@@ -8,6 +8,8 @@ import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.thread.QueuedThreadPool;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,6 +24,10 @@ public class Launcher {
 
   private String defaultWebapp;
   private final Map<String, String> webapps = new LinkedHashMap<String, String>(3);
+
+  public Launcher() {
+    this(findFreePort());
+  }
 
   public Launcher(int port) {
     this.port = port;
@@ -93,11 +99,23 @@ public class Launcher {
     return webapp;
   }
 
-  protected Handler[] createWebapps() {
+  private Handler[] createWebapps() {
     List<Handler> handlers = new ArrayList<Handler>(webapps.size());
     for (Map.Entry<String, String> entry : webapps.entrySet()) {
       handlers.add(createWebApp(entry.getKey(), entry.getValue()));
     }
     return handlers.toArray(new Handler[webapps.size()]);
+  }
+
+  public static int findFreePort() {
+    try {
+      ServerSocket server = new ServerSocket(0);
+      int port = server.getLocalPort();
+      server.close();
+      return port;
+    }
+    catch (IOException e) {
+      throw new IllegalStateException("Cannot get free port: " + e.getMessage(), e);
+    }
   }
 }

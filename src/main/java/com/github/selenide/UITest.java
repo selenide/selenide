@@ -3,8 +3,11 @@ package com.github.selenide;
 import com.github.selenide.jetty.Launcher;
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import static org.junit.Assert.assertTrue;
 
 public abstract class UITest {
   protected WebDriver browser;
@@ -17,7 +20,7 @@ public abstract class UITest {
   }
 
   protected Launcher createLauncher() {
-    return new Launcher(8888);
+    return new Launcher();
   }
 
   @Before
@@ -46,10 +49,11 @@ public abstract class UITest {
     if (server.getDefaultWebapp() == null) {
       throw new IllegalStateException("No webapps deployed. Override method createLauncher() to create jetty launcher with your own web application.");
     }
-    browser.get("http://localhost:" + server.getPort() + server.getDefaultWebapp() + servletName);
+    openRelativeUrl(server.getDefaultWebapp() + servletName);
   }
 
   protected void openRelativeUrl(String relativeUrl) {
     browser.get("http://localhost:" + server.getPort() + relativeUrl);
+    assertTrue(browser.findElement(By.tagName("body")).isDisplayed());
   }
 }
