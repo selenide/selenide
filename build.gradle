@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+repositories{
+    mavenCentral()
+}
+
+dependencies {
+  compile 'org.seleniumhq.selenium:selenium-java:2.9.0'
+  compile 'org.mortbay.jetty:jetty:6.1.26'
+  compile 'jetty:javax.servlet:5.1.12'
+  runtime 'org.mortbay.jetty:jsp-2.1:6.1.14'
+  compile 'junit:junit:4.9'
+  compile 'org.hamcrest:hamcrest-all:1.1'
+}
+
+task libs(type: Sync) {
+  from configurations.compile
+  from configurations.runtime
+  into "$buildDir/lib"
+}
+
+[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
+[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
+
+test {
+  systemProperties 'file.encoding': 'UTF-8'
+}
+
+defaultTasks 'clean', 'libs', 'test', 'jar'
+
