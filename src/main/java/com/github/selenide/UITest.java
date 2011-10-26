@@ -97,7 +97,10 @@ public abstract class UITest {
   }
 
   protected static String takeScreenShot(String testName) {
-    if (webdriver != null && (webdriver instanceof TakesScreenshot)) {
+    if (webdriver == null) {
+      return null;
+    }
+    else if (webdriver instanceof TakesScreenshot) {
       try {
         File scrFile = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
         String pageSource = webdriver.getPageSource();
