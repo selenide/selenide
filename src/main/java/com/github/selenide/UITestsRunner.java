@@ -29,9 +29,18 @@ public class UITestsRunner extends BlockJUnit4ClassRunner {
   }
 
   @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-    notifier.addListener(new UITestListener());
-  }
+   protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+     UITestListener uiTestListener = new UITestListener();
+     notifier.addListener(uiTestListener);
+
+     try {
+       super.runChild(method, notifier);
+     }
+     finally {
+       notifier.removeListener(uiTestListener);
+     }
+   }
+
 
   private class UITestListener extends RunListener {
     @Override
