@@ -1,7 +1,17 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
-repositories{
-    mavenCentral()
+sourceCompatibility = 1.5
+version = '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+configure(install.repositories.mavenInstaller) {
+  pom.groupId = 'com.github.selenide'
+  pom.artifactId = 'selenide'
+  pom.version = '1.0-SNAPSHOT'
 }
 
 dependencies {
