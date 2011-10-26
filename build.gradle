@@ -36,5 +36,5 @@ test {
   systemProperties 'file.encoding': 'UTF-8'
 }
 
-defaultTasks 'clean', 'libs', 'test', 'jar'
+defaultTasks 'clean', 'libs', 'test', 'jar', 'install'
 
