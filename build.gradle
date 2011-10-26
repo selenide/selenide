@@ -34,6 +34,8 @@ task libs(type: Sync) {
 
 test {
   systemProperties 'file.encoding': 'UTF-8'
+  systemProperties 'webdriver.chrome.driver': '/home/andrei/Dropbox/projects/hangman-java/lib/chromedriver'
+  systemProperties 'browser': 'chrome'
 }
 
 defaultTasks 'clean', 'libs', 'test', 'jar', 'install'
