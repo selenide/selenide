@@ -3,6 +3,7 @@ package com.github.selenide;
 import com.github.selenide.jetty.Launcher;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.*;
@@ -161,7 +162,7 @@ public abstract class UITest {
   }
 
   protected static <T> T fail(String message) {
-    fail(message +
+    Assert.fail(message +
         ", browser.currentUrl=" + webdriver.getCurrentUrl() +
         ", browser.title=" + webdriver.getTitle()
     );
