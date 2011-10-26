@@ -53,9 +53,11 @@ public abstract class UITest {
 
   @After
   public void hopeToFixIE() {
-    clearBrowserCache();
-    if (ie()) {
-      sleep(1000);
+    if (webdriver != null) {
+      clearBrowserCache();
+      if (ie()) {
+        sleep(1000);
+      }
     }
   }
 
