@@ -2,9 +2,7 @@ package com.github.selenide;
 
 import com.github.selenide.jetty.Launcher;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -43,8 +41,8 @@ public abstract class UITest {
     return new Launcher();
   }
 
-  @Before
-  public void openBrowser() {
+  @BeforeClass
+  public static void openBrowser() {
     if (webdriver == null) {
       webdriver = createDriver(browser);
       webdriver.manage().timeouts().implicitlyWait(5, SECONDS);
@@ -61,10 +59,11 @@ public abstract class UITest {
     }
   }
 
-  @After
-  public void closeBrowser() {
+  @AfterClass
+  public static void closeBrowser() {
     if (webdriver != null) {
       webdriver.close();
+      webdriver = null;
     }
   }
 
