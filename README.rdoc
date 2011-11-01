@@ -1,7 +1,3 @@
-= Selenide
-
-this is Selenide project.
-
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
