@@ -12,9 +12,9 @@ you can write tests like this:
 assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
 
 This is ok for many cases, but in Ajax-rich web applications the element "topic" appears after some time.
-Selenide allows testing it:
+Selenide allows testing such cases:
 
-waitFor(By.tagName("body"), visible);
+waitFor(By.id("topic"), visible);
 
 
 ---++ How to use Selenide?
