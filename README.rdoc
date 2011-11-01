@@ -1,6 +1,5 @@
 = Selenide
 
-Hello,
 this is Selenide project.
 
 == What is Selenide?
@@ -8,14 +7,20 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
 
 == What benefits is gives over plain Selenium?
 
-Selenium is not a testing library, it just allows you to manipulate browser. So, combining JUnit and Selenium,
-you can write tests like this:
+Selenium is not a testing library, it just allows you to manipulate browser. Selenide has additional functions for using Selenium in JUnit-based UI tests:
+[_Transparent WebDriver_]     You don't need to operate with WebDriver directly. JUnit setUp/tearDown methods do it for you.
+[_Convenience methods_]       Selenide contains methods for operating controls like radiobutton and selectbox.
+[_JettyLauncher_]             Your web-application can be launched/stopped during running tests.
+[_Screenshots_]               Selenide automatically takes screenshot of the browser window if test has failed.
+[_Selenium bugs_]             We know that Selenium has some bugs/disadvantages. For instance, when settings field value, the "onChange" event is not always triggered. Selenide contains workarounds for such issues.
+[_IE_]                        Our experience says that Selenium has some problems with IE. Selenide contains several workarounds for IE problems.
 
+=== Functional style
+Combining JUnit and Selenium, you can write tests like this:
  assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
 
 This is ok for many cases, but in Ajax-rich web applications the element "topic" appears after some time.
-Selenide allows testing such cases:
-
+Selenide allows testing such cases in one-line:
  waitFor(By.id("topic"), visible);
 
 == What about IE?
@@ -30,3 +35,10 @@ Tutorial is in progress now, but you can take a look at a example project which 
 https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangman/uitest/HangmanSpec.java
 
 Until tutorial is ready, you can find some Selenide usages there.
+
+
+
+---
+Author::   Andrei Solntsev <mailto:andrei@codeborne.com>
+Version::  1.0
+Licence::  GPL[http://www.gnu.org/copyleft/gpl.html]
