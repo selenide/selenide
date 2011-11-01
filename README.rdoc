@@ -1,10 +1,12 @@
+= Selenide
+
 Hello,
 this is Selenide project.
 
---+ What is Selenide?
+== What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
----++ What benefits is gives over plain Selenium?
+== What benefits is gives over plain Selenium?
 
 Selenium is not a testing library, it just allows you to manipulate browser. So, combining JUnit and Selenium,
 you can write tests like this:
@@ -16,14 +18,14 @@ Selenide allows testing such cases:
 
 waitFor(By.id("topic"), visible);
 
----++ What about IE?
+== What about IE?
 Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
 want to test our code with IE because many users still use it.
 
 Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
 you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
 
----++ How to use Selenide?
+== How to use Selenide?
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
 https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangman/uitest/HangmanSpec.java
 
