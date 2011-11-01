@@ -16,6 +16,12 @@ Selenide allows testing such cases:
 
 waitFor(By.id("topic"), visible);
 
+---++ What about IE?
+Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
+want to test our code with IE because many users still use it.
+
+Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
+you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
 
 ---++ How to use Selenide?
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
