@@ -98,8 +98,7 @@ public abstract class UITest {
   protected static String takeScreenShot(String testName) {
     if (webdriver == null) {
       return null;
-    }
-    else if (webdriver instanceof TakesScreenshot) {
+    } else if (webdriver instanceof TakesScreenshot) {
       try {
         File scrFile = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
         String pageSource = webdriver.getPageSource();
@@ -151,11 +150,10 @@ public abstract class UITest {
     final String fullUrl;
     if (url.contains("timestamp=")) {
       fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-                   .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    }
-    else {
+          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
+    } else {
       fullUrl = url.contains("?") ?
-          url + "&timestamp=" + unique:
+          url + "&timestamp=" + unique :
           url + "?timestamp=" + unique;
     }
     return fullUrl;
@@ -281,7 +279,7 @@ public abstract class UITest {
 //    triggerChangeEvent(By.id(radioFieldId));
   }
 
-    public static void selectOption(By selectField, String value) {
+  public static void selectOption(By selectField, String value) {
     waitFor(selectField, hasOptions());
     findOptionByValue(selectField, value).click();
     triggerChangeEvent(selectField);

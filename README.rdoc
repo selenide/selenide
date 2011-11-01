@@ -8,27 +8,76 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
 == What benefits is gives over plain Selenium?
 
 Selenium is not a testing library, it just allows you to manipulate browser. Selenide has additional functions for using Selenium in JUnit-based UI tests:
-[_Transparent WebDriver_]     You don't need to operate with WebDriver directly. JUnit setUp/tearDown methods do it for you.
-[_Convenience methods_]       Selenide contains methods for operating controls like radiobutton and selectbox.
-[_JettyLauncher_]             Your web-application can be launched/stopped during running tests.
-[_Screenshots_]               Selenide automatically takes screenshot of the browser window if test has failed.
-[_Selenium bugs_]             We know that Selenium has some bugs/disadvantages. For instance, when settings field value, the "onChange" event is not always triggered. Selenide contains workarounds for such issues.
-[_IE_]                        Our experience says that Selenium has some problems with IE. Selenide contains several workarounds for IE problems.
+[Transparent WebDriver]     You don't need to operate with WebDriver directly. JUnit setUp/tearDown methods do it for you.
+[Convenience methods]       Selenide contains methods for operating controls like radiobutton and selectbox.
+[Ajax support]              Testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
+[Screenshots]               Selenide automatically takes screenshot of the browser window if test has failed.
+[Selenium bugs]             We know that Selenium has some bugs/disadvantages. For instance, when settings field value, the "onChange" event is not always triggered. Selenide contains workarounds for such issues.
+[IE]                        Our experience says that Selenium has some problems with IE. Selenide contains several workarounds for IE problems.
+[JettyLauncher]             Your web-application can be launched/stopped during running tests.
+
+=== Transparent WebDriver.
+You don't need to operate with Selenium WebDriver directly.
+Just extend class <code>com.github.selenide.UITest</code>:
+
+ public class MyApplicationTest extends UITest {
+   ...
+ }
+
+ and you can use <code>webdriver</code> variable. WebDriver will be automatically created/deleted during test start/finished.
+
+=== Convenience methods
+ @Test
+ public void canFillComplexForm() {
+   open("/client/registration");
+   setValue(By.name("user.name"), "johny");
+   selectRadio("user.gender", "male");
+   selectOption(By.name("user.preferredLayout"), "plain");
+   selectOptionByText(By.name("user.securityQuestion"), "What is my first car?");
+   followLink(By.id("submit"));
+ }
 
 === Functional style
 Combining JUnit and Selenium, you can write tests like this:
  assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
+ assertEquals("Agile engineering practices", webdriver.findElement(By.id("topic")).getText());
 
-This is ok for many cases, but in Ajax-rich web applications the element "topic" appears after some time.
+With Selenide you can express the same test in a more functional style which is more readable:
+ assertElement(By.id("topic"), visible);
+ assertElement(By.id("topic"), hasText("Agile engineering practices"));
+
+Other available methods include:
+ assertElement(By.id("topic"), hidden);
+ assertElement(By.id("password"), hasAttribute("name", "user.password"));
+ assertElement(By.id("securityQuestion"), hasOptions());
+ assertElement(By.id("password"), hasClass("okMessage"));
+ assertElement(By.id("password"), hasNotClass("errorField"));
+
+=== Ajax support
+When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting:
+
 Selenide allows testing such cases in one-line:
- waitFor(By.id("topic"), visible);
+ assertElement(By.id("topic"), visible);
+ assertElement(By.id("topic"), hidden);
+ assertElement(By.id("password"), hasNotClass("errorField"));
+ etc.
 
 == What about IE?
 Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
 want to test our code with IE because many users still use it.
 
+  * Body tag doesn't appear immediately - we need to wait for it.
+  * IE caches pages - we need to clear cache after every test and generate unique urls.
+  * IE crashed when running too many tests at a time. Making pauses between helps.
+
 Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
 you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
+
+== Jetty Launcher
+It's very convenient what the system automatically starts your web application, runs all tests and shutdowns. We use
+Jetty servlet container for this purpose. We find it very useful.
+
+This is optional, you don't need to use it if your project cannot be run with Jetty or it starts too slowly.
 
 == How to use Selenide?
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
