@@ -11,12 +11,12 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
 Selenium is not a testing library, it just allows you to manipulate browser. So, combining JUnit and Selenium,
 you can write tests like this:
 
-assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
+ assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
 
 This is ok for many cases, but in Ajax-rich web applications the element "topic" appears after some time.
 Selenide allows testing such cases:
 
-waitFor(By.id("topic"), visible);
+ waitFor(By.id("topic"), visible);
 
 == What about IE?
 Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
