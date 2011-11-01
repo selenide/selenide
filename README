@@ -1,0 +1,11 @@
+Hello,
+this is Selenide project.
+
+What is Selenide?
+TODO
+
+How to use Selenide?
+Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
+https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangman/uitest/HangmanSpec.java
+
+Until tutorial is ready, you can find some Selenide usages there.
