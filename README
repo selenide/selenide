@@ -1,10 +1,23 @@
 Hello,
 this is Selenide project.
 
-What is Selenide?
-TODO
+--+ What is Selenide?
+Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
-How to use Selenide?
+---++ What benefits is gives over plain Selenium?
+
+Selenium is not a testing library, it just allows you to manipulate browser. So, combining JUnit and Selenium,
+you can write tests like this:
+
+assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
+
+This is ok for many cases, but in Ajax-rich web applications the element "topic" appears after some time.
+Selenide allows testing it:
+
+waitFor(By.tagName("body"), visible);
+
+
+---++ How to use Selenide?
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
 https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangman/uitest/HangmanSpec.java
 
