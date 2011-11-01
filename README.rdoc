@@ -1,16 +1,20 @@
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
-== What benefits is gives over plain Selenium?
+== What benefits gives Selenide over plain Selenium?
 
 Selenium is not a testing library, it just allows you to manipulate browser. Selenide has additional functions for using Selenium in JUnit-based UI tests:
-[Transparent WebDriver]     You don't need to operate with WebDriver directly. JUnit setUp/tearDown methods do it for you.
-[Convenience methods]       Selenide contains methods for operating controls like radiobutton and selectbox.
-[Ajax support]              Testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
+[Transparent WebDriver]     You don't need to operate with WebDriver directly. With Selenide, setUp/tearDown methods do it for you.
+[Convenience methods]       Selenide contains convenient methods for operating controls like textfield, radiobutton and selectbox.
+[Ajax support]              when testing Ajax applications, we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
 [Screenshots]               Selenide automatically takes screenshot of the browser window if test has failed.
 [Selenium bugs]             We know that Selenium has some bugs/disadvantages. For instance, when settings field value, the "onChange" event is not always triggered. Selenide contains workarounds for such issues.
 [IE]                        Our experience says that Selenium has some problems with IE. Selenide contains several workarounds for IE problems.
-[JettyLauncher]             Your web-application can be launched/stopped during running tests.
+[Jetty Launcher]            Your web-application can be launched/stopped during running tests.
+
+You can find more details below.
+
+
 
 === Transparent WebDriver.
 You don't need to operate with Selenium WebDriver directly.
@@ -20,13 +24,15 @@ Just extend class <code>com.github.selenide.UITest</code>:
    ...
  }
 
- and you can use <code>webdriver</code> variable. WebDriver will be automatically created/deleted during test start/finished.
+and you can use <code>webdriver</code> variable. WebDriver will be automatically created/deleted during test start/finished.
 
 === Convenience methods
+Selenide contains several methods that make your tests shorter and more readable:
+
  @Test
  public void canFillComplexForm() {
    open("/client/registration");
-   setValue(By.name("user.name"), "johny");
+   _setValue_(By.name("user.name"), "johny");
    selectRadio("user.gender", "male");
    selectOption(By.name("user.preferredLayout"), "plain");
    selectOptionByText(By.name("user.securityQuestion"), "What is my first car?");
@@ -56,15 +62,15 @@ Selenide allows testing such cases in one-line:
  assertElement(By.id("topic"), visible);
  assertElement(By.id("topic"), hidden);
  assertElement(By.id("password"), hasNotClass("errorField"));
- etc.
+etc.
 
-== What about IE?
+=== What about IE?
 Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
 want to test our code with IE because many users still use it.
 
-  * Body tag doesn't appear immediately - we need to wait for it.
-  * IE caches pages - we need to clear cache after every test and generate unique urls.
-  * IE crashed when running too many tests at a time. Making pauses between helps.
+* Body tag doesn't appear immediately - we need to wait for it.
+* IE caches pages - we need to clear cache after every test and generate unique urls.
+* IE crashed when running too many tests at a time. Making pauses between helps.
 
 Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
 you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
@@ -74,6 +80,8 @@ It's very convenient what the system automatically starts your web application, 
 Jetty servlet container for this purpose. We find it very useful.
 
 This is optional, you don't need to use it if your project cannot be run with Jetty or it starts too slowly.
+
+
 
 == How to use Selenide?
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
