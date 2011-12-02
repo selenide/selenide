@@ -10,7 +10,7 @@ public abstract class Condition {
       return element != null && element.isDisplayed();
     }
     @Override
-    public Object actualValue(WebElement element) {
+    public String actualValue(WebElement element) {
       return element == null? "does not exists" :
           element.isDisplayed() ? "visible" : "hidden";
     }
@@ -22,7 +22,7 @@ public abstract class Condition {
       return element == null || !element.isDisplayed();
     }
     @Override
-    public Object actualValue(WebElement element) {
+    public String actualValue(WebElement element) {
       return element == null? "does not exists" :
           element.isDisplayed() ? "visible" : "hidden";
     }
@@ -35,7 +35,7 @@ public abstract class Condition {
         return element != null && attributeValue.equals(element.getAttribute(attributeName));
       }
       @Override
-      public Object actualValue(WebElement element) {
+      public String actualValue(WebElement element) {
         return element == null? "element does not even exist" : element.getAttribute(attributeName);
       }
       @Override
@@ -52,7 +52,7 @@ public abstract class Condition {
         return element != null && element.getText().contains(text);
       }
       @Override
-      public Object actualValue(WebElement element) {
+      public String actualValue(WebElement element) {
         return element == null? "element does not even exist" :
             "<" + element.getTagName() + ">" + element.getText() + "</" + element.getTagName() + ">";
       }
@@ -75,7 +75,7 @@ public abstract class Condition {
         }
       }
       @Override
-      public Object actualValue(WebElement element) {
+      public String actualValue(WebElement element) {
         return element == null? "element does not even exist" : element.getText();
       }
       @Override
@@ -93,8 +93,8 @@ public abstract class Condition {
   }
 
   private static <T> boolean contains(T[] objects, T object) {
-    for (int i=0; i<objects.length; i++) {
-      if (object.equals(objects[i])) {
+    for (T object1 : objects) {
+      if (object.equals(object1)) {
         return true;
       }
     }
@@ -108,7 +108,7 @@ public abstract class Condition {
         return element != null && hasClass(element, cssClass);
       }
       @Override
-      public Object actualValue(WebElement element) {
+      public String actualValue(WebElement element) {
         return element == null? "element does not even exist" :
             "<" + element.getTagName() + " @class='" + element.getAttribute("class") + "'" + ">" + element.getText() + "</" + element.getTagName() + ">";
       }
@@ -126,7 +126,7 @@ public abstract class Condition {
         return element != null && !hasClass(element, cssClass);
       }
       @Override
-      public Object actualValue(WebElement element) {
+      public String actualValue(WebElement element) {
         return element == null? "element does not exist" :
             "<" + element.getTagName() + " @class='" + element.getAttribute("class") + "'" + ">" + element.getText() + "</" + element.getTagName() + ">";
       }
@@ -149,7 +149,7 @@ public abstract class Condition {
   public final boolean applyNull() {
     return nullIsAllowed;
   }
-  public abstract Object actualValue(WebElement element);
+  public abstract String actualValue(WebElement element);
 
   @Override
   public String toString() {
