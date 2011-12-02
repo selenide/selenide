@@ -3,6 +3,13 @@ apply plugin: 'maven'
 
 sourceCompatibility = 1.5
 version = '1.0-SNAPSHOT'
+description = "Selenide is an addition for Selenium WebDriver to facilitate writing JUnit tests with Selenium"
+
+jar {
+  manifest {
+    attributes 'Implementation-Title': 'Selenide', 'Implementation-Version': version, 'Author': 'Andrei Solntsev', 'URL': 'https://github.com/asolntsev/selenide'
+  }
+}
 
 repositories {
   mavenCentral()
@@ -34,6 +41,21 @@ task libs(type: Sync) {
 
 test {
   systemProperties 'file.encoding': 'UTF-8'
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives sourcesJar
+  archives javadocJar
 }
 
 defaultTasks 'clean', 'libs', 'test', 'jar', 'install'
