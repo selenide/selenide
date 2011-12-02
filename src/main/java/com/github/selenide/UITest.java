@@ -334,10 +334,19 @@ public abstract class UITest {
     }
   }
 
+  private static String getActualValue(WebElement element, Condition condition) {
+    try {
+      return condition.actualValue(element);
+    }
+    catch (WebDriverException e) {
+      return e.toString();
+    }
+  }
+
   public static WebElement assertElement(By selector, Condition condition) {
     WebElement element = getElement(selector);
     if (!condition.apply(element)) {
-      fail("Element " + selector + " hasn't " + condition + "; actual value is '" + condition.actualValue(element) + "'");
+      fail("Element " + selector + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
     }
     return element;
   }
@@ -355,7 +364,7 @@ public abstract class UITest {
         if (condition.apply(element)) {
           return element;
         }
-      } catch (NoSuchElementException ignore) {
+      } catch (WebDriverException elementNotFound) {
         if (condition.applyNull()) {
           return null;
         }
@@ -364,7 +373,7 @@ public abstract class UITest {
     }
     while (System.currentTimeMillis() - startTime < milliseconds);
 
-    fail("Element " + by + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + condition.actualValue(element) + "'");
+    fail("Element " + by + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
     return null;
   }
 
