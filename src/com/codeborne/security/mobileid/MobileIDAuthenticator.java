@@ -8,6 +8,7 @@ import com.codeborne.security.mobileid.client.DigiDocService_ServiceLocator;
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.holders.IntHolder;
 import javax.xml.rpc.holders.StringHolder;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
@@ -24,6 +25,10 @@ public class MobileIDAuthenticator {
   DigiDocServicePortType digiDocServicePortType;
 
   public MobileIDAuthenticator() {
+  }
+
+  public MobileIDAuthenticator(String digidocServiceURL) throws MalformedURLException {
+    setDigidocServiceURL(new URL(digidocServiceURL));
   }
 
   public MobileIDAuthenticator(URL digidocServiceURL) {
