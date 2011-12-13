@@ -1,0 +1,47 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.5
+version = '1.0-SNAPSHOT'
+
+repositories{
+  mavenCentral()
+//  mavenRepo urls: 'http://repository.jboss.com/maven2/'
+}
+
+configure(install.repositories.mavenInstaller) {
+  pom.groupId = 'com.codeborne.security'
+  pom.artifactId = 'mobileid'
+  pom.version = '1.0-SNAPSHOT'
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+  test {
+    java {
+      srcDir 'test'
+    }
+  }
+}
+dependencies {
+  compile 'org.apache.axis:axis:1.4'
+  compile 'org.apache.axis:axis-jaxrpc:1.4'
+  compile 'commons-discovery:commons-discovery:0.4'
+  compile 'wsdl4j:wsdl4j:1.6.2'
+  testCompile 'junit:junit:4.10'
+  testCompile 'org.hamcrest:hamcrest-all:1.1'
+  testCompile 'org.mockito:mockito-all:1.9.0-rc1'
+}
+
+task libs(type: Sync) {
+  from configurations.compile
+  from configurations.runtime
+  from configurations.testCompile
+  into "$buildDir/lib"
+}
+
+defaultTasks 'clean', 'libs', 'test', 'install'
