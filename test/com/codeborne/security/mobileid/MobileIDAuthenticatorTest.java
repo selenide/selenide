@@ -10,39 +10,18 @@ import javax.xml.rpc.holders.IntHolder;
 import javax.xml.rpc.holders.StringHolder;
 import java.rmi.RemoteException;
 
+import static java.lang.String.valueOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MobileIDAuthenticatorTest {
+  MobileIDAuthenticator mid = new MobileIDAuthenticator();
+
   @Test
   public void startSession() throws RemoteException, AuthenticationException {
-    MobileIDAuthenticator mid = new MobileIDAuthenticator();
-    mid.digiDocServicePortType = mock(DigiDocServicePortType.class);
-    doAnswer(new Answer<Object>() {
-      @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        IntHolder sessCode = (IntHolder)invocation.getArguments()[11];
-        StringHolder result = (StringHolder)invocation.getArguments()[12];
-        StringHolder personalCode = (StringHolder)invocation.getArguments()[13];
-        StringHolder firstName = (StringHolder)invocation.getArguments()[14];
-        StringHolder lastName = (StringHolder)invocation.getArguments()[15];
-        StringHolder challenge = (StringHolder)invocation.getArguments()[19];
-        sessCode.value = 123;
-        result.value = "OK";
-        personalCode.value = "38105060708";
-        firstName.value = "Bruce";
-        lastName.value = "Willis";
-        challenge.value = "4567";
-        return null;
-      }
-    }).when(mid.digiDocServicePortType).mobileAuthenticate(anyString(), anyString(), eq("+37255667788"), anyString(),
-        anyString(), anyString(), anyString(), anyString(), anyInt(), anyBoolean(), anyBoolean(), any(IntHolder.class),
-        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class),
-        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class));
+    mid.digiDocServicePortType = mockMobileIdAuthenticator("OK", "Bruce", "Willis", "38105060708", "4567", 123);
 
     MobileIDSession session = mid.startSession("+37255667788");
     assertThat(session.firstName, equalTo("Bruce"));
@@ -50,5 +29,44 @@ public class MobileIDAuthenticatorTest {
     assertThat(session.personalCode, equalTo("38105060708"));
     assertThat(session.sessCode, equalTo(123));
     assertThat(session.challenge, equalTo("4567"));
+  }
+
+  @Test(expected = AuthenticationException.class)
+  public void throwsExceptionIfError() throws RemoteException, AuthenticationException {
+    mid.digiDocServicePortType = mockMobileIdAuthenticatorError(100);
+    mid.startSession("+37255667788");
+  }
+
+  private DigiDocServicePortType mockMobileIdAuthenticator(final String result, final String firstName,
+         final String lastName, final String personalCode, final String challenge, final int sessCode) throws RemoteException {
+    DigiDocServicePortType service = mock(DigiDocServicePortType.class);
+    doAnswer(new Answer<Object>() {
+      @Override
+      public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((IntHolder)invocation.getArguments()[11]).value = sessCode;
+        ((StringHolder)invocation.getArguments()[12]).value = result;
+        ((StringHolder)invocation.getArguments()[13]).value = personalCode;
+        ((StringHolder)invocation.getArguments()[14]).value = firstName;
+        ((StringHolder)invocation.getArguments()[15]).value = lastName;
+        ((StringHolder)invocation.getArguments()[19]).value = challenge;
+        return null;
+      }
+    }).when(service).mobileAuthenticate(anyString(), anyString(), eq("+37255667788"), anyString(),
+        anyString(), anyString(), anyString(), anyString(), anyInt(), anyBoolean(), anyBoolean(), any(IntHolder.class),
+        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class),
+        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class));
+
+    return service;
+  }
+
+  private DigiDocServicePortType mockMobileIdAuthenticatorError(int errorCode) throws RemoteException {
+    DigiDocServicePortType service = mock(DigiDocServicePortType.class);
+    doThrow(new RemoteException(valueOf(errorCode)))
+    .when(service).mobileAuthenticate(anyString(), anyString(), eq("+37255667788"), anyString(),
+        anyString(), anyString(), anyString(), anyString(), anyInt(), anyBoolean(), anyBoolean(), any(IntHolder.class),
+        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class),
+        any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class));
+
+    return service;
   }
 }
