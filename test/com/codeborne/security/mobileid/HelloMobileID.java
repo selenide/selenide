@@ -8,10 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 
-import static java.awt.BorderLayout.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HelloMobileID {
   private MobileIDAuthenticator mid;
@@ -29,17 +26,16 @@ public class HelloMobileID {
   public final void login(String phoneNumber) {
     try {
       final MobileIDSession mobileIDSession = mid.startSession(phoneNumber);
-      showMessage("Challenge: " + mobileIDSession.challenge);
+      showMessage("<br>Challenge: " + mobileIDSession.challenge + "<br>You will get SMS in few seconds.<br>Please accept it to login.<br>");
 
       mid.waitForLogin(mobileIDSession);
       showMessage("Your have logged in." +
-          "\nFirst name: " + mobileIDSession.firstName +
-          "\nLast name: " + mobileIDSession.lastName +
-          "\nPersonal code: " + mobileIDSession.personalCode);
+          "<br>First name: " + mobileIDSession.firstName +
+          "<br>Last name: " + mobileIDSession.lastName +
+          "<br>Personal code: " + mobileIDSession.personalCode);
     } catch (AuthenticationException e) {
       e.printStackTrace();
-      showMessage(e.getMessage());
-      frame.pack();
+      showMessage("<br><br>" + e.getMessage() + "<br><br><br>");
     }
   }
 
@@ -47,7 +43,8 @@ public class HelloMobileID {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
-        HelloMobileID.this.message.setText(message);
+        HelloMobileID.this.message.setText("<html>" + message + "</html>");
+        frame.pack();
       }
     });
   }
@@ -68,16 +65,17 @@ public class HelloMobileID {
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        new Thread(){
+        new Thread() {
           @Override
           public void run() {
+            showMessage("<br><br>Connecting to MobileID server...<br><br><br>");
             login(phone.getText());
           }
         }.start();
       }
     });
 
-    message = new JLabel("Enter your phone");
+    message = new JLabel("<html><br><br>Enter your phone<br><br><br></html>");
     phone = new JTextField("+372", 30);
     phone.setMaximumSize(new Dimension(50, 20));
 
