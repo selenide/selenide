@@ -3,18 +3,14 @@ package com.codeborne.security.mobileid;
 import com.codeborne.security.AuthenticationException;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.BorderLayout.NORTH;
-import static java.awt.BorderLayout.SOUTH;
+import static java.awt.BorderLayout.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HelloMobileID {
@@ -33,22 +29,27 @@ public class HelloMobileID {
   public final void login(String phoneNumber) {
     try {
       final MobileIDSession mobileIDSession = mid.startSession(phoneNumber);
-      SwingUtilities.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-          message.setText("Challenge: " + mobileIDSession.challenge);
-        }
-      });
+      showMessage("Challenge: " + mobileIDSession.challenge);
 
       mid.waitForLogin(mobileIDSession);
-      showMessageDialog(frame, "Your have logged in." +
+      showMessage("Your have logged in." +
           "\nFirst name: " + mobileIDSession.firstName +
           "\nLast name: " + mobileIDSession.lastName +
-          "\nPersonal code: " + mobileIDSession.personalCode,
-          "Logged in", INFORMATION_MESSAGE);
+          "\nPersonal code: " + mobileIDSession.personalCode);
     } catch (AuthenticationException e) {
-      showMessageDialog(frame, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+      e.printStackTrace();
+      showMessage(e.getMessage());
+      frame.pack();
     }
+  }
+
+  private void showMessage(final String message) {
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        HelloMobileID.this.message.setText(message);
+      }
+    });
   }
 
   private void create() {
@@ -56,7 +57,8 @@ public class HelloMobileID {
     frame.setContentPane(createContent());
 
     frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    frame.setMinimumSize(new Dimension(400, 200));
+    frame.setMinimumSize(new Dimension(300, 100));
+    frame.setPreferredSize(new Dimension(400, 200));
     frame.pack();
     frame.setVisible(true);
   }
@@ -79,10 +81,10 @@ public class HelloMobileID {
     phone = new JTextField("+372", 30);
     phone.setMaximumSize(new Dimension(50, 20));
 
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(message, NORTH);
-    panel.add(phone, CENTER);
-    panel.add(button, SOUTH);
+    JPanel panel = new JPanel(new FlowLayout());
+    panel.add(message);
+    panel.add(phone);
+    panel.add(button);
     return panel;
   }
 }
