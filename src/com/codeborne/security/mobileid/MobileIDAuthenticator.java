@@ -13,10 +13,9 @@ import java.net.URL;
 import java.rmi.RemoteException;
 
 public class MobileIDAuthenticator {
-  private final String language = "EST";
-  private final String serviceName = "Testimine";
-  private final String loginMessage = "Login?";
-  private final String SPChallenge = "12345678901234567890";
+  private String language = "EST";
+  private String serviceName = "Testimine";
+  private String loginMessage = "Login?";
   private final String messagingMode = "asynchClientServer";
   private final int asyncConfiguration = 0;
   private final int mobileServiceGetCallRetryCount = 60;
@@ -31,8 +30,18 @@ public class MobileIDAuthenticator {
     setDigidocServiceURL(new URL(digidocServiceURL));
   }
 
+  public MobileIDAuthenticator(String digidocServiceURL, String serviceName) throws MalformedURLException {
+    setDigidocServiceURL(new URL(digidocServiceURL));
+    this.serviceName = serviceName;
+  }
+
   public MobileIDAuthenticator(URL digidocServiceURL) {
     setDigidocServiceURL(digidocServiceURL);
+  }
+
+  public MobileIDAuthenticator(URL digidocServiceURL, String serviceName) {
+    setDigidocServiceURL(digidocServiceURL);
+    this.serviceName = serviceName;
   }
 
   public final MobileIDAuthenticator setDigidocServiceURL(URL digidocServiceURL) {
@@ -43,6 +52,18 @@ public class MobileIDAuthenticator {
       throw new RuntimeException("Failed to initialize Mobile-ID support", e);
     }
     return this;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+  public void setServiceName(String serviceName) {
+    this.serviceName = serviceName;
+  }
+
+  public void setLoginMessage(String loginMessage) {
+    this.loginMessage = loginMessage;
   }
 
   public MobileIDSession startSession(String phone) throws AuthenticationException {
@@ -58,7 +79,7 @@ public class MobileIDAuthenticator {
     StringHolder challenge = new StringHolder();
 
     try {
-      digiDocServicePortType.mobileAuthenticate(null, null, phone, language, serviceName, loginMessage, SPChallenge,
+      digiDocServicePortType.mobileAuthenticate(null, null, phone, language, serviceName, loginMessage, generateSPChallenge(),
           messagingMode, asyncConfiguration, false, false, sessCode, result,
           personalCode, firstName, lastName, new StringHolder(), new StringHolder(), new StringHolder(), challenge,
           new StringHolder(), new StringHolder());
@@ -97,6 +118,12 @@ public class MobileIDAuthenticator {
       throw new AuthenticationException(result.value);
 
     return new MobileIDSession(sessCode.value, challenge.value, firstName.value, lastName.value, personalCode.value);
+  }
+
+  protected String generateSPChallenge() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < 10; i++) sb.append((int)(Math.random() * 10));
+    return sb.toString();
   }
 
   public MobileIDSession waitForLogin(MobileIDSession session) throws AuthenticationException {
