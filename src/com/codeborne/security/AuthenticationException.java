@@ -1,11 +1,19 @@
 package com.codeborne.security;
 
 public class AuthenticationException extends Exception {
-  public AuthenticationException(String s, Throwable throwable) {
-    super(s, throwable);
+  private String details;
+  
+  public AuthenticationException(String code, String details, Throwable throwable) {
+    super(code, throwable);
+    this.details = details;
   }
 
-  public AuthenticationException(String s) {
-    super(s);
+  public AuthenticationException(String code) {
+    super(code);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getName() + ": " + getMessage() + (details != null ? ": " + details : "");
   }
 }

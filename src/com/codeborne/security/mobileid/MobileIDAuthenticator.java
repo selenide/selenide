@@ -4,6 +4,7 @@ import com.codeborne.security.AuthenticationException;
 import com.codeborne.security.mobileid.client.DigiDocServicePortType;
 import com.codeborne.security.mobileid.client.DigiDocService_Service;
 import com.codeborne.security.mobileid.client.DigiDocService_ServiceLocator;
+import org.apache.axis.AxisFault;
 
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.holders.IntHolder;
@@ -121,7 +122,8 @@ public class MobileIDAuthenticator {
       else
         errorCode = e.getMessage();
 
-      throw new AuthenticationException(errorCode, e);
+      String details = e instanceof AxisFault ? ((AxisFault)e).getFaultDetails()[0].getTextContent() : null;
+      throw new AuthenticationException(errorCode, details, e);
     }
 
     if (!"OK".equals(result.value))
@@ -144,7 +146,7 @@ public class MobileIDAuthenticator {
         digiDocServicePortType.getMobileAuthenticateStatus(session.sessCode, false, status, new StringHolder());
       }
       catch (RemoteException e) {
-        throw new AuthenticationException(status.value, e);
+        throw new AuthenticationException(status.value, null, e);
       }
       tryCount++;
     }
