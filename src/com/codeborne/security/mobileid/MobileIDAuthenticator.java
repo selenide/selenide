@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 public class MobileIDAuthenticator {
   private String language = "EST";
   private String serviceName = "Testimine";
-  private String loginMessage = "Login?";
+  private String loginMessage = "";
   private final String messagingMode = "asynchClientServer";
   private final int asyncConfiguration = 0;
   private final int mobileServiceGetCallRetryCount = 60;
@@ -71,6 +71,9 @@ public class MobileIDAuthenticator {
       throw new IllegalStateException("digidocServiceURL is not initialized");
     }
 
+    if (phone.startsWith("+")) phone = phone.substring(1);
+    if (!phone.startsWith("372")) phone = "372" + phone;
+
     IntHolder sessCode = new IntHolder();
     StringHolder result = new StringHolder();
     StringHolder firstName = new StringHolder();
@@ -122,7 +125,7 @@ public class MobileIDAuthenticator {
 
   protected String generateSPChallenge() {
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < 10; i++) sb.append((int)(Math.random() * 10));
+    for (int i = 0; i < 20; i++) sb.append((int)(Math.random() * 10));
     return sb.toString();
   }
 
