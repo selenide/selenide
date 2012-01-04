@@ -16,10 +16,9 @@ public class MobileIDAuthenticator {
   private String language = "EST";
   private String serviceName = "Testimine";
   private String loginMessage = "";
+  private int retryCount = 60;
+  private int pollIntervalMs = 3000;
   private final String messagingMode = "asynchClientServer";
-  private final int asyncConfiguration = 0;
-  private final int mobileServiceGetCallRetryCount = 60;
-  private final int mobileIdStatusPollInterval = 3000;
 
   DigiDocServicePortType digiDocServicePortType;
 
@@ -66,6 +65,14 @@ public class MobileIDAuthenticator {
     this.loginMessage = loginMessage;
   }
 
+  public void setRetryCount(int retryCount) {
+    this.retryCount = retryCount;
+  }
+
+  public void setPollIntervalMs(int pollIntervalMs) {
+    this.pollIntervalMs = pollIntervalMs;
+  }
+
   public MobileIDSession startSession(String phone) throws AuthenticationException {
     if (digiDocServicePortType == null) {
       throw new IllegalStateException("digidocServiceURL is not initialized");
@@ -83,7 +90,7 @@ public class MobileIDAuthenticator {
 
     try {
       digiDocServicePortType.mobileAuthenticate(null, null, phone, language, serviceName, loginMessage, generateSPChallenge(),
-          messagingMode, asyncConfiguration, false, false, sessCode, result,
+          messagingMode, 0, false, false, sessCode, result,
           personalCode, firstName, lastName, new StringHolder(), new StringHolder(), new StringHolder(), challenge,
           new StringHolder(), new StringHolder());
     }
@@ -132,7 +139,7 @@ public class MobileIDAuthenticator {
   public MobileIDSession waitForLogin(MobileIDSession session) throws AuthenticationException {
     StringHolder status = new StringHolder("OUTSTANDING_TRANSACTION");
     int tryCount = 0;
-    while (sleep(mobileIdStatusPollInterval) && "OUTSTANDING_TRANSACTION".equals(status.value) && tryCount < mobileServiceGetCallRetryCount) {
+    while (sleep(pollIntervalMs) && "OUTSTANDING_TRANSACTION".equals(status.value) && tryCount < retryCount) {
       try {
         digiDocServicePortType.getMobileAuthenticateStatus(session.sessCode, false, status, new StringHolder());
       }
