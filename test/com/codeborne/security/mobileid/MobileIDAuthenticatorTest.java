@@ -37,8 +37,7 @@ public class MobileIDAuthenticatorTest {
     mid.startSession("+37255667788");
   }
 
-  private DigiDocServicePortType mockMobileIdAuthenticator(final String result, final String firstName,
-         final String lastName, final String personalCode, final String challenge, final int sessCode) throws RemoteException {
+  private DigiDocServicePortType mockMobileIdAuthenticator(final String result, final String firstName, final String lastName, final String personalCode, final String challenge, final int sessCode) throws RemoteException {
     DigiDocServicePortType service = mock(DigiDocServicePortType.class);
     doAnswer(new Answer<Object>() {
       @Override
@@ -51,7 +50,7 @@ public class MobileIDAuthenticatorTest {
         ((StringHolder)invocation.getArguments()[19]).value = challenge;
         return null;
       }
-    }).when(service).mobileAuthenticate(anyString(), anyString(), eq("+37255667788"), anyString(),
+    }).when(service).mobileAuthenticate(anyString(), anyString(), eq("37255667788"), anyString(),
         anyString(), anyString(), anyString(), anyString(), anyInt(), anyBoolean(), anyBoolean(), any(IntHolder.class),
         any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class),
         any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class));
@@ -62,7 +61,7 @@ public class MobileIDAuthenticatorTest {
   private DigiDocServicePortType mockMobileIdAuthenticatorError(int errorCode) throws RemoteException {
     DigiDocServicePortType service = mock(DigiDocServicePortType.class);
     doThrow(new RemoteException(valueOf(errorCode)))
-    .when(service).mobileAuthenticate(anyString(), anyString(), eq("+37255667788"), anyString(),
+    .when(service).mobileAuthenticate(anyString(), anyString(), eq("37255667788"), anyString(),
         anyString(), anyString(), anyString(), anyString(), anyInt(), anyBoolean(), anyBoolean(), any(IntHolder.class),
         any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class),
         any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class), any(StringHolder.class));
