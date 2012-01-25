@@ -13,13 +13,17 @@ The official Mobile-ID API is a SOAP web service, so it usually takes time to ge
 start using it in a Java application.
 
 This small library tries to solve this problem: just add the *mobileid.jar* (with dependencies) to your
-project and you have a working Mobile-ID support.
+project and you have a working Mobile-ID support. It already contains all the generated classes as well as a simplified
+API of our own.
 
 The same jar works in Scala as well or any other JVM-based language.
 
 Usage
 =====
 
-Just use the public methods in com.codeborne.security.mobileid.MobileIDAuthenticator class.
+Just use the public methods in [MobileIDAuthenticator](http://github.com/codeborne/mobileid/blob/master/src/com/codeborne/security/mobileid/MobileIDAuthenticator.java) class:
+
+* *startLogin(phoneNumber)* - to initiate the session, which will send a flash message to your mobile phone and return the MobileIDSession, which contains the challenge code that you need to display to the user
+* *waitForLogin(session)* - to wait until user finally signs the challenge
 
 See working example in [HelloMobileID.java](http://github.com/codeborne/mobileid/blob/master/test/com/codeborne/security/mobileid/HelloMobileID.java) - run the main() method.
