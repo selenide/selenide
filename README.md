@@ -22,4 +22,4 @@ Usage
 
 Just use the public methods in com.codeborne.security.mobileid.MobileIDAuthenticator class.
 
-See working example in [HelloMobileID.java](blob/master/test/com/codeborne/security/mobileid/HelloMobileID.java) - run the main() method.
+See working example in [HelloMobileID.java](http://github.com/codeborne/mobileid/blob/master/test/com/codeborne/security/mobileid/HelloMobileID.java) - run the main() method.
