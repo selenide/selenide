@@ -12,9 +12,8 @@ Java and Mobile-ID
 The official Mobile-ID API is a SOAP web service, so it usually takes time to generate the code and
 start using it in a Java application.
 
-This small library tries to solve this problem: just add the *mobileid.jar* (with dependencies) to your
-project and you have a working Mobile-ID support. It already contains all the generated classes as well as a simplified
-API of our own.
+This small library tries to solve this problem: just add the [*mobileid.jar* (with dependencies)](https://github.com/codeborne/mobileid/tree/master/build/libs)
+to your project and you have a working Mobile-ID support. It already contains all the generated classes (by axis v1) as well as a simplified API of our own.
 
 The same jar works in Scala as well or any other JVM-based language.
 
