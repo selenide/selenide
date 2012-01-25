@@ -23,7 +23,7 @@ Usage
 
 Just use the public methods in [MobileIDAuthenticator](http://github.com/codeborne/mobileid/blob/master/src/com/codeborne/security/mobileid/MobileIDAuthenticator.java) class:
 
-* *startLogin(phoneNumber)* - to initiate the session, which will send a flash message to your mobile phone and return the MobileIDSession, which contains the challenge code that you need to display to the user
-* *waitForLogin(session)* - to wait until user finally signs the challenge
+* startLogin(phoneNumber) - to initiate the login session, which will send a flash message to your mobile phone. The returned MobileIDSession contains the challenge code that you need to display to the user.
+* waitForLogin(session) - to wait until user finally signs the challenge. This is a blocking call for simplicity.
 
 See working example in [HelloMobileID.java](http://github.com/codeborne/mobileid/blob/master/test/com/codeborne/security/mobileid/HelloMobileID.java) - run the main() method.
