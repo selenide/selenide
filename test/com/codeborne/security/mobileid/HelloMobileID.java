@@ -29,7 +29,7 @@ public class HelloMobileID {
       showMessage("<br>Challenge: " + mobileIDSession.challenge + "<br>You will get SMS in few seconds.<br>Please accept it to login.<br>");
 
       mid.waitForLogin(mobileIDSession);
-      showMessage("Your have logged in." +
+      showMessage("You have logged in." +
           "<br>First name: " + mobileIDSession.firstName +
           "<br>Last name: " + mobileIDSession.lastName +
           "<br>Personal code: " + mobileIDSession.personalCode);
