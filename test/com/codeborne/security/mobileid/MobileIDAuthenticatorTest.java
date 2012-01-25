@@ -1,7 +1,7 @@
 package com.codeborne.security.mobileid;
 
 import com.codeborne.security.AuthenticationException;
-import com.codeborne.security.mobileid.client.DigiDocServicePortType;
+import com.codeborne.security.digidoc.DigiDocServicePortType;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -23,7 +23,7 @@ public class MobileIDAuthenticatorTest {
   public void startSession() throws RemoteException, AuthenticationException {
     mid.digiDocServicePortType = mockMobileIdAuthenticator("OK", "Bruce", "Willis", "38105060708", "4567", 123);
 
-    MobileIDSession session = mid.startSession("+37255667788");
+    MobileIDSession session = mid.startLogin("+37255667788");
     assertThat(session.firstName, equalTo("Bruce"));
     assertThat(session.lastName, equalTo("Willis"));
     assertThat(session.personalCode, equalTo("38105060708"));
@@ -34,7 +34,7 @@ public class MobileIDAuthenticatorTest {
   @Test(expected = AuthenticationException.class)
   public void throwsExceptionIfError() throws RemoteException, AuthenticationException {
     mid.digiDocServicePortType = mockMobileIdAuthenticatorError(100);
-    mid.startSession("+37255667788");
+    mid.startLogin("+37255667788");
   }
 
   private DigiDocServicePortType mockMobileIdAuthenticator(final String result, final String firstName, final String lastName, final String personalCode, final String challenge, final int sessCode) throws RemoteException {

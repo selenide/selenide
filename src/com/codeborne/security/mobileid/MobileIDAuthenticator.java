@@ -1,9 +1,9 @@
 package com.codeborne.security.mobileid;
 
 import com.codeborne.security.AuthenticationException;
-import com.codeborne.security.mobileid.client.DigiDocServicePortType;
-import com.codeborne.security.mobileid.client.DigiDocService_Service;
-import com.codeborne.security.mobileid.client.DigiDocService_ServiceLocator;
+import com.codeborne.security.digidoc.DigiDocServicePortType;
+import com.codeborne.security.digidoc.DigiDocService_Service;
+import com.codeborne.security.digidoc.DigiDocService_ServiceLocator;
 import org.apache.axis.AxisFault;
 
 import javax.xml.rpc.ServiceException;
@@ -13,6 +13,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
+/**
+ * Authenticates with Mobile-ID
+ */
 public class MobileIDAuthenticator {
   private String language = "EST";
   private String serviceName = "Testimine";
@@ -74,7 +77,7 @@ public class MobileIDAuthenticator {
     this.pollIntervalMs = pollIntervalMs;
   }
 
-  public MobileIDSession startSession(String phone) throws AuthenticationException {
+  public MobileIDSession startLogin(String phone) throws AuthenticationException {
     if (digiDocServicePortType == null) {
       throw new IllegalStateException("digidocServiceURL is not initialized");
     }

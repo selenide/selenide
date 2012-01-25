@@ -25,7 +25,7 @@ public class HelloMobileID {
 
   public final void login(String phoneNumber) {
     try {
-      final MobileIDSession mobileIDSession = mid.startSession(phoneNumber);
+      final MobileIDSession mobileIDSession = mid.startLogin(phoneNumber);
       showMessage("<br>Challenge: " + mobileIDSession.challenge + "<br>You will get SMS in few seconds.<br>Please accept it to login.<br>");
 
       mid.waitForLogin(mobileIDSession);
