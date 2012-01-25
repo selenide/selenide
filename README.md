@@ -1,7 +1,7 @@
 Mobile-ID
 =========
 
-[http://www.id.ee/?id=10995&&langchange=1 Mobile-ID] (Mobiil-ID) is a personal mobile identity in Estonia and Lithuania, 
+[Mobile-ID](http://www.id.ee/?id=10995&&langchange=1) (Mobiil-ID) is a personal mobile identity in Estonia and Lithuania,
 provided by an additional application on a SIM card. The good thing is that it 
 is backed by government and provides the same level of security for authentication 
 and digital signatures as a national ID card without the need of having a smart card reader.
@@ -22,4 +22,4 @@ Usage
 
 Just use the public methods in com.codeborne.security.mobileid.MobileIDAuthenticator class.
 
-See working example in [test/com/codeborne/security/mobileid/HelloMobileID.java HelloMobileID.java] - run the main() method.
+See working example in (HelloMobileID.java)[test/com/codeborne/security/mobileid/HelloMobileID.java] - run the main() method.
