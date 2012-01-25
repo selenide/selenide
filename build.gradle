@@ -6,7 +6,6 @@ version = '0.9'
 
 repositories{
   mavenCentral()
-//  mavenRepo urls: 'http://repository.jboss.com/maven2/'
 }
 
 configure(install.repositories.mavenInstaller) {
@@ -37,11 +36,9 @@ dependencies {
   testCompile 'org.mockito:mockito-all:1.9.0-rc1'
 }
 
-task libs(type: Sync) {
+task 'copy-libs'(type: Sync) {
   from configurations.compile
-  from configurations.runtime
-  from configurations.testCompile
-  into "$buildDir/lib"
+  into "$buildDir/libs"
 }
 
-defaultTasks 'clean', 'libs', 'test', 'install'
+defaultTasks 'clean', 'copy-libs', 'test', 'install'
