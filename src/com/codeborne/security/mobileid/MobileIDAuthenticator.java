@@ -4,7 +4,6 @@ import com.codeborne.security.AuthenticationException;
 import com.codeborne.security.digidoc.DigiDocServicePortType;
 import com.codeborne.security.digidoc.DigiDocService_Service;
 import com.codeborne.security.digidoc.DigiDocService_ServiceLocator;
-import org.apache.axis.AxisFault;
 
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.holders.IntHolder;
@@ -12,6 +11,8 @@ import javax.xml.rpc.holders.StringHolder;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
+
+import static com.codeborne.security.AuthenticationException.Code.*;
 
 /**
  * Authenticates with Mobile-ID.<br>
@@ -122,38 +123,11 @@ public class MobileIDAuthenticator {
           new StringHolder(), new StringHolder());
     }
     catch (RemoteException e) {
-      String errorCode;
-      if ("100".equals(e.getMessage()))
-        errorCode = "SERVICE_ERROR";   // Teenuse üldine veasituatsioon.
-      else if ("101".equals(e.getMessage()))
-        errorCode = "INVALID_INPUT";   // Sisendparameetrid mittekorrektsel kujul.
-      else if ("102".equals(e.getMessage()))
-        errorCode = "MISSING_INPUT";   // Mõni kohustuslik sisendparameeter on määramata
-      else if ("103".equals(e.getMessage()))
-        errorCode = "METHOD_NOT_ALLOWED"; // Ligipääs antud meetodile antud parameetritega piiratud (näiteks kasutatav ServiceName ei ole teenuse pakkuja juures registreeritud).
-      else if ("200".equals(e.getMessage()))
-        errorCode = "AUTHENTICATION_ERROR"; // Teenuse üldine viga.
-      else if ("201".equals(e.getMessage()))
-        errorCode = "USER_CERTIFICATE_MISSING"; // Kasutaja sertifikaat puudub.
-      else if ("202".equals(e.getMessage()))
-        errorCode = "UNABLE_TO_TEST_USER_CERTIFICATE"; // Kasutaja sertifikaadi kehtivus ei ole võimalik kontrollida.
-      else if ("300".equals(e.getMessage()))
-        errorCode = "USER_PHONE_ERROR"; // Kasutajaga telefoniga seotud üldine viga.
-      else if ("301".equals(e.getMessage()))
-        errorCode = "NO_AGREEMENT";   // Kasutajal pole Mobiil-ID lepingut.
-      else if ("302".equals(e.getMessage()))
-        errorCode = "CERTIFICATE_REVOKED"; // Kasutaja sertifikaat ei kehti (OCSP vastus REVOKED).
-      else if ("303".equals(e.getMessage()))
-        errorCode = "NOT_ACTIVATED";  // Kasutajal pole Mobiil-ID aktiveeritud. Aktiveerimiseks tuleks minna aadressile http://mobiil.id.ee
-      else
-        errorCode = e.getMessage();
-
-      String details = e instanceof AxisFault ? ((AxisFault)e).getFaultDetails()[0].getTextContent() : null;
-      throw new AuthenticationException(errorCode, details, e);
+      throw new AuthenticationException(e);
     }
 
     if (!"OK".equals(result.value))
-      throw new AuthenticationException(result.value);
+      throw new AuthenticationException(AUTHENTICATION_ERROR, result.value, null);
 
     return new MobileIDSession(sessCode.value, challenge.value, firstName.value, lastName.value, personalCodeHolder.value);
   }
@@ -177,13 +151,13 @@ public class MobileIDAuthenticator {
         digiDocServicePortType.getMobileAuthenticateStatus(session.sessCode, false, status, new StringHolder());
       }
       catch (RemoteException e) {
-        throw new AuthenticationException(status.value, null, e);
+        throw new AuthenticationException(e);
       }
       tryCount++;
     }
 
     if (!"USER_AUTHENTICATED".equals(status.value))
-      throw new AuthenticationException(status.value);
+      throw new AuthenticationException(AUTHENTICATION_ERROR, status.value, null);
 
     return session;
   }
