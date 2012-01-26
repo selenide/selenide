@@ -1,3 +1,10 @@
 /*.iml
+/.idea
 /.gradle
-/build
+/out
+/build/classes
+/build/dependency-cache
+/build/poms
+/build/reports
+/build/test-results
+/build/tmp
