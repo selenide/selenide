@@ -14,7 +14,11 @@ import java.net.URL;
 import java.rmi.RemoteException;
 
 /**
- * Authenticates with Mobile-ID
+ * Authenticates with Mobile-ID.<br>
+ * Can be used as a preconfigured singleton (eg Spring bean).<br>
+ * <p>Use {@link #startLogin} to initiate the login session and display challenge to the user,
+ * then {@link #waitForLogin(MobileIDSession)} to wait for the authentication to complete.</p>
+ * <p>Various setters can be used to configure the behaviour.</p>
  */
 public class MobileIDAuthenticator {
   private String language = "EST";
@@ -77,7 +81,26 @@ public class MobileIDAuthenticator {
     this.pollIntervalMs = pollIntervalMs;
   }
 
+  /**
+   * Initiates the login session. Note: returned session already contains user's info, but the authenticity is not yet verified.
+   * @param personalCode user's personal code
+   * @param countryCode two letter country code, eg EE
+   * @throws AuthenticationException is authentication unsuccessful
+   */
+  public MobileIDSession startLogin(String personalCode, String countryCode) throws AuthenticationException {
+    return startLogin(personalCode, countryCode, null);
+  }
+
+  /**
+   * Initiates the login session. Note: returned session already contains user's info, but the authenticity is not yet verified.
+   * @param phone phone number, either a local one (work for EE) or with country code (eg +37255667788).
+   * @throws AuthenticationException is authentication unsuccessful
+   */
   public MobileIDSession startLogin(String phone) throws AuthenticationException {
+    return startLogin(null, null, phone);
+  }
+  
+  protected MobileIDSession startLogin(String personalCode, String countryCode, String phone) throws AuthenticationException {
     if (digiDocServicePortType == null) {
       throw new IllegalStateException("digidocServiceURL is not initialized");
     }
@@ -89,13 +112,13 @@ public class MobileIDAuthenticator {
     StringHolder result = new StringHolder();
     StringHolder firstName = new StringHolder();
     StringHolder lastName = new StringHolder();
-    StringHolder personalCode = new StringHolder();
+    StringHolder personalCodeHolder = new StringHolder();
     StringHolder challenge = new StringHolder();
 
     try {
-      digiDocServicePortType.mobileAuthenticate(null, null, phone, language, serviceName, loginMessage, generateSPChallenge(),
+      digiDocServicePortType.mobileAuthenticate(personalCode, countryCode, phone, language, serviceName, loginMessage, generateSPChallenge(),
           messagingMode, 0, false, false, sessCode, result,
-          personalCode, firstName, lastName, new StringHolder(), new StringHolder(), new StringHolder(), challenge,
+          personalCodeHolder, firstName, lastName, new StringHolder(), new StringHolder(), new StringHolder(), challenge,
           new StringHolder(), new StringHolder());
     }
     catch (RemoteException e) {
@@ -132,7 +155,7 @@ public class MobileIDAuthenticator {
     if (!"OK".equals(result.value))
       throw new AuthenticationException(result.value);
 
-    return new MobileIDSession(sessCode.value, challenge.value, firstName.value, lastName.value, personalCode.value);
+    return new MobileIDSession(sessCode.value, challenge.value, firstName.value, lastName.value, personalCodeHolder.value);
   }
 
   protected String generateSPChallenge() {
@@ -141,6 +164,11 @@ public class MobileIDAuthenticator {
     return sb.toString();
   }
 
+  /**
+   * Waits until user confirms their identity using the mobile device.
+   * @param session previously returned by {@link #startLogin}
+   * @throws AuthenticationException is authentication unsuccessful
+   */
   public MobileIDSession waitForLogin(MobileIDSession session) throws AuthenticationException {
     StringHolder status = new StringHolder("OUTSTANDING_TRANSACTION");
     int tryCount = 0;
