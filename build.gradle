@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 sourceCompatibility = 1.5
-version = '0.9'
+version = '0.9.1'
 
 repositories{
   mavenCentral()
@@ -41,4 +41,9 @@ task 'copy-libs'(type: Sync) {
   into "$buildDir/libs"
 }
 
-defaultTasks 'clean', 'copy-libs', 'test', 'install'
+task 'copy-test-libs'(type: Sync) {
+  from configurations.testCompile
+  into "$buildDir/libs-test"
+}
+
+defaultTasks 'clean', 'copy-libs', 'copy-test-libs', 'test', 'install'

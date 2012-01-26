@@ -127,7 +127,7 @@ public class MobileIDAuthenticator {
     }
 
     if (!"OK".equals(result.value))
-      throw new AuthenticationException(AUTHENTICATION_ERROR, result.value, null);
+      throw new AuthenticationException(valueOf(result.value));
 
     return new MobileIDSession(sessCode.value, challenge.value, firstName.value, lastName.value, personalCodeHolder.value);
   }
@@ -157,7 +157,7 @@ public class MobileIDAuthenticator {
     }
 
     if (!"USER_AUTHENTICATED".equals(status.value))
-      throw new AuthenticationException(AUTHENTICATION_ERROR, status.value, null);
+      throw new AuthenticationException(valueOf(status.value));
 
     return session;
   }
