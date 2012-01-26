@@ -2,9 +2,11 @@
 /.idea
 /.gradle
 /out
+/classes
 /build/classes
 /build/dependency-cache
 /build/poms
 /build/reports
 /build/test-results
 /build/tmp
+/build/libs-test
