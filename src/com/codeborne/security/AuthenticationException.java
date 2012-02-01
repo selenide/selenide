@@ -19,6 +19,7 @@ public class AuthenticationException extends Exception {
     NO_AGREEMENT(301, "Kasutajal pole Mobiil-ID lepingut"),
     CERTIFICATE_REVOKED(302, "Kasutaja sertifikaat ei kehti (OCSP vastus REVOKED)."),
     NOT_ACTIVATED(303, "Kasutajal pole Mobiil-ID aktiveeritud. Aktiveerimiseks tuleks minna aadressile http://mobiil.id.ee"),
+    NOT_VALID(304, "Authentication failed: generated signature is not valid!"),
     USER_CANCEL(0, "");
 
     private int code;
