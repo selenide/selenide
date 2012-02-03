@@ -10,19 +10,20 @@ import org.junit.runners.model.Statement;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.github.selenide.UITest.takeScreenShot;
+import static com.github.selenide.WebDriverRunner.takeScreenShot;
 
-public class UITestsRunner extends BlockJUnit4ClassRunner {
+public class ScreenShooter extends BlockJUnit4ClassRunner {
+  public static int FAILURES_LIMIT = 3;
   private final AtomicInteger errors = new AtomicInteger();
 
-  public UITestsRunner(Class<?> clazz) throws InitializationError {
+  public ScreenShooter(Class<?> clazz) throws InitializationError {
     super(clazz);
   }
 
   @Override
   protected Statement methodInvoker(FrameworkMethod method, Object test) {
-    if (errors.get() > 3) {
-      throw new IllegalStateException("Some UI test already failed; don't waste time for others.");
+    if (errors.get() > FAILURES_LIMIT) {
+      throw new IllegalStateException(errors.get() + " tests already failed; don't waste time for others.");
     }
 
     return super.methodInvoker(method, test);

@@ -1,5 +1,6 @@
 package com.github.selenide.jetty;
 
+import com.github.selenide.Navigation;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
@@ -36,6 +37,8 @@ public class Launcher {
     if (new File(DEFAULT_WEBAPP_FOLDER).exists()) {
       addWebapp(DEFAULT_WEBAPP_CONTEXT, DEFAULT_WEBAPP_FOLDER);
     }
+
+    Navigation.baseUrl = "http://localhost:" + port;
   }
 
   public int getPort() {
@@ -46,13 +49,14 @@ public class Launcher {
     return defaultWebapp;
   }
 
-  protected Launcher addWebapp(String context, String folder) {
+  public Launcher addWebapp(String context, String folder) {
     if (!new File(folder).exists()) {
       throw new IllegalArgumentException("Webapp folder does not exist: " + folder);
     }
 
     if (webapps.isEmpty()) {
       defaultWebapp = context;
+      Navigation.baseUrl = "http://localhost:" + port + "/" + defaultWebapp;
     }
     webapps.put(context, folder);
     return this;
@@ -92,7 +96,7 @@ public class Launcher {
     }
   }
 
-  protected WebAppContext createWebApp(String contextPath, String webappLocation) {
+  private WebAppContext createWebApp(String contextPath, String webappLocation) {
     WebAppContext webapp = new WebAppContext();
     webapp.setContextPath(contextPath);
     webapp.setWar(webappLocation);
