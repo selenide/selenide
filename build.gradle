@@ -10,7 +10,7 @@ repositories{
 
 configure(install.repositories.mavenInstaller) {
   pom.groupId = 'com.codeborne'
-  pom.artifactId = 'codeborne-security'
+  pom.artifactId = 'mobileid'
   pom.version = '0.9'
 }
 
