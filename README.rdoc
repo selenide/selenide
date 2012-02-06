@@ -9,6 +9,8 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    waitFor(By.id("username", hasText("Hello, Johny!"));
  }
 
+You don't need to operate with Selenium WebDriver directly. WebDriver will be automatically created/deleted during test start/finished.
+
 == How to start?
 Just put selenide.jar to your project. Include the following methods and let's start!
 
@@ -29,16 +31,6 @@ Selenium is not a testing library, it just allows you to manipulate browser. Sel
 You can find more details below.
 
 
-
-=== Transparent WebDriver.
-You don't need to operate with Selenium WebDriver directly.
-Just extend class <code>com.github.selenide.UITest</code>:
-
- public class MyApplicationTest extends UITest {
-   ...
- }
-
-and you can use <code>webdriver</code> variable. WebDriver will be automatically created/deleted during test start/finished.
 
 === Convenience methods
 Selenide contains several methods that make your tests shorter and more readable:
