@@ -21,6 +21,15 @@ public class WebDriverRunner {
   static String browser = System.getProperty("browser", "firefox");
   private static WebDriver webdriver;
 
+  static {
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        closeWebDriver();
+      }
+    });
+  }
+
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
       webdriver = createDriver(browser);
@@ -34,15 +43,6 @@ public class WebDriverRunner {
       webdriver.close();
       webdriver = null;
     }
-  }
-
-  public static void closeWebDriverOnShutdown() {
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        closeWebDriver();
-      }
-    });
   }
 
   static boolean ie() {

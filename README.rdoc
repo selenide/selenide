@@ -1,6 +1,23 @@
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
+ @Test
+ public void testLogin() {
+   open("/login");
+   setValue(By.name("user.name"), "johny");
+   followLink(By.id("submit"));
+   waitFor(By.id("username", hasText("Hello, Johny!"));
+ }
+
+Though Selenium WebDriver[http://seleniumhq.org/projects/webdriver/] is a great library for operating web browser, it's API is too low-level. Developer needs to write some boilerplate code to create/shutdown webdriver, to search radio buttons, to wait for javascript interactions etc.
+With Selenide, You don't need to operate with Selenium WebDriver directly. WebDriver will be automatically created/deleted during test start/finished.
+
+== How to start?
+Just put selenide.jar to your project. Include the following methods and let's start!
+
+  include static com.github.selenide.Navigation.*
+  include static com.github.selenide.DOM.*
+
 == What benefits gives Selenide over plain Selenium?
 
 Selenium is not a testing library, it just allows you to manipulate browser. Selenide has additional functions for using Selenium in JUnit-based UI tests:
@@ -16,23 +33,13 @@ You can find more details below.
 
 
 
-=== Transparent WebDriver.
-You don't need to operate with Selenium WebDriver directly.
-Just extend class <code>com.github.selenide.UITest</code>:
-
- public class MyApplicationTest extends UITest {
-   ...
- }
-
-and you can use <code>webdriver</code> variable. WebDriver will be automatically created/deleted during test start/finished.
-
 === Convenience methods
 Selenide contains several methods that make your tests shorter and more readable:
 
  @Test
  public void canFillComplexForm() {
    open("/client/registration");
-   _setValue_(By.name("user.name"), "johny");
+   setValue(By.name("user.name"), "johny");
    selectRadio("user.gender", "male");
    selectOption(By.name("user.preferredLayout"), "plain");
    selectOptionByText(By.name("user.securityQuestion"), "What is my first car?");
@@ -59,9 +66,9 @@ Other available methods include:
 When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting:
 
 Selenide allows testing such cases in one-line:
- assertElement(By.id("topic"), visible);
- assertElement(By.id("topic"), hidden);
- assertElement(By.id("password"), hasNotClass("errorField"));
+ waitFor(By.id("topic"), visible);
+ waitFor(By.id("topic"), hidden);
+ waitFor(By.id("password"), hasNotClass("errorField"));
 etc.
 
 === What about IE?
