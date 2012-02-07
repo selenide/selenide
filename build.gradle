@@ -16,7 +16,7 @@ repositories {
 }
 
 configure(install.repositories.mavenInstaller) {
-  pom.groupId = 'com.github.selenide'
+  pom.groupId = 'com.codeborne'
   pom.artifactId = 'selenide'
   pom.version = '1.0-SNAPSHOT'
 }
