@@ -232,9 +232,6 @@ public class DOM {
           return element;
         }
       } catch (WebDriverException elementNotFound) {
-        if (condition.applyNull()) {
-          return null;
-        }
       }
       sleep(50);
     }
