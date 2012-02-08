@@ -1,4 +1,4 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -9,8 +9,6 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.github.selenide.WebDriverRunner.takeScreenShot;
 
 public class ScreenShooter extends BlockJUnit4ClassRunner {
   public static int FAILURES_LIMIT = 3;
@@ -47,14 +45,14 @@ public class ScreenShooter extends BlockJUnit4ClassRunner {
     @Override
     public void testFailure(Failure failure) throws Exception {
       errors.incrementAndGet();
-      takeScreenShot(failure.getTestHeader());
+      WebDriverRunner.takeScreenShot(failure.getTestHeader());
       super.testFailure(failure);
     }
 
     @Override
     public void testAssumptionFailure(Failure failure) {
       errors.incrementAndGet();
-      takeScreenShot(failure.getTestHeader());
+      WebDriverRunner.takeScreenShot(failure.getTestHeader());
       super.testAssumptionFailure(failure);
     }
   }

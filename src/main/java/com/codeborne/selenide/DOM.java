@@ -1,12 +1,11 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.openqa.selenium.*;
 
 import java.util.List;
 
-import static com.github.selenide.Condition.*;
-import static com.github.selenide.WebDriverRunner.fail;
-import static com.github.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.fail;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -123,7 +122,7 @@ public class DOM {
   }
 
   public static void selectOption(By selectField, String value) {
-    waitFor(selectField, hasOptions());
+    waitFor(selectField, Condition.hasOptions());
     findOptionByValue(selectField, value).click();
     triggerChangeEvent(selectField);
   }
@@ -144,7 +143,7 @@ public class DOM {
   }
 
   public void selectOptionByText(By selectField, String value) {
-    waitFor(selectField, hasOptions());
+    waitFor(selectField, Condition.hasOptions());
     findOptionByText(selectField, value).click();
     triggerChangeEvent(selectField);
   }
@@ -195,7 +194,7 @@ public class DOM {
   }
 
   public static WebElement assertVisible(By selector) {
-    return assertElement(selector, visible);
+    return assertElement(selector, Condition.visible);
   }
 
   /**
@@ -203,7 +202,7 @@ public class DOM {
    * Be aware of asserting that element does not exists - it does veeery slooowly in Selenium.
    */
   public static WebElement assertHidden(By selector) {
-    return assertElement(selector, hidden);
+    return assertElement(selector, Condition.hidden);
   }
 
   public static WebElement assertElement(By selector, Condition condition) {
@@ -215,7 +214,7 @@ public class DOM {
   }
 
   public static WebElement waitFor(By by) {
-    return waitFor(by, visible);
+    return waitFor(by, Condition.visible);
   }
 
   public static WebElement waitFor(By by, Condition condition) {

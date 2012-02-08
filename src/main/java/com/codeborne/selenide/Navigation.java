@@ -1,9 +1,9 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
 
-import static com.github.selenide.WebDriverRunner.getWebDriver;
-import static com.github.selenide.WebDriverRunner.ie;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.ie;
 import static org.junit.Assert.assertTrue;
 
 public class Navigation {

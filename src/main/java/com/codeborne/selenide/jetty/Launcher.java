@@ -1,6 +1,6 @@
-package com.github.selenide.jetty;
+package com.codeborne.selenide.jetty;
 
-import com.github.selenide.Navigation;
+import com.codeborne.selenide.Navigation;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;

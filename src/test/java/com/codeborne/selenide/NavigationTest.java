@@ -1,8 +1,8 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.junit.Test;
 
-import static com.github.selenide.Navigation.makeUniqueUrl;
+import static com.codeborne.selenide.Navigation.makeUniqueUrl;
 import static org.junit.Assert.assertEquals;
 
 public class NavigationTest {

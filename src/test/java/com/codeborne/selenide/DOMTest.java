@@ -1,9 +1,9 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.github.selenide.DOM.getJQuerySelector;
+import static com.codeborne.selenide.DOM.getJQuerySelector;
 import static org.junit.Assert.assertEquals;
 
 public class DOMTest {

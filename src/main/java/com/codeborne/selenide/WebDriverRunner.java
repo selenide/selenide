@@ -1,4 +1,4 @@
-package com.github.selenide;
+package com.codeborne.selenide;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
