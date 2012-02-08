@@ -1,8 +1,5 @@
+apply from: 'build.gradle'
 apply plugin: 'signing'
-
-group= 'com.codeborne'
-artifact = 'selenide'
-version = '1.0-SNAPSHOT'
 
 signing {
   sign configurations.archives

@@ -1,15 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-apply from: 'public-repo-stuff.gradle'
+group = 'com.codeborne'
+artifact = 'selenide'
+version = '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.5
-
-jar {
-  manifest {
-    attributes 'Implementation-Title': 'Selenide', 'Implementation-Version': version, 'Author': 'Andrei Solntsev', 'URL': 'https://github.com/codeborne/selenide'
-  }
-}
 
 repositories {
   mavenCentral()
