@@ -21,12 +21,12 @@ uploadArchives {
                name 'selenide'
                packaging 'jar'
                description 'Selenide is an addition for Selenium WebDriver to facilitate writing JUnit tests with Selenium'
-               url 'https://github.com/codeborne/Selenide'
+               url 'https://github.com/codeborne/selenide'
 
                scm {
-                   url 'scm:git@github.com:codeborne/Selenide.git'
-                   connection 'scm:git@github.com:codeborne/Selenide.git'
-                   developerConnection 'scm:git@github.com:codeborne/Selenide.git'
+                   url 'scm:git@github.com:codeborne/selenide.git'
+                   connection 'scm:git@github.com:codeborne/selenide.git'
+                   developerConnection 'scm:git@github.com:codeborne/selenide.git'
                }
 
                licenses {

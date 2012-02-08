@@ -15,8 +15,8 @@ With Selenide, You don't need to operate with Selenium WebDriver directly. WebDr
 == How to start?
 Just put selenide.jar to your project. Include the following methods and let's start!
 
-  include static com.github.selenide.Navigation.*
-  include static com.github.selenide.DOM.*
+  include static com.codeborne.selenide.Navigation.*
+  include static com.codeborne.selenide.DOM.*
 
 == What benefits gives Selenide over plain Selenium?
 
