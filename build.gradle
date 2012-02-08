@@ -49,5 +49,11 @@ artifacts {
   archives javadocJar
 }
 
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.0-milestone-7'
+  jarFile = './gradle-wrapper/gradle-wrapper.jar'
+  scriptFile = './gradle'
+}
+
 defaultTasks 'clean', 'libs', 'test', 'jar', 'install'
 
