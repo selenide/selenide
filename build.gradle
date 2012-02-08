@@ -1,24 +1,18 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
+apply from: 'public-repo-stuff.gradle'
+
 sourceCompatibility = 1.5
-version = '1.0-SNAPSHOT'
-description = "Selenide is an addition for Selenium WebDriver to facilitate writing JUnit tests with Selenium"
 
 jar {
   manifest {
-    attributes 'Implementation-Title': 'Selenide', 'Implementation-Version': version, 'Author': 'Andrei Solntsev', 'URL': 'https://github.com/asolntsev/selenide'
+    attributes 'Implementation-Title': 'Selenide', 'Implementation-Version': version, 'Author': 'Andrei Solntsev', 'URL': 'https://github.com/codeborne/selenide'
   }
 }
 
 repositories {
   mavenCentral()
-}
-
-configure(install.repositories.mavenInstaller) {
-  pom.groupId = 'com.codeborne'
-  pom.artifactId = 'selenide'
-  pom.version = '1.0-SNAPSHOT'
 }
 
 dependencies {
@@ -54,6 +48,7 @@ task javadocJar(type: Jar, dependsOn:javadoc) {
 }
 
 artifacts {
+  archives jar
   archives sourcesJar
   archives javadocJar
 }
