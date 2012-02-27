@@ -154,6 +154,28 @@ public class DOM {
     }
   }
 
+  public static String getSelectedValue(By selectField) {
+    WebElement option = findSelectedOption(selectField);
+    return option == null ? null : option.getAttribute("value");
+  }
+
+  public static String getSelectedText(By selectField) {
+    WebElement option = findSelectedOption(selectField);
+    return option == null ? null : option.getText();
+  }
+
+  private static WebElement findSelectedOption(By selectField) {
+    WebElement selectElement = getElement(selectField);
+    List<WebElement> options = selectElement.findElements(By.tagName("option"));
+    for (WebElement option : options) {
+      if (option.getAttribute("selected") != null) {
+        return option;
+      }
+    }
+
+    return null;
+  }
+
   public static void selectOption(By selectField, String value) {
     waitFor(selectField, Condition.hasOptions());
     findOptionByValue(selectField, value).click();

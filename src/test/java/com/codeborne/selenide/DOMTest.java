@@ -24,9 +24,13 @@ public class DOMTest {
     Navigation.navigateToAbsoluteUrl("http://www.rambler.ru"); // TODO Use something like localhost:8080/nojquery
     assertFalse(DOM.isJQueryAvailable());
     selectOption(By.xpath("//select[@name='domain']"), "myrambler.ru");
-    assertEquals("myrambler.ru", getElement(By.xpath("//select[@name='domain']")).getAttribute("value"));
+    assertEquals("myrambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
+    assertEquals("@myrambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
+
     selectOptionByText(By.xpath("//select[@name='domain']"), "@autorambler.ru");
-    assertEquals("autorambler.ru", getElement(By.xpath("//select[@name='domain']")).getAttribute("value"));
+    assertEquals("autorambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
+    assertEquals("@autorambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
+
     // TODO Test all methods on this page
   }
 
