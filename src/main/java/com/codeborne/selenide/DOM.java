@@ -35,21 +35,47 @@ public class DOM {
     element.clear();
     element.sendKeys(value);
   }
-
-  public static void click(By by) {
-    // This doesn't work stably in Windows:
-    // getElement(by).click();
-
-    // so we had to create a workaround using JavaScript:
-    executeJavaScript(getJQuerySelector(by) + ".click();");
+  
+  static boolean isJQueryAvailable() {
+    Object result = executeJavaScript("return (typeof jQuery);");
+    return !"undefined".equalsIgnoreCase(String.valueOf(result));
   }
 
+  public static void click(By by) {
+    if (!isJQueryAvailable()) {
+      // This doesn't work stably in Windows:
+      getElement(by).click();
+    }
+    else {
+      // so we had to create a workaround using JavaScript:
+      executeJavaScript(getJQuerySelector(by) + ".click();");
+    }
+  }
+
+  /**
+   * Click the Nth matched element on the page.
+   *
+   * @param by selector to match element
+   * @param index is zero-based
+   * @throws IllegalArgumentException if index is bigger than number of matched elements.
+   */
   public static void click(By by, int index) {
-    executeJavaScript(getJQuerySelector(by) + ".eq(" + index + ").click();");
+    List<WebElement> matchedElements = WebDriverRunner.getWebDriver().findElements(by);
+    if (index >= matchedElements.size()) {
+      throw new IllegalArgumentException("Cannot click " + index + "th element: there is only " + matchedElements.size() + " elements on the page");
+    }
+
+    if (isJQueryAvailable()) {
+      executeJavaScript(getJQuerySelector(by) + ".eq(" + index + ").click();");
+    } else {
+      matchedElements.get(index).click();
+    }
   }
 
   public static void triggerChangeEvent(By by) {
-    executeJavaScript(getJQuerySelector(by) + ".change();");
+    if (isJQueryAvailable()) {
+      executeJavaScript(getJQuerySelector(by) + ".change();");
+    }
   }
 
   public static String getJQuerySelector(By seleniumSelector) {
@@ -97,7 +123,10 @@ public class DOM {
    *
    * @param element HTML element to scroll to.
    */
-  public void scrollTo(By element) {
+  public static void scrollTo(By element) {
+    if (!isJQueryAvailable()) {
+      throw new IllegalStateException("JQuery is not available on current page");
+    }
     executeJavaScript("$.scrollTo('" + getJQuerySelectorString(element) + "')");
   }
 
@@ -111,14 +140,18 @@ public class DOM {
     assertThat(getWebDriver().findElements(byXpath).size(), equalTo(1));
     assertThat(getElement(byXpath).isDisplayed(), is(true));
 
-    executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".attr('checked', true);");
-    sleep(100);
-    executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".click();");
-    sleep(100);
-
-//    This doesn't always work properly in Windows:
-//    click(By.id(radioFieldId + value));
-//    triggerChangeEvent(By.id(radioFieldId));
+    if (isJQueryAvailable()) {
+      // It didn't always work properly for us, so we had to add "sleep" as a workaround.
+      executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".attr('checked', true);");
+      sleep(100);
+      executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".click();");
+      sleep(100);
+    }
+    else {
+      //    This doesn't always work properly in Windows:
+      click(By.id(radioFieldId + value));
+      triggerChangeEvent(By.id(radioFieldId));
+    }
   }
 
   public static void selectOption(By selectField, String value) {
@@ -142,7 +175,7 @@ public class DOM {
     throw new IllegalArgumentException("Option " + value + " is not found for select " + selectField);
   }
 
-  public void selectOptionByText(By selectField, String value) {
+  public static void selectOptionByText(By selectField, String value) {
     waitFor(selectField, Condition.hasOptions());
     findOptionByText(selectField, value).click();
     triggerChangeEvent(selectField);
@@ -161,7 +194,8 @@ public class DOM {
    * Not recommended! Searching of unexisting element is veeery slooooow in Selenium.
    * @deprecated
    */
-  protected static boolean existsAndVisible(By logoutLink) {
+  @Deprecated
+  public static boolean existsAndVisible(By logoutLink) {
     try {
       return getWebDriver().findElement(logoutLink).isDisplayed();
     } catch (NoSuchElementException doesNotExist) {
@@ -169,7 +203,7 @@ public class DOM {
     }
   }
 
-  public void followLink(By by) {
+  public static void followLink(By by) {
     WebElement link = getElement(by);
     String href = link.getAttribute("href");
     link.click();
@@ -230,7 +264,7 @@ public class DOM {
         if (condition.apply(element)) {
           return element;
         }
-      } catch (WebDriverException elementNotFound) {
+      } catch (WebDriverException ignored) {
       }
       sleep(50);
     }
@@ -242,6 +276,7 @@ public class DOM {
 
   /**
    * Not recommended. Test should not sleep, but should wait for some condition instead.
+   * @param milliseconds Time to sleep in milliseconds
    */
   private static void sleep(long milliseconds) {
     try {
