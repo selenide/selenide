@@ -10,7 +10,11 @@ public class Navigation {
   public static String baseUrl = "http://localhost:8080";
 
   public static void open(String relativeUrl) {
-    navigateToAbsoluteUrl(baseUrl + relativeUrl);
+    navigateToAbsoluteUrl(absoluteUrl(relativeUrl));
+  }
+
+  public static String absoluteUrl(String relativeUrl) {
+    return baseUrl + relativeUrl;
   }
 
   public static void navigateToAbsoluteUrl(String url) {
@@ -40,5 +44,17 @@ public class Navigation {
           url + "?timestamp=" + unique;
     }
     return fullUrl;
+  }
+
+  /**
+   * Not recommended. Test should not sleep, but should wait for some condition instead.
+   * @param milliseconds Time to sleep in milliseconds
+   */
+  public static void sleep(long milliseconds) {
+    try {
+      Thread.sleep(milliseconds);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

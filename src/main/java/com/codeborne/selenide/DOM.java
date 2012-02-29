@@ -6,9 +6,10 @@ import java.util.List;
 
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Navigation.sleep;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class DOM {
   private static final long defaultWaitingTimeout = Long.getLong("timeout", 4000);
@@ -21,13 +22,39 @@ public class DOM {
     }
   }
 
+  public static WebElement getElement(By by, int index) {
+    try {
+      return getWebDriver().findElements(by).get(index);
+    } catch (WebDriverException e) {
+      return fail("Cannot get element " + by + ", caused by: " + e);
+    }
+  }
+
+  public static List<WebElement> getElements(By by) {
+    try {
+      return getWebDriver().findElements(by);
+    } catch (WebDriverException e) {
+      return fail("Cannot get element " + by + ", caused by: " + e);
+    }
+  }
+  
   public static void setValue(By by, String value) {
     try {
-      WebElement element = getWebDriver().findElement(by);
+      WebElement element = getElement(by);
       setValue(element, value);
       triggerChangeEvent(by);
     } catch (WebDriverException e) {
       fail("Cannot get element " + by + ", caused by: " + e);
+    }
+  }
+
+  public static void setValue(By by, int index, String value) {
+    try {
+      WebElement element = getElement(by, index);
+      setValue(element, value);
+      triggerChangeEvent(by, index);
+    } catch (WebDriverException e) {
+      fail("Cannot get element " + by + " and index " + index + ", caused by: " + e);
     }
   }
 
@@ -44,7 +71,7 @@ public class DOM {
   public static void click(By by) {
     if (!isJQueryAvailable()) {
       // This doesn't work stably in Windows:
-      getElement(by).click();
+    getElement(by).click();
     }
     else {
       // so we had to create a workaround using JavaScript:
@@ -75,6 +102,12 @@ public class DOM {
   public static void triggerChangeEvent(By by) {
     if (isJQueryAvailable()) {
       executeJavaScript(getJQuerySelector(by) + ".change();");
+    }
+  }
+
+  public static void triggerChangeEvent(By by, int index) {
+    if (isJQueryAvailable()) {
+      executeJavaScript(getJQuerySelector(by) + ".eq(" + index + ").change();");
     }
   }
 
@@ -136,7 +169,7 @@ public class DOM {
     assertThat(getWebDriver().findElements(By.id(radioButtonId)).size(), equalTo(1));
     assertThat(getElement(By.id(radioButtonId)).isDisplayed(), is(true));
 
-    By byXpath = By.xpath("//label[@for='" + radioButtonId + "']");
+    By byXpath = By.xpath("//label[@for='" + radioButtonId + "']"); // TODO This method depends on "<label>" tag existence, which is not always the case.
     assertThat(getWebDriver().findElements(byXpath).size(), equalTo(1));
     assertThat(getElement(byXpath).isDisplayed(), is(true));
 
@@ -213,10 +246,8 @@ public class DOM {
   }
 
   /**
-   * Not recommended! Searching of unexisting element is veeery slooooow in Selenium.
-   * @deprecated
+   * Not recommended! Searching of nonexistent element is veeery slooooow in Selenium.
    */
-  @Deprecated
   public static boolean existsAndVisible(By logoutLink) {
     try {
       return getWebDriver().findElement(logoutLink).isDisplayed();
@@ -245,6 +276,26 @@ public class DOM {
     }
   }
 
+  public static void assertChecked(By element) {
+    assertThat(getElement(element).getAttribute("checked"), equalTo("true"));
+  }
+
+  public static void assertNotChecked(By element) {
+    assertNull(getElement(element).getAttribute("checked"));
+  }
+
+  public static void assertDisabled(By element) {
+    assertThat(getElement(element).getAttribute("disabled"), equalTo("true") );
+  }
+
+  public static void assertSelected(By element) {
+    assertTrue(getElement(element).isSelected());
+  }
+
+  public static void assertNotSelected(By element) {
+    assertFalse(getElement(element).isSelected());
+  }
+
   public static boolean isVisible(By selector) {
     return getElement(selector).isDisplayed();
   }
@@ -270,19 +321,33 @@ public class DOM {
   }
 
   public static WebElement waitFor(By by) {
-    return waitFor(by, Condition.visible);
+    return waitFor(by, 0, Condition.visible, defaultWaitingTimeout);
   }
 
   public static WebElement waitFor(By by, Condition condition) {
-    return waitFor(by, condition, defaultWaitingTimeout);
+    return waitFor(by, 0, condition, defaultWaitingTimeout);
+  }
+
+  public static WebElement waitFor(By by, int index, Condition condition) {
+    return waitFor(by, index, condition, defaultWaitingTimeout);
   }
 
   public static WebElement waitFor(By by, Condition condition, long milliseconds) {
+    return waitFor(by, 0, condition, milliseconds);
+  }
+
+  public static WebElement waitFor(By by, int index, Condition condition, long milliseconds) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
     do {
       try {
-        element = getWebDriver().findElement(by);
+        if (index == 0) {
+          element = getWebDriver().findElement(by);
+        }
+        else {
+          element = getWebDriver().findElements(by).get(index);
+        }
+
         if (condition.apply(element)) {
           return element;
         }
@@ -294,17 +359,5 @@ public class DOM {
 
     fail("Element " + by + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
     return null;
-  }
-
-  /**
-   * Not recommended. Test should not sleep, but should wait for some condition instead.
-   * @param milliseconds Time to sleep in milliseconds
-   */
-  private static void sleep(long milliseconds) {
-    try {
-      Thread.sleep(milliseconds);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
   }
 }

@@ -45,7 +45,7 @@ public class WebDriverRunner {
     }
   }
 
-  static boolean ie() {
+  public static boolean ie() {
     return webdriver != null && webdriver instanceof InternetExplorerDriver;
   }
 
