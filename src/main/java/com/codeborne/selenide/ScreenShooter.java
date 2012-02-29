@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
@@ -13,9 +14,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ScreenShooter extends BlockJUnit4ClassRunner {
   public static int FAILURES_LIMIT = 3;
   private final AtomicInteger errors = new AtomicInteger();
+  private static final ThreadLocal<String> currentTest = new ThreadLocal<String>();
 
   public ScreenShooter(Class<?> clazz) throws InitializationError {
     super(clazz);
+  }
+  
+  public static String getCurrentTestName() {
+    return currentTest.get();
   }
 
   @Override
@@ -42,6 +48,18 @@ public class ScreenShooter extends BlockJUnit4ClassRunner {
 
 
   private class UITestListener extends RunListener {
+    @Override
+    public void testStarted(Description description) throws Exception {
+      currentTest.set(description.getDisplayName());
+      super.testStarted(description);
+    }
+
+    @Override
+    public void testFinished(Description description) throws Exception {
+      currentTest.remove();
+      super.testFinished(description);
+    }
+
     @Override
     public void testFailure(Failure failure) throws Exception {
       errors.incrementAndGet();
