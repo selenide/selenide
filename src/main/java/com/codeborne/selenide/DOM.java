@@ -69,14 +69,7 @@ public class DOM {
   }
 
   public static void click(By by) {
-    if (!isJQueryAvailable()) {
-      // This doesn't work stably in Windows:
     getElement(by).click();
-    }
-    else {
-      // so we had to create a workaround using JavaScript:
-      executeJavaScript(getJQuerySelector(by) + ".click();");
-    }
   }
 
   /**
