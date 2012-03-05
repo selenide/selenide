@@ -25,6 +25,11 @@ task libs(type: Sync) {
   into "$buildDir/lib"
 }
 
+test {
+  exclude 'com/codeborne/selenide/integrationtests/**'
+  testLogging.showStandardStreams = true
+}
+
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
   from sourceSets.main.allSource

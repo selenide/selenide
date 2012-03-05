@@ -63,7 +63,7 @@ public class DOM {
     element.sendKeys(value);
   }
   
-  static boolean isJQueryAvailable() {
+  public static boolean isJQueryAvailable() {
     Object result = executeJavaScript("return (typeof jQuery);");
     return !"undefined".equalsIgnoreCase(String.valueOf(result));
   }
