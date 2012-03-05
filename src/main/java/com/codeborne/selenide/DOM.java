@@ -238,9 +238,6 @@ public class DOM {
     }
   }
 
-  /**
-   * Not recommended! Searching of nonexistent element is veeery slooooow in Selenium.
-   */
   public static boolean existsAndVisible(By logoutLink) {
     try {
       return getWebDriver().findElement(logoutLink).isDisplayed();
@@ -299,7 +296,6 @@ public class DOM {
 
   /**
    * Method fails if element does not exists.
-   * Be aware of asserting that element does not exists - it does veeery slooowly in Selenium.
    */
   public static WebElement assertHidden(By selector) {
     return assertElement(selector, Condition.hidden);

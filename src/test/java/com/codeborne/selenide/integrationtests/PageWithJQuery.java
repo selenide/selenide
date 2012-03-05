@@ -13,5 +13,4 @@ public class PageWithJQuery {
     assertTrue(DOM.isJQueryAvailable());
     // TODO Test all methods on this page
   }
-
 }

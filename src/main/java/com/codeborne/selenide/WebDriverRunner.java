@@ -33,7 +33,6 @@ public class WebDriverRunner {
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
       webdriver = createDriver(browser);
-      webdriver.manage().timeouts().implicitlyWait(5, SECONDS);
     }
     return webdriver;
   }
