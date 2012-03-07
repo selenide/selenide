@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
@@ -202,40 +203,16 @@ public class DOM {
     return null;
   }
 
+  public static Select select(By selectField) {
+    return new Select(getElement(selectField));
+  }
+
   public static void selectOption(By selectField, String value) {
-    waitFor(selectField, Condition.hasOptions());
-    findOptionByValue(selectField, value).click();
-    triggerChangeEvent(selectField);
+    select(selectField).selectByValue(value);
   }
 
-  private static WebElement findOptionByValue(By selectField, String value) {
-    try {
-      WebElement selectElement = getElement(selectField);
-      List<WebElement> options = selectElement.findElements(By.tagName("option"));
-      for (WebElement option : options) {
-        if (option.getAttribute("value").equals(value)) {
-          return option;
-        }
-      }
-    } catch (WebDriverException e) {
-      throw new IllegalArgumentException("Option " + value + " is not found for select " + selectField, e);
-    }
-    throw new IllegalArgumentException("Option " + value + " is not found for select " + selectField);
-  }
-
-  public static void selectOptionByText(By selectField, String value) {
-    waitFor(selectField, Condition.hasOptions());
-    findOptionByText(selectField, value).click();
-    triggerChangeEvent(selectField);
-  }
-
-  private static WebElement findOptionByText(By selectField, String text) {
-    WebElement selectElement = getElement(selectField);
-    try {
-      return selectElement.findElement(By.xpath("option[text()='" + text + "']"));
-    } catch (WebDriverException e) {
-      throw new IllegalArgumentException("Option " + text + " is not found for select " + selectField, e);
-    }
+  public static void selectOptionByText(By selectField, String text) {
+    select(selectField).selectByVisibleText(text);
   }
 
   public static boolean existsAndVisible(By logoutLink) {
