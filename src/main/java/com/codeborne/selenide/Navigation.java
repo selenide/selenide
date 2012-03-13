@@ -2,9 +2,9 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.DOM.waitFor;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
-import static org.junit.Assert.assertTrue;
 
 public class Navigation {
   public static String baseUrl = "http://localhost:8080";
@@ -19,7 +19,7 @@ public class Navigation {
 
   public static void navigateToAbsoluteUrl(String url) {
     getWebDriver().navigate().to(makeUniqueUrl(url, System.nanoTime()));
-    assertTrue(getWebDriver().findElement(By.tagName("body")).isDisplayed());
+    waitFor(By.tagName("body"));
 
     if (ie()) {
       toBeSureThatPageIsNotCached();
