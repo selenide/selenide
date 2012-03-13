@@ -157,13 +157,20 @@ public class DOM {
     executeJavaScript("$.scrollTo('" + getJQuerySelectorString(element) + "')");
   }
 
+  /**
+   * This method depends on "<label>" tag existence, which is not always the case.
+   *
+   * @param radioFieldId IF of radio field
+   * @param value value to select
+   */
   public static void selectRadio(String radioFieldId, String value) {
     String radioButtonId = radioFieldId + value;
 
+    waitFor(By.id(radioButtonId));
     assertThat(getWebDriver().findElements(By.id(radioButtonId)).size(), equalTo(1));
     assertThat(getElement(By.id(radioButtonId)).isDisplayed(), is(true));
 
-    By byXpath = By.xpath("//label[@for='" + radioButtonId + "']"); // TODO This method depends on "<label>" tag existence, which is not always the case.
+    By byXpath = By.xpath("//label[@for='" + radioButtonId + "']");
     assertThat(getWebDriver().findElements(byXpath).size(), equalTo(1));
     assertThat(getElement(byXpath).isDisplayed(), is(true));
 
@@ -175,7 +182,7 @@ public class DOM {
       sleep(100);
     }
     else {
-      //    This doesn't always work properly in Windows:
+      // This doesn't always work properly in Windows
       click(By.id(radioFieldId + value));
       triggerChangeEvent(By.id(radioFieldId));
     }
