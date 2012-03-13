@@ -6,6 +6,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -13,8 +14,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.FileWriter;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
@@ -79,7 +78,9 @@ public class WebDriverRunner {
 
   private static WebDriver createDriver(String browser) {
     if ("chrome".equalsIgnoreCase(browser)) {
-      return new ChromeDriver();
+      ChromeOptions options = new ChromeOptions();
+      options.addArguments("chrome.switches", "--start-maximized");
+      return new ChromeDriver(options);
     }
     else if ("ie".equalsIgnoreCase(browser)) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
