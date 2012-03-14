@@ -156,28 +156,6 @@ public class DOM {
     executeJavaScript("$.scrollTo('" + getJQuerySelectorString(element) + "')");
   }
 
-  /**
-   * @deprecated This method depends on "<label>" tag existence, which is not always the case.
-   *
-   * <input type="radio" name="sex" id="sexMAN" checked="checked" value="MAN" />
-   * <label for="sexMAN">I am a man</label>
-   * <input type="radio" name="sex" id="sexWOMAN" value="WOMAN" />
-   * <label for="sexWOMAN">I am a woman</label>
-   *
-   * @param radioFieldId IF of radio field
-   * @param value value to select
-   */
-  @Deprecated
-  public static void selectRadio(String radioFieldId, String value) {
-    String radioButtonId = radioFieldId + value;
-
-    waitFor(By.id(radioButtonId));
-    assertVisible(By.id(radioButtonId));
-
-    click(By.id(radioFieldId + value));
-    triggerChangeEvent(By.id(radioFieldId));
-  }
-  
   public static WebElement selectRadio(By radioField, String value) {
     assertEnabled(radioField);
     for (WebElement radio : getElements(radioField)) {
