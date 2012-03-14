@@ -9,7 +9,6 @@ import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Navigation.sleep;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class DOM {
@@ -158,34 +157,36 @@ public class DOM {
   }
 
   /**
-   * This method depends on "<label>" tag existence, which is not always the case.
+   * @deprecated This method depends on "<label>" tag existence, which is not always the case.
+   *
+   * <input type="radio" name="sex" id="sexMAN" checked="checked" value="MAN" />
+   * <label for="sexMAN">I am a man</label>
+   * <input type="radio" name="sex" id="sexWOMAN" value="WOMAN" />
+   * <label for="sexWOMAN">I am a woman</label>
    *
    * @param radioFieldId IF of radio field
    * @param value value to select
    */
+  @Deprecated
   public static void selectRadio(String radioFieldId, String value) {
     String radioButtonId = radioFieldId + value;
 
     waitFor(By.id(radioButtonId));
-    assertThat(getWebDriver().findElements(By.id(radioButtonId)).size(), equalTo(1));
-    assertThat(getElement(By.id(radioButtonId)).isDisplayed(), is(true));
+    assertVisible(By.id(radioButtonId));
 
-    By byXpath = By.xpath("//label[@for='" + radioButtonId + "']");
-    assertThat(getWebDriver().findElements(byXpath).size(), equalTo(1));
-    assertThat(getElement(byXpath).isDisplayed(), is(true));
-
-    if (isJQueryAvailable()) {
-      // It didn't always work properly for us, so we had to add "sleep" as a workaround.
-      executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".attr('checked', true);");
-      sleep(100);
-      executeJavaScript(getJQuerySelector(By.id(radioButtonId)) + ".click();");
-      sleep(100);
+    click(By.id(radioFieldId + value));
+    triggerChangeEvent(By.id(radioFieldId));
+  }
+  
+  public static WebElement selectRadio(By radioField, String value) {
+    assertEnabled(radioField);
+    for (WebElement radio : getElements(radioField)) {
+      if (value.equals(radio.getAttribute("value"))) {
+        radio.click();
+        return radio;
+      }
     }
-    else {
-      // This doesn't always work properly in Windows
-      click(By.id(radioFieldId + value));
-      triggerChangeEvent(By.id(radioFieldId));
-    }
+    throw new NoSuchElementException("With " + radioField);
   }
 
   public static String getSelectedValue(By selectField) {
@@ -260,6 +261,10 @@ public class DOM {
 
   public static void assertDisabled(By element) {
     assertThat(getElement(element).getAttribute("disabled"), equalTo("true") );
+  }
+
+  public static void assertEnabled(By element) {
+    assertThat(getElement(element).getAttribute("disabled"), equalTo("false") );
   }
 
   public static void assertSelected(By element) {
