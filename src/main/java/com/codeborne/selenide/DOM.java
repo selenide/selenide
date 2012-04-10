@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.Navigation.sleep;
@@ -258,7 +259,7 @@ public class DOM {
   }
 
   public static WebElement assertVisible(By selector) {
-    return assertElement(selector, Condition.visible);
+    return assertElement(selector, visible);
   }
 
   /**
@@ -276,32 +277,47 @@ public class DOM {
     return element;
   }
 
-  public static WebElement waitFor(By by) {
-    return waitFor(by, 0, Condition.visible, defaultWaitingTimeout);
+  public static WebElement waitFor(By elementSelector) {
+    return waitUntil(elementSelector, 0, visible, defaultWaitingTimeout);
   }
 
-  public static WebElement waitFor(By by, Condition condition) {
-    return waitFor(by, 0, condition, defaultWaitingTimeout);
+  @Deprecated
+  public static WebElement waitFor(By elementSelector, Condition condition) {
+    return waitUntil(elementSelector, condition);
   }
 
-  public static WebElement waitFor(By by, int index, Condition condition) {
-    return waitFor(by, index, condition, defaultWaitingTimeout);
+  public static WebElement waitUntil(By elementSelector, Condition condition) {
+    return waitUntil(elementSelector, 0, condition, defaultWaitingTimeout);
   }
 
-  public static WebElement waitFor(By by, Condition condition, long milliseconds) {
-    return waitFor(by, 0, condition, milliseconds);
+  public static WebElement waitUntil(By elementSelector, int index, Condition condition) {
+    return waitUntil(elementSelector, index, condition, defaultWaitingTimeout);
   }
 
-  public static WebElement waitFor(By by, int index, Condition condition, long milliseconds) {
+  @Deprecated
+  public static WebElement waitFor(By elementSelector, Condition condition, long milliseconds) {
+    return waitUntil(elementSelector, condition, milliseconds);
+  }
+
+  public static WebElement waitUntil(By elementSelector, Condition condition, long milliseconds) {
+    return waitUntil(elementSelector, 0, condition, milliseconds);
+  }
+
+  @Deprecated
+  public static WebElement waitFor(By elementSelector, int index, Condition condition, long milliseconds) {
+    return waitUntil(elementSelector, index, condition, milliseconds);
+  }
+
+  public static WebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
     do {
       try {
         if (index == 0) {
-          element = getWebDriver().findElement(by);
+          element = getWebDriver().findElement(elementSelector);
         }
         else {
-          element = getWebDriver().findElements(by).get(index);
+          element = getWebDriver().findElements(elementSelector).get(index);
         }
 
         if (condition.apply(element)) {
@@ -313,7 +329,7 @@ public class DOM {
     }
     while (System.currentTimeMillis() - startTime < milliseconds);
 
-    fail("Element " + by + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
+    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
     return null;
   }
 }
