@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 group = 'com.codeborne'
 artifact = 'selenide'
-version = '1.3-SNAPSHOT'
+version = '1.3'
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
