@@ -18,6 +18,7 @@ uploadArchives {
             }
 
             pom.project {
+              name archivesBaseName
               packaging 'jar'
               description 'Selenide = concise API for Selenium WebDriver in unit-tests'
               url 'https://github.com/codeborne/selenide'
