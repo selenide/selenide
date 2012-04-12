@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-  compile 'org.seleniumhq.selenium:selenium-java:2.20.0'
+  compile 'org.seleniumhq.selenium:selenium-java:2.21.0'
   compile 'junit:junit:4.10'
   compile 'org.hamcrest:hamcrest-all:1.1'
 }
@@ -47,7 +47,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '1.0-milestone-8a'
+  gradleVersion = '1.0-rc-1'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }
