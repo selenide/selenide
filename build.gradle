@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='1.4-SNAPSHOT'
+version='1.4'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.5
