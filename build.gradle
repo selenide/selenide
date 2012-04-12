@@ -1,9 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-group = 'com.codeborne'
-artifact = 'selenide'
-version = '1.4-SNAPSHOT'
+group='com.codeborne'
+version='1.4-SNAPSHOT'
+
+compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 

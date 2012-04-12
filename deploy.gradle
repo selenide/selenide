@@ -10,7 +10,7 @@ signing {
 uploadArchives {
     repositories {
         mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signPom(deployment) }
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
 //              repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
@@ -18,10 +18,9 @@ uploadArchives {
             }
 
             pom.project {
-               name 'selenide'
-               packaging 'jar'
-               description 'Selenide = concise API for Selenium WebDriver in unit-tests'
-               url 'https://github.com/codeborne/selenide'
+              packaging 'jar'
+              description 'Selenide = concise API for Selenium WebDriver in unit-tests'
+              url 'https://github.com/codeborne/selenide'
 
                scm {
                    url 'scm:git@github.com:codeborne/selenide.git'
