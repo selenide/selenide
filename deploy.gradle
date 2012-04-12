@@ -20,7 +20,7 @@ uploadArchives {
             pom.project {
                name 'selenide'
                packaging 'jar'
-               description 'Selenide is an addition for Selenium WebDriver to facilitate writing JUnit tests with Selenium'
+               description 'Selenide = concise API for Selenium WebDriver in unit-tests'
                url 'https://github.com/codeborne/selenide'
 
                scm {

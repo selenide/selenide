@@ -20,7 +20,8 @@ Just put selenide.jar to your project. Include the following methods and let's s
 
 == What benefits gives Selenide over plain Selenium?
 
-Selenium is not a testing library, it just allows you to manipulate browser. Selenide has additional functions for using Selenium in JUnit-based UI tests:
+Selenium is not a testing library, it just allows you to manipulate browser.
+Selenide provides a concise API for using Selenium WebDriver in UI tests:
 [Transparent WebDriver]     You don't need to operate with WebDriver directly. With Selenide, setUp/tearDown methods do it for you.
 [Convenience methods]       Selenide contains convenient methods for operating controls like textfield, radiobutton and selectbox.
 [Ajax support]              when testing Ajax applications, we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
@@ -88,7 +89,8 @@ https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangm
 
 Until tutorial is ready, you can find some Selenide usages there.
 
-
+== How is author of Selenide?
+Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
 ---
 Author::   Andrei Solntsev <mailto:andrei@codeborne.com>
