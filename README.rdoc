@@ -6,7 +6,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    open("/login");
    setValue(By.name("user.name"), "johny");
    followLink(By.id("submit"));
-   waitFor(By.id("username", hasText("Hello, Johny!"));
+   waitFor(By.id("username"), hasText("Hello, Johny!"));
  }
 
 Though Selenium WebDriver[http://seleniumhq.org/projects/webdriver/] is a great library for operating web browser, it's API is too low-level. Developer needs to write some boilerplate code to create/shutdown webdriver, to search radio buttons, to wait for javascript interactions etc.
