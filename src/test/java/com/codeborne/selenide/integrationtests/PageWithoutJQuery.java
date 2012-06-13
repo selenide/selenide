@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.DOM.*;
-import static com.codeborne.selenide.DOM.getSelectedText;
-import static com.codeborne.selenide.DOM.getSelectedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
