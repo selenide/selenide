@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  compile 'org.seleniumhq.selenium:selenium-java:2.21.0'
+  compile 'org.seleniumhq.selenium:selenium-java:2.23.1'
   compile 'junit:junit:4.10'
   compile 'org.hamcrest:hamcrest-all:1.1'
 }
