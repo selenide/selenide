@@ -277,6 +277,13 @@ public class DOM {
     return element;
   }
 
+  public static WebElement assertElement(WebElement element, Condition condition) {
+    if (!condition.apply(element)) {
+      fail("Element " + element.getTagName() + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
+    }
+    return element;
+  }
+
   public static WebElement waitFor(By elementSelector) {
     return waitUntil(elementSelector, 0, visible, defaultWaitingTimeout);
   }
