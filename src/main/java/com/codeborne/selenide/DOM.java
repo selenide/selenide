@@ -243,7 +243,10 @@ public class DOM {
   }
 
   public static void assertEnabled(By element) {
-    assertThat(getElement(element).getAttribute("disabled"), equalTo("false") );
+    String disabled = getElement(element).getAttribute("disabled");
+    if (disabled != null) {
+      assertThat(disabled, equalTo("false"));
+    }
   }
 
   public static void assertSelected(By element) {
