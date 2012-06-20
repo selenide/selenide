@@ -45,6 +45,10 @@ public abstract class Condition {
     };
   }
 
+  public static Condition hasValue(final String value) {
+    return hasAttribute("value", value);
+  }
+
   public static Condition hasText(final String text) {
     return new Condition("hasText") {
       @Override
