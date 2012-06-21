@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.DOM.waitFor;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
+import static org.junit.Assert.assertEquals;
 
 public class Navigation {
   public static String baseUrl = "http://localhost:8080";
@@ -47,6 +48,14 @@ public class Navigation {
           url + "?timestamp=" + unique;
     }
     return fullUrl;
+  }
+
+  /**
+   * Assert that URL of current page is #baseUrl + #relativeUrl
+   * @param relativeUrl
+   */
+  public static void assertURL(String relativeUrl) {
+    assertEquals(baseUrl + relativeUrl, WebDriverRunner.getWebDriver().getCurrentUrl().replaceFirst("\\?.*$", ""));
   }
 
   /**
