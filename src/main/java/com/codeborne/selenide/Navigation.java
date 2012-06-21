@@ -18,11 +18,14 @@ public class Navigation {
   }
 
   public static void navigateToAbsoluteUrl(String url) {
-    getWebDriver().navigate().to(makeUniqueUrl(url, System.nanoTime()));
-    waitFor(By.tagName("body"));
-
     if (ie()) {
+      getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
+      waitFor(By.tagName("body"));
       toBeSureThatPageIsNotCached();
+    }
+    else {
+      getWebDriver().navigate().to(url);
+      waitFor(By.tagName("body"));
     }
   }
 
@@ -33,7 +36,7 @@ public class Navigation {
     }
   }
 
-  static String makeUniqueUrl(String url, long unique) {
+  static String makeUniqueUrlToAvoidIECaching(String url, long unique) {
     final String fullUrl;
     if (url.contains("timestamp=")) {
       fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
