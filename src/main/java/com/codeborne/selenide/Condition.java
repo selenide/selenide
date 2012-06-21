@@ -4,7 +4,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 public abstract class Condition {
-  public static final Condition visible = new Condition("visible") {
+  public static final Condition visible = new Condition("visible", false) {
     @Override
     public boolean apply(WebElement element) {
       return element != null && element.isDisplayed();
@@ -16,7 +16,7 @@ public abstract class Condition {
     }
   };
 
-  public static final Condition hidden = new Condition("hidden") {
+  public static final Condition hidden = new Condition("hidden", true) {
     @Override
     public boolean apply(WebElement element) {
       return element == null || !element.isDisplayed();
@@ -28,8 +28,23 @@ public abstract class Condition {
     }
   };
 
+  /**
+   * Synonym for #visible - may be used for better readability
+   * waitUntil(By.id("logoutLink"), appears);
+
+   * Thought the same can be done in a shorter way:
+   * waitFor(By.id("logoutLink");
+   */
+  public static final Condition appears = visible;
+
+  /**
+   * Synonym for #hidden - may be used for better readability:
+   * waitUntil(By.id("loginLink"), disappears);
+   */
+  public static final Condition disappears = hidden;
+
   public static Condition hasAttribute(final String attributeName, final String attributeValue) {
-    return new Condition("hasAttribute") {
+    return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {
         return element != null && attributeValue.equals(element.getAttribute(attributeName));
@@ -50,7 +65,7 @@ public abstract class Condition {
   }
 
   public static Condition hasText(final String text) {
-    return new Condition("hasText") {
+    return new Condition("hasText", false) {
       @Override
       public boolean apply(WebElement element) {
         return element != null && element.getText().contains(text);
@@ -68,7 +83,7 @@ public abstract class Condition {
   }
 
   public static Condition hasOptions() {
-    return new Condition("hasOptions") {
+    return new Condition("hasOptions", false) {
       @Override
       public boolean apply(WebElement element) {
         try {
@@ -106,7 +121,7 @@ public abstract class Condition {
   }
 
   public static Condition hasClass(final String cssClass) {
-    return new Condition("hasClass") {
+    return new Condition("hasClass", false) {
       @Override
       public boolean apply(WebElement element) {
         return element != null && hasClass(element, cssClass);
@@ -124,7 +139,7 @@ public abstract class Condition {
   }
 
   public static Condition hasNotClass(final String cssClass) {
-    return new Condition("hasNotClass") {
+    return new Condition("hasNotClass", false) {
       @Override
       public boolean apply(WebElement element) {
         return element != null && !hasClass(element, cssClass);
@@ -142,12 +157,18 @@ public abstract class Condition {
   }
 
   private final String name;
+  private final boolean nullIsAllowed;
 
-  public Condition(String name) {
+  public Condition(String name, boolean nullIsAllowed) {
     this.name = name;
+    this.nullIsAllowed = nullIsAllowed;
   }
 
   public abstract boolean apply(WebElement element);
+
+  public final boolean applyNull() {
+    return nullIsAllowed;
+  }
 
   public abstract String actualValue(WebElement element);
 

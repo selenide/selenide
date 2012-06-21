@@ -202,9 +202,9 @@ public class DOM {
     select(selectField).selectByVisibleText(text);
   }
 
-  public static boolean existsAndVisible(By logoutLink) {
+  public static boolean existsAndVisible(By selector) {
     try {
-      return getWebDriver().findElement(logoutLink).isDisplayed();
+      return getWebDriver().findElement(selector).isDisplayed();
     } catch (NoSuchElementException doesNotExist) {
       return false;
     }
@@ -239,7 +239,7 @@ public class DOM {
   }
 
   public static void assertDisabled(By element) {
-    assertThat(getElement(element).getAttribute("disabled"), equalTo("true") );
+    assertThat(getElement(element).getAttribute("disabled"), equalTo("true"));
   }
 
   public static void assertEnabled(By element) {
@@ -273,11 +273,19 @@ public class DOM {
   }
 
   public static WebElement assertElement(By selector, Condition condition) {
-    WebElement element = getElement(selector);
-    if (!condition.apply(element)) {
-      fail("Element " + selector + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
+    try {
+      WebElement element = getWebDriver().findElement(selector);
+      if (!condition.apply(element)) {
+        fail("Element " + selector + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
+      }
+      return element;
     }
-    return element;
+    catch (WebDriverException elementNotFound) {
+      if (!condition.applyNull()) {
+        throw elementNotFound;
+      }
+      return null;
+    }
   }
 
   public static WebElement assertElement(WebElement element, Condition condition) {
@@ -333,7 +341,10 @@ public class DOM {
         if (condition.apply(element)) {
           return element;
         }
-      } catch (WebDriverException ignored) {
+      } catch (WebDriverException elementNotFound) {
+        if (condition.applyNull()) {
+          return null;
+        }
       }
       sleep(50);
     }
