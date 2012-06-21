@@ -17,6 +17,14 @@ import java.io.FileWriter;
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
+  /**
+   * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
+   * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".
+   *
+   * Default value: false.
+   */
+  public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
+
   static String browser = System.getProperty("browser", "firefox");
   private static WebDriver webdriver;
 
@@ -38,7 +46,9 @@ public class WebDriverRunner {
 
   public static void closeWebDriver() {
     if (webdriver != null) {
-      webdriver.close();
+      if (!holdBrowserOpen) {
+        webdriver.close();
+      }
       webdriver = null;
     }
   }
