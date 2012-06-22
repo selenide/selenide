@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 public class DOM {
-  private static final long defaultWaitingTimeout = Long.getLong("timeout", 4000);
+  public static long defaultWaitingTimeout = Long.getLong("timeout", 4000);
 
   public static WebElement getElement(By by) {
     try {
