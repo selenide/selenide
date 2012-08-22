@@ -164,6 +164,10 @@ public abstract class Condition {
     this.nullIsAllowed = nullIsAllowed;
   }
 
+  public Condition(String name) {
+    this(name, false);
+  }
+
   public abstract boolean apply(WebElement element);
 
   public final boolean applyNull() {
