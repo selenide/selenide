@@ -1,7 +1,10 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public abstract class Condition {
   public static final Condition visible = new Condition("visible", false) {
@@ -104,7 +107,6 @@ public abstract class Condition {
     };
   }
 
-
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
     String[] classNames = classes.split(" ");
@@ -155,6 +157,28 @@ public abstract class Condition {
       }
     };
   }
+
+  protected Condition focused = new Condition("focused") {
+    @Override public boolean apply(WebElement webElement) {
+      return webElement.getAttribute("name").equals(getWebDriver().findElement(By.cssSelector(":focus")).getAttribute("name"));
+    }
+
+    @Override public String actualValue(WebElement webElement) {
+      return getWebDriver().findElement(By.cssSelector(":focus")).getAttribute("name");
+    }
+  };
+
+  public static final Condition enabled = new Condition("enabled") {
+    @Override public boolean apply(WebElement element) {
+      return element != null && element.isEnabled();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return element.isEnabled() ? "enabled" : "disabled";
+    }
+  };
+
+  protected Condition empty = hasValue("");
 
   private final String name;
   private final boolean nullIsAllowed;

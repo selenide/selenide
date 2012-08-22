@@ -55,7 +55,7 @@ public class Navigation {
    * @param relativeUrl
    */
   public static void assertURL(String relativeUrl) {
-    assertEquals(baseUrl + relativeUrl, WebDriverRunner.getWebDriver().getCurrentUrl().replaceFirst("\\?.*$", ""));
+    assertEquals(baseUrl + relativeUrl, getWebDriver().getCurrentUrl().replaceFirst("\\?.*$", ""));
   }
 
   /**
