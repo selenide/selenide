@@ -73,7 +73,8 @@ public class DOM {
     getElement(by).click();
   }
 
-  protected void callOnClick(By by) {
+  /** Calls onclick javascript code, useful for invisible (hovered) elements that cannot be clicked directly */
+  public static void callOnClick(By by) {
     executeJavaScript("eval(\"" + getElement(by).getAttribute("onclick") + "\")");
   }
 
