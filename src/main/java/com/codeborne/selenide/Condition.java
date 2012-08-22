@@ -67,6 +67,8 @@ public abstract class Condition {
     return hasAttribute("value", value);
   }
 
+  public static final Condition empty = hasValue("");
+
   public static Condition hasText(final String text) {
     return new Condition("hasText", false) {
       @Override
@@ -158,7 +160,7 @@ public abstract class Condition {
     };
   }
 
-  protected Condition focused = new Condition("focused") {
+  public static final Condition focused = new Condition("focused", false) {
     @Override public boolean apply(WebElement webElement) {
       return webElement.getAttribute("name").equals(getWebDriver().findElement(By.cssSelector(":focus")).getAttribute("name"));
     }
@@ -168,7 +170,7 @@ public abstract class Condition {
     }
   };
 
-  public static final Condition enabled = new Condition("enabled") {
+  public static final Condition enabled = new Condition("enabled", false) {
     @Override public boolean apply(WebElement element) {
       return element != null && element.isEnabled();
     }
@@ -178,18 +180,12 @@ public abstract class Condition {
     }
   };
 
-  protected Condition empty = hasValue("");
-
   private final String name;
   private final boolean nullIsAllowed;
 
   public Condition(String name, boolean nullIsAllowed) {
     this.name = name;
     this.nullIsAllowed = nullIsAllowed;
-  }
-
-  public Condition(String name) {
-    this(name, false);
   }
 
   public abstract boolean apply(WebElement element);
