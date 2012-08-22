@@ -50,7 +50,7 @@ public abstract class Condition {
     return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && attributeValue.equals(element.getAttribute(attributeName));
+        return element != null && attributeValue.equals(element.getAttribute(attributeName).trim());
       }
       @Override
       public String actualValue(WebElement element) {
