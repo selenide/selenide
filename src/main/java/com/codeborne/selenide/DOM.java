@@ -6,9 +6,9 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.Navigation.sleep;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -73,6 +73,10 @@ public class DOM {
     getElement(by).click();
   }
 
+  protected void callOnClick(By by) {
+    executeJavaScript("eval(\"" + getElement(by).getAttribute("onclick") + "\")");
+  }
+
   /**
    * Click the Nth matched element on the page.
    *
@@ -81,7 +85,7 @@ public class DOM {
    * @throws IllegalArgumentException if index is bigger than number of matched elements.
    */
   public static void click(By by, int index) {
-    List<WebElement> matchedElements = WebDriverRunner.getWebDriver().findElements(by);
+    List<WebElement> matchedElements = com.codeborne.selenide.WebDriverRunner.getWebDriver().findElements(by);
     if (index >= matchedElements.size()) {
       throw new IllegalArgumentException("Cannot click " + index + "th element: there is only " + matchedElements.size() + " elements on the page");
     }
