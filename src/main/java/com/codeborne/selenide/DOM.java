@@ -25,6 +25,16 @@ public class DOM {
   }
 
   /**
+   * Find the first element matching given CSS selector
+   * @param parent the WebElement to search elements in
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return null if element was no found
+   */
+  public static WebElement $(WebElement parent, String cssSelector) {
+    return parent.findElement(By.cssSelector(cssSelector));
+  }
+
+  /**
    * Find all elements matching given CSS selector.
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
@@ -33,6 +43,18 @@ public class DOM {
    */
   public static ElementsCollection $$(String cssSelector) {
     return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
+  }
+
+  /**
+   * Find all elements matching given CSS selector.
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
+   * @param parent the WebElement to search elements in
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return null if element was no found
+   */
+  public static ElementsCollection $$(WebElement parent, String cssSelector) {
+    return new ElementsCollection(parent.findElements((By.cssSelector(cssSelector))));
   }
 
   /**
@@ -162,7 +184,7 @@ public class DOM {
       return "." + className;
     } else if (seleniumSelector instanceof By.ByXPath) {
       String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
-      return seleniumXPath.replaceFirst("\\/\\/(.*)", "$1").replaceAll("\\[@", "[");
+      return seleniumXPath.replaceFirst("//(.*)", "$1").replaceAll("\\[@", "[");
     }
 
     return seleniumSelector.toString();
