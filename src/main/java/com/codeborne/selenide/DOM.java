@@ -25,12 +25,14 @@ public class DOM {
   }
 
   /**
-   * Find all elements matching given CSS selector
+   * Find all elements matching given CSS selector.
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return null if element was no found
    */
-  public static List<WebElement> $$(String cssSelector) {
-    return getElements(By.cssSelector(cssSelector));
+  public static ElementsCollection $$(String cssSelector) {
+    return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
   }
 
   /**
@@ -65,9 +67,9 @@ public class DOM {
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return null if element was no found
    */
-  public static List<WebElement> getElements(By criteria) {
+  public static ElementsCollection getElements(By criteria) {
     try {
-      return getWebDriver().findElements(criteria);
+      return new ElementsCollection(getWebDriver().findElements(criteria));
     } catch (WebDriverException e) {
       return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
