@@ -15,27 +15,61 @@ import static org.junit.Assert.*;
 public class DOM {
   public static long defaultWaitingTimeout = Long.getLong("timeout", 4000);
 
-  public static WebElement getElement(By by) {
+  /**
+   * Find the first element matching given CSS selector
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return null if element was no found
+   */
+  public static WebElement $(String cssSelector) {
+    return getElement(By.cssSelector(cssSelector));
+  }
+
+  /**
+   * Find all elements matching given CSS selector
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return null if element was no found
+   */
+  public static List<WebElement> $$(String cssSelector) {
+    return getElements(By.cssSelector(cssSelector));
+  }
+
+  /**
+   * Find the first element matching given criteria
+   * @param criteria instance of By: By.id(), By.className() etc.
+   * @return null if element was no found
+   */
+  public static WebElement getElement(By criteria) {
     try {
-      return getWebDriver().findElement(by);
+      return getWebDriver().findElement(criteria);
     } catch (WebDriverException e) {
-      return fail("Cannot get element " + by + ", caused by: " + e);
+      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
   }
 
-  public static WebElement getElement(By by, int index) {
+  /**
+   * Find the Nth element matching given criteria
+   * @param criteria instance of By: By.id(), By.className() etc.
+   * @param index 1..N
+   * @return null if element was no found
+   */
+  public static WebElement getElement(By criteria, int index) {
     try {
-      return getWebDriver().findElements(by).get(index);
+      return getWebDriver().findElements(criteria).get(index);
     } catch (WebDriverException e) {
-      return fail("Cannot get element " + by + ", caused by: " + e);
+      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
   }
 
-  public static List<WebElement> getElements(By by) {
+  /**
+   * Find all elements matching given CSS selector
+   * @param criteria instance of By: By.id(), By.className() etc.
+   * @return null if element was no found
+   */
+  public static List<WebElement> getElements(By criteria) {
     try {
-      return getWebDriver().findElements(by);
+      return getWebDriver().findElements(criteria);
     } catch (WebDriverException e) {
-      return fail("Cannot get element " + by + ", caused by: " + e);
+      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
   }
   
