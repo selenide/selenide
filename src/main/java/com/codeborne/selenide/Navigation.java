@@ -58,6 +58,18 @@ public class Navigation {
     assertEquals(baseUrl + relativeUrl, getWebDriver().getCurrentUrl().replaceFirst("\\?.*$", ""));
   }
 
+  public static String source() {
+    return getWebDriver().getPageSource();
+  }
+
+  public static String title() {
+    return getWebDriver().getTitle();
+  }
+
+  public static String url() {
+    return getWebDriver().getCurrentUrl();
+  }
+
   /**
    * Not recommended. Test should not sleep, but should wait for some condition instead.
    * @param milliseconds Time to sleep in milliseconds
