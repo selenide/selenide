@@ -6,7 +6,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    open("/login");
    setValue(By.name("user.name"), "johny");
    followLink(By.id("submit"));
-   waitFor(By.id("username"), hasText("Hello, Johny!"));
+   waitUntil(By.id("username"), hasText("Hello, Johny!"));
  }
 
 Though Selenium WebDriver[http://seleniumhq.org/projects/webdriver/] is a great library for operating web browser, it's API is too low-level. Developer needs to write some boilerplate code to create/shutdown webdriver, to search radio buttons, to wait for javascript interactions etc.
@@ -48,14 +48,17 @@ Selenide contains several methods that make your tests shorter and more readable
 
 === Functional style
 Combining JUnit and Selenium, you can write tests like this:
+ UGLY EXAMPLES:
  assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
  assertEquals("Agile engineering practices", webdriver.findElement(By.id("topic")).getText());
 
 With Selenide you can express the same test in a more functional style which is more readable:
+ GOOD EXAMPLES:
  assertElement(By.id("topic"), visible);
  assertElement(By.id("topic"), hasText("Agile engineering practices"));
 
 Other available methods include:
+ assertHidden(By.id("topic"));
  assertElement(By.id("topic"), hidden);
  assertElement(By.id("password"), hasAttribute("name", "user.password"));
  assertElement(By.id("securityQuestion"), hasOptions());
@@ -66,9 +69,9 @@ Other available methods include:
 When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting:
 
 Selenide allows testing such cases in one-line:
- waitFor(By.id("topic"), visible);
- waitFor(By.id("topic"), hidden);
- waitFor(By.id("password"), hasNotClass("errorField"));
+ waitFor(By.id("topic"));
+ waitUntil(By.id("topic"), hidden);
+ waitUntil(By.id("password"), hasNotClass("errorField"));
 etc.
 
 === What about IE?
@@ -84,15 +87,36 @@ you will encounter more problems in your projects - feel free to report them and
 
 
 == How to use Selenide?
+Just add a Selenide dependency to your pom, ivy or gradle dependencies configuration:
+ testCompile 'com.codeborne:selenide:1.6-SNAPSHOT'
+
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
 https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/era/hangman/uitest/HangmanSpec.java
 
 Until tutorial is ready, you can find some Selenide usages there.
+
+== Best practices
+Here we will provide some examples how Selenide can be used to write short and expressive acceptance tests.
+
+ LONG: assertEquals("EPP", getElement(By.tagName("title")).getText());
+ SHORTER: assertElement(By.tagName("title"), hasText("EPP"));
+ SHORT: assertEquals("EPP", title());
+
+ LONG:   assertEquals(2, getElements(By.className("tellimus")).size());
+ SHORT:  assertEquals(2, $$(".tellimus").size());
+
+ LONG:  assertThat(getElement(By.id("documentsTable")).findElement(By.tagName("tbody")).findElements(By.tagName("tr")).size(), equalTo(4));
+ SHORT: assertThat($$("#documentsTable tbody tr").size(), equalTo(4));
+
+
 
 == How is author of Selenide?
 Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
 ---
 Author::   Andrei Solntsev <mailto:andrei@codeborne.com>
+           Anon Keks <mailto:anton@codeborne.com>
+           Maksim Säkki <mailto:maksim@codeborne.com>
+           Vadim Gerasimov <mailto:vadim@codeborne.com>
 Version::  1.0
 Licence::  GPL[http://www.gnu.org/copyleft/gpl.html]
