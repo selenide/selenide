@@ -18,7 +18,8 @@ public class DOM {
   /**
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return null if element was no found
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
    */
   public static WebElement $(String cssSelector) {
     return getElement(By.cssSelector(cssSelector));
@@ -28,7 +29,8 @@ public class DOM {
    * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return null if element was no found
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
    */
   public static WebElement $(WebElement parent, String cssSelector) {
     return parent.findElement(By.cssSelector(cssSelector));
@@ -39,7 +41,7 @@ public class DOM {
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return null if element was no found
+   * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
     return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
@@ -51,7 +53,7 @@ public class DOM {
    * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return null if element was no found
+   * @return empty list if element was no found
    */
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
     return new ElementsCollection(parent.findElements((By.cssSelector(cssSelector))));
@@ -60,7 +62,8 @@ public class DOM {
   /**
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @return null if element was no found
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
    */
   public static WebElement getElement(By criteria) {
     try {
@@ -74,7 +77,8 @@ public class DOM {
    * Find the Nth element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 1..N
-   * @return null if element was no found
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
    */
   public static WebElement getElement(By criteria, int index) {
     try {
@@ -87,7 +91,7 @@ public class DOM {
   /**
    * Find all elements matching given CSS selector
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @return null if element was no found
+   * @return empty list if element was no found
    */
   public static ElementsCollection getElements(By criteria) {
     try {
