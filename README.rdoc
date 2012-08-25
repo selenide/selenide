@@ -7,10 +7,17 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    setValue(By.name("user.name"), "johny");
    followLink(By.id("submit"));
    waitUntil(By.id("username"), hasText("Hello, Johny!"));
+
+   assertThat($("#insuranceDetailsHeader").getText(), equalTo("Страховые полисы"));
+   assertThat($$("#paymentScheduleTable tr").size(), equalTo(7));
  }
 
 Though Selenium WebDriver[http://seleniumhq.org/projects/webdriver/] is a great library for operating web browser, it's API is too low-level. Developer needs to write some boilerplate code to create/shutdown webdriver, to search radio buttons, to wait for javascript interactions etc.
 With Selenide, You don't need to operate with Selenium WebDriver directly. WebDriver will be automatically created/deleted during test start/finished.
+
+Probably two the most noticeable methods are (inspired from jQuery):
+  $("#insuranceDetailsHeader") - returns WebElement matching given CSS selector
+  $$("#insuranceDetailsHeader tr td") - returns list of WebElements matching given CSS selector
 
 == How to start?
 Just put selenide.jar to your project. Include the following methods and let's start!

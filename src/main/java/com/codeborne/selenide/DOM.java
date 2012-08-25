@@ -37,6 +37,29 @@ public class DOM {
   }
 
   /**
+   * Find the Nth element matching given criteria
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 1..N
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
+   */
+  public static WebElement $(String cssSelector, int index) {
+    return $$(cssSelector).get(index);
+  }
+
+  /**
+   * Find the Nth element matching given criteria
+   * @param parent the WebElement to search elements in
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 1..N
+   * @return WebElement
+   * @throws NoSuchElementException if element was no found
+   */
+  public static WebElement $(WebElement parent, String cssSelector, int index) {
+    return $$(parent, cssSelector).get(index);
+  }
+
+  /**
    * Find all elements matching given CSS selector.
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
