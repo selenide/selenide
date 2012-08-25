@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -18,33 +19,33 @@ public class DOM {
   /**
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement $(String cssSelector) {
-    return getElement(By.cssSelector(cssSelector));
+  public static ShouldableWebElement $(String cssSelector) {
+    return wrap(getElement(By.cssSelector(cssSelector)));
   }
 
   /**
    * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement $(WebElement parent, String cssSelector) {
-    return parent.findElement(By.cssSelector(cssSelector));
+  public static ShouldableWebElement $(WebElement parent, String cssSelector) {
+    return wrap(parent.findElement(By.cssSelector(cssSelector)));
   }
 
   /**
    * Find the Nth element matching given criteria
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 1..N
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement $(String cssSelector, int index) {
-    return $$(cssSelector).get(index);
+  public static ShouldableWebElement $(String cssSelector, int index) {
+    return wrap($$(cssSelector).get(index));
   }
 
   /**
@@ -52,11 +53,11 @@ public class DOM {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 1..N
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement $(WebElement parent, String cssSelector, int index) {
-    return $$(parent, cssSelector).get(index);
+  public static ShouldableWebElement $(WebElement parent, String cssSelector, int index) {
+    return wrap($$(parent, cssSelector).get(index));
   }
 
   /**
