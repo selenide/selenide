@@ -28,6 +28,16 @@ public class DOM {
 
   /**
    * Find the first element matching given CSS selector
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return ShouldableWebElement
+   * @throws NoSuchElementException if element was no found
+   */
+  public static ShouldableWebElement $(By seleniumSelector) {
+    return wrap(getElement(seleniumSelector));
+  }
+
+  /**
+   * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return ShouldableWebElement
@@ -69,6 +79,17 @@ public class DOM {
    */
   public static ElementsCollection $$(String cssSelector) {
     return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
+  }
+
+  /**
+   * Find all elements matching given CSS selector.
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return empty list if element was no found
+   */
+  public static ElementsCollection $$(By seleniumSelector) {
+    return new ElementsCollection(getElements(seleniumSelector));
   }
 
   /**

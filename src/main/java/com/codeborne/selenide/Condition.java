@@ -87,6 +87,10 @@ public abstract class Condition {
     };
   }
 
+  public static Condition haveText(final String text) {
+    return hasText(text);
+  }
+
   public static Condition hasOptions() {
     return new Condition("hasOptions", false) {
       @Override
@@ -173,6 +177,26 @@ public abstract class Condition {
   public static final Condition enabled = new Condition("enabled", false) {
     @Override public boolean apply(WebElement element) {
       return element != null && element.isEnabled();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return element.isEnabled() ? "enabled" : "disabled";
+    }
+  };
+
+  public static final Condition disabled = new Condition("disabled", false) {
+    @Override public boolean apply(WebElement element) {
+      return element != null && !element.isEnabled();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return element.isEnabled() ? "enabled" : "disabled";
+    }
+  };
+
+  public static final Condition checked = new Condition("checked", false) {
+    @Override public boolean apply(WebElement element) {
+      return element != null && "true".equalsIgnoreCase(element.getAttribute("checked"));
     }
 
     @Override public String actualValue(WebElement element) {

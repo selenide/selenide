@@ -4,4 +4,5 @@ import org.openqa.selenium.WebElement;
 
 public interface ShouldableWebElement extends WebElement {
   void should(Condition condition);
+  void shouldBe(Condition condition);
 }

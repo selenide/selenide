@@ -24,7 +24,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if ("should".equals(method.getName())) {
+    if ("should".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       assertElement(delegate, (Condition) args[0]);
       return null;
     } else {
