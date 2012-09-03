@@ -11,9 +11,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URL;
+
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
@@ -26,6 +29,7 @@ public class WebDriverRunner {
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
   static String browser = System.getProperty("browser", "firefox");
+  static String remote = System.getProperty("remote", null);
   private static WebDriver webdriver;
 
   static {
@@ -39,7 +43,15 @@ public class WebDriverRunner {
 
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
-      webdriver = createDriver(browser);
+      if (remote == null) {
+        webdriver = createDriver(browser);
+      } else {
+        try {
+          webdriver = createRemoteDriver(remote, browser);
+        } catch (Exception ex){
+          throw new DriverInitializationException("Could not initialize remote driver", ex);
+        }
+      }
     }
     return webdriver;
   }
@@ -107,6 +119,12 @@ public class WebDriverRunner {
     else {
       return new FirefoxDriver();
     }
+  }
+
+  private static WebDriver createRemoteDriver(String remote, String browser) throws Exception {
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setBrowserName(browser);
+    return new RemoteWebDriver(new URL(remote), capabilities);
   }
 
   static <T> T fail(String message) {
