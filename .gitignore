@@ -2,6 +2,8 @@ build
 .idea
 out
 *.iml
+*.ipr
+*.iws
 .gradle
 .project
 .classpath
