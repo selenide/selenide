@@ -79,7 +79,7 @@ public class WebDriverRunner {
 
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
-      webdriver = remote == null ? createDriver(browser) : createRemoteDriver(remote, browser);
+      webdriver = createDriver();
     }
     return webdriver;
   }
@@ -126,8 +126,10 @@ public class WebDriverRunner {
     return null;
   }
 
-  private static WebDriver createDriver(String browser) {
-    if (CHROME.equalsIgnoreCase(browser)) {
+  private static WebDriver createDriver() {
+    if (remote != null) {
+      return createRemoteDriver(remote, browser);
+    } else if (CHROME.equalsIgnoreCase(browser)) {
       ChromeOptions options = new ChromeOptions();
       options.addArguments("chrome.switches", chromeSwitches);
       return new ChromeDriver(options);
