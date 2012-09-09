@@ -15,21 +15,57 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
+  public static final String CHROME = "chrome";
+  public static final String INTERNET_EXPLORER = "ie";
+  public static final String HTMLUNIT = "htmlunit";
+  public static final String FIREFOX = "firefox";
+
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
    * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".
-   *
+   * <p/>
    * Default value: false.
    */
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
-  static String browser = System.getProperty("browser", "firefox");
-  static String remote = System.getProperty("remote", null);
+  /**
+   * Which browser to use.
+   * Can be configured either programmatically or by system property "-Dbrowser=ie".
+   * Supported values: "chrome", "firefox", "ie", "htmlunit"
+   * <p/>
+   * Default value: "firefox"
+   */
+  public static String browser = System.getProperty("browser", "firefox");
+
+  /**
+   * URL of remote web driver (in case of using Selenium Grid).
+   * Can be configured either programmatically or by system property "-Dremote=true".
+   *
+   * Default value: null (Grid is not used).
+   */
+  public static String remote = System.getProperty("remote");
+
+  /**
+   * Value of "chrome.switches" parameter (in case of using Chrome driver).
+   * Can be configured either programmatically or by system property "-Dchrome.switches=--start-maximized".
+   * Default value: "--start-maximized"
+   */
+  public static String chromeSwitches = System.getProperty("chrome.switches", "--start-maximized");
+
+  /**
+   * Folder to store screenshots to.
+   * Can be configured either programmatically or by system property "-Dselenide.reports=true".
+   *
+   * Default value: "build/reports/tests" (this is default for Gradle projects)
+   */
+  public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
+
   private static WebDriver webdriver;
 
   static {
@@ -43,15 +79,7 @@ public class WebDriverRunner {
 
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
-      if (remote == null) {
-        webdriver = createDriver(browser);
-      } else {
-        try {
-          webdriver = createRemoteDriver(remote, browser);
-        } catch (Exception ex){
-          throw new DriverInitializationException("Could not initialize remote driver", ex);
-        }
-      }
+      webdriver = remote == null ? createDriver(browser) : createRemoteDriver(remote, browser);
     }
     return webdriver;
   }
@@ -83,11 +111,11 @@ public class WebDriverRunner {
         File scrFile = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
         String pageSource = webdriver.getPageSource();
 
-        String screenshotFileName = "build/reports/tests/" + fileName + ".png";
-        String htmlFileName = "build/reports/tests/" + fileName + ".html";
-        copyFile(scrFile, new File(screenshotFileName));
+        File screenshotFileName = new File(reportsFolder, fileName + ".png");
+        File htmlFileName = new File(reportsFolder, fileName + ".html");
+        copyFile(scrFile, screenshotFileName);
         IOUtils.write(pageSource, new FileWriter(htmlFileName));
-        return screenshotFileName;
+        return screenshotFileName.getAbsolutePath();
       } catch (Exception e) {
         System.err.println(e);
       }
@@ -99,39 +127,41 @@ public class WebDriverRunner {
   }
 
   private static WebDriver createDriver(String browser) {
-    if ("chrome".equalsIgnoreCase(browser)) {
+    if (CHROME.equalsIgnoreCase(browser)) {
       ChromeOptions options = new ChromeOptions();
-      options.addArguments("chrome.switches", "--start-maximized");
+      options.addArguments("chrome.switches", chromeSwitches);
       return new ChromeDriver(options);
-    }
-    else if ("ie".equalsIgnoreCase(browser)) {
+    } else if (INTERNET_EXPLORER.equalsIgnoreCase(browser)) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
       ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
       return new InternetExplorerDriver(ieCapabilities);
-    }
-    else if ("htmlunit".equalsIgnoreCase(browser)) {
+    } else if (HTMLUNIT.equalsIgnoreCase(browser)) {
       DesiredCapabilities desiredCapabilities = DesiredCapabilities.htmlUnit();
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
       desiredCapabilities.setJavascriptEnabled(true);
       return new HtmlUnitDriver(desiredCapabilities);
-    }
-    else {
+    } else if (FIREFOX.equalsIgnoreCase(browser)) {
       return new FirefoxDriver();
+    } else {
+      throw new IllegalArgumentException("Unknown 'browser' parameter: " + browser);
     }
   }
 
-  private static WebDriver createRemoteDriver(String remote, String browser) throws Exception {
-    DesiredCapabilities capabilities = new DesiredCapabilities();
-    capabilities.setBrowserName(browser);
-    return new RemoteWebDriver(new URL(remote), capabilities);
+  private static WebDriver createRemoteDriver(String remote, String browser) {
+    try {
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setBrowserName(browser);
+      return new RemoteWebDriver(new URL(remote), capabilities);
+    } catch (MalformedURLException e) {
+      throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
+    }
   }
 
   static <T> T fail(String message) {
     if (webdriver == null) {
       Assert.fail(message);
-    }
-    else {
+    } else {
       Assert.fail(message +
           ", browser.currentUrl=" + webdriver.getCurrentUrl() +
           ", browser.title=" + webdriver.getTitle()
