@@ -91,6 +91,10 @@ public abstract class Condition {
     return hasText(text);
   }
 
+  public static Condition text(final String text) {
+    return hasText(text);
+  }
+
   public static Condition hasOptions() {
     return new Condition("hasOptions", false) {
       @Override
@@ -126,6 +130,10 @@ public abstract class Condition {
       }
     }
     return false;
+  }
+
+  public static Condition cssClass(String cssClass) {
+    return hasClass(cssClass);
   }
 
   public static Condition hasClass(final String cssClass) {

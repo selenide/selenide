@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import org.openqa.selenium.WebElement;
 
 public interface ShouldableWebElement extends WebElement {
-  void should(Condition condition);
-  void shouldBe(Condition condition);
+  ShouldableWebElement should(Condition... condition);
+  ShouldableWebElement shouldHave(Condition... condition);
+  ShouldableWebElement shouldBe(Condition... condition);
 }
