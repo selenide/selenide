@@ -11,6 +11,10 @@ import org.junit.runners.model.Statement;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @deprecated Use com.codeborne.selenide.junit.ScreenShooter TestWatcher instead,
+ */
+@Deprecated
 public class ScreenShooter extends BlockJUnit4ClassRunner {
   public static int FAILURES_LIMIT = 3;
   private final AtomicInteger errors = new AtomicInteger();
