@@ -411,6 +411,10 @@ public class DOM {
     return waitUntil(elementSelector, 0, visible, defaultWaitingTimeout);
   }
 
+  public static WebElement waitFor(String cssSelector) {
+    return waitFor(By.cssSelector(cssSelector));
+  }
+
   @Deprecated
   public static WebElement waitFor(By elementSelector, Condition condition) {
     return waitUntil(elementSelector, condition);
@@ -420,8 +424,16 @@ public class DOM {
     return waitUntil(elementSelector, 0, condition, defaultWaitingTimeout);
   }
 
+  public static WebElement waitUntil(String cssSelector, Condition condition) {
+    return waitUntil(By.cssSelector(cssSelector), condition);
+  }
+
   public static WebElement waitUntil(By elementSelector, int index, Condition condition) {
     return waitUntil(elementSelector, index, condition, defaultWaitingTimeout);
+  }
+
+  public static WebElement waitUntil(String cssSelector, int index, Condition condition) {
+    return waitUntil(By.cssSelector(cssSelector), index, condition);
   }
 
   @Deprecated
@@ -433,11 +445,18 @@ public class DOM {
     return waitUntil(elementSelector, 0, condition, milliseconds);
   }
 
+  public static WebElement waitUntil(String cssSelector, Condition condition, long milliseconds) {
+    return waitUntil(By.cssSelector(cssSelector), condition, milliseconds);
+  }
+
   @Deprecated
   public static WebElement waitFor(By elementSelector, int index, Condition condition, long milliseconds) {
     return waitUntil(elementSelector, index, condition, milliseconds);
   }
 
+  public static WebElement waitUntil(String cssSelector, int index, Condition condition, long milliseconds) {
+    return waitUntil(By.cssSelector(cssSelector), index, condition, milliseconds);
+  }
   public static WebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
