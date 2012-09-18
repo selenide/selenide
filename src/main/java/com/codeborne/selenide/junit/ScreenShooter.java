@@ -15,20 +15,16 @@ import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
  * or
  * <code>
  *   @Rule
- *   public ScreenShooter makeScreenshotOnEveryTest = new ScreenShooter(true. true);
+ *   public ScreenShooter makeScreenshotOnEveryTest = new ScreenShooter().onSucceeded();
  * </code>
  */
 public class ScreenShooter extends TestWatcher {
-  private final boolean captureFailingTests;
-  private final boolean captureSuccessfulTests;
+  public boolean captureFailingTests = true;
+  public boolean captureSuccessfulTests;
 
-  public ScreenShooter() {
-    this(true, false);
-  }
-
-  public ScreenShooter(boolean captureFailingTests, boolean captureSuccessfulTests) {
-    this.captureFailingTests = captureFailingTests;
-    this.captureSuccessfulTests = captureSuccessfulTests;
+  public ScreenShooter onSucceeded() {
+    captureSuccessfulTests = true;
+    return this;
   }
 
   @Override protected void failed(Throwable e, Description description) {
