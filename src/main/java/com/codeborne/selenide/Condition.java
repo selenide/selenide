@@ -19,6 +19,33 @@ public abstract class Condition {
     }
   };
 
+  public static final Condition present = new Condition("present", false) {
+    @Override
+    public boolean apply(WebElement element) {
+      return true;
+    }
+
+    @Override
+    public String actualValue(WebElement element) {
+      return "does not exists";
+    }
+  };
+
+  public static final Condition notPresent = new Condition("notPresent", true) {
+    @Override
+    public boolean apply(WebElement element) {
+      return false;
+    }
+
+    @Override
+    public String actualValue(WebElement element) {
+      return "exists";
+    }
+  };
+
+  /**
+   * Checks that element is not visible or does not exists.
+   */
   public static final Condition hidden = new Condition("hidden", true) {
     @Override
     public boolean apply(WebElement element) {

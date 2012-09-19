@@ -5,6 +5,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.notPresent;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.fail;
@@ -381,16 +383,12 @@ public class DOM {
    * Method fails if element does not exists.
    */
   public static WebElement assertHidden(By selector) {
-    return assertElement(selector, Condition.hidden);
+    return assertElement(selector, hidden);
   }
 
   public static WebElement assertElement(By selector, Condition condition) {
     try {
-      WebElement element = getWebDriver().findElement(selector);
-      if (!condition.apply(element)) {
-        fail("Element " + selector + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
-      }
-      return element;
+      return assertElement(getWebDriver().findElement(selector), condition);
     }
     catch (WebDriverException elementNotFound) {
       if (!condition.applyNull()) {
