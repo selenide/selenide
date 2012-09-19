@@ -13,6 +13,6 @@ public class ShouldMatchers {
   public void testDollar() {
     Navigation.navigateToAbsoluteUrl("http://jquery.com/"); // TODO Use something like localhost:8080/nojquery
     assertVisible(By.id("jq-siteContain"));
-    $("#jq-siteContain").should(visible);
+    $("#jq-siteContain").shouldBe(visible);
   }
 }
