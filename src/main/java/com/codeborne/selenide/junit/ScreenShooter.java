@@ -11,7 +11,7 @@ import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
  * {@code
  *
  * @ Rule
- * public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failed();
+ * public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
  * }</pre>
  * <p/>
  * or
@@ -19,7 +19,7 @@ import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
  * {@code
  *
  *   @ Rule
- *   public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failed().succeeded();
+ *   public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().succeededTests();
  * }</pre>
  */
 public class ScreenShooter extends TestWatcher {
@@ -29,11 +29,11 @@ public class ScreenShooter extends TestWatcher {
   private ScreenShooter() {
   }
 
-  public static ScreenShooter failed() {
+  public static ScreenShooter failedTests() {
     return new ScreenShooter();
   }
 
-  public ScreenShooter succeeded() {
+  public ScreenShooter succeededTests() {
     captureSuccessfulTests = true;
     return this;
   }
