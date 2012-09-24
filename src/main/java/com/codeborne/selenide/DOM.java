@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.notPresent;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.fail;
@@ -455,6 +454,7 @@ public class DOM {
   public static WebElement waitUntil(String cssSelector, int index, Condition condition, long milliseconds) {
     return waitUntil(By.cssSelector(cssSelector), index, condition, milliseconds);
   }
+
   public static WebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
@@ -481,5 +481,24 @@ public class DOM {
 
     fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
     return null;
+  }
+
+  public static void confirm(String expectedConfirmationText) {
+    Alert alert = getWebDriver().switchTo().alert();
+    assertEquals(expectedConfirmationText, alert.getText());
+    alert.accept();
+
+    try {
+      long start = System.currentTimeMillis();
+      while (getWebDriver().switchTo().alert() != null) {
+        getWebDriver().switchTo().alert();
+        if (System.currentTimeMillis() - start > defaultWaitingTimeout) {
+          fail("Confirmation dialog has not disappeared in " + defaultWaitingTimeout + " milliseconds");
+        }
+        sleep(50);
+      }
+    }
+    catch (NoAlertPresentException ignore) {
+    }
   }
 }
