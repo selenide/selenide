@@ -484,9 +484,14 @@ public class DOM {
   }
 
   public static void confirm(String expectedConfirmationText) {
-    Alert alert = getWebDriver().switchTo().alert();
-    assertEquals(expectedConfirmationText, alert.getText());
-    alert.accept();
+
+    try {
+      Alert alert = getWebDriver().switchTo().alert();
+      assertEquals(expectedConfirmationText, alert.getText());
+      alert.accept();
+    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
+      return;
+    }
 
     try {
       long start = System.currentTimeMillis();
