@@ -4,7 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import java.util.regex.Pattern;
+
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static java.util.regex.Pattern.DOTALL;
 
 public abstract class Condition {
   public static final Condition visible = new Condition("visible", false) {
@@ -95,6 +98,40 @@ public abstract class Condition {
   }
 
   public static final Condition empty = hasValue("");
+
+  /**
+   * @see #matchText(String)
+   */
+  public static Condition matchesText(final String text) {
+    return matchText(text);
+  }
+
+  /**
+   * Assert that given element's text matches given regular expression
+   * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
+   * @return
+   */
+  public static Condition matchText(final String regex) {
+    return new Condition("match", false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return element != null && matches(element.getText(), regex);
+      }
+      @Override
+      public String actualValue(WebElement element) {
+        return element == null? "element does not even exist" :
+            "<" + element.getTagName() + ">" + element.getText() + "</" + element.getTagName() + ">";
+      }
+      @Override
+      public String toString() {
+        return "matched text '" + regex + "'";
+      }
+    };
+  }
+
+  private static boolean matches(String text, String regex) {
+    return Pattern.compile(regex, DOTALL).matcher(text).matches();
+  }
 
   public static Condition hasText(final String text) {
     return new Condition("hasText", false) {
