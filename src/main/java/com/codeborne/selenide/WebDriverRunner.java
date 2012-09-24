@@ -107,16 +107,16 @@ public class WebDriverRunner {
   public static String takeScreenShot(String fileName) {
     if (webdriver == null) {
       return null;
-    } else if (webdriver instanceof TakesScreenshot) {
+    }
+
+    File targetFile = new File(reportsFolder, fileName + ".html");
+    writeToFile(webdriver.getPageSource(), targetFile);
+
+    if (webdriver instanceof TakesScreenshot) {
       try {
         File scrFile = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
-        String pageSource = webdriver.getPageSource();
-
-        File screenshotFileName = new File(reportsFolder, fileName + ".png");
-        File htmlFileName = new File(reportsFolder, fileName + ".html");
-        copyFile(scrFile, screenshotFileName);
-        writeToFile(pageSource, htmlFileName);
-        return screenshotFileName.getAbsolutePath();
+        targetFile = new File(reportsFolder, fileName + ".png");
+        copyFile(scrFile, targetFile);
       } catch (Exception e) {
         System.err.println(e);
       }
@@ -124,16 +124,19 @@ public class WebDriverRunner {
       System.err.println("Cannot take screenshot, driver does not support it: " + webdriver);
     }
 
-    return null;
+    return targetFile.getAbsolutePath();
   }
 
-  private static void writeToFile(String content, File fileName) throws IOException {
-    FileWriter output = new FileWriter(fileName);
+  private static void writeToFile(String content, File targetFile) {
     try {
-      IOUtils.write(content, output);
-    }
-    finally {
-      output.close();
+      FileWriter output = new FileWriter(targetFile);
+      try {
+        IOUtils.write(content, output);
+      } finally {
+        output.close();
+      }
+    } catch (IOException e) {
+      System.err.println("Failed to write page source to file " + targetFile + ": " + e);
     }
   }
 
