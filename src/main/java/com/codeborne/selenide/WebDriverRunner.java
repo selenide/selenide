@@ -15,6 +15,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -114,7 +115,7 @@ public class WebDriverRunner {
         File screenshotFileName = new File(reportsFolder, fileName + ".png");
         File htmlFileName = new File(reportsFolder, fileName + ".html");
         copyFile(scrFile, screenshotFileName);
-        IOUtils.write(pageSource, new FileWriter(htmlFileName));
+        writeToFile(pageSource, htmlFileName);
         return screenshotFileName.getAbsolutePath();
       } catch (Exception e) {
         System.err.println(e);
@@ -124,6 +125,16 @@ public class WebDriverRunner {
     }
 
     return null;
+  }
+
+  private static void writeToFile(String content, File fileName) throws IOException {
+    FileWriter output = new FileWriter(fileName);
+    try {
+      IOUtils.write(content, output);
+    }
+    finally {
+      output.close();
+    }
   }
 
   private static WebDriver createDriver() {
