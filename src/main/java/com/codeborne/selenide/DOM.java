@@ -24,7 +24,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(String cssSelector) {
-    return wrap(getElement(By.cssSelector(cssSelector)));
+    return getElement(By.cssSelector(cssSelector));
   }
 
   /**
@@ -34,7 +34,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(By seleniumSelector) {
-    return wrap(getElement(seleniumSelector));
+    return getElement(seleniumSelector);
   }
 
   /**
@@ -108,12 +108,12 @@ public class DOM {
   /**
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement getElement(By criteria) {
+  public static ShouldableWebElement getElement(By criteria) {
     try {
-      return getWebDriver().findElement(criteria);
+      return wrap(getWebDriver().findElement(criteria));
     } catch (WebDriverException e) {
       return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
@@ -123,12 +123,12 @@ public class DOM {
    * Find the Nth element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 1..N
-   * @return WebElement
+   * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
-  public static WebElement getElement(By criteria, int index) {
+  public static ShouldableWebElement getElement(By criteria, int index) {
     try {
-      return getWebDriver().findElements(criteria).get(index);
+      return wrap(getWebDriver().findElements(criteria).get(index));
     } catch (WebDriverException e) {
       return fail("Cannot get element " + criteria + ", caused criteria: " + e);
     }
@@ -256,12 +256,12 @@ public class DOM {
     executeJavaScript("$.scrollTo('" + getJQuerySelectorString(element) + "')");
   }
 
-  public static WebElement selectRadio(By radioField, String value) {
+  public static ShouldableWebElement selectRadio(By radioField, String value) {
     assertEnabled(radioField);
     for (WebElement radio : getElements(radioField)) {
       if (value.equals(radio.getAttribute("value"))) {
         radio.click();
-        return radio;
+        return wrap(radio);
       }
     }
     throw new NoSuchElementException("With " + radioField);
@@ -277,12 +277,12 @@ public class DOM {
     return option == null ? null : option.getText();
   }
 
-  private static WebElement findSelectedOption(By selectField) {
+  private static ShouldableWebElement findSelectedOption(By selectField) {
     WebElement selectElement = getElement(selectField);
     List<WebElement> options = selectElement.findElements(By.tagName("option"));
     for (WebElement option : options) {
       if (option.getAttribute("selected") != null) {
-        return option;
+        return wrap(option);
       }
     }
 
@@ -360,18 +360,18 @@ public class DOM {
     return getElement(selector).isDisplayed();
   }
 
-  public static WebElement assertVisible(By selector) {
+  public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
    * Method fails if element does not exists.
    */
-  public static WebElement assertHidden(By selector) {
+  public static ShouldableWebElement assertHidden(By selector) {
     return assertElement(selector, hidden);
   }
 
-  public static WebElement assertElement(By selector, Condition condition) {
+  public static ShouldableWebElement assertElement(By selector, Condition condition) {
     try {
       return assertElement(getWebDriver().findElement(selector), condition);
     }
@@ -383,65 +383,65 @@ public class DOM {
     }
   }
 
-  public static WebElement assertElement(WebElement element, Condition condition) {
+  public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
     if (!condition.apply(element)) {
       fail("Element " + element.getTagName() + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
     }
-    return element;
+    return wrap(element);
   }
 
-  public static WebElement waitFor(By elementSelector) {
+  public static ShouldableWebElement waitFor(By elementSelector) {
     return waitUntil(elementSelector, 0, visible, defaultWaitingTimeout);
   }
 
-  public static WebElement waitFor(String cssSelector) {
+  public static ShouldableWebElement waitFor(String cssSelector) {
     return waitFor(By.cssSelector(cssSelector));
   }
 
   @Deprecated
-  public static WebElement waitFor(By elementSelector, Condition condition) {
+  public static ShouldableWebElement waitFor(By elementSelector, Condition condition) {
     return waitUntil(elementSelector, condition);
   }
 
-  public static WebElement waitUntil(By elementSelector, Condition condition) {
+  public static ShouldableWebElement waitUntil(By elementSelector, Condition condition) {
     return waitUntil(elementSelector, 0, condition, defaultWaitingTimeout);
   }
 
-  public static WebElement waitUntil(String cssSelector, Condition condition) {
+  public static ShouldableWebElement waitUntil(String cssSelector, Condition condition) {
     return waitUntil(By.cssSelector(cssSelector), condition);
   }
 
-  public static WebElement waitUntil(By elementSelector, int index, Condition condition) {
+  public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition) {
     return waitUntil(elementSelector, index, condition, defaultWaitingTimeout);
   }
 
-  public static WebElement waitUntil(String cssSelector, int index, Condition condition) {
+  public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition) {
     return waitUntil(By.cssSelector(cssSelector), index, condition);
   }
 
   @Deprecated
-  public static WebElement waitFor(By elementSelector, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitFor(By elementSelector, Condition condition, long milliseconds) {
     return waitUntil(elementSelector, condition, milliseconds);
   }
 
-  public static WebElement waitUntil(By elementSelector, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitUntil(By elementSelector, Condition condition, long milliseconds) {
     return waitUntil(elementSelector, 0, condition, milliseconds);
   }
 
-  public static WebElement waitUntil(String cssSelector, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitUntil(String cssSelector, Condition condition, long milliseconds) {
     return waitUntil(By.cssSelector(cssSelector), condition, milliseconds);
   }
 
   @Deprecated
-  public static WebElement waitFor(By elementSelector, int index, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitFor(By elementSelector, int index, Condition condition, long milliseconds) {
     return waitUntil(elementSelector, index, condition, milliseconds);
   }
 
-  public static WebElement waitUntil(String cssSelector, int index, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition, long milliseconds) {
     return waitUntil(By.cssSelector(cssSelector), index, condition, milliseconds);
   }
 
-  public static WebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
     do {
@@ -454,7 +454,7 @@ public class DOM {
         }
 
         if (condition.apply(element)) {
-          return element;
+          return wrap(element);
         }
       } catch (WebDriverException elementNotFound) {
         if (condition.applyNull()) {

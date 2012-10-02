@@ -13,8 +13,10 @@ import static com.codeborne.selenide.DOM.assertElement;
 
 public class ShouldableWebElementProxy implements InvocationHandler {
   public static ShouldableWebElement wrap(WebElement element) {
-    return (ShouldableWebElement) Proxy.newProxyInstance(
-        element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
+    return (element instanceof ShouldableWebElement) ?
+        (ShouldableWebElement) element :
+        (ShouldableWebElement) Proxy.newProxyInstance(
+          element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
   }
 
   private final WebElement delegate;
