@@ -32,7 +32,14 @@ public class ShouldableWebElementProxy implements InvocationHandler {
         assertElement(delegate, condition);
       }
       return proxy;
-    } else {
+    }
+    else if ("toString".equals(method.getName())) {
+      return new Describe(delegate)
+        .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
+        .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
+        .toString();
+    }
+    else {
       return delegateMethod(method, args);
     }
   }

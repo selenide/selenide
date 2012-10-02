@@ -492,31 +492,11 @@ public class DOM {
     }
   }
 
+  /**
+   * @deprecated Use $("selector").toString()
+   */
+  @Deprecated
   public static String describeElement(WebElement element) {
-    return new Describe(element)
-        .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
-        .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-        .toString();
-  }
-
-  private static class Describe {
-    private WebElement element;
-    private StringBuilder sb = new StringBuilder();
-    private Describe(WebElement element) {
-      this.element = element;
-      sb.append('<').append(element.getTagName());
-    }
-
-    Describe attr(String attributeName) {
-      String attributeValue = element.getAttribute(attributeName);
-      if (attributeValue != null) sb.append(' ').append(attributeName).append('=').append(attributeValue);
-      return this;
-    }
-
-    @Override
-    public String toString() {
-      sb.append('>').append(element.getText()).append("</").append(element.getTagName()).append('>');
-      return sb.toString();
-    }
+    return wrap(element).toString();
   }
 }
