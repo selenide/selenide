@@ -71,6 +71,13 @@ public class Navigation {
   }
 
   /**
+   * Reload current page
+   */
+  public static void refresh() {
+    getWebDriver().navigate().refresh();
+  }
+
+  /**
    * Not recommended. Test should not sleep, but should wait for some condition instead.
    * @param milliseconds Time to sleep in milliseconds
    */

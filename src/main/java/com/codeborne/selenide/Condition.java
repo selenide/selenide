@@ -213,7 +213,7 @@ public abstract class Condition {
       @Override
       public String actualValue(WebElement element) {
         return element == null? "element does not even exist" :
-            "<" + element.getTagName() + " @class='" + element.getAttribute("class") + "'" + ">" + element.getText() + "</" + element.getTagName() + ">";
+            '<' + element.getTagName() + " class=" + element.getAttribute("class") + '>' + element.getText() + "</" + element.getTagName() + '>';
       }
       @Override
       public String toString() {
@@ -231,7 +231,7 @@ public abstract class Condition {
       @Override
       public String actualValue(WebElement element) {
         return element == null? "element does not exist" :
-            "<" + element.getTagName() + " @class='" + element.getAttribute("class") + "'" + ">" + element.getText() + "</" + element.getTagName() + ">";
+            '<' + element.getTagName() + " class=" + element.getAttribute("class") + '>' + element.getText() + "</" + element.getTagName() + '>';
       }
       @Override
       public String toString() {
