@@ -77,6 +77,10 @@ public abstract class Condition {
   public static final Condition disappears = hidden;
 
   public static Condition hasAttribute(final String attributeName, final String attributeValue) {
+    return attribute(attributeName, attributeValue);
+  }
+
+  public static Condition attribute(final String attributeName, final String attributeValue) {
     return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {

@@ -174,7 +174,7 @@ public class WebDriverRunner {
     }
   }
 
-  static <T> T fail(String message) {
+  public static <T> T fail(String message) {
     if (webdriver == null) {
       Assert.fail(message);
     } else {
