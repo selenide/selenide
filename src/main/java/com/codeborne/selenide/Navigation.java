@@ -74,7 +74,7 @@ public class Navigation {
    * Reload current page
    */
   public static void refresh() {
-    getWebDriver().navigate().refresh();
+    navigateToAbsoluteUrl(url());
   }
 
   /**
