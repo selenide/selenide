@@ -95,11 +95,11 @@ public class WebDriverRunner {
   }
 
   public static boolean ie() {
-    return webdriver != null && webdriver instanceof InternetExplorerDriver;
+    return INTERNET_EXPLORER.equalsIgnoreCase(browser);
   }
 
   public static boolean htmlUnit() {
-    return webdriver != null && webdriver instanceof HtmlUnitDriver;
+    return HTMLUNIT.equalsIgnoreCase(browser);
   }
 
   public static void clearBrowserCache() {
@@ -151,11 +151,11 @@ public class WebDriverRunner {
       ChromeOptions options = new ChromeOptions();
       options.addArguments("chrome.switches", chromeSwitches);
       return new ChromeDriver(options);
-    } else if (INTERNET_EXPLORER.equalsIgnoreCase(browser)) {
+    } else if (ie()) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
       ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
       return new InternetExplorerDriver(ieCapabilities);
-    } else if (HTMLUNIT.equalsIgnoreCase(browser)) {
+    } else if (htmlUnit()) {
       DesiredCapabilities desiredCapabilities = DesiredCapabilities.htmlUnit();
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
