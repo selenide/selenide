@@ -26,6 +26,11 @@ public class WebDriverRunner {
   public static final String INTERNET_EXPLORER = "ie";
   public static final String HTMLUNIT = "htmlunit";
   public static final String FIREFOX = "firefox";
+  /**
+   * To use OperaDriver, you need to include extra dependency to your project:
+   * <dependency org="com.opera" name="operadriver" rev="0.18" conf="test->default"/>
+   */
+  public static final String OPERA = "opera";
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
@@ -42,7 +47,7 @@ public class WebDriverRunner {
    * <p/>
    * Default value: "firefox"
    */
-  public static String browser = System.getProperty("browser", "firefox");
+  public static String browser = System.getProperty("browser", FIREFOX);
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
@@ -163,8 +168,19 @@ public class WebDriverRunner {
       return new HtmlUnitDriver(desiredCapabilities);
     } else if (FIREFOX.equalsIgnoreCase(browser)) {
       return new FirefoxDriver();
+    } else if (OPERA.equalsIgnoreCase(browser)) {
+      return createInstanceOf("com.opera.core.systems.OperaDriver");
     } else {
-      throw new IllegalArgumentException("Unknown 'browser' parameter: " + browser);
+      return createInstanceOf(browser);
+    }
+  }
+
+  private static WebDriver createInstanceOf(String className) {
+    try {
+      return (WebDriver) Class.forName(className).newInstance();
+    }
+    catch (Exception invalidClassName) {
+      throw new IllegalArgumentException(invalidClassName);
     }
   }
 
