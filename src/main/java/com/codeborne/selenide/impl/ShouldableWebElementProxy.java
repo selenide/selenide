@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.DOM.assertElement;
@@ -20,7 +21,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     return (element instanceof ShouldableWebElement) ?
         (ShouldableWebElement) element :
         (ShouldableWebElement) Proxy.newProxyInstance(
-          element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
+            element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
   }
 
   private final WebElement delegate;
@@ -31,49 +32,61 @@ public class ShouldableWebElementProxy implements InvocationHandler {
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
-      Condition[] conditions = (Condition[]) args[0];
-      for (Condition condition : conditions) {
-        assertElement(delegate, condition);
-      }
-      return proxy;
+      return should(proxy, (Condition[]) args[0]);
     }
     if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
-      Condition[] conditions = (Condition[]) args[0];
-      for (Condition condition : conditions) {
-        if (condition.apply(delegate)) {
-          fail("Element " + delegate.getTagName() + " has " + condition);
-        }
-      }
-      return proxy;
+      return shouldNot(proxy, (Condition[]) args[0]);
     }
-    else if ("find".equals(method.getName())) {
-      return wrap((args[0] instanceof By) ?
-                  delegate.findElement((By) args[0]) :
-                  delegate.findElement(By.cssSelector((String) args[0])));
+    if ("find".equals(method.getName())) {
+      return wrap(find(args[0]));
     }
-    else if ("toString".equals(method.getName())) {
+    if ("toString".equals(method.getName())) {
       return new Describe(delegate)
-        .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
-        .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-        .toString();
+          .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
+          .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
+          .toString();
     }
-    else if ("uploadFromClasspath".equals(method.getName())) {
-      if (!"input".equals(delegate.getTagName())) {
-        throw new IllegalArgumentException("Cannot upload file because " + delegate + " is not an INPUT");
-      }
+    if ("uploadFromClasspath".equals(method.getName())) {
+      return uploadFromClasspath((String) args[0]);
+    }
 
-      String fileName = (String) args[0];
-      URL resource = Thread.currentThread().getContextClassLoader().getResource(fileName);
-      if (resource == null) {
-        throw new IllegalArgumentException("File not found in classpath: " + fileName);
+    return delegateMethod(method, args);
+  }
+
+  private Object uploadFromClasspath(String fileName) throws URISyntaxException {
+    if (!"input".equals(delegate.getTagName())) {
+      throw new IllegalArgumentException("Cannot upload file because " + delegate + " is not an INPUT");
+    }
+
+    URL resource = Thread.currentThread().getContextClassLoader().getResource(fileName);
+    if (resource == null) {
+      throw new IllegalArgumentException("File not found in classpath: " + fileName);
+    }
+    File file = new File(resource.toURI());
+    delegate.sendKeys(file.getAbsolutePath());
+    return file;
+  }
+
+  private Object should(Object proxy, Condition[] conditions) {
+    for (Condition condition : conditions) {
+      assertElement(delegate, condition);
+    }
+    return proxy;
+  }
+
+  private Object shouldNot(Object proxy, Condition[] conditions) {
+    for (Condition condition : conditions) {
+      if (condition.apply(delegate)) {
+        fail("Element " + delegate.getTagName() + " has " + condition);
       }
-      File file = new File(resource.toURI());
-      delegate.sendKeys(file.getAbsolutePath());
-      return file;
     }
-    else {
-      return delegateMethod(method, args);
-    }
+    return proxy;
+  }
+
+  private WebElement find(Object arg) {
+    return (arg instanceof By) ?
+        delegate.findElement((By) arg) :
+        delegate.findElement(By.cssSelector((String) arg));
   }
 
   private Object delegateMethod(Method method, Object[] args) throws Throwable {
