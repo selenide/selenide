@@ -41,10 +41,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
       return wrap(find(args[0]));
     }
     if ("toString".equals(method.getName())) {
-      return new Describe(delegate)
-          .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
-          .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-          .toString();
+      return describe(delegate);
     }
     if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath((String) args[0]);
@@ -53,9 +50,16 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     return delegateMethod(method, args);
   }
 
+  private String describe(WebElement element) {
+    return new Describe(element)
+        .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
+        .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
+        .toString();
+  }
+
   private Object uploadFromClasspath(String fileName) throws URISyntaxException {
-    if (!"input".equals(delegate.getTagName())) {
-      throw new IllegalArgumentException("Cannot upload file because " + delegate + " is not an INPUT");
+    if (!"input".equalsIgnoreCase(delegate.getTagName())) {
+      throw new IllegalArgumentException("Cannot upload file because " + describe(delegate) + " is not an INPUT");
     }
 
     URL resource = Thread.currentThread().getContextClassLoader().getResource(fileName);
