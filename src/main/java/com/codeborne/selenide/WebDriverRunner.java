@@ -98,6 +98,10 @@ public class WebDriverRunner {
     return webdriver != null && webdriver instanceof InternetExplorerDriver;
   }
 
+  public static boolean htmlUnit() {
+    return webdriver != null && webdriver instanceof HtmlUnitDriver;
+  }
+
   public static void clearBrowserCache() {
     if (webdriver != null) {
       webdriver.manage().deleteAllCookies();
