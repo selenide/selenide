@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.URL;
 
 import static com.codeborne.selenide.DOM.assertElement;
 import static com.codeborne.selenide.WebDriverRunner.fail;
@@ -57,11 +58,16 @@ public class ShouldableWebElementProxy implements InvocationHandler {
         .toString();
     }
     else if ("uploadFromClasspath".equals(method.getName())) {
-      String fileName = (String) args[0];
-      File file = new File(Thread.currentThread().getContextClassLoader().getResource(fileName).toURI());
       if (!"input".equals(delegate.getTagName())) {
         throw new IllegalArgumentException("Cannot upload file because " + delegate + " is not an INPUT");
       }
+
+      String fileName = (String) args[0];
+      URL resource = Thread.currentThread().getContextClassLoader().getResource(fileName);
+      if (resource == null) {
+        throw new IllegalArgumentException("File not found in classpath: " + fileName);
+      }
+      File file = new File(resource.toURI());
       delegate.sendKeys(file.getAbsolutePath());
       return file;
     }
