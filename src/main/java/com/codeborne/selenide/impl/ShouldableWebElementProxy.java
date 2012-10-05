@@ -5,6 +5,7 @@ import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,6 +55,15 @@ public class ShouldableWebElementProxy implements InvocationHandler {
         .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
         .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
         .toString();
+    }
+    else if ("uploadFromClasspath".equals(method.getName())) {
+      String fileName = (String) args[0];
+      File file = new File(Thread.currentThread().getContextClassLoader().getResource(fileName).toURI());
+      if (!"input".equals(delegate.getTagName())) {
+        throw new IllegalArgumentException("Cannot upload file because " + delegate + " is not an INPUT");
+      }
+      delegate.sendKeys(file.getAbsolutePath());
+      return file;
     }
     else {
       return delegateMethod(method, args);

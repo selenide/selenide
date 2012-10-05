@@ -3,6 +3,8 @@ package com.codeborne.selenide;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.File;
+
 public interface ShouldableWebElement extends WebElement {
   ShouldableWebElement should(Condition... condition);
   ShouldableWebElement shouldHave(Condition... condition);
@@ -20,4 +22,6 @@ public interface ShouldableWebElement extends WebElement {
 
   ShouldableWebElement find(String cssSelector);
   ShouldableWebElement find(By selector);
+
+  File uploadFromClasspath(String fileName);
 }
