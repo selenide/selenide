@@ -136,7 +136,7 @@ public abstract class Condition {
   }
 
   private static boolean matches(String text, String regex) {
-    return Pattern.compile(regex, DOTALL).matcher(text).matches();
+    return Pattern.compile(".*" + regex + ".*", DOTALL).matcher(text).matches();
   }
 
   public static Condition hasText(final String text) {
