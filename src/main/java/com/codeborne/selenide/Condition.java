@@ -30,9 +30,11 @@ public abstract class Condition {
 
     @Override
     public String actualValue(WebElement element) {
-      return "does not exists";
+      return "does not exist";
     }
   };
+
+  public static final Condition exist = present;
 
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
