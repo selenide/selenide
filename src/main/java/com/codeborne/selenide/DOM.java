@@ -38,6 +38,13 @@ public class DOM {
   }
 
   /**
+   * @see #getElement(org.openqa.selenium.By, int)
+   */
+  public static ShouldableWebElement $(By seleniumSelector, int index) {
+    return getElement(seleniumSelector, index);
+  }
+
+  /**
    * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
