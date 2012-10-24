@@ -13,44 +13,67 @@ public class ElementsCollection extends ArrayList<WebElement> implements WebElem
     super(elements);
   }
 
+  @Override
   public void click() {
     for (WebElement webElement : this) {
       webElement.click();
     }
   }
 
+  @Override
   public void submit() {
     for (WebElement webElement : this) {
       webElement.submit();
     }
   }
 
+  @Override
   public void sendKeys(CharSequence... keysToSend) {
     for (WebElement webElement : this) {
       webElement.sendKeys(keysToSend);
     }
   }
 
+  private WebElement first() {
+    return get(0);
+  }
+
+  @Override
   public String getTagName() {
-    throw new UnsupportedOperationException();
+    return first().getTagName();
   }
 
+  @Override
   public String getAttribute(String name) {
-    throw new UnsupportedOperationException();
+    return first().getAttribute(name);
   }
 
+  @Override
   public boolean isSelected() {
-    throw new UnsupportedOperationException();
+    for (WebElement webElement : this) {
+      if (!webElement.isSelected()) {
+        return false;
+      }
+    }
+    return true;
   }
 
+  @Override
   public boolean isEnabled() {
-    throw new UnsupportedOperationException();
+    for (WebElement webElement : this) {
+      if (!webElement.isEnabled()) {
+        return false;
+      }
+    }
+    return true;
   }
 
+  @Override
   public String getText() {
-    throw new UnsupportedOperationException();
+    return first().getText();
   }
 
+  @Override
   public List<WebElement> findElements(By by) {
     List<WebElement> result = new ArrayList<WebElement>();
     for (WebElement webElement : this) {
@@ -59,6 +82,7 @@ public class ElementsCollection extends ArrayList<WebElement> implements WebElem
     return result;
   }
 
+  @Override
   public WebElement findElement(By by) {
     for (WebElement webElement : this) {
       WebElement element = webElement.findElement(by);
@@ -68,19 +92,28 @@ public class ElementsCollection extends ArrayList<WebElement> implements WebElem
     return null;
   }
 
+  @Override
   public boolean isDisplayed() {
-    throw new UnsupportedOperationException();
+    for (WebElement webElement : this) {
+      if (!webElement.isDisplayed()) {
+        return false;
+      }
+    }
+    return true;
   }
 
+  @Override
   public Point getLocation() {
-    throw new UnsupportedOperationException();
+    return first().getLocation();
   }
 
+  @Override
   public Dimension getSize() {
-    throw new UnsupportedOperationException();
+    return first().getSize();
   }
 
+  @Override
   public String getCssValue(String propertyName) {
-    throw new UnsupportedOperationException();
+    return first().getCssValue(propertyName);
   }
 }
