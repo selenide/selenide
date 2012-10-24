@@ -87,9 +87,6 @@ public class WebDriverRunner {
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
       webdriver = createDriver();
-      if (startMaximized && !chrome() && !opera()) {
-        webdriver.manage().window().maximize();
-      }
     }
     return webdriver;
   }
@@ -109,18 +106,6 @@ public class WebDriverRunner {
 
   public static boolean htmlUnit() {
     return HTMLUNIT.equalsIgnoreCase(browser);
-  }
-
-  public static boolean chrome() {
-    return CHROME.equalsIgnoreCase(browser);
-  }
-
-  public static boolean firefox() {
-    return FIREFOX.equalsIgnoreCase(browser);
-  }
-
-  public static boolean opera() {
-    return OPERA.equalsIgnoreCase(browser);
   }
 
   public static void clearBrowserCache() {
@@ -168,7 +153,7 @@ public class WebDriverRunner {
   private static WebDriver createDriver() {
     if (remote != null) {
       return createRemoteDriver(remote, browser);
-    } else if (chrome()) {
+    } else if (CHROME.equalsIgnoreCase(browser)) {
       ChromeOptions options = new ChromeOptions();
       if (startMaximized) {
         // Due do bug in ChromeDriver we need this workaround
@@ -179,20 +164,27 @@ public class WebDriverRunner {
     } else if (ie()) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
       ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-      return new InternetExplorerDriver(ieCapabilities);
+      return maximize(new InternetExplorerDriver(ieCapabilities));
     } else if (htmlUnit()) {
       DesiredCapabilities desiredCapabilities = DesiredCapabilities.htmlUnit();
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
       desiredCapabilities.setJavascriptEnabled(true);
       return new HtmlUnitDriver(desiredCapabilities);
-    } else if (firefox()) {
-      return new FirefoxDriver();
-    } else if (opera()) {
+    } else if (FIREFOX.equalsIgnoreCase(browser)) {
+      return maximize(new FirefoxDriver());
+    } else if (OPERA.equalsIgnoreCase(browser)) {
       return createInstanceOf("com.opera.core.systems.OperaDriver");
     } else {
       return createInstanceOf(browser);
     }
+  }
+
+  private static WebDriver maximize(WebDriver driver) {
+    if (startMaximized) {
+      driver.manage().window().maximize();
+    }
+    return driver;
   }
 
   private static WebDriver createInstanceOf(String className) {
