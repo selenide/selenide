@@ -58,11 +58,12 @@ public class WebDriverRunner {
   public static String remote = System.getProperty("remote");
 
   /**
-   * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property "-Dchrome.switches=--start-maximized".
-   * Default value: "--start-maximized"
+   * The browser window is maximized when started.
+   * Can be configured either programmatically or by system property "-Dselenide.start-maximized=true".
+   *
+   * Default value: true
    */
-  public static String chromeSwitches = System.getProperty("chrome.switches", "--start-maximized");
+  public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
    * Folder to store screenshots to.
@@ -86,6 +87,9 @@ public class WebDriverRunner {
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
       webdriver = createDriver();
+      if (startMaximized && !chrome() && !opera()) {
+        webdriver.manage().window().maximize();
+      }
     }
     return webdriver;
   }
@@ -105,6 +109,18 @@ public class WebDriverRunner {
 
   public static boolean htmlUnit() {
     return HTMLUNIT.equalsIgnoreCase(browser);
+  }
+
+  public static boolean chrome() {
+    return CHROME.equalsIgnoreCase(browser);
+  }
+
+  public static boolean firefox() {
+    return FIREFOX.equalsIgnoreCase(browser);
+  }
+
+  public static boolean opera() {
+    return OPERA.equalsIgnoreCase(browser);
   }
 
   public static void clearBrowserCache() {
@@ -152,9 +168,13 @@ public class WebDriverRunner {
   private static WebDriver createDriver() {
     if (remote != null) {
       return createRemoteDriver(remote, browser);
-    } else if (CHROME.equalsIgnoreCase(browser)) {
+    } else if (chrome()) {
       ChromeOptions options = new ChromeOptions();
-      options.addArguments("chrome.switches", chromeSwitches);
+      if (startMaximized) {
+        // Due do bug in ChromeDriver we need this workaround
+        // http://stackoverflow.com/questions/3189430/how-do-i-maximize-the-browser-window-using-webdriver-selenium-2
+        options.addArguments("chrome.switches", "--start-maximized");
+      }
       return new ChromeDriver(options);
     } else if (ie()) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
@@ -166,9 +186,9 @@ public class WebDriverRunner {
       desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
       desiredCapabilities.setJavascriptEnabled(true);
       return new HtmlUnitDriver(desiredCapabilities);
-    } else if (FIREFOX.equalsIgnoreCase(browser)) {
+    } else if (firefox()) {
       return new FirefoxDriver();
-    } else if (OPERA.equalsIgnoreCase(browser)) {
+    } else if (opera()) {
       return createInstanceOf("com.opera.core.systems.OperaDriver");
     } else {
       return createInstanceOf(browser);
