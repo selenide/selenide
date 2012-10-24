@@ -130,8 +130,6 @@ public class WebDriverRunner {
       } catch (Exception e) {
         System.err.println(e);
       }
-    } else {
-      System.err.println("Cannot take screenshot, driver does not support it: " + webdriver);
     }
 
     return targetFile.getAbsolutePath();
