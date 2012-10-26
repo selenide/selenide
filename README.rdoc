@@ -98,7 +98,7 @@ Just add a Selenide dependency to your pom, ivy or gradle dependencies configura
  testCompile 'com.codeborne:selenide:1.6-SNAPSHOT'
 
 Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
-https://github.com/asolntsev/hangman-java/blob/master/src/test/java/uitest/HangmanSpec.java
+https://github.com/asolntsev/hangman-java/blob/master/src/test/java/ee/uitest/HangmanSpec.java
 
 Until tutorial is ready, you can find some Selenide usages there.
 
