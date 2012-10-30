@@ -38,7 +38,7 @@ public class DOM {
   }
 
   /**
-   * @see #getElement(org.openqa.selenium.By, int)
+   * @see #getElement(By, int)
    */
   public static ShouldableWebElement $(By seleniumSelector, int index) {
     return getElement(seleniumSelector, index);
@@ -109,7 +109,7 @@ public class DOM {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(parent.findElements((By.cssSelector(cssSelector))));
+    return new ElementsCollection(parent.findElements(By.cssSelector(cssSelector)));
   }
 
   /**
@@ -201,7 +201,7 @@ public class DOM {
    * @throws IllegalArgumentException if index is bigger than number of matched elements.
    */
   public static void click(By by, int index) {
-    List<WebElement> matchedElements = com.codeborne.selenide.WebDriverRunner.getWebDriver().findElements(by);
+    List<WebElement> matchedElements = getWebDriver().findElements(by);
     if (index >= matchedElements.size()) {
       throw new IllegalArgumentException("Cannot click " + index + "th element: there is only " + matchedElements.size() + " elements on the page");
     }
