@@ -202,37 +202,37 @@ public class DOM {
    */
   public static void click(By by, int index) {
     List<WebElement> matchedElements = getWebDriver().findElements(by);
-    if (index >= matchedElements.size()) {
+    if (index >= matchedElements.size())
       throw new IllegalArgumentException("Cannot click " + index + "th element: there is only " + matchedElements.size() + " elements on the page");
-    }
 
-    if (isJQueryAvailable()) {
-      executeJavaScript(getJQuerySelector(by) + ".eq(" + index + ").click();");
-    } else {
+    if (isJQueryAvailable())
+      executeJQueryMethod(by, "eq(" + index + ").click();");
+    else
       matchedElements.get(index).click();
-    }
   }
 
   public static void triggerChangeEvent(By by) {
-    if (isJQueryAvailable()) {
-      executeJavaScript(getJQuerySelector(by) + ".change();");
-    }
+    if (isJQueryAvailable())
+      executeJQueryMethod(by, "change()");
   }
 
   public static void triggerChangeEvent(By by, int index) {
-    if (isJQueryAvailable()) {
-      executeJavaScript(getJQuerySelector(by) + ".eq(" + index + ").change();");
-    }
+    if (isJQueryAvailable())
+      executeJQueryMethod(by, "eq(" + index + ").change()");
+  }
+
+  static void executeJQueryMethod(By by, String method) {
+    String selector = getJQuerySelector(by);
+    if (selector != null)
+      executeJavaScript("$(\"" + selector + "\")." + method);
+    else
+      System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
   }
 
   public static String getJQuerySelector(By seleniumSelector) {
-    return "$(\"" + getJQuerySelectorString(seleniumSelector) + "\")";
-  }
-
-  public static String getJQuerySelectorString(By seleniumSelector) {
     if (seleniumSelector instanceof By.ByName) {
       String name = seleniumSelector.toString().replaceFirst("By\\.name:\\s*(.*)", "$1");
-      return "*[name='" + name + "']";
+      return "[name='" + name + "']";
     } else if (seleniumSelector instanceof By.ById) {
       String id = seleniumSelector.toString().replaceFirst("By\\.id:\\s*(.*)", "$1");
       return "#" + id;
@@ -245,8 +245,7 @@ public class DOM {
       String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
       return seleniumXPath.replaceFirst("//(.*)", "$1").replaceAll("\\[@", "[");
     }
-
-    return seleniumSelector.toString();
+    return null;
   }
 
   public static Object executeJavaScript(String jsCode) {
@@ -262,7 +261,7 @@ public class DOM {
     if (!isJQueryAvailable()) {
       throw new IllegalStateException("JQuery is not available on current page");
     }
-    executeJavaScript("$.scrollTo('" + getJQuerySelectorString(element) + "')");
+    executeJavaScript("$.scrollTo('" + getJQuerySelector(element) + "')");
   }
 
   public static ShouldableWebElement selectRadio(By radioField, String value) {
