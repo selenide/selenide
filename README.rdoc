@@ -117,6 +117,23 @@ Here we will provide some examples how Selenide can be used to write short and e
 
 
 
+== Changelog
+=== 1.8
+* Changed Selectors.byText() behaviour - now it matches THE WHOLE TEXT, not a substring.
+* A new method Selectors.withText() has been added that matches substring.
+* Added option "selenide.start-maximized" (true/false) instead of (deprecated) option "chrome.switches".
+* Added support for By.CssSelector to method DOM.getJQuerySelector()
+=== 1.7
+* Added file uploading functionality (file is taken from test classpath)
+* Added methods $().should(), $().shouldHave, $().shouldBe(), $().shouldNot, $().shouldNotBe, $().find()
+* Added method $().toString() for logging WebElement in human-readable format.
+* Added wait-methods with CSS Selector parameter
+* Added method DOM.confirm() for clicking on confirmation dialog (alert)
+* Added support for Opera browser
+* Added method Navigation.refresh() for reloading current page
+* Added condition "present", "notPresent", "exist".
+* Added selector "byText" and condition "matchesText" for matching elements by regex
+
 == How is author of Selenide?
 Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
