@@ -229,7 +229,7 @@ public class DOM {
       System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
   }
 
-  public static String getJQuerySelector(By seleniumSelector) {
+  static String getJQuerySelector(By seleniumSelector) {
     if (seleniumSelector instanceof By.ByName) {
       String name = seleniumSelector.toString().replaceFirst("By\\.name:\\s*(.*)", "$1");
       return "[name='" + name + "']";

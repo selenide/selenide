@@ -1,10 +1,10 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.Navigation;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
+import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -12,7 +12,7 @@ import static org.junit.Assert.fail;
 public class TimeoutTest {
   @Test
   public void lookingForInexistingElementShouldFailFast() {
-    Navigation.navigateToAbsoluteUrl("http://jquery.com/"); // TODO Use something like localhost:8080/with-jquery
+    navigateToAbsoluteUrl("http://jquery.com/"); // TODO Use something like localhost:8080/with-jquery
     
     long start = System.nanoTime();
     try {
