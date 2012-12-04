@@ -393,7 +393,7 @@ public class DOM {
 
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
     if (!condition.apply(element)) {
-      fail("Element " + element.getTagName() + " hasn't " + condition + "; actual value is '" + getActualValue(element, condition) + "'");
+      fail("Element " + element.getTagName() + " hasn't " + condition + "; element details: '" + getActualValue(element, condition) + "'");
     }
     return wrap(element);
   }
@@ -473,7 +473,7 @@ public class DOM {
     }
     while (System.currentTimeMillis() - startTime < milliseconds);
 
-    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.; actual value is '" + getActualValue(element, condition) + "'");
+    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.; element details: '" + getActualValue(element, condition) + "'");
     return null;
   }
 
