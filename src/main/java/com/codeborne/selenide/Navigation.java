@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
 
+import java.net.URL;
+
 import static com.codeborne.selenide.DOM.waitFor;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
@@ -16,6 +18,10 @@ public class Navigation {
 
   public static String absoluteUrl(String relativeUrl) {
     return baseUrl + relativeUrl;
+  }
+
+  public static void navigateToAbsoluteUrl(URL url) {
+    navigateToAbsoluteUrl(url.toExternalForm());
   }
 
   public static void navigateToAbsoluteUrl(String url) {

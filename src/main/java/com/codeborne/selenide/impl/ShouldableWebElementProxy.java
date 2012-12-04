@@ -15,6 +15,8 @@ import java.net.URL;
 
 import static com.codeborne.selenide.DOM.assertElement;
 import static com.codeborne.selenide.WebDriverRunner.fail;
+import static com.codeborne.selenide.impl.Describe.describe;
+import static java.lang.Thread.currentThread;
 
 public class ShouldableWebElementProxy implements InvocationHandler {
   public static ShouldableWebElement wrap(WebElement element) {
@@ -44,30 +46,23 @@ public class ShouldableWebElementProxy implements InvocationHandler {
       return describe(delegate);
     }
     if ("uploadFromClasspath".equals(method.getName())) {
-      return uploadFromClasspath((String) args[0]);
+      return uploadFromClasspath(delegate, (String) args[0]);
     }
 
-    return delegateMethod(method, args);
+    return delegateMethod(delegate, method, args);
   }
 
-  private String describe(WebElement element) {
-    return new Describe(element)
-        .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("type").attr("placeholder")
-        .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-        .toString();
-  }
-
-  private Object uploadFromClasspath(String fileName) throws URISyntaxException {
-    if (!"input".equalsIgnoreCase(delegate.getTagName())) {
-      throw new IllegalArgumentException("Cannot upload file because " + describe(delegate) + " is not an INPUT");
+  static Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
+    if (!"input".equalsIgnoreCase(inputField.getTagName())) {
+      throw new IllegalArgumentException("Cannot upload file because " + describe(inputField) + " is not an INPUT");
     }
 
-    URL resource = Thread.currentThread().getContextClassLoader().getResource(fileName);
+    URL resource = currentThread().getContextClassLoader().getResource(fileName);
     if (resource == null) {
       throw new IllegalArgumentException("File not found in classpath: " + fileName);
     }
     File file = new File(resource.toURI());
-    delegate.sendKeys(file.getAbsolutePath());
+    inputField.sendKeys(file.getAbsolutePath());
     return file;
   }
 
@@ -93,7 +88,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
         delegate.findElement(By.cssSelector((String) arg));
   }
 
-  private Object delegateMethod(Method method, Object[] args) throws Throwable {
+  static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
     try {
       return method.invoke(delegate, args);
     } catch (InvocationTargetException e) {

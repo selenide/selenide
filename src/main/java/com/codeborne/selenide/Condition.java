@@ -17,8 +17,7 @@ public abstract class Condition {
     }
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exists" :
-          element.isDisplayed() ? "visible" : "hidden";
+      return element == null? "does not exist" : element.isDisplayed() ? "visible" : "hidden";
     }
   };
 
@@ -30,7 +29,7 @@ public abstract class Condition {
 
     @Override
     public String actualValue(WebElement element) {
-      return "does not exist";
+      return element == null? "does not exist" : "exists";
     }
   };
 
@@ -44,7 +43,7 @@ public abstract class Condition {
 
     @Override
     public String actualValue(WebElement element) {
-      return "exists";
+      return element == null? "does not exist" : "exists";
     }
   };
 
@@ -58,8 +57,7 @@ public abstract class Condition {
     }
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exists" :
-          element.isDisplayed() ? "visible" : "hidden";
+      return element == null? "does not exists" : element.isDisplayed() ? "visible" : "hidden";
     }
   };
 
@@ -90,7 +88,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not even exist" : element.getAttribute(attributeName);
+        return element == null? "does not exist" : element.getAttribute(attributeName);
       }
       @Override
       public String toString() {
@@ -125,8 +123,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not even exist" :
-            "<" + element.getTagName() + ">" + element.getText() + "</" + element.getTagName() + ">";
+        return element == null? "does not exist" : element.getText();
       }
       @Override
       public String toString() {
@@ -147,8 +144,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not even exist" :
-            "<" + element.getTagName() + ">" + element.getText() + "</" + element.getTagName() + ">";
+        return element == null? "does not exist" : element.getText();
       }
       @Override
       public String toString() {
@@ -178,7 +174,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not even exist" : element.getText();
+        return element == null? "does not exist" : element.getText();
       }
       @Override
       public String toString() {
@@ -214,8 +210,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not even exist" :
-            '<' + element.getTagName() + " class=" + element.getAttribute("class") + '>' + element.getText() + "</" + element.getTagName() + '>';
+        return element == null? "does not exist" : "class=" + element.getAttribute("class");
       }
       @Override
       public String toString() {
@@ -232,8 +227,7 @@ public abstract class Condition {
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "element does not exist" :
-            '<' + element.getTagName() + " class=" + element.getAttribute("class") + '>' + element.getText() + "</" + element.getTagName() + '>';
+        return element == null? "does not exist" : "class=" + element.getAttribute("class");
       }
       @Override
       public String toString() {
@@ -248,7 +242,8 @@ public abstract class Condition {
     }
 
     @Override public String actualValue(WebElement webElement) {
-      return getWebDriver().findElement(By.cssSelector(":focus")).getAttribute("name");
+      WebElement element = getWebDriver().findElement(By.cssSelector(":focus"));
+      return element == null? "element does not exist" : element.getAttribute("name");
     }
   };
 
@@ -258,7 +253,7 @@ public abstract class Condition {
     }
 
     @Override public String actualValue(WebElement element) {
-      return element.isEnabled() ? "enabled" : "disabled";
+      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
     }
   };
 
@@ -268,7 +263,7 @@ public abstract class Condition {
     }
 
     @Override public String actualValue(WebElement element) {
-      return element.isEnabled() ? "enabled" : "disabled";
+      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
     }
   };
 
@@ -278,9 +273,23 @@ public abstract class Condition {
     }
 
     @Override public String actualValue(WebElement element) {
-      return element.isEnabled() ? "enabled" : "disabled";
+      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
     }
   };
+
+  public static Condition not(final Condition condition) {
+    return new Condition("not(" + condition.name + ")", !condition.nullIsAllowed) {
+      @Override
+      public boolean apply(WebElement element) {
+        return !condition.apply(element);
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return condition.actualValue(element);
+      }
+    };
+  }
 
   private final String name;
   private final boolean nullIsAllowed;

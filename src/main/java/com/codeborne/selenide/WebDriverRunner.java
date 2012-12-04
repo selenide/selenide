@@ -209,8 +209,8 @@ public class WebDriverRunner {
       Assert.fail(message);
     } else {
       Assert.fail(message +
-          ", browser.currentUrl=" + webdriver.getCurrentUrl() +
-          ", browser.title=" + webdriver.getTitle()
+          "\n, browser.currentUrl=" + webdriver.getCurrentUrl() +
+          "\n, browser.title=" + webdriver.getTitle()
       );
     }
     return null;

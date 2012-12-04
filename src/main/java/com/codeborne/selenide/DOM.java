@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -52,30 +54,30 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(WebElement parent, String cssSelector) {
-    return wrap(parent.findElement(By.cssSelector(cssSelector)));
+    return wrap(parent.findElement(By.cssSelector(cssSelector))); // TODO wait for
   }
 
   /**
    * Find the Nth element matching given criteria
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 1..N
+   * @param index 0..N
    * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(String cssSelector, int index) {
-    return wrap($$(cssSelector).get(index));
+    return WebElementWaitingProxy.wrap(By.cssSelector(cssSelector), index);
   }
 
   /**
    * Find the Nth element matching given criteria
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 1..N
+   * @param index 0..N
    * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(WebElement parent, String cssSelector, int index) {
-    return wrap($$(parent, cssSelector).get(index));
+    return wrap(parent.findElements(By.cssSelector(cssSelector)).get(index)); // TODO wait for
   }
 
   /**
@@ -119,26 +121,18 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement getElement(By criteria) {
-    try {
-      return wrap(getWebDriver().findElement(criteria));
-    } catch (WebDriverException e) {
-      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
-    }
+    return WebElementWaitingProxy.wrap(criteria);
   }
 
   /**
    * Find the Nth element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @param index 1..N
+   * @param index 0..N
    * @return ShouldableWebElement
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement getElement(By criteria, int index) {
-    try {
-      return wrap(getWebDriver().findElements(criteria).get(index));
-    } catch (WebDriverException e) {
-      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
-    }
+    return WebElementWaitingProxy.wrap(criteria, index);
   }
 
   /**
@@ -197,23 +191,26 @@ public class DOM {
    * Click the Nth matched element on the page.
    *
    * @param by selector to match element
-   * @param index is zero-based
+   * @param index 0..N
    * @throws IllegalArgumentException if index is bigger than number of matched elements.
    */
   public static void click(By by, int index) {
     List<WebElement> matchedElements = getWebDriver().findElements(by);
-    if (index >= matchedElements.size())
-      throw new IllegalArgumentException("Cannot click " + index + "th element: there is only " + matchedElements.size() + " elements on the page");
+    if (index < 0 || index >= matchedElements.size()) {
+      throw new IllegalArgumentException("Cannot click " + index + "th element: there is " + matchedElements.size() + " elements on the page");
+    }
 
-    if (isJQueryAvailable())
+    if (isJQueryAvailable()) {
       executeJQueryMethod(by, "eq(" + index + ").click();");
-    else
+    } else {
       matchedElements.get(index).click();
+    }
   }
 
   public static void triggerChangeEvent(By by) {
-    if (isJQueryAvailable())
+    if (isJQueryAvailable()) {
       executeJQueryMethod(by, "change()");
+    }
   }
 
   public static void triggerChangeEvent(By by, int index) {
@@ -223,10 +220,11 @@ public class DOM {
 
   static void executeJQueryMethod(By by, String method) {
     String selector = getJQuerySelector(by);
-    if (selector != null)
+    if (selector != null) {
       executeJavaScript("$(\"" + selector + "\")." + method);
-    else
+    } else {
       System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
+    }
   }
 
   static String getJQuerySelector(By seleniumSelector) {
@@ -337,31 +335,43 @@ public class DOM {
     }
   }
 
-  public static void assertChecked(By element) {
-    assertThat(getElement(element).getAttribute("checked"), equalTo("true"));
+  public static ShouldableWebElement assertChecked(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    assertThat(element.getAttribute("checked"), equalTo("true"));
+    return element;
   }
 
-  public static void assertNotChecked(By element) {
-    assertNull(getElement(element).getAttribute("checked"));
+  public static ShouldableWebElement assertNotChecked(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    assertNull(element.getAttribute("checked"));
+    return element;
   }
 
-  public static void assertDisabled(By element) {
-    assertThat(getElement(element).getAttribute("disabled"), equalTo("true"));
+  public static ShouldableWebElement assertDisabled(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    assertThat(element.getAttribute("disabled"), equalTo("true"));
+    return element;
   }
 
-  public static void assertEnabled(By element) {
-    String disabled = getElement(element).getAttribute("disabled");
+  public static ShouldableWebElement assertEnabled(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    String disabled = element.getAttribute("disabled");
     if (disabled != null) {
       assertThat(disabled, equalTo("false"));
     }
+    return element;
   }
 
-  public static void assertSelected(By element) {
-    assertTrue(getElement(element).isSelected());
+  public static ShouldableWebElement assertSelected(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    assertTrue(element.isSelected());
+    return element;
   }
 
-  public static void assertNotSelected(By element) {
-    assertFalse(getElement(element).isSelected());
+  public static ShouldableWebElement assertNotSelected(By criteria) {
+    ShouldableWebElement element = getElement(criteria);
+    assertFalse(element.isSelected());
+    return element;
   }
 
   public static boolean isVisible(By selector) {
@@ -458,22 +468,27 @@ public class DOM {
           element = getWebDriver().findElement(elementSelector);
         }
         else {
-          element = getWebDriver().findElements(elementSelector).get(index);
-        }
-
-        if (condition.apply(element)) {
-          return wrap(element);
+          List<WebElement> elements = getWebDriver().findElements(elementSelector);
+          if (index < elements.size()) {
+            element = elements.get(index);
+          }
         }
       } catch (WebDriverException elementNotFound) {
-        if (condition.applyNull()) {
-          return null;
-        }
+        element = null;
+      }
+      if (element != null && condition.apply(element)) {
+        return wrap(element);
+      }
+      else if (element == null && condition.applyNull()) {
+        return null;
       }
       sleep(50);
     }
     while (System.currentTimeMillis() - startTime < milliseconds);
 
-    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.; element details: '" + getActualValue(element, condition) + "'");
+    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.;" +
+        " actual value: '" + getActualValue(element, condition) + "';" +
+        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
     return null;
   }
 
@@ -503,8 +518,7 @@ public class DOM {
   /**
    * @deprecated Use $("selector").toString()
    */
-  @Deprecated
   public static String describeElement(WebElement element) {
-    return wrap(element).toString();
+    return Describe.describe(element);
   }
 }
