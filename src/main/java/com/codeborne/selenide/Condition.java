@@ -1,8 +1,6 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.regex.Pattern;
 
@@ -38,7 +36,7 @@ public abstract class Condition {
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
     public boolean apply(WebElement element) {
-      return false;
+      return element == null;
     }
 
     @Override
@@ -53,7 +51,11 @@ public abstract class Condition {
   public static final Condition hidden = new Condition("hidden", true) {
     @Override
     public boolean apply(WebElement element) {
-      return element == null || !element.isDisplayed();
+      try {
+        return element == null || !element.isDisplayed();
+      } catch (StaleElementReferenceException elementHasDisappeared) {
+        return true;
+      }
     }
     @Override
     public String actualValue(WebElement element) {
