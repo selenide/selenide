@@ -482,7 +482,7 @@ public class DOM {
       else if (element == null && condition.applyNull()) {
         return null;
       }
-      sleep(50);
+      sleep(100);
     }
     while (System.currentTimeMillis() - startTime < milliseconds);
 
@@ -508,7 +508,7 @@ public class DOM {
         if (System.currentTimeMillis() - start > defaultWaitingTimeout) {
           fail("Confirmation dialog has not disappeared in " + defaultWaitingTimeout + " milliseconds");
         }
-        sleep(50);
+        sleep(100);
       }
     }
     catch (NoAlertPresentException ignore) {
