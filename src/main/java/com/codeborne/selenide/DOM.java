@@ -262,6 +262,12 @@ public class DOM {
     executeJavaScript("$.scrollTo('" + getJQuerySelector(element) + "')");
   }
 
+  /**
+   * Select radio field by value
+   * @param radioField
+   * @param value
+   * @return
+   */
   public static ShouldableWebElement selectRadio(By radioField, String value) {
     assertEnabled(radioField);
     for (WebElement radio : getElements(radioField)) {
@@ -270,7 +276,16 @@ public class DOM {
         return wrap(radio);
       }
     }
-    throw new NoSuchElementException("With " + radioField);
+    throw new NoSuchElementException(radioField + " and value " + value);
+  }
+
+  public static ShouldableWebElement getSelectedRadio(By radioField) {
+    for (WebElement radio : getElements(radioField)) {
+      if (radio.getAttribute("checked") != null) {
+        return wrap(radio);
+      }
+    }
+    return null;
   }
 
   public static String getSelectedValue(By selectField) {
