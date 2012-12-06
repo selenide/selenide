@@ -389,6 +389,18 @@ public class DOM {
     return assertElement(selector, hidden);
   }
 
+  public static ShouldableWebElement assertElement(WebElement parent, By selector, Condition condition) {
+    try {
+      return assertElement(parent.findElement(selector), condition);
+      }
+    catch (WebDriverException elementNotFound) {
+      if (!condition.applyNull()) {
+        throw elementNotFound;
+      }
+      return null;
+    }
+  }
+
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
     try {
       return assertElement(getWebDriver().findElement(selector), condition);
