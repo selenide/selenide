@@ -1,7 +1,6 @@
 package com.codeborne.selenide.integrationtests;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -36,6 +35,19 @@ public class LongRunningAjaxRequestTest {
     $(byText("Loading...")).shouldNot(exist);
   }
 
+  @Test
+  public void dollarWithParentWaitsUntilElementDisappears() {
+    $($("#results"), "span").should(exist);
+    $($("#results"), "span").shouldNot(exist);
+  }
+
+  @Test
+  public void dollarWithParentAndIndexWaitsUntilElementDisappears() {
+    $($("#results"), "span", 0).should(exist);
+    $($("#results"), "span", 0).shouldNot(exist);
+    $($("#results"), "span", 666).shouldNot(exist);
+  }
+
   @Test(expected = AssertionError.class)
   public void waitingTimeout() {
     $("#non-existing-element").should(exist);
@@ -68,7 +80,7 @@ public class LongRunningAjaxRequestTest {
     $("#results").find(byText("Loading..."), 0).shouldNot(exist);
   }
 
-  @Test @Ignore
+  @Test
   public void shouldNotExistWithinParentElement() {
     $($(By.tagName("body")), "#non-existing-element").shouldNot(exist);
     $($(By.tagName("body")), "#non-existing-element", 4).shouldNot(exist);
@@ -82,7 +94,7 @@ public class LongRunningAjaxRequestTest {
     $(By.linkText("non-existing-link"), 8).shouldNotBe(visible);
   }
 
-  @Test @Ignore
+  @Test
   public void shouldNotBeVisibleWithinParentElement() {
     $($(By.tagName("body")), "#non-existing-element").shouldNotBe(visible);
     $($(By.tagName("body")), "#non-existing-element", 4).shouldNotBe(visible);

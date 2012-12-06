@@ -54,7 +54,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(WebElement parent, String cssSelector) {
-    return wrap(parent.findElement(By.cssSelector(cssSelector))); // TODO wait for
+    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), 0);
   }
 
   /**
@@ -77,7 +77,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(WebElement parent, String cssSelector, int index) {
-    return wrap(parent.findElements(By.cssSelector(cssSelector)).get(index)); // TODO wait for
+    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), index);
   }
 
   /**
@@ -389,18 +389,6 @@ public class DOM {
     return assertElement(selector, hidden);
   }
 
-  public static ShouldableWebElement assertElement(WebElement parent, By selector, Condition condition) {
-    try {
-      return assertElement(parent.findElement(selector), condition);
-      }
-    catch (WebDriverException elementNotFound) {
-      if (!condition.applyNull()) {
-        throw elementNotFound;
-      }
-      return null;
-    }
-  }
-
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
     try {
       return assertElement(getWebDriver().findElement(selector), condition);
@@ -485,13 +473,11 @@ public class DOM {
     do {
       try {
         if (index == 0) {
-          element = (parent == null ? getWebDriver() : parent).findElement(elementSelector);
+          element = getSearchContext(parent).findElement(elementSelector);
         }
         else {
-          List<WebElement> elements = (parent == null ? getWebDriver() : parent).findElements(elementSelector);
-          if (index < elements.size()) {
-            element = elements.get(index);
-          }
+          List<WebElement> elements = getSearchContext(parent).findElements(elementSelector);
+          element = index < elements.size() ? elements.get(index) : null;
         }
       } catch (WebDriverException elementNotFound) {
         element = null;
@@ -510,6 +496,10 @@ public class DOM {
         " actual value: '" + getActualValue(element, condition) + "';" +
         (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
     return null;
+  }
+
+  private static SearchContext getSearchContext(WebElement parent) {
+    return parent == null ? getWebDriver() : parent;
   }
 
   public static void confirm(String expectedConfirmationText) {
