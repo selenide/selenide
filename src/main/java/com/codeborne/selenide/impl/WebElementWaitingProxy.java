@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.DOM.waitUntil;
+import static com.codeborne.selenide.DOM.waitWhile;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
@@ -77,7 +77,7 @@ public class WebElementWaitingProxy implements InvocationHandler {
 
   private Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(parent, criteria, index, not(condition)); // TODO This is probably buggie line
+      waitWhile(parent, criteria, index, condition);
     }
     return proxy;
   }

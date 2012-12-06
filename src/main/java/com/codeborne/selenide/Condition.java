@@ -279,20 +279,6 @@ public abstract class Condition {
     }
   };
 
-  public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ")", !condition.nullIsAllowed) {
-      @Override
-      public boolean apply(WebElement element) {
-        return !condition.apply(element);
-      }
-
-      @Override
-      public String actualValue(WebElement element) {
-        return condition.actualValue(element);
-      }
-    };
-  }
-
   private final String name;
   private final boolean nullIsAllowed;
 

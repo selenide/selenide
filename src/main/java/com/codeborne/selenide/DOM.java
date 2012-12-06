@@ -469,19 +469,9 @@ public class DOM {
 
   public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
     final long startTime = System.currentTimeMillis();
-    WebElement element = null;
+    WebElement element;
     do {
-      try {
-        if (index == 0) {
-          element = getSearchContext(parent).findElement(elementSelector);
-        }
-        else {
-          List<WebElement> elements = getSearchContext(parent).findElements(elementSelector);
-          element = index < elements.size() ? elements.get(index) : null;
-        }
-      } catch (WebDriverException elementNotFound) {
-        element = null;
-      }
+      element = tryToGetElement(parent, elementSelector, index);
       if (element != null && condition.apply(element)) {
         return wrap(element);
       }
@@ -492,10 +482,49 @@ public class DOM {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    fail("Element " + elementSelector + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
+    return fail("Element " + elementSelector + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
         " actual value: '" + getActualValue(element, condition) + "';" +
         (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
-    return null;
+  }
+
+  public static void waitWhile(WebElement parent, By elementSelector, int index, Condition condition) {
+    waitWhile(parent, elementSelector, index, condition, defaultWaitingTimeout);
+  }
+
+  public static void waitWhile(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
+    final long startTime = System.currentTimeMillis();
+    WebElement element;
+    do {
+      element = tryToGetElement(parent, elementSelector, index);
+      if (element != null && !condition.apply(element)) {
+        return;
+      }
+      else if (element == null && !condition.applyNull()) {
+        return;
+      }
+      sleep(100);
+    }
+    while (System.currentTimeMillis() - startTime < timeoutMs);
+
+    fail("Element " + elementSelector + " has " + condition + " in " + timeoutMs + " ms.;" +
+        " actual value: '" + getActualValue(element, condition) + "';" +
+        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
+  }
+
+  private static WebElement tryToGetElement(WebElement parent, By elementSelector, int index) {
+    WebElement element;
+    try {
+      if (index == 0) {
+        element = getSearchContext(parent).findElement(elementSelector);
+      }
+      else {
+        List<WebElement> elements = getSearchContext(parent).findElements(elementSelector);
+        element = index < elements.size() ? elements.get(index) : null;
+      }
+    } catch (WebDriverException elementNotFound) {
+      element = null;
+    }
+    return element;
   }
 
   private static SearchContext getSearchContext(WebElement parent) {
