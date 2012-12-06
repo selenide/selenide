@@ -40,7 +40,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
     if ("find".equals(method.getName())) {
-      return wrap(find(args[0]));
+      return wrap(args.length == 1 ? find(args[0]) : find(args[0], (Integer) args[1]));
     }
     if ("toString".equals(method.getName())) {
       return describe(delegate);
@@ -86,6 +86,12 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     return (arg instanceof By) ?
         delegate.findElement((By) arg) :
         delegate.findElement(By.cssSelector((String) arg));
+  }
+
+  private WebElement find(Object arg, int index) {
+    return (arg instanceof By) ?
+        delegate.findElements((By) arg).get(index) :
+        delegate.findElements(By.cssSelector((String) arg)).get(index);
   }
 
   static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {

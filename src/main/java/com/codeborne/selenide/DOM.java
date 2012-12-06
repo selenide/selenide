@@ -65,7 +65,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement $(String cssSelector, int index) {
-    return WebElementWaitingProxy.wrap(By.cssSelector(cssSelector), index);
+    return WebElementWaitingProxy.wrap(null, By.cssSelector(cssSelector), index);
   }
 
   /**
@@ -121,7 +121,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement getElement(By criteria) {
-    return WebElementWaitingProxy.wrap(criteria);
+    return WebElementWaitingProxy.wrap(null, criteria, 0);
   }
 
   /**
@@ -132,7 +132,7 @@ public class DOM {
    * @throws NoSuchElementException if element was no found
    */
   public static ShouldableWebElement getElement(By criteria, int index) {
-    return WebElementWaitingProxy.wrap(criteria, index);
+    return WebElementWaitingProxy.wrap(null, criteria, index);
   }
 
   /**
@@ -450,37 +450,45 @@ public class DOM {
   }
 
   @Deprecated
-  public static ShouldableWebElement waitFor(By elementSelector, Condition condition, long milliseconds) {
-    return waitUntil(elementSelector, condition, milliseconds);
+  public static ShouldableWebElement waitFor(By elementSelector, Condition condition, long timeoutMs) {
+    return waitUntil(elementSelector, condition, timeoutMs);
   }
 
-  public static ShouldableWebElement waitUntil(By elementSelector, Condition condition, long milliseconds) {
-    return waitUntil(elementSelector, 0, condition, milliseconds);
+  public static ShouldableWebElement waitUntil(By elementSelector, Condition condition, long timeoutMs) {
+    return waitUntil(elementSelector, 0, condition, timeoutMs);
   }
 
-  public static ShouldableWebElement waitUntil(String cssSelector, Condition condition, long milliseconds) {
-    return waitUntil(By.cssSelector(cssSelector), condition, milliseconds);
+  public static ShouldableWebElement waitUntil(String cssSelector, Condition condition, long timeoutMs) {
+    return waitUntil(By.cssSelector(cssSelector), condition, timeoutMs);
   }
 
   @Deprecated
-  public static ShouldableWebElement waitFor(By elementSelector, int index, Condition condition, long milliseconds) {
-    return waitUntil(elementSelector, index, condition, milliseconds);
+  public static ShouldableWebElement waitFor(By elementSelector, int index, Condition condition, long timeoutMs) {
+    return waitUntil(elementSelector, index, condition, timeoutMs);
   }
 
-  public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition, long milliseconds) {
-    return waitUntil(By.cssSelector(cssSelector), index, condition, milliseconds);
+  public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition, long timeoutMs) {
+    return waitUntil(By.cssSelector(cssSelector), index, condition, timeoutMs);
   }
 
-  public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition, long milliseconds) {
+  public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition, long timeoutMs) {
+    return waitUntil(null, elementSelector, index, condition, timeoutMs);
+  }
+
+  public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition) {
+    return waitUntil(parent, elementSelector, index, condition, defaultWaitingTimeout);
+  }
+
+  public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
     final long startTime = System.currentTimeMillis();
     WebElement element = null;
     do {
       try {
         if (index == 0) {
-          element = getWebDriver().findElement(elementSelector);
+          element = (parent == null ? getWebDriver() : parent).findElement(elementSelector);
         }
         else {
-          List<WebElement> elements = getWebDriver().findElements(elementSelector);
+          List<WebElement> elements = (parent == null ? getWebDriver() : parent).findElements(elementSelector);
           if (index < elements.size()) {
             element = elements.get(index);
           }
@@ -496,9 +504,9 @@ public class DOM {
       }
       sleep(100);
     }
-    while (System.currentTimeMillis() - startTime < milliseconds);
+    while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    fail("Element " + elementSelector + " hasn't " + condition + " in " + milliseconds + " ms.;" +
+    fail("Element " + elementSelector + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
         " actual value: '" + getActualValue(element, condition) + "';" +
         (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
     return null;

@@ -21,7 +21,9 @@ public interface ShouldableWebElement extends WebElement {
   @Override String toString();
 
   ShouldableWebElement find(String cssSelector);
+  ShouldableWebElement find(String cssSelector, int index);
   ShouldableWebElement find(By selector);
+  ShouldableWebElement find(By selector, int index);
 
   File uploadFromClasspath(String fileName);
 }

@@ -59,6 +59,15 @@ public class LongRunningAjaxRequestTest {
     $(By.linkText("non-existing-link"), 8).shouldNot(exist);
   }
 
+  @Test
+  public void findWaitsForConditions() {
+    $("#results").find(byText("non-eisting element")).shouldNot(exist);
+    $("#results").find(byText("non-eisting element"), 3).shouldNot(exist);
+
+    $("#results").find(byText("Loading...")).shouldNot(exist);
+    $("#results").find(byText("Loading..."), 0).shouldNot(exist);
+  }
+
   @Test @Ignore
   public void shouldNotExistWithinParentElement() {
     $($(By.tagName("body")), "#non-existing-element").shouldNot(exist);

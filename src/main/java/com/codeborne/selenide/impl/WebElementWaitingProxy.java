@@ -17,22 +17,18 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
 public class WebElementWaitingProxy implements InvocationHandler {
-  public static ShouldableWebElement wrap(By criteria) {
+  public static ShouldableWebElement wrap(WebElement parent, By criteria, int index) {
     return (ShouldableWebElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
-        new Class<?>[]{ShouldableWebElement.class}, new WebElementWaitingProxy(criteria, 0));
+        new Class<?>[]{ShouldableWebElement.class}, new WebElementWaitingProxy(parent, criteria, index));
   }
 
-  public static ShouldableWebElement wrap(By criteria, int index) {
-    return (ShouldableWebElement) Proxy.newProxyInstance(
-        currentThread().getContextClassLoader(),
-        new Class<?>[]{ShouldableWebElement.class}, new WebElementWaitingProxy(criteria, index));
-  }
-
+  private final WebElement parent;
   private final By criteria;
   private final int index;
 
-  private WebElementWaitingProxy(By criteria, int index) {
+  private WebElementWaitingProxy(WebElement parent, By criteria, int index) {
+    this.parent = parent;
     this.criteria = criteria;
     this.index = index;
   }
@@ -45,7 +41,7 @@ public class WebElementWaitingProxy implements InvocationHandler {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
     if ("find".equals(method.getName())) {
-      return ShouldableWebElementProxy.wrap(find(args[0])); // TODO Don't we want to wrap into WebElementWaitingProxy?
+      return find(args[0], args.length == 1 ? 0 : (Integer) args[1]);
     }
     if ("toString".equals(method.getName())) {
       return describe();
@@ -74,25 +70,25 @@ public class WebElementWaitingProxy implements InvocationHandler {
 
   private Object should(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(criteria, index, condition);
+      waitUntil(parent, criteria, index, condition);
     }
     return proxy;
   }
 
   private Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(criteria, index, not(condition)); // TODO This is probably buggie line
+      waitUntil(parent, criteria, index, not(condition)); // TODO This is probably buggie line
     }
     return proxy;
   }
 
-  private WebElement find(Object arg) {
+  private ShouldableWebElement find(Object arg, int index) {
     return (arg instanceof By) ?
-      waitForElement().findElement((By) arg) :
-      waitForElement().findElement(By.cssSelector((String) arg));
+      wrap(waitForElement(), (By) arg, index) :
+      wrap(waitForElement(), By.cssSelector((String) arg), index);
   }
 
   private ShouldableWebElement waitForElement() {
-    return waitUntil(criteria, index, exist);
+    return waitUntil(parent, criteria, index, exist);
   }
 }
