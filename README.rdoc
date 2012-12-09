@@ -145,9 +145,10 @@ Selenide was created by Codeborne[http://codeborne.com/], an software developmen
 
 ---
 ==== Authors
-  Andrei Solntsev <mailto:andrei@codeborne.com>
-  Anon Keks <mailto:anton@codeborne.com>
-  Maksim Säkki <mailto:maksim@codeborne.com>
-  Vadim Gerasimov <mailto:vadim@codeborne.com>
+  [Andrei Solntsev][<mailto:andrei@codeborne.com>]
+  Anton Keks[<mailto:anton@codeborne.com>]
+  Maksim Säkki[<mailto:maksim@codeborne.com>]
+  Vadim Gerasimov[<mailto:vadim@codeborne.com>]
 
-==== License::  GPL[http://www.gnu.org/copyleft/gpl.html] 1.0
+==== License
+GPL[http://www.gnu.org/copyleft/gpl.html] 1.0
