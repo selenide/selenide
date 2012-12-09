@@ -151,9 +151,11 @@ Here we will provide some examples how Selenide can be used to write short and e
 Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
 ---
-=== Authors::  Andrei Solntsev <mailto:andrei@codeborne.com>
-               Anon Keks <mailto:anton@codeborne.com>
-               Maksim Säkki <mailto:maksim@codeborne.com>
-               Vadim Gerasimov <mailto:vadim@codeborne.com>
-=== License::  GPL[http://www.gnu.org/copyleft/gpl.html]
-=== Version::  1.0
+==== Authors
+  Andrei Solntsev <mailto:andrei@codeborne.com>
+  Anon Keks <mailto:anton@codeborne.com>
+  Maksim Säkki <mailto:maksim@codeborne.com>
+  Vadim Gerasimov <mailto:vadim@codeborne.com>
+
+==== License::  GPL[http://www.gnu.org/copyleft/gpl.html]
+Version::  1.0
