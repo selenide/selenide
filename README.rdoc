@@ -124,7 +124,7 @@ Here we will provide some examples how Selenide can be used to write short and e
  SHORT: assertThat($$("#documentsTable tbody tr").size(), equalTo(4));
 
 
-anchor:changelog
+{{anchor:changelog}}
 == Changelog
 === 1.9 (Snapshot, planned release date: December 2012)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
@@ -151,8 +151,9 @@ anchor:changelog
 == How is author of Selenide?
 Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
-anchor:authors
-anchor:license
+{{anchor|authors}}
+{{anchor|license}}
+{{anchor:license2}}
 ---
 Author::   Andrei Solntsev <mailto:andrei@codeborne.com>
            Anon Keks <mailto:anton@codeborne.com>
