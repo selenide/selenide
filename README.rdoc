@@ -27,11 +27,14 @@ If you are using Maven (Ivy, Gradle or whatever dependency management), you can 
     testCompile 'com.codeborne:selenide:1.8'
   }
 
-
 Include the following methods and let's start!
 
   include static com.codeborne.selenide.Navigation.*
   include static com.codeborne.selenide.DOM.*
+
+Until tutorial is ready, you can find some Selenide usages in the example project Hangman:
+https://github.com/asolntsev/hangman/blob/master/selenide_1_8/test/ee/uitest/HangmanSpec.java
+
 
 == What benefits gives Selenide over plain Selenium?
 
@@ -100,16 +103,6 @@ want to test our code with IE because many users still use it.
 Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
 you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
 
-
-== How to use Selenide?
-Just add a Selenide dependency to your pom, ivy or gradle dependencies configuration:
- testCompile 'com.codeborne:selenide:1.7'
-
-Tutorial is in progress now, but you can take a look at a example project which already uses Selenide:
-https://github.com/asolntsev/hangman/blob/master/selenide_1_8/test/ee/uitest/HangmanSpec.java
-
-Until tutorial is ready, you can find some Selenide usages there.
-
 == Best practices
 Here we will provide some examples how Selenide can be used to write short and expressive acceptance tests.
 
@@ -157,5 +150,4 @@ Selenide was created by Codeborne[http://codeborne.com/], an software developmen
   Maksim Säkki <mailto:maksim@codeborne.com>
   Vadim Gerasimov <mailto:vadim@codeborne.com>
 
-==== License::  GPL[http://www.gnu.org/copyleft/gpl.html]
-Version::  1.0
+==== License::  GPL[http://www.gnu.org/copyleft/gpl.html] 1.0
