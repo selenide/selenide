@@ -140,15 +140,16 @@ Here we will provide some examples how Selenide can be used to write short and e
 * Added condition "present", "notPresent", "exist".
 * Added selector "byText" and condition "matchesText" for matching elements by regex
 
-== How is author of Selenide?
+---
+== Authors
 Selenide was created by Codeborne[http://codeborne.com/], an software development company based in Tallinn, Estonia.
 
----
-==== Authors
-[Andrei Solntsev][<mailto:andrei@codeborne.com>]
-Anton Keks[<mailto:anton@codeborne.com>]
-Maksim Säkki[<mailto:maksim@codeborne.com>]
-Vadim Gerasimov[<mailto:vadim@codeborne.com>]
+The main committers are:
+- Andrei Solntsev <mailto:andrei@codeborne.com>
+- Anton Keks <mailto:anton@codeborne.com>
+- Maksim Säkki <mailto:maksim@codeborne.com>
+- Vadim Gerasimov <mailto:vadim@codeborne.com>
 
-==== License
+
+== License
 GPL[http://www.gnu.org/copyleft/gpl.html] 1.0
