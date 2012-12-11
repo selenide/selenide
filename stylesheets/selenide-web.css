@@ -5,6 +5,8 @@
 }
 
 #twitter .date {
+  position: absolute;
+  left: -85px;
   text-align: right;
   vertical-align: text-bottom;
   font-weight: bold;

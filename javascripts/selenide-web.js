@@ -4,7 +4,7 @@ $(function() {
     var b = $("#twitter").find("tbody");
     $.each(tweets, function(i, tweet) {
       var date = new Date(tweet.created_at.replace(/ (UTC ?)?\+/, " UTC+"));
-      var h = $("<tr><td class=date></td><td class=title><a></a></td></tr>");
+      var h = $("<tr><td class=title><span class='date'></span> <a></a></td></tr>");
       h.find(".date").html(date.getDate() + "." + date.getMonth() + "." + (1900+date.getYear()));
       h.find(".title a")
           .attr("href", "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str).text(tweet.text);
