@@ -117,6 +117,10 @@ Here we will provide some examples how Selenide can be used to write short and e
  SHORT: assertThat($$("#documentsTable tbody tr").size(), equalTo(4));
 
 
+== Resources
+* Presentation at TopConf conference[http://asolntsev.github.com/presentations/ui-tests/the_fast_and_the_continuous.topconf.html/] (Tallinn, 1. Nov 2012)
+* Article on Habrahabr.ru[http://habrahabr.ru/post/143269/] (in Russian)
+
 == Changelog
 === 1.9 (Snapshot, planned release date: December 2012)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
