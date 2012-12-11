@@ -118,7 +118,7 @@ Here we will provide some examples how Selenide can be used to write short and e
 
 
 == Resources
-* Presentation at TopConf conference[http://asolntsev.github.com/presentations/ui-tests/the_fast_and_the_continuous.topconf.html/] (Tallinn, 1. Nov 2012)
+* Presentation at TopConf conference[http://asolntsev.github.com/presentations/ui-tests/the_fast_and_the_continuous.topconf.html] (Tallinn, 1. Nov 2012)
 * Article on Habrahabr.ru[http://habrahabr.ru/post/143269/] (in Russian)
 
 == Changelog
