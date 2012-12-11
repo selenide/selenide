@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -33,7 +34,12 @@ public class WebElementWaitingProxy implements InvocationHandler {
     this.index = index;
   }
 
+  @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    if ("setValue".equals(method.getName())) {
+      DOM.setValue(waitForElement(), (String) args[0]);
+      return null;
+    }
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       return should(proxy, (Condition[]) args[0]);
     }
@@ -83,7 +89,7 @@ public class WebElementWaitingProxy implements InvocationHandler {
   }
 
   private ShouldableWebElement find(Object arg, int index) {
-    return (arg instanceof By) ?
+    return arg instanceof By ?
       wrap(waitForElement(), (By) arg, index) :
       wrap(waitForElement(), By.cssSelector((String) arg), index);
   }

@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 
 public interface ShouldableWebElement extends WebElement {
+  void setValue(String value);
   ShouldableWebElement should(Condition... condition);
   ShouldableWebElement shouldHave(Condition... condition);
   ShouldableWebElement shouldBe(Condition... condition);

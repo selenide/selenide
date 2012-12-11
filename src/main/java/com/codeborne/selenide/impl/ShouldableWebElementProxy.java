@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -20,7 +21,7 @@ import static java.lang.Thread.currentThread;
 
 public class ShouldableWebElementProxy implements InvocationHandler {
   public static ShouldableWebElement wrap(WebElement element) {
-    return (element instanceof ShouldableWebElement) ?
+    return element instanceof ShouldableWebElement ?
         (ShouldableWebElement) element :
         (ShouldableWebElement) Proxy.newProxyInstance(
             element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
@@ -32,7 +33,12 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     this.delegate = delegate;
   }
 
+  @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    if ("setValue".equals(method.getName())) {
+      DOM.setValue(delegate, (String) args[0]);
+      return null;
+    }
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       return should(proxy, (Condition[]) args[0]);
     }
@@ -83,13 +89,13 @@ public class ShouldableWebElementProxy implements InvocationHandler {
   }
 
   private WebElement find(Object arg) {
-    return (arg instanceof By) ?
+    return arg instanceof By ?
         delegate.findElement((By) arg) :
         delegate.findElement(By.cssSelector((String) arg));
   }
 
   private WebElement find(Object arg, int index) {
-    return (arg instanceof By) ?
+    return arg instanceof By ?
         delegate.findElements((By) arg).get(index) :
         delegate.findElements(By.cssSelector((String) arg)).get(index);
   }

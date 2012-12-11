@@ -125,6 +125,7 @@ Here we will provide some examples how Selenide can be used to write short and e
 === 1.9 (Snapshot, planned release date: December 2012)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
 * Added methods $().find() with index parameter
+* Added method $().setValue()
 * Added method DOM.getSelectedRadio()
 * Updated to selenium-java:2.26.0
 
