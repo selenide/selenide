@@ -18,7 +18,7 @@
         <h1>Selenide</h1>
         <p>Addition for Selenium WebDriver to facilitate writing JUnit tests with Selenium</p>
 
-        <p class="view"><a href="https://github.com/codeborne/selenide">View the Project on GitHub <small>codeborne/selenide</small></a></p>
+        <p class="view"><a href="https://github.com/codeborne/selenide">View the Project on GitHub</a></p>
 
 
         <ul>
@@ -26,35 +26,53 @@
           <li><a href="https://github.com/codeborne/selenide/tarball/master">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/codeborne/selenide">View On <strong>GitHub</strong></a></li>
         </ul>
+
+        <!--<a href="http://www.jetbrains.com/idea/" style="position: relative;display:block; background:#fff url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea120x60_white.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:120px; height:60px" alt="The best Java IDE" title="The best Java IDE"><span style="margin: 4px 0 0 28px;padding: 0;float: left;font-size: 9px;cursor:pointer;  background-image:none;border:0;color: #0d3a9e; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Proud fan of</span></a>-->
+        <a href="http://www.jetbrains.com/idea/features/javascript.html" style="display:block; background:#fff url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea234x60_white.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:252px; height:58px" alt="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers" title="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers"><span style="margin: -3px 0 0 41px;padding: 0;float: left;font-size: 10px;cursor:pointer;  background-image:none;border:0;color: #0d3a9e; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Proud fan of</span><span style="margin:33px 0 0 7px;padding:0 0 2px 0; line-height:12px;font-size:9px;cursor:pointer;  background-image:none;border:0;display:block;width:240px; color:#0d3a9e; font-family:trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Java IDE with advanced HTML/CSS/JS<br/>editor for hardcore web-developers</span></a>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <h4>Selenide. Concise UI Tests in Java.</h4>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Selenide is a library for writing concise, readable, boilerplate-free tests in Java using Selenium WebDriver.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<pre><code>@Test
+public void testLogin() {
+  open("/login");
+  setValue(By.name("user.name"), "johny");
+  $("#submit").click();
+  waitUntil("#username", hasText("Hello, Johny!"));
+
+  $("#insuranceDetailsHeader").shouldHave(text("Страховые полисы"));
+  assertEquals(7, $$("#paymentScheduleTable tr"));
+}
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-<h3>Designer Templates</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
+<!--<h3>Authors and Contributors</h3>
 
 <p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
 
 <h3>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>-->
+
+<h4>How to start?</h4>
+Just put selenide.jar to your project.
+If you are using Maven (Ivy, Gradle or whatever dependency management), you can add the following dependency:
+<pre><code>dependencies {
+  testCompile 'com.codeborne:selenide:1.8'
+}</code></pre>
+
+Include the following methods and let's start!
+<pre><code>
+include static com.codeborne.selenide.Navigation.*
+include static com.codeborne.selenide.DOM.*
+</code></pre>
+
+You can find some Selenide usages in the example project <a href="https://github.com/asolntsev/hangman/blob/master/selenide_1_8/test/ee/uitest/HangmanSpec.java">Hangman</a>.
       </section>
+
       <footer>
         <p>This project is maintained by <a href="https://github.com/codeborne">codeborne</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
