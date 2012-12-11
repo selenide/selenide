@@ -1,0 +1,15 @@
+.centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#twitter .date {
+  text-align: right;
+  vertical-align: text-bottom;
+  font-weight: bold;
+}
+
+#twitter .title a {
+  color: black;
+}
