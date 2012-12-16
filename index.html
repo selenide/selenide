@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -26,7 +26,7 @@
           <li><a href="http://twitter.com/jselenide">Follow at <strong>Twitter</strong></a></li>
         </ul>
 
-        <div id="twitter">
+        <div id="twitter" style="overflow : auto;">
           <table width="100%">
             <thead>
               <tr>
@@ -46,35 +46,32 @@ public void userCanLoginByUsername() {
   <b>$</b>(By.name("user.name")).<b>setValue</b>("johny");
   <b>$("#submit")</b>.click();
   <b>waitUntil</b>("#username", <b>hasText</b>("Hello, Johny!"));
-
-  <b>$</b>("#insuranceDetailsHeader").<b>shouldHave( text</b>("Страховые полисы") );
-  assertEquals(7, <b>$$</b>("#paymentScheduleTable tr").size());
 }
 </code></pre>
 <p>
-  As you can see, Selenide provides:<ul>
+  Selenide is a wrapper for <a href="http://seleniumhq.org/projects/webdriver/">Selenium WebDriver</a> providing:<ul>
+    <li>Automatic handling of browser lifecycle</li>
     <li>jQuery-like element selectors</li>
     <li>Ajax support</li>
-    <li>Automatic handling of browser lifecycle</li>
   </ul>
 </p>
-
+<p>
+  That way Selenide provides a Concise API for writing tests. You don't need to think how to shutdown browser - just concentrate on your business logic!
+</p>
 <h4>How to start?</h4>
 Just put <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/1.8/selenide-1.8.jar">selenide.jar</a> to your project.<br/>
 For Maven, Ivy, Gradle etc., users:
 <pre><code>&lt;dependency org="com.codeborne" name="selenide" revision="1.8"/&gt;</code></pre>
-
-Import the following methods and let's start!
-<pre><code>import static com.codeborne.selenide.Navigation.*
-import static com.codeborne.selenide.DOM.*
-</code></pre>
-
-You can find some Selenide usages in the example project <a href="https://github.com/asolntsev/hangman/blob/master/selenide_1_8/test/ee/uitest/HangmanSpec.java">Hangman</a>.
+See <a href="https://github.com/codeborne/selenide/wiki/Quick-Start">Quick Start guide</a> fr more details
+<footer>
+  <!--<a href="http://www.jetbrains.com/idea/" style="position: relative;display:block; background:#fff url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea120x60_white.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:120px; height:60px" alt="The best Java IDE" title="The best Java IDE"><span style="margin: 4px 0 0 28px;padding: 0;float: left;font-size: 9px;cursor:pointer;  background-image:none;border:0;color: #0d3a9e; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Developed with</span></a>-->
+  <!--<p>This project is maintained by <a href="https://github.com/codeborne"><img src="images/codeborne-logo.png"/></a></p>-->
+</footer>
       </section>
 
       <footer>
-        <a href="http://www.jetbrains.com/idea/features/javascript.html" style="display:block; background:#fff url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea234x60_white.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:252px; height:58px" alt="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers" title="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers"><span style="margin: -3px 0 0 41px;padding: 0;float: left;font-size: 10px;cursor:pointer;  background-image:none;border:0;color: #0d3a9e; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Developed with</span><span style="margin:33px 0 0 7px;padding:0 0 2px 0; line-height:12px;font-size:9px;cursor:pointer;  background-image:none;border:0;display:block;width:240px; color:#0d3a9e; font-family:trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;"><br/>Best Java IDE in the world</span></a>
-        <br/>
+        <!--<a href="http://www.jetbrains.com/idea/features/javascript.html" style="display:block; background:#fff url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea234x60_white.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:252px; height:58px" alt="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers" title="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers"><span style="margin: -3px 0 0 41px;padding: 0;float: left;font-size: 10px;cursor:pointer;  background-image:none;border:0;color: #0d3a9e; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Developed with</span><span style="margin:33px 0 0 7px;padding:0 0 2px 0; line-height:12px;font-size:9px;cursor:pointer;  background-image:none;border:0;display:block;width:240px; color:#0d3a9e; font-family:trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;"><br/>Best Java IDE in the world</span></a>-->
+        <!--<br/>-->
         <p>This project is maintained by <a href="https://github.com/codeborne"><img src="images/codeborne-logo.png"/></a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
