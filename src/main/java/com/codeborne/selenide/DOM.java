@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
@@ -574,5 +575,9 @@ public class DOM {
    */
   public static String describeElement(WebElement element) {
     return Describe.describe(element);
+  }
+
+  public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
+    return PageFactory.initElements(getWebDriver(), pageObjectClass);
   }
 }

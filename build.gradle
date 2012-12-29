@@ -31,6 +31,11 @@ task libs(type: Sync) {
 
 test {
   exclude 'com/codeborne/selenide/integrationtests/**'
+  systemProperties['browser'] = 'htmlunit'
+  // systemProperties['browser'] = 'chrome'
+  // systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+
+  systemProperties 'file.encoding': 'UTF-8'
   testLogging.showStandardStreams = true
 }
 
