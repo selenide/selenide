@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -206,13 +205,12 @@ public class WebDriverRunner {
 
   public static <T> T fail(String message) {
     if (webdriver == null) {
-      Assert.fail(message);
+      throw new AssertionError(message);
     } else {
-      Assert.fail(message +
+      throw new AssertionError(message +
           "\n, browser.currentUrl=" + webdriver.getCurrentUrl() +
           "\n, browser.title=" + webdriver.getTitle()
       );
     }
-    return null;
   }
 }

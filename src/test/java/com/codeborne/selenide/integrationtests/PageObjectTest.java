@@ -10,7 +10,7 @@ import static com.codeborne.selenide.DOM.page;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.Navigation.sleep;
 import static java.lang.Thread.currentThread;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class PageObjectTest {
 
@@ -36,6 +36,16 @@ public class PageObjectTest {
     pageWithSelects.selectDomainByText("@мыло.ру");
     assertEquals("мыло.ру", pageWithSelects.getSelectedOption().getAttribute("value"));
     assertEquals("@мыло.ру", pageWithSelects.getSelectedOption().getText());
+  }
+
+  @Test
+  public void userCanInjectExistingPageObject() {
+    SelectsPage originalPageObject = new SelectsPage();
+    assertNull(originalPageObject.domainSelect);
+
+    SelectsPage pageObject = page(originalPageObject);
+    assertSame(originalPageObject, pageObject);
+    assertNotNull(pageObject.domainSelect);
   }
 
   public static class SelectsPage {
