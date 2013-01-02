@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -62,15 +63,15 @@ public class WebElementWaitingProxy implements InvocationHandler {
   private String describe() {
     try {
       if (index == 0) {
-        return Describe.describe(getWebDriver().findElement(criteria));
+        return Describe.describe(getSearchContext().findElement(criteria));
       }
       else {
-        return Describe.describe(getWebDriver().findElements(criteria).get(index));
+        return Describe.describe(getSearchContext().findElements(criteria).get(index));
       }
     } catch (WebDriverException e) {
-      return "null";
+      return e.toString();
     } catch (IndexOutOfBoundsException e) {
-      return "null";
+      return e.toString();
     }
   }
 
@@ -94,7 +95,11 @@ public class WebElementWaitingProxy implements InvocationHandler {
       wrap(waitForElement(), By.cssSelector((String) arg), index);
   }
 
-  private ShouldableWebElement waitForElement() {
+  private WebElement waitForElement() {
     return waitUntil(parent, criteria, index, exist);
+  }
+
+  private SearchContext getSearchContext() {
+    return parent == null ? getWebDriver() : parent;
   }
 }
