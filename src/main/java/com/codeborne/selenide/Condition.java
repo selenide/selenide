@@ -78,6 +78,12 @@ public abstract class Condition {
    */
   public static final Condition disappears = hidden;
 
+  /**
+     * Synonym for #hidden - may be used for better readability:
+     * $("#loginLink").should(disappear);
+     */
+  public static final Condition disappear = hidden;
+
   public static Condition hasAttribute(final String attributeName, final String attributeValue) {
     return attribute(attributeName, attributeValue);
   }
