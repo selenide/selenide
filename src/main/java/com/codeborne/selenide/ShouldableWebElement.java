@@ -6,7 +6,12 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 
 public interface ShouldableWebElement extends WebElement {
-  void setValue(String value);
+  /**
+   * Clear the text field and enter given text.
+   * @param text Any text to enter into the text field.
+   */
+  void setValue(String text);
+
   ShouldableWebElement should(Condition... condition);
   ShouldableWebElement shouldHave(Condition... condition);
   ShouldableWebElement shouldBe(Condition... condition);
