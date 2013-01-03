@@ -5,8 +5,8 @@ import org.openqa.selenium.By;
 public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring)
-   * @param elementText
-   * @return
+   * @param elementText Text to search inside element
+   * @return standard selenium By criteria
    */
   public static By withText(String elementText) {
     if (elementText.contains("'") && elementText.contains("\"")) {
@@ -19,8 +19,8 @@ public class Selectors {
 
   /**
    * Find element HAVING given text (exactly this text)
-   * @param elementText
-   * @return
+   * @param elementText Text that searched element should have
+   * @return standard selenium By criteria
    */
   public static By byText(String elementText) {
     if (elementText.contains("'") && elementText.contains("\"")) {
