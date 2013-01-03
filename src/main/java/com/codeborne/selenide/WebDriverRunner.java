@@ -192,7 +192,12 @@ public class WebDriverRunner {
 
   private static WebDriver createInstanceOf(String className) {
     try {
-      return (WebDriver) Class.forName(className).newInstance();
+      Class<?> clazz = Class.forName(className);
+      if (WebDriverProvider.class.isAssignableFrom(clazz)) {
+        return ((WebDriverProvider)clazz.newInstance()).createDriver();
+      } else {
+        return (WebDriver) Class.forName(className).newInstance();
+      }
     }
     catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
