@@ -78,10 +78,26 @@ public abstract class Condition {
    */
   public static final Condition disappears = hidden;
 
+  /**
+     * Synonym for #hidden - may be used for better readability:
+     * $("#loginLink").should(disappear);
+     */
+  public static final Condition disappear = hidden;
+
+  /**
+   * waitUntil(By.id("#mydiv"), hasAttribute("fileId", "12345"));
+   * @param attributeName name of attribute
+   * @param attributeValue expected value of attribute
+   */
   public static Condition hasAttribute(final String attributeName, final String attributeValue) {
     return attribute(attributeName, attributeValue);
   }
 
+  /**
+   * $("#mydiv").shouldHave(attribute("fileId", "12345"));
+   * @param attributeName name of attribute
+   * @param attributeValue expected value of attribute
+   */
   public static Condition attribute(final String attributeName, final String attributeValue) {
     return new Condition("hasAttribute", false) {
       @Override
@@ -99,13 +115,30 @@ public abstract class Condition {
     };
   }
 
-  public static Condition hasValue(final String value) {
+  /**
+   * $("#input").shouldHave(value("John"))
+   * @param value expected value of input field
+   */
+  public static Condition value(final String value) {
     return hasAttribute("value", value);
   }
 
-  public static final Condition empty = hasValue("");
+  /**
+   * assertElement(By,id("input"), hasValue("John"))
+   * @param value expected value of input field
+   */
+  public static Condition hasValue(final String value) {
+    return value(value);
+  }
 
   /**
+   * $("#input").shouldBe(empty)
+   */
+  public static final Condition empty = value("");
+
+  /**
+   * assertElement(By,tagName("h1"), matchesText("Hello"))
+   *
    * @see #matchText(String)
    */
   public static Condition matchesText(final String text) {
@@ -114,8 +147,10 @@ public abstract class Condition {
 
   /**
    * Assert that given element's text matches given regular expression
+   *
+   * $("h1").should(matchText("Hello\s*John"))
+   *
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
-   * @return
    */
   public static Condition matchText(final String regex) {
     return new Condition("match", false) {
@@ -138,6 +173,10 @@ public abstract class Condition {
     return Pattern.compile(".*" + regex + ".*", DOTALL).matcher(text).matches();
   }
 
+  /**
+   * assertElement(By,tagName("h1"), hasText("Hello"))
+   * @param text expected text of HTML element
+   */
   public static Condition hasText(final String text) {
     return new Condition("hasText", false) {
       @Override
@@ -155,35 +194,51 @@ public abstract class Condition {
     };
   }
 
+  /**
+   * $("h1").should(haveText("Hello\s*John"))
+   * @param text expected text of HTML element
+   */
   public static Condition haveText(final String text) {
     return hasText(text);
   }
 
+  /**
+   * $("h1").shouldHave(text("Hello\s*John"))
+   * @param text expected text of HTML element
+   */
   public static Condition text(final String text) {
     return hasText(text);
   }
 
+  /**
+   * waitUntil(By.tagName("input"), hasOptions());
+   */
   public static Condition hasOptions() {
-    return new Condition("hasOptions", false) {
-      @Override
-      public boolean apply(WebElement element) {
-        try {
-          return element != null && element.getText().length() > 0;
-        }
-        catch (NoSuchElementException e) {
-          return false;
-        }
-      }
-      @Override
-      public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getText();
-      }
-      @Override
-      public String toString() {
-        return "got any options";
-      }
-    };
+    return options;
   }
+
+  /**
+   * $("input").shouldHave(options);
+   */
+  public static Condition options = new Condition("hasOptions", false) {
+    @Override
+    public boolean apply(WebElement element) {
+      try {
+        return element != null && element.getText().length() > 0;
+      }
+      catch (NoSuchElementException e) {
+        return false;
+      }
+    }
+    @Override
+    public String actualValue(WebElement element) {
+      return element == null? "does not exist" : element.getText();
+    }
+    @Override
+    public String toString() {
+      return "got any options";
+    }
+  };
 
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");

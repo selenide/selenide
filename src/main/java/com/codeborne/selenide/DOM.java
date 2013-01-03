@@ -14,8 +14,6 @@ import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
 
 public class DOM {
   public static long defaultWaitingTimeout = Long.getLong("timeout", 4000);
@@ -265,19 +263,19 @@ public class DOM {
 
   /**
    * Select radio field by value
-   * @param radioField
-   * @param value
-   * @return
+   * @param radioFieldCriteria
+   * @param value value to select (should match an attribute "value")
+   * @return the selected radio field
    */
-  public static ShouldableWebElement selectRadio(By radioField, String value) {
-    assertEnabled(radioField);
-    for (WebElement radio : getElements(radioField)) {
+  public static ShouldableWebElement selectRadio(By radioFieldCriteria, String value) {
+    assertEnabled(radioFieldCriteria);
+    for (WebElement radio : getElements(radioFieldCriteria)) {
       if (value.equals(radio.getAttribute("value"))) {
         radio.click();
         return wrap(radio);
       }
     }
-    throw new NoSuchElementException(radioField + " and value " + value);
+    throw new NoSuchElementException(radioFieldCriteria + " and value " + value);
   }
 
   public static ShouldableWebElement getSelectedRadio(By radioField) {
@@ -353,40 +351,50 @@ public class DOM {
 
   public static ShouldableWebElement assertChecked(By criteria) {
     ShouldableWebElement element = getElement(criteria);
-    assertThat(element.getAttribute("checked"), equalTo("true"));
+    if (!"true".equalsIgnoreCase(element.getAttribute("checked"))) {
+      throw new AssertionError("Element is not checked: " + element);
+    }
     return element;
   }
 
   public static ShouldableWebElement assertNotChecked(By criteria) {
     ShouldableWebElement element = getElement(criteria);
-    assertNull(element.getAttribute("checked"));
+    if (element.getAttribute("checked") != null) {
+      throw new AssertionError("Element is checked: " + element);
+    }
     return element;
   }
 
   public static ShouldableWebElement assertDisabled(By criteria) {
     ShouldableWebElement element = getElement(criteria);
-    assertThat(element.getAttribute("disabled"), equalTo("true"));
+    if (!"true".equalsIgnoreCase(element.getAttribute("disabled"))) {
+      throw new AssertionError("Element is enabled: " + element);
+    }
     return element;
   }
 
   public static ShouldableWebElement assertEnabled(By criteria) {
     ShouldableWebElement element = getElement(criteria);
     String disabled = element.getAttribute("disabled");
-    if (disabled != null) {
-      assertThat(disabled, equalTo("false"));
+    if (disabled != null && !"false".equalsIgnoreCase(disabled)) {
+      throw new AssertionError("Element is disabled: " + element);
     }
     return element;
   }
 
   public static ShouldableWebElement assertSelected(By criteria) {
     ShouldableWebElement element = getElement(criteria);
-    assertTrue(element.isSelected());
+    if (!element.isSelected()) {
+      throw new AssertionError("Element is not selected: " + element);
+    }
     return element;
   }
 
   public static ShouldableWebElement assertNotSelected(By criteria) {
     ShouldableWebElement element = getElement(criteria);
-    assertFalse(element.isSelected());
+    if (element.isSelected()) {
+      throw new AssertionError("Element is selected: " + element);
+    }
     return element;
   }
 
@@ -547,15 +555,52 @@ public class DOM {
     return parent == null ? getWebDriver() : parent;
   }
 
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
+   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
+   *
+   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws AssertionError if confirmation message differs from expected message
+   */
   public static void confirm(String expectedConfirmationText) {
     try {
-      Alert alert = getWebDriver().switchTo().alert();
-      assertEquals(expectedConfirmationText, alert.getText());
+      Alert alert = checkAlertMessage(expectedConfirmationText);
       alert.accept();
     } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
       return;
     }
 
+    waitUntilAlertDisappears();
+  }
+
+  /**
+   * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
+   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
+   *
+   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws AssertionError if confirmation message differs from expected message
+   */
+  public static void dismiss(String expectedConfirmationText) {
+    try {
+      Alert alert = checkAlertMessage(expectedConfirmationText);
+      alert.dismiss();
+    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
+      return;
+    }
+
+    waitUntilAlertDisappears();
+  }
+
+  private static Alert checkAlertMessage(String expectedConfirmationText) {
+    Alert alert = getWebDriver().switchTo().alert();
+    if (expectedConfirmationText != null && !expectedConfirmationText.equals(alert.getText())) {
+      throw new AssertionError("Actual confirmation text is '" + alert.getText() +
+          "', but expected: '" + expectedConfirmationText + "'");
+    }
+    return alert;
+  }
+
+  private static void waitUntilAlertDisappears() {
     try {
       long start = System.currentTimeMillis();
       while (getWebDriver().switchTo().alert() != null) {
@@ -573,11 +618,25 @@ public class DOM {
   /**
    * @deprecated Use $("selector").toString()
    */
+  @Deprecated
   public static String describeElement(WebElement element) {
     return Describe.describe(element);
   }
 
+  /**
+   * Create a Page Object instance.
+   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
+   */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     return PageFactory.initElements(getWebDriver(), pageObjectClass);
+  }
+
+  /**
+   * Create a Page Object instance.
+   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
+   */
+  public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
+    PageFactory.initElements(getWebDriver(), pageObject);
+    return pageObject;
   }
 }

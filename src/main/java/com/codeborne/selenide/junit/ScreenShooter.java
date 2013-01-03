@@ -7,20 +7,11 @@ import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
 
 /**
  * Usage:
- * <pre>
- * {@code
- *
- * @ Rule
- * public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
- * }</pre>
- * <p/>
+ * <pre>  {@literal @}Rule
+ * public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();</pre>
  * or
- * <pre>
- * {@code
- *
- *   @ Rule
- *   public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().succeededTests();
- * }</pre>
+ * <pre>  {@literal @}Rule
+ * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().succeededTests();</pre>
  */
 public class ScreenShooter extends TestWatcher {
   public boolean captureFailingTests = true;
