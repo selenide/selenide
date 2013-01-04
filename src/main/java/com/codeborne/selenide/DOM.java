@@ -263,19 +263,19 @@ public class DOM {
 
   /**
    * Select radio field by value
-   * @param radioFieldCriteria
+   * @param radioField any By selector for finding radio field
    * @param value value to select (should match an attribute "value")
    * @return the selected radio field
    */
-  public static ShouldableWebElement selectRadio(By radioFieldCriteria, String value) {
-    assertEnabled(radioFieldCriteria);
-    for (WebElement radio : getElements(radioFieldCriteria)) {
+  public static ShouldableWebElement selectRadio(By radioField, String value) {
+    assertEnabled(radioField);
+    for (WebElement radio : getElements(radioField)) {
       if (value.equals(radio.getAttribute("value"))) {
         radio.click();
         return wrap(radio);
       }
     }
-    throw new NoSuchElementException(radioFieldCriteria + " and value " + value);
+    throw new NoSuchElementException(radioField + " and value " + value);
   }
 
   public static ShouldableWebElement getSelectedRadio(By radioField) {

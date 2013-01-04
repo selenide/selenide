@@ -57,7 +57,7 @@ public class Navigation {
 
   /**
    * Assert that URL of current page is #baseUrl + #relativeUrl
-   * @param relativeUrl
+   * @param relativeUrl expected relative url like "/petclinic/user/login"
    */
   public static void assertURL(String relativeUrl) {
     String expectedUrl = baseUrl + relativeUrl;
