@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -25,6 +26,7 @@ public class WebDriverRunner {
   public static final String INTERNET_EXPLORER = "ie";
   public static final String HTMLUNIT = "htmlunit";
   public static final String FIREFOX = "firefox";
+  public static final String PHANTOMJS = "phantomjs";
   /**
    * To use OperaDriver, you need to include extra dependency to your project:
    * <dependency org="com.opera" name="operadriver" rev="0.18" conf="test->default"/>
@@ -172,6 +174,10 @@ public class WebDriverRunner {
       return maximize(new FirefoxDriver());
     } else if (OPERA.equalsIgnoreCase(browser)) {
       return createInstanceOf("com.opera.core.systems.OperaDriver");
+    } else if (PHANTOMJS.equals(browser)) {
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setJavascriptEnabled(true);
+      return new PhantomJSDriver(capabilities);
     } else {
       return createInstanceOf(browser);
     }
@@ -186,7 +192,12 @@ public class WebDriverRunner {
 
   private static WebDriver createInstanceOf(String className) {
     try {
-      return (WebDriver) Class.forName(className).newInstance();
+      Class<?> clazz = Class.forName(className);
+      if (WebDriverProvider.class.isAssignableFrom(clazz)) {
+        return ((WebDriverProvider)clazz.newInstance()).createDriver();
+      } else {
+        return (WebDriver) Class.forName(className).newInstance();
+      }
     }
     catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
