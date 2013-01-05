@@ -6,7 +6,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    open("/login");
    setValue(By.name("user.name"), "johny");
    followLink(By.id("submit"));
-   waitUntil(By.id("username"), hasText("Hello, Johny!"));
+   waitUntil(By.id("username"), hasText("Hello, Johny!"), 5000);
 
    assertThat($("#insuranceDetailsHeader").getText(), equalTo("Страховые полисы"));
    assertThat($$("#paymentScheduleTable tr").size(), equalTo(7));
@@ -24,7 +24,7 @@ Just put selenide.jar to your project.
 If you are using Maven (Ivy, Gradle or whatever dependency management), you can add the following dependency:
 
   dependencies {
-    testCompile 'com.codeborne:selenide:1.8'
+    testCompile 'com.codeborne:selenide:1.9'
   }
 
 Include the following methods and let's start!
@@ -33,7 +33,7 @@ Include the following methods and let's start!
   include static com.codeborne.selenide.DOM.*
 
 Until tutorial is ready, you can find some Selenide usages in the example project Hangman:
-https://github.com/asolntsev/hangman/blob/master/selenide_1_8/test/ee/uitest/HangmanSpec.java
+https://github.com/asolntsev/hangman/blob/master/selenide_1_9/test/ee/uitest/HangmanSpec.java
 
 
 == What benefits gives Selenide over plain Selenium?
@@ -76,12 +76,10 @@ With Selenide you can express the same test in a more functional style which is 
  assertElement(By.id("topic"), hasText("Agile engineering practices"));
 
 Other available methods include:
- assertHidden(By.id("topic"));
- assertElement(By.id("topic"), hidden);
- assertElement(By.id("password"), hasAttribute("name", "user.password"));
- assertElement(By.id("securityQuestion"), hasOptions());
- assertElement(By.id("password"), hasClass("okMessage"));
- assertElement(By.id("password"), hasNotClass("errorField"));
+ $(By.id("topic")).shouldBe(hidden);
+ $("#topic").shouldBe(hidden);
+ $("#password").shouldHave(attribute("name", "user.password"));
+ $("#password").shouldNotHave(cssClass("okMessage"));
 
 === Ajax support
 When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting:
@@ -124,14 +122,13 @@ Here we will provide some examples how Selenide can be used to write short and e
 == Changelog
 === 1.9 (Snapshot, planned release date: December 2012)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
+* Added support for PageObjects - see method DOM.page(Class)
 * Added methods $().find() with index parameter
 * Added method $().setValue()
 * Added method DOM.getSelectedRadio()
 * Updated to selenium-java:2.26.0
 * Added initial support for phantomjs headless webkit browser (-Dbrowser=phantomjs)
 * Added support for custom WebDriver initialization by defining com.codeborne.selenide.WebDriverProvider implementation via "browser" system property.
-
-
 === 1.8 (Released 29.11.2012)
 * Changed Selectors.byText() behaviour - now it matches THE WHOLE TEXT, not a substring.
 * A new method Selectors.withText() has been added that matches substring.
