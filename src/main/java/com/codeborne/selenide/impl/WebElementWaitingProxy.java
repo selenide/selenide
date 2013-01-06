@@ -53,6 +53,9 @@ public class WebElementWaitingProxy implements InvocationHandler {
     if ("toString".equals(method.getName())) {
       return describe();
     }
+    if ("exists".equals(method.getName())) {
+      return exists();
+    }
     if ("uploadFromClasspath".equals(method.getName())) {
       return ShouldableWebElementProxy.uploadFromClasspath(waitForElement(), (String) args[0]);
     }
@@ -60,14 +63,19 @@ public class WebElementWaitingProxy implements InvocationHandler {
     return ShouldableWebElementProxy.delegateMethod(waitForElement(), method, args);
   }
 
+  private boolean exists() {
+    try {
+      return findElement() != null;
+    } catch (WebDriverException e) {
+      return false;
+    } catch (IndexOutOfBoundsException e) {
+      return false;
+    }
+  }
+
   private String describe() {
     try {
-      if (index == 0) {
-        return Describe.describe(getSearchContext().findElement(criteria));
-      }
-      else {
-        return Describe.describe(getSearchContext().findElements(criteria).get(index));
-      }
+      return Describe.describe(findElement());
     } catch (WebDriverException e) {
       return e.toString();
     } catch (IndexOutOfBoundsException e) {
@@ -91,12 +99,18 @@ public class WebElementWaitingProxy implements InvocationHandler {
 
   private ShouldableWebElement find(Object arg, int index) {
     return arg instanceof By ?
-      wrap(waitForElement(), (By) arg, index) :
-      wrap(waitForElement(), By.cssSelector((String) arg), index);
+        wrap(waitForElement(), (By) arg, index) :
+        wrap(waitForElement(), By.cssSelector((String) arg), index);
   }
 
   private WebElement waitForElement() {
     return waitUntil(parent, criteria, index, exist);
+  }
+
+  private WebElement findElement() {
+    return index == 0 ?
+        getSearchContext().findElement(criteria) :
+        getSearchContext().findElements(criteria).get(index);
   }
 
   private SearchContext getSearchContext() {

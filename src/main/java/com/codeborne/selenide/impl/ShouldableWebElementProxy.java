@@ -51,11 +51,18 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     if ("toString".equals(method.getName())) {
       return describe(delegate);
     }
+    if ("exists".equals(method.getName())) {
+      return exists(delegate);
+    }
     if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(delegate, (String) args[0]);
     }
 
     return delegateMethod(delegate, method, args);
+  }
+
+  private boolean exists(WebElement delegate) {
+    return delegate != null;
   }
 
   static Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {

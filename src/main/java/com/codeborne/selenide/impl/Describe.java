@@ -14,12 +14,16 @@ public class Describe {
 
   Describe attr(String attributeName) {
     String attributeValue = element.getAttribute(attributeName);
-    if (attributeValue != null) sb.append(' ').append(attributeName).append('=').append(attributeValue);
+    if (attributeValue != null && attributeValue.length() > 0) {
+      sb.append(' ').append(attributeName).append('=').append(attributeValue);
+    }
     return this;
   }
 
-  Describe is(String name, boolean value) {
-    sb.append(' ').append(name).append(':').append(value);
+  Describe is(String name, boolean value, boolean valueToShow) {
+    if (value == valueToShow) {
+      sb.append(' ').append(name).append(':').append(value);
+    }
     return this;
   }
 
@@ -35,9 +39,9 @@ public class Describe {
           .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("checked")
           .attr("type").attr("placeholder")
           .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-          .is("selected", element.isSelected())
-          .is("displayed", element.isDisplayed())
-          .is("enabled", element.isEnabled())
+          .is("selected", element.isSelected(), true)
+          .is("displayed", element.isDisplayed(), false)
+          .is("enabled", element.isEnabled(), false)
           .toString();
     } catch (WebDriverException elementDoesNotExist) {
       return elementDoesNotExist.toString();

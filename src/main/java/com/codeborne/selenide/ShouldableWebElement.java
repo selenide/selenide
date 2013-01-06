@@ -12,6 +12,8 @@ public interface ShouldableWebElement extends WebElement {
    */
   void setValue(String text);
 
+  boolean exists();
+
   ShouldableWebElement should(Condition... condition);
   ShouldableWebElement shouldHave(Condition... condition);
   ShouldableWebElement shouldBe(Condition... condition);
