@@ -39,12 +39,20 @@ public class Describe {
           .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("checked")
           .attr("type").attr("placeholder")
           .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
-          .is("selected", element.isSelected(), true)
+          .is("selected", isSelected(element), true)
           .is("displayed", element.isDisplayed(), false)
           .is("enabled", element.isEnabled(), false)
           .toString();
     } catch (WebDriverException elementDoesNotExist) {
       return elementDoesNotExist.toString();
+    }
+  }
+
+  private static boolean isSelected(WebElement element) {
+    try {
+      return element.isSelected();
+    } catch (UnsupportedOperationException e) {
+      return false;
     }
   }
 }
