@@ -5,6 +5,7 @@ import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
@@ -57,6 +58,14 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(delegate, (String) args[0]);
     }
+    if ("selectOption".equals(method.getName())) {
+      selectOptionByText(delegate, (String) args[0]);
+      return null;
+    }
+    if ("selectOptionByValue".equals(method.getName())) {
+      selectOptionByValue(delegate, (String) args[0]);
+      return null;
+    }
 
     return delegateMethod(delegate, method, args);
   }
@@ -77,6 +86,14 @@ public class ShouldableWebElementProxy implements InvocationHandler {
     File file = new File(resource.toURI());
     inputField.sendKeys(file.getAbsolutePath());
     return file;
+  }
+
+  static void selectOptionByText(WebElement selectField, String optionText) {
+    new Select(selectField).selectByVisibleText(optionText);
+  }
+
+  static void selectOptionByValue(WebElement selectField, String optionValue) {
+    new Select(selectField).selectByValue(optionValue);
   }
 
   private Object should(Object proxy, Condition[] conditions) {

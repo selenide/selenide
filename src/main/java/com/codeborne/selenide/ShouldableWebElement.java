@@ -34,4 +34,7 @@ public interface ShouldableWebElement extends WebElement {
   ShouldableWebElement find(By selector, int index);
 
   File uploadFromClasspath(String fileName);
+
+  void selectOption(String text);
+  void selectOptionByValue(String value);
 }

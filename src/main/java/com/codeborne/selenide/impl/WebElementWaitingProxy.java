@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.hasOptions;
 import static com.codeborne.selenide.DOM.waitUntil;
 import static com.codeborne.selenide.DOM.waitWhile;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -58,6 +59,18 @@ public class WebElementWaitingProxy implements InvocationHandler {
     }
     if ("uploadFromClasspath".equals(method.getName())) {
       return ShouldableWebElementProxy.uploadFromClasspath(waitForElement(), (String) args[0]);
+    }
+    if ("selectOption".equals(method.getName())) {
+      // TODO wait until the element has option with given text
+      ShouldableWebElement selectField = waitUntil(parent, criteria, index, hasOptions());
+      ShouldableWebElementProxy.selectOptionByText(selectField, (String) args[0]);
+      return null;
+    }
+    if ("selectOptionByValue".equals(method.getName())) {
+      // TODO wait until the element has option with given value
+      ShouldableWebElement selectField = waitUntil(parent, criteria, index, hasOptions());
+      ShouldableWebElementProxy.selectOptionByValue(selectField, (String) args[0]);
+      return null;
     }
 
     return ShouldableWebElementProxy.delegateMethod(waitForElement(), method, args);
