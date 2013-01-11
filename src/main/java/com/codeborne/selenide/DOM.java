@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.ShouldableWebElementProxy;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -16,7 +17,16 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 
 public class DOM {
-  public static long defaultWaitingTimeout = Long.getLong("timeout", 4000);
+  public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
+
+  /**
+   * Wrap standard Selenium WebElement into ShouldableWebElement to use additional methods like shouldHave(), selectOption() etc.
+   * @param webElement standard Selenium WebElement
+   * @return given WebElement wrapped into ShouldableWebElement
+   */
+  public static ShouldableWebElement $(WebElement webElement) {
+    return ShouldableWebElementProxy.wrap(webElement);
+  }
 
   /**
    * Find the first element matching given CSS selector
