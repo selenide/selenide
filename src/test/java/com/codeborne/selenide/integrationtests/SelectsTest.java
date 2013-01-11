@@ -17,6 +17,13 @@ public class SelectsTest {
 
   @Test
   public void userCanSelectOptionByValue() {
+    $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
+    assertEquals("myrambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
+    assertEquals("@myrambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
+  }
+
+  @Test
+  public void userCanSelectOptionByValueOldWay() {
     selectOption(By.xpath("//select[@name='domain']"), "myrambler.ru");
     assertEquals("myrambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
     assertEquals("@myrambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
@@ -24,6 +31,13 @@ public class SelectsTest {
 
   @Test
   public void userCanSelectOptionByText() {
+    $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
+    assertEquals("мыло.ру", getSelectedValue(By.xpath("//select[@name='domain']")));
+    assertEquals("@мыло.ру", getSelectedText(By.xpath("//select[@name='domain']")));
+  }
+
+  @Test
+  public void userCanSelectOptionByTextOldWay() {
     selectOptionByText(By.xpath("//select[@name='domain']"), "@мыло.ру");
     assertEquals("мыло.ру", getSelectedValue(By.xpath("//select[@name='domain']")));
     assertEquals("@мыло.ру", getSelectedText(By.xpath("//select[@name='domain']")));

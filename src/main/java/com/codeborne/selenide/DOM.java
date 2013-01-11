@@ -102,7 +102,7 @@ public class DOM {
   }
 
   /**
-   * Find all elements matching given CSS selector.
+   * Find all elements matching given CSS selector inside given parent element
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
    * @param parent the WebElement to search elements in
@@ -111,6 +111,14 @@ public class DOM {
    */
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
     return new ElementsCollection(parent.findElements(By.cssSelector(cssSelector)));
+  }
+
+  /**
+   * Find all elements matching given criteria inside given parent element
+   * @see DOM#$$(org.openqa.selenium.WebElement, java.lang.String)
+   */
+  public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
+    return new ElementsCollection(parent.findElements(seleniumSelector));
   }
 
   /**
