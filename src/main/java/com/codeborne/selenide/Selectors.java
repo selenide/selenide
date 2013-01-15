@@ -13,8 +13,8 @@ public class Selectors {
       throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
     }
     return elementText.contains("'") ?
-        By.xpath(".//*[contains(text(), \"" + elementText + "\")]") :
-        By.xpath(".//*[contains(text(), '" + elementText + "')]");
+        By.xpath(".//*[contains(normalize-space(text()), \"" + elementText + "\")]") :
+        By.xpath(".//*[contains(normalize-space(text()), '" + elementText + "')]");
   }
 
   /**
@@ -27,7 +27,7 @@ public class Selectors {
       throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
     }
     return elementText.contains("'") ?
-        By.xpath(".//*[text() = \"" + elementText + "\"]") :
-        By.xpath(".//*[text() = '" + elementText + "']");
+        By.xpath(".//*[normalize-space(text()) = \"" + elementText + "\"]") :
+        By.xpath(".//*[normalize-space(text()) = '" + elementText + "']");
   }
 }
