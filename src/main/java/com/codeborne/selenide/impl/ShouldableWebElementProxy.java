@@ -5,6 +5,7 @@ import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
@@ -28,16 +29,32 @@ public class ShouldableWebElementProxy implements InvocationHandler {
             element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
   }
 
-  private final WebElement delegate;
+  public static ShouldableWebElement wrap(ElementLocator elementLocator) {
+    return (ShouldableWebElement) Proxy.newProxyInstance(
+        elementLocator.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(elementLocator));
+  }
+
+  private WebElement delegate;
+  private ElementLocator elementLocator;
 
   private ShouldableWebElementProxy(WebElement delegate) {
     this.delegate = delegate;
   }
 
+  private ShouldableWebElementProxy(ElementLocator elementLocator) {
+    this.elementLocator = elementLocator;
+  }
+
+  private WebElement getDelegate() {
+    if (delegate != null) return delegate;
+    else if (elementLocator != null) return elementLocator.findElement();
+    else return null;
+  }
+
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     if ("setValue".equals(method.getName())) {
-      DOM.setValue(delegate, (String) args[0]);
+      DOM.setValue(getDelegate(), (String) args[0]);
       return null;
     }
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
@@ -50,28 +67,28 @@ public class ShouldableWebElementProxy implements InvocationHandler {
       return wrap(args.length == 1 ? find(args[0]) : find(args[0], (Integer) args[1]));
     }
     if ("toString".equals(method.getName())) {
-      return describe(delegate);
+      return describe(getDelegate());
     }
     if ("exists".equals(method.getName())) {
-      return exists(delegate);
+      return exists(getDelegate());
     }
     if ("uploadFromClasspath".equals(method.getName())) {
-      return uploadFromClasspath(delegate, (String) args[0]);
+      return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
     if ("selectOption".equals(method.getName())) {
-      selectOptionByText(delegate, (String) args[0]);
+      selectOptionByText(getDelegate(), (String) args[0]);
       return null;
     }
     if ("selectOptionByValue".equals(method.getName())) {
-      selectOptionByValue(delegate, (String) args[0]);
+      selectOptionByValue(getDelegate(), (String) args[0]);
       return null;
     }
 
-    return delegateMethod(delegate, method, args);
+    return delegateMethod(getDelegate(), method, args);
   }
 
   private boolean exists(WebElement delegate) {
-    return delegate != null;
+    return getDelegate() != null;
   }
 
   static Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
@@ -98,15 +115,15 @@ public class ShouldableWebElementProxy implements InvocationHandler {
 
   private Object should(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      assertElement(delegate, condition);
+      assertElement(getDelegate(), condition);
     }
     return proxy;
   }
 
   private Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      if (condition.apply(delegate)) {
-        fail("Element " + delegate.getTagName() + " has " + condition);
+      if (condition.apply(getDelegate())) {
+        fail("Element " + getDelegate().getTagName() + " has " + condition);
       }
     }
     return proxy;
@@ -114,14 +131,14 @@ public class ShouldableWebElementProxy implements InvocationHandler {
 
   private WebElement find(Object arg) {
     return arg instanceof By ?
-        delegate.findElement((By) arg) :
-        delegate.findElement(By.cssSelector((String) arg));
+        getDelegate().findElement((By) arg) :
+        getDelegate().findElement(By.cssSelector((String) arg));
   }
 
   private WebElement find(Object arg, int index) {
     return arg instanceof By ?
-        delegate.findElements((By) arg).get(index) :
-        delegate.findElements(By.cssSelector((String) arg)).get(index);
+        getDelegate().findElements((By) arg).get(index) :
+        getDelegate().findElements(By.cssSelector((String) arg)).get(index);
   }
 
   static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
