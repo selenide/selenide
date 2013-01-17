@@ -44,5 +44,11 @@
         </tr>
       </tbody>
     </table>
+
+    <div id="dynamic-content-container"></div>
+
+    <script type="text/javascript">
+        setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 500);
+    </script>
   </body>
 </html>
