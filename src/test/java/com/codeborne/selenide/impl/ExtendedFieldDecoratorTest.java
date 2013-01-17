@@ -26,7 +26,7 @@ public class ExtendedFieldDecoratorTest {
   @Test
   public void usesDefaultElementLocatorFactory() throws Exception {
     ExtendedFieldDecorator fieldDecorator = new ExtendedFieldDecorator(mock(WebDriver.class));
-    fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType().equals(DefaultElementLocatorFactory.class);
+    assertEquals(DefaultElementLocatorFactory.class, fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType());
   }
 
   @Test
@@ -39,6 +39,7 @@ public class ExtendedFieldDecoratorTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void decoratesListOfShouldableWebElements() throws Exception {
     when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
     List<ShouldableWebElement> elements = (List<ShouldableWebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
@@ -54,6 +55,7 @@ public class ExtendedFieldDecoratorTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void decoratesListOfVanillaWebElements() throws Exception {
     when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
     List<WebElement> elements = (List<WebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("data"));

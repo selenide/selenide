@@ -15,6 +15,7 @@ public class ShouldableWebElementListProxy implements InvocationHandler {
 
   private ElementLocator locator;
 
+  @SuppressWarnings("unchecked")
   public static List<ShouldableWebElement> wrap(ElementLocator locator) {
     InvocationHandler handler = new ShouldableWebElementListProxy(locator);
 
