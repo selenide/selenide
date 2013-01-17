@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.ExtendedFieldDecorator;
 import com.codeborne.selenide.impl.ShouldableWebElementProxy;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
@@ -646,7 +647,11 @@ public class DOM {
    * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return PageFactory.initElements(getWebDriver(), pageObjectClass);
+    try {
+      return page(pageObjectClass.newInstance());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
+    }
   }
 
   /**
@@ -654,7 +659,7 @@ public class DOM {
    * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    PageFactory.initElements(getWebDriver(), pageObject);
+    PageFactory.initElements(new ExtendedFieldDecorator(getWebDriver()), pageObject);
     return pageObject;
   }
 }

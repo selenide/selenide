@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.ui.Select;
@@ -47,8 +48,24 @@ public class ShouldableWebElementProxy implements InvocationHandler {
 
   private WebElement getDelegate() {
     if (delegate != null) return delegate;
-    else if (elementLocator != null) return elementLocator.findElement();
+    else if (elementLocator != null) return locateElement();
     else return null;
+  }
+
+  private WebElement locateElement() {
+    long startTime = System.currentTimeMillis();
+    NoSuchElementException exception;
+    do {
+      try {
+        return elementLocator.findElement();
+      } catch (NoSuchElementException e) {
+        exception = e;
+        try {
+          Thread.sleep(50);
+        } catch (InterruptedException ignore) {}
+      }
+    } while (System.currentTimeMillis() - startTime < DOM.defaultWaitingTimeout);
+    throw exception;
   }
 
   @Override
