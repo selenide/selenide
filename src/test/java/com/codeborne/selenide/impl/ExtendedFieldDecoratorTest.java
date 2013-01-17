@@ -26,7 +26,7 @@ public class ExtendedFieldDecoratorTest {
   @Test
   public void usesDefaultElementLocatorFactory() throws Exception {
     ExtendedFieldDecorator fieldDecorator = new ExtendedFieldDecorator(mock(WebDriver.class));
-    assertEquals(DefaultElementLocatorFactory.class, fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType());
+    assertTrue(fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType().isAssignableFrom(DefaultElementLocatorFactory.class));
   }
 
   @Test
