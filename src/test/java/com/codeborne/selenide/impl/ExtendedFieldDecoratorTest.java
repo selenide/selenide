@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -70,6 +71,26 @@ public class ExtendedFieldDecoratorTest {
     assertNull(fieldDecorator.decorate(getClass().getClassLoader(), getField("unsupportedField")));
   }
 
+  @Test
+  public void decoratesElementsContainersWithItsSubElements() throws Exception {
+    StatusBlock status = (StatusBlock) fieldDecorator.decorate(getClass().getClassLoader(), getField("status"));
+    WebElement statusElement = mock(WebElement.class);
+    when(webDriver.findElement(By.id("status"))).thenReturn(statusElement);
+    when(statusElement.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
+    when(statusElement.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
+
+    assertNotNull(status);
+    assertNotNull(status.getSelf());
+    status.getSelf().getText();
+    verify(webDriver).findElement(By.id("status"));
+    assertNotNull(status.lastLogin);
+    status.lastLogin.getText();
+    verify(statusElement).findElement(By.className("last-login"));
+    assertNotNull(status.name);
+    status.name.getText();
+    verify(statusElement).findElement(By.className("name"));
+  }
+
   public static class TestPage {
     ShouldableWebElement username;
     @FindBy(css = "table tbody tr")
@@ -78,5 +99,16 @@ public class ExtendedFieldDecoratorTest {
     @FindBy(css = "table tbody tr")
     List<WebElement> data;
     String unsupportedField;
+
+    @FindBy(id = "status")
+    StatusBlock status;
+  }
+
+  public static class StatusBlock extends ElementsContainer {
+    @FindBy(className = "last-login")
+    ShouldableWebElement lastLogin;
+
+    @FindBy(className = "name")
+    ShouldableWebElement name;
   }
 }
