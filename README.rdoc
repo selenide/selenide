@@ -23,7 +23,7 @@ Just put selenide.jar to your project and include the following methods:
   include static com.codeborne.selenide.Navigation.*
   include static com.codeborne.selenide.DOM.*
 
-Look for [[Quick Start|https://github.com/codeborne/selenide/wiki/Quick-Start]] for details.
+Look for {Quick Start}[https://github.com/codeborne/selenide/wiki/Quick-Start] for details.
 
 == What benefits gives Selenide over plain Selenium?
 
