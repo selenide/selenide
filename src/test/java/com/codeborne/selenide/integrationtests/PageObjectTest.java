@@ -1,6 +1,7 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +66,13 @@ public class PageObjectTest {
     pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
   }
 
+  @Test
+  public void canComposePageFromReusableBlocks() throws Exception {
+    pageWithSelects.status.getSelf().shouldBe(visible);
+    pageWithSelects.status.name.shouldHave(text("Bob Smith"));
+    pageWithSelects.status.lastLogin.shouldHave(text("01.01.1970"));
+  }
+
   public static class SelectsPage {
     @FindBy(xpath = "//select[@name='domain']")
     public WebElement domainSelect;
@@ -77,6 +85,9 @@ public class PageObjectTest {
 
     @FindBy(id = "dynamic-content")
     public ShouldableWebElement dynamicContent;
+
+    @FindBy(id = "status")
+    public StatusBlock status;
 
     public WebElement getSelectedOption() {
       return new Select(domainSelect).getFirstSelectedOption();
@@ -91,5 +102,13 @@ public class PageObjectTest {
       new Select(domainSelect).selectByVisibleText(domainValue);
       sleep(500);
     }
+  }
+
+  public static class StatusBlock extends ElementsContainer {
+    @FindBy(className = "name")
+    ShouldableWebElement name;
+
+    @FindBy(className = "last-login")
+    ShouldableWebElement lastLogin;
   }
 }
