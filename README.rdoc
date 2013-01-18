@@ -1,4 +1,4 @@
-Selenide = Consice API for Selenium WebDriver
+= Selenide = Consice API for Selenium WebDriver
 
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
@@ -11,7 +11,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
    $("#username").shouldHave(text("Hello, Johny!"));
  }
 
-Look here for detailed comparision of Selenide and Selenium WebDriver API.
+Look here[https://github.com/codeborne/selenide/wiki/Selenide-vs-Selenium] for detailed comparision of Selenide and Selenium WebDriver API.
 
 Probably two the most noticeable methods are (inspired from jQuery):
   $("#insuranceDetailsHeader") - returns WebElement matching given CSS selector
@@ -23,21 +23,25 @@ Just put selenide.jar to your project and include the following methods:
   include static com.codeborne.selenide.Navigation.*
   include static com.codeborne.selenide.DOM.*
 
-Look for Quick Start[https://github.com/codeborne/selenide/wiki/Quick-Start] for details.
+Look for [[Quick Start|https://github.com/codeborne/selenide/wiki/Quick-Start]] for details.
 
 == What benefits gives Selenide over plain Selenium?
 
 Selenium is not a testing library, it just allows you to manipulate browser.
 Selenide provides a concise API for using Selenium WebDriver in UI tests:
-[Transparent WebDriver]     You don't need to operate with WebDriver directly. With Selenide, setUp/tearDown methods do it for you.
-[Convenience methods]       Selenide contains convenient methods for operating controls like textfield, radiobutton and selectbox.
-[Ajax support]              when testing Ajax applications, we often need to wait until some element changes its state. Selenide has built-in support for waiting.
-[Screenshots]               Selenide can automatically take screenshot of the browser window if test has failed.
+* Transparent WebDriver
+* Convenience methods
+* Ajax support
+* Screenshots
 
 You can find more details below.
 
+=== Transparent WebDriver
+You don't need to operate with WebDriver directly.
+Selenide for start and shut down the browser automatically whenevery it's needed.
+
 === Convenience methods
-Selenide contains several methods that make your tests shorter and more readable:
+Selenide provides concise API for that makes your tests shorter and more readable. Selenide has convenient methods for operating controls like textfield, radiobutton and selectbox.
 
  @Test
  public void canFillComplexForm() {
@@ -62,10 +66,12 @@ Any of the following methods waits until the described event happens. Default ti
 
 etc.
 
+Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for more details.
 
 == Resources
 * Presentation at TopConf conference[http://asolntsev.github.com/presentations/ui-tests/the_fast_and_the_continuous.topconf.html] (Tallinn, 1. Nov 2012)
 * Article on Habrahabr.ru[http://habrahabr.ru/post/143269/] (in Russian)
+
 
 == Changelog
 === 1.10 (Snapshot, planned release date: January 2013)
