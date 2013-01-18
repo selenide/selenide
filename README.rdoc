@@ -1,40 +1,29 @@
+Selenide = Consice API for Selenium WebDriver
+
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
  @Test
  public void testLogin() {
    open("/login");
-   setValue(By.name("user.name"), "johny");
-   followLink(By.id("submit"));
-   waitUntil(By.id("username"), hasText("Hello, Johny!"), 5000);
-
-   assertThat($("#insuranceDetailsHeader").getText(), equalTo("Страховые полисы"));
-   assertThat($$("#paymentScheduleTable tr").size(), equalTo(7));
+   $(By.name("user.name")).setValue("johny");
+   $("#submit").click();
+   $("#username").shouldHave(text("Hello, Johny!"));
  }
 
-Though Selenium WebDriver[http://seleniumhq.org/projects/webdriver/] is a great library for operating web browser, it's API is too low-level. Developer needs to write some boilerplate code to create/shutdown webdriver, to search radio buttons, to wait for javascript interactions etc.
-With Selenide, You don't need to operate with Selenium WebDriver directly. WebDriver will be automatically created/deleted during test start/finished.
+Look here for detailed comparision of Selenide and Selenium WebDriver API.
 
 Probably two the most noticeable methods are (inspired from jQuery):
   $("#insuranceDetailsHeader") - returns WebElement matching given CSS selector
   $$("#insuranceDetailsHeader tr td") - returns list of WebElements matching given CSS selector
 
 == How to start?
-Just put selenide.jar to your project.
-If you are using Maven (Ivy, Gradle or whatever dependency management), you can add the following dependency:
-
-  dependencies {
-    testCompile 'com.codeborne:selenide:1.9'
-  }
-
-Include the following methods and let's start!
+Just put selenide.jar to your project and include the following methods:
 
   include static com.codeborne.selenide.Navigation.*
   include static com.codeborne.selenide.DOM.*
 
-Until tutorial is ready, you can find some Selenide usages in the example project Hangman:
-https://github.com/asolntsev/hangman/blob/master/selenide_1_9/test/ee/uitest/HangmanSpec.java
-
+Look for Quick Start[https://github.com/codeborne/selenide/wiki/Quick-Start] for details.
 
 == What benefits gives Selenide over plain Selenium?
 
@@ -42,14 +31,10 @@ Selenium is not a testing library, it just allows you to manipulate browser.
 Selenide provides a concise API for using Selenium WebDriver in UI tests:
 [Transparent WebDriver]     You don't need to operate with WebDriver directly. With Selenide, setUp/tearDown methods do it for you.
 [Convenience methods]       Selenide contains convenient methods for operating controls like textfield, radiobutton and selectbox.
-[Ajax support]              when testing Ajax applications, we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
-[Screenshots]               Selenide automatically takes screenshot of the browser window if test has failed.
-[Selenium bugs]             We know that Selenium has some bugs/disadvantages. For instance, when settings field value, the "onChange" event is not always triggered. Selenide contains workarounds for such issues.
-[IE]                        Our experience says that Selenium has some problems with IE. Selenide contains several workarounds for IE problems.
+[Ajax support]              when testing Ajax applications, we often need to wait until some element changes its state. Selenide has built-in support for waiting.
+[Screenshots]               Selenide can automatically take screenshot of the browser window if test has failed.
 
 You can find more details below.
-
-
 
 === Convenience methods
 Selenide contains several methods that make your tests shorter and more readable:
@@ -57,62 +42,25 @@ Selenide contains several methods that make your tests shorter and more readable
  @Test
  public void canFillComplexForm() {
    open("/client/registration");
-   setValue(By.name("user.name"), "johny");
+   $(By.name("user.name")).setValue("johny");
    selectRadio("user.gender", "male");
-   selectOption(By.name("user.preferredLayout"), "plain");
-   selectOptionByText(By.name("user.securityQuestion"), "What is my first car?");
-   followLink(By.id("submit"));
+   $("#user.preferredLayout").selectOption("plain");
+   $("#user.securityQuestion").selectOptionByText("What is my first car?");
  }
 
-=== Functional style
-Combining JUnit and Selenium, you can write tests like this:
- UGLY EXAMPLES:
- assertTrue(webdriver.findElement(By.id("topic")).isDisplayed());
- assertEquals("Agile engineering practices", webdriver.findElement(By.id("topic")).getText());
-
-With Selenide you can express the same test in a more functional style which is more readable:
- GOOD EXAMPLES:
- assertElement(By.id("topic"), visible);
- assertElement(By.id("topic"), hasText("Agile engineering practices"));
-
-Other available methods include:
- $(By.id("topic")).shouldBe(hidden);
- $("#topic").shouldBe(hidden);
- $("#password").shouldHave(attribute("name", "user.password"));
- $("#password").shouldNotHave(cssClass("okMessage"));
-
 === Ajax support
-When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting:
+When testing Ajax applications we often need to wait until some element changes its state. Selenide has built-in methods for waiting.
 
-Selenide allows testing such cases in one-line:
- waitFor(By.id("topic"));
- waitUntil(By.id("topic"), hidden);
- waitUntil(By.id("password"), hasNotClass("errorField"));
+Any of the following methods waits until the described event happens. Default timeout is 4 seconds.
+ $("#topic").should(appear);
+ $("#topic").shouldBe(visible);
+
+ $("#topic").should(disappear);
+ $("h1").shouldHave(text("Hello"));
+ $(".message").shouldNotHave(text("Wait for loading..."));
+ $(".password").shouldNotHave(cssClass("errorField"));
+
 etc.
-
-=== What about IE?
-Our experience says that Selenium WebDriver doesn't always work correctly with IE browser. But we typically
-want to test our code with IE because many users still use it.
-
-* Body tag doesn't appear immediately - we need to wait for it.
-* IE caches pages - we need to clear cache after every test and generate unique urls.
-* IE crashed when running too many tests at a time. Making pauses between helps.
-
-Selenide contains some workarounds for IE. It was sufficient to make IE working in our projects, but probably
-you will encounter more problems in your projects - feel free to report them and suggest your workarounds!
-
-== Best practices
-Here we will provide some examples how Selenide can be used to write short and expressive acceptance tests.
-
- LONG: assertEquals("EPP", getElement(By.tagName("title")).getText());
- SHORTER: assertElement(By.tagName("title"), hasText("EPP"));
- SHORT: assertEquals("EPP", title());
-
- LONG:   assertEquals(2, getElements(By.className("tellimus")).size());
- SHORT:  assertEquals(2, $$(".tellimus").size());
-
- LONG:  assertThat(getElement(By.id("documentsTable")).findElement(By.tagName("tbody")).findElements(By.tagName("tr")).size(), equalTo(4));
- SHORT: assertThat($$("#documentsTable tbody tr").size(), equalTo(4));
 
 
 == Resources
@@ -120,7 +68,11 @@ Here we will provide some examples how Selenide can be used to write short and e
 * Article on Habrahabr.ru[http://habrahabr.ru/post/143269/] (in Russian)
 
 == Changelog
-=== 1.9 (Snapshot, planned release date: December 2012)
+=== 1.10 (Snapshot, planned release date: January 2013)
+* Added method $().exists()
+* Added methods $().selectOption() and $().selectOptionByText()
+* Changed behaviour of methods byText() and withText(): now spaces in text are ignored
+=== 1.9 (Released 5.01.2013)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
 * Added support for PageObjects - see method DOM.page(Class)
 * Added methods $().find() with index parameter
