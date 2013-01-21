@@ -94,15 +94,24 @@ public abstract class Condition {
   }
 
   /**
-   * $("#mydiv").shouldHave(attribute("fileId", "12345"));
-   * @param attributeName name of attribute
-   * @param attributeValue expected value of attribute
+   * Check if element has "readonly" attribute (with any value)
+   * @return true iff attribute "readonly" exists
    */
-  public static Condition attribute(final String attributeName, final String attributeValue) {
+  public static Condition readonly() {
+    return attribute("readonly");
+  }
+
+  /**
+   * Check if element has given attribute (with any value)
+   *
+   * @param attributeName name of attribute, not null
+   * @return true iff attribute exists
+   */
+  public static Condition attribute(final String attributeName) {
     return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && attributeValue.equals(element.getAttribute(attributeName).trim());
+        return element != null && element.getAttribute(attributeName) != null;
       }
       @Override
       public String actualValue(WebElement element) {
@@ -110,9 +119,36 @@ public abstract class Condition {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName + "=" + attributeValue;
+        return "got attribute " + attributeName;
       }
     };
+  }
+
+  /**
+   * $("#mydiv").shouldHave(attribute("fileId", "12345"));
+   * @param attributeName name of attribute
+   * @param expectedAttributeValue expected value of attribute
+   */
+  public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
+    return new Condition("hasAttribute", false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return element != null && expectedAttributeValue.equals(getAttributeValue(element, attributeName));
+      }
+      @Override
+      public String actualValue(WebElement element) {
+        return element == null? "does not exist" : element.getAttribute(attributeName);
+      }
+      @Override
+      public String toString() {
+        return "got attribute " + attributeName + "=" + expectedAttributeValue;
+      }
+    };
+  }
+
+  private static String getAttributeValue(WebElement element, String attributeName) {
+    String attr = element.getAttribute(attributeName);
+    return attr == null ? "" : attr.trim();
   }
 
   /**

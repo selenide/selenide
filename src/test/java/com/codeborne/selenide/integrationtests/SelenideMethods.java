@@ -4,12 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.DOM.$;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static java.lang.Thread.currentThread;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SelenideMethods {
   @Before
@@ -21,6 +20,12 @@ public class SelenideMethods {
   public void userCanCheckIfElementExists() {
     assertTrue($(By.name("domain")).exists());
     assertFalse($(By.name("non-existing-element")).exists());
+  }
+
+  @Test
+  public void userCanCheckIfElementIsReadonly() {
+    $(By.name("username")).shouldBe(readonly());
+    $(By.name("password")).shouldNotBe(readonly());
   }
 
   @Test
