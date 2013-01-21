@@ -11,6 +11,8 @@ public interface ShouldableWebElement extends WebElement {
    * @param text Any text to enter into the text field.
    */
   void setValue(String text);
+  String text();
+  String val();
 
   boolean exists();
 

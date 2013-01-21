@@ -74,6 +74,12 @@ public class ShouldableWebElementProxy implements InvocationHandler {
       DOM.setValue(getDelegate(), (String) args[0]);
       return null;
     }
+    if ("text".equals(method.getName())) {
+      return getDelegate().getText();
+    }
+    if ("val".equals(method.getName())) {
+      return getDelegate().getAttribute("value");
+    }
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       return should(proxy, (Condition[]) args[0]);
     }

@@ -42,6 +42,12 @@ public class WebElementWaitingProxy implements InvocationHandler {
       DOM.setValue(waitForElement(), (String) args[0]);
       return null;
     }
+    if ("text".equals(method.getName())) {
+      return waitForElement().getText();
+    }
+    if ("val".equals(method.getName())) {
+      return waitForElement().getAttribute("value");
+    }
     if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       return should(proxy, (Condition[]) args[0]);
     }
