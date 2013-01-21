@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  compile 'org.seleniumhq.selenium:selenium-java:2.28.0'
+  compile 'org.seleniumhq.selenium:selenium-java:2.29.0'
   compile 'junit:junit:4.11'
   compile fileTree(dir: 'lib', include: '*.jar')
   testCompile 'org.hamcrest:hamcrest-all:1.3'
