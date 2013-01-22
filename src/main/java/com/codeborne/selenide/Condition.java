@@ -95,11 +95,8 @@ public abstract class Condition {
 
   /**
    * Check if element has "readonly" attribute (with any value)
-   * @return true iff attribute "readonly" exists
    */
-  public static Condition readonly() {
-    return attribute("readonly");
-  }
+  public static Condition readonly = attribute("readonly");
 
   /**
    * Check if element has given attribute (with any value)

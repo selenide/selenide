@@ -24,8 +24,8 @@ public class SelenideMethods {
 
   @Test
   public void userCanCheckIfElementIsReadonly() {
-    $(By.name("username")).shouldBe(readonly());
-    $(By.name("password")).shouldNotBe(readonly());
+    $(By.name("username")).shouldBe(readonly);
+    $(By.name("password")).shouldNotBe(readonly);
   }
 
   @Test
