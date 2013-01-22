@@ -10,7 +10,15 @@ public interface ShouldableWebElement extends WebElement {
    * Clear the text field and enter given text.
    * @param text Any text to enter into the text field.
    */
+  void type(String text);
+
+  /**
+   * Same as #type, but less expressive
+   * @param text
+   */
+  @Deprecated
   void setValue(String text);
+
   String text();
   String val();
 

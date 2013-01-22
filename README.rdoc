@@ -6,7 +6,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
  @Test
  public void testLogin() {
    open("/login");
-   $(By.name("user.name")).setValue("johny");
+   $(By.name("user.name")).type("johny");
    $("#submit").click();
    $("#username").shouldHave(text("Hello, Johny!"));
  }
@@ -46,7 +46,7 @@ Selenide provides concise API for that makes your tests shorter and more readabl
  @Test
  public void canFillComplexForm() {
    open("/client/registration");
-   $(By.name("user.name")).setValue("johny");
+   $(By.name("user.name")).type("johny");
    selectRadio("user.gender", "male");
    $("#user.preferredLayout").selectOption("plain");
    $("#user.securityQuestion").selectOptionByText("What is my first car?");
@@ -78,6 +78,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 * Added method $().exists()
 * Added methods $().selectOption() and $().selectOptionByText()
 * Changed behaviour of methods byText() and withText(): now spaces in text are ignored
+* Added method $().type(String) as a replacement for $().setValue(String)
 === 1.9 (Released 5.01.2013)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
 * Added support for PageObjects - see method DOM.page(Class)

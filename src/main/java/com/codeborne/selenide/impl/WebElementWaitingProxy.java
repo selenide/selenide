@@ -38,7 +38,7 @@ public class WebElementWaitingProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if ("setValue".equals(method.getName())) {
+    if ("type".equals(method.getName()) || "setValue".equals(method.getName())) {
       DOM.setValue(waitForElement(), (String) args[0]);
       return null;
     }

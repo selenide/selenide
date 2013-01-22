@@ -70,7 +70,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if ("setValue".equals(method.getName())) {
+    if ("type".equals(method.getName()) || "setValue".equals(method.getName())) {
       DOM.setValue(getDelegate(), (String) args[0]);
       return null;
     }
@@ -111,7 +111,7 @@ public class ShouldableWebElementProxy implements InvocationHandler {
   }
 
   private boolean exists(WebElement delegate) {
-    return getDelegate() != null;
+    return delegate != null;
   }
 
   static Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
