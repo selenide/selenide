@@ -1,25 +1,19 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.hasOptions;
-import static com.codeborne.selenide.DOM.waitUntil;
-import static com.codeborne.selenide.DOM.waitWhile;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
-public class WebElementWaitingProxy implements InvocationHandler {
+public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
   public static ShouldableWebElement wrap(WebElement parent, By criteria, int index) {
     return (ShouldableWebElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
@@ -30,103 +24,26 @@ public class WebElementWaitingProxy implements InvocationHandler {
   private final By criteria;
   private final int index;
 
-  private WebElementWaitingProxy(WebElement parent, By criteria, int index) {
+  WebElementWaitingProxy(WebElement parent, By criteria, int index) {
     this.parent = parent;
     this.criteria = criteria;
     this.index = index;
   }
 
   @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if ("type".equals(method.getName()) || "setValue".equals(method.getName())) {
-      DOM.setValue(waitForElement(), (String) args[0]);
-      return null;
-    }
-    if ("text".equals(method.getName())) {
-      return waitForElement().getText();
-    }
-    if ("val".equals(method.getName())) {
-      return waitForElement().getAttribute("value");
-    }
-    if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
-      return should(proxy, (Condition[]) args[0]);
-    }
-    if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
-      return shouldNot(proxy, (Condition[]) args[0]);
-    }
-    if ("find".equals(method.getName())) {
-      return find(args[0], args.length == 1 ? 0 : (Integer) args[1]);
-    }
-    if ("toString".equals(method.getName())) {
-      return describe();
-    }
-    if ("exists".equals(method.getName())) {
-      return exists();
-    }
-    if ("uploadFromClasspath".equals(method.getName())) {
-      return ShouldableWebElementProxy.uploadFromClasspath(waitForElement(), (String) args[0]);
-    }
-    if ("selectOption".equals(method.getName())) {
-      // TODO wait until the element has option with given text
-      ShouldableWebElement selectField = waitUntil(parent, criteria, index, hasOptions());
-      ShouldableWebElementProxy.selectOptionByText(selectField, (String) args[0]);
-      return null;
-    }
-    if ("selectOptionByValue".equals(method.getName())) {
-      // TODO wait until the element has option with given value
-      ShouldableWebElement selectField = waitUntil(parent, criteria, index, hasOptions());
-      ShouldableWebElementProxy.selectOptionByValue(selectField, (String) args[0]);
-      return null;
-    }
-
-    return ShouldableWebElementProxy.delegateMethod(waitForElement(), method, args);
+  protected WebElement getDelegate() {
+    return waitUntil(exist, DOM.defaultWaitingTimeout);
   }
 
-  private boolean exists() {
-    try {
-      return findElement() != null;
-    } catch (WebDriverException e) {
-      return false;
-    } catch (IndexOutOfBoundsException e) {
-      return false;
-    }
-  }
-
-  private String describe() {
-    try {
-      return Describe.describe(findElement());
-    } catch (WebDriverException e) {
-      return e.toString();
-    } catch (IndexOutOfBoundsException e) {
-      return e.toString();
-    }
-  }
-
-  private Object should(Object proxy, Condition[] conditions) {
-    for (Condition condition : conditions) {
-      waitUntil(parent, criteria, index, condition);
-    }
-    return proxy;
-  }
-
-  private Object shouldNot(Object proxy, Condition[] conditions) {
-    for (Condition condition : conditions) {
-      waitWhile(parent, criteria, index, condition);
-    }
-    return proxy;
-  }
-
-  private ShouldableWebElement find(Object arg, int index) {
+  @Override
+  protected ShouldableWebElement find(Object arg, int index) {
     return arg instanceof By ?
-        wrap(waitForElement(), (By) arg, index) :
-        wrap(waitForElement(), By.cssSelector((String) arg), index);
+        wrap(getDelegate(), (By) arg, index) :
+        wrap(getDelegate(), By.cssSelector((String) arg), index);
   }
 
-  private WebElement waitForElement() {
-    return waitUntil(parent, criteria, index, exist);
-  }
-
-  private WebElement findElement() {
+  @Override
+  protected WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
         getSearchContext().findElement(criteria) :
         getSearchContext().findElements(criteria).get(index);
@@ -134,5 +51,13 @@ public class WebElementWaitingProxy implements InvocationHandler {
 
   private SearchContext getSearchContext() {
     return parent == null ? getWebDriver() : parent;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '{' + criteria +
+        (parent == null ? "" : ", in: " + parent) +
+        (index == 0 ? "" : ", index: " + index) +
+        '}';
   }
 }

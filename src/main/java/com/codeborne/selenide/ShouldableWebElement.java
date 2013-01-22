@@ -11,17 +11,8 @@ public interface ShouldableWebElement extends WebElement {
    * @param text Any text to enter into the text field.
    */
   void type(String text);
-
-  /**
-   * Same as #type, but less expressive
-   * @param text
-   */
-  @Deprecated
-  void setValue(String text);
-
   String text();
   String val();
-
   boolean exists();
 
   ShouldableWebElement should(Condition... condition);
@@ -47,4 +38,11 @@ public interface ShouldableWebElement extends WebElement {
 
   void selectOption(String text);
   void selectOptionByValue(String value);
+
+  /**
+   * Same as com.codeborne.selenide.ShouldableWebElement#type(java.lang.String), but less expressive
+   * @deprecated Use method #type
+   */
+  @Deprecated
+  void setValue(String text);
 }

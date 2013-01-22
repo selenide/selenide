@@ -536,35 +536,6 @@ public class DOM {
         (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
   }
 
-  public static void waitWhile(WebElement parent, By elementSelector, int index, Condition condition) {
-    waitWhile(parent, elementSelector, index, condition, defaultWaitingTimeout);
-  }
-
-  public static void waitWhile(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
-    final long startTime = System.currentTimeMillis();
-    WebElement element;
-    do {
-      element = tryToGetElement(parent, elementSelector, index);
-      if (element != null) {
-        try {
-          if (!condition.apply(element)) {
-            return;
-          }
-        } catch (WebDriverException ignore) {
-        }
-      }
-      else if (!condition.applyNull()) {
-        return;
-      }
-      sleep(100);
-    }
-    while (System.currentTimeMillis() - startTime < timeoutMs);
-
-    fail("Element " + elementSelector + " has " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(element, condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
-  }
-
   private static WebElement tryToGetElement(WebElement parent, By elementSelector, int index) {
     WebElement element;
     try {

@@ -35,6 +35,9 @@ public class Describe {
 
   public static String describe(WebElement element) {
     try {
+      if (element == null) {
+        return "null";
+      }
       return new Describe(element)
           .attr("id").attr("name").attr("class").attr("value").attr("disabled").attr("checked")
           .attr("type").attr("placeholder")

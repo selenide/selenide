@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.SearchContext;
@@ -10,10 +9,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
-
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class ExtendedFieldDecorator extends DefaultFieldDecorator {
   public ExtendedFieldDecorator(SearchContext searchContext) {
@@ -23,7 +22,7 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
   @Override
   public Object decorate(ClassLoader loader, Field field) {
     if (ShouldableWebElement.class.isAssignableFrom(field.getType())) {
-      return ShouldableWebElementProxy.wrap(factory.createLocator(field));
+      return ElementLocatorProxy.wrap(factory.createLocator(field));
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(field);
     } else if (isDecoratableList(field)) {
@@ -34,7 +33,7 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer createElementsContainer(Field field) {
     try {
-      ShouldableWebElement self = ShouldableWebElementProxy.wrap(factory.createLocator(field));
+      ShouldableWebElement self = ElementLocatorProxy.wrap(factory.createLocator(field));
       ElementsContainer result = (ElementsContainer) field.getType().newInstance();
       PageFactory.initElements(new ExtendedFieldDecorator(self), result);
       result.setSelf(self);
@@ -56,16 +55,11 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
     Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
-    if (!ShouldableWebElement.class.equals(listType)) {
+    if (!ShouldableWebElement.class.equals(listType)) { // TODO support subclasses
       return false;
     }
 
-    if (field.getAnnotation(FindBy.class) == null &&
-        field.getAnnotation(FindBys.class) == null) {
-      return false;
-    }
-
-    return true;
+    return field.getAnnotation(FindBy.class) != null ||
+        field.getAnnotation(FindBys.class) != null;
   }
-
 }
