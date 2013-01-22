@@ -515,10 +515,16 @@ public class DOM {
     WebElement element;
     do {
       element = tryToGetElement(parent, elementSelector, index);
-      if (element != null && condition.apply(element)) {
-        return wrap(element);
+      if (element != null) {
+        try {
+          if (condition.apply(element)) {
+            return wrap(element);
+          }
+        }
+        catch (WebDriverException ignore) {
+        }
       }
-      else if (element == null && condition.applyNull()) {
+      else if (condition.applyNull()) {
         return null;
       }
       sleep(100);
@@ -539,10 +545,15 @@ public class DOM {
     WebElement element;
     do {
       element = tryToGetElement(parent, elementSelector, index);
-      if (element != null && !condition.apply(element)) {
-        return;
+      if (element != null) {
+        try {
+          if (!condition.apply(element)) {
+            return;
+          }
+        } catch (WebDriverException ignore) {
+        }
       }
-      else if (element == null && !condition.applyNull()) {
+      else if (!condition.applyNull()) {
         return;
       }
       sleep(100);
