@@ -9,9 +9,7 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By withText(String elementText) {
-    if (elementText.contains("'") && elementText.contains("\"")) {
-      throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
-    }
+    assertDoesNotContainBothApostrophesAndQuotes(elementText);
     return elementText.contains("'") ?
         By.xpath(".//*[contains(normalize-space(text()), \"" + elementText + "\")]") :
         By.xpath(".//*[contains(normalize-space(text()), '" + elementText + "')]");
@@ -23,11 +21,28 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By byText(String elementText) {
-    if (elementText.contains("'") && elementText.contains("\"")) {
-      throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
-    }
+    assertDoesNotContainBothApostrophesAndQuotes(elementText);
     return elementText.contains("'") ?
         By.xpath(".//*[normalize-space(text()) = \"" + elementText + "\"]") :
         By.xpath(".//*[normalize-space(text()) = '" + elementText + "']");
+  }
+
+  /**
+   * Find elements having attribute with given value.
+   * @param attributeName name of attribute, should not be empty or null
+   * @param attributeValue value of attribute, should not contain both apostrophes and quotes
+   * @return standard selenium By criteria
+   */
+  public static By byAttribute(String attributeName, String attributeValue) {
+    assertDoesNotContainBothApostrophesAndQuotes(attributeValue);
+    return attributeValue.contains("'") ?
+        By.xpath(".//*[@" + attributeName + " = \"" + attributeValue + "\"]") :
+        By.xpath(".//*[@" + attributeName + " = '" + attributeValue + "']");
+  }
+
+  private static void assertDoesNotContainBothApostrophesAndQuotes(String elementText) {
+    if (elementText.contains("'") && elementText.contains("\"")) {
+      throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
+    }
   }
 }

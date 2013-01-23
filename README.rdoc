@@ -79,6 +79,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 * Added methods $().selectOption() and $().selectOptionByText()
 * Changed behaviour of methods byText() and withText(): now spaces in text are ignored
 * Added method $().type(String) as a replacement for $().setValue(String)
+* Added method Selectors.byAttribute(name, value)
 === 1.9 (Released 5.01.2013)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
 * Added support for PageObjects - see method DOM.page(Class)

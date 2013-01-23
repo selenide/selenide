@@ -6,7 +6,9 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.DOM.$;
+import static com.codeborne.selenide.DOM.$$;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selectors.byAttribute;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
@@ -34,5 +36,15 @@ public class SelenideMethods {
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
     assertEquals("<option value=livemail.ru checked=true selected:true>@livemail.ru</option>",
         $(By.name("domain")).find("option").toString());
+  }
+
+  @Test
+  public void userCanFindElementByAttribute() {
+    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
+    assertEquals("select", $(byAttribute("name", "domain")).getTagName());
+    assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
+    assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
+    assertEquals(4, $$(byAttribute("type", "radio")).size());
+    assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
   }
 }
