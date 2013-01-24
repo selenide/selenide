@@ -363,7 +363,7 @@ public abstract class Condition {
     }
 
     @Override public String actualValue(WebElement element) {
-      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
+      return element == null? "does not exist" : element.getAttribute("checked");
     }
   };
 
