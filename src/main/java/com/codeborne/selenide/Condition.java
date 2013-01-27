@@ -65,6 +65,12 @@ public abstract class Condition {
 
   /**
    * Synonym for #visible - may be used for better readability
+   * $("#logoutLink").should(appear);
+   */
+  public static final Condition appear = visible;
+
+  /**
+   * Synonym for #visible - may be used for better readability
    * waitUntil(By.id("logoutLink"), appears);
 
    * Thought the same can be done in a shorter way:

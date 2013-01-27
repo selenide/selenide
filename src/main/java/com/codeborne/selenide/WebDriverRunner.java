@@ -137,6 +137,14 @@ public class WebDriverRunner {
   }
 
   private static void writeToFile(String content, File targetFile) {
+    File reportsFolder = targetFile.getParentFile();
+    if (!reportsFolder.exists()) {
+      System.err.println("Creating folder for test reports: " + reportsFolder);
+      if (!reportsFolder.mkdirs()) {
+        System.err.println("Failed to create " + reportsFolder);
+      }
+    }
+
     try {
       FileWriter output = new FileWriter(targetFile);
       try {
