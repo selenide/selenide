@@ -72,7 +72,7 @@ public class ExtendedFieldDecoratorTest {
   }
 
   @Test
-  public void decoratesElementsContainersWithItsSubElements() throws Exception {
+  public void decoratesElementsContainerWithItsSubElements() throws Exception {
     StatusBlock status = (StatusBlock) fieldDecorator.decorate(getClass().getClassLoader(), getField("status"));
     WebElement statusElement = mock(WebElement.class);
     when(webDriver.findElement(By.id("status"))).thenReturn(statusElement);
@@ -91,6 +91,31 @@ public class ExtendedFieldDecoratorTest {
     verify(statusElement).findElement(By.className("name"));
   }
 
+  @Test
+  public void decoratesElementsContainerListWithItsSubElements() throws Exception {
+    WebElement statusElement1 = mock(WebElement.class);
+    WebElement statusElement2 = mock(WebElement.class);
+    when(webDriver.findElements(any(By.class))).thenReturn(asList(statusElement1, statusElement2));
+    when(statusElement1.getText()).thenReturn("status element1 text");
+    when(statusElement1.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
+    when(statusElement1.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
+    when(statusElement2.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
+    when(statusElement2.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
+
+    List<StatusBlock> statusHistory = (List<StatusBlock>) fieldDecorator.decorate(getClass().getClassLoader(), getField("statusHistory"));
+    assertNotNull(statusHistory);
+    verify(webDriver).findElements(By.cssSelector("table.history tr.status"));
+    assertEquals(2, statusHistory.size());
+    assertEquals("status element1 text", statusHistory.get(0).getSelf().getText());
+    assertNotNull(statusHistory.get(0).lastLogin);
+    statusHistory.get(0).lastLogin.getText();
+    verify(statusElement1).findElement(By.className("last-login"));
+    assertNotNull(statusHistory.get(0).name);
+    statusHistory.get(0).name.getText();
+    verify(statusElement1).findElement(By.className("name"));
+  }
+
+
   public static class TestPage {
     ShouldableWebElement username;
     @FindBy(css = "table tbody tr")
@@ -102,6 +127,9 @@ public class ExtendedFieldDecoratorTest {
 
     @FindBy(id = "status")
     StatusBlock status;
+
+    @FindBy(css = "table.history tr.status")
+    List<StatusBlock> statusHistory;
   }
 
   public static class StatusBlock extends ElementsContainer {

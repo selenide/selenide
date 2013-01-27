@@ -56,6 +56,28 @@
 
     <div id="dynamic-content-container"></div>
 
+    <table id="user-table">
+      <thead>
+        <tr>
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="firstname">Bob</td>
+          <td class="lastname">Dilan</td>
+          <td class="age">25</td>
+        </tr>
+        <tr>
+          <td class="firstname">John</td>
+          <td class="lastname">Smith</td>
+          <td class="age">28</td>
+        </tr>
+      </tbody>
+    </table>
+
     <script type="text/javascript">
         setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 500);
     </script>

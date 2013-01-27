@@ -73,6 +73,17 @@ public class PageObjectTest {
     pageWithSelects.status.lastLogin.shouldHave(text("01.01.1970"));
   }
 
+  @Test
+  public void canComposePageFromListOfReusableBlocks() throws Exception {
+    assertEquals(2, pageWithSelects.userInfoList.size());
+
+    pageWithSelects.userInfoList.get(0).getSelf().shouldBe(visible);
+    pageWithSelects.userInfoList.get(0).firstName.shouldHave(text("Bob"));
+
+    pageWithSelects.userInfoList.get(1).lastName.shouldHave(text("Smith"));
+    pageWithSelects.userInfoList.get(1).age.shouldHave(text("28"));
+  }
+
   public static class SelectsPage {
     @FindBy(xpath = "//select[@name='domain']")
     public WebElement domainSelect;
@@ -88,6 +99,9 @@ public class PageObjectTest {
 
     @FindBy(id = "status")
     public StatusBlock status;
+
+    @FindBy(css = "#user-table tbody tr")
+    public List<UserInfo> userInfoList;
 
     public WebElement getSelectedOption() {
       return new Select(domainSelect).getFirstSelectedOption();
@@ -110,5 +124,14 @@ public class PageObjectTest {
 
     @FindBy(className = "last-login")
     ShouldableWebElement lastLogin;
+  }
+
+  public static class UserInfo extends ElementsContainer {
+    @FindBy(className = "firstname")
+    ShouldableWebElement firstName;
+    @FindBy(className = "lastname")
+    ShouldableWebElement lastName;
+    @FindBy(className = "age")
+    ShouldableWebElement age;
   }
 }
