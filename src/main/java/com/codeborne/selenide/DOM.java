@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.ExtendedFieldDecorator;
 import com.codeborne.selenide.impl.ShouldableWebElementProxy;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
@@ -614,6 +615,10 @@ public class DOM {
     }
     catch (NoAlertPresentException ignore) {
     }
+  }
+
+  public static TargetLocator switchTo() {
+    return getWebDriver().switchTo();
   }
 
   /**
