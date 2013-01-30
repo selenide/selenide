@@ -12,6 +12,7 @@ import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExtendedFieldDecorator extends DefaultFieldDecorator {
@@ -25,41 +26,64 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
       return ElementLocatorProxy.wrap(factory.createLocator(field));
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(field);
-    } else if (isDecoratableList(field)) {
+    } else if (isDecoratableList(field, ElementsContainer.class)) {
+      return createElementsContainerList(field);
+    } else if (isDecoratableList(field, ShouldableWebElement.class)) {
       return ShouldableWebElementListProxy.wrap(factory.createLocator(field));
     }
     return super.decorate(loader, field);
   }
 
+  private List<ElementsContainer> createElementsContainerList(Field field) {
+    try {
+      List<ElementsContainer> result = new ArrayList<ElementsContainer>();
+      Class<?> listType = getListGenericType(field);
+      List<ShouldableWebElement> selfList = ShouldableWebElementListProxy.wrap(factory.createLocator(field));
+      for (ShouldableWebElement element : selfList) {
+        result.add(initElementsContainer(listType, element));
+      }
+      return result;  //To change body of created methods use File | Settings | File Templates.
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
+    }
+  }
+
   private ElementsContainer createElementsContainer(Field field) {
     try {
       ShouldableWebElement self = ElementLocatorProxy.wrap(factory.createLocator(field));
-      ElementsContainer result = (ElementsContainer) field.getType().newInstance();
-      PageFactory.initElements(new ExtendedFieldDecorator(self), result);
-      result.setSelf(self);
+      ElementsContainer result = initElementsContainer(field.getType(), self);
       return result;
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
-  private boolean isDecoratableList(Field field) {
+  private ElementsContainer initElementsContainer(Class<?> type, ShouldableWebElement self) throws InstantiationException, IllegalAccessException {
+    ElementsContainer result = (ElementsContainer) type.newInstance();
+    PageFactory.initElements(new ExtendedFieldDecorator(self), result);
+    result.setSelf(self);
+    return result;
+  }
+
+  private boolean isDecoratableList(Field field, Class<?> type) {
     if (!List.class.isAssignableFrom(field.getType())) {
       return false;
     }
 
-    Type genericType = field.getGenericType();
-    if (!(genericType instanceof ParameterizedType)) {
-      return false;
-    }
+    Class<?> listType = getListGenericType(field);
 
-    Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-
-    if (!ShouldableWebElement.class.equals(listType)) { // TODO support subclasses
+    if (listType == null || !type.isAssignableFrom(listType)) {
       return false;
     }
 
     return field.getAnnotation(FindBy.class) != null ||
         field.getAnnotation(FindBys.class) != null;
+  }
+
+  private Class<?> getListGenericType(Field field) {
+    Type genericType = field.getGenericType();
+    if (!(genericType instanceof ParameterizedType)) return null;
+
+    return (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
   }
 }
