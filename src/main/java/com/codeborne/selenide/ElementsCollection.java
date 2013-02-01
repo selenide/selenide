@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.WebDriverRunner.fail;
+
 public class ElementsCollection extends ArrayList<WebElement> implements WebElement {
   public ElementsCollection(List<WebElement> elements) {
     super(elements);
@@ -115,5 +117,12 @@ public class ElementsCollection extends ArrayList<WebElement> implements WebElem
   @Override
   public String getCssValue(String propertyName) {
     return first().getCssValue(propertyName);
+  }
+
+  public void shouldHaveSize(int expectedSize) {
+    // wait until size = expectedSize
+    if (expectedSize != size()) {
+      fail("List size is " + size()+ ", but expected size is " + expectedSize);
+    }
   }
 }
