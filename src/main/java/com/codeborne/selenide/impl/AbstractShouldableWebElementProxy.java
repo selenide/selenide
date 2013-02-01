@@ -2,10 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
@@ -24,14 +21,19 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
 
-//  abstract Object should(Object proxy, Condition[] conditions);
-//  abstract Object shouldNot(Object proxy, Condition[] conditions);
-//  abstract WebElement find(Object arg, int index);
-
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     if ("type".equals(method.getName()) || "setValue".equals(method.getName())) {
-      DOM.setValue(getDelegate(), (String) args[0]);
+      WebElement element = getDelegate();
+      element.clear();
+      element.sendKeys((String) args[0]);
+      return null;
+    }
+    if ("enter".equals(method.getName())) {
+      WebElement element = getDelegate();
+      element.clear();
+      element.sendKeys((String) args[0]);
+      element.sendKeys(Keys.ENTER);
       return null;
     }
     if ("text".equals(method.getName())) {
