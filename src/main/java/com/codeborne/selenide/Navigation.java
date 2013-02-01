@@ -11,8 +11,22 @@ import static com.codeborne.selenide.WebDriverRunner.ie;
 public class Navigation {
   public static String baseUrl = "http://localhost:8080";
 
-  public static void open(String relativeUrl) {
-    navigateToAbsoluteUrl(absoluteUrl(relativeUrl));
+  /**
+   * The main starting point in your tests.
+   * Open a browser window with given URL.
+   *
+   * If browser window was already opened before, it will be reused.
+   *
+   * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
+   *
+   * @param relativeOrAbsoluteUrl If starting with "/", it's considered to be relative URL. In this case, it's prepended by baseUrl
+   */
+  public static void open(String relativeOrAbsoluteUrl) {
+    if (relativeOrAbsoluteUrl.startsWith("/")) {
+      navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl));
+    } else {
+      navigateToAbsoluteUrl(relativeOrAbsoluteUrl);
+    }
   }
 
   public static String absoluteUrl(String relativeUrl) {
