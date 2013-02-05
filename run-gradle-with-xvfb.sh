@@ -15,7 +15,7 @@ function kill_xvfb_if_needed() {
 }
 
 start_xvfb_if_needed $1
-./gradle
+./gradle --refresh-dependencies
 RESULT=$?
 kill_xvfb_if_needed
 exit $RESULT
