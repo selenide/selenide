@@ -31,8 +31,8 @@ task libs(type: Sync) {
 }
 
 test {
-  exclude 'com/codeborne/selenide/integrationtests/**'
-  systemProperties['browser'] = 'htmlunit'
+  //exclude 'com/codeborne/selenide/integrationtests/**'
+  //systemProperties['browser'] = 'htmlunit'
   // systemProperties['browser'] = 'chrome'
   // systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
 
