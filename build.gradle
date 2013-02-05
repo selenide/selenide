@@ -15,10 +15,20 @@ repositories {
   mavenCentral()
 }
 
+configurations {
+  provided
+  compile.extendsFrom provided
+}
+
 dependencies {
-  compile 'org.seleniumhq.selenium:selenium-java:2.29.1'
-  compile 'junit:junit:4.11'
-  compile fileTree(dir: 'lib', include: '*.jar')
+  compile('org.seleniumhq.selenium:selenium-java:2.29.1') {
+    exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
+  }
+  provided(group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.29.1') {
+    //transitive = false
+  }
+  provided 'junit:junit:4.11'
+  provided fileTree(dir: 'lib', include: '*.jar')
   testCompile 'org.hamcrest:hamcrest-all:1.3'
   testCompile 'org.mockito:mockito-all:1.9.5'
 }
