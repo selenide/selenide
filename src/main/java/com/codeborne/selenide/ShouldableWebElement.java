@@ -77,4 +77,9 @@ public interface ShouldableWebElement extends WebElement {
 
   void selectOption(String text);
   void selectOptionByValue(String value);
+
+  /**
+   * @return the original Selenium WebElement that is current object wrapper for
+   */
+  WebElement toWebElement();
 }

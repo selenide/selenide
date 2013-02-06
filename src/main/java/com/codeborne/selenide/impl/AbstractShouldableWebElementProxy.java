@@ -28,7 +28,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
       return proxy;
     }
     else if ("val".equals(method.getName())) {
-      if (args.length == 0) {
+      if (args == null || args.length == 0) {
         return getDelegate().getAttribute("value");
       }
       else {
@@ -72,6 +72,9 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     else if ("selectOptionByValue".equals(method.getName())) {
       selectOptionByValue(getDelegate(), (String) args[0]);
       return null;
+    }
+    else if ("toWebElement".equals(method.getName())) {
+      return getActualDelegate();
     }
 
     return delegateMethod(getDelegate(), method, args);

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.value;
@@ -12,6 +13,7 @@ import static com.codeborne.selenide.DOM.$$;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.Navigation.url;
 import static com.codeborne.selenide.Selectors.byAttribute;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
@@ -56,6 +58,7 @@ public class SelenideMethods {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
     $(By.name("password")).shouldHave(value("sherlyn"));
+    assertEquals("sherlyn", $(By.name("password")).val());
   }
 
   @Test
@@ -63,6 +66,7 @@ public class SelenideMethods {
     $(By.name("password")).val("Sherlyn");
     $(By.name("password")).append(" theron");
     $(By.name("password")).shouldHave(value("Sherlyn theron"));
+    assertEquals("Sherlyn theron", $(By.name("password")).val());
   }
 
   @Test
@@ -83,5 +87,15 @@ public class SelenideMethods {
   @Test @Ignore
   public void userCanUploadFiles() {
     $("#file_upload").uploadFromClasspath("some-file.txt");
+  }
+
+  @Test
+  public void userCanGetOriginalWebElement() {
+    WebElement selenideElement = $(By.name("domain")).toWebElement();
+    WebElement seleniumElement = getWebDriver().findElement(By.name("domain"));
+
+    assertSame(seleniumElement.getClass(), selenideElement.getClass());
+    assertEquals(seleniumElement.getTagName(), selenideElement.getTagName());
+    assertEquals(seleniumElement.getText(), selenideElement.getText());
   }
 }
