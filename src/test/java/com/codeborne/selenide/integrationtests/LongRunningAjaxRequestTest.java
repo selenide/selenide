@@ -5,14 +5,17 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.DOM.$;
+import static com.codeborne.selenide.DOM.*;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.Selectors.byText;
 import static java.lang.Thread.currentThread;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LongRunningAjaxRequestTest {
   @Before
   public void openTestPage() {
+    defaultWaitingTimeout = 2500;
     navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("long_ajax_request.html"));
     $(byText("Run long request")).click();
     $(byText("Loading...")).should(exist);
@@ -33,6 +36,22 @@ public class LongRunningAjaxRequestTest {
   public void dollarWaitsUntilElementDisappears() {
     $(byText("Loading...")).should(exist);
     $(byText("Loading...")).shouldNot(exist);
+  }
+
+  @Test
+  public void userCanWaitUntilConditionIsMet() {
+    defaultWaitingTimeout = 1000;
+    assertFalse(existsAndVisible(byText("Result 2")));
+    $(byText("Result 2")).waitUntil(visible, 3000);
+    assertTrue(existsAndVisible(byText("Result 2")));
+  }
+
+  @Test
+  public void userCanWaitWhileConditionIsMet() {
+    defaultWaitingTimeout = 1000;
+    assertFalse(existsAndVisible(byText("Result 2")));
+    $(byText("Result 2")).waitWhile(notPresent, 3000);
+    assertTrue(existsAndVisible(byText("Result 2")));
   }
 
   @Test

@@ -62,6 +62,9 @@ public interface ShouldableWebElement extends WebElement {
   ShouldableWebElement shouldNotHave(Condition... condition);
   ShouldableWebElement shouldNotBe(Condition... condition);
 
+  ShouldableWebElement waitUntil(Condition condition, long timeoutMilliseconds);
+  ShouldableWebElement waitWhile(Condition condition, long timeoutMilliseconds);
+
   /**
    * Displays WebElement in human-readable format
    * @return e.g. <strong id=orderConfirmedStatus class=>Order has been confirmed</strong>

@@ -76,6 +76,14 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     else if ("toWebElement".equals(method.getName())) {
       return getActualDelegate();
     }
+    else if ("waitUntil".equals(method.getName())) {
+      waitUntil((Condition) args[0], (Long) args[1]);
+      return proxy;
+    }
+    else if ("waitWhile".equals(method.getName())) {
+      waitWhile((Condition) args[0], (Long) args[1]);
+      return proxy;
+    }
 
     return delegateMethod(getDelegate(), method, args);
   }
