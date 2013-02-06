@@ -49,9 +49,10 @@
         Username: <span class="name">Bob Smith</span>&nbsp;Last login: <span class="last-login">01.01.1970</span>
     </div>
 
-    <form action="login">
+    <form action="#submitted-form" method="post">
       <input name="username" value="" readonly="readonly"/>
       <input name="password" value=""/>
+      <input id="login" type="submit" value="Log in"/>
     </form>
 
     <div id="dynamic-content-container"></div>

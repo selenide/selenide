@@ -8,6 +8,12 @@ import java.io.File;
 public interface ShouldableWebElement extends WebElement {
   /**
    * Clear the text field and enter given text.
+   *
+   * Implementation details:
+   * This is the same as <pre>
+   *   1. WebElement.clear()
+   *   2. WebElement.sendKeys(text)</pre>
+   *
    * @param text Any text to enter into the text field.
    */
   ShouldableWebElement setValue(String text);
@@ -18,8 +24,23 @@ public interface ShouldableWebElement extends WebElement {
   ShouldableWebElement val(String text);
 
   /**
-   * Press ENTER. Useful for input field and textareas:
-   * $("query").val("Aikido techniques").pressEnter();
+   * Append given test to the text field
+   *
+   * Implementation details:
+   * This is the same as <pre>
+   *  WebElement.sendKeys(text)</pre>
+   *
+   * @param text Any text to append into the text field.
+   */
+  ShouldableWebElement append(String text);
+
+  /**
+   * Press ENTER. Useful for input field and textareas: <pre>
+   *  $("query").val("Aikido techniques").pressEnter();</pre>
+   *
+   * Implementation details:
+   * This is the same as <pre>
+   *  WebElement.sendKeys(Keys.ENTER)</pre>
    */
   ShouldableWebElement pressEnter();
 

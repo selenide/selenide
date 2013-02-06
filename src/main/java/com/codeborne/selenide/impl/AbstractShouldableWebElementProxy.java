@@ -23,53 +23,64 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    if ("type".equals(method.getName()) || "setValue".equals(method.getName())) {
-      WebElement element = getDelegate();
-      element.clear();
-      element.sendKeys((String) args[0]);
-      return null;
+    if ("setValue".equals(method.getName())) {
+      setValue((String) args[0]);
+      return proxy;
     }
-    if ("enter".equals(method.getName())) {
-      WebElement element = getDelegate();
-      element.clear();
-      element.sendKeys((String) args[0]);
-      element.sendKeys(Keys.ENTER);
-      return null;
+    else if ("val".equals(method.getName())) {
+      if (args.length == 0) {
+        return getDelegate().getAttribute("value");
+      }
+      else {
+        setValue((String) args[0]);
+        return proxy;
+      }
     }
-    if ("text".equals(method.getName())) {
+    else if ("append".equals(method.getName())) {
+      getDelegate().sendKeys((String) args[0]);
+      return proxy;
+    }
+    else if ("pressEnter".equals(method.getName())) {
+      getDelegate().sendKeys(Keys.ENTER);
+      return proxy;
+    }
+    else if ("text".equals(method.getName())) {
       return getDelegate().getText();
     }
-    if ("val".equals(method.getName())) {
-      return getDelegate().getAttribute("value");
-    }
-    if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
+    else if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
       return should(proxy, (Condition[]) args[0]);
     }
-    if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
+    else if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
-    if ("find".equals(method.getName())) {
+    else if ("find".equals(method.getName())) {
       return ShouldableWebElementProxy.wrap(args.length == 1 ? find(args[0], 0) : find(args[0], (Integer) args[1]));
     }
-    if ("toString".equals(method.getName())) {
+    else if ("toString".equals(method.getName())) {
       return describe();
     }
-    if ("exists".equals(method.getName())) {
+    else if ("exists".equals(method.getName())) {
       return exists();
     }
-    if ("uploadFromClasspath".equals(method.getName())) {
+    else if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
-    if ("selectOption".equals(method.getName())) {
+    else if ("selectOption".equals(method.getName())) {
       selectOptionByText(getDelegate(), (String) args[0]);
       return null;
     }
-    if ("selectOptionByValue".equals(method.getName())) {
+    else if ("selectOptionByValue".equals(method.getName())) {
       selectOptionByValue(getDelegate(), (String) args[0]);
       return null;
     }
 
     return delegateMethod(getDelegate(), method, args);
+  }
+
+  private void setValue(String text) {
+    WebElement element = getDelegate();
+    element.clear();
+    element.sendKeys(text);
   }
 
   private Object should(Object proxy, Condition[] conditions) {
