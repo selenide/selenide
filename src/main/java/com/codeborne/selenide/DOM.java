@@ -422,34 +422,37 @@ public class DOM {
     return getElement(selector).isDisplayed();
   }
 
+  /**
+   * @deprecated Use $(selector).shouldBe(visible);
+   */
+  @Deprecated
   public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
    * Method fails if element does not exists.
+   * @deprecated Use $(selector).shouldBe(hidden);
    */
+  @Deprecated
   public static ShouldableWebElement assertHidden(By selector) {
-    return assertElement(selector, hidden);
+    return $(selector).shouldBe(hidden);
   }
 
+  /**
+   * @deprecated Use $(selector).shouldBe(condition);
+   */
+  @Deprecated
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
-    try {
-      return assertElement(getWebDriver().findElement(selector), condition);
-    }
-    catch (WebDriverException elementNotFound) {
-      if (!condition.applyNull()) {
-        throw elementNotFound;
-      }
-      return null;
-    }
+    return $(selector).should(condition);
   }
 
+  /**
+   * @deprecated Use $(selector).shouldBe(condition);
+   */
+  @Deprecated
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
-    if (!condition.apply(element)) {
-      fail("Element " + element.getTagName() + " hasn't " + condition + "; element details: '" + getActualValue(element, condition) + "'");
-    }
-    return wrap(element);
+    return $(element).should(condition);
   }
 
   public static ShouldableWebElement waitFor(By elementSelector) {
