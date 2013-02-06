@@ -423,34 +423,34 @@ public class DOM {
   }
 
   /**
-   * @deprecated Use $(selector).shouldBe(visible);
+   * out-of-date:
+   * Use $(selector).shouldBe(visible);
    */
-  @Deprecated
   public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
    * Method fails if element does not exists.
-   * @deprecated Use $(selector).shouldBe(hidden);
+   * out-of-date:
+   * Use $(selector).shouldBe(hidden);
    */
-  @Deprecated
   public static ShouldableWebElement assertHidden(By selector) {
     return $(selector).shouldBe(hidden);
   }
 
   /**
-   * @deprecated Use $(selector).shouldBe(condition);
+   * out-of-date:
+   * Use $(selector).shouldBe(condition);
    */
-  @Deprecated
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
     return $(selector).should(condition);
   }
 
   /**
-   * @deprecated Use $(selector).shouldBe(condition);
+   * out-of-date:
+   * Use $(selector).shouldBe(condition);
    */
-  @Deprecated
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
     return $(element).should(condition);
   }
