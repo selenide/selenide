@@ -122,7 +122,12 @@ public class WebDriverRunner {
     }
 
     File targetFile = new File(reportsFolder, fileName + ".html");
-    writeToFile(webdriver.getPageSource(), targetFile);
+
+    try {
+      writeToFile(webdriver.getPageSource(), targetFile);
+    } catch (Exception e) {
+      System.err.println(e);
+    }
 
     if (webdriver instanceof TakesScreenshot) {
       try {
