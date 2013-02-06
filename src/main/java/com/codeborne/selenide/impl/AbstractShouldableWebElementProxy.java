@@ -14,6 +14,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static java.lang.Thread.currentThread;
 
@@ -150,7 +151,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     try {
       return Describe.describe(getActualDelegate());
     } catch (WebDriverException elementDoesNotExist) {
-      return elementDoesNotExist.toString();
+      return cleanupWebDriverExceptionMessage(elementDoesNotExist);
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return invalidElementIndex.toString();
     }
@@ -236,7 +237,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
       return condition.actualValue(element);
     }
     catch (WebDriverException e) {
-      return e.toString();
+      return cleanupWebDriverExceptionMessage(e);
     }
     catch (IndexOutOfBoundsException e) {
       return e.toString();

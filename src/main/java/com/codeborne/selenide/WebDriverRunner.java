@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -191,7 +192,7 @@ public class WebDriverRunner {
     }
   }
 
-  private static WebDriver maximize(WebDriver driver) {
+  private static RemoteWebDriver maximize(RemoteWebDriver driver) {
     if (startMaximized) {
       driver.manage().window().maximize();
     }
@@ -223,13 +224,19 @@ public class WebDriverRunner {
   }
 
   public static <T> T fail(String message) {
-    if (webdriver == null) {
-      throw new AssertionError(message);
-    } else {
-      throw new AssertionError(message +
-          "\n, browser.currentUrl=" + webdriver.getCurrentUrl() +
-          "\n, browser.title=" + webdriver.getTitle()
-      );
-    }
+    throw new AssertionError(message);
+  }
+
+  public static String cleanupWebDriverExceptionMessage(WebDriverException webDriverException) {
+    return cleanupWebDriverExceptionMessage(webDriverException.toString());
+  }
+
+  static String cleanupWebDriverExceptionMessage(String webDriverExceptionInfo) {
+    return webDriverExceptionInfo == null || webDriverExceptionInfo.indexOf('\n') == -1 ?
+        webDriverExceptionInfo :
+        webDriverExceptionInfo
+            .substring(0, webDriverExceptionInfo.indexOf('\n'))
+            .replaceFirst("(.*)\\(WARNING: The server did not provide any stacktrace.*", "$1")
+            .trim();
   }
 }

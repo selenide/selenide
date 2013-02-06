@@ -3,6 +3,8 @@ package com.codeborne.selenide.impl;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
+
 public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
@@ -47,7 +49,7 @@ public class Describe {
           .is("enabled", element.isEnabled(), false)
           .toString();
     } catch (WebDriverException elementDoesNotExist) {
-      return elementDoesNotExist.toString();
+      return cleanupWebDriverExceptionMessage(elementDoesNotExist);
     }
   }
 

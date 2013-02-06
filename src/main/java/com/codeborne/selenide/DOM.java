@@ -14,6 +14,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
@@ -163,7 +164,7 @@ public class DOM {
     try {
       return new ElementsCollection(getWebDriver().findElements(criteria));
     } catch (WebDriverException e) {
-      return fail("Cannot get element " + criteria + ", caused criteria: " + e);
+      return fail("Cannot get element " + criteria + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
   }
   
@@ -173,7 +174,7 @@ public class DOM {
       setValue(element, value);
       triggerChangeEvent(by);
     } catch (WebDriverException e) {
-      fail("Cannot get element " + by + ", caused by: " + e);
+      fail("Cannot get element " + by + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
   }
 
@@ -183,7 +184,7 @@ public class DOM {
       setValue(element, value);
       triggerChangeEvent(by, index);
     } catch (WebDriverException e) {
-      fail("Cannot get element " + by + " and index " + index + ", caused by: " + e);
+      fail("Cannot get element " + by + " and index " + index + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
   }
 
@@ -365,7 +366,7 @@ public class DOM {
       return condition.actualValue(element);
     }
     catch (WebDriverException e) {
-      return e.toString();
+      return cleanupWebDriverExceptionMessage(e);
     }
   }
 
