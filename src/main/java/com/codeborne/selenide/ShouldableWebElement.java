@@ -10,21 +10,27 @@ public interface ShouldableWebElement extends WebElement {
    * Clear the text field and enter given text.
    * @param text Any text to enter into the text field.
    */
-  void type(String text);
+  ShouldableWebElement setValue(String text);
 
   /**
-   * Same as com.codeborne.selenide.ShouldableWebElement#type(java.lang.String)
+   * Same as #type(java.lang.String)
    */
-  void setValue(String text);
+  ShouldableWebElement val(String text);
 
   /**
-   * Clear the text field, enter given text and press ENTER.
-   * @param text Any text
+   * Press ENTER. Useful for input field and textareas:
+   * $("query").val("Aikido techniques").pressEnter();
    */
-  void enter(String text);
+  ShouldableWebElement pressEnter();
 
   String text();
+
+  /**
+   * Get the "value" attribute of the element
+   * @return attribute "value" value or empty string if attribute is missing
+   */
   String val();
+
   boolean exists();
 
   ShouldableWebElement should(Condition... condition);
