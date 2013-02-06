@@ -13,6 +13,11 @@ public interface ShouldableWebElement extends WebElement {
   void type(String text);
 
   /**
+   * Same as com.codeborne.selenide.ShouldableWebElement#type(java.lang.String)
+   */
+  void setValue(String text);
+
+  /**
    * Clear the text field, enter given text and press ENTER.
    * @param text Any text
    */
@@ -45,11 +50,4 @@ public interface ShouldableWebElement extends WebElement {
 
   void selectOption(String text);
   void selectOptionByValue(String value);
-
-  /**
-   * Same as com.codeborne.selenide.ShouldableWebElement#type(java.lang.String), but less expressive
-   * @deprecated Use method #type
-   */
-  @Deprecated
-  void setValue(String text);
 }
