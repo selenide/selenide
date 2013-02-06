@@ -422,34 +422,37 @@ public class DOM {
     return getElement(selector).isDisplayed();
   }
 
+  /**
+   * out-of-date:
+   * Use $(selector).shouldBe(visible);
+   */
   public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
    * Method fails if element does not exists.
+   * out-of-date:
+   * Use $(selector).shouldBe(hidden);
    */
   public static ShouldableWebElement assertHidden(By selector) {
-    return assertElement(selector, hidden);
+    return $(selector).shouldBe(hidden);
   }
 
+  /**
+   * out-of-date:
+   * Use $(selector).shouldBe(condition);
+   */
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
-    try {
-      return assertElement(getWebDriver().findElement(selector), condition);
-    }
-    catch (WebDriverException elementNotFound) {
-      if (!condition.applyNull()) {
-        throw elementNotFound;
-      }
-      return null;
-    }
+    return $(selector).should(condition);
   }
 
+  /**
+   * out-of-date:
+   * Use $(selector).shouldBe(condition);
+   */
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
-    if (!condition.apply(element)) {
-      fail("Element " + element.getTagName() + " hasn't " + condition + "; element details: '" + getActualValue(element, condition) + "'");
-    }
-    return wrap(element);
+    return $(element).should(condition);
   }
 
   public static ShouldableWebElement waitFor(By elementSelector) {
