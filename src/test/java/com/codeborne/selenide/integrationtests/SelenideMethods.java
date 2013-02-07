@@ -26,7 +26,15 @@ public class SelenideMethods {
   @Test
   public void userCanCheckIfElementExists() {
     assertTrue($(By.name("domain")).exists());
+    assertTrue($("#theHiddenElement").exists());
     assertFalse($(By.name("non-existing-element")).exists());
+  }
+
+  @Test
+  public void userCanCheckIfElementExistsAndVisible() {
+    assertTrue($(By.name("domain")).isDisplayed());
+    assertFalse($("#theHiddenElement").isDisplayed());
+    assertFalse($(By.name("non-existing-element")).isDisplayed());
   }
 
   @Test

@@ -64,6 +64,9 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     else if ("exists".equals(method.getName())) {
       return exists();
     }
+    else if ("isDisplayed".equals(method.getName())) {
+      return isDisplayed();
+    }
     else if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
@@ -142,6 +145,17 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   private boolean exists() {
     try {
       return getActualDelegate() != null;
+    } catch (WebDriverException elementDoesNotExist) {
+      return false;
+    } catch (IndexOutOfBoundsException invalidElementIndex) {
+      return false;
+    }
+  }
+
+  private boolean isDisplayed() {
+    try {
+      WebElement delegate = getActualDelegate();
+      return delegate != null && delegate.isDisplayed();
     } catch (WebDriverException elementDoesNotExist) {
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
