@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static java.lang.Thread.currentThread;
+import static org.openqa.selenium.Keys.TAB;
 
 abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   abstract WebElement getDelegate();
@@ -93,6 +94,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     WebElement element = getDelegate();
     element.clear();
     element.sendKeys(text);
+    element.sendKeys(TAB);
   }
 
   private Object should(Object proxy, Condition[] conditions) {
