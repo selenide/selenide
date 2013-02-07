@@ -89,6 +89,22 @@ public interface SelenideElement extends WebElement {
   void selectOptionByValue(String value);
 
   /**
+   * Find selected option from this select field
+   * @return null if no option is selected
+   */
+  SelenideElement getSelectedOption();
+
+  /**
+   * Get value of selected option in select field
+   */
+  String getSelectedValue();
+
+  /**
+   * Get text of selected option in select field
+   */
+  String getSelectedText();
+
+  /**
    * @return the original Selenium WebElement that is current object wrapper for
    */
   WebElement toWebElement();

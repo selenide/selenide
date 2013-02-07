@@ -1,9 +1,11 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.DOM.*;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static java.lang.Thread.currentThread;
@@ -17,29 +19,37 @@ public class SelectsTest {
 
   @Test
   public void userCanSelectOptionByValue() {
-    $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
-    assertEquals("myrambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
-    assertEquals("@myrambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
+    ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
+    select.selectOptionByValue("myrambler.ru");
+
+    select.getSelectedOption().shouldBe(checked);
+    assertEquals("myrambler.ru", select.getSelectedValue());
+    assertEquals("@myrambler.ru", select.getSelectedText());
   }
 
   @Test
   public void userCanSelectOptionByValueOldWay() {
-    selectOption(By.xpath("//select[@name='domain']"), "myrambler.ru");
-    assertEquals("myrambler.ru", getSelectedValue(By.xpath("//select[@name='domain']")));
-    assertEquals("@myrambler.ru", getSelectedText(By.xpath("//select[@name='domain']")));
+    By select = By.xpath("//select[@name='domain']");
+    selectOption(select, "myrambler.ru");
+    assertEquals("myrambler.ru", getSelectedValue(select));
+    assertEquals("@myrambler.ru", getSelectedText(select));
   }
 
   @Test
   public void userCanSelectOptionByText() {
-    $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
-    assertEquals("мыло.ру", getSelectedValue(By.xpath("//select[@name='domain']")));
-    assertEquals("@мыло.ру", getSelectedText(By.xpath("//select[@name='domain']")));
+    ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
+    select.selectOption("@мыло.ру");
+
+    select.getSelectedOption().shouldBe(checked);
+    assertEquals("мыло.ру", select.getSelectedValue());
+    assertEquals("@мыло.ру", select.getSelectedText());
   }
 
   @Test
   public void userCanSelectOptionByTextOldWay() {
-    selectOptionByText(By.xpath("//select[@name='domain']"), "@мыло.ру");
-    assertEquals("мыло.ру", getSelectedValue(By.xpath("//select[@name='domain']")));
-    assertEquals("@мыло.ру", getSelectedText(By.xpath("//select[@name='domain']")));
+    By select = By.xpath("//select[@name='domain']");
+    selectOptionByText(select, "@мыло.ру");
+    assertEquals("мыло.ру", getSelectedValue(select));
+    assertEquals("@мыло.ру", getSelectedText(select));
   }
 }

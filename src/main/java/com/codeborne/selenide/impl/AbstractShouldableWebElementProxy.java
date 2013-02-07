@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -11,11 +12,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
+import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 import static org.openqa.selenium.Keys.TAB;
 
@@ -77,6 +80,15 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     else if ("selectOptionByValue".equals(method.getName())) {
       selectOptionByValue(getDelegate(), (String) args[0]);
       return null;
+    }
+    else if ("getSelectedOption".equals(method.getName())) {
+      return getSelectedOption(getDelegate());
+    }
+    else if ("getSelectedValue".equals(method.getName())) {
+      return getSelectedValue(getDelegate());
+    }
+    else if ("getSelectedText".equals(method.getName())) {
+      return getSelectedText(getDelegate());
     }
     else if ("toWebElement".equals(method.getName())) {
       return getActualDelegate();
@@ -140,6 +152,27 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     // TODO wait until the element has option with given value
     DOM.waitUntil(selectField, By.tagName("option"), 0, present);
     new Select(selectField).selectByValue(optionValue);
+  }
+
+  private String getSelectedValue(WebElement selectElement) {
+    WebElement option = getSelectedOption(selectElement);
+    return option == null ? null : option.getAttribute("value");
+  }
+
+  private String getSelectedText(WebElement selectElement) {
+    WebElement option = getSelectedOption(selectElement);
+    return option == null ? null : option.getText();
+  }
+
+  private SelenideElement getSelectedOption(WebElement selectElement) {
+    List<WebElement> options = selectElement.findElements(By.tagName("option"));
+    for (WebElement option : options) {
+      if (option.getAttribute("selected") != null) {
+        return wrap(option);
+      }
+    }
+
+    return null;
   }
 
   private boolean exists() {

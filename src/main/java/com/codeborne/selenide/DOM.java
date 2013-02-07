@@ -15,10 +15,7 @@ import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
-import static com.codeborne.selenide.WebDriverRunner.fail;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
+import static com.codeborne.selenide.WebDriverRunner.*;
 
 public class DOM {
   public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
@@ -318,26 +315,18 @@ public class DOM {
     return $.getSelectedRadio(radioField);
   }
 
+  /**
+   * @out-of-date Use $(selectField).getSelectedValue();
+   */
   public static String getSelectedValue(By selectField) {
-    WebElement option = findSelectedOption(selectField);
-    return option == null ? null : option.getAttribute("value");
+    return $(selectField).getSelectedValue();
   }
 
+  /**
+   * @out-of-date Use $(selectField).getSelectedText();
+   */
   public static String getSelectedText(By selectField) {
-    WebElement option = findSelectedOption(selectField);
-    return option == null ? null : option.getText();
-  }
-
-  private static ShouldableWebElement findSelectedOption(By selectField) {
-    WebElement selectElement = getElement(selectField);
-    List<WebElement> options = selectElement.findElements(By.tagName("option"));
-    for (WebElement option : options) {
-      if (option.getAttribute("selected") != null) {
-        return wrap(option);
-      }
-    }
-
-    return null;
+    return $(selectField).getSelectedText();
   }
 
   public static Select select(By selectField) {
