@@ -14,6 +14,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -304,29 +305,17 @@ public class DOM {
   }
 
   /**
-   * Select radio field by value
-   * @param radioField any By selector for finding radio field
-   * @param value value to select (should match an attribute "value")
-   * @return the selected radio field
+   * @out-of-date Use $.selectRadio(radioField, value);
    */
   public static ShouldableWebElement selectRadio(By radioField, String value) {
-    assertEnabled(radioField);
-    for (WebElement radio : getElements(radioField)) {
-      if (value.equals(radio.getAttribute("value"))) {
-        radio.click();
-        return wrap(radio);
-      }
-    }
-    throw new NoSuchElementException(radioField + " and value " + value);
+    return $.selectRadio(radioField, value);
   }
 
+  /**
+   * @out-of-date Use $.getSelectedRadio(radioField);
+   */
   public static ShouldableWebElement getSelectedRadio(By radioField) {
-    for (WebElement radio : getElements(radioField)) {
-      if (radio.getAttribute("checked") != null) {
-        return wrap(radio);
-      }
-    }
-    return null;
+    return $.getSelectedRadio(radioField);
   }
 
   public static String getSelectedValue(By selectField) {
