@@ -92,6 +92,10 @@ public class DOM {
     return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), index);
   }
 
+  private static ShouldableWebElement $(WebElement parent, By selector, int index) {
+    return WebElementWaitingProxy.wrap(parent, selector, index);
+  }
+
   /**
    * Find all elements matching given CSS selector.
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
@@ -167,7 +171,11 @@ public class DOM {
       return fail("Cannot get element " + criteria + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
   }
-  
+
+  /**
+   * @deprecated Use $(by).setValue(value)
+   */
+  @Deprecated
   public static void setValue(By by, String value) {
     try {
       WebElement element = getElement(by);
@@ -178,6 +186,10 @@ public class DOM {
     }
   }
 
+  /**
+   * @deprecated Use $(by, index).setValue(value)
+   */
+  @Deprecated
   public static void setValue(By by, int index, String value) {
     try {
       WebElement element = getElement(by, index);
@@ -188,6 +200,10 @@ public class DOM {
     }
   }
 
+  /**
+   * @out-of-date Use $(element).setValue(value)
+   *              or $(element).val(value)
+   */
   public static void setValue(WebElement element, String value) {
     element.clear();
     element.sendKeys(value);
@@ -198,6 +214,9 @@ public class DOM {
     return !"undefined".equalsIgnoreCase(String.valueOf(result));
   }
 
+  /**
+   * @out-of-date Use $(by).click()
+   */
   public static void click(By by) {
     getElement(by).click();
   }
@@ -208,6 +227,8 @@ public class DOM {
   }
 
   /**
+   * @out-of-date Use $(by, index).click()
+   *
    * Click the Nth matched element on the page.
    *
    * @param by selector to match element
@@ -334,14 +355,23 @@ public class DOM {
     return new Select(getElement(selectField));
   }
 
+  /**
+   * @out-of-date Use $(selectField).selectOptionByValue(String)
+   */
   public static void selectOption(By selectField, String value) {
     select(selectField).selectByValue(value);
   }
 
+  /**
+   * @out-of-date Use $(selectField).selectOption(String)
+   */
   public static void selectOptionByText(By selectField, String text) {
     select(selectField).selectByVisibleText(text);
   }
 
+  /**
+   * @out-of-date Use $(selector).isDisplayed()
+   */
   public static boolean existsAndVisible(By selector) {
     try {
       return getWebDriver().findElement(selector).isDisplayed();
@@ -419,146 +449,147 @@ public class DOM {
     return element;
   }
 
+  /**
+   * @out-of-date Use $(selector).isDisplayed()
+   */
   public static boolean isVisible(By selector) {
     return getElement(selector).isDisplayed();
   }
 
   /**
-   * out-of-date:
-   * Use $(selector).shouldBe(visible);
+   * @out-of-date Use $(selector).shouldBe(visible);
    */
   public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
-   * Method fails if element does not exists.
-   * out-of-date:
-   * Use $(selector).shouldBe(hidden);
+   * @out-of-date Use $(selector).shouldBe(hidden);
    */
   public static ShouldableWebElement assertHidden(By selector) {
     return $(selector).shouldBe(hidden);
   }
 
   /**
-   * out-of-date:
-   * Use $(selector).shouldBe(condition);
+   * @out-of-date Use $(selector).shouldBe(condition);
    */
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
     return $(selector).should(condition);
   }
 
   /**
-   * out-of-date:
-   * Use $(selector).shouldBe(condition);
+   * @out-of-date Use $(selector).shouldBe(condition);
    */
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
     return $(element).should(condition);
   }
 
+  /**
+   * @out-of-date Use $(elementSelector).shouldBe(visible);
+   */
   public static ShouldableWebElement waitFor(By elementSelector) {
-    return waitUntil(elementSelector, 0, visible, defaultWaitingTimeout);
+    return $(elementSelector).shouldBe(visible);
   }
 
+  /**
+   * @out-of-date Use $(cssSelector).shouldBe(visible);
+   */
   public static ShouldableWebElement waitFor(String cssSelector) {
-    return waitFor(By.cssSelector(cssSelector));
+    return $(cssSelector).shouldBe(visible);
   }
 
+  /**
+   * @deprecated Use $(elementSelector).shouldBe(condition)
+   */
   @Deprecated
   public static ShouldableWebElement waitFor(By elementSelector, Condition condition) {
     return waitUntil(elementSelector, condition);
   }
 
+  /**
+   * @out-of-date Use $(elementSelector).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(By elementSelector, Condition condition) {
-    return waitUntil(elementSelector, 0, condition, defaultWaitingTimeout);
+    return $(elementSelector).shouldBe(condition);
   }
 
+  /**
+   * @out-of-date Use $(cssSelector).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(String cssSelector, Condition condition) {
-    return waitUntil(By.cssSelector(cssSelector), condition);
+    return $(cssSelector).shouldBe(condition);
   }
 
+  /**
+   * @out-of-date Use $(elementSelector, index).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition) {
-    return waitUntil(elementSelector, index, condition, defaultWaitingTimeout);
+    return $(elementSelector, index).shouldBe(condition);
   }
 
+  /**
+   * @out-of-date Use $(cssSelector, index).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition) {
-    return waitUntil(By.cssSelector(cssSelector), index, condition);
+    return $(cssSelector, index).shouldBe(condition);
   }
 
+  /**
+   * @deprecated Use $(elementSelector).waitUntil(condition, timeoutMs);
+   */
   @Deprecated
   public static ShouldableWebElement waitFor(By elementSelector, Condition condition, long timeoutMs) {
-    return waitUntil(elementSelector, condition, timeoutMs);
+    return $(elementSelector).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @out-of-date Use $(elementSelector).waitUntil(condition, timeoutMs);
+   */
   public static ShouldableWebElement waitUntil(By elementSelector, Condition condition, long timeoutMs) {
-    return waitUntil(elementSelector, 0, condition, timeoutMs);
+    return $(elementSelector).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @out-of-date Use $(cssSelector).waitUntil(condition, timeoutMs);
+   */
   public static ShouldableWebElement waitUntil(String cssSelector, Condition condition, long timeoutMs) {
-    return waitUntil(By.cssSelector(cssSelector), condition, timeoutMs);
+    return $(cssSelector).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @deprecated Use $(elementSelector, index).waitUntil(condition, timeoutMs);
+   */
   @Deprecated
   public static ShouldableWebElement waitFor(By elementSelector, int index, Condition condition, long timeoutMs) {
-    return waitUntil(elementSelector, index, condition, timeoutMs);
+    return $(elementSelector, index).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @out-of-date Use $(cssSelector, index).waitUntil(condition, timeoutMs);
+   */
   public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition, long timeoutMs) {
-    return waitUntil(By.cssSelector(cssSelector), index, condition, timeoutMs);
+    return $(cssSelector, index).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @out-of-date Use $(elementSelector, index).waitUntil(condition, timeoutMs);
+   */
   public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition, long timeoutMs) {
-    return waitUntil(null, elementSelector, index, condition, timeoutMs);
+    return $(elementSelector, index).waitUntil(condition, timeoutMs);
   }
 
+  /**
+   * @out-of-date Use $(parent, elementSelector, index).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition) {
-    return waitUntil(parent, elementSelector, index, condition, defaultWaitingTimeout);
+    return $(parent, elementSelector, index).shouldBe(condition);
   }
 
+  /**
+   * @out-of-date Use $(parent, elementSelector, index).shouldBe(condition);
+   */
   public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
-    final long startTime = System.currentTimeMillis();
-    WebElement element;
-    do {
-      element = tryToGetElement(parent, elementSelector, index);
-      if (element != null) {
-        try {
-          if (condition.apply(element)) {
-            return wrap(element);
-          }
-        }
-        catch (WebDriverException ignore) {
-        }
-      }
-      else if (condition.applyNull()) {
-        return null;
-      }
-      sleep(100);
-    }
-    while (System.currentTimeMillis() - startTime < timeoutMs);
-
-    return fail("Element " + elementSelector + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(element, condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
-  }
-
-  private static WebElement tryToGetElement(WebElement parent, By elementSelector, int index) {
-    WebElement element;
-    try {
-      if (index == 0) {
-        element = getSearchContext(parent).findElement(elementSelector);
-      }
-      else {
-        List<WebElement> elements = getSearchContext(parent).findElements(elementSelector);
-        element = index < elements.size() ? elements.get(index) : null;
-      }
-    } catch (WebDriverException elementNotFound) {
-      element = null;
-    }
-    return element;
-  }
-
-  private static SearchContext getSearchContext(WebElement parent) {
-    return parent == null ? getWebDriver() : parent;
+    return $(parent, elementSelector, index).waitUntil(condition, timeoutMs);
   }
 
   /**
