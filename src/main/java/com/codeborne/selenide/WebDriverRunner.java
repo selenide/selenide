@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -97,8 +98,20 @@ public class WebDriverRunner {
     if (webdriver != null) {
       if (!holdBrowserOpen) {
         webdriver.close();
+        killBrowser();
       }
       webdriver = null;
+    }
+  }
+
+  static void killBrowser() {
+    if (webdriver instanceof Killable) {
+      try {
+        ((Killable) webdriver).kill();
+      } catch (Exception e) {
+        System.err.println("Failed to kill browser " + webdriver + ':');
+        e.printStackTrace();
+      }
     }
   }
 
