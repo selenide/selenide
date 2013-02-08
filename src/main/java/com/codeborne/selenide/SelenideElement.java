@@ -7,6 +7,11 @@ import java.io.File;
 
 public interface SelenideElement extends WebElement {
   /**
+   * Actual for <a href> elements. Navigates by clicking this links.
+   */
+  void followLink();
+
+  /**
    * Clear the text field and enter given text.
    *
    * Implementation details:

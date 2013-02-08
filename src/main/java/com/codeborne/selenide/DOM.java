@@ -358,15 +358,11 @@ public class DOM {
     }
   }
 
-  public static void followLink(By by) {
-    WebElement link = getElement(by);
-    String href = link.getAttribute("href");
-    link.click();
-
-    // JavaScript $.click() doesn't take effect for <a href>
-    if (href != null) {
-      Navigation.navigateToAbsoluteUrl(href);
-    }
+  /**
+   * @out-of-date Use $(selector).followLink();
+   */
+  public static void followLink(By selector) {
+    $(selector).followLink();
   }
 
   private static String getActualValue(WebElement element, Condition condition) {

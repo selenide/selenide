@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.DOM;
+import com.codeborne.selenide.Navigation;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
@@ -48,6 +49,10 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     else if ("pressEnter".equals(method.getName())) {
       getDelegate().sendKeys(Keys.ENTER);
       return proxy;
+    }
+    else if ("followLink".equals(method.getName())) {
+      followLink(getDelegate());
+      return null;
     }
     else if ("text".equals(method.getName())) {
       return getDelegate().getText();
@@ -103,6 +108,16 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     }
 
     return delegateMethod(getDelegate(), method, args);
+  }
+
+  private void followLink(WebElement link) {
+    String href = link.getAttribute("href");
+    link.click();
+
+    // JavaScript $.click() doesn't take effect for <a href>
+    if (href != null) {
+      Navigation.navigateToAbsoluteUrl(href);
+    }
   }
 
   private void setValue(String text) {

@@ -106,4 +106,11 @@ public class SelenideMethods {
     assertEquals(seleniumElement.getTagName(), selenideElement.getTagName());
     assertEquals(seleniumElement.getText(), selenideElement.getText());
   }
+
+  @Test
+  public void userCanFollowLinks() {
+    $(By.linkText("Want to see ajax in action?")).followLink();
+//    $(By.linkText("Want to see ajax in action?")).click();
+    assertTrue(url().endsWith("long_ajax_request.html"));
+  }
 }
