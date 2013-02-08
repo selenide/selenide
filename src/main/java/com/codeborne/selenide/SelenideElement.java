@@ -7,7 +7,7 @@ import java.io.File;
 
 public interface SelenideElement extends WebElement {
   /**
-   * Actual for <a href> elements. Navigates by clicking this links.
+   * Actual for &lt;a href&gt; elements. Navigates browser by clicking this links.
    */
   void followLink();
 
