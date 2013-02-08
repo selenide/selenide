@@ -1,173 +1,15 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
-import com.codeborne.selenide.impl.ExtendedFieldDecorator;
-import com.codeborne.selenide.impl.ShouldableWebElementProxy;
-import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
-import org.openqa.selenium.WebDriver.TargetLocator;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 
-public class DOM {
-  public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
-
-  /**
-   * Wrap standard Selenium WebElement into ShouldableWebElement to use additional methods like shouldHave(), selectOption() etc.
-   * @param webElement standard Selenium WebElement
-   * @return given WebElement wrapped into ShouldableWebElement
-   */
-  public static ShouldableWebElement $(WebElement webElement) {
-    return ShouldableWebElementProxy.wrap(webElement);
-  }
-
-  /**
-   * Find the first element matching given CSS selector
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement $(String cssSelector) {
-    return getElement(By.cssSelector(cssSelector));
-  }
-
-  /**
-   * Find the first element matching given CSS selector
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement $(By seleniumSelector) {
-    return getElement(seleniumSelector);
-  }
-
-  /**
-   * @see #getElement(By, int)
-   */
-  public static ShouldableWebElement $(By seleniumSelector, int index) {
-    return getElement(seleniumSelector, index);
-  }
-
-  /**
-   * Find the first element matching given CSS selector
-   * @param parent the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement $(WebElement parent, String cssSelector) {
-    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), 0);
-  }
-
-  /**
-   * Find the Nth element matching given criteria
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 0..N
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement $(String cssSelector, int index) {
-    return WebElementWaitingProxy.wrap(null, By.cssSelector(cssSelector), index);
-  }
-
-  /**
-   * Find the Nth element matching given criteria
-   * @param parent the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 0..N
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement $(WebElement parent, String cssSelector, int index) {
-    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), index);
-  }
-
-  private static ShouldableWebElement $(WebElement parent, By selector, int index) {
-    return WebElementWaitingProxy.wrap(parent, selector, index);
-  }
-
-  /**
-   * Find all elements matching given CSS selector.
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return empty list if element was no found
-   */
-  public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
-  }
-
-  /**
-   * Find all elements matching given CSS selector.
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @return empty list if element was no found
-   */
-  public static ElementsCollection $$(By seleniumSelector) {
-    return new ElementsCollection(getElements(seleniumSelector));
-  }
-
-  /**
-   * Find all elements matching given CSS selector inside given parent element
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
-   * @param parent the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return empty list if element was no found
-   */
-  public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(parent.findElements(By.cssSelector(cssSelector)));
-  }
-
-  /**
-   * Find all elements matching given criteria inside given parent element
-   * @see DOM#$$(org.openqa.selenium.WebElement, java.lang.String)
-   */
-  public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return new ElementsCollection(parent.findElements(seleniumSelector));
-  }
-
-  /**
-   * Find the first element matching given criteria
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement getElement(By criteria) {
-    return WebElementWaitingProxy.wrap(null, criteria, 0);
-  }
-
-  /**
-   * Find the Nth element matching given criteria
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @param index 0..N
-   * @return ShouldableWebElement
-   * @throws NoSuchElementException if element was no found
-   */
-  public static ShouldableWebElement getElement(By criteria, int index) {
-    return WebElementWaitingProxy.wrap(null, criteria, index);
-  }
-
-  /**
-   * Find all elements matching given CSS selector
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @return empty list if element was no found
-   */
-  public static ElementsCollection getElements(By criteria) {
-    try {
-      return new ElementsCollection(getWebDriver().findElements(criteria));
-    } catch (WebDriverException e) {
-      return fail("Cannot get element " + criteria + ", caused by: " + cleanupWebDriverExceptionMessage(e));
-    }
-  }
+public class DOM extends Selenide {
 
   /**
    * @deprecated Use $(by).setValue(value)
@@ -175,7 +17,7 @@ public class DOM {
   @Deprecated
   public static void setValue(By by, String value) {
     try {
-      WebElement element = getElement(by);
+      WebElement element = $(by);
       setValue(element, value);
       triggerChangeEvent(by);
     } catch (WebDriverException e) {
@@ -189,7 +31,7 @@ public class DOM {
   @Deprecated
   public static void setValue(By by, int index, String value) {
     try {
-      WebElement element = getElement(by, index);
+      WebElement element = $(by, index);
       setValue(element, value);
       triggerChangeEvent(by, index);
     } catch (WebDriverException e) {
@@ -215,12 +57,12 @@ public class DOM {
    * @out-of-date Use $(by).click()
    */
   public static void click(By by) {
-    getElement(by).click();
+    $(by).click();
   }
 
   /** Calls onclick javascript code, useful for invisible (hovered) elements that cannot be clicked directly */
   public static void callOnClick(By by) {
-    executeJavaScript("eval(\"" + getElement(by).getAttribute("onclick") + "\")");
+    executeJavaScript("eval(\"" + $(by).getAttribute("onclick") + "\")");
   }
 
   /**
@@ -284,10 +126,6 @@ public class DOM {
     return null;
   }
 
-  public static Object executeJavaScript(String jsCode) {
-    return ((JavascriptExecutor) getWebDriver()).executeScript(jsCode);
-  }
-
   /**
    * It works only if jQuery "scroll" plugin is included in page being tested
    *
@@ -298,35 +136,6 @@ public class DOM {
       throw new IllegalStateException("JQuery is not available on current page");
     }
     executeJavaScript("$.scrollTo('" + getJQuerySelector(element) + "')");
-  }
-
-  /**
-   * Select radio field by value
-   * @param radioField any By selector for finding radio field
-   * @param value value to select (should match an attribute "value")
-   * @return the selected radio field
-   */
-  public static ShouldableWebElement selectRadio(By radioField, String value) {
-    $(radioField).shouldBe(enabled);
-    for (WebElement radio : $$(radioField)) {
-      if (value.equals(radio.getAttribute("value"))) {
-        radio.click();
-        return wrap(radio);
-      }
-    }
-    throw new NoSuchElementException(radioField + " and value " + value);
-  }
-
-  /**
-   * @out-of-date Use $.getSelectedRadio(radioField);
-   */
-  public static ShouldableWebElement getSelectedRadio(By radioField) {
-    for (WebElement radio : $$(radioField)) {
-      if (radio.getAttribute("checked") != null) {
-        return wrap(radio);
-      }
-    }
-    return null;
   }
 
   /**
@@ -344,7 +153,7 @@ public class DOM {
   }
 
   public static Select select(By selectField) {
-    return new Select(getElement(selectField));
+    return new Select($(selectField));
   }
 
   /**
@@ -379,17 +188,8 @@ public class DOM {
     $(selector).followLink();
   }
 
-  private static String getActualValue(WebElement element, Condition condition) {
-    try {
-      return condition.actualValue(element);
-    }
-    catch (WebDriverException e) {
-      return cleanupWebDriverExceptionMessage(e);
-    }
-  }
-
   public static ShouldableWebElement assertChecked(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     if (!"true".equalsIgnoreCase(element.getAttribute("checked"))) {
       throw new AssertionError("Element is not checked: " + element);
     }
@@ -397,7 +197,7 @@ public class DOM {
   }
 
   public static ShouldableWebElement assertNotChecked(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     if (element.getAttribute("checked") != null) {
       throw new AssertionError("Element is checked: " + element);
     }
@@ -405,7 +205,7 @@ public class DOM {
   }
 
   public static ShouldableWebElement assertDisabled(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     if (!"true".equalsIgnoreCase(element.getAttribute("disabled"))) {
       throw new AssertionError("Element is enabled: " + element);
     }
@@ -413,7 +213,7 @@ public class DOM {
   }
 
   public static ShouldableWebElement assertEnabled(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     String disabled = element.getAttribute("disabled");
     if (disabled != null && !"false".equalsIgnoreCase(disabled)) {
       throw new AssertionError("Element is disabled: " + element);
@@ -422,7 +222,7 @@ public class DOM {
   }
 
   public static ShouldableWebElement assertSelected(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     if (!element.isSelected()) {
       throw new AssertionError("Element is not selected: " + element);
     }
@@ -430,7 +230,7 @@ public class DOM {
   }
 
   public static ShouldableWebElement assertNotSelected(By criteria) {
-    ShouldableWebElement element = getElement(criteria);
+    ShouldableWebElement element = $(criteria);
     if (element.isSelected()) {
       throw new AssertionError("Element is selected: " + element);
     }
@@ -441,7 +241,7 @@ public class DOM {
    * @out-of-date Use $(selector).isDisplayed()
    */
   public static boolean isVisible(By selector) {
-    return getElement(selector).isDisplayed();
+    return $(selector).isDisplayed();
   }
 
   /**
@@ -581,70 +381,6 @@ public class DOM {
   }
 
   /**
-   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
-   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
-   *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
-   */
-  public static void confirm(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
-      alert.accept();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
-    }
-
-    waitUntilAlertDisappears();
-  }
-
-  /**
-   * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
-   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
-   *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
-   */
-  public static void dismiss(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
-      alert.dismiss();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
-    }
-
-    waitUntilAlertDisappears();
-  }
-
-  private static Alert checkAlertMessage(String expectedConfirmationText) {
-    Alert alert = getWebDriver().switchTo().alert();
-    if (expectedConfirmationText != null && !expectedConfirmationText.equals(alert.getText())) {
-      throw new AssertionError("Actual confirmation text is '" + alert.getText() +
-          "', but expected: '" + expectedConfirmationText + "'");
-    }
-    return alert;
-  }
-
-  private static void waitUntilAlertDisappears() {
-    try {
-      long start = System.currentTimeMillis();
-      while (getWebDriver().switchTo().alert() != null) {
-        getWebDriver().switchTo().alert();
-        if (System.currentTimeMillis() - start > defaultWaitingTimeout) {
-          fail("Confirmation dialog has not disappeared in " + defaultWaitingTimeout + " milliseconds");
-        }
-        sleep(100);
-      }
-    }
-    catch (NoAlertPresentException ignore) {
-    }
-  }
-
-  public static TargetLocator switchTo() {
-    return getWebDriver().switchTo();
-  }
-
-  /**
    * @deprecated Use $("selector").toString()
    */
   @Deprecated
@@ -652,24 +388,4 @@ public class DOM {
     return Describe.describe(element);
   }
 
-  /**
-   * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
-   */
-  public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    try {
-      return page(pageObjectClass.newInstance());
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
-    }
-  }
-
-  /**
-   * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, java.lang.Class)
-   */
-  public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    PageFactory.initElements(new ExtendedFieldDecorator(getWebDriver()), pageObject);
-    return pageObject;
-  }
 }

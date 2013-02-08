@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -8,10 +7,13 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Proxy;
 
+import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
+
 public class ElementLocatorProxy extends AbstractShouldableWebElementProxy {
   public static ShouldableWebElement wrap(ElementLocator elementLocator) {
     return (ShouldableWebElement) Proxy.newProxyInstance(
-        elementLocator.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ElementLocatorProxy(elementLocator));
+        elementLocator.getClass().getClassLoader(),
+        new Class<?>[]{ShouldableWebElement.class}, new ElementLocatorProxy(elementLocator));
   }
 
   private final ElementLocator elementLocator;
@@ -34,7 +36,7 @@ public class ElementLocatorProxy extends AbstractShouldableWebElementProxy {
         } catch (InterruptedException ignore) {
         }
       }
-    } while (System.currentTimeMillis() - startTime < DOM.defaultWaitingTimeout);
+    } while (System.currentTimeMillis() - startTime < defaultWaitingTimeout);
     throw exception;
   }
 

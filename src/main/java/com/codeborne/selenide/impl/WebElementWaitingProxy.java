@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -10,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
@@ -17,7 +17,8 @@ public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
   public static ShouldableWebElement wrap(WebElement parent, By criteria, int index) {
     return (ShouldableWebElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
-        new Class<?>[]{ShouldableWebElement.class}, new WebElementWaitingProxy(parent, criteria, index));
+        new Class<?>[]{ShouldableWebElement.class},
+        new WebElementWaitingProxy(parent, criteria, index));
   }
 
   private final WebElement parent;
@@ -32,7 +33,7 @@ public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
 
   @Override
   protected WebElement getDelegate() {
-    return waitUntil(exist, DOM.defaultWaitingTimeout);
+    return waitUntil(exist, defaultWaitingTimeout);
   }
 
   @Override

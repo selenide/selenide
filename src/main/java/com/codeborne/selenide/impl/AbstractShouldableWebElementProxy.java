@@ -1,9 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.DOM;
-import com.codeborne.selenide.Navigation;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -17,6 +14,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
@@ -129,14 +127,14 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
 
   private Object should(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(condition, DOM.defaultWaitingTimeout);
+      waitUntil(condition, defaultWaitingTimeout);
     }
     return proxy;
   }
 
   private Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitWhile(condition, DOM.defaultWaitingTimeout);
+      waitWhile(condition, defaultWaitingTimeout);
     }
     return proxy;
   }
