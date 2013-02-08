@@ -11,11 +11,10 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Navigation.sleep;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 
 public class DOM {
   public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
@@ -302,17 +301,32 @@ public class DOM {
   }
 
   /**
-   * @out-of-date Use $.selectRadio(radioField, value);
+   * Select radio field by value
+   * @param radioField any By selector for finding radio field
+   * @param value value to select (should match an attribute "value")
+   * @return the selected radio field
    */
   public static ShouldableWebElement selectRadio(By radioField, String value) {
-    return $.selectRadio(radioField, value);
+    $(radioField).shouldBe(enabled);
+    for (WebElement radio : $$(radioField)) {
+      if (value.equals(radio.getAttribute("value"))) {
+        radio.click();
+        return wrap(radio);
+      }
+    }
+    throw new NoSuchElementException(radioField + " and value " + value);
   }
 
   /**
    * @out-of-date Use $.getSelectedRadio(radioField);
    */
   public static ShouldableWebElement getSelectedRadio(By radioField) {
-    return $.getSelectedRadio(radioField);
+    for (WebElement radio : $$(radioField)) {
+      if (radio.getAttribute("checked") != null) {
+        return wrap(radio);
+      }
+    }
+    return null;
   }
 
   /**

@@ -7,7 +7,6 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.DOM.getSelectedRadio;
 import static com.codeborne.selenide.DOM.selectRadio;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
-import static com.codeborne.selenide.Selenide.$;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -20,10 +19,10 @@ public class RadioTest {
 
   @Test
   public void userCanSelectRadioButtonByValue() {
-    assertNull($.getSelectedRadio(By.name("me")));
+    assertNull(getSelectedRadio(By.name("me")));
 
-    $.selectRadio(By.name("me"), "ready");
-    assertEquals("ready", $.getSelectedRadio(By.name("me")).val());
+    selectRadio(By.name("me"), "ready");
+    assertEquals("ready", getSelectedRadio(By.name("me")).val());
 //    assertEquals("Я готов", $.getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
   }
 
