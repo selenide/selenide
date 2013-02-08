@@ -19,7 +19,6 @@ public class DOM extends Selenide {
     try {
       WebElement element = $(by);
       setValue(element, value);
-      triggerChangeEvent(by);
     } catch (WebDriverException e) {
       fail("Cannot get element " + by + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
@@ -33,7 +32,6 @@ public class DOM extends Selenide {
     try {
       WebElement element = $(by, index);
       setValue(element, value);
-      triggerChangeEvent(by, index);
     } catch (WebDriverException e) {
       fail("Cannot get element " + by + " and index " + index + ", caused by: " + cleanupWebDriverExceptionMessage(e));
     }
@@ -74,6 +72,7 @@ public class DOM extends Selenide {
    * @param index 0..N
    * @throws IllegalArgumentException if index is bigger than number of matched elements.
    */
+  @Deprecated
   public static void click(By by, int index) {
     List<WebElement> matchedElements = getWebDriver().findElements(by);
     if (index < 0 || index >= matchedElements.size()) {
@@ -87,18 +86,21 @@ public class DOM extends Selenide {
     }
   }
 
+  @Deprecated
   public static void triggerChangeEvent(By by) {
     if (isJQueryAvailable()) {
       executeJQueryMethod(by, "change()");
     }
   }
 
+  @Deprecated
   public static void triggerChangeEvent(By by, int index) {
     if (isJQueryAvailable())
       executeJQueryMethod(by, "eq(" + index + ").change()");
   }
 
-  static void executeJQueryMethod(By by, String method) {
+  @Deprecated
+  public static void executeJQueryMethod(By by, String method) {
     String selector = getJQuerySelector(by);
     if (selector != null) {
       executeJavaScript("$(\"" + selector + "\")." + method);
@@ -107,7 +109,8 @@ public class DOM extends Selenide {
     }
   }
 
-  static String getJQuerySelector(By seleniumSelector) {
+  @Deprecated
+  private static String getJQuerySelector(By seleniumSelector) {
     if (seleniumSelector instanceof By.ByName) {
       String name = seleniumSelector.toString().replaceFirst("By\\.name:\\s*(.*)", "$1");
       return "[name='" + name + "']";
@@ -131,6 +134,7 @@ public class DOM extends Selenide {
    *
    * @param element HTML element to scroll to.
    */
+  @Deprecated
   public static void scrollTo(By element) {
     if (!isJQueryAvailable()) {
       throw new IllegalStateException("JQuery is not available on current page");
