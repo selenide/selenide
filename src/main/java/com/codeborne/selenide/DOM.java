@@ -64,7 +64,7 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(by, index).click()
+   * @deprecated Use $(by, index).click()
    *
    * Click the Nth matched element on the page.
    *
@@ -186,8 +186,9 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(selector).followLink();
+   * @deprecated Use $(selector).followLink();
    */
+  @Deprecated
   public static void followLink(By selector) {
     $(selector).followLink();
   }
@@ -219,50 +220,57 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(disabled)
+   * @deprecated Use $(selector).shouldBe(disabled)
    */
+  @Deprecated
   public static ShouldableWebElement assertDisabled(By selector) {
     return $(selector).shouldBe(disabled);
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(enabled)
+   * @deprecated Use $(selector).shouldBe(enabled)
    */
+  @Deprecated
   public static ShouldableWebElement assertEnabled(By selector) {
     return $(selector).shouldBe(enabled);
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(selected)
+   * @deprecated Use $(selector).shouldBe(selected)
    */
+  @Deprecated
   public static ShouldableWebElement assertSelected(By selector) {
     return $(selector).shouldBe(selected);
   }
 
   /**
-   * @out-of-date Use $(selector).shouldNotBe(selected)
+   * @deprecated Use $(selector).shouldNotBe(selected)
    */
+  @Deprecated
   public static ShouldableWebElement assertNotSelected(By selector) {
     return $(selector).shouldNotBe(selected);
   }
 
   /**
-   * @out-of-date Use $(selector).isDisplayed()
+   * @deprecated Use $(selector).isDisplayed()
    */
+  @Deprecated
   public static boolean isVisible(By selector) {
     return $(selector).isDisplayed();
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(visible);
+   * @deprecated Use $(selector).shouldBe(visible);
    */
+  @Deprecated
   public static ShouldableWebElement assertVisible(By selector) {
     return assertElement(selector, visible);
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(hidden);
+   * @deprecated Use $(selector).shouldBe(hidden);
    */
+  @Deprecated
   public static ShouldableWebElement assertHidden(By selector) {
     return $(selector).shouldBe(hidden);
   }
