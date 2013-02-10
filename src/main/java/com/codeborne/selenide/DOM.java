@@ -192,6 +192,11 @@ public class DOM extends Selenide {
     $(selector).followLink();
   }
 
+  /**
+   * "checked" attribute seems to work incorrectly in IE or HtmlUnit.
+   * @deprecated Use $(criteria).shouldBe(selected)
+   */
+  @Deprecated
   public static ShouldableWebElement assertChecked(By criteria) {
     ShouldableWebElement element = $(criteria);
     if (!"true".equalsIgnoreCase(element.getAttribute("checked"))) {
@@ -200,6 +205,11 @@ public class DOM extends Selenide {
     return element;
   }
 
+  /**
+   * "checked" attribute seems to work incorrectly in IE or HtmlUnit.
+   * @deprecated Use $(criteria).shouldNotBe(selected)
+   */
+  @Deprecated
   public static ShouldableWebElement assertNotChecked(By criteria) {
     ShouldableWebElement element = $(criteria);
     if (element.getAttribute("checked") != null) {
@@ -208,37 +218,32 @@ public class DOM extends Selenide {
     return element;
   }
 
-  public static ShouldableWebElement assertDisabled(By criteria) {
-    ShouldableWebElement element = $(criteria);
-    if (!"true".equalsIgnoreCase(element.getAttribute("disabled"))) {
-      throw new AssertionError("Element is enabled: " + element);
-    }
-    return element;
+  /**
+   * @out-of-date Use $(selector).shouldBe(disabled)
+   */
+  public static ShouldableWebElement assertDisabled(By selector) {
+    return $(selector).shouldBe(disabled);
   }
 
-  public static ShouldableWebElement assertEnabled(By criteria) {
-    ShouldableWebElement element = $(criteria);
-    String disabled = element.getAttribute("disabled");
-    if (disabled != null && !"false".equalsIgnoreCase(disabled)) {
-      throw new AssertionError("Element is disabled: " + element);
-    }
-    return element;
+  /**
+   * @out-of-date Use $(selector).shouldBe(enabled)
+   */
+  public static ShouldableWebElement assertEnabled(By selector) {
+    return $(selector).shouldBe(enabled);
   }
 
-  public static ShouldableWebElement assertSelected(By criteria) {
-    ShouldableWebElement element = $(criteria);
-    if (!element.isSelected()) {
-      throw new AssertionError("Element is not selected: " + element);
-    }
-    return element;
+  /**
+   * @out-of-date Use $(selector).shouldBe(selected)
+   */
+  public static ShouldableWebElement assertSelected(By selector) {
+    return $(selector).shouldBe(selected);
   }
 
-  public static ShouldableWebElement assertNotSelected(By criteria) {
-    ShouldableWebElement element = $(criteria);
-    if (element.isSelected()) {
-      throw new AssertionError("Element is selected: " + element);
-    }
-    return element;
+  /**
+   * @out-of-date Use $(selector).shouldNotBe(selected)
+   */
+  public static ShouldableWebElement assertNotSelected(By selector) {
+    return $(selector).shouldNotBe(selected);
   }
 
   /**

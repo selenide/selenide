@@ -95,7 +95,8 @@ public interface SelenideElement extends WebElement {
 
   /**
    * Find selected option from this select field
-   * @return null if no option is selected
+   * @return WebElement for selected &lt;option&gt; element
+   * @throws org.openqa.selenium.NoSuchElementException if no options are selected
    */
   SelenideElement getSelectedOption();
 

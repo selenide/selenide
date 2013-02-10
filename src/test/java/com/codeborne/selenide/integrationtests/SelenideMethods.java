@@ -6,8 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Condition.readonly;
-import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.DOM.$;
 import static com.codeborne.selenide.DOM.$$;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
@@ -47,7 +46,11 @@ public class SelenideMethods {
   public void toStringMethodShowsElementDetails() {
     assertEquals("<h1>Page without JQuery</h1>", $("h1").toString());
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
-    assertEquals("<option value=livemail.ru checked=true selected:true>@livemail.ru</option>",
+
+    assertEquals("<input name=rememberMe value=on type=checkbox></input>",
+        $(By.name("rememberMe")).toString());
+
+    assertEquals("<option value=livemail.ru selected:true>@livemail.ru</option>",
         $(By.name("domain")).find("option").toString());
   }
 
@@ -112,5 +115,18 @@ public class SelenideMethods {
     $(By.linkText("Want to see ajax in action?")).followLink();
 //    $(By.linkText("Want to see ajax in action?")).click();
     assertTrue(url().endsWith("long_ajax_request.html"));
+  }
+
+  @Test
+  public void userCanSelectCheckbox() {
+    $(By.name("rememberMe")).shouldNotBe(selected);
+    $(By.name("rememberMe")).shouldNotBe(checked);
+
+    $(By.name("rememberMe")).click();
+
+    $(By.name("rememberMe")).shouldBe(selected);
+    $(By.name("rememberMe")).shouldBe(checked);
+    assertEquals("<input name=rememberMe value=on type=checkbox selected:true></input>",
+        $(By.name("rememberMe")).toString());
   }
 }

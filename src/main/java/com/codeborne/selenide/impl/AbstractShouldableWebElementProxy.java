@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.DOM;
+import com.codeborne.selenide.Navigation;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -10,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
@@ -178,14 +180,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   }
 
   private SelenideElement getSelectedOption(WebElement selectElement) {
-    List<WebElement> options = selectElement.findElements(By.tagName("option"));
-    for (WebElement option : options) {
-      if (option.getAttribute("selected") != null) {
-        return wrap(option);
-      }
-    }
-
-    return null;
+    return wrap(new Select(selectElement).getFirstSelectedOption());
   }
 
   private boolean exists() {

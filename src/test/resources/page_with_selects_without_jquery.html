@@ -51,11 +51,21 @@
 
     <div id="theHiddenElement" style="display: none">Видишь суслика? И я не вижу. А он есть!</div>
 
-    <form action="#submitted-form" method="post">
-      <input name="username" value="" readonly="readonly"/>
-      <input name="password" value=""/>
-      <input id="login" type="submit" value="Log in"/>
-    </form>
+    <br/>
+    <div style="width: 400px">
+      <form action="#submitted-form" method="post">
+        <fieldset title="Login form">
+          <label> Username:
+            <input name="username" value="" readonly="readonly"/>
+          </label> <br/>
+          <label>Password:
+            <input name="password" value=""/>
+          </label> <br/>
+          <input type="checkbox" name="rememberMe">Remember me<br/><br/>
+          <input id="login" type="submit" value="Log in"/>
+        </fieldset>
+      </form>
+    </div>
 
     <div id="dynamic-content-container"></div>
 

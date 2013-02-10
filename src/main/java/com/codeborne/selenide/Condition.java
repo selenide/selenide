@@ -363,6 +363,12 @@ public abstract class Condition {
     }
   };
 
+
+  /**
+   * TODO How uses it? It seems to work incorrectly in HtmlUnit
+   * @deprecated Use "selected" condition
+   */
+  @Deprecated
   public static final Condition checked = new Condition("checked", false) {
     @Override public boolean apply(WebElement element) {
       return element != null && "true".equalsIgnoreCase(element.getAttribute("checked"));
@@ -370,6 +376,16 @@ public abstract class Condition {
 
     @Override public String actualValue(WebElement element) {
       return element == null? "does not exist" : element.getAttribute("checked");
+    }
+  };
+
+  public static final Condition selected = new Condition("selected", false) {
+    @Override public boolean apply(WebElement element) {
+      return element != null && element.isSelected();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return element == null? "does not exist" : String.valueOf(element.isSelected());
     }
   };
 

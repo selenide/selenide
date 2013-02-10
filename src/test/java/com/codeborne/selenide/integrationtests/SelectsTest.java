@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.checked;
+import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.DOM.*;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static java.lang.Thread.currentThread;
@@ -22,7 +22,7 @@ public class SelectsTest {
     ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOptionByValue("myrambler.ru");
 
-    select.getSelectedOption().shouldBe(checked);
+    select.getSelectedOption().shouldBe(selected);
     assertEquals("myrambler.ru", select.getSelectedValue());
     assertEquals("@myrambler.ru", select.getSelectedText());
   }
@@ -40,7 +40,7 @@ public class SelectsTest {
     ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOption("@мыло.ру");
 
-    select.getSelectedOption().shouldBe(checked);
+    select.getSelectedOption().shouldBe(selected);
     assertEquals("мыло.ру", select.getSelectedValue());
     assertEquals("@мыло.ру", select.getSelectedText());
   }
