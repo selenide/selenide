@@ -9,7 +9,7 @@ compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
-defaultTasks 'clean', 'libs', 'test', 'install'
+defaultTasks 'libs', 'test', 'install'
 
 repositories {
   mavenCentral()
