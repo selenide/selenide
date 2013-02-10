@@ -97,8 +97,14 @@ public class WebDriverRunner {
   public static void closeWebDriver() {
     if (webdriver != null) {
       if (!holdBrowserOpen) {
-        webdriver.close();
-        killBrowser();
+        try {
+          webdriver.close();
+        } catch (WebDriverException cannotCloseBrowser) {
+          System.err.println("Cannot close browser normally (let's kill it): " + cannotCloseBrowser.toString());
+        }
+        finally {
+          killBrowser();
+        }
       }
       webdriver = null;
     }
