@@ -281,8 +281,7 @@ public abstract class Condition {
 
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
-    String[] classNames = classes.split(" ");
-    return contains(classNames, cssClass);
+    return classes == null ? false : contains(classes.split(" "), cssClass);
   }
 
   private static <T> boolean contains(T[] objects, T object) {
@@ -365,7 +364,7 @@ public abstract class Condition {
 
 
   /**
-   * TODO How uses it? It seems to work incorrectly in HtmlUnit
+   * TODO Remote this method: it seems to work incorrectly in HtmlUnit
    * @deprecated Use "selected" condition
    */
   @Deprecated

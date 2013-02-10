@@ -12,6 +12,7 @@ import static com.codeborne.selenide.DOM.$$;
 import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.Navigation.url;
 import static com.codeborne.selenide.Selectors.byAttribute;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
@@ -128,5 +129,13 @@ public class SelenideMethods {
     $(By.name("rememberMe")).shouldBe(checked);
     assertEquals("<input name=rememberMe value=on type=checkbox selected:true></input>",
         $(By.name("rememberMe")).toString());
+  }
+
+  @Test
+  public void userCanCheckCssClass() {
+    $(byText("Bob")).shouldHave(cssClass("firstname"));
+    $(byText("Dilan")).shouldHave(cssClass("lastname"));
+    $(byText("25")).shouldHave(cssClass("age"));
+    $(byText("First name")).shouldNotHave(cssClass("anything"));
   }
 }
