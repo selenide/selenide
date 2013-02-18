@@ -17,6 +17,10 @@ import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 public class Selenide {
   public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
 
+  public static void open(String relativeOrAbsoluteUrl) {
+    Navigation.open(relativeOrAbsoluteUrl);
+  }
+
   /**
    * Wrap standard Selenium WebElement into ShouldableWebElement to use additional methods like shouldHave(), selectOption() etc.
    * @param webElement standard Selenium WebElement
