@@ -53,6 +53,9 @@ public class SelenideMethods {
 
     assertEquals("<option value=livemail.ru selected:true>@livemail.ru</option>",
         $(By.name("domain")).find("option").toString());
+
+    assertTrue($(byText("Want to see ajax in action?")).toString().contains("<a href="));
+    assertTrue($(byText("Want to see ajax in action?")).toString().contains(">Want to see ajax in action?</a>"));
   }
 
   @Test

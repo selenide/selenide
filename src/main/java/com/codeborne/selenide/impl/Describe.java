@@ -42,7 +42,7 @@ public class Describe {
         return "null";
       }
       return new Describe(element)
-          .attr("id").attr("name").attr("class").attr("value").attr("disabled")
+          .attr("id").attr("name").attr("class").attr("href").attr("value").attr("disabled")
           .attr("type").attr("placeholder")
           .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
           .is("selected", isSelected(element), true)
