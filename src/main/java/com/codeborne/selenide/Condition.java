@@ -364,7 +364,7 @@ public abstract class Condition {
 
 
   /**
-   * TODO Remote this method: it seems to work incorrectly in HtmlUnit
+   * "checked" attribute seems to work incorrectly in HtmlUnit
    * @deprecated Use "selected" condition
    */
   @Deprecated

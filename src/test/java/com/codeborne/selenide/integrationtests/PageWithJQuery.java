@@ -1,7 +1,6 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.DOM;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -26,16 +25,12 @@ public class PageWithJQuery {
   @Test
   public void setValueTriggersOnChangeEvent() {
     $("#username").setValue("john");
-    if (WebDriverRunner.htmlUnit()) {
-      DOM.triggerChangeEvent(By.id("username"));
-    }
+    DOM.triggerChangeEvent(By.id("username"));
     $("h2").shouldHave(text("john"));
 
     $("#username").append(" ");
     $("#username").append("bon-jovi");
-    if (WebDriverRunner.htmlUnit()) {
-      DOM.triggerChangeEvent(By.id("username"));
-    }
+    DOM.triggerChangeEvent(By.id("username"));
 
     $("h2").shouldHave(text("john bon-jovi"));
   }
