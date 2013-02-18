@@ -38,9 +38,10 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(element).setValue(value)
+   * @deprecated  Use $(element).setValue(value)
    *              or $(element).val(value)
    */
+  @Deprecated
   public static void setValue(WebElement element, String value) {
     element.clear();
     element.sendKeys(value);
@@ -52,8 +53,9 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(by).click()
+   * @deprecated Use $(by).click()
    */
+  @Deprecated
   public static void click(By by) {
     $(by).click();
   }
@@ -143,15 +145,17 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(selectField).getSelectedValue();
+   * @deprecated Use $(selectField).getSelectedValue();
    */
+  @Deprecated
   public static String getSelectedValue(By selectField) {
     return $(selectField).getSelectedValue();
   }
 
   /**
-   * @out-of-date Use $(selectField).getSelectedText();
+   * @deprecated Use $(selectField).getSelectedText();
    */
+  @Deprecated
   public static String getSelectedText(By selectField) {
     return $(selectField).getSelectedText();
   }
@@ -161,22 +165,25 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(selectField).selectOptionByValue(String)
+   * @deprecated Use $(selectField).selectOptionByValue(String)
    */
+  @Deprecated
   public static void selectOption(By selectField, String value) {
     select(selectField).selectByValue(value);
   }
 
   /**
-   * @out-of-date Use $(selectField).selectOption(String)
+   * @deprecated Use $(selectField).selectOption(String)
    */
+  @Deprecated
   public static void selectOptionByText(By selectField, String text) {
     select(selectField).selectByVisibleText(text);
   }
 
   /**
-   * @out-of-date Use $(selector).isDisplayed()
+   * @deprecated Use $(selector).isDisplayed()
    */
+  @Deprecated
   public static boolean existsAndVisible(By selector) {
     try {
       return getWebDriver().findElement(selector).isDisplayed();
@@ -276,29 +283,33 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(condition);
+   * @deprecated Use $(selector).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement assertElement(By selector, Condition condition) {
     return $(selector).should(condition);
   }
 
   /**
-   * @out-of-date Use $(selector).shouldBe(condition);
+   * @deprecated Use $(selector).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement assertElement(WebElement element, Condition condition) {
     return $(element).should(condition);
   }
 
   /**
-   * @out-of-date Use $(elementSelector).shouldBe(visible);
+   * @deprecated Use $(elementSelector).shouldBe(visible);
    */
+  @Deprecated
   public static ShouldableWebElement waitFor(By elementSelector) {
     return $(elementSelector).shouldBe(visible);
   }
 
   /**
-   * @out-of-date Use $(cssSelector).shouldBe(visible);
+   * @deprecated Use $(cssSelector).shouldBe(visible);
    */
+  @Deprecated
   public static ShouldableWebElement waitFor(String cssSelector) {
     return $(cssSelector).shouldBe(visible);
   }
@@ -312,29 +323,33 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(elementSelector).shouldBe(condition);
+   * @deprecated Use $(elementSelector).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(By elementSelector, Condition condition) {
     return $(elementSelector).shouldBe(condition);
   }
 
   /**
-   * @out-of-date Use $(cssSelector).shouldBe(condition);
+   * @deprecated Use $(cssSelector).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(String cssSelector, Condition condition) {
     return $(cssSelector).shouldBe(condition);
   }
 
   /**
-   * @out-of-date Use $(elementSelector, index).shouldBe(condition);
+   * @deprecated Use $(elementSelector, index).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition) {
     return $(elementSelector, index).shouldBe(condition);
   }
 
   /**
-   * @out-of-date Use $(cssSelector, index).shouldBe(condition);
+   * @deprecated Use $(cssSelector, index).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition) {
     return $(cssSelector, index).shouldBe(condition);
   }
@@ -348,15 +363,17 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(elementSelector).waitUntil(condition, timeoutMs);
+   * @deprecated Use $(elementSelector).waitUntil(condition, timeoutMs);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(By elementSelector, Condition condition, long timeoutMs) {
     return $(elementSelector).waitUntil(condition, timeoutMs);
   }
 
   /**
-   * @out-of-date Use $(cssSelector).waitUntil(condition, timeoutMs);
+   * @deprecated Use $(cssSelector).waitUntil(condition, timeoutMs);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(String cssSelector, Condition condition, long timeoutMs) {
     return $(cssSelector).waitUntil(condition, timeoutMs);
   }
@@ -370,29 +387,33 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @out-of-date Use $(cssSelector, index).waitUntil(condition, timeoutMs);
+   * @deprecated Use $(cssSelector, index).waitUntil(condition, timeoutMs);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(String cssSelector, int index, Condition condition, long timeoutMs) {
     return $(cssSelector, index).waitUntil(condition, timeoutMs);
   }
 
   /**
-   * @out-of-date Use $(elementSelector, index).waitUntil(condition, timeoutMs);
+   * @deprecated Use $(elementSelector, index).waitUntil(condition, timeoutMs);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(By elementSelector, int index, Condition condition, long timeoutMs) {
     return $(elementSelector, index).waitUntil(condition, timeoutMs);
   }
 
   /**
-   * @out-of-date Use $(parent, elementSelector, index).shouldBe(condition);
+   * @deprecated Use $(parent, elementSelector, index).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition) {
     return $(parent, elementSelector, index).shouldBe(condition);
   }
 
   /**
-   * @out-of-date Use $(parent, elementSelector, index).shouldBe(condition);
+   * @deprecated Use $(parent, elementSelector, index).shouldBe(condition);
    */
+  @Deprecated
   public static ShouldableWebElement waitUntil(WebElement parent, By elementSelector, int index, Condition condition, long timeoutMs) {
     return $(parent, elementSelector, index).waitUntil(condition, timeoutMs);
   }
@@ -404,5 +425,4 @@ public class DOM extends Selenide {
   public static String describeElement(WebElement element) {
     return Describe.describe(element);
   }
-
 }

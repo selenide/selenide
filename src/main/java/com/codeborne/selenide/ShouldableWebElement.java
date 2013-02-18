@@ -1,7 +1,8 @@
 package com.codeborne.selenide;
 
 /**
- * @out-of-date Use SelenideElement instead
+ * @deprecated Use SelenideElement instead
  */
+@Deprecated
 public interface ShouldableWebElement extends SelenideElement {
 }

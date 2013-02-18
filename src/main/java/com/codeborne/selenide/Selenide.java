@@ -188,9 +188,6 @@ public class Selenide {
     throw new NoSuchElementException(radioField + " and value " + value);
   }
 
-  /**
-   * @out-of-date Use $.getSelectedRadio(radioField);
-   */
   public static ShouldableWebElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField)) {
       if (radio.getAttribute("checked") != null) {
