@@ -74,12 +74,29 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
-=== 1.10 (Snapshot, planned release date: January 2013)
-* Added method $().exists()
-* Added methods $().selectOption() and $().selectOptionByText()
+=== 1.11 (Snapshot, release planned to February 2013)
+* Mark out-of-date methods and DOM class as deprecated. Going to drop them in Selenide 2.0
+* Added support for PhantomJS driver
+=== 1.10 (Released 11.02.2013)
+* Excluded HtmlUnit dependencies. These have too large size, and not everyone uses them.
+* Added method $$().shouldHaveSize(n)
+* Added methods $.exists(), isDisplayed(), $.text(), $.pressEnter(), $.followLink()
+* Added methods $.selectOption(), $.selectOptionByValue(), $.getSelectedValue(), $.getSelectedText()
 * Changed behaviour of methods byText() and withText(): now spaces in text are ignored
-* Added method $().type(String) as a replacement for $().setValue(String)
+* Added method $.val(String) as an alternative for $.setValue(String) (opa JQuery style!)
+* Added methods $.waitUntil() and $.waitWhile()
 * Added method Selectors.byAttribute(name, value)
+* Added Conditions appear, readonly and attribute(String)
+* Added method switchTo() for easier supporting frames
+* Method open() can use either absolute or relative URL
+* Added method toWebElement() returning the original WebElement
+* Added annotation BrowserStrategy
+* Methods assertElement, assertVisible, assertHidden in DOM are deprecated.
+* Renamed ShouldableWebElement to SelenideElement (shouldable still exists for compatibility)
+* $$ does not implement WebElement anymore - it was useless feature.
+* Now Selenide kills webdriver if it failed to close normally
+* Moved useful methods to class Selenide. Class DOM will be marked as deprecated in version 1.11 and dropped in 2.0
+* Updated to selenium-java:2.29.1
 === 1.9 (Released 5.01.2013)
 * No need for waitFor/waitUntil methods. All the $(), getElement() and shouldXXX() methods wait for a few seconds until element appears or condition gets satisfied.
 * Added support for PageObjects - see method DOM.page(Class)
