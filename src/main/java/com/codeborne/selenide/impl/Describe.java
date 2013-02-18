@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -57,6 +58,8 @@ public class Describe {
     try {
       return element.isSelected();
     } catch (UnsupportedOperationException e) {
+      return false;
+    } catch (InvalidElementStateException e) {
       return false;
     }
   }

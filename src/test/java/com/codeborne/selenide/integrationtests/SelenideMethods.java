@@ -48,8 +48,8 @@ public class SelenideMethods {
     assertEquals("<h1>Page without JQuery</h1>", $("h1").toString());
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
 
-    assertEquals("<input name=rememberMe value=on type=checkbox></input>",
-        $(By.name("rememberMe")).toString());
+    assertTrue($(By.name("rememberMe")).toString().contains("<input name=rememberMe"));
+    assertTrue($(By.name("rememberMe")).toString().contains("type=checkbox></input>"));
 
     assertEquals("<option value=livemail.ru selected:true>@livemail.ru</option>",
         $(By.name("domain")).find("option").toString());

@@ -11,7 +11,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -210,7 +209,8 @@ public class WebDriverRunner {
     } else if (PHANTOMJS.equals(browser)) {
       DesiredCapabilities capabilities = new DesiredCapabilities();
       capabilities.setJavascriptEnabled(true);
-      return new PhantomJSDriver(capabilities);
+      capabilities.setCapability("takesScreenshot", true);
+      return new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities);
     } else {
       return createInstanceOf(browser);
     }
