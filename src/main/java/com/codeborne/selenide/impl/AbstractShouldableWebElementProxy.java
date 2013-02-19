@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.DOM;
 import com.codeborne.selenide.Navigation;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
@@ -16,6 +15,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
@@ -159,14 +159,16 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   }
 
   private void selectOptionByText(WebElement selectField, String optionText) {
+    $(selectField).shouldBe(present);
+    $(selectField, "option").shouldBe(present);
     // TODO wait until the element has option with given text
-    DOM.waitUntil(selectField, By.tagName("option"), 0, present);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
   private void selectOptionByValue(WebElement selectField, String optionValue) {
+    $(selectField).shouldBe(present);
+    $(selectField, "option").shouldBe(present);
     // TODO wait until the element has option with given value
-    DOM.waitUntil(selectField, By.tagName("option"), 0, present);
     new Select(selectField).selectByValue(optionValue);
   }
 

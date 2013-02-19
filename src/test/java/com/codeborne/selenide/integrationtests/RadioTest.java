@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.DOM.getSelectedRadio;
 import static com.codeborne.selenide.DOM.selectRadio;
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNull;
 public class RadioTest {
   @Before
   public void openTestPage() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
   }
 
   @Test

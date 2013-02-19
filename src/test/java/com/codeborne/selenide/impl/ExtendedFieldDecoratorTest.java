@@ -46,7 +46,7 @@ public class ExtendedFieldDecoratorTest {
     List<ShouldableWebElement> elements = (List<ShouldableWebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
-    assertTrue(elements.get(0) instanceof ShouldableWebElement);
+    assertTrue(elements.get(0) != null);
   }
 
   @Test
@@ -62,7 +62,6 @@ public class ExtendedFieldDecoratorTest {
     List<WebElement> elements = (List<WebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("data"));
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
-    assertTrue(elements.get(0) instanceof WebElement);
     assertFalse(elements.get(0) instanceof ShouldableWebElement);
   }
 

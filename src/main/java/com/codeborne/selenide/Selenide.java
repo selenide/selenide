@@ -7,11 +7,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.support.PageFactory;
 
+import java.net.URL;
+
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Navigation.sleep;
-import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
-import static com.codeborne.selenide.WebDriverRunner.fail;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 
 public class Selenide {
@@ -19,6 +19,10 @@ public class Selenide {
 
   public static void open(String relativeOrAbsoluteUrl) {
     Navigation.open(relativeOrAbsoluteUrl);
+  }
+
+  public static void open(URL absoluteUrl) {
+    Navigation.navigateToAbsoluteUrl(absoluteUrl);
   }
 
   /**

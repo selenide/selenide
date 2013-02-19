@@ -4,7 +4,8 @@ import org.openqa.selenium.By;
 
 import java.net.URL;
 
-import static com.codeborne.selenide.DOM.waitFor;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
 
@@ -42,12 +43,12 @@ public class Navigation {
   public static void navigateToAbsoluteUrl(String url) {
     if (ie()) {
       getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
-      waitFor(By.tagName("body"));
+      $(By.tagName("body")).should(appear);
       toBeSureThatPageIsNotCached();
     }
     else {
       getWebDriver().navigate().to(url);
-      waitFor(By.tagName("body"));
+      $(By.tagName("body")).should(appear);
     }
   }
 

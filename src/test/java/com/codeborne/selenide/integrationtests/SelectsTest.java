@@ -1,25 +1,26 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.ShouldableWebElement;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.DOM.*;
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 
 public class SelectsTest {
   @Before
   public void openTestPage() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
   }
 
   @Test
   public void userCanSelectOptionByValue() {
-    ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOptionByValue("myrambler.ru");
 
     select.getSelectedOption().shouldBe(selected);
@@ -37,7 +38,7 @@ public class SelectsTest {
 
   @Test
   public void userCanSelectOptionByText() {
-    ShouldableWebElement select = $(By.xpath("//select[@name='domain']"));
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOption("@мыло.ру");
 
     select.getSelectedOption().shouldBe(selected);

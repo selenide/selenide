@@ -9,6 +9,11 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 
+/**
+ * @deprecated Use methods of class Selenide - these are useful.
+ * All methods of class DOM are a bullshit for historical reasons.
+ */
+@Deprecated
 public class DOM extends Selenide {
 
   /**

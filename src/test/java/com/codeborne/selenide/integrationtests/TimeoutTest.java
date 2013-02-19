@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 public class TimeoutTest {
   @Before
   public void openTestPageWithJQuery() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
   }
 
   @Test

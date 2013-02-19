@@ -7,12 +7,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.DOM.$;
-import static com.codeborne.selenide.DOM.$$;
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Navigation.url;
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class SelenideMethods {
   @Before
   public void openTestPageWithJQuery() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
   }
 
   @Test

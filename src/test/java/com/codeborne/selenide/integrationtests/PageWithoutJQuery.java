@@ -4,14 +4,14 @@ import com.codeborne.selenide.DOM;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
+import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertFalse;
 
 public class PageWithoutJQuery {
   @Before
   public void openTestPageWithJQuery() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
   }
 
   @Test
