@@ -2,6 +2,7 @@ package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,13 +90,13 @@ public class PageObjectTest {
     public WebElement domainSelect;
 
     @FindBy(tagName = "h1")
-    public ShouldableWebElement h1;
+    public SelenideElement h1;
 
     @FindBy(tagName = "h2")
-    public List<ShouldableWebElement> h2s;
+    public List<SelenideElement> h2s;
 
     @FindBy(id = "dynamic-content")
-    public ShouldableWebElement dynamicContent;
+    public SelenideElement dynamicContent;
 
     @FindBy(id = "status")
     public StatusBlock status;
@@ -120,18 +121,18 @@ public class PageObjectTest {
 
   public static class StatusBlock extends ElementsContainer {
     @FindBy(className = "name")
-    ShouldableWebElement name;
+    SelenideElement name;
 
     @FindBy(className = "last-login")
-    ShouldableWebElement lastLogin;
+    SelenideElement lastLogin;
   }
 
   public static class UserInfo extends ElementsContainer {
     @FindBy(className = "firstname")
-    ShouldableWebElement firstName;
+    SelenideElement firstName;
     @FindBy(className = "lastname")
-    ShouldableWebElement lastName;
+    SelenideElement lastName;
     @FindBy(className = "age")
-    ShouldableWebElement age;
+    SelenideElement age;
   }
 }
