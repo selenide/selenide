@@ -71,7 +71,7 @@ public abstract class Condition {
 
   /**
    * Synonym for #visible - may be used for better readability
-   * waitUntil(By.id("logoutLink"), appears);
+   * $("#logoutLink").waitUntil(appears, 10000);
 
    * Thought the same can be done in a shorter way:
    * waitFor(By.id("logoutLink");
@@ -80,7 +80,7 @@ public abstract class Condition {
 
   /**
    * Synonym for #hidden - may be used for better readability:
-   * waitUntil(By.id("loginLink"), disappears);
+   * $("#loginLink").waitUntil(disappears, 9000);
    */
   public static final Condition disappears = hidden;
 
@@ -91,7 +91,7 @@ public abstract class Condition {
   public static final Condition disappear = hidden;
 
   /**
-   * waitUntil(By.id("#mydiv"), hasAttribute("fileId", "12345"));
+   * $("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);
    * @param attributeName name of attribute
    * @param attributeValue expected value of attribute
    */
@@ -163,7 +163,7 @@ public abstract class Condition {
   }
 
   /**
-   * assertElement(By,id("input"), hasValue("John"))
+   * $("#myInput").waitUntil(hasValue("John"), 5000)
    * @param value expected value of input field
    */
   public static Condition hasValue(final String value) {
@@ -171,12 +171,29 @@ public abstract class Condition {
   }
 
   /**
+   * 1) For input element, check that value is missing or empty
    * $("#input").shouldBe(empty)
+   *
+   * 2) For other elements, check that text is empty
+   * $("h2").shouldBe(empty)
    */
-  public static final Condition empty = value("");
+  public static final Condition empty = new Condition("empty", false) {
+    private final Condition emptyValue = value("");
+    private final Condition emptyText = exactText("");
+
+    @Override
+    public boolean apply(WebElement element) {
+      return emptyValue.apply(element) && emptyText.apply(element);
+    }
+
+    @Override
+    public String actualValue(WebElement element) {
+      return "value=" + getAttributeValue(element, "value") + ", text='" + element.getText() + "'";
+    }
+  };
 
   /**
-   * assertElement(By,tagName("h1"), matchesText("Hello"))
+   * $(".error_message").waitWhile(matchesText("Exception"), 12000)
    *
    * @see #matchText(String)
    */
@@ -213,11 +230,29 @@ public abstract class Condition {
   }
 
   /**
-   * assertElement(By,tagName("h1"), hasText("Hello"))
+   * $("h1").waitUntil(hasText("Hello"), 10000)
    * @param text expected text of HTML element
    */
   public static Condition hasText(final String text) {
-    return new Condition("hasText", false) {
+    return text(text);
+  }
+
+  /**
+   * $("h1").should(haveText("Hello\s*John"))
+   * @param text expected text of HTML element
+   * @deprecated Use $.shouldHave(text("Hello"))
+   */
+  @Deprecated
+  public static Condition haveText(final String text) {
+    return hasText(text);
+  }
+
+  /**
+   * $("h1").shouldHave(text("Hello\s*John"))
+   * @param text expected text of HTML element
+   */
+  public static Condition text(final String text) {
+    return new Condition("text", false) {
       @Override
       public boolean apply(WebElement element) {
         return element != null && element.getText().contains(text);
@@ -234,23 +269,28 @@ public abstract class Condition {
   }
 
   /**
-   * $("h1").should(haveText("Hello\s*John"))
+   * $("h1").shouldHave(exactText("Hello"))
    * @param text expected text of HTML element
    */
-  public static Condition haveText(final String text) {
-    return hasText(text);
+  public static Condition exactText(final String text) {
+    return new Condition("exactText", false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return element != null && text.equals(element.getText());
+      }
+      @Override
+      public String actualValue(WebElement element) {
+        return element == null? "does not exist" : element.getText();
+      }
+      @Override
+      public String toString() {
+        return "got exactly the text '" + text + "'";
+      }
+    };
   }
 
   /**
-   * $("h1").shouldHave(text("Hello\s*John"))
-   * @param text expected text of HTML element
-   */
-  public static Condition text(final String text) {
-    return hasText(text);
-  }
-
-  /**
-   * waitUntil(By.tagName("input"), hasOptions());
+   * $("#my-select-box").waitUntil(hasOptions(), 7000);
    */
   public static Condition hasOptions() {
     return options;

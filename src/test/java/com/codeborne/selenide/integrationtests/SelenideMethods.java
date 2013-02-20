@@ -92,11 +92,33 @@ public class SelenideMethods {
   }
 
   @Test
-  public void userCanCheckElementText() {
+  public void userCanCheckIfElementContainsText() {
     assertEquals("Page without JQuery", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
     assertEquals("Radio buttons\nЯ идиот Я тупица Я готов I don't speak Russian", $("#radioButtons").text());
+
+    $("h1").shouldHave(text("Page "));
+    $("h2").shouldHave(text("Dropdown list"));
+    $(By.name("domain")).find("option").shouldHave(text("vemail.r"));
+    $("#radioButtons").shouldHave(text("buttons\nЯ идиот Я тупица"));
+  }
+
+  @Test
+  public void userCanCheckIfElementHasExactText() {
+    $("h1").shouldHave(exactText("Page without JQuery"));
+    $("h2").shouldHave(exactText("Dropdown list"));
+    $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
+    $("#radioButtons").shouldHave(text("Radio buttons\n" +
+        "Я идиот Я тупица Я готов I don't speak Russian"));
+  }
+
+  @Test
+  public void elementIsEmptyIfTextAndValueAreBothEmpty() {
+    $("br").shouldBe(empty);
+    $("h2").shouldNotBe(empty);
+    $(By.name("password")).shouldBe(empty);
+    $("#login").shouldNotBe(empty);
   }
 
   @Test @Ignore
