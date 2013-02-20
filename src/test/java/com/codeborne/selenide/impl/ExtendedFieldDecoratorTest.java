@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -31,8 +32,8 @@ public class ExtendedFieldDecoratorTest {
   }
 
   @Test
-  public void decoratesShouldableWebElement() throws Exception {
-    assertTrue(fieldDecorator.decorate(getClass().getClassLoader(), getField("username")) instanceof ShouldableWebElement);
+  public void decoratesSelenideElement() throws Exception {
+    assertTrue(fieldDecorator.decorate(getClass().getClassLoader(), getField("username")) instanceof SelenideElement);
   }
 
   private Field getField(String fieldName) throws NoSuchFieldException {
@@ -41,12 +42,12 @@ public class ExtendedFieldDecoratorTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  public void decoratesListOfShouldableWebElements() throws Exception {
+  public void decoratesListOfSelenideElements() throws Exception {
     when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
-    List<ShouldableWebElement> elements = (List<ShouldableWebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
+    List<SelenideElement> elements = (List<SelenideElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
-    assertTrue(elements.get(0) != null);
+    assertTrue(elements.get(0) instanceof SelenideElement);
   }
 
   @Test
@@ -62,6 +63,7 @@ public class ExtendedFieldDecoratorTest {
     List<WebElement> elements = (List<WebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("data"));
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
+    assertTrue(elements.get(0) instanceof WebElement);
     assertFalse(elements.get(0) instanceof ShouldableWebElement);
   }
 
@@ -116,9 +118,9 @@ public class ExtendedFieldDecoratorTest {
 
 
   public static class TestPage {
-    ShouldableWebElement username;
+    SelenideElement username;
     @FindBy(css = "table tbody tr")
-    List<ShouldableWebElement> rows;
+    List<SelenideElement> rows;
     WebElement someDiv;
     @FindBy(css = "table tbody tr")
     List<WebElement> data;
@@ -133,9 +135,9 @@ public class ExtendedFieldDecoratorTest {
 
   public static class StatusBlock extends ElementsContainer {
     @FindBy(className = "last-login")
-    ShouldableWebElement lastLogin;
+    SelenideElement lastLogin;
 
     @FindBy(className = "name")
-    ShouldableWebElement name;
+    SelenideElement name;
   }
 }

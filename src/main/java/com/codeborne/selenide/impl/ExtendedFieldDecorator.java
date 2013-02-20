@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.FindBy;
@@ -22,13 +23,13 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
   @Override
   public Object decorate(ClassLoader loader, Field field) {
-    if (ShouldableWebElement.class.isAssignableFrom(field.getType())) {
+    if (SelenideElement.class.isAssignableFrom(field.getType())) {
       return ElementLocatorProxy.wrap(factory.createLocator(field));
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(field);
     } else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
-    } else if (isDecoratableList(field, ShouldableWebElement.class)) {
+    } else if (isDecoratableList(field, SelenideElement.class)) {
       return ShouldableWebElementListProxy.wrap(factory.createLocator(field));
     }
     return super.decorate(loader, field);
