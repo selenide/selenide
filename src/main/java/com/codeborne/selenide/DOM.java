@@ -1,13 +1,11 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
 
 /**
  * @deprecated Use methods of class Selenide - these are useful.
@@ -15,18 +13,14 @@ import static com.codeborne.selenide.WebDriverRunner.*;
  */
 @Deprecated
 public class DOM extends Selenide {
+  private static JQuery jQuery = new JQuery();
 
   /**
    * @deprecated Use $(by).setValue(value)
    */
   @Deprecated
   public static void setValue(By by, String value) {
-    try {
-      WebElement element = $(by);
-      setValue(element, value);
-    } catch (WebDriverException e) {
-      fail("Cannot get element " + by + ", caused by: " + cleanupWebDriverExceptionMessage(e));
-    }
+    $(by).setValue(value);
   }
 
   /**
@@ -34,12 +28,7 @@ public class DOM extends Selenide {
    */
   @Deprecated
   public static void setValue(By by, int index, String value) {
-    try {
-      WebElement element = $(by, index);
-      setValue(element, value);
-    } catch (WebDriverException e) {
-      fail("Cannot get element " + by + " and index " + index + ", caused by: " + cleanupWebDriverExceptionMessage(e));
-    }
+    $(by, index).setValue(value);
   }
 
   /**
@@ -51,10 +40,13 @@ public class DOM extends Selenide {
     element.clear();
     element.sendKeys(value);
   }
-  
+
+  /**
+   * @deprecated Use JQuery.isJQueryAvailable
+   */
+  @Deprecated
   public static boolean isJQueryAvailable() {
-    Object result = executeJavaScript("return (typeof jQuery);");
-    return !"undefined".equalsIgnoreCase(String.valueOf(result));
+    return jQuery.isJQueryAvailable();
   }
 
   /**
@@ -65,9 +57,12 @@ public class DOM extends Selenide {
     $(by).click();
   }
 
-  /** Calls onclick javascript code, useful for invisible (hovered) elements that cannot be clicked directly */
+  /**
+   * @deprecated Use JQuery.callOnClick
+   */
+  @Deprecated
   public static void callOnClick(By by) {
-    executeJavaScript("eval(\"" + $(by).getAttribute("onclick") + "\")");
+    jQuery.onClick(by);
   }
 
   /**
@@ -81,72 +76,31 @@ public class DOM extends Selenide {
    */
   @Deprecated
   public static void click(By by, int index) {
-    List<WebElement> matchedElements = getWebDriver().findElements(by);
-    if (index < 0 || index >= matchedElements.size()) {
-      throw new IllegalArgumentException("Cannot click " + index + "th element: there is " + matchedElements.size() + " elements on the page");
-    }
-
-    if (isJQueryAvailable()) {
-      executeJQueryMethod(by, "eq(" + index + ").click();");
-    } else {
-      matchedElements.get(index).click();
-    }
-  }
-
-  @Deprecated
-  public static void triggerChangeEvent(By by) {
-    if (isJQueryAvailable()) {
-      executeJQueryMethod(by, "change()");
-    }
-  }
-
-  @Deprecated
-  public static void triggerChangeEvent(By by, int index) {
-    if (isJQueryAvailable())
-      executeJQueryMethod(by, "eq(" + index + ").change()");
-  }
-
-  @Deprecated
-  public static void executeJQueryMethod(By by, String method) {
-    String selector = getJQuerySelector(by);
-    if (selector != null) {
-      executeJavaScript("$(\"" + selector + "\")." + method);
-    } else {
-      System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
-    }
-  }
-
-  @Deprecated
-  private static String getJQuerySelector(By seleniumSelector) {
-    if (seleniumSelector instanceof By.ByName) {
-      String name = seleniumSelector.toString().replaceFirst("By\\.name:\\s*(.*)", "$1");
-      return "[name='" + name + "']";
-    } else if (seleniumSelector instanceof By.ById) {
-      String id = seleniumSelector.toString().replaceFirst("By\\.id:\\s*(.*)", "$1");
-      return "#" + id;
-    } else if (seleniumSelector instanceof By.ByClassName) {
-      String className = seleniumSelector.toString().replaceFirst("By\\.className:\\s*(.*)", "$1");
-      return "." + className;
-    } else if (seleniumSelector instanceof By.ByCssSelector) {
-      return seleniumSelector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
-    } else if (seleniumSelector instanceof By.ByXPath) {
-      String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
-      return seleniumXPath.replaceFirst("//(.*)", "$1").replaceAll("\\[@", "[");
-    }
-    return null;
+    $(by, index).click();
   }
 
   /**
-   * It works only if jQuery "scroll" plugin is included in page being tested
-   *
-   * @param element HTML element to scroll to.
+   * @deprecated Use JQuery.triggerChangeEvent
+   */
+  @Deprecated
+  public static void triggerChangeEvent(By by) {
+    jQuery.change(by);
+  }
+
+  /**
+   * @deprecated Use JQuery.triggerChangeEvent
+   */
+  @Deprecated
+  public static void triggerChangeEvent(By by, int index) {
+    jQuery.change(by, index);
+  }
+
+  /**
+   * @deprecated Use JQuery.scrollTo
    */
   @Deprecated
   public static void scrollTo(By element) {
-    if (!isJQueryAvailable()) {
-      throw new IllegalStateException("JQuery is not available on current page");
-    }
-    executeJavaScript("$.scrollTo('" + getJQuerySelector(element) + "')");
+    jQuery.scrollTo(element);
   }
 
   /**
@@ -190,11 +144,7 @@ public class DOM extends Selenide {
    */
   @Deprecated
   public static boolean existsAndVisible(By selector) {
-    try {
-      return getWebDriver().findElement(selector).isDisplayed();
-    } catch (NoSuchElementException doesNotExist) {
-      return false;
-    }
+    return $(selector).isDisplayed();
   }
 
   /**
@@ -276,7 +226,7 @@ public class DOM extends Selenide {
    */
   @Deprecated
   public static ShouldableWebElement assertVisible(By selector) {
-    return assertElement(selector, visible);
+    return $(selector).shouldBe(visible);
   }
 
   /**
@@ -304,7 +254,7 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @deprecated Use $(elementSelector).shouldBe(visible);
+   * @deprecated Use $(elementSelector).shouldBe(visible) or $(elementSelector).should(appear)
    */
   @Deprecated
   public static ShouldableWebElement waitFor(By elementSelector) {
@@ -312,7 +262,7 @@ public class DOM extends Selenide {
   }
 
   /**
-   * @deprecated Use $(cssSelector).shouldBe(visible);
+   * @deprecated Use $(cssSelector).shouldBe(visible) or $(cssSelector).should(appear)
    */
   @Deprecated
   public static ShouldableWebElement waitFor(String cssSelector) {

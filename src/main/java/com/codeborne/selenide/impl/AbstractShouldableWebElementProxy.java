@@ -1,8 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Navigation;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -17,6 +15,7 @@ import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
@@ -24,6 +23,8 @@ import static java.lang.Thread.currentThread;
 import static org.openqa.selenium.Keys.TAB;
 
 abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
+  protected JQuery jQuery = new JQuery();
+
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
 
@@ -43,8 +44,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
       }
     }
     else if ("append".equals(method.getName())) {
-      getDelegate().sendKeys((String) args[0]);
-      getDelegate().sendKeys(TAB);
+      append((String) args[0]);
       return proxy;
     }
     else if ("pressEnter".equals(method.getName())) {
@@ -117,13 +117,19 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
 
     // JavaScript $.click() doesn't take effect for <a href>
     if (href != null) {
-      Navigation.navigateToAbsoluteUrl(href);
+      open(href);
     }
   }
 
-  private void setValue(String text) {
+  protected void setValue(String text) {
     WebElement element = getDelegate();
     element.clear();
+    element.sendKeys(text);
+    element.sendKeys(TAB);
+  }
+
+  protected void append(String text) {
+    WebElement element = getDelegate();
     element.sendKeys(text);
     element.sendKeys(TAB);
   }

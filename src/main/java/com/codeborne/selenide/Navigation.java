@@ -36,10 +36,18 @@ public class Navigation {
     return baseUrl + relativeUrl;
   }
 
+  /**
+   * @deprecated Use Selenide.open(url)
+   */
+  @Deprecated
   public static void navigateToAbsoluteUrl(URL url) {
     navigateToAbsoluteUrl(url.toExternalForm());
   }
 
+  /**
+   * @deprecated Use Selenide.open(url)
+   */
+  @Deprecated
   public static void navigateToAbsoluteUrl(String url) {
     if (ie()) {
       getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
