@@ -62,7 +62,7 @@ public class JQuery {
   protected String getJQuerySelector(By seleniumSelector) {
     if (seleniumSelector instanceof By.ByName) {
       String name = seleniumSelector.toString().replaceFirst("By\\.name:\\s*(.*)", "$1");
-      return "[name='" + name + "']";
+      return "*[name='" + name + "']";
     } else if (seleniumSelector instanceof By.ById) {
       String id = seleniumSelector.toString().replaceFirst("By\\.id:\\s*(.*)", "$1");
       return "#" + id;
