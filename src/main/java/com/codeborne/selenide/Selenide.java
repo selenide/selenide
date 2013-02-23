@@ -176,6 +176,7 @@ public class Selenide {
   }
 
   public static Object executeJavaScript(String jsCode) {
+    System.out.println("OPA JAVASCRIPT: " + jsCode);
     return ((JavascriptExecutor) getWebDriver()).executeScript(jsCode);
   }
 
