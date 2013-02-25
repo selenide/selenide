@@ -3,7 +3,6 @@ package com.codeborne.selenide.integrationtests;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -15,8 +14,8 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.DOM.page;
-import static com.codeborne.selenide.Navigation.navigateToAbsoluteUrl;
 import static com.codeborne.selenide.Navigation.sleep;
+import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
@@ -26,7 +25,7 @@ public class PageObjectTest {
 
   @Before
   public void openTestPage() {
-    navigateToAbsoluteUrl(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
     sleep(100);
     pageWithSelects = page(SelectsPage.class);
   }
@@ -57,7 +56,7 @@ public class PageObjectTest {
   }
 
   @Test
-  public void canUseExtendedWebElementsFunctionality() throws Exception {
+  public void canUseExtendedWebElementsFunctionality() {
     pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
 
     assertEquals(2, pageWithSelects.h2s.size());
@@ -68,14 +67,14 @@ public class PageObjectTest {
   }
 
   @Test
-  public void canComposePageFromReusableBlocks() throws Exception {
+  public void canComposePageFromReusableBlocks() {
     pageWithSelects.status.getSelf().shouldBe(visible);
     pageWithSelects.status.name.shouldHave(text("Bob Smith"));
     pageWithSelects.status.lastLogin.shouldHave(text("01.01.1970"));
   }
 
   @Test
-  public void canComposePageFromListOfReusableBlocks() throws Exception {
+  public void canComposePageFromListOfReusableBlocks() {
     assertEquals(2, pageWithSelects.userInfoList.size());
 
     pageWithSelects.userInfoList.get(0).getSelf().shouldBe(visible);

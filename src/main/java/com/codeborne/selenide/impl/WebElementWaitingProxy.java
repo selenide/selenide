@@ -37,18 +37,6 @@ public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
   }
 
   @Override
-  protected void setValue(String text) {
-    super.setValue(text);
-    jQuery.change(criteria, index); // TODO Use also the parent element
-  }
-
-  @Override
-  protected void append(String text) {
-    super.append(text);
-    jQuery.change(criteria, index); // TODO Use also the parent element
-  }
-
-  @Override
   protected ShouldableWebElement find(Object arg, int index) {
     return arg instanceof By ?
         wrap(getDelegate(), (By) arg, index) :

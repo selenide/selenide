@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.JQuery;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
@@ -22,8 +21,6 @@ import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
 abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
-  protected JQuery jQuery = new JQuery();
-
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
 
@@ -124,11 +121,21 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     WebElement element = getDelegate();
     element.clear();
     element.sendKeys(text);
+    fireEvent("change");
   }
 
   protected void append(String text) {
     WebElement element = getDelegate();
     element.sendKeys(text);
+    fireEvent("change");
+  }
+
+  protected void fireEvent(final String event) {
+    // TODO Probably we need another IF for IE as described here:
+    // http://stackoverflow.com/questions/136617/how-do-i-programatically-force-an-onchange-event-on-an-input
+    executeJavaScript("var evt = document.createEvent('HTMLEvents'); " +
+        "evt.initEvent('" + event + "', true, true ); " +
+        "return !document.activeElement.dispatchEvent(evt);");
   }
 
   private Object should(Object proxy, Condition[] conditions) {
