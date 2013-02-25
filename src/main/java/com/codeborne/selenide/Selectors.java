@@ -40,6 +40,20 @@ public class Selectors {
         By.xpath(".//*[@" + attributeName + " = '" + attributeValue + "']");
   }
 
+  /**
+   * Synonym for #byAttribute
+   */
+  public static By by(String attributeName, String attributeValue) {
+    return byAttribute(attributeName, attributeValue);
+  }
+
+  /**
+   * Find element with given title ("title" attribute)
+   */
+  public static By byTitle(String title) {
+    return byAttribute("title", title);
+  }
+
   private static void assertDoesNotContainBothApostrophesAndQuotes(String elementText) {
     if (elementText.contains("'") && elementText.contains("\"")) {
       throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
