@@ -2,6 +2,14 @@
   <head>
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript">
+      function onUsernameChanged(input) {
+        var val = input.value;
+        console.log(val);
+        console.log(document.getElementById('username-mirror'));
+        document.getElementById('username-mirror').innerHTML = val;
+      }
+    </script>
   </head>
   <body>
     <h1>Page without JQuery</h1>
@@ -96,5 +104,18 @@
     <script type="text/javascript">
         setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 1000);
     </script>
+
+    <h1>Now typing: </h1>
+    <h2 id="username-mirror"></h2>
+    <div style="width: 400px">
+      <form>
+        <fieldset title="Login form">
+          <label> Username:
+            <input id="username" name="username" value="" onchange="onUsernameChanged(this);"/>
+          </label> <br/>
+        </fieldset>
+      </form>
+    </div>
+
   </body>
 </html>

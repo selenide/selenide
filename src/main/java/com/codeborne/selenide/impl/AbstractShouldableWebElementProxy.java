@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.JQuery;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -13,14 +15,11 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Navigation.sleep;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
-import static org.openqa.selenium.Keys.TAB;
 
 abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   protected JQuery jQuery = new JQuery();
@@ -125,13 +124,11 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
     WebElement element = getDelegate();
     element.clear();
     element.sendKeys(text);
-    element.sendKeys(TAB);
   }
 
   protected void append(String text) {
     WebElement element = getDelegate();
     element.sendKeys(text);
-    element.sendKeys(TAB);
   }
 
   private Object should(Object proxy, Condition[] conditions) {
@@ -311,6 +308,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
   }
 
   protected WebElement find(Object arg, int index) {
+    // TODO Do not evaluate element immediately.
     if (index == 0) {
       return arg instanceof By ?
           getDelegate().findElement((By) arg) :
