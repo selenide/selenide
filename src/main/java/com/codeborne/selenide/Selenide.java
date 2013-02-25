@@ -279,6 +279,10 @@ public class Selenide {
     return getWebDriver().switchTo();
   }
 
+  public static WebElement getFocusedElement() {
+    return (WebElement) executeJavaScript("return document.activeElement");
+  }
+
   /**
    * Create a Page Object instance.
    * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)

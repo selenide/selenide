@@ -1,10 +1,13 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.*;
+import com.codeborne.selenide.impl.Describe;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
 
 import java.util.regex.Pattern;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Selenide.getFocusedElement;
 import static java.util.regex.Pattern.DOTALL;
 
 public abstract class Condition {
@@ -373,12 +376,15 @@ public abstract class Condition {
 
   public static final Condition focused = new Condition("focused", false) {
     @Override public boolean apply(WebElement webElement) {
-      return webElement.getAttribute("name").equals(getWebDriver().findElement(By.cssSelector(":focus")).getAttribute("name"));
+      WebElement focusedElement = getFocusedElement();
+      return focusedElement!= null && focusedElement.equals(webElement);
     }
 
     @Override public String actualValue(WebElement webElement) {
-      WebElement element = getWebDriver().findElement(By.cssSelector(":focus"));
-      return element == null? "element does not exist" : element.getAttribute("name");
+      WebElement focusedElement = getFocusedElement();
+      return focusedElement == null? "No focused focusedElement found " :
+          "Focused focusedElement: " + Describe.describe(focusedElement) +
+          ", current focusedElement: " + Describe.describe(webElement);
     }
   };
 
