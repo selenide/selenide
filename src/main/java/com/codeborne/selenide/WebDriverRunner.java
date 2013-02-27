@@ -134,6 +134,14 @@ public class WebDriverRunner {
     }
   }
 
+  public static String source() {
+    return getWebDriver().getPageSource();
+  }
+
+  public static String url() {
+    return getWebDriver().getCurrentUrl();
+  }
+
   public static String takeScreenShot(String fileName) {
     if (webdriver == null) {
       return null;

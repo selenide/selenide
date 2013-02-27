@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.ExtendedFieldDecorator;
+import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.ShouldableWebElementProxy;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
@@ -10,19 +11,42 @@ import org.openqa.selenium.support.PageFactory;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
 
 public class Selenide {
   public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
+  public static Navigator navigator = new Navigator();
 
   public static void open(String relativeOrAbsoluteUrl) {
-    Navigation.open(relativeOrAbsoluteUrl);
+    navigator.open(relativeOrAbsoluteUrl);
   }
 
   public static void open(URL absoluteUrl) {
-    Navigation.navigateToAbsoluteUrl(absoluteUrl);
+    navigator.open(absoluteUrl);
+  }
+
+  /**
+   * Reload current page
+   */
+  public static void refresh() {
+    navigator.open(url());
+  }
+
+  public static String title() {
+    return getWebDriver().getTitle();
+  }
+
+  /**
+   * Not recommended. Test should not sleep, but should wait for some condition instead.
+   * @param milliseconds Time to sleep in milliseconds
+   */
+  public static void sleep(long milliseconds) {
+    try {
+      Thread.sleep(milliseconds);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**

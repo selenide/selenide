@@ -1,39 +1,31 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.By;
-
 import java.net.URL;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.ie;
 
+/**
+ * @deprecated Use methods of class Selenide
+ */
+@Deprecated
 public class Navigation {
+  /**
+   * If you want to set "selenide.baseUrl" property programmatically, please use Configuration.baseUrl
+   */
+  @Deprecated
   public static String baseUrl = "http://localhost:8080";
 
   /**
-   * The main starting point in your tests.
-   * Open a browser window with given URL.
-   *
-   * If browser window was already opened before, it will be reused.
-   *
-   * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
-   *
-   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL. In this case, it's prepended by baseUrl
+   * @deprecated Use Selenide.open(relativeOrAbsoluteUrl)
    */
+  @Deprecated
   public static void open(String relativeOrAbsoluteUrl) {
-    if (relativeOrAbsoluteUrl.startsWith("http:") ||
-        relativeOrAbsoluteUrl.startsWith("https:") ||
-        relativeOrAbsoluteUrl.startsWith("file:")) {
-      navigateToAbsoluteUrl(relativeOrAbsoluteUrl);
-    } else {
-      navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl));
-    }
+    Selenide.open(relativeOrAbsoluteUrl);
   }
 
+  @Deprecated
   public static String absoluteUrl(String relativeUrl) {
-    return baseUrl + relativeUrl;
+    return Configuration.getBaseUrl() + relativeUrl;
   }
 
   /**
@@ -41,7 +33,7 @@ public class Navigation {
    */
   @Deprecated
   public static void navigateToAbsoluteUrl(URL url) {
-    navigateToAbsoluteUrl(url.toExternalForm());
+    Selenide.open(url);
   }
 
   /**
@@ -49,77 +41,58 @@ public class Navigation {
    */
   @Deprecated
   public static void navigateToAbsoluteUrl(String url) {
-    if (ie()) {
-      getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
-      $(By.tagName("body")).should(appear);
-      toBeSureThatPageIsNotCached();
-    }
-    else {
-      getWebDriver().navigate().to(url);
-      $(By.tagName("body")).should(appear);
-    }
-  }
-
-  private static void toBeSureThatPageIsNotCached() {
-    String currentUrl = getWebDriver().getCurrentUrl();
-    if (!currentUrl.contains("timestamp=")) {
-      navigateToAbsoluteUrl(currentUrl);
-    }
-  }
-
-  static String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    final String fullUrl;
-    if (url.contains("timestamp=")) {
-      fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    } else {
-      fullUrl = url.contains("?") ?
-          url + "&timestamp=" + unique :
-          url + "?timestamp=" + unique;
-    }
-    return fullUrl;
+    Selenide.open(url);
   }
 
   /**
-   * Assert that URL of current page is #baseUrl + #relativeUrl
-   * @param relativeUrl expected relative url like "/petclinic/user/login"
+   * @deprecated Do not check URLs as user does not
    */
+  @Deprecated
   public static void assertURL(String relativeUrl) {
-    String expectedUrl = baseUrl + relativeUrl;
+    String expectedUrl = Configuration.getBaseUrl() + relativeUrl;
     String actualUrl = getWebDriver().getCurrentUrl().replaceFirst("\\?.*$", "");
     if (!expectedUrl.equals(actualUrl)) {
       throw new AssertionError("Actual URL " + actualUrl + " does not match with expected " + expectedUrl);
     }
   }
 
+  /**
+   * @deprecated Use WebDriverRunner.source()
+   */
+  @Deprecated
   public static String source() {
     return getWebDriver().getPageSource();
   }
 
+  /**
+   * @deprecated Use Selenide.title()
+   */
+  @Deprecated
   public static String title() {
     return getWebDriver().getTitle();
   }
 
+  /**
+   * @deprecated Use WebDriverRunner.url()
+   */
+  @Deprecated
   public static String url() {
     return getWebDriver().getCurrentUrl();
   }
 
   /**
-   * Reload current page
+   * @deprecated Use Selenide.refresh()
    */
+  @Deprecated
   public static void refresh() {
-    navigateToAbsoluteUrl(url());
+    Selenide.refresh();
   }
 
   /**
-   * Not recommended. Test should not sleep, but should wait for some condition instead.
-   * @param milliseconds Time to sleep in milliseconds
+   * @deprecated Use Selenide.sleep()
    */
+  @Deprecated
   public static void sleep(long milliseconds) {
-    try {
-      Thread.sleep(milliseconds);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    Selenide.sleep(milliseconds);
   }
 }
