@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.DOM.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
@@ -29,14 +28,6 @@ public class SelectsTest {
   }
 
   @Test
-  public void userCanSelectOptionByValueOldWay() {
-    By select = By.xpath("//select[@name='domain']");
-    selectOption(select, "myrambler.ru");
-    assertEquals("myrambler.ru", getSelectedValue(select));
-    assertEquals("@myrambler.ru", getSelectedText(select));
-  }
-
-  @Test
   public void userCanSelectOptionByText() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOption("@мыло.ру");
@@ -44,13 +35,5 @@ public class SelectsTest {
     select.getSelectedOption().shouldBe(selected);
     assertEquals("мыло.ру", select.getSelectedValue());
     assertEquals("@мыло.ру", select.getSelectedText());
-  }
-
-  @Test
-  public void userCanSelectOptionByTextOldWay() {
-    By select = By.xpath("//select[@name='domain']");
-    selectOptionByText(select, "@мыло.ру");
-    assertEquals("мыло.ру", getSelectedValue(select));
-    assertEquals("@мыло.ру", getSelectedText(select));
   }
 }

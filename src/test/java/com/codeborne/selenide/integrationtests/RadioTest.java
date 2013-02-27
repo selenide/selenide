@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.DOM.getSelectedRadio;
-import static com.codeborne.selenide.DOM.selectRadio;
+import static com.codeborne.selenide.Selenide.getSelectedRadio;
+import static com.codeborne.selenide.Selenide.selectRadio;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;

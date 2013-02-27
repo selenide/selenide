@@ -20,8 +20,7 @@ Probably two the most noticeable methods are (inspired from jQuery):
 == How to start?
 Just put selenide.jar to your project and include the following methods:
 
-  include static com.codeborne.selenide.Navigation.*
-  include static com.codeborne.selenide.DOM.*
+  include static com.codeborne.selenide.Selenide.*
 
 Look for {Quick Start}[https://github.com/codeborne/selenide/wiki/Quick-Start] for details.
 

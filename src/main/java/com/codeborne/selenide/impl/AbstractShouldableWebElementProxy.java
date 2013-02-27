@@ -13,7 +13,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Navigation.sleep;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
