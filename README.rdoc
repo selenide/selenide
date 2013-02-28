@@ -73,9 +73,17 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
-=== 1.11 (Snapshot, release planned to February 2013)
-* Mark out-of-date methods and DOM class as deprecated. Going to drop them in Selenide 2.0
+=== 2.0 (Snapshot, release planned to March 2013)
+* Drop deprecated classes and methods (DOM, Navigation).
+=== 1.11 (Released 28.02.2013)
+* Mark classes DOM and Navigation as deprecated (going to drop them in Selenide 2.0). The point is that now user only needs to include one class Selenide.
 * Added support for PhantomJS driver
+* Suppress HtmlUnit useless warnings
+* Method $.setValue() triggers onchange event with standard JavaScript instead of jQuery.
+* Condition "empty" checks for both text and value.
+* Added condition "exactText".
+* Moved jquery-specific workarounds to a separate class JQuery
+* Added selector "by" as a synonym for "byAttribute"
 === 1.10 (Released 11.02.2013)
 * Excluded HtmlUnit dependencies. These have too large size, and not everyone uses them.
 * Added method $$().shouldHaveSize(n)
