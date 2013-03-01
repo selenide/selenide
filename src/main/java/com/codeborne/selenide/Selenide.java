@@ -159,7 +159,7 @@ public class Selenide {
 
   /**
    * Find all elements matching given criteria inside given parent element
-   * @see com.codeborne.selenide.DOM#$$(org.openqa.selenium.WebElement, String)
+   * @see com.codeborne.selenide.Selenide#$$(org.openqa.selenium.WebElement, String)
    */
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return new ElementsCollection(parent.findElements(seleniumSelector));
