@@ -7,7 +7,7 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Proxy;
 
-import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
+import static com.codeborne.selenide.Configuration.timeout;
 
 public class ElementLocatorProxy extends AbstractSelenideElementProxy {
   public static SelenideElement wrap(ElementLocator elementLocator) {
@@ -36,7 +36,7 @@ public class ElementLocatorProxy extends AbstractSelenideElementProxy {
         } catch (InterruptedException ignore) {
         }
       }
-    } while (System.currentTimeMillis() - startTime < defaultWaitingTimeout);
+    } while (System.currentTimeMillis() - startTime < timeout);
     throw exception;
   }
 

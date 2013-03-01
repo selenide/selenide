@@ -5,8 +5,10 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 public class LongRunningAjaxRequestTest {
   @Before
   public void openTestPage() {
-    defaultWaitingTimeout = 2500;
+    timeout = 2500;
     open(currentThread().getContextClassLoader().getResource("long_ajax_request.html"));
     $(byText("Run long request")).click();
     $(byText("Loading...")).should(exist);
@@ -39,7 +41,7 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void userCanWaitUntilConditionIsMet() {
-    defaultWaitingTimeout = 1000;
+    timeout = 1000;
     assertFalse($(byText("Result 2")).isDisplayed());
     $(byText("Result 2")).waitUntil(visible, 3000);
     assertTrue($(byText("Result 2")).isDisplayed());
@@ -47,7 +49,7 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void userCanWaitWhileConditionIsMet() {
-    defaultWaitingTimeout = 1000;
+    timeout = 1000;
     assertFalse($(byText("Result 2")).isDisplayed());
     $(byText("Result 2")).waitWhile(notPresent, 3000);
     assertTrue($(byText("Result 2")).isDisplayed());
@@ -100,8 +102,8 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void shouldNotExistWithinParentElement() {
-    $($(By.tagName("body")), "#non-existing-element").shouldNot(exist);
-    $($(By.tagName("body")), "#non-existing-element", 4).shouldNot(exist);
+    $($("body"), "#non-existing-element").shouldNot(exist);
+    $($("body"), "#non-existing-element", 4).shouldNot(exist);
   }
 
   @Test
@@ -114,7 +116,7 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void shouldNotBeVisibleWithinParentElement() {
-    $($(By.tagName("body")), "#non-existing-element").shouldNotBe(visible);
-    $($(By.tagName("body")), "#non-existing-element", 4).shouldNotBe(visible);
+    $($("body"), "#non-existing-element").shouldNotBe(visible);
+    $($("body"), "#non-existing-element", 4).shouldNotBe(visible);
   }
 }

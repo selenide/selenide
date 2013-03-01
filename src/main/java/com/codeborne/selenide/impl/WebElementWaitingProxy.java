@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
@@ -33,7 +33,7 @@ public class WebElementWaitingProxy extends AbstractSelenideElementProxy {
 
   @Override
   protected WebElement getDelegate() {
-    return waitUntil(exist, defaultWaitingTimeout);
+    return waitUntil(exist, timeout);
   }
 
   @Override

@@ -11,11 +11,11 @@ import org.openqa.selenium.support.PageFactory;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 
 public class Selenide {
-  public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
   public static Navigator navigator = new Navigator();
 
   public static void open(String relativeOrAbsoluteUrl) {
@@ -229,15 +229,6 @@ public class Selenide {
     return null;
   }
 
-  private static String getActualValue(WebElement element, Condition condition) {
-    try {
-      return condition.actualValue(element);
-    }
-    catch (WebDriverException e) {
-      return cleanupWebDriverExceptionMessage(e);
-    }
-  }
-
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
@@ -288,8 +279,8 @@ public class Selenide {
       long start = System.currentTimeMillis();
       while (getWebDriver().switchTo().alert() != null) {
         getWebDriver().switchTo().alert();
-        if (System.currentTimeMillis() - start > defaultWaitingTimeout) {
-          fail("Confirmation dialog has not disappeared in " + defaultWaitingTimeout + " milliseconds");
+        if (System.currentTimeMillis() - start > timeout) {
+          fail("Confirmation dialog has not disappeared in " + timeout + " milliseconds");
         }
         sleep(100);
       }

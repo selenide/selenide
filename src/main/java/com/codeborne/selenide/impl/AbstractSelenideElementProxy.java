@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
@@ -139,14 +140,14 @@ abstract class AbstractSelenideElementProxy implements InvocationHandler {
 
   private Object should(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(condition, defaultWaitingTimeout);
+      waitUntil(condition, timeout);
     }
     return proxy;
   }
 
   private Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitWhile(condition, defaultWaitingTimeout);
+      waitWhile(condition, timeout);
     }
     return proxy;
   }
