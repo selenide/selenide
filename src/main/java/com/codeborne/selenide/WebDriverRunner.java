@@ -20,60 +20,31 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.codeborne.selenide.Configuration.*;
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
-  public static final String HTMLUNIT = "htmlunit";
   public static final String FIREFOX = "firefox";
+
+  /**
+   * To use OperaDriver, you need to include extra dependency to your project:
+   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.31.0" conf="test->default"/>
+   */
+  public static final String HTMLUNIT = "htmlunit";
+
+  /**
+   * To use OperaDriver, you need to include extra dependency to your project:
+   * <dependency org="com.github.detro.ghostdriver" name="phantomjsdriver" rev="1.+" conf="test->default"/>
+   */
   public static final String PHANTOMJS = "phantomjs";
+
   /**
    * To use OperaDriver, you need to include extra dependency to your project:
    * <dependency org="com.opera" name="operadriver" rev="0.18" conf="test->default"/>
    */
   public static final String OPERA = "opera";
-
-  /**
-   * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
-   * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".
-   * <p/>
-   * Default value: false.
-   */
-  public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
-
-  /**
-   * Which browser to use.
-   * Can be configured either programmatically or by system property "-Dbrowser=ie".
-   * Supported values: "chrome", "firefox", "ie", "htmlunit"
-   * <p/>
-   * Default value: "firefox"
-   */
-  public static String browser = System.getProperty("browser", FIREFOX);
-
-  /**
-   * URL of remote web driver (in case of using Selenium Grid).
-   * Can be configured either programmatically or by system property "-Dremote=true".
-   *
-   * Default value: null (Grid is not used).
-   */
-  public static String remote = System.getProperty("remote");
-
-  /**
-   * The browser window is maximized when started.
-   * Can be configured either programmatically or by system property "-Dselenide.start-maximized=true".
-   *
-   * Default value: true
-   */
-  public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
-
-  /**
-   * Folder to store screenshots to.
-   * Can be configured either programmatically or by system property "-Dselenide.reports=true".
-   *
-   * Default value: "build/reports/tests" (this is default for Gradle projects)
-   */
-  public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
 
   private static WebDriver webdriver;
 
@@ -269,6 +240,7 @@ public class WebDriverRunner {
         webDriverExceptionInfo
             .substring(0, webDriverExceptionInfo.indexOf('\n'))
             .replaceFirst("(.*)\\(WARNING: The server did not provide any stacktrace.*", "$1")
+            .replaceFirst("org\\.openqa\\.selenium\\.(.*)", "$1")
             .trim();
   }
 }

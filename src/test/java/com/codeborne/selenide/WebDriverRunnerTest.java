@@ -16,13 +16,13 @@ public class WebDriverRunnerTest {
   @Test
   public void allowsToSpecifyCustomWebDriverConfiguration() {
     WebDriverRunner.closeWebDriver();
-    WebDriverRunner.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
+    Configuration.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
 
     try {
       assertSame(driver, WebDriverRunner.getWebDriver());
     } finally {
       WebDriverRunner.closeWebDriver();
-      WebDriverRunner.browser = System.getProperty("browser", FIREFOX);
+      Configuration.browser = System.getProperty("browser", FIREFOX);
     }
   }
 
@@ -36,7 +36,7 @@ public class WebDriverRunnerTest {
         "Session ID: 610138404f5c180a4f3153785e66c528\n" +
         "Driver info: org.openqa.selenium.chrome.ChromeDriver\n" +
         "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, acceptSslCerts=false, javascriptEnabled=true, browserName=chrome, rotatable=false, locationContextEnabled=false, version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, takesScreenshot=true}]";
-    String expectedException = "org.openqa.selenium.NoSuchElementException: The element could not be found";
+    String expectedException = "NoSuchElementException: The element could not be found";
     assertEquals(expectedException, cleanupWebDriverExceptionMessage(webdriverException));
   }
 
