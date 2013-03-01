@@ -1,11 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.By;
 
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
@@ -36,7 +36,7 @@ public class Navigator {
   }
 
   protected String absoluteUrl(String relativeUrl) {
-    return Configuration.getBaseUrl() + relativeUrl;
+    return baseUrl + relativeUrl;
   }
 
   protected void navigateToAbsoluteUrl(String url) {
