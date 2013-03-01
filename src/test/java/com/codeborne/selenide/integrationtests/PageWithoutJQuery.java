@@ -2,7 +2,6 @@ package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.JQuery;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.text;
@@ -24,9 +23,7 @@ public class PageWithoutJQuery {
     assertFalse(jQuery.isJQueryAvailable());
   }
 
-  @Test @Ignore // TODO Trigger onchange event without jQuery as described here:
-  // - http://stackoverflow.com/questions/136617/how-do-i-programatically-force-an-onchange-event-on-an-input
-  // - http://stackoverflow.com/questions/2856513/trigger-onchange-event-manually
+  @Test
   public void setValueTriggersOnChangeEvent() {
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("john"));
