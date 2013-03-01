@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ShouldableWebElement;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,11 +46,12 @@ public class ExtendedFieldDecoratorTest {
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
     assertTrue(elements.get(0) instanceof SelenideElement);
+    assertTrue(elements.get(1) instanceof SelenideElement);
   }
 
   @Test
   public void decoratesVanillaWebElements() throws Exception {
-    assertFalse(fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv")) instanceof ShouldableWebElement);
+    assertFalse(fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv")) instanceof SelenideElement);
     assertTrue(fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv")) instanceof WebElement);
   }
 
@@ -64,7 +63,7 @@ public class ExtendedFieldDecoratorTest {
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
     assertTrue(elements.get(0) instanceof WebElement);
-    assertFalse(elements.get(0) instanceof ShouldableWebElement);
+    assertFalse(elements.get(0) instanceof SelenideElement);
   }
 
   @Test

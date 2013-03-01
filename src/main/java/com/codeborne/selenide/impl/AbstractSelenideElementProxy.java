@@ -16,10 +16,10 @@ import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.WebDriverRunner.fail;
-import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
+import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
-abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
+abstract class AbstractSelenideElementProxy implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
 
@@ -60,7 +60,7 @@ abstract class AbstractShouldableWebElementProxy implements InvocationHandler {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
     else if ("find".equals(method.getName())) {
-      return ShouldableWebElementProxy.wrap(args.length == 1 ? find(args[0], 0) : find(args[0], (Integer) args[1]));
+      return WebElementProxy.wrap(args.length == 1 ? find(args[0], 0) : find(args[0], (Integer) args[1]));
     }
     else if ("toString".equals(method.getName())) {
       return describe();

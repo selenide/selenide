@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ShouldableWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -30,7 +29,7 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
     } else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
     } else if (isDecoratableList(field, SelenideElement.class)) {
-      return ShouldableWebElementListProxy.wrap(factory.createLocator(field));
+      return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
     return super.decorate(loader, field);
   }
@@ -39,8 +38,8 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
     try {
       List<ElementsContainer> result = new ArrayList<ElementsContainer>();
       Class<?> listType = getListGenericType(field);
-      List<ShouldableWebElement> selfList = ShouldableWebElementListProxy.wrap(factory.createLocator(field));
-      for (ShouldableWebElement element : selfList) {
+      List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
+      for (SelenideElement element : selfList) {
         result.add(initElementsContainer(listType, element));
       }
       return result;  //To change body of created methods use File | Settings | File Templates.
@@ -51,15 +50,14 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer createElementsContainer(Field field) {
     try {
-      ShouldableWebElement self = ElementLocatorProxy.wrap(factory.createLocator(field));
-      ElementsContainer result = initElementsContainer(field.getType(), self);
-      return result;
+      SelenideElement self = ElementLocatorProxy.wrap(factory.createLocator(field));
+      return initElementsContainer(field.getType(), self);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
-  private ElementsContainer initElementsContainer(Class<?> type, ShouldableWebElement self) throws InstantiationException, IllegalAccessException {
+  private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self) throws InstantiationException, IllegalAccessException {
     ElementsContainer result = (ElementsContainer) type.newInstance();
     PageFactory.initElements(new ExtendedFieldDecorator(self), result);
     result.setSelf(self);
@@ -73,12 +71,8 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
     Class<?> listType = getListGenericType(field);
 
-    if (listType == null || !type.isAssignableFrom(listType)) {
-      return false;
-    }
-
-    return field.getAnnotation(FindBy.class) != null ||
-        field.getAnnotation(FindBys.class) != null;
+    return listType != null && type.isAssignableFrom(listType)
+        && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
   }
 
   private Class<?> getListGenericType(Field field) {

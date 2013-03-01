@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.ShouldableWebElement;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
@@ -11,27 +11,27 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShouldableWebElementListProxy implements InvocationHandler {
+public class SelenideElementListProxy implements InvocationHandler {
 
   private ElementLocator locator;
 
   @SuppressWarnings("unchecked")
-  public static List<ShouldableWebElement> wrap(ElementLocator locator) {
-    InvocationHandler handler = new ShouldableWebElementListProxy(locator);
+  public static List<SelenideElement> wrap(ElementLocator locator) {
+    InvocationHandler handler = new SelenideElementListProxy(locator);
 
-    return (List<ShouldableWebElement>) Proxy.newProxyInstance(
-        ShouldableWebElementListProxy.class.getClassLoader(), new Class[]{List.class}, handler);
+    return (List<SelenideElement>) Proxy.newProxyInstance(
+        SelenideElementListProxy.class.getClassLoader(), new Class[]{List.class}, handler);
   }
 
-  private ShouldableWebElementListProxy(ElementLocator locator) {
+  private SelenideElementListProxy(ElementLocator locator) {
     this.locator = locator;
   }
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    List<ShouldableWebElement> elements = new ArrayList<ShouldableWebElement>();
+    List<SelenideElement> elements = new ArrayList<SelenideElement>();
     for (WebElement webElement : locator.findElements()) {
-      elements.add(ShouldableWebElementProxy.wrap(webElement));
+      elements.add(WebElementProxy.wrap(webElement));
     }
     try {
       return method.invoke(elements, args);

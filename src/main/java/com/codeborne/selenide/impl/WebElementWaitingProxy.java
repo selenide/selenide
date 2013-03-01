@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.ShouldableWebElement;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -13,11 +13,11 @@ import static com.codeborne.selenide.Selenide.defaultWaitingTimeout;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
-public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
-  public static ShouldableWebElement wrap(WebElement parent, By criteria, int index) {
-    return (ShouldableWebElement) Proxy.newProxyInstance(
+public class WebElementWaitingProxy extends AbstractSelenideElementProxy {
+  public static SelenideElement wrap(WebElement parent, By criteria, int index) {
+    return (SelenideElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
-        new Class<?>[]{ShouldableWebElement.class},
+        new Class<?>[]{SelenideElement.class},
         new WebElementWaitingProxy(parent, criteria, index));
   }
 
@@ -37,7 +37,7 @@ public class WebElementWaitingProxy extends AbstractShouldableWebElementProxy {
   }
 
   @Override
-  protected ShouldableWebElement find(Object arg, int index) {
+  protected SelenideElement find(Object arg, int index) {
     return arg instanceof By ?
         wrap(getDelegate(), (By) arg, index) :
         wrap(getDelegate(), By.cssSelector((String) arg), index);

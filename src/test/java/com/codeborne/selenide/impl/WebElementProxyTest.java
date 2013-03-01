@@ -7,11 +7,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ShouldableWebElementProxyTest {
+public class WebElementProxyTest {
   @Test
   public void testToString() {
     WebElement element = mock(WebElement.class);
     when(element.toString()).thenReturn("webElement");
-    assertEquals("ShouldableWebElementProxy{webElement}", new ShouldableWebElementProxy(element).toString());
+    assertEquals("WebElementProxy{webElement}", new WebElementProxy(element).toString());
   }
 }

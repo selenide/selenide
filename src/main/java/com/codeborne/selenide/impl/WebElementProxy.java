@@ -1,22 +1,22 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.ShouldableWebElement;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
 
-public class ShouldableWebElementProxy extends AbstractShouldableWebElementProxy {
-  public static ShouldableWebElement wrap(WebElement element) {
-    return element instanceof ShouldableWebElement ?
-        (ShouldableWebElement) element :
-        (ShouldableWebElement) Proxy.newProxyInstance(
-            element.getClass().getClassLoader(), new Class<?>[]{ShouldableWebElement.class}, new ShouldableWebElementProxy(element));
+public class WebElementProxy extends AbstractSelenideElementProxy {
+  public static SelenideElement wrap(WebElement element) {
+    return element instanceof SelenideElement ?
+        (SelenideElement) element :
+        (SelenideElement) Proxy.newProxyInstance(
+            element.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class}, new WebElementProxy(element));
   }
 
   private final WebElement delegate;
 
-  ShouldableWebElementProxy(WebElement delegate) {
+  WebElementProxy(WebElement delegate) {
     this.delegate = delegate;
   }
 

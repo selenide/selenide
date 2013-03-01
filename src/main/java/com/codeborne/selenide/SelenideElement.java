@@ -21,12 +21,12 @@ public interface SelenideElement extends WebElement {
    *
    * @param text Any text to enter into the text field.
    */
-  ShouldableWebElement setValue(String text);
+  SelenideElement setValue(String text);
 
   /**
    * Same as #type(java.lang.String)
    */
-  ShouldableWebElement val(String text);
+  SelenideElement val(String text);
 
   /**
    * Append given test to the text field
@@ -37,7 +37,7 @@ public interface SelenideElement extends WebElement {
    *
    * @param text Any text to append into the text field.
    */
-  ShouldableWebElement append(String text);
+  SelenideElement append(String text);
 
   /**
    * Press ENTER. Useful for input field and textareas: <pre>
@@ -47,7 +47,7 @@ public interface SelenideElement extends WebElement {
    * This is the same as <pre>
    *  WebElement.sendKeys(Keys.ENTER)</pre>
    */
-  ShouldableWebElement pressEnter();
+  SelenideElement pressEnter();
 
   String text();
 
@@ -66,16 +66,16 @@ public interface SelenideElement extends WebElement {
   @Override
   boolean isDisplayed();
 
-  ShouldableWebElement should(Condition... condition);
-  ShouldableWebElement shouldHave(Condition... condition);
-  ShouldableWebElement shouldBe(Condition... condition);
+  SelenideElement should(Condition... condition);
+  SelenideElement shouldHave(Condition... condition);
+  SelenideElement shouldBe(Condition... condition);
 
-  ShouldableWebElement shouldNot(Condition... condition);
-  ShouldableWebElement shouldNotHave(Condition... condition);
-  ShouldableWebElement shouldNotBe(Condition... condition);
+  SelenideElement shouldNot(Condition... condition);
+  SelenideElement shouldNotHave(Condition... condition);
+  SelenideElement shouldNotBe(Condition... condition);
 
-  ShouldableWebElement waitUntil(Condition condition, long timeoutMilliseconds);
-  ShouldableWebElement waitWhile(Condition condition, long timeoutMilliseconds);
+  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
+  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
 
   /**
    * Displays WebElement in human-readable format
@@ -83,10 +83,10 @@ public interface SelenideElement extends WebElement {
    */
   @Override String toString();
 
-  ShouldableWebElement find(String cssSelector);
-  ShouldableWebElement find(String cssSelector, int index);
-  ShouldableWebElement find(By selector);
-  ShouldableWebElement find(By selector, int index);
+  SelenideElement find(String cssSelector);
+  SelenideElement find(String cssSelector, int index);
+  SelenideElement find(By selector);
+  SelenideElement find(By selector, int index);
 
   File uploadFromClasspath(String fileName);
 

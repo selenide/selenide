@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.ExtendedFieldDecorator;
 import com.codeborne.selenide.impl.Navigator;
-import com.codeborne.selenide.impl.ShouldableWebElementProxy;
+import com.codeborne.selenide.impl.WebElementProxy;
 import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -12,7 +12,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.ShouldableWebElementProxy.wrap;
+import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 
 public class Selenide {
   public static long defaultWaitingTimeout = Long.parseLong(System.getProperty("timeout", "4000"));
@@ -50,38 +50,38 @@ public class Selenide {
   }
 
   /**
-   * Wrap standard Selenium WebElement into ShouldableWebElement to use additional methods like shouldHave(), selectOption() etc.
+   * Wrap standard Selenium WebElement into SelenideElement to use additional methods like shouldHave(), selectOption() etc.
    * @param webElement standard Selenium WebElement
-   * @return given WebElement wrapped into ShouldableWebElement
+   * @return given WebElement wrapped into SelenideElement
    */
-  public static ShouldableWebElement $(WebElement webElement) {
-    return ShouldableWebElementProxy.wrap(webElement);
+  public static SelenideElement $(WebElement webElement) {
+    return WebElementProxy.wrap(webElement);
   }
 
   /**
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement $(String cssSelector) {
+  public static SelenideElement $(String cssSelector) {
     return getElement(By.cssSelector(cssSelector));
   }
 
   /**
    * Find the first element matching given CSS selector
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement $(By seleniumSelector) {
+  public static SelenideElement $(By seleniumSelector) {
     return getElement(seleniumSelector);
   }
 
   /**
    * @see #getElement(org.openqa.selenium.By, int)
    */
-  public static ShouldableWebElement $(By seleniumSelector, int index) {
+  public static SelenideElement $(By seleniumSelector, int index) {
     return getElement(seleniumSelector, index);
   }
 
@@ -89,10 +89,10 @@ public class Selenide {
    * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement $(WebElement parent, String cssSelector) {
+  public static SelenideElement $(WebElement parent, String cssSelector) {
     return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), 0);
   }
 
@@ -100,10 +100,10 @@ public class Selenide {
    * Find the Nth element matching given criteria
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement $(String cssSelector, int index) {
+  public static SelenideElement $(String cssSelector, int index) {
     return WebElementWaitingProxy.wrap(null, By.cssSelector(cssSelector), index);
   }
 
@@ -112,14 +112,14 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement $(WebElement parent, String cssSelector, int index) {
+  public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), index);
   }
 
-  protected static ShouldableWebElement $(WebElement parent, By selector, int index) {
+  protected static SelenideElement $(WebElement parent, By selector, int index) {
     return WebElementWaitingProxy.wrap(parent, selector, index);
   }
 
@@ -168,10 +168,10 @@ public class Selenide {
   /**
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement getElement(By criteria) {
+  public static SelenideElement getElement(By criteria) {
     return WebElementWaitingProxy.wrap(null, criteria, 0);
   }
 
@@ -179,10 +179,10 @@ public class Selenide {
    * Find the Nth element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
-   * @return ShouldableWebElement
+   * @return SelenideElement
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
-  public static ShouldableWebElement getElement(By criteria, int index) {
+  public static SelenideElement getElement(By criteria, int index) {
     return WebElementWaitingProxy.wrap(null, criteria, index);
   }
 
@@ -209,7 +209,7 @@ public class Selenide {
    * @param value value to select (should match an attribute "value")
    * @return the selected radio field
    */
-  public static ShouldableWebElement selectRadio(By radioField, String value) {
+  public static SelenideElement selectRadio(By radioField, String value) {
     $(radioField).shouldBe(enabled);
     for (WebElement radio : $$(radioField)) {
       if (value.equals(radio.getAttribute("value"))) {
@@ -220,7 +220,7 @@ public class Selenide {
     throw new NoSuchElementException(radioField + " and value " + value);
   }
 
-  public static ShouldableWebElement getSelectedRadio(By radioField) {
+  public static SelenideElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField)) {
       if (radio.getAttribute("checked") != null) {
         return wrap(radio);
