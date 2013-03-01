@@ -146,12 +146,10 @@ public class SelenideMethods {
   @Test
   public void userCanSelectCheckbox() {
     $(By.name("rememberMe")).shouldNotBe(selected);
-    $(By.name("rememberMe")).shouldNotBe(checked);
 
     $(By.name("rememberMe")).click();
 
     $(By.name("rememberMe")).shouldBe(selected);
-    $(By.name("rememberMe")).shouldBe(checked);
     assertEquals("<input name=rememberMe value=on type=checkbox selected:true></input>",
         $(By.name("rememberMe")).toString());
   }
