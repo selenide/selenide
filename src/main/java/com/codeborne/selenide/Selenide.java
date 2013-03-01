@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
@@ -282,7 +283,7 @@ public class Selenide {
         if (System.currentTimeMillis() - start > timeout) {
           fail("Confirmation dialog has not disappeared in " + timeout + " milliseconds");
         }
-        sleep(100);
+        sleep(pollingInterval);
       }
     }
     catch (NoAlertPresentException ignore) {

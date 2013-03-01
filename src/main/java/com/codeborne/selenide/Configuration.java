@@ -7,6 +7,8 @@ public class Configuration {
 
   public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
+  public static long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
+
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
    * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".

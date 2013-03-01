@@ -7,6 +7,7 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Proxy;
 
+import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 
 public class ElementLocatorProxy extends AbstractSelenideElementProxy {
@@ -32,7 +33,7 @@ public class ElementLocatorProxy extends AbstractSelenideElementProxy {
       } catch (NoSuchElementException e) {
         exception = e;
         try {
-          Thread.sleep(100);
+          Thread.sleep(pollingInterval);
         } catch (InterruptedException ignore) {
         }
       }

@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
@@ -254,7 +255,7 @@ abstract class AbstractSelenideElementProxy implements InvocationHandler {
       else if (condition.applyNull()) {
         return null;
       }
-      sleep(100);
+      sleep(pollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
@@ -282,7 +283,7 @@ abstract class AbstractSelenideElementProxy implements InvocationHandler {
       else if (!condition.applyNull()) {
         return;
       }
-      sleep(100);
+      sleep(pollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
