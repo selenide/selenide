@@ -7,12 +7,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
@@ -160,5 +158,10 @@ public class SelenideMethods {
     $(byText("Dilan")).shouldHave(cssClass("lastname"));
     $(byText("25")).shouldHave(cssClass("age"));
     $(byText("First name")).shouldNotHave(cssClass("anything"));
+  }
+
+  @Test
+  public void userCanGetPageTitle() {
+    assertEquals("long ajax request", title());
   }
 }
