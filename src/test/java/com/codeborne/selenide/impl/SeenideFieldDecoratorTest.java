@@ -17,15 +17,15 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class ExtendedFieldDecoratorTest {
+public class SeenideFieldDecoratorTest {
 
   TestPage page = new TestPage();
   WebDriver webDriver = mock(WebDriver.class);
-  ExtendedFieldDecorator fieldDecorator = new ExtendedFieldDecorator(webDriver);
+  SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(webDriver);
 
   @Test
   public void usesDefaultElementLocatorFactory() throws Exception {
-    ExtendedFieldDecorator fieldDecorator = new ExtendedFieldDecorator(mock(WebDriver.class));
+    SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(mock(WebDriver.class));
     assertTrue(fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType().isAssignableFrom(DefaultElementLocatorFactory.class));
   }
 

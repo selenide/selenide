@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
 
-public class WebElementProxy extends AbstractSelenideElementProxy {
+public class WebElementProxy extends AbstractSelenideElement {
   public static SelenideElement wrap(WebElement element) {
     return element instanceof SelenideElement ?
         (SelenideElement) element :

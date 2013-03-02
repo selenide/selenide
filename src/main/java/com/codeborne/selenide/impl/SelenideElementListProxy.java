@@ -13,8 +13,6 @@ import java.util.List;
 
 public class SelenideElementListProxy implements InvocationHandler {
 
-  private ElementLocator locator;
-
   @SuppressWarnings("unchecked")
   public static List<SelenideElement> wrap(ElementLocator locator) {
     InvocationHandler handler = new SelenideElementListProxy(locator);
@@ -22,6 +20,8 @@ public class SelenideElementListProxy implements InvocationHandler {
     return (List<SelenideElement>) Proxy.newProxyInstance(
         SelenideElementListProxy.class.getClassLoader(), new Class[]{List.class}, handler);
   }
+
+  private final ElementLocator locator;
 
   private SelenideElementListProxy(ElementLocator locator) {
     this.locator = locator;
@@ -36,7 +36,6 @@ public class SelenideElementListProxy implements InvocationHandler {
     try {
       return method.invoke(elements, args);
     } catch (InvocationTargetException e) {
-      // Unwrap the underlying exception
       throw e.getCause();
     }
   }

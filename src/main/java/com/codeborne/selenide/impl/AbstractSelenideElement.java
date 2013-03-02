@@ -21,7 +21,7 @@ import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
-abstract class AbstractSelenideElementProxy implements InvocationHandler {
+abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
 

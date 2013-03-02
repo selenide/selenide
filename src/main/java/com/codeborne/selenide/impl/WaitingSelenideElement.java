@@ -13,19 +13,19 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
-public class WebElementWaitingProxy extends AbstractSelenideElementProxy {
+public class WaitingSelenideElement extends AbstractSelenideElement {
   public static SelenideElement wrap(WebElement parent, By criteria, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
         new Class<?>[]{SelenideElement.class},
-        new WebElementWaitingProxy(parent, criteria, index));
+        new WaitingSelenideElement(parent, criteria, index));
   }
 
   private final WebElement parent;
   private final By criteria;
   private final int index;
 
-  WebElementWaitingProxy(WebElement parent, By criteria, int index) {
+  WaitingSelenideElement(WebElement parent, By criteria, int index) {
     this.parent = parent;
     this.criteria = criteria;
     this.index = index;

@@ -15,8 +15,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtendedFieldDecorator extends DefaultFieldDecorator {
-  public ExtendedFieldDecorator(SearchContext searchContext) {
+public class SelenideFieldDecorator extends DefaultFieldDecorator {
+  public SelenideFieldDecorator(SearchContext searchContext) {
     super(new DefaultElementLocatorFactory(searchContext));
   }
 
@@ -59,7 +59,7 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self) throws InstantiationException, IllegalAccessException {
     ElementsContainer result = (ElementsContainer) type.newInstance();
-    PageFactory.initElements(new ExtendedFieldDecorator(self), result);
+    PageFactory.initElements(new SelenideFieldDecorator(self), result);
     result.setSelf(self);
     return result;
   }

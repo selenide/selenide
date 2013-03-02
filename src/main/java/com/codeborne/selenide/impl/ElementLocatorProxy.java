@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 
-public class ElementLocatorProxy extends AbstractSelenideElementProxy {
+public class ElementLocatorProxy extends AbstractSelenideElement {
   public static SelenideElement wrap(ElementLocator elementLocator) {
     return (SelenideElement) Proxy.newProxyInstance(
         elementLocator.getClass().getClassLoader(),

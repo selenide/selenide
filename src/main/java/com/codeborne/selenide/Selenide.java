@@ -1,9 +1,9 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.ExtendedFieldDecorator;
+import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.Navigator;
+import com.codeborne.selenide.impl.WaitingSelenideElement;
 import com.codeborne.selenide.impl.WebElementProxy;
-import com.codeborne.selenide.impl.WebElementWaitingProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.support.PageFactory;
@@ -94,7 +94,7 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), 0);
+    return WaitingSelenideElement.wrap(parent, By.cssSelector(cssSelector), 0);
   }
 
   /**
@@ -105,7 +105,7 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return WebElementWaitingProxy.wrap(null, By.cssSelector(cssSelector), index);
+    return WaitingSelenideElement.wrap(null, By.cssSelector(cssSelector), index);
   }
 
   /**
@@ -117,11 +117,11 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return WebElementWaitingProxy.wrap(parent, By.cssSelector(cssSelector), index);
+    return WaitingSelenideElement.wrap(parent, By.cssSelector(cssSelector), index);
   }
 
   protected static SelenideElement $(WebElement parent, By selector, int index) {
-    return WebElementWaitingProxy.wrap(parent, selector, index);
+    return WaitingSelenideElement.wrap(parent, selector, index);
   }
 
   /**
@@ -173,7 +173,7 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria) {
-    return WebElementWaitingProxy.wrap(null, criteria, 0);
+    return WaitingSelenideElement.wrap(null, criteria, 0);
   }
 
   /**
@@ -184,7 +184,7 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria, int index) {
-    return WebElementWaitingProxy.wrap(null, criteria, index);
+    return WaitingSelenideElement.wrap(null, criteria, index);
   }
 
   /**
@@ -315,7 +315,7 @@ public class Selenide {
    * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    PageFactory.initElements(new ExtendedFieldDecorator(getWebDriver()), pageObject);
+    PageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
     return pageObject;
   }
 }
