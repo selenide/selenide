@@ -305,7 +305,7 @@ abstract class AbstractSelenideElementProxy implements InvocationHandler {
   private String getActualValue(Condition condition) {
     try {
       WebElement element = getActualDelegate();
-      return condition.actualValue(element);
+      return element == null? "does not exist" : condition.actualValue(element);
     }
     catch (WebDriverException e) {
       return cleanupWebDriverExceptionMessage(e);

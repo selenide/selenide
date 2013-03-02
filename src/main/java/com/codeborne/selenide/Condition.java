@@ -14,11 +14,11 @@ public abstract class Condition {
   public static final Condition visible = new Condition("visible", false) {
     @Override
     public boolean apply(WebElement element) {
-      return element != null && element.isDisplayed();
+      return element.isDisplayed();
     }
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exist" : element.isDisplayed() ? "visible" : "hidden";
+      return element.isDisplayed() ? "visible" : "hidden";
     }
   };
 
@@ -30,7 +30,7 @@ public abstract class Condition {
 
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exist" : "exists";
+      return "exists";
     }
   };
 
@@ -39,12 +39,12 @@ public abstract class Condition {
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
     public boolean apply(WebElement element) {
-      return element == null;
+      return false;
     }
 
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exist" : "exists";
+      return "exists";
     }
   };
 
@@ -55,14 +55,14 @@ public abstract class Condition {
     @Override
     public boolean apply(WebElement element) {
       try {
-        return element == null || !element.isDisplayed();
+        return !element.isDisplayed();
       } catch (StaleElementReferenceException elementHasDisappeared) {
         return true;
       }
     }
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exists" : element.isDisplayed() ? "visible" : "hidden";
+      return element.isDisplayed() ? "visible" : "hidden";
     }
   };
 
@@ -117,11 +117,11 @@ public abstract class Condition {
     return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && element.getAttribute(attributeName) != null;
+        return element.getAttribute(attributeName) != null;
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getAttribute(attributeName);
+        return element.getAttribute(attributeName);
       }
       @Override
       public String toString() {
@@ -139,11 +139,11 @@ public abstract class Condition {
     return new Condition("hasAttribute", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && expectedAttributeValue.equals(getAttributeValue(element, attributeName));
+        return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getAttribute(attributeName);
+        return element.getAttribute(attributeName);
       }
       @Override
       public String toString() {
@@ -215,11 +215,11 @@ public abstract class Condition {
     return new Condition("match", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && matches(element.getText(), regex);
+        return matches(element.getText(), regex);
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getText();
+        return element.getText();
       }
       @Override
       public String toString() {
@@ -258,11 +258,11 @@ public abstract class Condition {
     return new Condition("text", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && element.getText().contains(text);
+        return element.getText().contains(text);
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getText();
+        return element.getText();
       }
       @Override
       public String toString() {
@@ -279,11 +279,11 @@ public abstract class Condition {
     return new Condition("exactText", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && text.equals(element.getText());
+        return text.equals(element.getText());
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : element.getText();
+        return element.getText();
       }
       @Override
       public String toString() {
@@ -306,7 +306,7 @@ public abstract class Condition {
     @Override
     public boolean apply(WebElement element) {
       try {
-        return element != null && element.getText().length() > 0;
+        return element.getText().length() > 0;
       }
       catch (NoSuchElementException e) {
         return false;
@@ -314,7 +314,7 @@ public abstract class Condition {
     }
     @Override
     public String actualValue(WebElement element) {
-      return element == null? "does not exist" : element.getText();
+      return element.getText();
     }
     @Override
     public String toString() {
@@ -324,7 +324,7 @@ public abstract class Condition {
 
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
-    return classes == null ? false : contains(classes.split(" "), cssClass);
+    return classes != null && contains(classes.split(" "), cssClass);
   }
 
   private static <T> boolean contains(T[] objects, T object) {
@@ -344,11 +344,11 @@ public abstract class Condition {
     return new Condition("hasClass", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && hasClass(element, cssClass);
+        return hasClass(element, cssClass);
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : "class=" + element.getAttribute("class");
+        return "class=" + element.getAttribute("class");
       }
       @Override
       public String toString() {
@@ -361,15 +361,15 @@ public abstract class Condition {
     return new Condition("hasNotClass", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element != null && !hasClass(element, cssClass);
+        return !hasClass(element, cssClass);
       }
       @Override
       public String actualValue(WebElement element) {
-        return element == null? "does not exist" : "class=" + element.getAttribute("class");
+        return "class=" + element.getAttribute("class");
       }
       @Override
       public String toString() {
-        return "loose class '" + cssClass + "'";
+        return "lose class '" + cssClass + "'";
       }
     };
   }
@@ -390,31 +390,31 @@ public abstract class Condition {
 
   public static final Condition enabled = new Condition("enabled", false) {
     @Override public boolean apply(WebElement element) {
-      return element != null && element.isEnabled();
+      return element.isEnabled();
     }
 
     @Override public String actualValue(WebElement element) {
-      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
+      return element.isEnabled() ? "enabled" : "disabled";
     }
   };
 
   public static final Condition disabled = new Condition("disabled", false) {
     @Override public boolean apply(WebElement element) {
-      return element != null && !element.isEnabled();
+      return !element.isEnabled();
     }
 
     @Override public String actualValue(WebElement element) {
-      return element == null? "does not exist" : element.isEnabled() ? "enabled" : "disabled";
+      return element.isEnabled() ? "enabled" : "disabled";
     }
   };
 
   public static final Condition selected = new Condition("selected", false) {
     @Override public boolean apply(WebElement element) {
-      return element != null && element.isSelected();
+      return element.isSelected();
     }
 
     @Override public String actualValue(WebElement element) {
-      return element == null? "does not exist" : String.valueOf(element.isSelected());
+      return String.valueOf(element.isSelected());
     }
   };
 
