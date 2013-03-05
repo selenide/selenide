@@ -73,6 +73,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.1 (Snapshot)
+* Changed license from GPL 1.0 to LGPL 3.0
+* Added support for Selenium FluentWait API
 === 2.0 (Released 3.03.2013)
 * Drop deprecated classes and methods (DOM, Navigation).
 * Updated to selenium-java:2.31.0
