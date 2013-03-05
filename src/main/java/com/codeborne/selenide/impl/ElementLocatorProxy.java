@@ -35,6 +35,7 @@ public class ElementLocatorProxy extends AbstractSelenideElement {
         try {
           Thread.sleep(pollingInterval);
         } catch (InterruptedException ignore) {
+          Thread.currentThread().interrupt();
         }
       }
     } while (System.currentTimeMillis() - startTime < timeout);

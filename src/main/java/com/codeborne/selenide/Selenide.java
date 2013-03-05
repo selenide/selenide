@@ -1,12 +1,13 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.Navigator;
+import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.WaitingSelenideElement;
 import com.codeborne.selenide.impl.WebElementProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
 
@@ -15,6 +16,7 @@ import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class Selenide {
   public static Navigator navigator = new Navigator();
@@ -46,6 +48,7 @@ public class Selenide {
     try {
       Thread.sleep(milliseconds);
     } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
   }
@@ -317,5 +320,11 @@ public class Selenide {
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     PageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
     return pageObject;
+  }
+
+  public static FluentWait<WebDriver> Wait() {
+    return new FluentWait<WebDriver>(getWebDriver())
+        .withTimeout(Configuration.timeout, MILLISECONDS)
+        .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
   }
 }
