@@ -73,9 +73,22 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
-=== 2.0 (Snapshot, release planned to March 2013)
+=== 2.0 (Released 3.03.2013)
 * Drop deprecated classes and methods (DOM, Navigation).
 * Updated to selenium-java:2.31.0
+* Selenide 2.0 is not backward-compatible with Selenide 1.+
+  Migration guide:
+  * import static com.codeborne.selenide.WebDriverRunner.{browser,holdBrowserOpen,remote,startMaximized,reportsFolder}
+    * replace by import static com.codeborne.selenide.Configuration.*
+  * import static com.codeborne.selenide.DOM.defaultWaitingTimeout
+    * replace by import static com.codeborne.selenide.Configuration.*
+  * import static com.codeborne.selenide.DOM.*
+    * replace by import static com.codeborne.selenide.Selenide.*
+  * import static com.codeborne.selenide.Navigation.*
+    * replace by import static com.codeborne.selenide.Selenide.open
+  * import com.codeborne.selenide.ShouldableWebElement
+    * replace by import com.codeborne.selenide.SelenideElement
+
 === 1.11 (Released 28.02.2013)
 * Mark classes DOM and Navigation as deprecated (going to drop them in Selenide 2.0). The point is that now user only needs to include one class Selenide.
 * Added support for PhantomJS driver
