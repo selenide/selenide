@@ -156,4 +156,4 @@ The main committers are:
 
 
 == License
-GPL[http://www.gnu.org/copyleft/gpl.html] 1.0
+LGPL[http://www.gnu.org/copyleft/lesser.html] 3.0
