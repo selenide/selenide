@@ -234,6 +234,7 @@ public abstract class Condition {
 
   /**
    * $("h1").waitUntil(hasText("Hello"), 10000)
+   * <p>Case insensitive</p>
    * @param text expected text of HTML element
    */
   public static Condition hasText(final String text) {
@@ -242,6 +243,7 @@ public abstract class Condition {
 
   /**
    * $("h1").should(haveText("Hello\s*John"))
+   * <p>Case insensitive</p>
    * @param text expected text of HTML element
    * @deprecated Use $.shouldHave(text("Hello"))
    */
@@ -252,10 +254,32 @@ public abstract class Condition {
 
   /**
    * $("h1").shouldHave(text("Hello\s*John"))
+   * <p>Case insensitive</p>
    * @param text expected text of HTML element
    */
   public static Condition text(final String text) {
     return new Condition("text", false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return element.getText().toLowerCase().contains(text.toLowerCase());
+      }
+      @Override
+      public String actualValue(WebElement element) {
+        return element.getText();
+      }
+      @Override
+      public String toString() {
+        return "got text '" + text + "'";
+      }
+    };
+  }
+
+  /**
+   * $("h1").shouldHave(textCaseSensitive("Hello\s*John"))
+   * @param text expected text of HTML element
+   */
+  public static Condition textCaseSensitive(final String text) {
+    return new Condition("textCaseSensitive", false) {
       @Override
       public boolean apply(WebElement element) {
         return element.getText().contains(text);
@@ -273,10 +297,32 @@ public abstract class Condition {
 
   /**
    * $("h1").shouldHave(exactText("Hello"))
+   * <p>Case insensitive</p>
    * @param text expected text of HTML element
    */
   public static Condition exactText(final String text) {
     return new Condition("exactText", false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return text.equalsIgnoreCase(element.getText());
+      }
+      @Override
+      public String actualValue(WebElement element) {
+        return element.getText();
+      }
+      @Override
+      public String toString() {
+        return "got exactly the text '" + text + "'";
+      }
+    };
+  }
+
+  /**
+   * $("h1").shouldHave(exactText("Hello"))
+   * @param text expected text of HTML element
+   */
+  public static Condition exactTextCaseSensitive(final String text) {
+    return new Condition("exactTextCaseSensitive", false) {
       @Override
       public boolean apply(WebElement element) {
         return text.equals(element.getText());
