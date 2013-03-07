@@ -242,17 +242,6 @@ public abstract class Condition {
   }
 
   /**
-   * $("h1").should(haveText("Hello\s*John"))
-   * <p>Case insensitive</p>
-   * @param text expected text of HTML element
-   * @deprecated Use $.shouldHave(text("Hello"))
-   */
-  @Deprecated
-  public static Condition haveText(final String text) {
-    return hasText(text);
-  }
-
-  /**
    * $("h1").shouldHave(text("Hello\s*John"))
    * <p>Case insensitive</p>
    * @param text expected text of HTML element
