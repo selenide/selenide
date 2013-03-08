@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
+import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 import static com.codeborne.selenide.Selenide.getFocusedElement;
 import static java.util.regex.Pattern.DOTALL;
 
-public abstract class Condition {
+public abstract class Condition implements Predicate<WebElement> {
   public static final Condition visible = new Condition("visible", false) {
     @Override
     public boolean apply(WebElement element) {
