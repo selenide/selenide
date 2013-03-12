@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.WaitingSelenideElement;
 import com.codeborne.selenide.impl.WebElementProxy;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
@@ -331,5 +332,9 @@ public class Selenide {
     return new FluentWait<WebDriver>(getWebDriver())
         .withTimeout(Configuration.timeout, MILLISECONDS)
         .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
+  }
+
+  public static Actions actions() {
+    return new Actions(getWebDriver());
   }
 }

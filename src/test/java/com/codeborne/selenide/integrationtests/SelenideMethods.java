@@ -153,6 +153,15 @@ public class SelenideMethods {
   }
 
   @Test
+  public void userCanUseSeleniumActions() {
+    $(By.name("rememberMe")).shouldNotBe(selected);
+
+    actions().click($(By.name("rememberMe"))).build().perform();
+
+    $(By.name("rememberMe")).shouldBe(selected);
+  }
+
+  @Test
   public void userCanCheckCssClass() {
     $(byText("Bob")).shouldHave(cssClass("firstname"));
     $(byText("Dilan")).shouldHave(cssClass("lastname"));

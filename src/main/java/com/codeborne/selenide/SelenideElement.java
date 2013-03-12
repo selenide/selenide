@@ -2,10 +2,14 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.*;
 
 import java.io.File;
 
-public interface SelenideElement extends WebElement {
+public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,
+    FindsByTagName, FindsByClassName, FindsByCssSelector,
+    FindsByXPath, WrapsDriver, Locatable {
+
   /**
    * Actual for &lt;a href&gt; elements. Navigates browser by clicking this links.
    */
