@@ -175,6 +175,14 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * $("#input").shouldHave(name("username"))
+   * @param name expected name of input field
+   */
+  public static Condition name(final String name) {
+    return hasAttribute("name", name);
+  }
+
+  /**
    * 1) For input element, check that value is missing or empty
    * $("#input").shouldBe(empty)
    *
