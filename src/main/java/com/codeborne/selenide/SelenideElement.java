@@ -88,6 +88,23 @@ public interface SelenideElement extends WebElement {
   SelenideElement find(By selector);
   SelenideElement find(By selector, int index);
 
+  /**
+   * Dollar methods are synonym for "find" methods
+   */
+  SelenideElement $(String cssSelector);
+  SelenideElement $(String cssSelector, int index);
+  SelenideElement $(By selector);
+  SelenideElement $(By selector, int index);
+
+  ElementsCollection list(String cssSelector);
+  ElementsCollection list(By selector);
+
+  /**
+   * Double-dollar methods are synonyms for "list" methods
+   */
+  ElementsCollection $$(String cssSelector);
+  ElementsCollection $$(By selector);
+
   File uploadFromClasspath(String fileName);
 
   void selectOption(String text);

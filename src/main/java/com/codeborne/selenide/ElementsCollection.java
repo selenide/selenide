@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.WebElementProxy;
 import com.google.common.collect.Collections2;
 import org.openqa.selenium.WebElement;
 
@@ -8,9 +9,12 @@ import java.util.Collection;
 
 import static com.codeborne.selenide.WebDriverRunner.fail;
 
-public class ElementsCollection extends ArrayList<WebElement> {
-  public ElementsCollection(Collection<WebElement> elements) {
-    super(elements);
+public class ElementsCollection extends ArrayList<SelenideElement> {
+  public ElementsCollection(Collection<? extends WebElement> elements) {
+    super(elements.size());
+    for (WebElement element : elements) {
+      add(WebElementProxy.wrap(element));
+    }
   }
 
   public void shouldHaveSize(int expectedSize) {

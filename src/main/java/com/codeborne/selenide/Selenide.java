@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
+import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Configuration.pollingInterval;
@@ -125,6 +126,10 @@ public class Selenide {
 
   protected static SelenideElement $(WebElement parent, By selector, int index) {
     return WaitingSelenideElement.wrap($(parent), selector, index);
+  }
+
+  public static ElementsCollection $$(Collection<? extends WebElement> elements) {
+    return new ElementsCollection(elements);
   }
 
   /**

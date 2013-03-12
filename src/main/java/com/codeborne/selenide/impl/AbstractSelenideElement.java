@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
@@ -11,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Configuration.pollingInterval;
@@ -61,10 +63,13 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
-    else if ("find".equals(method.getName())) {
+    else if ("find".equals(method.getName()) || "$".equals(method.getName())) {
       return WebElementProxy.wrap(args.length == 1 ?
           find((SelenideElement) proxy, args[0], 0) :
           find((SelenideElement) proxy, args[0], (Integer) args[1]));
+    }
+    else if ("list".equals(method.getName()) || "$$".equals(method.getName())) {
+      return new ElementsCollection(list(args[0]));
     }
     else if ("toString".equals(method.getName())) {
       return describe();
@@ -328,5 +333,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           getDelegate().findElements((By) arg).get(index) :
           getDelegate().findElements(By.cssSelector((String) arg)).get(index);
     }
+  }
+
+  protected Collection<WebElement> list(Object arg) {
+    return arg instanceof By ?
+        getDelegate().findElements((By) arg) :
+        getDelegate().findElements(By.cssSelector((String) arg));
   }
 }

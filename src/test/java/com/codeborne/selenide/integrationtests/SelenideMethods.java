@@ -164,4 +164,18 @@ public class SelenideMethods {
   public void userCanGetPageTitle() {
     assertEquals("long ajax request", title());
   }
+
+  @Test
+  public void userCanFindFirstMatchingSubElement() {
+    $(By.name("domain")).find("option").shouldHave(value("livemail.ru"));
+    $(By.name("domain")).$("option").shouldHave(value("livemail.ru"));
+  }
+
+  @Test
+  public void userCanListMatchingSubElements() {
+    $("#multirowTable").list(byText("Chack")).shouldHaveSize(2);
+    $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);
+    $("#multirowTable tr").list(byText("Chack")).shouldHaveSize(1);
+    $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
+  }
 }
