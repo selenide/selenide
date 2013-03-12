@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 public class WaitingSelenideElementTest {
   @Test
   public void testToString() {
-    WebElement parent = mock(WebElement.class);
+    SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
 
     assertEquals("WaitingSelenideElement{By.id: app}", new WaitingSelenideElement(null, By.id("app"), 0).toString());

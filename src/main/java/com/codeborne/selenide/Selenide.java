@@ -97,7 +97,7 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return WaitingSelenideElement.wrap(parent, By.cssSelector(cssSelector), 0);
+    return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), 0);
   }
 
   /**
@@ -120,11 +120,11 @@ public class Selenide {
    * @throws org.openqa.selenium.NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return WaitingSelenideElement.wrap(parent, By.cssSelector(cssSelector), index);
+    return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), index);
   }
 
   protected static SelenideElement $(WebElement parent, By selector, int index) {
-    return WaitingSelenideElement.wrap(parent, selector, index);
+    return WaitingSelenideElement.wrap($(parent), selector, index);
   }
 
   /**

@@ -7,6 +7,11 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 public class JQuery {
   /**
+   * This instance is mutable so that you can replace it with your own custom object.
+   */
+  public static JQuery jQuery = new JQuery();
+
+  /**
    * Calls onclick javascript code.
    * Useful for invisible (hovered) elements that cannot be clicked directly
    * */

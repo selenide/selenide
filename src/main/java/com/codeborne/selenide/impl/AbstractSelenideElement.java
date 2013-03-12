@@ -62,7 +62,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return shouldNot(proxy, (Condition[]) args[0]);
     }
     else if ("find".equals(method.getName())) {
-      return WebElementProxy.wrap(args.length == 1 ? find(args[0], 0) : find(args[0], (Integer) args[1]));
+      return WebElementProxy.wrap(args.length == 1 ?
+          find((SelenideElement) proxy, args[0], 0) :
+          find((SelenideElement) proxy, args[0], (Integer) args[1]));
     }
     else if ("toString".equals(method.getName())) {
       return describe();
@@ -169,14 +171,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return file;
   }
 
-  private void selectOptionByText(WebElement selectField, String optionText) {
+  protected void selectOptionByText(WebElement selectField, String optionText) {
     $(selectField).shouldBe(present);
     $(selectField, "option").shouldBe(present);
     // TODO wait until the element has option with given text
     new Select(selectField).selectByVisibleText(optionText);
   }
 
-  private void selectOptionByValue(WebElement selectField, String optionValue) {
+  protected void selectOptionByValue(WebElement selectField, String optionValue) {
     $(selectField).shouldBe(present);
     $(selectField, "option").shouldBe(present);
     // TODO wait until the element has option with given value
@@ -315,7 +317,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected WebElement find(Object arg, int index) {
+  protected WebElement find(SelenideElement proxy, Object arg, int index) {
     // TODO Do not evaluate element immediately.
     if (index == 0) {
       return arg instanceof By ?
