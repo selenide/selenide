@@ -334,6 +334,19 @@ public class Selenide {
         .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
   }
 
+  /**
+   * With this method you can use Selenium Actions like described in the
+   * <a href="http://code.google.com/p/selenium/wiki/AdvancedUserInteractions">AdvancedUserInteractions</a> page.
+   *
+   * <pre>
+   *   actions()
+   *    .sendKeys($(By.name("rememberMe")), "John")
+   *    .click($(#rememberMe"))
+   *    .click($(byText("Login")))
+   *    .build()
+   *    .perform();
+   * </pre>
+   */
   public static Actions actions() {
     return new Actions(getWebDriver());
   }

@@ -29,8 +29,8 @@ dependencies {
     exclude group: 'org.webbitserver', module: 'webbit'
   }
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.31.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.11', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.11'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.12', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.12'
   provided 'junit:junit:4.11'
   provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.0.1', transitive: false
   testCompile 'org.hamcrest:hamcrest-all:1.3'
