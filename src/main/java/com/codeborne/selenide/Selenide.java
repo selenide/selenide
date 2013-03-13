@@ -31,6 +31,16 @@ public class Selenide {
     navigator.open(absoluteUrl);
   }
 
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
+    open(relativeOrAbsoluteUrl);
+    return page(pageObjectClassClass);
+  }
+
+  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
+    open(absoluteUrl);
+    return page(pageObjectClassClass);
+  }
+
   /**
    * Reload current page
    */
