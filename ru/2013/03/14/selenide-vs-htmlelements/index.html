@@ -1,0 +1,81 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Selenide.org</title>
+  <link rel="shortcut icon" href="../../../../../images/favicon.ico"/>
+  <link rel="stylesheet" href="../../../../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../../../../stylesheets/pygment_trac.css">
+  <link rel="stylesheet" href="../../../../../stylesheets/selenide-web.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1>Selenide и HtmlElements</h1>
+Ребята в компании Yandex разработали свою надстройку над Selenium WebDriver под названием HtmlElements.
+Информацию и видео про HtmlElements можно найти <a href="http://events.yandex.ru/events/yac/2012/talks/366/">здесь</a>.
+
+Мне как автору Selenide, конечно, очень интересно было сравнить HtmlElements с Selenide.
+
+Прежде всего, хочу заметить, что мы не хотим позиционировать себя как конкуренты: мы с HtmlElements делаем одно дело, просто немножко по-разному.
+
+<h2>Вкратце</h2>
+Итак, если вкратце, моё первое впечатление такое:
+HtmlElements и Selenide по начальным идеям довольно сильно различаются: Selenide - удобства на микроуровне (грубо говоря, набор хелпер функций, которые делают работу с webdriver удобнее), HtmlElements - улучшения на макроуровне (компонентено-ориентированный фреймворк для тестирования). Вполне вероятно в дальнейшем заимствование функционала.
+
+<h2>Критика PageObjects</h2>
+Теперь я хочу немного покритиковать не HtmlElements, а саму концепцию PageObjects в целом.
+
+Я считаю, что концепция PageObjects полезна исключительно для разбивки длинных тестов на самостоятельные куски.
+То есть если у меня во многих-многих тестах есть строчка <code lang="java">driver.findElement(By.id("login")).click()</code>, то её разумнее вынести в отдельный метод <code lang="java">login()</code>, а его в свою очередь можно вынести в отдельный класс <code lang="java">LoginPage</code>.
+Но если эта строка всего в парочке методов, то пусть они так и остаются - не стоит из-за этого городить отдельный класс.
+
+В том виде, в котором я увидел PageObjects на странице Selenium WebDriver и в докладе про HtmlElements, они мне не понравились: они требуют от разработчика дополнительных усилий и не приносят дополнительной пользы. Насколько я понимаю, все их используют главным образом из-за аннотаций:
+@FindBy(id = "search")
+private WebElement searchBox;
+И это не оправдано, потому что эти две строчки ничем не лучше обычного вызова
+WebElement searchBox = driver.findElement(By.id("search"));
+Это яркий пример синдрома ненужного использования аннотаций.
+Может быть, первый вариант с аннотацией чуть-чуть лучше читается. И вот как раз эту проблему и решает Selenide - он позволяет написать короче:
+WebElement searchBox = $("#search");
+В некоторых случаях вообще невозможно сделать поле класса для каждого элемента. Например, тест для игры "Виселица": в алфавите может быть разное количество букв в зависимости от языка, не стану же я делать в классе 26 полей для английского и плюс ещё 33 для русского? Поэтому логичнее сделать просто метод letter(char), который при желании можно выделить в отдельный класс HangmanPage, но только по мере необходимости (если он используется во многих тестах):
+
+
+private WebElement letter(String letter) {
+
+return $(byText(letter));
+
+}
+
+Вот и получается, что HtmlElements улучшает реализацию концепции PageObjects, а я саму эту концепцию ставлю под сомнение.
+
+Какие проблемы решает Selenide
+Selenide берёт на себя несколько вещей:
+создание, конфигурация и закрытие браузера (объекта WebDriver)
+Об объекте WebDriver можно просто забыть - он сам появляется при первом обращении к open() и сам исчезает.
+
+Поддержка Ajax: ожидание событий, которые наступают не сразу, а через некоторое время. Насколько я понимаю, HtmlElements решает эту проблему частично ("lazy loading"). А Selenide позволяет ожидать не только того, что элемент появится, но и того, что элемент пропадёт или, например, поменяет текст или другое свойство:
+$(".loading_progress").should(disappear); // Ждёт, пока элемент не пропадёт
+$(".status").shouldHave(text("Загрузка завершена"));  // Ждёт, пока элемент не поменяет текст
+У меня сильное подозрение, что когда на руках есть такой API, PageObjects с их аннотациями становятся не нужны. Но мы, конечно, можем продолжить дискуссию с рассмотрением каких-нибудь конкретных примеров.
+
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-39031927-1']);
+  _gaq.push(['_setDomainName', window.location.hostname]);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>
