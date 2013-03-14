@@ -1,0 +1,100 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Selenide.org</title>
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="../stylesheets/selenide-web.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="languages">
+      <a href="../index.html">ENG</a>
+      <a href="">RUS</a>
+    </div>
+
+    <div class="wrapper">
+      <header>
+        <img src="../images/selenide-logo-100x100.png" align="right" style="vertical-align: sub;"/>
+        <h1>Selenide</h1>
+        <p>Selenide - это библиотека для написания коротких и выразительных, свободных от мусора тестов на Java с использованием Selenium WebDriver.</p>
+
+        <ul>
+          <li><a href="https://github.com/codeborne/selenide">Заглянуть на <strong>GitHub</strong></a></li>
+          <li><a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.codeborne%22%20AND%20a%3A%22selenide%22">Поискать в <strong>Maven</strong></a></li>
+          <li><a href="http://twitter.com/jselenide">Следить в <strong>Twitter</strong></a></li>
+        </ul>
+
+        <div id="twitter" style="overflow : auto;">
+          <table width="100%">
+            <thead>
+              <tr>
+                <th>Пульс проекта</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </header>
+      <section>
+        <h4>Лаконичные UI Теста на Java</h4>
+
+<pre><code>@Test
+public void userCanLoginByUsername() {
+  <b>open</b>("/login");
+  <b>$</b>(By.name("user.name")).<b>setValue</b>("johny");
+  <b>$("#submit")</b>.click();
+  <b>$</b>(".loading_progress").<b>should(disappear)</b>; // Само подождёт, пока элемент исчезнет
+  <b>$</b>("#username").<b>shouldHave(text</b>("Hello, Johny!")); // Само подождёт, пока у элемента появится нужный текст
+}
+</code></pre>
+<p>
+  Selenide - это обёртка вокруг <a href="http://seleniumhq.org/projects/webdriver/">Selenium WebDriver</a>, дающая:<ul>
+    <li>Автоматическое управление жизненным циклом бразера (открыть/закрыть/рестартануть)</li>
+    <li>Селекторы для элементов в стиле jQuery</li>
+    <li>Поддержка Ajax</li>
+  </ul>
+</p>
+<p>
+  Вот так Selenide позволяет писать лаконичные тесты. Вам больше не нужно заботиться о
+  том, как открыть и закрыть браузер, не надо беспокоиться о таймаутах, не надо писать монструозный код для
+  ожидания наступления событий - сконцентрируйтесь на бизнес-логике!
+</p>
+<h4>С чего начать?</h4>
+Просто добавьте <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.0/selenide-2.0.jar">selenide.jar</a> в ваш проект. Для пользователей Maven, Ivy, Gradle и т.п.:
+<pre><code>&lt;dependency org="com.codeborne" name="selenide" revision="2.0"/&gt;</code></pre>
+Дальше смотри <a href="https://github.com/codeborne/selenide/wiki/Quick-Start">Quick Start guide</a>, там немножко больше деталей.
+<footer>
+</footer>
+      </section>
+
+      <footer>
+        <p>Проект поддерживается фирмой <a href="https://github.com/codeborne"><img src="../images/codeborne-logo.png"/></a></p>
+        <p><small>Данный сайт бегает на GitHub Pages &mdash; Стиль создан <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+    <script src="../javascripts/jquery-1.8.3.min.js"></script>
+    <script src="../javascripts/selenide-web.js"></script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-39031927-1']);
+      _gaq.push(['_setDomainName', window.location.hostname]);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>
