@@ -5,6 +5,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
@@ -39,5 +41,19 @@ public class CollectionMethods {
   @Test @Ignore // TODO Improve method shouldHaveSize() to wait
   public void shouldWaitUntilCollectionGetsExpectedSize() {
     $$("#dynamic-content-container span").shouldHaveSize(1);
+  }
+
+  @Test
+  public void userCanFilterOutMatchingElements() {
+    $$("#multirowTable tr").shouldHaveSize(2);
+    $$("#multirowTable tr").filterBy(text("Norris")).shouldHaveSize(1);
+    $$("#multirowTable tr").filterBy(cssClass("inexisting")).shouldHaveSize(0);
+  }
+
+  @Test
+  public void userCanExcludeMatchingElements() {
+    $$("#multirowTable tr").shouldHaveSize(2);
+    $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);
+    $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHaveSize(2);
   }
 }

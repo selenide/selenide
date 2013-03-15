@@ -25,11 +25,19 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
     }
   }
 
-  public ElementsCollection filter(Condition filter) {
-    return new ElementsCollection(Collections2.filter(this, filter));
+  public ElementsCollection filter(Condition condition) {
+    return new ElementsCollection(Collections2.filter(this, condition));
   }
 
-  public ElementsCollection exclude(Condition filter) {
-    return new ElementsCollection(Collections2.filter(this, not(filter)));
+  public ElementsCollection filterBy(Condition condition) {
+    return filter(condition);
+  }
+
+  public ElementsCollection exclude(Condition condition) {
+    return new ElementsCollection(Collections2.filter(this, not(condition)));
+  }
+
+  public ElementsCollection excludeWith(Condition condition) {
+    return exclude(condition);
   }
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.by;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static com.codeborne.selenide.Selectors.byAttribute;
@@ -33,6 +34,10 @@ public class SelenideMethods {
     assertTrue($(By.name("domain")).isDisplayed());
     assertFalse($("#theHiddenElement").isDisplayed());
     assertFalse($(By.name("non-existing-element")).isDisplayed());
+
+    $("#theHiddenElement").shouldBe(hidden);
+    $("#theHiddenElement").should(disappear);
+    $("#theHiddenElement").waitUntil(disappears, 1000);
   }
 
   @Test
@@ -70,7 +75,9 @@ public class SelenideMethods {
   public void userCanSetValueToTextfield() {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
+    $(By.name("password")).shouldBe(focused);
     $(By.name("password")).shouldHave(value("sherlyn"));
+    $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
     assertEquals("sherlyn", $(By.name("password")).val());
   }
 
@@ -172,6 +179,29 @@ public class SelenideMethods {
   @Test
   public void userCanGetPageTitle() {
     assertEquals("long ajax request", title());
+  }
+
+  @Test
+  public void userCanCheckElementId() {
+    $("#multirowTable").shouldHave(id("multirowTable"));
+    $("#login").shouldHave(id("login"));
+    $(By.id("theHiddenElement")).shouldHave(id("theHiddenElement"));
+    $("h3").shouldHave(id("username-mirror"));
+  }
+
+  @Test
+  public void userCanCheckElementName() {
+    $("select").shouldHave(name("domain"));
+    $(by("type", "radio")).shouldHave(name("me"));
+    $(by("type", "checkbox")).shouldHave(name("rememberMe"));
+    $("#username").shouldHave(name("username"));
+  }
+
+  @Test
+  public void userCanCheckElementType() {
+    $("#login").shouldHave(type("submit"));
+    $(By.name("me")).shouldHave(type("radio"));
+    $(By.name("rememberMe")).shouldHave(type("checkbox"));
   }
 
   @Test

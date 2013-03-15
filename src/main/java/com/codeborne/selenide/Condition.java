@@ -113,7 +113,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param attributeName name of attribute
    * @param attributeValue expected value of attribute
    */
-  public static Condition hasAttribute(final String attributeName, final String attributeValue) {
+  public static Condition hasAttribute(String attributeName, String attributeValue) {
     return attribute(attributeName, attributeValue);
   }
 
@@ -162,7 +162,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName + "=" + expectedAttributeValue;
+        return "got attribute " + attributeName + '=' + expectedAttributeValue;
       }
     };
   }
@@ -176,7 +176,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#input").shouldHave(value("John"))
    * @param value expected value of input field
    */
-  public static Condition value(final String value) {
+  public static Condition value(String value) {
     return hasAttribute("value", value);
   }
 
@@ -184,7 +184,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#myInput").waitUntil(hasValue("John"), 5000)
    * @param value expected value of input field
    */
-  public static Condition hasValue(final String value) {
+  public static Condition hasValue(String value) {
     return value(value);
   }
 
@@ -192,7 +192,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#input").shouldHave(name("username"))
    * @param name expected name of input field
    */
-  public static Condition name(final String name) {
+  public static Condition name(String name) {
     return hasAttribute("name", name);
   }
 
@@ -200,7 +200,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#input").shouldHave(type("checkbox"))
    * @param type expected type of input field
    */
-  public static Condition type(final String type) {
+  public static Condition type(String type) {
     return hasAttribute("type", type);
   }
 
@@ -208,7 +208,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#input").shouldHave(id("myForm"))
    * @param id expected id of input field
    */
-  public static Condition id(final String id) {
+  public static Condition id(String id) {
     return hasAttribute("id", id);
   }
 
@@ -230,7 +230,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
     @Override
     public String actualValue(WebElement element) {
-      return "value=" + getAttributeValue(element, "value") + ", text='" + element.getText() + "'";
+      return "value=" + getAttributeValue(element, "value") + ", text='" + element.getText() + '\'';
     }
   };
 
@@ -239,7 +239,7 @@ public abstract class Condition implements Predicate<WebElement> {
    *
    * @see #matchText(String)
    */
-  public static Condition matchesText(final String text) {
+  public static Condition matchesText(String text) {
     return matchText(text);
   }
 
@@ -262,7 +262,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "matched text '" + regex + "'";
+        return "matched text '" + regex + '\'';
       }
     };
   }
@@ -276,7 +276,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * <p>Case insensitive</p>
    * @param text expected text of HTML element
    */
-  public static Condition hasText(final String text) {
+  public static Condition hasText(String text) {
     return text(text);
   }
 
@@ -297,7 +297,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + "'";
+        return "got text '" + text + '\'';
       }
     };
   }
@@ -318,7 +318,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + "'";
+        return "got text '" + text + '\'';
       }
     };
   }
@@ -340,7 +340,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + "'";
+        return "got exactly the text '" + text + '\'';
       }
     };
   }
@@ -361,7 +361,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + "'";
+        return "got exactly the text '" + text + '\'';
       }
     };
   }
@@ -376,7 +376,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * $("input").shouldHave(options);
    */
-  public static Condition options = new Condition("hasOptions", false) {
+  public static final Condition options = new Condition("hasOptions", false) {
     @Override
     public boolean apply(WebElement element) {
       try {
@@ -426,7 +426,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got class '" + cssClass + "'";
+        return "got class '" + cssClass + '\'';
       }
     };
   }
@@ -443,7 +443,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "lose class '" + cssClass + "'";
+        return "lose class '" + cssClass + '\'';
       }
     };
   }
@@ -495,7 +495,7 @@ public abstract class Condition implements Predicate<WebElement> {
   private final String name;
   private final boolean nullIsAllowed;
 
-  public Condition(String name, boolean nullIsAllowed) {
+  protected Condition(String name, boolean nullIsAllowed) {
     this.name = name;
     this.nullIsAllowed = nullIsAllowed;
   }
