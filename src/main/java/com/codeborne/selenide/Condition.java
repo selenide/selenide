@@ -12,6 +12,20 @@ import static com.codeborne.selenide.Selenide.getFocusedElement;
 import static java.util.regex.Pattern.DOTALL;
 
 public abstract class Condition implements Predicate<WebElement> {
+  public static Condition not(final Condition condition) {
+    return new Condition("not(" + condition.name + ')', false) {
+      @Override
+      public boolean apply(WebElement element) {
+        return !condition.apply(element);
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return condition.actualValue(element);
+      }
+    };
+  }
+
   public static final Condition visible = new Condition("visible", false) {
     @Override
     public boolean apply(WebElement element) {
@@ -180,6 +194,22 @@ public abstract class Condition implements Predicate<WebElement> {
    */
   public static Condition name(final String name) {
     return hasAttribute("name", name);
+  }
+
+  /**
+   * $("#input").shouldHave(type("checkbox"))
+   * @param type expected type of input field
+   */
+  public static Condition type(final String type) {
+    return hasAttribute("type", type);
+  }
+
+  /**
+   * $("#input").shouldHave(id("myForm"))
+   * @param id expected id of input field
+   */
+  public static Condition id(final String id) {
+    return hasAttribute("id", id);
   }
 
   /**
@@ -470,6 +500,7 @@ public abstract class Condition implements Predicate<WebElement> {
     this.nullIsAllowed = nullIsAllowed;
   }
 
+  @Override
   public abstract boolean apply(WebElement element);
 
   public final boolean applyNull() {

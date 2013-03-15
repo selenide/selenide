@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.WebDriverRunner.fail;
 
 public class ElementsCollection extends ArrayList<SelenideElement> {
@@ -26,5 +27,9 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
 
   public ElementsCollection filter(Condition filter) {
     return new ElementsCollection(Collections2.filter(this, filter));
+  }
+
+  public ElementsCollection exclude(Condition filter) {
+    return new ElementsCollection(Collections2.filter(this, not(filter)));
   }
 }
