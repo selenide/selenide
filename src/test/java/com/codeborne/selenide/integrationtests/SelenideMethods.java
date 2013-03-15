@@ -182,9 +182,9 @@ public class SelenideMethods {
 
   @Test
   public void userCanListMatchingSubElements() {
-    $("#multirowTable").list(byText("Chack")).shouldHaveSize(2);
+    $("#multirowTable").findAll(byText("Chack")).shouldHaveSize(2);
     $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);
-    $("#multirowTable tr").list(byText("Chack")).shouldHaveSize(1);
+    $("#multirowTable tr").findAll(byText("Chack")).shouldHaveSize(1);
     $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
   }
 }

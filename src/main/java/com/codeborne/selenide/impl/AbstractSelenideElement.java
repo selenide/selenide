@@ -68,8 +68,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           find((SelenideElement) proxy, args[0], 0) :
           find((SelenideElement) proxy, args[0], (Integer) args[1]));
     }
-    else if ("list".equals(method.getName()) || "$$".equals(method.getName())) {
-      return new ElementsCollection(list(args[0]));
+    else if ("findAll".equals(method.getName()) || "$$".equals(method.getName())) {
+      return new ElementsCollection(findAll(args[0]));
     }
     else if ("toString".equals(method.getName())) {
       return describe();
@@ -335,7 +335,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected Collection<WebElement> list(Object arg) {
+  protected Collection<WebElement> findAll(Object arg) {
     return arg instanceof By ?
         getDelegate().findElements((By) arg) :
         getDelegate().findElements(By.cssSelector((String) arg));

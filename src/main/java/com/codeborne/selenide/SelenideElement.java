@@ -100,11 +100,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement $(By selector);
   SelenideElement $(By selector, int index);
 
-  ElementsCollection list(String cssSelector);
-  ElementsCollection list(By selector);
+  ElementsCollection findAll(String cssSelector);
+  ElementsCollection findAll(By selector);
 
   /**
-   * Double-dollar methods are synonyms for "list" methods
+   * Double-dollar methods are synonyms for "findAll" methods
    */
   ElementsCollection $$(String cssSelector);
   ElementsCollection $$(By selector);
