@@ -56,4 +56,9 @@ public class CollectionMethods {
     $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);
     $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHaveSize(2);
   }
+
+  @Test
+  public void userCanFindMatchingElementFromList() {
+    $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
+  }
 }

@@ -40,4 +40,12 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
   public ElementsCollection excludeWith(Condition condition) {
     return exclude(condition);
   }
+
+  public SelenideElement find(Condition condition) {
+    return filter(condition).get(0);
+  }
+
+  public SelenideElement findBy(Condition condition) {
+    return find(condition);
+  }
 }
