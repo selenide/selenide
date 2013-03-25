@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.WebDriverRunner.fail;
 
 public class ElementsCollection extends ArrayList<SelenideElement> {
   public ElementsCollection(Collection<? extends WebElement> elements) {
@@ -19,9 +18,13 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
   }
 
   public void shouldHaveSize(int expectedSize) {
-    // TODO wait until size = expectedSize
-    if (expectedSize != size()) {
-      fail("List size is " + size()+ ", but expected size is " + expectedSize);
+    shouldHave(CollectionCondition.size(expectedSize));
+  }
+
+  public void shouldHave(CollectionCondition condition) {
+    // TODO wait until condition applies
+    if (!condition.apply(this)) {
+      condition.fail(this);
     }
   }
 
@@ -47,5 +50,18 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
 
   public SelenideElement findBy(Condition condition) {
     return find(condition);
+  }
+
+  public String[] getTexts() {
+    return getTexts(this);
+  }
+
+  protected static String[] getTexts(Collection<SelenideElement> elements) {
+    String[] texts = new String[elements.size()];
+    int i = 0;
+    for (SelenideElement element : elements) {
+      texts[i++] = element.getText();
+    }
+    return texts;
   }
 }
