@@ -76,9 +76,21 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 === 2.1 (Snapshot)
 * Changed license from GPL 1.0 to LGPL 3.0
 * Added support for Selenium FluentWait API
+* Added support for Selenium Actions API
 * text and exactText conditions are case insensitive (reason - in css designer can apply text transformations and tests will fail)
 * introduced textCaseSensitive and exactTextCaseSensitive conditions
 * added open methods to Selenide class that return page object by class
+* Removed deprecated condition "haveText". Use $.shouldHave(text("john")) instead.
+* Excluded org.webbit, netty, selenium-iphone-driver, selenium-safari-driver from Selenide dependencies to avoid loading too much useless stuff unless it's really needed.
+* Now Condition implements Predicate<WebElement>. So it can be used for filtering collections.
+* Methods $.selectOption and $.selectOptionByValue trigger change event when possible.
+* Class ElementsCollection now contains list of SelenideElements (instead of WebElements).
+* Added method $.findAll() returning list of matching elements.
+* Added conditions "name", "not", "type", "id": $("#username").shouldHave(name("firstName"))
+* Added screenshot support for TestNG
+* Added method $$.findBy
+* Added method $$.shouldHave(texts("A", "B", "C")) for asserting texts of all matching elements
+* Added method $.data(attr) as a synonym for $.getAttribute("data-" + attr)
 === 2.0 (Released 3.03.2013)
 * Drop deprecated classes and methods (DOM, Navigation).
 * Updated to selenium-java:2.31.0
