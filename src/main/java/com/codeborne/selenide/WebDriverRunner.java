@@ -99,6 +99,10 @@ public class WebDriverRunner {
     return HTMLUNIT.equalsIgnoreCase(browser);
   }
 
+  public static boolean phantomjs() {
+    return PHANTOMJS.equalsIgnoreCase(browser);
+  }
+
   public static void clearBrowserCache() {
     if (webdriver != null) {
       webdriver.manage().deleteAllCookies();
