@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Selectors.byValue;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.by;
 import static com.codeborne.selenide.Selenide.*;
@@ -69,6 +71,16 @@ public class SelenideMethods {
     assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
     assertEquals(4, $$(byAttribute("type", "radio")).size());
     assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
+  }
+
+  @Test
+  public void userCanGetDataAttributes() {
+    assertEquals("111", $(byValue("livemail.ru")).getAttribute("data-mailServerId"));
+    assertEquals("111", $(byValue("livemail.ru")).data("mailServerId"));
+
+    assertEquals("222A", $(byText("@myrambler.ru")).data("mailServerId"));
+    assertEquals("33333B", $(byValue("rusmail.ru")).data("mailServerId"));
+    assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
   }
 
   @Test

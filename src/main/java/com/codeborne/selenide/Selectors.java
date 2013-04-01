@@ -59,4 +59,8 @@ public class Selectors {
       throw new UnsupportedOperationException("Text with both apostrophes and quotes is not supported");
     }
   }
+
+	public static By byValue(String value) {
+	  return byAttribute("value", value);
+  }
 }
