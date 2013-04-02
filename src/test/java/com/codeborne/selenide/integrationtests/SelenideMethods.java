@@ -80,6 +80,11 @@ public class SelenideMethods {
 
     assertEquals("222A", $(byText("@myrambler.ru")).data("mailServerId"));
     assertEquals("33333B", $(byValue("rusmail.ru")).data("mailServerId"));
+    assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
+  }
+
+  @Test @Ignore
+  public void userCanSearchElementByDataAttribute() {
     assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
   }
 

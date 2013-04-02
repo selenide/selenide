@@ -29,6 +29,9 @@ public class Selectors {
 
   /**
    * Find elements having attribute with given value.
+   *
+   * Seems to work incorrectly if attribute name contains dash, for example: <option data-mailServerId="123"></option>
+   *
    * @param attributeName name of attribute, should not be empty or null
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
    * @return standard selenium By criteria
