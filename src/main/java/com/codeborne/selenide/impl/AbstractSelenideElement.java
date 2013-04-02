@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Configuration.pollingInterval;
@@ -72,7 +71,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           find((SelenideElement) proxy, args[0], (Integer) args[1]));
     }
     else if ("findAll".equals(method.getName()) || "$$".equals(method.getName())) {
-      return new ElementsCollection(findAll(args[0]));
+      final SelenideElement parent = (SelenideElement) proxy;
+      return new ElementsCollection(new BySelectorCollection(parent, getSelector(args[0])));
     }
     else if ("toString".equals(method.getName())) {
       return describe();
@@ -338,9 +338,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected Collection<WebElement> findAll(Object arg) {
-    return arg instanceof By ?
-        getDelegate().findElements((By) arg) :
-        getDelegate().findElements(By.cssSelector((String) arg));
+  protected By getSelector(Object arg) {
+    return arg instanceof By ? ((By) arg) : By.cssSelector((String) arg);
   }
 }

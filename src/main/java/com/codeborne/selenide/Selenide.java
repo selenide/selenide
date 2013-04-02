@@ -1,9 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.Navigator;
-import com.codeborne.selenide.impl.SelenideFieldDecorator;
-import com.codeborne.selenide.impl.WaitingSelenideElement;
-import com.codeborne.selenide.impl.WebElementProxy;
+import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.Actions;
@@ -140,7 +137,7 @@ public class Selenide {
   }
 
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
-    return new ElementsCollection(elements);
+    return new ElementsCollection(new WebElementsCollectionWrapper(elements));
   }
 
   /**
@@ -151,7 +148,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(getElements(By.cssSelector(cssSelector)));
+    return new ElementsCollection(new BySelectorCollection(By.cssSelector(cssSelector)));
   }
 
   /**
@@ -162,7 +159,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(By seleniumSelector) {
-    return new ElementsCollection(getElements(seleniumSelector));
+    return new ElementsCollection(new BySelectorCollection(seleniumSelector));
   }
 
   /**
@@ -174,7 +171,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(parent.findElements(By.cssSelector(cssSelector)));
+    return new ElementsCollection(new BySelectorCollection(parent, By.cssSelector(cssSelector)));
   }
 
   /**
@@ -182,7 +179,7 @@ public class Selenide {
    * @see com.codeborne.selenide.Selenide#$$(org.openqa.selenium.WebElement, String)
    */
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return new ElementsCollection(parent.findElements(seleniumSelector));
+    return new ElementsCollection(new BySelectorCollection(parent, seleniumSelector));
   }
 
   /**
@@ -212,11 +209,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection getElements(By criteria) {
-    try {
-      return new ElementsCollection(getWebDriver().findElements(criteria));
-    } catch (WebDriverException e) {
-      return fail("Cannot get element " + criteria + ", caused by: " + cleanupWebDriverExceptionMessage(e));
-    }
+    return $$(criteria);
   }
 
   public static Object executeJavaScript(String jsCode) {

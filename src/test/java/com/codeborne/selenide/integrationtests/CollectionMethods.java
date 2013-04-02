@@ -1,15 +1,17 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.ElementsCollection;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class CollectionMethods {
@@ -38,9 +40,22 @@ public class CollectionMethods {
     $$("#dynamic-content-container span").shouldHaveSize(0);
   }
 
-  @Test @Ignore // TODO Improve method shouldHaveSize() to wait
+  @Test
   public void shouldWaitUntilCollectionGetsExpectedSize() {
-    $$("#dynamic-content-container span").shouldHaveSize(1);
+    ElementsCollection spans = $$("#dynamic-content-container span");
+
+    assertEquals(0, spans.size());
+    assertArrayEquals(new String[]{}, spans.getTexts());
+
+    spans.shouldHave(size(1)); // appears after 1 second
+
+    assertEquals(1, spans.size());
+    assertArrayEquals(new String[]{"dynamic content"}, spans.getTexts());
+
+    spans.shouldHave(size(2)); // appears after 2 seconds
+
+    assertEquals(2, spans.size());
+    assertArrayEquals(new String[]{"dynamic content", "dynamic content2"}, spans.getTexts());
   }
 
   @Test

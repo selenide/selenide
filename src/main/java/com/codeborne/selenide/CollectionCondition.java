@@ -4,22 +4,20 @@ import com.google.common.base.Predicate;
 import org.openqa.selenium.WebElement;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
-import static com.codeborne.selenide.ElementsCollection.getTexts;
-
-public abstract class CollectionCondition implements Predicate<Collection<SelenideElement>> {
-  abstract void fail(Collection<SelenideElement> elements);
+public abstract class CollectionCondition implements Predicate<List<WebElement>> {
+  public abstract void fail(List<WebElement> elements);
 
   public static CollectionCondition size(final int expectedSize) {
     return new CollectionCondition() {
       @Override
-      public boolean apply(Collection<SelenideElement> elements) {
+      public boolean apply(List<WebElement> elements) {
         return elements.size() == expectedSize;
       }
 
       @Override
-      public void fail(Collection<SelenideElement> elements) {
+      public void fail(List<WebElement> elements) {
         WebDriverRunner.fail("List size is " + elements.size() + ", but expected size is " + expectedSize);
       }
     };
@@ -28,7 +26,7 @@ public abstract class CollectionCondition implements Predicate<Collection<Seleni
   public static CollectionCondition texts(final String... expectedTexts) {
     return new CollectionCondition() {
       @Override
-      public boolean apply(Collection<SelenideElement> elements) {
+      public boolean apply(List<WebElement> elements) {
         int i = 0;
         for (WebElement element : elements) {
           if (!expectedTexts[i++].equals(element.getText())) {
@@ -39,8 +37,8 @@ public abstract class CollectionCondition implements Predicate<Collection<Seleni
       }
 
       @Override
-      public void fail(Collection<SelenideElement> elements) {
-        WebDriverRunner.fail("Elements' texts are " + Arrays.toString(getTexts(elements)) + ", but expected texts are " + Arrays.toString(expectedTexts));
+      public void fail(List<WebElement> elements) {
+        WebDriverRunner.fail("Elements' texts are " + Arrays.toString(ElementsCollection.getTexts(elements)) + ", but expected texts are " + Arrays.toString(expectedTexts));
       }
     };
   }

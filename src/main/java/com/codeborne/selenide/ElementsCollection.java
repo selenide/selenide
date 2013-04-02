@@ -1,20 +1,22 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.WebElementProxy;
-import com.google.common.collect.Collections2;
+import com.codeborne.selenide.impl.*;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Configuration.pollingInterval;
+import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.sleep;
 
-public class ElementsCollection extends ArrayList<SelenideElement> {
-  public ElementsCollection(Collection<? extends WebElement> elements) {
-    super(elements.size());
-    for (WebElement element : elements) {
-      add(WebElementProxy.wrap(element));
-    }
+public class ElementsCollection extends AbstractList<SelenideElement> {
+  private final WebElementsCollection collection;
+  private List<WebElement> actualElements;
+
+  public ElementsCollection(WebElementsCollection collection) {
+    this.collection = collection;
   }
 
   public void shouldHaveSize(int expectedSize) {
@@ -22,14 +24,23 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
   }
 
   public void shouldHave(CollectionCondition condition) {
-    // TODO wait until condition applies
-    if (!condition.apply(this)) {
-      condition.fail(this);
+    final long startTime = System.currentTimeMillis();
+    do {
+      try {
+        actualElements = collection.getActualElements();
+        if (condition.apply(actualElements)) {
+          return;
+        }
+      } catch (WebDriverException ignore) {
+      }
+      sleep(pollingInterval);
     }
+    while (System.currentTimeMillis() - startTime < timeout);
+    condition.fail(actualElements);
   }
 
   public ElementsCollection filter(Condition condition) {
-    return new ElementsCollection(Collections2.filter(this, condition));
+    return new ElementsCollection(new FilteringCollection(collection, condition));
   }
 
   public ElementsCollection filterBy(Condition condition) {
@@ -37,7 +48,7 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
   }
 
   public ElementsCollection exclude(Condition condition) {
-    return new ElementsCollection(Collections2.filter(this, not(condition)));
+    return new ElementsCollection(new FilteringCollection(collection, not(condition)));
   }
 
   public ElementsCollection excludeWith(Condition condition) {
@@ -52,16 +63,43 @@ public class ElementsCollection extends ArrayList<SelenideElement> {
     return find(condition);
   }
 
-  public String[] getTexts() {
-    return getTexts(this);
+  private List<WebElement> getActualElements() {
+    if (actualElements == null) {
+      actualElements = collection.getActualElements();
+    }
+    return actualElements;
   }
 
-  protected static String[] getTexts(Collection<SelenideElement> elements) {
+  public String[] getTexts() {
+    return getTexts(getActualElements());
+  }
+
+  public static String[] getTexts(Collection<WebElement> elements) {
     String[] texts = new String[elements.size()];
     int i = 0;
-    for (SelenideElement element : elements) {
+    for (WebElement element : elements) {
       texts[i++] = element.getText();
     }
     return texts;
+  }
+
+  @Override
+  public SelenideElement get(int index) {
+    return WebElementProxy.wrap(getActualElements().get(index));
+  }
+
+  @Override
+  public int size() {
+    return getActualElements().size();
+  }
+
+  @Override
+  public Iterator<SelenideElement> iterator() {
+    return new SelenideElementIterator(getActualElements().iterator());
+  }
+
+  @Override
+  public ListIterator<SelenideElement> listIterator(int index) {
+    return new SelenideElementListIterator(getActualElements().listIterator(index));
   }
 }
