@@ -23,6 +23,17 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     shouldHave(CollectionCondition.size(expectedSize));
   }
 
+  /**
+   * $$(".error").shouldBe(empty)
+   */
+  public void shouldBe(CollectionCondition condition) {
+    shouldHave(condition);
+  }
+
+  /**
+   * $$(".error").shouldHave(size(3))
+   * $$(".error").shouldHave(texts("Error1", "Error2"))
+   */
   public void shouldHave(CollectionCondition condition) {
     final long startTime = System.currentTimeMillis();
     do {

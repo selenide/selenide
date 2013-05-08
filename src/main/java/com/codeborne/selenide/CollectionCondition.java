@@ -9,6 +9,8 @@ import java.util.List;
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
   public abstract void fail(List<WebElement> elements);
 
+  public static CollectionCondition empty = size(0);
+
   public static CollectionCondition size(final int expectedSize) {
     return new CollectionCondition() {
       @Override

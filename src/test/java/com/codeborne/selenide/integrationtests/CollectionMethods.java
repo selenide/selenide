@@ -5,9 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
@@ -28,6 +31,13 @@ public class CollectionMethods {
     assertEquals(4, $$(By.xpath("//select[@name='domain']/option")).size());
     assertEquals(0, $$(By.name("non-existing-element")).size());
     assertEquals(0, $$("#dynamic-content-container span").size());
+  }
+
+  @Test
+  public void canCheckIfCollectionIsEmpty() {
+    $$(By.name("#dynamic-content-container span")).shouldBe(empty);
+    $$(By.name("non-existing-element")).shouldBe(empty);
+    $$(byText("Loading...")).shouldBe(empty);
   }
 
   @Test
@@ -56,6 +66,11 @@ public class CollectionMethods {
 
     assertEquals(2, spans.size());
     assertArrayEquals(new String[]{"dynamic content", "dynamic content2"}, spans.getTexts());
+  }
+
+  @Test
+  public void canCheckThatElementsHaveCorrectTexts() {
+    $$("#dynamic-content-container span").shouldHave(texts("dynamic-content", "dynamic-content2"));
   }
 
   @Test
