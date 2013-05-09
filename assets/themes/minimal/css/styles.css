@@ -270,3 +270,19 @@ footer {
     color:#444;
   }
 }
+
+.centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#languages {
+  position: absolute;
+  top: 10px;
+  right: 320px;
+}
+
+#languages a {
+  margin-right: 10px;
+}
