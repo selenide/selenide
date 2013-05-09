@@ -1,18 +1,18 @@
 ---
 layout: page
-title : С чего начать?
-header : С чего начать?
+title : Quick Start
+header : Quick Start
 group: navigation
 ---
 {% include JB/setup %}
 
-Начать использовать Selenide очень просто. Не нужно читать тонны документации. Не нужно покупать тренинг.
+It's extremely easy to start using Selenide. You don't need to read tons of documentation. You don't even need to buy a workshop.
 
-Просто добавь в проект <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.1/selenide-2.1.jar">selenide.jar</a> и начинай писать тест.
+Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.1/selenide-2.1.jar">selenide.jar</a> to your project and start writing test.
 
-### Для пользователей Maven:
+### For Maven users:
 
-Добавь в файл pom.xml:
+Add these lines to file pom.xml:
 
 ```xml
 <dependency>
@@ -22,9 +22,9 @@ group: navigation
 </dependency>
 ```
 
-### Для пользователей Ivy:
+### For Ivy users:
 
-Добавь в файл ivy.xml:
+Add these lines to file ivy.xml:
 
 ```xml
 <ivy-module>
@@ -34,9 +34,9 @@ group: navigation
 </ivy-module>
 ```
 
-### Для пользователей Gradle:
+### For Gradle users:
 
-Добавь в файл build.gradle:
+Add these lines to file build.gradle:
 
 ```groovy
 dependencies {
@@ -44,17 +44,17 @@ dependencies {
 }
 ```
 
-## Начинай писать тест
+## Start writing test
 
-Вот так просто! Больше никакой волокиты, начинай писать тест.
+So easy! No more boring routines, we can start.
 
-Импортируй нужный класс:
+Import one class:
 
 ```java
 include static com.codeborne.selenide.Selenide.*
 ```
 
-и пиши тест:
+and write test:
 
 ```java
 @Test
@@ -67,8 +67,8 @@ public void userCanLoginByUsername() {
 }
 ```
 
-И готово!
+Ready!
 
-Можно использовать любой фреймворк по вкусу: JUnit, TestNG - что душа пожелает.
+You can choose any testing framework you prefer: JUnit, TestNG, Cucumber, ScalaTest, JBehave - whatever.
 
-Запускать как обычные юнит-тесты. Можно из IDE, можно ANT скриптом, можно "mvn test".
+Run as a usual tests. You can run from IDE, or as an ANT script, or "mvn test". You don't need to change anything in your process.
