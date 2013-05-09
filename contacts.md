@@ -1,15 +1,16 @@
 ---
 layout: page
-title : Наши контакты
-header : Наши контакты
+title : Contacts
+header : Contacts
 group: navigation
 ---
 {% include JB/setup %}
 
-### Поделитесь с нами опытом!
-Нам было бы очень интересно услышать ваши отзывы - что пробовали, что получилось, с чем испытывали проблемы.
-Напишите нам в [гуглогруппу](mailto:selenide-ru@googlegroups.com) или [лично](mailto:andrei тчк solntsev сбк gmail тчк com)!
+### Share your experience with us!
+We would be glad to get your
+Нам было бы очень интересно услышать ваши feedback - tell us what you tried, how it worked. What succeeded, what failed?
+Feel free to write your feedback or questions to [googlegroup](mailto:selenide@googlegroups.com) or [privately to me](mailto:andrei.solntsev@gmail.com)!
 
-### Читать гуглогруппу
+### Read the googlegroup
 
-[Архив гуглогруппы](https://groups.google.com/forum/?fromgroups#!forum/selenide-ru)
+[Selenide googlegroup archive](https://groups.google.com/forum/?fromgroups#!forum/selenide)
