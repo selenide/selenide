@@ -1,19 +1,23 @@
 ---
 layout: post
-title: "Что такое Selenide"
+title: "What is Selenide"
 description: ""
 category: 
 tags: []
 ---
 {% include JB/setup %}
 
-Многие слышали про [Selenium WebDriver](http://code.google.com/p/selenium/) - один из самых популярных инструментов для написания приёмочных/интеграционных тестов.
+Many of you have tried [Selenium WebDriver](http://code.google.com/p/selenium/) - one of the most popular tools for UI Testing.
 
-Нам приходилось использовать Selenium в разных проектах, и мы быстро заметили, что нам раз от раза приходится писать один и тот же код, чтобы инициализировать браузер в начале, закрыть его в конце, делать скриншоты после каждого упавшего теста и т.д.
-В интернете можно найти множество статей типа "Как в Selenium сделать то или это" с кучей кода, который приходится копировать к себе в проект. [Например](http://habrahabr.ru/post/114145/).
+We have been using Selenium in different projects.
+And we discovered that every time we need to write the same code in order to start browser, close browser,
+take screenshots and so one.
+You can find a huge amount of topics ala "How to do this and that in Selenium" with a huge
+amount of code that you need to copy-pase into your project.
 
-И мы подумали: почему создание UI-тестов должно быть таким сложным?
-Поэтому мы решили выделить этот повторяющийся код в отдельную библиотеку. Так на свет появился [Selenide](http://selenide.org).
+We asked ourself: why should UI Testing be so tedious?
+We decided to extract our repeating code into a separate open-source library.
+That's how [Selenide](http://selenide.org) was born.
 
 ![right]({{ BASE_PATH }}/images/selenide-logo-100x100.png)
 
