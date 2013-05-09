@@ -34,6 +34,20 @@ public class LongRunningAjaxRequestTest {
   }
 
   @Test
+  public void findWaitsForParentAndChildElements() {
+    $(byText("Result 1")).find("#result-1").shouldNotBe(visible);
+    $(byText("Result 1")).find("#result-1").shouldHave(text("r1"));
+    $(byText("Result 1")).shouldBe(visible);
+    $("#results li", 1).find("#result-2").shouldHave(text("r2"));
+  }
+
+  @Test
+  public void findWaitsForParentAndChildElementsMeetsCondition() {
+    $("#unexisting-parent").shouldNotBe(visible);
+    $("#unexisting-parent").find("#unexisting-child").shouldNotBe(visible);
+  }
+
+  @Test
   public void dollarWaitsUntilElementDisappears() {
     $(byText("Loading...")).should(exist);
     $(byText("Loading...")).shouldNot(exist);
