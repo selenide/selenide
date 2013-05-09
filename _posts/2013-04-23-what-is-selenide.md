@@ -21,10 +21,11 @@ That's how [Selenide](http://selenide.org) was born.
 
 ![right]({{ BASE_PATH }}/images/selenide-logo-100x100.png)
 
-### Что такое Selenide
-[Selenide](http://selenide.org) - это обёртка вокруг Selenium WebDriver, позволяющая быстро и просто его использовать при написании тестов, сосредоточившись на логике, а не суете с браузером.
+### What is Selenide
+[Selenide](http://selenide.org) is a wrapper for Selenium WebDriver that allows you easier and faster writing of UI Tests.
+With Selenide you can concentrate on business logic instead of solving all these endless browser/ajax/timeouts problems.
 
-Вот пример теста. Как видите, код минимален. Вызвал метод `open` - и браузер открылся.
+This is an example of UI Test. As you see, the amount of code is minimal. Just type `open` - and browser comes.
 
 ```java
 @Test
@@ -37,20 +38,22 @@ public void testLogin() {
 }
 ```
 
-При вызове метода open Selenide сам запускает браузер и открывает страницу `http://localhost:8080/login` (порт и хост конфигурируется, естественно). А также заботится о том, чтобы в конце браузер закрылся.
+When you first execute `open`, Selenide automatically runs web browser and opens page `http://localhost:8080/login` (host and port are configurable).
+And closes the browser automatically when all tests are finished.
 
-### Ключевые особенности Selenide
-Если вкратце, вот главные особенности Selenide
+### Selenide key features
+Shortly, these are the key features of Selenide
 
-+  Лаконичный синтаксис в духе jQuery
-+  Автоматическое решение большинства проблем с Ajax, ожиданием и таймаутами.
-+  Управление жизнедеятельностью браузера
-+  Автоматическое создание скриншотов
++  Concise API inspired by jQuery
++  Automatic handling of most problems with Ajax, waiting and timeouts
++  Automatic handling of browser lifecycle
++  Automatic screenshots on test failures
 
-Одним словом, цель Selenide - сосредоточиться на бизнес-логике и не заниматься вечными надоедливыми мелкими проблемами.
+In short, the purpose of Selenide - is to **focus on business logic** and not to engage in perpetual annoying minor problems.
 
-### Дополнительные вкусности Selenide
-Selenide предоставляет дополнительные методы для действий, которые невозможно сделать одной командой Selenium WebDriver. Это выбор радио-кнопки, выбор элемента из выпадающего списка, создание снимка экрана, очистка кэша браузера и т.п.
+### Additional Selenide
+Selenide provides additional methods for actions that cannot be done with a single command in Selenium WebDriver.
+These are radiobutton selection, selectbox selection, taking screenshots, clearing browser cache etc.
 
 ```java
 @Test
@@ -70,38 +73,46 @@ public void clearCache() {
 }
 ```
 
-### Как побороть Ajax?
+### How Selenide overcomes Ajax?
 
-И особняком стоит вопрос Ajax: при тестировании приложений, использующих Ajax, приходится изобретать код, который чего-то ждёт (когда кнопка станет зелёной).
-Selenide решает эту проблему как никто другой. В то время как Selenium предлагает богатый API для ожидания разного рода
-событий [Например](http://xpinjection.com/2013/04/04/waits-and-timeouts-in-webdriver/), Selenide
-просто предлагает вам не заморачиваться. Если вы хотите поверить, что кнопка зелёная, а она пока
-что не зелёная, Selenide просто подождёт, пока она станет зелёной. Конечно, таймаут конфигурируется
-(по умолчанию 4 секунды). Это уникальное решение - простое и надёжное.
+Ajax is PITA (pain in the ass) for UI Testers.
+
+Nowdays most of applications use Ajax. When testing web application that uses Ajax, you need to invent code that waits for something. Wait until
+button gets green, wait until div gets required text, or wait until error message disappears. You can find tons of web pages suggesting tricks how to
+make Selenium wait something.
+
+Selenide resolves this problem like no other. Unbelievably simple!
+While Selenium provides you a rich API for waiting different events [see this for example](http://xpinjection.com/2013/04/04/waits-and-timeouts-in-webdriver/),
+Selenide suggests you just to not bother. If you want to check that button is green, but button is not yet green, Selenide just waits until the
+button gets green. (Of course, timeout is configurable. Default is 4 seconds).
+It's an unique solution - as easy and stable as possible.
+
+Enjoy code samples:
 
 ```java
 @Test
 public void pageUsingAjax() {
-  $("#username").shouldBe(visible);   // ждёт, пока элемент появится
-  $("#username").shouldHave(text("Hello, Johny!")); // ждёт, пока текст элемента изменится на "Hello, Johny!"
-  $("#login-button").shouldHave(cssClass("green-button")); // ждёт, пока кнопка станет зелёной
-  $("#login-button").shouldBe(disabled); // ждёт, пока кнопка станет неактивной
-  $(".error").shouldNotBe(visible);  // ждёт, пока элемент исчезнет
-  $(".error").should(disappear);     // попробуйте-ка сделать это с Selenium в одну строчку!
+  $("#username").shouldBe(visible);   // waits until elemens appears
+  $("#username").shouldHave(text("Hello, Johny!")); // waits until elements gets text "Hello, Johny!"
+  $("#login-button").shouldHave(cssClass("green-button")); // waits until button gets green
+  $("#login-button").shouldBe(disabled); // waits until button gets disabled
+  $(".error").shouldNotBe(visible);  // waits until element disappears
+  $(".error").should(disappear);     // try to the same with a standard Selenium WebDriver!
 }
 ```
 
-### Как автоматически делать скриншоты?
-Легко! Если вы используете JUnit, просто добавьте эту строчку в свой тестовый класс:
+### How to make screenshots automatically?
+That's easy! If you are using JUnit, just add this line to your base test class:
 
 ```java
    @Rule
    public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests();
 ```
 
-Тогда после каждого упавшего теста будет автоматически создаваться скриншот (на самом деле два файла, .PNG и .HTML).
+This line will cause Selenide to automatically take screenshot after every failed test.
+For your convenience, Selenide creates even 2 files: .PNG и .HTML.
 
-А если вы хотите снимать вообще все тесты, а не только упавшие, тогда подойдёт такая строчка:
+If you want to shot all tests (not only failed), you can use this line:
 
 ```java
    @Rule
@@ -109,15 +120,15 @@ public void pageUsingAjax() {
               ScreenShooter.failedTests().succeededTests();
 ```
 
-Если вы используете TestNG, просто добавьте следующую аннотацию к своему тестовому классу:
+TestNG users can add this annotation to their base test class:
 
 ```java
 @Listeners({ ScreenShooter.class})
 ```
 
-### Я хочу попробовать, с чего начать?
+### I want to try, how to start?
 
-Добавь в свой проект зависимость Selenide:
+Just add Selenide dependency to your project:
 
 ```xml
 <dependency>
@@ -127,40 +138,48 @@ public void pageUsingAjax() {
 </dependency>
 ```
 
-Импортируй нужный класс:
+Import the class:
 
 ```java
 include static com.codeborne.selenide.Selenide.*
 ```
 
-И готово! Пиши тесты, едрён-батон!
+and it's ready! Start writing tests!
 
-### Кто-нибудь это реально использует?
-Да, мы <a href="http://ru.codeborne.com/" target="_blank">в фирме Codeborne</a> используем Selenide в нескольких реальных проектах:
+### Does somebody use Selenide?
+Yes. In <a href="http://codeborne.com/" target="_blank">Codeborne</a> we have been using Selenide for 2 years in different project:
+
+*   Internet-banks
+*   Self-service portals
+*   etc.
+
+with different languages and testing frameworks:
 
 *   Java + ANT + JUnit
 *   Java + Gradle + JUnit
 *   Scala + ANT + ScalaTest
+*   Groovy + ANT
+*   etc.
 
-Так что можете быть уверены, проект не сырой, реально используется и поддерживается.
-Есть ещё небольшой эталонный open-source проект, в котором используется Selenide: [игра Виселица](https://github.com/asolntsev/hangman).
-А также мы создали проект [Selenide examples](https://github.com/codeborne/selenide_examples), где мы храним примеры использования
-Selenide для тестирования [Gmail](https://github.com/codeborne/selenide_examples/tree/master/gmail/test/org/selenide/examples/gmail),
-[Github](https://github.com/codeborne/selenide_examples/tree/master/github/test/org/selenide/examples/github)
-и других классических примеров.
+So you can be sure that Selenide is not just another raw open-source project. It's actually used and supported.
 
-### Откуда такое название - Selenide?
-Библиотека Selenium взяла своё название от химического элемента (Селен). А селениды - это соединения селена с  другими элементами.
+You can find a reference open-source project that uses Selenide: [Hangman game](https://github.com/asolntsev/hangman).
+We have also created project [Selenide examples](https://github.com/codeborne/selenide_examples), where you can find examples of using Selenide
+for testing different sites like [Gmail](https://github.com/codeborne/selenide_examples/tree/master/gmail/test/org/selenide/examples/gmail) and
+[Github](https://github.com/codeborne/selenide_examples/tree/master/github/test/org/selenide/examples/github).
 
-Вот и у нас:
+### What means the name "Selenide"?
+In chemistry, Selenide is chemical compound containing Selenium + something.
+
+So for UI Tests:
 
 *   Selenide = Selenium + JUnit
 *   Selenide = Selenium + TestNG
 *   Selenide = Selenium + ScalaTest
 *   Selenide = Selenium + что угодно
 
-Химичьте на здоровье!
+Enjoy the open-source chemistry!
 
-### Поделитесь с нами опытом!
-Нам было бы очень интересно услышать ваши отзывы - что пробовали, что получилось, с чем испытывали проблемы.
-Напишите нам в [гуглогруппу](mailto:selenide-ru@googlegroups.com) или [лично](mailto:andrei тчк solntsev сбк gmail тчк com)!
+### Share your experience with us!
+We would be glad to get your feedback - tell us what you tried, how it worked. What succeeded, what failed?
+Feel free to write your feedback or questions to [googlegroup](mailto:selenide@googlegroups.com) or [privately to me](mailto:andrei.solntsev@gmail.com)!
