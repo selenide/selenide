@@ -1,15 +1,11 @@
 ---
 layout: page
-title: Selenide.org
+title:
 tagline: Concise UI Tests in Java
 ---
 {% include JB/setup %}
 
-![right]({{ BASE_PATH }}/images/selenide-logo-100x100.png)
-
-Selenide is a library for writing concise and expressive UI Tests in Java using Selenium WebDriver.
-
-## Code sample
+<h4>{{ site.tagline }}</h4>
 
 ```java
 @Test
@@ -42,12 +38,4 @@ For Maven, Ivy, Gradle etc. users:
 <dependency org="com.codeborne" name="selenide" revision="2.1"/>
 ```
 
-See [Quick Start guide](https://github.com/codeborne/selenide/wiki/Quick-Start) for more details.
-
-## Contacts
-
-<ul>
-  <li><a href="https://github.com/codeborne/selenide">View on <strong>GitHub</strong></a></li>
-  <li><a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.codeborne%22%20AND%20a%3A%22selenide%22">Search In <strong>Maven</strong></a></li>
-  <li><a href="http://twitter.com/jselenide">Follow at <strong>Twitter</strong></a></li>
-</ul>
+See [Quick Start guide]({{ BASE_PATH }}/quick-start.html) for more details.

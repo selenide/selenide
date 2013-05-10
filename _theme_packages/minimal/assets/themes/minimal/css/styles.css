@@ -104,6 +104,15 @@ img {
     float: right;
 }
 
+a.black:link {
+  color: rgb(34, 34, 34);
+  font-weight: bold;
+}
+a.black:visited {
+  color: rgb(34, 34, 34);
+  font-weight: bold;
+}
+
 .small {
     font-size: small;
 }
