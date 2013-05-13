@@ -163,7 +163,10 @@ with different languages and testing frameworks:
 
 So you can be sure that Selenide is not just another raw open-source project. It's actually used and supported.
 
+### Show me a working example!
+
 You can find a reference open-source project that uses Selenide: [Hangman game](https://github.com/asolntsev/hangman).
+
 We have also created project [Selenide examples](https://github.com/codeborne/selenide_examples), where you can find examples of using Selenide
 for testing different sites like [Gmail](https://github.com/codeborne/selenide_examples/tree/master/gmail/test/org/selenide/examples/gmail) and
 [Github](https://github.com/codeborne/selenide_examples/tree/master/github/test/org/selenide/examples/github).
