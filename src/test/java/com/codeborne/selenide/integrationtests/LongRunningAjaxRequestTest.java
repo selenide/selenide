@@ -71,15 +71,15 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void dollarWithParentWaitsUntilElementDisappears() {
-    $($("#results"), "span").should(exist);
-    $($("#results"), "span").shouldNot(exist);
+    $($("#results"), "span#loading").should(exist);
+    $($("#results"), "span#loading").shouldNot(exist);
   }
 
   @Test
   public void dollarWithParentAndIndexWaitsUntilElementDisappears() {
-    $($("#results"), "span", 0).should(exist);
-    $($("#results"), "span", 0).shouldNot(exist);
-    $($("#results"), "span", 666).shouldNot(exist);
+    $($("#results"), "span#loading", 0).should(exist);
+    $($("#results"), "span#loading", 0).shouldNot(exist);
+    $($("#results"), "span#loading", 666).shouldNot(exist);
   }
 
   @Test(expected = AssertionError.class)
