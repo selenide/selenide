@@ -57,6 +57,31 @@ public class WebDriverRunner {
     });
   }
 
+  /**
+   * Tell Selenide use your provided WebDriver instance.
+   * Use it if you need a custom logic for creating WebDriver.
+   *
+   * <p/>
+   * <p/>
+   *
+   * NB! Be sure to call this method before calling <code>open(url)</code>.
+   * Otherwise Selenide will create its own WebDriver instance and would not close it.
+   *
+   * <p/>
+   * <p/>
+   * P.S. Alternatively, you can run tests with system property
+   * <pre>  -Dbrowser=com.my.WebDriverFactory</pre>
+   *
+   * which should implement interface com.codeborne.selenide.WebDriverProvider
+   */
+  public static void setWebDriver(WebDriver webDriver) {
+    webdriver = webDriver;
+  }
+
+  /**
+   * Get the underlying instance of Selenium WebDriver.
+   * This can be used for any operations directly with WebDriver.
+   */
   public static WebDriver getWebDriver() {
     if (webdriver == null) {
       webdriver = createDriver();
