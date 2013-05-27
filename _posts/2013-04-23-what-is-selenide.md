@@ -9,7 +9,7 @@ tags: []
 
 Many of you have tried [Selenium WebDriver](http://code.google.com/p/selenium/) - one of the most popular tools for UI Testing.
 
-Writing UI Tests is not simple. There are a number of typical problems, including Ajax and dynamic pages.
+Writing UI Tests is not simple. There are a number of typical problems, including Ajax, dynamic pages and timeouts.
 The goal of Selenide is to resolve these problems.
 
 ![right]({{ BASE_PATH }}/images/selenide-logo-100x100.png)
