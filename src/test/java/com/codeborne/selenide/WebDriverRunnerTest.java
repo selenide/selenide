@@ -2,16 +2,20 @@ package com.codeborne.selenide;
 
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
+import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 public class WebDriverRunnerTest {
 
-  static WebDriver driver = mock(WebDriver.class);
+  static WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
 
   @Test
   public void allowsToSpecifyCustomWebDriverConfiguration() {
@@ -23,6 +27,17 @@ public class WebDriverRunnerTest {
     } finally {
       WebDriverRunner.closeWebDriver();
       Configuration.browser = System.getProperty("browser", FIREFOX);
+    }
+  }
+
+  @Test
+  public void allowsToSpecifyCustomWebDriverProgrammatically() {
+    WebDriverRunner.setWebDriver(new ChromeDriver());
+    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    try {
+      assertEquals(ChromeDriver.class, WebDriverRunner.getWebDriver().getClass());
+    } finally {
+      WebDriverRunner.closeWebDriver();
     }
   }
 
