@@ -9,15 +9,8 @@ tags: []
 
 Many of you have tried [Selenium WebDriver](http://code.google.com/p/selenium/) - one of the most popular tools for UI Testing.
 
-We have been using Selenium in different projects.
-And we discovered that every time we need to write the same code in order to start browser, close browser,
-take screenshots and so one.
-You can find a huge amount of topics ala "How to do this and that in Selenium" with a huge
-amount of code that you need to copy-pase into your project.
-
-We asked ourself: why should UI Testing be so tedious?
-We decided to extract our repeating code into a separate open-source library.
-That's how [Selenide](http://selenide.org) was born.
+Writing UI Tests is not simple. There are a number of typical problems, including Ajax and dynamic pages.
+The goal of Selenide is to resolve these problems.
 
 ![right]({{ BASE_PATH }}/images/selenide-logo-100x100.png)
 
@@ -51,7 +44,7 @@ Shortly, these are the key features of Selenide
 
 In short, the purpose of Selenide - is to **focus on business logic** and not to engage in perpetual annoying minor problems.
 
-### Additional Selenide
+### Additional methods
 Selenide provides additional methods for actions that cannot be done with a single command in Selenium WebDriver.
 These are radiobutton selection, selectbox selection, taking screenshots, clearing browser cache etc.
 
@@ -145,6 +138,19 @@ include static com.codeborne.selenide.Selenide.*
 ```
 
 and it's ready! Start writing tests!
+
+### Why yet another testing library?
+
+We have been using Selenium in different projects.
+And we discovered that every time we need to write the same code in order to start browser, close browser,
+take screenshots and so one.
+You can find a huge amount of topics ala "How to do this and that in Selenium" with a huge
+amount of code that you need to copy-pase into your project.
+
+We asked ourself: why should UI Testing be so tedious?
+We decided to extract our repeating code into a separate open-source library.
+That's how [Selenide](http://selenide.org) was born.
+
 
 ### Does somebody use Selenide?
 Yes. In <a href="http://codeborne.com/" target="_blank">Codeborne</a> we have been using Selenide for 2 years in different project:
