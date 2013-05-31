@@ -51,7 +51,7 @@ So easy! No more boring routines, we can start.
 Import one class:
 
 ```java
-include static com.codeborne.selenide.Selenide.*
+import static com.codeborne.selenide.Selenide.*
 ```
 
 and write test:
