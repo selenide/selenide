@@ -6,6 +6,7 @@
 
 <ul class="main-menu-pages">
   <li><a href="{{ BASE_PATH }}/quick-start.html">Quick start</a></li>
+  <li><a href="{{ BASE_PATH }}/users.html">Who uses Selenide?</a></li>
   <li><a href="{{ BASE_PATH }}/contacts.html">Tell us about yourself!</a></li>
 </ul>
 

@@ -104,6 +104,10 @@ img {
     float: right;
 }
 
+.text-right {
+  text-align: right;
+}
+
 a.black:link {
   color: rgb(34, 34, 34);
   font-weight: bold;
