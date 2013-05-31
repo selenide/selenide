@@ -18,9 +18,9 @@ Probably two the most noticeable methods are (inspired from jQuery):
   $$("#insuranceDetailsHeader tr td") - returns list of WebElements matching given CSS selector
 
 == How to start?
-Just put selenide.jar to your project and include the following methods:
+Just put selenide.jar to your project and import the following methods:
 
-  include static com.codeborne.selenide.Selenide.*
+  import static com.codeborne.selenide.Selenide.*
 
 Look for {Quick Start}[https://github.com/codeborne/selenide/wiki/Quick-Start] for details.
 
@@ -116,7 +116,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
     * replace by import com.codeborne.selenide.SelenideElement
 
 === 1.11 (Released 28.02.2013)
-* Mark classes DOM and Navigation as deprecated (going to drop them in Selenide 2.0). The point is that now user only needs to include one class Selenide.
+* Mark classes DOM and Navigation as deprecated (going to drop them in Selenide 2.0). The point is that now user only needs to import one class Selenide.
 * Added support for PhantomJS driver
 * Suppress HtmlUnit useless warnings
 * Method $.setValue() triggers onchange event with standard JavaScript instead of jQuery.
