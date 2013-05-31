@@ -29,8 +29,20 @@ public class WebDriverRunner {
   public static final String FIREFOX = "firefox";
 
   /**
-   * To use OperaDriver, you need to include extra dependency to your project:
-   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.31.0" conf="test->default"/>
+   * To use HtmlUnitDriver, you need to include extra dependency to your project:
+   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.33.0" conf="test->default"/>
+   *
+   * It's also possible to run HtmlUnit driver emulating different browsers:
+   * <p>
+   * java -Dbrowser=htmlunit:firefox
+   * </p>
+   * <p>
+   * java -Dbrowser=htmlunit:chrome
+   * </p>
+   * <p>
+   * java -Dbrowser=htmlunit:internet explorer   (default)
+   * </p>
+   * etc.
    */
   public static final String HTMLUNIT = "htmlunit";
 
@@ -60,6 +72,8 @@ public class WebDriverRunner {
   /**
    * Tell Selenide use your provided WebDriver instance.
    * Use it if you need a custom logic for creating WebDriver.
+   *
+   * It's recommended not to use implicit wait with this driver, because Selenide handles timing issues explicitly.
    *
    * <p/>
    * <p/>
@@ -121,7 +135,7 @@ public class WebDriverRunner {
   }
 
   public static boolean htmlUnit() {
-    return HTMLUNIT.equalsIgnoreCase(browser);
+    return browser != null && browser.startsWith(HTMLUNIT);
   }
 
   public static boolean phantomjs() {
@@ -192,7 +206,8 @@ public class WebDriverRunner {
   private static WebDriver createDriver() {
     if (remote != null) {
       return createRemoteDriver(remote, browser);
-    } else if (CHROME.equalsIgnoreCase(browser)) {
+    }
+    else if (CHROME.equalsIgnoreCase(browser)) {
       ChromeOptions options = new ChromeOptions();
       if (startMaximized) {
         // Due do bug in ChromeDriver we need this workaround
@@ -200,26 +215,37 @@ public class WebDriverRunner {
         options.addArguments("chrome.switches", "--start-maximized");
       }
       return new ChromeDriver(options);
-    } else if (ie()) {
+    }
+    else if (ie()) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
       ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
       return maximize(new InternetExplorerDriver(ieCapabilities));
-    } else if (htmlUnit()) {
-      DesiredCapabilities desiredCapabilities = DesiredCapabilities.htmlUnit();
-      desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
-      desiredCapabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
-      desiredCapabilities.setJavascriptEnabled(true);
-      return new HtmlUnitDriver(desiredCapabilities);
-    } else if (FIREFOX.equalsIgnoreCase(browser)) {
+    }
+    else if (htmlUnit()) {
+      DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
+      capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
+      capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
+      capabilities.setJavascriptEnabled(true);
+      if (browser.indexOf(':') > -1) {
+        // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
+        String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
+        capabilities.setVersion(emulatedBrowser);
+      }
+      return new HtmlUnitDriver(capabilities);
+    }
+    else if (FIREFOX.equalsIgnoreCase(browser)) {
       return maximize(new FirefoxDriver());
-    } else if (OPERA.equalsIgnoreCase(browser)) {
+    }
+    else if (OPERA.equalsIgnoreCase(browser)) {
       return createInstanceOf("com.opera.core.systems.OperaDriver");
-    } else if (PHANTOMJS.equals(browser)) {
+    }
+    else if (PHANTOMJS.equals(browser)) {
       DesiredCapabilities capabilities = new DesiredCapabilities();
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability("takesScreenshot", true);
       return new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities);
-    } else {
+    }
+    else {
       return createInstanceOf(browser);
     }
   }
