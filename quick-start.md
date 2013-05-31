@@ -8,7 +8,7 @@ group: navigation
 
 It's extremely easy to start using Selenide. You don't need to read tons of documentation. You don't even need to buy a workshop.
 
-Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.1/selenide-2.1.jar">selenide.jar</a> to your project and start writing test.
+Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.2/selenide-2.2.jar">selenide.jar</a> to your project and start writing test.
 
 ### For Maven users:
 
@@ -18,7 +18,7 @@ Add these lines to file pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ Add these lines to file ivy.xml:
 ```xml
 <ivy-module>
   <dependencies>
-    <dependency org="com.codeborne" name="selenide" rev="2.1"/>
+    <dependency org="com.codeborne" name="selenide" rev="2.2"/>
   </dependencies>
 </ivy-module>
 ```
@@ -40,7 +40,7 @@ Add these lines to file build.gradle:
 
 ```groovy
 dependencies {
-  testCompile 'com.codeborne:selenide:2.1'
+  testCompile 'com.codeborne:selenide:2.2'
 }
 ```
 
