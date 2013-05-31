@@ -134,7 +134,7 @@ Just add Selenide dependency to your project:
 Import the class:
 
 ```java
-include static com.codeborne.selenide.Selenide.*
+import static com.codeborne.selenide.Selenide.*
 ```
 
 and it's ready! Start writing tests!
