@@ -142,11 +142,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void fireEvent(final String event) {
-    // TODO Probably we need another IF for IE as described here:
-    // http://stackoverflow.com/questions/136617/how-do-i-programatically-force-an-onchange-event-on-an-input
-    executeJavaScript("var evt = document.createEvent('HTMLEvents'); " +
-        "evt.initEvent('" + event + "', true, true ); " +
-        "return !document.activeElement.dispatchEvent(evt);");
+    final String jsCodeToTriggerEvent
+        = "if (document.createEventObject){\n" +  // IE
+        "  var evt = document.createEventObject();\n" +
+        "  return document.activeElement.fireEvent('on" + event + "', evt);\n" +
+        "}\n" +
+        "else{\n" +
+        "  var evt = document.createEvent('HTMLEvents');\n " +
+        "  evt.initEvent('" + event + "', true, true );\n " +
+        "  return !document.activeElement.dispatchEvent(evt);\n" +
+        "}";
+    executeJavaScript(jsCodeToTriggerEvent);
   }
 
   private Object should(Object proxy, Condition[] conditions) {
