@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
@@ -32,10 +32,11 @@ public class WebDriverRunnerTest {
 
   @Test
   public void allowsToSpecifyCustomWebDriverProgrammatically() {
-    WebDriverRunner.setWebDriver(new ChromeDriver());
+    WebDriver myDriver = new HtmlUnitDriver();
+    WebDriverRunner.setWebDriver(myDriver);
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
     try {
-      assertEquals(ChromeDriver.class, WebDriverRunner.getWebDriver().getClass());
+      assertSame(myDriver, WebDriverRunner.getWebDriver());
     } finally {
       WebDriverRunner.closeWebDriver();
     }
