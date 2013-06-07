@@ -56,6 +56,15 @@ public class WebDriverRunnerTest {
     assertEquals(expectedException, cleanupWebDriverExceptionMessage(webdriverException));
   }
 
+  @Test
+  public void composesScreenshotNameFromTestClassAndMethod() {
+    assertEquals("MyTest/helloWorldTest", WebDriverRunner.getScreenshotFileName("MyTest", "helloWorldTest"));
+
+    assertEquals("com/codeborne/selenide/integrationtests/SelenideMethods/userCanListMatchingSubElements",
+        WebDriverRunner.getScreenshotFileName("com.codeborne.selenide.integrationtests.SelenideMethods",
+            "userCanListMatchingSubElements"));
+  }
+
   public static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver() {

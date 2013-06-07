@@ -1,24 +1,25 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selectors.byValue;
-
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.by;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.url;
-import static com.codeborne.selenide.Selectors.byAttribute;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.url;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
 public class SelenideMethods {
+  @Rule
+  public ScreenShooter allScreens = ScreenShooter.failedTests();
+
   @Before
   public void openTestPageWithJQuery() {
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));

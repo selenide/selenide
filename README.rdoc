@@ -73,6 +73,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.3 (snapshot)
+* Save screenshots into subfolders: folder name is "com/package/TestClass/", file name is "testName.png"/"testName.html"
+
 === 2.2 (Released 31.05.2013)
 * Added method WebDriverRunner.setWebDriver(myDriver) to enable using custom WebDriver instance.
 * Added possibility to run HtmlUnit driver emulating different browsers: -Dbrowser=htmlunit:firefox, htmlunit:chrome etc.

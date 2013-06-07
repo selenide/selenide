@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.*;
+import static java.io.File.separatorChar;
 import static org.apache.commons.io.FileUtils.copyFile;
 
 public class WebDriverRunner {
@@ -156,8 +157,17 @@ public class WebDriverRunner {
     return getWebDriver().getCurrentUrl();
   }
 
+  public static String takeScreenShot(String className, String methodName) {
+    return takeScreenShot(getScreenshotFileName(className, methodName));
+  }
+
+  static String getScreenshotFileName(String className, String methodName) {
+    return className.replace('.', separatorChar) + separatorChar + methodName;
+  }
+
   public static String takeScreenShot(String fileName) {
     if (webdriver == null) {
+      System.err.println("Cannot take screenshot because browser is not started");
       return null;
     }
 
