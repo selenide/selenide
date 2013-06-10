@@ -299,3 +299,13 @@ footer {
 #languages a {
   margin-right: 10px;
 }
+
+.green {
+  color: green;
+  font-weight: bold;
+}
+
+.red {
+  color: red;
+  font-weight: bold;
+}
