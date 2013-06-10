@@ -4,6 +4,10 @@
   <li><a href="http://twitter.com/jselenide" target="_blank">Follow at <strong>Twitter</strong></a></li>
 </ul>
 
+<a class="right" title="Subscribe to this blog" href="{{ BASE_PATH }}/rss.xml">
+  <abbr title="Really Simple Syndication">RSS</abbr>
+</a>
+
 <ul class="main-menu-pages">
   <li><a href="{{ BASE_PATH }}/quick-start.html">Quick start</a></li>
   <li><a href="{{ BASE_PATH }}/users.html">Who uses Selenide?</a></li>
