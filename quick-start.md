@@ -52,6 +52,7 @@ Import one class:
 
 ```java
 import static com.codeborne.selenide.Selenide.*
+import static com.codeborne.selenide.Condition.*
 ```
 
 and write test:
