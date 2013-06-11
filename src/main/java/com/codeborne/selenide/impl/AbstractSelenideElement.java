@@ -1,8 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -275,9 +273,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    return fail("Element " + toString() + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
+    /*
+    NotFound{ By.name: usernamex}
+    Expected: shouldBe(readonly)
+    Timeout: 4 sec
+    */
+    if (element == null) {
+      throw new ElementNotFound(toString(), condition, timeoutMs);
+    }
+    else {
+      throw new ElementNotMatches(toString(), condition, element, timeoutMs);
+
+//      return fail("Element " + toString() + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
+//          " actual value: '" + getActualValue(condition) + "';" +
+//          " element details: '" + Describe.describe(element) + "'");
+    }
   }
 
   protected void waitWhile(Condition condition, long timeoutMs) {

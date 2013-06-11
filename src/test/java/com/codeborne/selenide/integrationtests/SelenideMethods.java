@@ -45,7 +45,7 @@ public class SelenideMethods {
 
   @Test
   public void userCanCheckIfElementIsReadonly() {
-    $(By.name("username")).shouldBe(readonly);
+    $(By.name("username")).shouldBe(readonly).shouldBe(selected);
     $(By.name("password")).shouldNotBe(readonly);
   }
 
@@ -235,4 +235,48 @@ public class SelenideMethods {
     $("#multirowTable tr").findAll(byText("Chack")).shouldHaveSize(1);
     $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @Test
+  public void justStartTyping() {
+    $("http://google.com");
+    $(By.name("q")).shouldBe(r);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

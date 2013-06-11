@@ -52,6 +52,9 @@ public class Describe {
     } catch (WebDriverException elementDoesNotExist) {
       return cleanupWebDriverExceptionMessage(elementDoesNotExist);
     }
+    catch (IndexOutOfBoundsException e) {
+      return e.toString();
+    }
   }
 
   private static boolean isSelected(WebElement element) {

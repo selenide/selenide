@@ -49,6 +49,6 @@ public class ElementLocatorProxy extends AbstractSelenideElement {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "{" + elementLocator + "}";
+    return "{" + elementLocator + "}";
   }
 }

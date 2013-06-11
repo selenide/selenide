@@ -33,6 +33,6 @@ public class WebElementProxy extends AbstractSelenideElement {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "{" + delegate + "}";
+    return String.valueOf(delegate);
   }
 }
