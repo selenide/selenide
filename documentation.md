@@ -12,7 +12,7 @@ Poor software <span class="red">does not have</span> documentation. <br/>
 Brillian software <span class="green">does not <em>need</em></span> documentation.
 
 ## Simplicity
-Selenide is so simple that you don't need to read tons of documentation.
+We are proud to claim that Selenide is so simple that you don't need to read tons of documentation.
 
 The whole work with Selenide consists of three simple things:
 
@@ -34,6 +34,8 @@ Just type: `$(selector).` - and IDE suggest you all the options.
 
 <img src="{{ BASE_PATH }}/images/ide-just-start-typing.png" alt="Selenide API: Just start typing"/>
 
+Use the power of nowdays development environments instead of bothering with documentation!
+
 <br/>
 Just for reference, these are Selenide classes:
 
@@ -46,7 +48,7 @@ Just for reference, these are Selenide classes:
 *  title()
 *  sleep(long milliseconds)
 
-The main method us certainly $ - it has a variety of parameters, but returns SelenideElement.
+The main method us certainly `$` - it has a variety of parameters, but returns SelenideElement.
 
 ### com.codeborne.selenide.SelenideElement <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/SelenideElement.java">[src]</a>
 
