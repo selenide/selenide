@@ -291,6 +291,11 @@ public class WebDriverRunner {
     }
   }
 
+  /**
+   * @deprecated This method produced unreadable error messages.
+   *          Throw ElementNotFound or ElementNotMatches instead.
+   */
+  @Deprecated
   public static <T> T fail(String message) {
     throw new AssertionError(message);
   }
