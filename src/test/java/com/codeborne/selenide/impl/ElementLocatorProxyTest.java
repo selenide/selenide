@@ -13,6 +13,6 @@ public class ElementLocatorProxyTest {
     ElementLocator locator = mock(ElementLocator.class);
     when(locator.toString()).thenReturn("pageObjectField");
 
-    assertEquals("ElementLocatorProxy{pageObjectField}", new ElementLocatorProxy(locator).toString());
+    assertEquals("{pageObjectField}", new ElementLocatorProxy(locator).toString());
   }
 }

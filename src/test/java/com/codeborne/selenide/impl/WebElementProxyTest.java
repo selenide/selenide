@@ -12,6 +12,6 @@ public class WebElementProxyTest {
   public void testToString() {
     WebElement element = mock(WebElement.class);
     when(element.toString()).thenReturn("webElement");
-    assertEquals("WebElementProxy{webElement}", new WebElementProxy(element).toString());
+    assertEquals("{webElement}", new WebElementProxy(element).toString());
   }
 }
