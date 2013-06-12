@@ -6,8 +6,8 @@ group: navigation
 ---
 {% include JB/setup %}
 
-Poor software <span class="red">does not have</span> documentation. <br/>
-Brilliant software <span class="green">does not need</span> documentation.
+> Poor software <span class="red">does not have</span> documentation. <br/>
+> Brilliant software <span class="green">does not need</span> documentation.
 
 We are proud to claim that Selenide is so simple that you don't need to read tons of documentation.
 
