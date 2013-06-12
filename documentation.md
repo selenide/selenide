@@ -6,13 +6,12 @@ group: navigation
 ---
 {% include JB/setup %}
 
-# Documentation
-
 Poor software <span class="red">does not have</span> documentation. <br/>
-Brillian software <span class="green">does not <em>need</em></span> documentation.
+Brilliant software <span class="green">does not need</span> documentation.
 
-## Simplicity
 We are proud to claim that Selenide is so simple that you don't need to read tons of documentation.
+
+## Three simple things
 
 The whole work with Selenide consists of three simple things:
 
@@ -26,7 +25,7 @@ The whole work with Selenide consists of three simple things:
   $(".message").shouldHave(text("Hello"));
 ```
 
-## Selenide API
+## Use the power of IDE
 
 Selenide API consists of few classes. We suggest you to stop reading, open your IDE and start typing.
 
@@ -37,7 +36,8 @@ Just type: `$(selector).` - and IDE suggest you all the options.
 Use the power of nowdays development environments instead of bothering with documentation!
 
 <br/>
-Just for reference, these are Selenide classes:
+## Selenide API
+Just for reference, these are Selenide classes you will probably need for work:
 
 ### com.codeborne.selenide.Selenide <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/Selenide.java">[src]</a>
 
