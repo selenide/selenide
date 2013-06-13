@@ -1,5 +1,7 @@
 = Selenide = Consice API for Selenium WebDriver
 
+[![Build Status](https://travis-ci.org/codeborne/selenide.png)](https://travis-ci.org/codeborne/selenide)
+
 == What is Selenide?
 Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
 
