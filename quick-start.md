@@ -77,7 +77,7 @@ Run as a usual tests. You can run from IDE, or as an ANT script, or "mvn test". 
 
 ### Do you want to see a working example?
 
-You can find a reference open-source project that uses Selenide: [Hangman game](https://github.com/asolntsev/hangman).
+You can find a reference open-source project that uses Selenide: [Hangman game](https://github.com/asolntsev/hangman/blob/master/test/uitest/selenide/HangmanSpec.java).
 We have also created project [Selenide examples](https://github.com/codeborne/selenide_examples), where you can find examples of using Selenide
 for testing different sites like [Gmail](https://github.com/codeborne/selenide_examples/tree/master/gmail/test/org/selenide/examples/gmail) and
 [Github](https://github.com/codeborne/selenide_examples/tree/master/github/test/org/selenide/examples/github).
