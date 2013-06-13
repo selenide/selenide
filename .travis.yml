@@ -1,5 +1,5 @@
 language: java
-script: "gradle firefox chrome"
+script: "gradle clean test firefox"
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
