@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -11,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -23,6 +23,7 @@ import java.net.URL;
 import static com.codeborne.selenide.Configuration.*;
 import static java.io.File.separatorChar;
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.openqa.selenium.OutputType.FILE;
 
 public class WebDriverRunner {
   public static final String CHROME = "chrome";
@@ -179,17 +180,28 @@ public class WebDriverRunner {
       System.err.println(e);
     }
 
-    if (webdriver instanceof TakesScreenshot) {
+    if (webdriver instanceof RemoteWebDriver) {
+      WebDriver remoteDriver = new Augmenter().augment(webdriver);
+      targetFile = takeScreenshotImageIfPossible(remoteDriver, fileName, targetFile);
+    }
+    else {
+      targetFile = takeScreenshotImageIfPossible(webdriver, fileName, targetFile);
+    }
+
+    return targetFile.getAbsolutePath();
+  }
+
+  private static File takeScreenshotImageIfPossible(WebDriver driver, String fileName, File targetFile) {
+    if (driver instanceof TakesScreenshot) {
       try {
-        File scrFile = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
+        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(FILE);
         targetFile = new File(reportsFolder, fileName + ".png");
         copyFile(scrFile, targetFile);
       } catch (Exception e) {
         System.err.println(e);
       }
     }
-
-    return targetFile.getAbsolutePath();
+    return targetFile;
   }
 
   private static void writeToFile(String content, File targetFile) {
