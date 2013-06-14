@@ -180,26 +180,27 @@ public class WebDriverRunner {
       System.err.println(e);
     }
 
-    if (webdriver instanceof RemoteWebDriver) {
-      WebDriver remoteDriver = new Augmenter().augment(webdriver);
-      targetFile = takeScreenshotImageIfPossible(remoteDriver, fileName, targetFile);
+    if (webdriver instanceof TakesScreenshot) {
+      targetFile = takeScreenshotImage((TakesScreenshot) webdriver, fileName, targetFile);
     }
-    else {
-      targetFile = takeScreenshotImageIfPossible(webdriver, fileName, targetFile);
+    else if (webdriver instanceof RemoteWebDriver) {
+      WebDriver remoteDriver = new Augmenter().augment(webdriver);
+      if (webdriver instanceof TakesScreenshot) {
+        targetFile = takeScreenshotImage((TakesScreenshot) remoteDriver, fileName, targetFile);
+      }
     }
 
     return targetFile.getAbsolutePath();
   }
 
-  private static File takeScreenshotImageIfPossible(WebDriver driver, String fileName, File targetFile) {
-    if (driver instanceof TakesScreenshot) {
-      try {
-        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(FILE);
-        targetFile = new File(reportsFolder, fileName + ".png");
-        copyFile(scrFile, targetFile);
-      } catch (Exception e) {
-        System.err.println(e);
-      }
+  private static File takeScreenshotImage(TakesScreenshot driver, String fileName, final File targetFile) {
+    try {
+      File scrFile = driver.getScreenshotAs(FILE);
+      File imageFile = new File(reportsFolder, fileName + ".png");
+      copyFile(scrFile, imageFile);
+      return imageFile;
+    } catch (Exception e) {
+      System.err.println(e);
     }
     return targetFile;
   }
