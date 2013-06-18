@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -14,15 +13,12 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.*;
 import static java.io.File.separatorChar;
-import static org.apache.commons.io.FileUtils.copyFile;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class WebDriverRunner {
@@ -111,7 +107,7 @@ public class WebDriverRunner {
         try {
           webdriver.quit();
         } catch (WebDriverException cannotCloseBrowser) {
-          System.err.println("Cannot close browser normally (let's kill it): " + cannotCloseBrowser.toString());
+          System.err.println("Cannot close browser normally: " + cleanupWebDriverExceptionMessage(cannotCloseBrowser));
         }
         finally {
           killBrowser();
@@ -205,25 +201,40 @@ public class WebDriverRunner {
     return targetFile;
   }
 
-  private static void writeToFile(String content, File targetFile) {
-    File reportsFolder = targetFile.getParentFile();
-    if (!reportsFolder.exists()) {
-      System.err.println("Creating folder for test reports: " + reportsFolder);
-      if (!reportsFolder.mkdirs()) {
-        System.err.println("Failed to create " + reportsFolder);
-      }
-    }
+  private static void copyFile(File sourceFile, File targetFile) throws IOException {
+    copyFile(new FileInputStream(sourceFile), ensureFolderExists(targetFile));
+  }
 
+  private static void copyFile(InputStream in, File targetFile) throws IOException {
+    byte[] buffer = new byte[1024];
+    int len;
     try {
-      FileWriter output = new FileWriter(targetFile);
+      final FileOutputStream out = new FileOutputStream(targetFile);
       try {
-        IOUtils.write(content, output);
+        while ((len = in.read(buffer)) != -1) {
+          out.write(buffer, 0, len);
+        }
       } finally {
-        output.close();
+        out.close();
       }
-    } catch (IOException e) {
-      System.err.println("Failed to write page source to file " + targetFile + ": " + e);
+    } finally {
+      in.close();
     }
+  }
+
+  private static void writeToFile(String content, File targetFile) throws IOException {
+    copyFile(new ByteArrayInputStream(content.getBytes()), targetFile);
+  }
+
+  private static File ensureFolderExists(File targetFile) {
+    File folder = targetFile.getParentFile();
+    if (!folder.exists()) {
+      System.err.println("Creating folder: " + folder);
+      if (!folder.mkdirs()) {
+        System.err.println("Failed to create " + folder);
+      }
+    }
+    return targetFile;
   }
 
   private static WebDriver createDriver() {
