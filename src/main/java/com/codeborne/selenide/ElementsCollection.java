@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.*;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -97,11 +96,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   public static String elementsToString(Collection<WebElement> elements) {
-    List<String> result = new ArrayList<String>(elements.size());
+    StringBuilder sb = new StringBuilder(256);
+    sb.append("[\n\t\t");
     for (WebElement element : elements) {
-      result.add($(element).toString());
+      if (sb.length() > 4) {
+        sb.append(",\n\t\t");
+      }
+      sb.append($(element).toString());
     }
-    return "[\n\t\t" + StringUtils.join(result, ",\n\t\t") + "\n]";
+    sb.append("\n]");
+    return sb.toString();
   }
 
   @Override
