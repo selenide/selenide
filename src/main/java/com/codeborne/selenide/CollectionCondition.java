@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
-  public abstract void fail(List<WebElement> elements);
+  public abstract void fail(List<WebElement> elements, long timeoutMs);
 
   public static CollectionCondition empty = size(0);
 
@@ -19,8 +19,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
       }
 
       @Override
-      public void fail(List<WebElement> elements) {
-        WebDriverRunner.fail("List size is " + elements.size() + ", but expected size is " + expectedSize);
+      public void fail(List<WebElement> elements, long timeoutMs) {
+        throw new ListSizeNotMatched(expectedSize, elements, timeoutMs);
       }
     };
   }
@@ -39,7 +39,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
       }
 
       @Override
-      public void fail(List<WebElement> elements) {
+      public void fail(List<WebElement> elements, long timeoutMs) {
         WebDriverRunner.fail("Elements' texts are " + Arrays.toString(ElementsCollection.getTexts(elements)) + ", but expected texts are " + Arrays.toString(expectedTexts));
       }
     };

@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.*;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -9,6 +10,7 @@ import java.util.*;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
@@ -47,7 +49,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(pollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeout);
-    condition.fail(actualElements);
+    condition.fail(actualElements, timeout);
   }
 
   public ElementsCollection filter(Condition condition) {
@@ -94,6 +96,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return texts;
   }
 
+  public static String elementsToString(Collection<WebElement> elements) {
+    List<String> result = new ArrayList<String>(elements.size());
+    for (WebElement element : elements) {
+      result.add($(element).toString());
+    }
+    return "[\n\t\t" + StringUtils.join(result, ",\n\t\t") + "\n]";
+  }
+
   @Override
   public SelenideElement get(int index) {
     return WebElementProxy.wrap(getActualElements().get(index));
@@ -112,5 +122,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public ListIterator<SelenideElement> listIterator(int index) {
     return new SelenideElementListIterator(getActualElements().listIterator(index));
+  }
+
+  @Override
+  public String toString() {
+    return elementsToString(actualElements);
   }
 }
