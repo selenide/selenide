@@ -1,0 +1,4 @@
+com.codeborne.selenide
+com.codeborne.selenide.impl
+com.codeborne.selenide.junit
+com.codeborne.selenide.testng
