@@ -462,6 +462,10 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
+  /**
+   * Checks that element is not disabled
+   * @see org.openqa.selenium.WebElement#isEnabled()
+   */
   public static final Condition enabled = new Condition("enabled", false) {
     @Override public boolean apply(WebElement element) {
       return element.isEnabled();
@@ -472,6 +476,10 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
+  /**
+   * Checks that element is disabled
+   * @see org.openqa.selenium.WebElement#isEnabled()
+   */
   public static final Condition disabled = new Condition("disabled", false) {
     @Override public boolean apply(WebElement element) {
       return !element.isEnabled();
@@ -482,6 +490,10 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
+  /**
+   * Checks that element is selected
+   * @see org.openqa.selenium.WebElement#isSelected()
+   */
   public static final Condition selected = new Condition("selected", false) {
     @Override public boolean apply(WebElement element) {
       return element.isSelected();
