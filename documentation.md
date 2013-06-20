@@ -36,7 +36,11 @@ Just type: `$(selector).` - and IDE suggest you all the options.
 Use the power of nowdays development environments instead of bothering with documentation!
 
 <br/>
+
 ## Selenide API
+
+Here is a full <a href="/javadoc/2.3" target="_blank">Selenide javadoc</a>.
+
 Just for reference, these are Selenide classes you will probably need for work:
 
 ### com.codeborne.selenide.Selenide <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/Selenide.java">[src]</a>
