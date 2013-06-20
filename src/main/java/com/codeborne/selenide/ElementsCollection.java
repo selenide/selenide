@@ -86,13 +86,26 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return getTexts(getActualElements());
   }
 
+  /**
+   * Fail-safe method for retrieving texts of given elements.
+   * @param elements Any collection of WebElements
+   * @return Array of texts (or exceptions in case of any WebDriverExceptions)
+   */
   public static String[] getTexts(Collection<WebElement> elements) {
     String[] texts = new String[elements.size()];
     int i = 0;
     for (WebElement element : elements) {
-      texts[i++] = element.getText();
+      texts[i++] = getText(element);
     }
     return texts;
+  }
+
+  private static String getText(WebElement element) {
+    try {
+      return element.getText();
+    } catch (WebDriverException elementDisappeared) {
+      return elementDisappeared.toString();
+    }
   }
 
   public static String elementsToString(Collection<WebElement> elements) {
