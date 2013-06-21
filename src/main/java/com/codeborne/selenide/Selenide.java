@@ -28,6 +28,10 @@ public class Selenide {
     navigator.open(absoluteUrl);
   }
 
+  /**
+   * Open a web page and create PageObject for it.
+   * @return PageObject of given class
+   */
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl);
     return page(pageObjectClassClass);
