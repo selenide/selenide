@@ -5,26 +5,32 @@ import org.openqa.selenium.By;
 public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring)
+   *
+   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
+   *
    * @param elementText Text to search inside element
    * @return standard selenium By criteria
    */
   public static By withText(String elementText) {
     assertDoesNotContainBothApostrophesAndQuotes(elementText);
     return elementText.contains("'") ?
-        By.xpath(".//*[contains(normalize-space(text()), \"" + elementText + "\")]") :
-        By.xpath(".//*[contains(normalize-space(text()), '" + elementText + "')]");
+        By.xpath(".//*/text()[contains(normalize-space(.), \"" + elementText + "\")]/parent::*") :
+        By.xpath(".//*/text()[contains(normalize-space(.), '" + elementText + "')]/parent::*");
   }
 
   /**
    * Find element HAVING given text (exactly this text)
+   *
+   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
+   *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
    */
   public static By byText(String elementText) {
     assertDoesNotContainBothApostrophesAndQuotes(elementText);
     return elementText.contains("'") ?
-        By.xpath(".//*[normalize-space(text()) = \"" + elementText + "\"]") :
-        By.xpath(".//*[normalize-space(text()) = '" + elementText + "']");
+        By.xpath(".//*/text()[normalize-space(.) = \"" + elementText + "\"]/parent::*") :
+        By.xpath(".//*/text()[normalize-space(.) = '" + elementText + "']/parent::*");
   }
 
   /**
