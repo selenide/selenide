@@ -30,7 +30,6 @@ public class CollectionMethods {
     assertEquals(4, $$("#radioButtons input").size());
     assertEquals(4, $$(By.xpath("//select[@name='domain']/option")).size());
     assertEquals(0, $$(By.name("non-existing-element")).size());
-    assertEquals(0, $$("#dynamic-content-container span").size());
   }
 
   @Test
@@ -47,7 +46,7 @@ public class CollectionMethods {
     $$("#radioButtons input").shouldHaveSize(4);
     $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
     $$(By.name("non-existing-element")).shouldHaveSize(0);
-    $$("#dynamic-content-container span").shouldHaveSize(0);
+    $$("#dynamic-content-container span").shouldHave(size(2));
   }
 
   @Test

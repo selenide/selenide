@@ -7,6 +7,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
+import static java.io.File.separatorChar;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -58,9 +59,11 @@ public class WebDriverRunnerTest {
 
   @Test
   public void composesScreenshotNameFromTestClassAndMethod() {
-    assertEquals("MyTest/helloWorldTest", WebDriverRunner.getScreenshotFileName("MyTest", "helloWorldTest"));
+    String expected = "MyTest/helloWorldTest".replace('/', separatorChar);
+    assertEquals(expected, WebDriverRunner.getScreenshotFileName("MyTest", "helloWorldTest"));
 
-    assertEquals("com/codeborne/selenide/integrationtests/SelenideMethods/userCanListMatchingSubElements",
+    String expectedFileName = "com/codeborne/selenide/integrationtests/SelenideMethods/userCanListMatchingSubElements".replace('/', separatorChar);
+    assertEquals(expectedFileName,
         WebDriverRunner.getScreenshotFileName("com.codeborne.selenide.integrationtests.SelenideMethods",
             "userCanListMatchingSubElements"));
   }

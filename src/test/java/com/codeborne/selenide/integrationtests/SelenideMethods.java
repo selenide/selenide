@@ -66,12 +66,12 @@ public class SelenideMethods {
 
   @Test
   public void userCanFindElementByAttribute() {
-    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
     assertEquals("select", $(byAttribute("name", "domain")).getTagName());
     assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
     assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
     assertEquals(4, $$(byAttribute("type", "radio")).size());
     assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
+    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
   }
 
   @Test
@@ -163,7 +163,7 @@ public class SelenideMethods {
   public void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).followLink();
 //    $(By.linkText("Want to see ajax in action?")).click();
-    assertTrue(url().endsWith("long_ajax_request.html"));
+    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
   @Test
