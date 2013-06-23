@@ -26,7 +26,6 @@ public class PageWithJQuery {
   @Test
   public void setValueTriggersOnChangeEvent() {
     $("#username").setValue("john");
-    //System.out.println($("#log").text());
     $("h2").shouldHave(text("john"));
 
     $("#username").append(" ");
