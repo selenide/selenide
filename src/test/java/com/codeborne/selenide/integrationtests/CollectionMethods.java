@@ -53,14 +53,6 @@ public class CollectionMethods {
   public void shouldWaitUntilCollectionGetsExpectedSize() {
     ElementsCollection spans = $$("#dynamic-content-container span");
 
-    assertEquals(0, spans.size());
-    assertArrayEquals(new String[]{}, spans.getTexts());
-
-    spans.shouldHave(size(1)); // appears after 1 second
-
-    assertEquals(1, spans.size());
-    assertArrayEquals(new String[]{"dynamic content"}, spans.getTexts());
-
     spans.shouldHave(size(2)); // appears after 2 seconds
 
     assertEquals(2, spans.size());
