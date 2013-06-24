@@ -1,5 +1,7 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.ElementMatches;
+import com.codeborne.selenide.ElementNotFound;
 import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -84,9 +86,17 @@ public class SelenideMethods {
     assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
   }
 
-  @Test
+  @Test @Ignore
   public void userCanSearchElementByDataAttribute() {
+    assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
+    assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
+    assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
     assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
+  }
+
+  @Test
+  public void userCanSearchElementByTitleAttribute() {
+    assertEquals("fieldset", $(byTitle("Login form")).getTagName());
   }
 
   @Test
@@ -184,6 +194,16 @@ public class SelenideMethods {
     actions().click($(By.name("rememberMe"))).build().perform();
 
     $(By.name("rememberMe")).shouldBe(selected);
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void shouldNotThrowsElementNotFound() {
+    $(byText("Unexisting text")).shouldNotBe(hidden);
+  }
+
+  @Test(expected = ElementMatches.class)
+  public void shouldNotThrowsElementMatches() {
+    $(byText("Bob")).shouldNotHave(cssClass("firstname"));
   }
 
   @Test

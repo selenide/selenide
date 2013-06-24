@@ -48,7 +48,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(pollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeout);
-    condition.fail(actualElements, timeout);
+    condition.fail(collection, actualElements, timeout);
   }
 
   public ElementsCollection filter(Condition condition) {

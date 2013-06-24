@@ -12,8 +12,8 @@ import static org.mockito.Mockito.when;
 public class ConditionTest {
   @Test
   public void displaysHumanReadableName() {
-    assertEquals("become visible", Condition.visible.toString());
-    assertEquals("become hidden", Condition.hidden.toString());
+    assertEquals("visible", Condition.visible.toString());
+    assertEquals("hidden", Condition.hidden.toString());
     assertEquals("got attribute lastName=Malkovich", Condition.hasAttribute("lastName", "Malkovich").toString());
   }
 

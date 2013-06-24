@@ -1,13 +1,13 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.ElementNotFound;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.TextsNotMatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
@@ -70,6 +70,16 @@ public class CollectionMethods {
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(texts("dynamic-content", "dynamic-content2"));
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void textsCheckThrowsElementNotFound() {
+    $$(".non-existing-elements").shouldHave(texts("content1", "content2"));
+  }
+
+  @Test(expected = TextsNotMatch.class)
+  public void textsCheckThrowsTextsNotMatch() {
+    $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
   }
 
   @Test

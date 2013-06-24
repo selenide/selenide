@@ -11,12 +11,12 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
-import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
@@ -304,15 +304,24 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    fail("Element " + toString() + " has " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
+    if (element == null) {
+      throw new ElementNotFound(toString(), not(condition), timeoutMs);
+    }
+    else {
+      throw new ElementMatches(toString(), condition, element, timeoutMs);
+    }
   }
 
   private WebElement tryToGetElement() {
     try {
       return getActualDelegate();
+    } catch (NoSuchElementException ignore) {
+      return null;
     } catch (WebDriverException ignore) {
+      // TODO Do not ignore this exception, but re-throw it later.
+      // For example, this information is useful:
+//      org.openqa.selenium.InvalidSelectorException: The given selector .//*/text()[contains(normalize-space(.), 'without')] is either invalid or does not result in a WebElement. The following error occurred:
+//          InvalidSelectorError: The result of the xpath expression ".//*/text()[contains(normalize-space(.), 'without')]" is: [object Text]. It should be an element.
       return null;
     } catch (IndexOutOfBoundsException ignore) {
       return null;

@@ -523,6 +523,6 @@ public abstract class Condition implements Predicate<WebElement> {
 
   @Override
   public String toString() {
-    return "become " + name;
+    return name;
   }
 }

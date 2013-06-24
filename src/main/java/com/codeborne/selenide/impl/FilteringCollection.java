@@ -20,4 +20,9 @@ public class FilteringCollection implements WebElementsCollection {
   public List<WebElement> getActualElements() {
     return Lists.newArrayList(Collections2.filter(originalCollection.getActualElements(), filter));
   }
+
+  @Override
+  public String description() {
+    return originalCollection.description() + ".filter(" + filter + ')';
+  }
 }
