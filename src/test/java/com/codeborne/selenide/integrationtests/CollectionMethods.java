@@ -69,7 +69,8 @@ public class CollectionMethods {
 
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
-    $$("#dynamic-content-container span").shouldHave(texts("dynamic-content", "dynamic-content2"));
+    $$("#dynamic-content-container span").shouldHave(
+        texts("dynamic content", "dynamic content2"));
   }
 
   @Test(expected = ElementNotFound.class)
