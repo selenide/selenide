@@ -202,10 +202,12 @@ public class WebDriverRunner {
   }
 
   private static void copyFile(File sourceFile, File targetFile) throws IOException {
-    copyFile(new FileInputStream(sourceFile), ensureFolderExists(targetFile));
+    copyFile(new FileInputStream(sourceFile), targetFile);
   }
 
   private static void copyFile(InputStream in, File targetFile) throws IOException {
+    ensureFolderExists(targetFile);
+
     byte[] buffer = new byte[1024];
     int len;
     try {
