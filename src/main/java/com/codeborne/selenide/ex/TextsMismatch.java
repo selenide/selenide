@@ -1,11 +1,11 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.WebElementsCollection;
 
 import java.util.Arrays;
 
-public class TextsNotMatch extends AssertionError {
-  public TextsNotMatch(WebElementsCollection collection, String[] actualTexts, String[] expectedTexts, long timeoutMs) {
+public class TextsMismatch extends AssertionError {
+  public TextsMismatch(WebElementsCollection collection, String[] actualTexts, String[] expectedTexts, long timeoutMs) {
     super("\nActual: " + Arrays.toString(actualTexts) +
         "\nExpected: " + Arrays.toString(expectedTexts) +
         "\nCollection: " + collection.description() +

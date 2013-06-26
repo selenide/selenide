@@ -1,6 +1,6 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.DialogTextMismatch;
+import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;

@@ -1,5 +1,6 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.WebElementsCollection;
 
 import java.util.Arrays;

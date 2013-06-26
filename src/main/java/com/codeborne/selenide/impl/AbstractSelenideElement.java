@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.*;
+import com.codeborne.selenide.ex.ElementMatches;
+import com.codeborne.selenide.ex.ElementMismatch;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -277,7 +280,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throw new ElementNotFound(toString(), condition, timeoutMs);
     }
     else {
-      throw new ElementNotMatches(toString(), condition, element, timeoutMs);
+      throw new ElementMismatch(toString(), condition, element, timeoutMs);
     }
   }
 

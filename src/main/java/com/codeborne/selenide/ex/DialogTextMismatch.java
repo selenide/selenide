@@ -1,4 +1,4 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.ex;
 
 public class DialogTextMismatch extends AssertionError {
   public DialogTextMismatch(String actualText, String expectedText) {

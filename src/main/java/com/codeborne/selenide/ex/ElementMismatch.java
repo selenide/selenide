@@ -1,10 +1,11 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.Describe;
 import org.openqa.selenium.WebElement;
 
-public class ElementNotMatches extends AssertionError {
-  public ElementNotMatches(String searchCriteria, Condition expectedCondition, WebElement element, long timeoutMs) {
+public class ElementMismatch extends AssertionError {
+  public ElementMismatch(String searchCriteria, Condition expectedCondition, WebElement element, long timeoutMs) {
     super(searchCriteria +
         "\nExpected: " + expectedCondition +
         "\nElement: '" + Describe.describe(element) + "'" +

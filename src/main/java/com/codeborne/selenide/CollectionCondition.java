@@ -1,5 +1,8 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
+import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.WebElement;
@@ -21,7 +24,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
       @Override
       public void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs) {
-        throw new ListSizeNotMatched(expectedSize, collection, elements, timeoutMs);
+        throw new ListSizeMismatch(expectedSize, collection, elements, timeoutMs);
       }
     };
   }
@@ -46,7 +49,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
           throw new ElementNotFound(collection, expectedTexts, timeoutMs);
         }
         else {
-          throw new TextsNotMatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
+          throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
         }
       }
     };

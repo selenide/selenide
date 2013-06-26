@@ -1,8 +1,8 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.ElementNotFound;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.TextsNotMatch;
+import com.codeborne.selenide.ex.TextsMismatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -80,8 +80,8 @@ public class CollectionMethods {
     $$(".non-existing-elements").shouldHave(texts("content1", "content2"));
   }
 
-  @Test(expected = TextsNotMatch.class)
-  public void textsCheckThrowsTextsNotMatch() {
+  @Test(expected = TextsMismatch.class)
+  public void textsCheckThrowsTextsMismatch() {
     $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
   }
 

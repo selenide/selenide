@@ -1,7 +1,7 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.ElementMatches;
-import com.codeborne.selenide.ElementNotFound;
+import com.codeborne.selenide.ex.ElementMatches;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;

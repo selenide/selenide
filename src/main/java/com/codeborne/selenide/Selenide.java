@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -274,7 +275,7 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @throws com.codeborne.selenide.ex.DialogTextMismatch if confirmation message differs from expected message
    */
   public static void confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
@@ -290,7 +291,7 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @throws com.codeborne.selenide.ex.DialogTextMismatch if confirmation message differs from expected message
    */
   public static void dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
