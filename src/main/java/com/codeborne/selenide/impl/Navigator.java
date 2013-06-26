@@ -24,7 +24,7 @@ public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
     if (relativeOrAbsoluteUrl.startsWith("http:") ||
         relativeOrAbsoluteUrl.startsWith("https:") ||
-        relativeOrAbsoluteUrl.startsWith("file:")) {
+        isLocalFile(relativeOrAbsoluteUrl)) {
       navigateToAbsoluteUrl(relativeOrAbsoluteUrl);
     } else {
       navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl));
@@ -40,7 +40,7 @@ public class Navigator {
   }
 
   protected void navigateToAbsoluteUrl(String url) {
-    if (ie()) {
+    if (ie() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
 
@@ -53,10 +53,6 @@ public class Navigator {
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    if (url.startsWith("file:")) {
-      return url;
-    }
-
     if (url.contains("timestamp=")) {
       return url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
           .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
@@ -65,5 +61,9 @@ public class Navigator {
           url + "&timestamp=" + unique:
           url + "?timestamp=" + unique;
     }
+  }
+
+  private boolean isLocalFile(String url) {
+    return url.startsWith("file:");
   }
 }
