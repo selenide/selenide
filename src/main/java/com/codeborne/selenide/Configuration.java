@@ -49,4 +49,12 @@ public class Configuration {
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
   public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
+
+  /**
+   * Mock "alert" and "confirm" javascript dialogs.
+   * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
+   *
+   * Default value: false (true for HtmlUnit because it doesn't support alert/confirm anyway)
+   */
+  public static boolean dismissModalDialogs = Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 }

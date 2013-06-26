@@ -33,7 +33,8 @@ public class WebDriverRunnerTest {
 
   @Test
   public void allowsToSpecifyCustomWebDriverProgrammatically() {
-    WebDriver myDriver = new HtmlUnitDriver();
+    HtmlUnitDriver myDriver = new HtmlUnitDriver();
+    myDriver.setJavascriptEnabled(true);
     WebDriverRunner.setWebDriver(myDriver);
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
     try {

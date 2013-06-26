@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Page with alerts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript">
+      function runAlert() {
+        var username = document.getElementById('username').value;
+        alert("Are you sure, " + username + "?");
+        document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
+        document.getElementById('container').innerHTML = '';
+      }
+
+      function runConfirm() {
+        var username = document.getElementById('username').value;
+        if (confirm("Get out of this page, " + username + "?")) {
+          return true;
+        }
+        else {
+          document.getElementById('message').innerHTML = 'Stay here, ' + username;
+          return false;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Page with alerts</h1>
+
+    <br/>
+    <div id="message" style="width: 400px; color: red;"/>
+
+    <div id="container" style="width: 400px">
+      <form>
+        <fieldset title="Login form">
+          <label> Username:
+            <input id="username" name="username"/>
+          </label> <br/>
+          <input type="button" onclick="return runAlert();" value="Alert button"><br/><br/>
+          <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
+        </fieldset>
+      </form>
+    </div>
+  </body>
+</html>

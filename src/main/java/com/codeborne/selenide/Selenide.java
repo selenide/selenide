@@ -11,8 +11,7 @@ import java.net.URL;
 import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Configuration.pollingInterval;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -22,10 +21,28 @@ public class Selenide {
 
   public static void open(String relativeOrAbsoluteUrl) {
     navigator.open(relativeOrAbsoluteUrl);
+    mockModalDialogs();
   }
 
   public static void open(URL absoluteUrl) {
     navigator.open(absoluteUrl);
+    mockModalDialogs();
+  }
+
+  private static boolean doDismissModalDialogs() {
+    return htmlUnit() || dismissModalDialogs;
+  }
+
+  private static void mockModalDialogs() {
+    if (doDismissModalDialogs()) {
+      String jsCode =
+          "  window._selenide_modalDialogReturnValue = true;\n" +
+          "  window.alert = function(message) {};\n" +
+          "  window.confirm = function(message) {\n" +
+          "    return window._selenide_modalDialogReturnValue;\n" +
+          "  };";
+      executeJavaScript(jsCode);
+    }
   }
 
   /**
@@ -246,63 +263,47 @@ public class Selenide {
     return null;
   }
 
+  public static void onConfirmReturn(boolean confirmReturnValue) {
+    if (doDismissModalDialogs()) {
+      executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ";");
+    }
+  }
+
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
+   * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
-  public static void confirm(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
+  public static void confirm(String expectedDialogText) {
+    if (!doDismissModalDialogs()) {
+      Alert alert = getWebDriver().switchTo().alert();
+      String actualDialogText = alert.getText();
       alert.accept();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
+      checkDialogText(expectedDialogText, actualDialogText);
     }
-
-    waitUntilAlertDisappears();
   }
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
+   * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
-  public static void dismiss(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
+  public static void dismiss(String expectedDialogText) {
+    if (!doDismissModalDialogs()) {
+      Alert alert = getWebDriver().switchTo().alert();
+      String actualDialogText = alert.getText();
       alert.dismiss();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
+      checkDialogText(expectedDialogText, actualDialogText);
     }
-
-    waitUntilAlertDisappears();
   }
 
-  private static Alert checkAlertMessage(String expectedConfirmationText) {
-    Alert alert = getWebDriver().switchTo().alert();
-    if (expectedConfirmationText != null && !expectedConfirmationText.equals(alert.getText())) {
-      throw new AssertionError("Actual confirmation text is '" + alert.getText() +
-          "', but expected: '" + expectedConfirmationText + "'");
-    }
-    return alert;
-  }
-
-  private static void waitUntilAlertDisappears() {
-    try {
-      long start = System.currentTimeMillis();
-      while (getWebDriver().switchTo().alert() != null) {
-        getWebDriver().switchTo().alert();
-        if (System.currentTimeMillis() - start > timeout) {
-          fail("Confirmation dialog has not disappeared in " + timeout + " milliseconds");
-        }
-        sleep(pollingInterval);
-      }
-    }
-    catch (NoAlertPresentException ignore) {
+  private static void checkDialogText(String expectedDialogText, String actualDialogText) {
+    if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
+      throw new DialogTextMismatch(actualDialogText, expectedDialogText);
     }
   }
 
