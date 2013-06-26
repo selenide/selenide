@@ -53,15 +53,17 @@ public class Navigator {
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    final String fullUrl;
+    if (url.startsWith("file:")) {
+      return url;
+    }
+
     if (url.contains("timestamp=")) {
-      fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
+      return url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
           .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
     } else {
-      fullUrl = url.contains("?") ?
-          url + "&timestamp=" + unique :
+      return url.contains("?") ?
+          url + "&timestamp=" + unique:
           url + "?timestamp=" + unique;
     }
-    return fullUrl;
   }
 }
