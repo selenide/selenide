@@ -11,8 +11,7 @@ import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +20,17 @@ public class CollectionMethods {
   @Before
   public void openTestPageWithJQuery() {
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+  }
+
+  @Test
+  public void useTwoDollarsToGetListOfElements() {
+    $$("#radioButtons input").shouldHave(size(4));
+    getElements(By.cssSelector("#radioButtons input")).shouldHave(size(4));
+
+    $("#radioButtons").$$("input").shouldHave(size(4));
+    $("#radioButtons").$$(By.tagName("input")).shouldHave(size(4));
+    $("#radioButtons").findAll("input").shouldHave(size(4));
+    $("#radioButtons").findAll(By.tagName("input")).shouldHave(size(4));
   }
 
   @Test
