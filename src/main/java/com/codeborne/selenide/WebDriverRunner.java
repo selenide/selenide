@@ -20,6 +20,7 @@ import java.net.URL;
 import static com.codeborne.selenide.Configuration.*;
 import static java.io.File.separatorChar;
 import static org.openqa.selenium.OutputType.FILE;
+import static org.openqa.selenium.ie.InternetExplorerDriver.INITIAL_BROWSER_URL;
 
 public class WebDriverRunner {
   public static final String CHROME = "chrome";
@@ -254,7 +255,7 @@ public class WebDriverRunner {
     }
     else if (ie()) {
       DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
-      ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+      ieCapabilities.setCapability(INITIAL_BROWSER_URL, baseUrl);
       return maximize(new InternetExplorerDriver(ieCapabilities));
     }
     else if (htmlUnit()) {
