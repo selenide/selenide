@@ -41,25 +41,15 @@ public class Navigator {
 
   protected void navigateToAbsoluteUrl(String url) {
     if (ie()) {
-      getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
-      waitUntilPageIsLoaded();
-      toBeSureThatPageIsNotCached();
+      url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
-    else {
-      getWebDriver().navigate().to(url);
-      waitUntilPageIsLoaded();
-    }
+
+    getWebDriver().navigate().to(url);
+    waitUntilPageIsLoaded();
   }
 
   protected void waitUntilPageIsLoaded() {
     $(By.tagName("body")).should(appear);
-  }
-
-  protected void toBeSureThatPageIsNotCached() {
-    String currentUrl = getWebDriver().getCurrentUrl();
-    if (!currentUrl.contains("timestamp=")) {
-      navigateToAbsoluteUrl(currentUrl);
-    }
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
