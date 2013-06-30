@@ -1,6 +1,6 @@
 ---
 layout: page
-title:
+title: Selenide - Concise UI Tests in Java
 tagline: Concise UI Tests in Java
 ---
 {% include JB/setup %}
