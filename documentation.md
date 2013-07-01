@@ -137,6 +137,14 @@ To be continued...
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/2.3/com/codeborne/selenide/Selectors.html">[javadoc]</a>
 </h3>
 
+This class contains some `By` selectors for searcing elements by text or attribute (that are missing in standard Selenium WebDriver API):
+
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/Selectors.html#byText(java.lang.String)">byText</a>     - search by text (substring)
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/Selectors.html#withText(java.lang.String)">withText</a>   - search by exact text
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/Selectors.html#by(java.lang.String, java.lang.String)">by</a>    - search by attribute
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/Selectors.html#byTitle(java.lang.String)">byTitle</a>   - search by "title" attribute
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/Selectors.html#byValue(java.lang.String)">byValue</a>   - search by "value" attribute
+
 <h3>com.codeborne.selenide.ElementsCollection
   <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/ElementsCollection.java">[src]</a>
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html">[javadoc]</a>
