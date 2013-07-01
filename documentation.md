@@ -130,8 +130,6 @@ SelenideElement is a wrapper around Selenium WebElement, giving it some addition
 You can easily add your own conditions by implementing interface `com.codeborne.selenide.Condition`
 
 
-To be continued...
-
 <h3>com.codeborne.selenide.Selectors
   <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/Selectors.java">[src]</a>
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/2.3/com/codeborne/selenide/Selectors.html">[javadoc]</a>
@@ -149,6 +147,17 @@ This class contains some `By` selectors for searcing elements by text or attribu
   <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/ElementsCollection.java">[src]</a>
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html">[javadoc]</a>
 </h3>
+
+This is the class returned by `$$` method. It contains a list of web elements with additionals methods:
+
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html#shouldBe(com.codeborne.selenide.CollectionCondition)">shouldBe</a>     - e.g. `$$(".errors").shouldBe(empty)`
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html#shouldHave(com.codeborne.selenide.CollectionCondition)">shouldHave</a>     - e.g. `$$("#mytable tbody tr").shouldHave(size(2))`
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html#find(com.codeborne.selenide.Condition)">find</a>     - e.g. `$$("#multirowTable tr").findBy(text("Norris"))`
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html#filter(com.codeborne.selenide.Condition)">filter</a>     - e.g. `$$("#multirowTable tr").filterBy(text("Norris"))`
+*   <a href="{{BASE_PATH}}/javadoc/2.3/com/codeborne/selenide/ElementsCollection.html#exclude(com.codeborne.selenide.Condition)">exclude</a>     - e.g. `$$("#multirowTable tr").excludeWith(text("Chack"))`
+
+
+To be continued...
 
 <h3>com.codeborne.selenide.CollectionCondition
   <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/CollectionCondition.java">[src]</a>
