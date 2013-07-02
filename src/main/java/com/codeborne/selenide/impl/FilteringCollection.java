@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
