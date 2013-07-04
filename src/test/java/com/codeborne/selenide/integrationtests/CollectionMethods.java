@@ -103,4 +103,10 @@ public class CollectionMethods {
   public void userCanFindMatchingElementFromList() {
     $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
   }
+
+  @Test
+  public void collectionMethodsCanBeChained() {
+    $$("#multirowTable tr").shouldHave(size(2))
+        .filterBy(text("Norris")).shouldHave(size(1));
+  }
 }

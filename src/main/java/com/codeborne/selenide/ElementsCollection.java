@@ -20,28 +20,28 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this.collection = collection;
   }
 
-  public void shouldHaveSize(int expectedSize) {
-    shouldHave(CollectionCondition.size(expectedSize));
+  public ElementsCollection shouldHaveSize(int expectedSize) {
+    return shouldHave(CollectionCondition.size(expectedSize));
   }
 
   /**
    * $$(".error").shouldBe(empty)
    */
-  public void shouldBe(CollectionCondition condition) {
-    shouldHave(condition);
+  public ElementsCollection shouldBe(CollectionCondition condition) {
+    return shouldHave(condition);
   }
 
   /**
    * $$(".error").shouldHave(size(3))
    * $$(".error").shouldHave(texts("Error1", "Error2"))
    */
-  public void shouldHave(CollectionCondition condition) {
+  public ElementsCollection shouldHave(CollectionCondition condition) {
     final long startTime = System.currentTimeMillis();
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          return;
+          return this;
         }
       } catch (WebDriverException ignore) {
       }
@@ -49,6 +49,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
     while (System.currentTimeMillis() - startTime < timeout);
     condition.fail(collection, actualElements, timeout);
+    return this;
   }
 
   public ElementsCollection filter(Condition condition) {
