@@ -109,4 +109,9 @@ public class CollectionMethods {
     $$("#multirowTable tr").shouldHave(size(2))
         .filterBy(text("Norris")).shouldHave(size(1));
   }
+
+  @Test
+  public void shouldMethodsCanCheckMultipleConditions() {
+    $$("#multirowTable tr").shouldHave(size(2), texts("Chack Norris", "Chack L'a Baskerville"));
+  }
 }

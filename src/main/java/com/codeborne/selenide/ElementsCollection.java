@@ -27,29 +27,35 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * $$(".error").shouldBe(empty)
    */
-  public ElementsCollection shouldBe(CollectionCondition condition) {
-    return shouldHave(condition);
+  public ElementsCollection shouldBe(CollectionCondition... conditions) {
+    return shouldHave(conditions);
   }
 
   /**
    * $$(".error").shouldHave(size(3))
    * $$(".error").shouldHave(texts("Error1", "Error2"))
    */
-  public ElementsCollection shouldHave(CollectionCondition condition) {
+  public ElementsCollection shouldHave(CollectionCondition... conditions) {
+    for (CollectionCondition condition : conditions) {
+      waitUntil(condition, timeout);
+    }
+    return this;
+  }
+
+  protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     final long startTime = System.currentTimeMillis();
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          return this;
+          return;
         }
       } catch (WebDriverException ignore) {
       }
       sleep(pollingInterval);
     }
-    while (System.currentTimeMillis() - startTime < timeout);
-    condition.fail(collection, actualElements, timeout);
-    return this;
+    while (System.currentTimeMillis() - startTime < timeoutMs);
+    condition.fail(collection, actualElements, timeoutMs);
   }
 
   public ElementsCollection filter(Condition condition) {
