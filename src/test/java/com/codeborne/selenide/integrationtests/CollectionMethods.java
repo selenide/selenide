@@ -112,6 +112,6 @@ public class CollectionMethods {
 
   @Test
   public void shouldMethodsCanCheckMultipleConditions() {
-    $$("#multirowTable tr").shouldHave(size(2), texts("Chack Norris", "Chack L'a Baskerville"));
+    $$("#multirowTable tr td").shouldHave(size(4), texts("Chack", "Norris", "Chack", "L'a Baskerville"));
   }
 }
