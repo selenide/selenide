@@ -142,7 +142,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void append(String text) {
-    WebElement element = getDelegate();
+    WebElement element = waitUntil(visible, timeout);
     element.sendKeys(text);
     fireEvent("change");
   }
