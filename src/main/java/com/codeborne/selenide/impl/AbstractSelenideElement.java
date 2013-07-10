@@ -135,7 +135,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    WebElement element = getDelegate();
+    WebElement element = waitUntil(visible, timeout);
     element.clear();
     element.sendKeys(text);
     fireEvent("change");
