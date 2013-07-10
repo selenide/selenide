@@ -80,9 +80,12 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 === 2.3 (Released 9.07.2013)
 ===== New features:
-* Added possibility to mock `alert` and `confirm` modal dialogs
-* Collection methods can be chained: `$$("#multirowTable tr").shouldHave(size(2)).filterBy(text("Norris")).shouldHave(size(1));`
+* Added possibility to mock 'alert' and 'confirm' modal dialogs
 * $$.should-methods can check multiple conditions
+* Collection methods can be chained:
+ $$("#multirowTable tr").shouldHave(size(2))
+    .filterBy(text("Norris")).shouldHave(size(1));
+
 ===== Usability issues:
 * Readable error messages!
 * Save screenshots into subfolders: folder name is "com/package/TestClass/", file name is "testName.png"/"testName.html"
