@@ -75,8 +75,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
-=== 2.3 (snapshot)
+=== 2.3 (Released 9.07.2013)
 * Save screenshots into subfolders: folder name is "com/package/TestClass/", file name is "testName.png"/"testName.html"
+* Updated to selenium-java:2.33.0
 
 === 2.2 (Released 31.05.2013)
 * Added method WebDriverRunner.setWebDriver(myDriver) to enable using custom WebDriver instance.
