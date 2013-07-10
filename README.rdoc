@@ -75,6 +75,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.4 (draft)
+* Added method $.pressTab()
+
 === 2.3 (Released 9.07.2013)
 ===== New features:
 * Added possibility to mock 'alert' and 'confirm' modal dialogs

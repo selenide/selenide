@@ -4,8 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript">
       function onUsernameChanged(input) {
-        var val = input.value;
-        document.getElementById('username-mirror').innerHTML = val;
+        document.getElementById('username-mirror').innerHTML = input.value;
+      }
+
+      var blurCounter = 0;
+      function onUsernameBlur() {
+        document.getElementById('username-blur-counter').innerHTML = "blur: " + ++blurCounter;
       }
     </script>
   </head>
@@ -106,12 +110,14 @@
 
     <h1>Now typing: </h1>
     <h3 id="username-mirror"></h3>
+    <span id="username-blur-counter"></span>
     <div style="width: 400px">
       <form>
         <fieldset title="Login form">
           <label> Username:
-            <input id="username" name="username" value="" onchange="onUsernameChanged(this);"/>
+            <input id="username" name="username" value="" onchange="onUsernameChanged(this);" onblur="onUsernameBlur();"/>
           </label> <br/>
+          <input name="password" type="password"/>
         </fieldset>
       </form>
     </div>

@@ -124,6 +124,12 @@ public class SelenideMethods {
     assertTrue(url().contains("#submitted-form"));
   }
 
+  @Test @Ignore // fails in HtmlUnit for unknown reason
+  public void userCanPressTab() {
+    $("#username").val("tere").pressTab();
+    $("#username-blur-counter").shouldHave(text("blur: 1"));
+  }
+
   @Test
   public void userCanCheckIfElementContainsText() {
     assertEquals("Page without JQuery", $("h1").text());

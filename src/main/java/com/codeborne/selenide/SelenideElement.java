@@ -65,6 +65,16 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement pressEnter();
 
   /**
+   * Press TAB. Useful for input field and textareas: <pre>
+   *  $("#to").val("stiven@seagal.com").pressTab();</pre>
+   *
+   * Implementation details:
+   * This is the same as <pre>
+   *  WebElement.sendKeys(Keys.TAB)</pre>
+   */
+  SelenideElement pressTab();
+
+  /**
    * Short form of getText()
    * @see org.openqa.selenium.WebElement#getText()
    */

@@ -16,6 +16,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
@@ -51,6 +52,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("pressEnter".equals(method.getName())) {
       getDelegate().sendKeys(Keys.ENTER);
+      return proxy;
+    }
+    else if ("pressTab".equals(method.getName())) {
+      getDelegate().sendKeys(Keys.TAB);
       return proxy;
     }
     else if ("followLink".equals(method.getName())) {
