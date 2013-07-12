@@ -255,6 +255,16 @@ public class SelenideMethods {
   }
 
   @Test
+  public void findWaitsUntilParentAppears() {
+    $("#container").find("#dynamic-content2").shouldBe(visible);
+  }
+
+  @Test
+  public void findWaitsUntilElementMatchesCondition() {
+    $("#dynamic-content-container").find("#dynamic-content2").shouldBe(visible);
+  }
+
+  @Test
   public void userCanListMatchingSubElements() {
     $("#multirowTable").findAll(byText("Chack")).shouldHaveSize(2);
     $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);

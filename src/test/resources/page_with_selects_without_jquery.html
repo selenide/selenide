@@ -77,7 +77,7 @@
       </form>
     </div>
 
-    <div id="dynamic-content-container"></div>
+    <div id="container"></div>
 
     <table id="user-table">
       <thead>
@@ -104,7 +104,8 @@
     <a href="long_ajax_request.html">Want to see ajax in action?</a>
 
     <script type="text/javascript">
-        setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 1000);
+        setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, 1000);
+        setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 1500);
         setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, 2000);
     </script>
 

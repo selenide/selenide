@@ -350,16 +350,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement find(SelenideElement proxy, Object arg, int index) {
-    // TODO Do not evaluate element immediately.
-    if (index == 0) {
-      return arg instanceof By ?
-          getDelegate().findElement((By) arg) :
-          getDelegate().findElement(By.cssSelector((String) arg));
-    } else {
-      return arg instanceof By ?
-          getDelegate().findElements((By) arg).get(index) :
-          getDelegate().findElements(By.cssSelector((String) arg)).get(index);
-    }
+    By criteria = arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+    return WaitingSelenideElement.wrap(proxy, criteria, index);
   }
 
   protected By getSelector(Object arg) {
