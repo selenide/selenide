@@ -49,6 +49,7 @@ test {
   systemProperties['file.encoding'] = 'UTF-8'
   testLogging.showStandardStreams = true
   systemProperties['browser'] = 'htmlunit'
+  maxParallelTests = 3
 }
 
 task ie(type: Test) {
@@ -62,6 +63,7 @@ task ie(type: Test) {
 task chrome(type: Test) {
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+  maxParallelTests = 3
 }
 
 task phantomjs(type: Test) {
@@ -71,7 +73,10 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['browser'] = 'firefox'
+  maxParallelTests = 3
 }
+
+task allTests(dependsOn: ['clean', 'libs', 'test', 'firefox', 'chrome']) {}
 
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
