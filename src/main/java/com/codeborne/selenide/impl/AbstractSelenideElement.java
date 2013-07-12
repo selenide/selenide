@@ -20,7 +20,6 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
@@ -244,7 +243,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     try {
       return Describe.describe(getActualDelegate());
     } catch (WebDriverException elementDoesNotExist) {
-      return cleanupWebDriverExceptionMessage(elementDoesNotExist);
+      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return invalidElementIndex.toString();
     }
@@ -342,7 +341,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return element == null? "does not exist" : condition.actualValue(element);
     }
     catch (WebDriverException e) {
-      return cleanupWebDriverExceptionMessage(e);
+      return Cleanup.of.webdriverExceptionMessage(e);
     }
     catch (IndexOutOfBoundsException e) {
       return e.toString();
