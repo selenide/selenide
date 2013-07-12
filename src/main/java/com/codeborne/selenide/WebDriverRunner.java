@@ -16,6 +16,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.Configuration.*;
 import static java.io.File.separatorChar;
@@ -56,13 +58,16 @@ public class WebDriverRunner {
    */
   public static final String OPERA = "opera";
 
-  private static WebDriver webdriver;
+  private static final List<WebDriver> ALL_WEB_DRIVERS = new ArrayList<WebDriver>();
+  private static final ThreadLocal<WebDriver> THREAD_WEB_DRIVER = new ThreadLocal<WebDriver>();
 
   static {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
-        closeWebDriver();
+        while (!ALL_WEB_DRIVERS.isEmpty()) {
+          closeWebDriver(ALL_WEB_DRIVERS.get(0));
+        }
       }
     });
   }
@@ -87,7 +92,9 @@ public class WebDriverRunner {
    * which should implement interface com.codeborne.selenide.WebDriverProvider
    */
   public static void setWebDriver(WebDriver webDriver) {
-    webdriver = webDriver;
+    closeWebDriver();
+    THREAD_WEB_DRIVER.set(webDriver);
+    ALL_WEB_DRIVERS.add(webDriver);
   }
 
   /**
@@ -95,29 +102,38 @@ public class WebDriverRunner {
    * This can be used for any operations directly with WebDriver.
    */
   public static WebDriver getWebDriver() {
-    if (webdriver == null) {
-      webdriver = createDriver();
+    if (THREAD_WEB_DRIVER.get() == null) {
+      WebDriver webDriver = createDriver();
+      THREAD_WEB_DRIVER.set(webDriver);
+      ALL_WEB_DRIVERS.add(webDriver);
     }
-    return webdriver;
+    return THREAD_WEB_DRIVER.get();
   }
 
   public static void closeWebDriver() {
+    WebDriver webdriver = THREAD_WEB_DRIVER.get();
     if (webdriver != null) {
-      if (!holdBrowserOpen) {
-        try {
-          webdriver.quit();
-        } catch (WebDriverException cannotCloseBrowser) {
-          System.err.println("Cannot close browser normally: " + cleanupWebDriverExceptionMessage(cannotCloseBrowser));
-        }
-        finally {
-          killBrowser();
-        }
-      }
-      webdriver = null;
+      closeWebDriver(webdriver);
     }
   }
 
-  static void killBrowser() {
+  private static void closeWebDriver(WebDriver webdriver) {
+    THREAD_WEB_DRIVER.remove();
+    ALL_WEB_DRIVERS.remove(webdriver);
+
+    if (!holdBrowserOpen) {
+      try {
+        webdriver.quit();
+      } catch (WebDriverException cannotCloseBrowser) {
+        System.err.println("Cannot close browser normally: " + cleanupWebDriverExceptionMessage(cannotCloseBrowser));
+      }
+      finally {
+        killBrowser(webdriver);
+      }
+    }
+  }
+
+  static void killBrowser(WebDriver webdriver) {
     if (webdriver instanceof Killable) {
       try {
         ((Killable) webdriver).kill();
@@ -141,8 +157,8 @@ public class WebDriverRunner {
   }
 
   public static void clearBrowserCache() {
-    if (webdriver != null) {
-      webdriver.manage().deleteAllCookies();
+    if (THREAD_WEB_DRIVER.get() != null) {
+      THREAD_WEB_DRIVER.get().manage().deleteAllCookies();
     }
   }
 
@@ -163,6 +179,7 @@ public class WebDriverRunner {
   }
 
   public static String takeScreenShot(String fileName) {
+    WebDriver webdriver = THREAD_WEB_DRIVER.get();
     if (webdriver == null) {
       System.err.println("Cannot take screenshot because browser is not started");
       return null;
@@ -181,7 +198,7 @@ public class WebDriverRunner {
     }
     else if (webdriver instanceof RemoteWebDriver) {
       WebDriver remoteDriver = new Augmenter().augment(webdriver);
-      if (webdriver instanceof TakesScreenshot) {
+      if (remoteDriver instanceof TakesScreenshot) {
         targetFile = takeScreenshotImage((TakesScreenshot) remoteDriver, fileName, targetFile);
       }
     }
