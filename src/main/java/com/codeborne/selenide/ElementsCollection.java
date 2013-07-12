@@ -130,7 +130,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public SelenideElement get(int index) {
-    return WebElementProxy.wrap(getActualElements().get(index));
+    return CollectionElement.wrap(collection, index);
   }
 
   @Override

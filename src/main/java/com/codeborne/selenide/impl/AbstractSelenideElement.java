@@ -58,7 +58,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return proxy;
     }
     else if ("followLink".equals(method.getName())) {
-      followLink(getDelegate());
+      followLink();
       return null;
     }
     else if ("text".equals(method.getName())) {
@@ -123,7 +123,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private void followLink(WebElement link) {
+  private void followLink() {
+    WebElement link = waitUntil(visible, timeout);
     String href = link.getAttribute("href");
     link.click();
 

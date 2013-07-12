@@ -1,15 +1,15 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.*;
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
@@ -102,6 +102,12 @@ public class CollectionMethods {
   @Test
   public void userCanFindMatchingElementFromList() {
     $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
+  }
+
+  @Test
+  public void findWaitsUntilElementMatches() {
+    $$("#dynamic-content-container span").findBy(text("dynamic content2")).shouldBe(visible);
+    $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(exist);
   }
 
   @Test
