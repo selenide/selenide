@@ -11,10 +11,10 @@ group: navigation
 <br/>
 
 <a href="https://i.bspb.ru/home" target="_blank">
-  <img src="{{ BASE_PATH }}/images/bspb-logo.png" alt="Bank Saint Petersburg"/>
+  <img src="{{ BASE_PATH }}/images/bspb_logo.jpg" alt="Bank Saint Petersburg"/>
 </a>
 
-<div class="text-right">In TOP-3 of best internet-banks in Russia</div>
+<div class="text-right">In <a href="http://markswebb.ru/rating/internet-banking-rank/" target="_blank">TOP-3</a> of best internet-banks in Russia</div>
 
 <br/>
 <br/>
