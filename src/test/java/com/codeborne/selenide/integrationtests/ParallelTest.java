@@ -1,6 +1,5 @@
 package com.codeborne.selenide.integrationtests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URL;
@@ -20,7 +19,7 @@ public class ParallelTest {
   private static final AtomicInteger errors = new AtomicInteger();
   private static final AtomicInteger completed = new AtomicInteger();
 
-  @Test @Ignore
+  @Test
   public void canRunMultipleWebDriversInParallelThreads() {
     for (int thread = 0; thread < THREADS; thread++) {
       new Thread(new WebDriverTestThread()).start();
