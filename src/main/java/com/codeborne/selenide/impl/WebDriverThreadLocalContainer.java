@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 public class WebDriverThreadLocalContainer {
   protected List<WebDriver> ALL_WEB_DRIVERS = new ArrayList<WebDriver>();
@@ -139,8 +140,8 @@ public class WebDriverThreadLocalContainer {
     else if (PHANTOMJS.equals(browser)) {
       DesiredCapabilities capabilities = new DesiredCapabilities();
       capabilities.setJavascriptEnabled(true);
-      capabilities.setCapability("takesScreenshot", true);
-      return new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities);
+      capabilities.setCapability(TAKES_SCREENSHOT, true);
+      return maximize(new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities));
     }
     else {
       return createInstanceOf(browser);
