@@ -1,7 +1,7 @@
 apply from: 'build.gradle'
 apply plugin: 'signing'
 
-defaultTasks 'allTests', 'install', 'uploadArchives'
+defaultTasks 'clean', 'allTests', 'install', 'uploadArchives'
 
 signing {
   sign configurations.archives
