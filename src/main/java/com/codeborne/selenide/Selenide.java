@@ -74,6 +74,13 @@ public class Selenide {
   }
 
   /**
+   * Close the browser if it's open
+   */
+  public static void close() {
+    closeWebDriver();
+  }
+
+  /**
    * Reload current page
    */
   public static void refresh() {
@@ -95,6 +102,15 @@ public class Selenide {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Take the screenshot of current page and save to file fileName.html and fileName.png
+   * @param fileName Name of file (without extension) to save HTML and PNG to
+   * @return The name of resulting file
+   */
+  public static String screenshot(String fileName) {
+    return takeScreenShot(fileName);
   }
 
   /**
