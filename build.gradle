@@ -21,19 +21,19 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.33.0') {
+  compile('org.seleniumhq.selenium:selenium-java:2.34.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     exclude group: 'org.webbitserver', module: 'webbit'
   }
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.33.0', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.34.0', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.12', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.12'
   provided 'junit:junit:4.11'
   provided 'org.testng:testng:6.8.5'
-  provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.0.3', transitive: false
+  provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.0.4', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
 }
 

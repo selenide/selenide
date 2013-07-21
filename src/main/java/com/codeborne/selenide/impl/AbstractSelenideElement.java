@@ -19,6 +19,8 @@ import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
@@ -193,15 +195,13 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void selectOptionByText(WebElement selectField, String optionText) {
     $(selectField).shouldBe(present);
-    $(selectField, "option").shouldBe(present);
-    // TODO wait until the element has option with given text
+    $(selectField).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
     $(selectField).shouldBe(present);
-    $(selectField, "option").shouldBe(present);
-    // TODO wait until the element has option with given value
+    $(selectField).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 

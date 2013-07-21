@@ -16,7 +16,7 @@ public class WebDriverRunner {
 
   /**
    * To use HtmlUnitDriver, you need to include extra dependency to your project:
-   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.33.0" conf="test->default"/>
+   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.34.0" conf="test->default"/>
    *
    * It's also possible to run HtmlUnit driver emulating different browsers:
    * <p>
