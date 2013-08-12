@@ -14,7 +14,7 @@
   <li><a href="https://github.com/codeborne/selenide/wiki">Wiki</a></li>
   <li><a href="{{ BASE_PATH }}/javadoc/2.3" target="_blank">Javadoc</a></li>
   <li><a href="{{ BASE_PATH }}/users.html">Who uses Selenide?</a></li>
-  <li><a href="{{ BASE_PATH }}/quotes.html">Waht users say?</a></li>
+  <li><a href="{{ BASE_PATH }}/quotes.html">What users say?</a></li>
   <li><a href="{{ BASE_PATH }}/contacts.html">Tell us about yourself!</a></li>
 </ul>
 
