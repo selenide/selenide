@@ -57,9 +57,10 @@ public class PageObjectTest {
   public void canUseExtendedWebElementsFunctionality() {
     pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
 
-    assertEquals(2, pageWithSelects.h2s.size());
+    assertEquals(3, pageWithSelects.h2s.size());
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
-    pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Radio buttons"));
+    pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Options with apostrophes and quotes"));
+    pageWithSelects.h2s.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
 
     pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
   }

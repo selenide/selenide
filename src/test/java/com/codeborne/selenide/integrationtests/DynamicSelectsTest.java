@@ -18,21 +18,21 @@ public class DynamicSelectsTest {
 
   @Test
   public void waitsUntilOptionWithTextAppears() {
-    $("#language").selectOption("English");
+    $("#language").selectOption("l'a \"English\"");
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    assertEquals("eng", select.getSelectedValue());
-    assertEquals("English", select.getSelectedText());
+    assertEquals("'eng'", select.getSelectedValue());
+    assertEquals("l'a \"English\"", select.getSelectedText());
   }
 
   @Test
   public void waitsUntilOptionWithValueAppears() {
-    $("#language").selectOptionByValue("est");
+    $("#language").selectOptionByValue("\"est\"");
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    assertEquals("est", select.getSelectedValue());
-    assertEquals("Eesti", select.getSelectedText());
+    assertEquals("\"est\"", select.getSelectedValue());
+    assertEquals("l'a \"Eesti\"", select.getSelectedText());
   }
 }

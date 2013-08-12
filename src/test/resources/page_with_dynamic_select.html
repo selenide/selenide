@@ -6,9 +6,9 @@
   <script type="text/javascript">
     function drawOptions() {
       var select = $("#language");
-      select.append("<option value='eng'>English</option>");
-      select.append("<option value='rus'>Русский</option>");
-      select.append("<option value='est'>Eesti</option>");
+      $("<option/>").val("'eng'").text("l'a " + '"English"').appendTo(select);
+      $("<option/>").val("rus").text("l'a " + '"Русский"').appendTo(select);
+      $("<option/>").val('"est"').text("l'a " + '"Eesti"').appendTo(select);
     }
 
     $(function () {
