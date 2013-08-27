@@ -16,6 +16,7 @@
   <li><a href="{{ BASE_PATH }}/users.html">Who uses Selenide?</a></li>
   <li><a href="{{ BASE_PATH }}/quotes.html">What users say?</a></li>
   <li><a href="{{ BASE_PATH }}/contacts.html">Tell us about yourself!</a></li>
+  <li><a href="{{ BASE_PATH }}/thanks.html">Our thanks</a></li>
 </ul>
 
 <h3>Blog</h3>
