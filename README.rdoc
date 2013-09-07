@@ -76,8 +76,18 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 === 2.4 (draft)
+===== New features:
+* Allow multiple WebDriver instances in parallel threads inside single VM. This allows running parallel tests.
 * Added method `$.pressTab()`
-* Updated to selenium-java:2.34.0
+* Maximize PhantomJS driver "window" by default
+
+===== Bugfixes:
+* Method "$$.findBy" waits until element matches the condition
+* Method $.append() first waits until element gets visible
+
+===== Technical issues:
+* Updated to selenium-java:2.35.0
+* Moved implementation details from WebDriverRunner class to separate WebDriverThreadLocalContainer, ScreenShotLaboratory and Cleanup classes that are not static and can be overridden if needed.
 
 === 2.3 (Released 9.07.2013)
 ===== New features:
@@ -92,6 +102,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 * Save screenshots into subfolders: folder name is "com/package/TestClass/", file name is "testName.png"/"testName.html"
 * Take screenshots for RemoteWebDriver too (using Augmenter)
 * Added javadoc for all SelenideElement methods
+
 ===== Technical issues:
 * Updated to selenium-java:2.33.0
 * Use "webdriver.quite()" instead of "webdriver.close()" to force closing ChromDriver and IE process
