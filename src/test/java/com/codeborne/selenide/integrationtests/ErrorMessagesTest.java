@@ -84,9 +84,15 @@ public class ErrorMessagesTest {
     }
   }
 
-  @Test(expected = ElementNotFound.class)
+  @Test
   public void selectOptionFromUnexistingList() {
-    $(pageObject.categoryDropdown).selectOption("SomeOption");
+    try {
+      $(pageObject.categoryDropdown).selectOption("SomeOption");
+    } catch (ElementNotFound e) {
+      assertEquals("ElementNotFound {By.xpath: .//*/text()[normalize-space(.) = \"SomeOption\"]/parent::*, in: NoSuchElementException: Unable to locate element with ID: invalid_id}\n" +
+          "Expected: visible\n" +
+          "Timeout: 4 s.", e.toString());
+    }
   }
 
   @Test
