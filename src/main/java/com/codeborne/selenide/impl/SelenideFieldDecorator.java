@@ -2,10 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 
@@ -22,16 +25,21 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   @Override
   public Object decorate(ClassLoader loader, Field field) {
+    By selector = new Annotations(field).buildBy();
     if (SelenideElement.class.isAssignableFrom(field.getType())) {
-      return ElementLocatorProxy.wrap(factory.createLocator(field));
+      return ElementLocatorProxy.wrap(selector, factory.createLocator(field));
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
-      return createElementsContainer(field);
+      return createElementsContainer(selector, field);
     } else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
     } else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
-    return super.decorate(loader, field);
+    Object original = super.decorate(loader, field);
+    if (original instanceof WebElement) {
+      return ToStringElementProxy.wrap(selector, (WebElement) original);
+    }
+    return original;
   }
 
   private List<ElementsContainer> createElementsContainerList(Field field) {
@@ -48,9 +56,9 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
   }
 
-  private ElementsContainer createElementsContainer(Field field) {
+  private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = ElementLocatorProxy.wrap(factory.createLocator(field));
+      SelenideElement self = ElementLocatorProxy.wrap(selector, factory.createLocator(field));
       return initElementsContainer(field.getType(), self);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);

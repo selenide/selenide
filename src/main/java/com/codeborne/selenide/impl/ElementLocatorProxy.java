@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
@@ -11,15 +12,17 @@ import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 
 public class ElementLocatorProxy extends AbstractSelenideElement {
-  public static SelenideElement wrap(ElementLocator elementLocator) {
+  public static SelenideElement wrap(By selector, ElementLocator elementLocator) {
     return (SelenideElement) Proxy.newProxyInstance(
         elementLocator.getClass().getClassLoader(),
-        new Class<?>[]{SelenideElement.class}, new ElementLocatorProxy(elementLocator));
+        new Class<?>[]{SelenideElement.class}, new ElementLocatorProxy(selector, elementLocator));
   }
 
+  private final By selector;
   private final ElementLocator elementLocator;
 
-  ElementLocatorProxy(ElementLocator elementLocator) {
+  ElementLocatorProxy(By selector, ElementLocator elementLocator) {
+    this.selector = selector;
     this.elementLocator = elementLocator;
   }
 
@@ -49,6 +52,6 @@ public class ElementLocatorProxy extends AbstractSelenideElement {
 
   @Override
   public String toString() {
-    return "{" + elementLocator + "}";
+    return "{" + selector + "}";
   }
 }

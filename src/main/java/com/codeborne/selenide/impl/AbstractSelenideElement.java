@@ -250,7 +250,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
+  static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
     try {
       return method.invoke(delegate, args);
     } catch (InvocationTargetException e) {

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import static org.junit.Assert.assertEquals;
@@ -13,6 +14,6 @@ public class ElementLocatorProxyTest {
     ElementLocator locator = mock(ElementLocator.class);
     when(locator.toString()).thenReturn("pageObjectField");
 
-    assertEquals("{pageObjectField}", new ElementLocatorProxy(locator).toString());
+    assertEquals("{By.selector: #id .clazz}", new ElementLocatorProxy(By.cssSelector("#id .clazz"), locator).toString());
   }
 }
