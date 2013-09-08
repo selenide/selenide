@@ -30,7 +30,8 @@ public class Describe {
 
   @Override
   public String toString() {
-    sb.append('>').append(element.getText()).append("</").append(element.getTagName()).append('>');
+    String text = element.getText();
+    sb.append('>').append(text == null ? "" : text).append("</").append(element.getTagName()).append('>');
     return sb.toString();
   }
 
