@@ -2,6 +2,7 @@ package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementMismatch;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,20 +16,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class ErrorMessagesTest {
-    PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
+  PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
 
-    @Test
-    public void elementTextDoesNotMatch() {
-        try {
-            $("h2").shouldHave(text("expected text"));
-            fail("Expected ElementMismatch");
-        } catch (ElementMismatch expected) {
-            assertEquals("ElementMismatch {By.selector: h2}\n" +
-                    "Expected: text 'expected text'\n" +
-                    "Element: '<h2>Dropdown list</h2>'\n" +
-                    "Timeout: 4 s.", expected.toString());
-        }
+  @Test
+  public void elementTextDoesNotMatch() {
+    try {
+      $("h2").shouldHave(text("expected text"));
+      fail("Expected ElementMismatch");
+    } catch (ElementMismatch expected) {
+      assertEquals("ElementMismatch {By.selector: h2}\n" +
+          "Expected: text 'expected text'\n" +
+          "Element: '<h2>Dropdown list</h2>'\n" +
+          "Timeout: 4 s.", expected.toString());
     }
+  }
 
   @Test
   public void elementAttributeDoesNotMatch() {
@@ -45,46 +46,69 @@ public class ErrorMessagesTest {
 
 
   @Test
-    public void wrapperTextDoesNotMatch() {
-        try {
-            $(getElement(By.tagName("h2"))).shouldHave(text("expected text"));
-            fail("Expected ElementMismatch");
-        } catch (ElementMismatch expected) {
-            assertEquals("ElementMismatch {By.tagName: h2}\n" +
-                    "Expected: text 'expected text'\n" +
-                    "Element: '<h2>Dropdown list</h2>'\n" +
-                    "Timeout: 4 s.", expected.toString());
-        }
+  public void wrapperTextDoesNotMatch() {
+    try {
+      $(getElement(By.tagName("h2"))).shouldHave(text("expected text"));
+      fail("Expected ElementMismatch");
+    } catch (ElementMismatch expected) {
+      assertEquals("ElementMismatch {By.tagName: h2}\n" +
+          "Expected: text 'expected text'\n" +
+          "Element: '<h2>Dropdown list</h2>'\n" +
+          "Timeout: 4 s.", expected.toString());
     }
+  }
 
-    @Test
-    public void pageObjectElementTextDoesNotMatch() {
-        try {
-            $(pageObject.header1).shouldHave(text("expected text"));
-            fail("Expected ElementMismatch");
-        } catch (ElementMismatch expected) {
-            assertEquals("ElementMismatch {By.tagName: h2}\n" +
-                    "Expected: text 'expected text'\n" +
-                    "Element: '<h2>Dropdown list</h2>'\n" +
-                    "Timeout: 4 s.", expected.toString());
-        }
+  @Test
+  public void pageObjectElementTextDoesNotMatch() {
+    try {
+      $(pageObject.header1).shouldHave(text("expected text"));
+      fail("Expected ElementMismatch");
+    } catch (ElementMismatch expected) {
+      assertEquals("ElementMismatch {By.tagName: h2}\n" +
+          "Expected: text 'expected text'\n" +
+          "Element: '<h2>Dropdown list</h2>'\n" +
+          "Timeout: 4 s.", expected.toString());
     }
+  }
 
-    @Test
-    public void pageObjectWrapperTextDoesNotMatch() {
-        try {
-            $(pageObject.header2).shouldHave(text("expected text"));
-            fail("Expected ElementMismatch");
-        } catch (ElementMismatch expected) {
-            assertEquals("ElementMismatch {By.tagName: h2: <h2>Dropdown list</h2>}\n" +
-                    "Expected: text 'expected text'\n" +
-                    "Element: '<h2>Dropdown list</h2>'\n" +
-                    "Timeout: 4 s.", expected.toString());
-        }
+  @Test
+  public void pageObjectWrapperTextDoesNotMatch() {
+    try {
+      $(pageObject.header2).shouldHave(text("expected text"));
+      fail("Expected ElementMismatch");
+    } catch (ElementMismatch expected) {
+      assertEquals("ElementMismatch {By.tagName: h2: <h2>Dropdown list</h2>}\n" +
+          "Expected: text 'expected text'\n" +
+          "Element: '<h2>Dropdown list</h2>'\n" +
+          "Timeout: 4 s.", expected.toString());
     }
+  }
 
-    public static class PageObject {
-        @FindBy(tagName="h2") public SelenideElement header1;
-        @FindBy(tagName="h2") public WebElement header2;
+  @Test(expected = ElementNotFound.class)
+  public void selectOptionFromUnexistingList() {
+    $(pageObject.categoryDropdown).selectOption("SomeOption");
+  }
+
+  @Test
+  public void clickUnexistingWrappedElement() {
+    try {
+      $(pageObject.categoryDropdown).click();
+      fail("Expected ElementNotFound");
+    } catch (ElementNotFound e) {
+      assertEquals("ElementNotFound {By.id: invalid_id: ElementNotFound}\n" +
+          "Expected: visible\n" +
+          "Timeout: 4 s.", e.toString());
     }
+  }
+
+  public static class PageObject {
+    @FindBy(tagName = "h2")
+    public SelenideElement header1;
+
+    @FindBy(tagName = "h2")
+    public WebElement header2;
+
+    @FindBy(id = "invalid_id")
+    private WebElement categoryDropdown;
+  }
 }

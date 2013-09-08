@@ -70,7 +70,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   @Override
   public String toString() {
     return "{" + criteria +
-        (parent == null ? "" : ", in: " + parent.toString()) +
+        (parent == null ? "" : ", in: " + Describe.shortly(parent)) +
         (index == 0 ? "" : ", index: " + index) +
         '}';
   }

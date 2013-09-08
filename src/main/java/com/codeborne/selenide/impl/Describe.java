@@ -55,6 +55,22 @@ public class Describe {
     }
   }
 
+  public static String shortly(WebElement element) {
+    try {
+      if (element == null) {
+        return "null";
+      }
+      return new Describe(element)
+          .attr("id").attr("name")
+          .toString();
+    } catch (WebDriverException elementDoesNotExist) {
+      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
+    }
+    catch (IndexOutOfBoundsException e) {
+      return e.toString();
+    }
+  }
+
   private static boolean isSelected(WebElement element) {
     try {
       return element.isSelected();

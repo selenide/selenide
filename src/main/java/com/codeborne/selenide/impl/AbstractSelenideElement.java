@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementMatches;
 import com.codeborne.selenide.ex.ElementMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -14,9 +16,7 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
@@ -121,11 +121,19 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       waitWhile((Condition) args[0], (Long) args[1]);
       return proxy;
     }
+    else if ("click".equals(method.getName())) {
+      click();
+    }
 
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private void followLink() {
+  protected void click() {
+    WebElement element = waitUntil(visible, timeout);
+    element.click();
+  }
+
+  protected void followLink() {
     WebElement link = waitUntil(visible, timeout);
     String href = link.getAttribute("href");
     link.click();
@@ -163,14 +171,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     executeJavaScript(jsCodeToTriggerEvent);
   }
 
-  private Object should(Object proxy, Condition[] conditions) {
+  protected Object should(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
       waitUntil(condition, timeout);
     }
     return proxy;
   }
 
-  private Object shouldNot(Object proxy, Condition[] conditions) {
+  protected Object shouldNot(Object proxy, Condition[] conditions) {
     for (Condition condition : conditions) {
       waitWhile(condition, timeout);
     }
@@ -179,7 +187,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
 
 
-  private Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
+  protected Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
       throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
     }
@@ -205,21 +213,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     new Select(selectField).selectByValue(optionValue);
   }
 
-  private String getSelectedValue(WebElement selectElement) {
+  protected String getSelectedValue(WebElement selectElement) {
     WebElement option = getSelectedOption(selectElement);
     return option == null ? null : option.getAttribute("value");
   }
 
-  private String getSelectedText(WebElement selectElement) {
+  protected String getSelectedText(WebElement selectElement) {
     WebElement option = getSelectedOption(selectElement);
     return option == null ? null : option.getText();
   }
 
-  private SelenideElement getSelectedOption(WebElement selectElement) {
+  protected SelenideElement getSelectedOption(WebElement selectElement) {
     return wrap(new Select(selectElement).getFirstSelectedOption());
   }
 
-  private boolean exists() {
+  protected boolean exists() {
     try {
       return getActualDelegate() != null;
     } catch (WebDriverException elementDoesNotExist) {
@@ -229,10 +237,18 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private boolean isDisplayed() {
+  protected boolean isDisplayed() {
     try {
-      WebElement delegate = getActualDelegate();
-      return delegate != null && delegate.isDisplayed();
+      return isDisplayed(getActualDelegate());
+    } catch (WebDriverException elementDoesNotExist) {
+      return false;
+    } catch (IndexOutOfBoundsException invalidElementIndex) {
+      return false;
+    }
+  }
+  protected static boolean isDisplayed(WebElement element) {
+    try {
+      return element != null && element.isDisplayed();
     } catch (WebDriverException elementDoesNotExist) {
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
@@ -240,7 +256,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private String describe() {
+  protected String describe() {
     try {
       return Describe.describe(getActualDelegate());
     } catch (WebDriverException elementDoesNotExist) {
@@ -281,7 +297,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    if (element == null) {
+    if (!isDisplayed(element)) {
       throw new ElementNotFound(toString(), condition, timeoutMs);
     }
     else {
@@ -320,7 +336,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private WebElement tryToGetElement() {
+  protected WebElement tryToGetElement() {
     try {
       return getActualDelegate();
     } catch (NoSuchElementException ignore) {
@@ -336,7 +352,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private String getActualValue(Condition condition) {
+  protected String getActualValue(Condition condition) {
     try {
       WebElement element = getActualDelegate();
       return element == null? "does not exist" : condition.actualValue(element);
