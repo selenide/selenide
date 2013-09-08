@@ -140,7 +140,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName;
+        return "attribute " + attributeName;
       }
     };
   }
@@ -162,7 +162,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName + '=' + expectedAttributeValue;
+        return "attribute " + attributeName + '=' + expectedAttributeValue;
       }
     };
   }
@@ -262,7 +262,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "matched text '" + regex + '\'';
+        return "match text '" + regex + '\'';
       }
     };
   }
@@ -297,7 +297,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + '\'';
+        return "text '" + text + '\'';
       }
     };
   }
@@ -318,7 +318,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + '\'';
+        return "text '" + text + '\'';
       }
     };
   }
@@ -340,7 +340,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + '\'';
+        return "exactly the text '" + text + '\'';
       }
     };
   }
@@ -361,7 +361,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + '\'';
+        return "exactly the text '" + text + '\'';
       }
     };
   }
@@ -392,7 +392,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
     @Override
     public String toString() {
-      return "got any options";
+      return "any options";
     }
   };
 
@@ -426,7 +426,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got class '" + cssClass + '\'';
+        return "CSS class '" + cssClass + '\'';
       }
     };
   }
@@ -443,7 +443,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "lose class '" + cssClass + '\'';
+        return "no CSS class '" + cssClass + '\'';
       }
     };
   }

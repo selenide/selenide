@@ -3,9 +3,7 @@ package com.codeborne.selenide;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +12,7 @@ public class ConditionTest {
   public void displaysHumanReadableName() {
     assertEquals("visible", Condition.visible.toString());
     assertEquals("hidden", Condition.hidden.toString());
-    assertEquals("got attribute lastName=Malkovich", Condition.hasAttribute("lastName", "Malkovich").toString());
+    assertEquals("attribute lastName=Malkovich", Condition.hasAttribute("lastName", "Malkovich").toString());
   }
 
   @Test
