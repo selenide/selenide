@@ -12,8 +12,7 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class ErrorMessagesTest {
   PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
@@ -89,9 +88,7 @@ public class ErrorMessagesTest {
     try {
       $(pageObject.categoryDropdown).selectOption("SomeOption");
     } catch (ElementNotFound e) {
-      assertEquals("ElementNotFound {By.xpath: .//*/text()[normalize-space(.) = \"SomeOption\"]/parent::*, in: NoSuchElementException: Unable to locate element with ID: invalid_id}\n" +
-          "Expected: visible\n" +
-          "Timeout: 4 s.", e.toString());
+      assertContains(e, "ElementNotFound {By.xpath: .//*/text()[normalize-space(.) = \"SomeOption\"]/parent::*, in: NoSuchElementException", "Expected: visible");
     }
   }
 
@@ -104,6 +101,12 @@ public class ErrorMessagesTest {
       assertEquals("ElementNotFound {By.id: invalid_id: ElementNotFound}\n" +
           "Expected: visible\n" +
           "Timeout: 4 s.", e.toString());
+    }
+  }
+
+  private void assertContains(AssertionError e, String... expectedTexts) {
+    for (String expectedText : expectedTexts) {
+      assertTrue("Error message: " + e.toString() + " does not contain " + expectedText, e.toString().contains(expectedText));
     }
   }
 
