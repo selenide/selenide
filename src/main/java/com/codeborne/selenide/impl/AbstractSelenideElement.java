@@ -123,6 +123,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("click".equals(method.getName())) {
       click();
+      return null;
     }
 
     return delegateMethod(getDelegate(), method, args);
