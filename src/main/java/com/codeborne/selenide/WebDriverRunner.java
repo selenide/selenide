@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import static com.codeborne.selenide.Configuration.browser;
 
@@ -43,6 +44,14 @@ public class WebDriverRunner {
    * <dependency org="com.opera" name="operadriver" rev="0.18" conf="test->default"/>
    */
   public static final String OPERA = "opera";
+
+  /**
+   * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
+   * @param listener
+   */
+  public static void addListener(WebDriverEventListener listener) {
+    webdriverContainer.addListener(listener);
+  }
 
   /**
    * Tell Selenide use your provided WebDriver instance.

@@ -11,6 +11,8 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,6 +24,7 @@ import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 public class WebDriverThreadLocalContainer {
+  protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
   protected List<WebDriver> ALL_WEB_DRIVERS = new ArrayList<WebDriver>();
   protected ThreadLocal<WebDriver> THREAD_WEB_DRIVER = new ThreadLocal<WebDriver>();
 
@@ -32,6 +35,10 @@ public class WebDriverThreadLocalContainer {
         closeAllWebDrivers();
       }
     });
+  }
+
+  public void addListener(WebDriverEventListener listener) {
+    listeners.add(listener);
   }
 
   public void setWebDriver(WebDriver webDriver) {
@@ -104,48 +111,65 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createDriver() {
-    if (remote != null) {
-      return createRemoteDriver(remote, browser);
+    WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
+        CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
+            FIREFOX.equalsIgnoreCase(browser) ? createFirefoxDriver() :
+                htmlUnit() ? createHtmlUnitDriver() :
+                    ie() ? createInternetExplorerDriver() :
+                        PHANTOMJS.equals(browser) ? createPhantomJsDriver() :
+                            OPERA.equalsIgnoreCase(browser) ? createOperaDriver() :
+                                createInstanceOf(browser);
+    return listeners.isEmpty() ? webdriver : addListeners(webdriver);
+  }
+
+  protected WebDriver addListeners(WebDriver webdriver) {
+    EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
+    for (WebDriverEventListener listener : listeners) {
+      wrapper.register(listener);
     }
-    else if (CHROME.equalsIgnoreCase(browser)) {
-      ChromeOptions options = new ChromeOptions();
-      if (startMaximized) {
-        // Due do bug in ChromeDriver we need this workaround
-        // http://stackoverflow.com/questions/3189430/how-do-i-maximize-the-browser-window-using-webdriver-selenium-2
-        options.addArguments("chrome.switches", "--start-maximized");
-      }
-      return new ChromeDriver(options);
+    return wrapper;
+  }
+
+  protected WebDriver createChromeDriver() {
+    ChromeOptions options = new ChromeOptions();
+    if (startMaximized) {
+      // Due do bug in ChromeDriver we need this workaround
+      // http://stackoverflow.com/questions/3189430/how-do-i-maximize-the-browser-window-using-webdriver-selenium-2
+      options.addArguments("chrome.switches", "--start-maximized");
     }
-    else if (ie()) {
-      return maximize(new InternetExplorerDriver());
+    return new ChromeDriver(options);
+  }
+
+  protected RemoteWebDriver createFirefoxDriver() {
+    return maximize(new FirefoxDriver());
+  }
+
+  protected WebDriver createHtmlUnitDriver() {
+    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
+    capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
+    capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
+    capabilities.setJavascriptEnabled(true);
+    if (browser.indexOf(':') > -1) {
+      // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
+      String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
+      capabilities.setVersion(emulatedBrowser);
     }
-    else if (htmlUnit()) {
-      DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
-      capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
-      capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
-      capabilities.setJavascriptEnabled(true);
-      if (browser.indexOf(':') > -1) {
-        // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
-        String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
-        capabilities.setVersion(emulatedBrowser);
-      }
-      return new HtmlUnitDriver(capabilities);
-    }
-    else if (FIREFOX.equalsIgnoreCase(browser)) {
-      return maximize(new FirefoxDriver());
-    }
-    else if (OPERA.equalsIgnoreCase(browser)) {
-      return createInstanceOf("com.opera.core.systems.OperaDriver");
-    }
-    else if (PHANTOMJS.equals(browser)) {
-      DesiredCapabilities capabilities = new DesiredCapabilities();
-      capabilities.setJavascriptEnabled(true);
-      capabilities.setCapability(TAKES_SCREENSHOT, true);
-      return maximize(new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities));
-    }
-    else {
-      return createInstanceOf(browser);
-    }
+    return new HtmlUnitDriver(capabilities);
+  }
+
+  protected RemoteWebDriver createInternetExplorerDriver() {
+    return maximize(new InternetExplorerDriver());
+  }
+
+  protected WebDriver createPhantomJsDriver() {
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setJavascriptEnabled(true);
+    capabilities.setCapability(TAKES_SCREENSHOT, true);
+    return maximize(new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities));
+  }
+
+  protected WebDriver createOperaDriver() {
+    return createInstanceOf("com.opera.core.systems.OperaDriver");
   }
 
   protected RemoteWebDriver maximize(RemoteWebDriver driver) {
