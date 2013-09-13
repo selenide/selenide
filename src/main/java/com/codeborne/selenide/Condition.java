@@ -289,7 +289,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("text", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element.getText().toLowerCase().contains(text.toLowerCase());
+        return reduceSpaces(element.getText().toLowerCase()).contains(reduceSpaces(text.toLowerCase()));
       }
       @Override
       public String actualValue(WebElement element) {
@@ -302,6 +302,10 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
+  protected String reduceSpaces(String text) {
+    return text.replaceAll("[\\s\\n\\r]+", " ").trim();
+  }
+
   /**
    * $("h1").shouldHave(textCaseSensitive("Hello\s*John"))
    * @param text expected text of HTML element
@@ -310,7 +314,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("textCaseSensitive", false) {
       @Override
       public boolean apply(WebElement element) {
-        return element.getText().contains(text);
+        return reduceSpaces(element.getText()).contains(reduceSpaces(text));
       }
       @Override
       public String actualValue(WebElement element) {
