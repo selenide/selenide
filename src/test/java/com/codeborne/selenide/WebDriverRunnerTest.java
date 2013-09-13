@@ -39,7 +39,7 @@ public class WebDriverRunnerTest {
 
   @Test
   public void allowsToSpecifyCustomWebDriverProgrammatically() {
-    HtmlUnitDriver myDriver = new HtmlUnitDriver();
+    HtmlUnitDriver myDriver = new HtmlUnitDriver(true);
     WebDriverRunner.setWebDriver(myDriver);
 
     open(url);
