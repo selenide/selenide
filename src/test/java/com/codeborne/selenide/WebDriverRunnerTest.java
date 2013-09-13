@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -17,33 +19,31 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
-
   static WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
+
+  @After
+  public void resetSettings() {
+    WebDriverRunner.closeWebDriver();
+    Configuration.browser = System.getProperty("browser", FIREFOX);
+    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
+  }
 
   @Test
   public void allowsToSpecifyCustomWebDriverConfiguration() {
     WebDriverRunner.closeWebDriver();
     Configuration.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
 
-    try {
-      assertSame(driver, WebDriverRunner.getWebDriver());
-    } finally {
-      WebDriverRunner.closeWebDriver();
-      Configuration.browser = System.getProperty("browser", FIREFOX);
-    }
+    assertSame(driver, WebDriverRunner.getWebDriver());
   }
 
   @Test
   public void allowsToSpecifyCustomWebDriverProgrammatically() {
     HtmlUnitDriver myDriver = new HtmlUnitDriver();
-    myDriver.setJavascriptEnabled(true);
     WebDriverRunner.setWebDriver(myDriver);
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
-    try {
-      assertSame(myDriver, WebDriverRunner.getWebDriver());
-    } finally {
-      WebDriverRunner.closeWebDriver();
-    }
+
+    open(url);
+    assertSame(myDriver, WebDriverRunner.getWebDriver());
   }
 
   @Test
@@ -51,7 +51,6 @@ public class WebDriverRunnerTest {
     WebDriverEventListener listener1 = mock(WebDriverEventListener.class);
     WebDriverRunner.addListener(listener1);
     Configuration.browser = HTMLUNIT;
-    URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
     open(url);
     verify(listener1).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
 
