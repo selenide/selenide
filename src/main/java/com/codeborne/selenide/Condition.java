@@ -1,15 +1,13 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
-import java.util.regex.Pattern;
-
 import static com.codeborne.selenide.Selenide.getFocusedElement;
-import static java.util.regex.Pattern.DOTALL;
 
 public abstract class Condition implements Predicate<WebElement> {
   public static Condition not(final Condition condition) {
@@ -254,7 +252,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("match", false) {
       @Override
       public boolean apply(WebElement element) {
-        return matches(element.getText(), regex);
+        return Html.text.matches(element.getText(), regex);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -267,13 +265,10 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  private static boolean matches(String text, String regex) {
-    return Pattern.compile(".*" + regex + ".*", DOTALL).matcher(text).matches();
-  }
-
   /**
    * $("h1").waitUntil(hasText("Hello"), 10000)
    * <p>Case insensitive</p>
+   * NB! Ignores multiple whitespaces between words
    * @param text expected text of HTML element
    */
   public static Condition hasText(String text) {
@@ -282,14 +277,18 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * $("h1").shouldHave(text("Hello\s*John"))
-   * <p>Case insensitive</p>
+   *
+   * <p>NB! Case insensitive</p>
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition text(final String text) {
     return new Condition("text", false) {
       @Override
       public boolean apply(WebElement element) {
-        return reduceSpaces(element.getText().toLowerCase()).contains(reduceSpaces(text.toLowerCase()));
+        return Html.text.contains(element.getText(), text.toLowerCase());
       }
       @Override
       public String actualValue(WebElement element) {
@@ -302,19 +301,18 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  protected String reduceSpaces(String text) {
-    return text.replaceAll("[\\s\\n\\r]+", " ").trim();
-  }
-
   /**
    * $("h1").shouldHave(textCaseSensitive("Hello\s*John"))
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition textCaseSensitive(final String text) {
     return new Condition("textCaseSensitive", false) {
       @Override
       public boolean apply(WebElement element) {
-        return reduceSpaces(element.getText()).contains(reduceSpaces(text));
+        return Html.text.containsCaseSensitive(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -329,14 +327,17 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * $("h1").shouldHave(exactText("Hello"))
+   *
    * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition exactText(final String text) {
     return new Condition("exactText", false) {
       @Override
       public boolean apply(WebElement element) {
-        return text.equalsIgnoreCase(element.getText());
+        return Html.text.equals(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -350,14 +351,17 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").shouldHave(exactText("Hello"))
+   * $("h1").shouldHave(exactTextCaseSensitive("Hello"))
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition exactTextCaseSensitive(final String text) {
     return new Condition("exactTextCaseSensitive", false) {
       @Override
       public boolean apply(WebElement element) {
-        return text.equals(element.getText());
+        return Html.text.equalsCaseSensitive(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -468,7 +472,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * Checks that element is not disabled
-   * @see org.openqa.selenium.WebElement#isEnabled()
+   * @see WebElement#isEnabled()
    */
   public static final Condition enabled = new Condition("enabled", false) {
     @Override public boolean apply(WebElement element) {
@@ -482,7 +486,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * Checks that element is disabled
-   * @see org.openqa.selenium.WebElement#isEnabled()
+   * @see WebElement#isEnabled()
    */
   public static final Condition disabled = new Condition("disabled", false) {
     @Override public boolean apply(WebElement element) {
@@ -496,7 +500,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * Checks that element is selected
-   * @see org.openqa.selenium.WebElement#isSelected()
+   * @see WebElement#isSelected()
    */
   public static final Condition selected = new Condition("selected", false) {
     @Override public boolean apply(WebElement element) {
@@ -508,8 +512,8 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  private final String name;
-  private final boolean nullIsAllowed;
+  protected final String name;
+  protected final boolean nullIsAllowed;
 
   protected Condition(String name, boolean nullIsAllowed) {
     this.name = name;

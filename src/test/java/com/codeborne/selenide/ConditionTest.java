@@ -46,17 +46,6 @@ public class ConditionTest {
   }
 
   @Test
-  public void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
-    Condition condition = Condition.text("abc");
-    assertEquals("Bruce Willis", condition.reduceSpaces("Bruce   \n\t   Willis"));
-    assertEquals("", condition.reduceSpaces(""));
-    assertEquals("", condition.reduceSpaces("   "));
-    assertEquals("a", condition.reduceSpaces("a"));
-    assertEquals("a", condition.reduceSpaces("  a\n"));
-    assertEquals("Bruce Willis", condition.reduceSpaces("     Bruce   \n\t   Willis  \n\n\n"));
-  }
-
-  @Test
   public void exactTextIsCaseInsensitive() {
     WebElement element = mock(WebElement.class);
     when(element.getText()).thenReturn("John Malkovich");

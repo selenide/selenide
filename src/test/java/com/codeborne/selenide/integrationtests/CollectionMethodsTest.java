@@ -16,7 +16,7 @@ import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class CollectionMethods {
+public class CollectionMethodsTest {
   @Before
   public void openTestPageWithJQuery() {
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
@@ -72,7 +72,22 @@ public class CollectionMethods {
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(
-        texts("dynamic content", "dynamic content2"));
+        texts("dynamic content", "dynamic content2"),
+        texts("mic cont", "content2"),
+        exactTexts("dynamic content", "dynamic content2"));
+  }
+
+  @Test
+  public void ignoresWhitespacesInTexts() {
+    $$("#dynamic-content-container span").shouldHave(
+        texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
+        exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+  }
+
+  @Test(expected = TextsMismatch.class)
+  public void canCheckThatElementsHaveExactlyCorrectTexts() {
+    $$("#dynamic-content-container span").shouldHave(
+        exactTexts("content", "content2"));
   }
 
   @Test(expected = ElementNotFound.class)
