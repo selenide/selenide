@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
 
@@ -34,7 +35,13 @@ public class Navigator {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
 
-    getWebDriver().navigate().to(url);
+    try {
+      getWebDriver().navigate().to(url);
+    } catch (WebDriverException e) {
+      e.addInfo("selenide.url", url);
+      e.addInfo("selenide.baseUrl", baseUrl);
+      throw e;
+    }
     waitUntilPageIsLoaded();
   }
 

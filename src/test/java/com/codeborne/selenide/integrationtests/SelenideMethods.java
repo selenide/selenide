@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
@@ -270,5 +271,16 @@ public class SelenideMethods {
     $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);
     $("#multirowTable tr").findAll(byText("Chack")).shouldHaveSize(1);
     $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
+  }
+
+  @Test
+  public void errorMessageShouldContainUrlIfBrowserFailedToOpenPage() {
+    try {
+      open("www.yandex.ru");
+      fail("Should fail on invalid URL");
+    } catch (WebDriverException e) {
+      assertTrue(e.getAdditionalInformation().contains("selenide.baseUrl: http://localhost:8080"));
+      assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
+    }
   }
 }
