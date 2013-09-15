@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.WebDriverProvider;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,6 +15,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -140,7 +142,7 @@ public class WebDriverThreadLocalContainer {
     return new ChromeDriver(options);
   }
 
-  protected RemoteWebDriver createFirefoxDriver() {
+  protected WebDriver createFirefoxDriver() {
     return maximize(new FirefoxDriver());
   }
 
@@ -157,22 +159,19 @@ public class WebDriverThreadLocalContainer {
     return new HtmlUnitDriver(capabilities);
   }
 
-  protected RemoteWebDriver createInternetExplorerDriver() {
+  protected WebDriver createInternetExplorerDriver() {
     return maximize(new InternetExplorerDriver());
   }
 
   protected WebDriver createPhantomJsDriver() {
-    DesiredCapabilities capabilities = new DesiredCapabilities();
-    capabilities.setJavascriptEnabled(true);
-    capabilities.setCapability(TAKES_SCREENSHOT, true);
-    return maximize(new org.openqa.selenium.phantomjs.PhantomJSDriver(capabilities));
+    return maximize(createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver"));
   }
 
   protected WebDriver createOperaDriver() {
     return createInstanceOf("com.opera.core.systems.OperaDriver");
   }
 
-  protected RemoteWebDriver maximize(RemoteWebDriver driver) {
+  protected WebDriver maximize(WebDriver driver) {
     if (startMaximized) {
       driver.manage().window().maximize();
     }
@@ -185,7 +184,12 @@ public class WebDriverThreadLocalContainer {
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
         return ((WebDriverProvider)clazz.newInstance()).createDriver();
       } else {
-        return (WebDriver) Class.forName(className).newInstance();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setJavascriptEnabled(true);
+        capabilities.setCapability(TAKES_SCREENSHOT, true);
+
+        Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
+        return (WebDriver) constructor.newInstance(capabilities);
       }
     }
     catch (Exception invalidClassName) {
