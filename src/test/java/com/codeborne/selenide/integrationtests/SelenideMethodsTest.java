@@ -1,5 +1,6 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementMatches;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.junit.ScreenShooter;
@@ -279,7 +280,9 @@ public class SelenideMethodsTest {
     try {
       baseUrl = "http://localhost:8080";
       open("www.yandex.ru");
-      fail("Should fail on invalid URL");
+      if (!WebDriverRunner.phantomjs()) {
+        fail("Should fail on invalid URL");
+      }
     } catch (WebDriverException e) {
       assertTrue(e.getAdditionalInformation().contains("selenide.baseUrl: http://localhost:8080"));
       assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
