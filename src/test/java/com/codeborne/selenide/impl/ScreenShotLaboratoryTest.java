@@ -13,9 +13,9 @@ public class ScreenShotLaboratoryTest {
     String expected = "MyTest/helloWorldTest".replace('/', separatorChar);
     assertEquals(expected, screenshots.getScreenshotFileName("MyTest", "helloWorldTest"));
 
-    String expectedFileName = "com/codeborne/selenide/integrationtests/SelenideMethods/userCanListMatchingSubElements".replace('/', separatorChar);
+    String expectedFileName = "com/codeborne/selenide/integrationtests/SelenideMethodsTest/userCanListMatchingSubElements".replace('/', separatorChar);
     assertEquals(expectedFileName,
-        screenshots.getScreenshotFileName("com.codeborne.selenide.integrationtests.SelenideMethods",
+        screenshots.getScreenshotFileName("com.codeborne.selenide.integrationtests.SelenideMethodsTest",
             "userCanListMatchingSubElements"));
   }
 }

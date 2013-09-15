@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -19,7 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.url;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
-public class SelenideMethods {
+public class SelenideMethodsTest {
   @Rule
   public ScreenShooter allScreens = ScreenShooter.failedTests();
 
@@ -276,6 +277,7 @@ public class SelenideMethods {
   @Test
   public void errorMessageShouldContainUrlIfBrowserFailedToOpenPage() {
     try {
+      baseUrl = "http://localhost:8080";
       open("www.yandex.ru");
       fail("Should fail on invalid URL");
     } catch (WebDriverException e) {
