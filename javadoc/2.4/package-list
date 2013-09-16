@@ -1,4 +1,5 @@
 com.codeborne.selenide
+com.codeborne.selenide.collections
 com.codeborne.selenide.ex
 com.codeborne.selenide.impl
 com.codeborne.selenide.junit
