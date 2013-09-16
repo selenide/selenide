@@ -22,5 +22,5 @@ git push origin --tags
 
 ### Publishing javadoc
 selenide> gradle clean javadoc
-selenide> mv build/docs/javadoc/* ~/Dropbox/projects/selenide-web/javadoc/2.3/
-selenide-web> git add javadoc/2.3
+selenide> mv build/docs/javadoc/* ~/Dropbox/projects/selenide-web/javadoc/2.5/
+selenide-web> git add javadoc/2.5
