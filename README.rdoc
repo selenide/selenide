@@ -78,8 +78,13 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 === 2.4 (draft)
 ===== New features:
 * Allow multiple WebDriver instances in parallel threads inside single VM. This allows running parallel tests.
+* All text checks like `shouldHave(text(..))` _ignore whitespaces_!
+* Added method for adding WebDriverEventListeners
 * Added method `$.pressTab()`
+* CollectionCondition#texts matches substrings
+* Added method CollectionCondition#exactTexts
 * Maximize PhantomJS driver "window" by default
+* Better error messages for wrapped elements in PageObjects
 
 ===== Bugfixes:
 * Method "$$.findBy" waits until element matches the condition
@@ -88,6 +93,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 ===== Technical issues:
 * Updated to selenium-java:2.35.0
 * Moved implementation details from WebDriverRunner class to separate WebDriverThreadLocalContainer, ScreenShotLaboratory and Cleanup classes that are not static and can be overridden if needed.
+* WebDriverProvider is deprecated
 
 === 2.3 (Released 9.07.2013)
 ===== New features:
