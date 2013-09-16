@@ -75,10 +75,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
-=== 2.4 (draft)
+=== 2.4 (Released 16.09.2013)
 ===== New features:
 * Allow multiple WebDriver instances in parallel threads inside single VM. This allows running parallel tests.
-* All text checks like `shouldHave(text(..))` _ignore whitespaces_!
+* All text checks like `shouldHave(text(..))` ignore whitespaces!
 * Added method for adding WebDriverEventListeners
 * Added method `$.pressTab()`
 * CollectionCondition#texts matches substrings
