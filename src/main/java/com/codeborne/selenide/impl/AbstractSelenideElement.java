@@ -240,15 +240,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected boolean isDisplayed() {
     try {
-      return isDisplayed(getActualDelegate());
-    } catch (WebDriverException elementDoesNotExist) {
-      return false;
-    } catch (IndexOutOfBoundsException invalidElementIndex) {
-      return false;
-    }
-  }
-  protected static boolean isDisplayed(WebElement element) {
-    try {
+      WebElement element = getActualDelegate();
       return element != null && element.isDisplayed();
     } catch (WebDriverException elementDoesNotExist) {
       return false;
@@ -298,11 +290,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    if (!isDisplayed(element)) {
+    if (!exists(element)) {
       throw new ElementNotFound(toString(), condition, timeoutMs);
     }
     else {
       throw new ElementMismatch(toString(), condition, element, timeoutMs);
+    }
+  }
+
+  static boolean exists(WebElement element) {
+    try {
+      if (element == null) return false;
+      element.isDisplayed();
+      return true;
+    } catch (WebDriverException e) {
+      return false;
     }
   }
 

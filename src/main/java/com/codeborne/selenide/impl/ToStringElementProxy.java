@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.impl.AbstractSelenideElement.delegateMethod;
-import static com.codeborne.selenide.impl.AbstractSelenideElement.isDisplayed;
+import static com.codeborne.selenide.impl.AbstractSelenideElement.exists;
 
 public class ToStringElementProxy implements InvocationHandler {
   public static WebElement wrap(By selector, WebElement element) {
@@ -28,7 +28,7 @@ public class ToStringElementProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     if ("toString".equals(method.getName())) {
-      return selector + ": " + (isDisplayed(element) ? Describe.describe(element) : "ElementNotFound");
+      return selector + ": " + (exists(element) ? Describe.describe(element) : "ElementNotFound");
     }
 
     return delegateMethod(element, method, args);
