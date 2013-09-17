@@ -88,7 +88,7 @@ public class ErrorMessagesTest {
     try {
       $(pageObject.categoryDropdown).selectOption("SomeOption");
     } catch (ElementNotFound e) {
-      assertContains(e, "ElementNotFound {By.xpath: .//*/text()[normalize-space(.) = \"SomeOption\"]/parent::*, in: NoSuchElementException", "Expected: visible");
+      assertContains(e, "ElementNotFound {By.id: invalid_id: ElementNotFound}", "Expected: present");
     }
   }
 
