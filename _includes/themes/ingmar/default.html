@@ -8,6 +8,7 @@
 
   <link rel="shortcut icon" href="{{ BASE_PATH }}/favicon.ico"/>
   <link rel="stylesheet" href="{{ ASSET_PATH }}/css/styles.css">
+  <link rel="stylesheet" href="{{ ASSET_PATH }}/css/selenide-web.css">
   <link rel="stylesheet" href="{{ ASSET_PATH }}/css/pygment_trac.css">
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{{ BASE_PATH }}/rss.xml" />
 
@@ -20,15 +21,18 @@
   {% include JB/analytics %}
 </head>
 <body>
-<div id="languages">
-  <a id="lang_eng" href="http://selenide.org">ENG</a>
-  <a id="lang_rus" href="http://ru.selenide.org">RUS</a>
-</div>
+<div class="head">
 <div class="wrapper">
+  <div class="service-links">
+    <div id="languages">
+      <a id="lang_eng" href="http://selenide.org">ENG</a>
+      <a id="lang_rus" href="http://ru.selenide.org">RUS</a>
+    </div>
+  </div>
+  <div style="clear: both"></div>
   <header>
-    <img class="right" src="{{ BASE_PATH }}/images/selenide-logo-100x100.png" width="80"/>
-    <h1 class="header"><a class="black" href="{{ HOME_PATH }}">{{ site.title }}</a></h1>
-    <p class="header">{{ site.tagline }}</p>
+
+    <img src="{{ BASE_PATH }}/images/selenide-logo-big.png" width="352" height="186"/>
 
     {% if site.ads.google %}
     <div class="misc ad">
@@ -39,27 +43,34 @@
       google_ad_height = {{ site.ads.google.height }};
       //-->
       </script>
-      <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-    </div>
+
     {% endif %}
 
     {% include main_menu.md %}
+      </div>
   </header>
+  </div>
+</div>
+<div class="main">
 
-  <section>
+<section>
     {{ content }}
-  </section>
+</section>
 
+ <div class="foot">
+   <div class="wrapper">
   <footer>
     <!--<p><small>Hosted on <a href="http://pages.github.com/">GitHub Pages</a> using the <a href="https://github.com/sodabrew/theme-dinky">Dinky theme</a> for <a href="http://jekyllbootstrap.com/">Jekyll Bootstrap</a></small></p>-->
     <p>
-      <small>
-        This project is maintained by <a href="https://github.com/codeborne">
-        <img src="{{ BASE_PATH }}/images/codeborne-logo.png" width="200"/></a>
-      </small>
+
+        <div>The project is maintained by</div> <a href="https://github.com/codeborne">
+        <img src="{{ BASE_PATH }}/images/codeborne-logo.png" width="300" height="49"/></a>
+
     </p>
   </footer>
-</div>
+   </div>
+ </div>
+
 <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
 
 <script type="text/javascript"><!--

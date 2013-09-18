@@ -1,20 +1,23 @@
 ---
 layout: page
-title : Selenide documentation
+title :
 header : Documentation
 group: navigation
 ---
 {% include JB/setup %}
-
-> Poor software <span class="red">does not have</span> documentation. <br/>
-> Brilliant software <span class="green">does not need</span> documentation.
+<div class="short docs">
+<div class="wrapper-color-content">
+<h3>Documentation</h3>
+<h4>Poor software <span class="bold">does not have</span> documentation.
+Brilliant software <span class="bold">does not need</span> documentation.</h4>
 
 We are proud to claim that Selenide is so simple that you don't need to read tons of documentation.
 
 ## Three simple things
 
 The whole work with Selenide consists of three simple things:
-
+</div></div>
+<div class="wrapper-content">
 1.  Open the page
 2.  $(find element).doAction()
 3.  $(find element).checkCondition()
