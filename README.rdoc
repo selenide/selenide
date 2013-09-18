@@ -75,6 +75,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.5 (Draft)
+* Added method $.attr("name") as a synonym for $.getAttribute("name").
+* Added method $.name() as a synonym for $.attr("name")
+
 === 2.4 (Released 16.09.2013)
 ===== New features:
 * Allow multiple WebDriver instances in parallel threads inside single VM. This allows running parallel tests.

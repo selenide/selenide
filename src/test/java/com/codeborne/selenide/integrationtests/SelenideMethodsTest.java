@@ -79,6 +79,16 @@ public class SelenideMethodsTest {
   }
 
   @Test
+  public void userCanGetAttr() {
+    assertEquals("username", $(by("readonly", "readonly")).attr("name"));
+  }
+
+  @Test
+  public void userCanGetNameAttribute() {
+    assertEquals("username", $(by("readonly", "readonly")).name());
+  }
+
+  @Test
   public void userCanGetDataAttributes() {
     assertEquals("111", $(byValue("livemail.ru")).getAttribute("data-mailServerId"));
     assertEquals("111", $(byValue("livemail.ru")).data("mailServerId"));

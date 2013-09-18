@@ -81,8 +81,20 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String text();
 
   /**
+   * Get the attribute of the element. Synonym for getAttribute(String).
+   * @return null if attribute is missing
+   */
+  String attr(String attributeName);
+
+  /**
+   * Get the "name" attribute of the element
+   * @return attribute "name" value or null if attribute is missing
+   */
+  String name();
+
+  /**
    * Get the "value" attribute of the element
-   * @return attribute "value" value or empty string if attribute is missing
+   * @return attribute "value" value or null if attribute is missing
    */
   String val();
 
