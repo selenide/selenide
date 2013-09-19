@@ -31,11 +31,11 @@ You don't need to think how to shutdown browser, handle timeouts or write
 monstrous code for waiting events - just **concentrate on your business logic**!
 
 ## How to start?
-Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.3/selenide-2.3.jar">selenide.jar</a> to your project.
+Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.4/selenide-2.4.jar">selenide.jar</a> to your project.
 For Maven, Ivy, Gradle etc. users:
 
 ```xml
-<dependency org="com.codeborne" name="selenide" revision="2.3"/>
+<dependency org="com.codeborne" name="selenide" revision="2.4"/>
 ```
 
 See [Quick Start guide]({{ BASE_PATH }}/quick-start.html) for more details.
