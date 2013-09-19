@@ -11,10 +11,10 @@ tagline:
 <h3>What is Selenide?</h3>
 <h4>Selenide is a wrapper for <a href="http://docs.seleniumhq.org/projects/webdriver/" target="_blank">Selenium WebDriver</a> that brings the following advantages:</h4>
 
-✓  Concise API for tests&nbsp;&nbsp;
-✓  Automatic handling browser lifecycle (open/close/restart)&nbsp;&nbsp;
-✓  jQuery-style selectors &nbsp;&nbsp;
-✓  Ajax support<br>
+✓ Concise API for tests&nbsp;&nbsp;
+✓ Ajax support&nbsp;&nbsp;
+✓ Autostart browser&nbsp;&nbsp;
+✓ jQuery-style selectors<br>
 You don't need to think how to shutdown browser, handle timeouts or write monstrous code! Read wiki for more details<br>
 
 <a href="https://github.com/codeborne/selenide/wiki" target="_blank"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
