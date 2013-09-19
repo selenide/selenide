@@ -1,5 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400italic,700italic,400,700);
 @import url(http://fonts.googleapis.com/css?family=Parisienne);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:700);
+@import url(http://fonts.googleapis.com/css?family=Courgette);
 
 * {
   padding: 0px;
@@ -61,7 +63,7 @@ a small {
 
 .wrapper-content {
   width: 776px;
-  padding-top: 30px;
+  padding-top: 1px;
   padding-bottom: 30px;
   margin:0 auto;
   font-size: 16px;
@@ -84,7 +86,7 @@ a small {
   width: 976px;
   margin:0 auto;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
 }
 
 .content-details {
@@ -113,37 +115,86 @@ a small {
   width: 100%;
   color: #fff;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
+}
+
+.short a {
+  text-decoration: underline;
+  color: #fff;
 }
 
 .short h3 {
   color: #fff;
   font-size: 96px;
   text-transform: uppercase;
+  letter-spacing: -1px;
 }
 
 .short h4 {
-  font-family: 'Parisienne', cursive;
+  font-family: 'Courgette', cursive;
   margin-top: 18px;
   margin-bottom: 18px;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 300;
-
   color: #fff;
   line-height: 28px;
+  letter-spacing: -1px;
 }
 
 .short h4 .bold {
-  font-family: 'Parisienne', cursive;;
+  font-family: 'Courgette', cursive;
   font-weight: 900;
+  letter-spacing: -1px;
+
+}
+
+.short h4 a {
+  text-decoration: underline;
+  color: #fff;
 }
 
 
 .short.docs {
+  background-color:  #E5B755;
+  padding-top: 25px;
+  padding-bottom: 35px;
+}
+
+.short.wiki {
+  background-color: #B74EB5;
+  padding-top: 25px;
+  padding-bottom: 35px;
+}
+
+.short.testimonials {
+  background-color: #92AC69;
+  padding-top: 25px;
+  padding-bottom: 35px;
+}
+
+.short.feedback {
+  background-color: #FF7A4D;
+  padding-top: 25px;
+  padding-bottom: 35px;
+}
+
+.short.howto {
   background-color: #55B7E7;
   padding-top: 25px;
   padding-bottom: 35px;
 }
+
+.short.thanks {
+  background-color: #e7e7e7;
+  padding-top: 25px;
+  padding-bottom: 35px;
+  color: #666;
+}
+
+.short.thanks a {
+  color: #666;
+}
+
 
 blockquote {
   border-left:1px solid #e5e5e5;
@@ -240,18 +291,61 @@ ul.gray-boxes {
 }
 
 ul.gray-boxes li {
-  width:100px;
-  height:100px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline;
+}
+
+ul.gray-boxes a h3 {
+  font-family: 'Parisienne', cursive;
+  color: #fff;
+  font-weight: 300;
+  font-size: 18px;
+}
+
+ul.gray-boxes a:hover h3 {
+  color: #4c4c4c;
+}
+
+ul.gray-boxes a h4 {
+  text-transform: uppercase;
+  color: #fff;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+ul.gray-boxes a:hover h4 {
+  color: #4c4c4c;
 }
 
 ul.gray-boxes a {
   line-height:1;
+  border: 3px solid #4c4c4c;
   font-size:14px;
   color:#999;
-  display:block;
+  display: inline-block;
+  background: #4c4c4c;
   text-align:center;
   padding-top:6px;
-  height:40px;
+  border-radius: 84px 84px 84px 84px;
+  padding: 7px;
+  top: 20px;
+  width: 84px;
+  height: 84px;
+  text-align: center;
+  line-height: 98px;
+}
+
+ul.gray-boxes a:hover {
+  border: 3px solid #4c4c4c;
+  background: #fff;
+  color: #4c4c4c;;
+}
+
+.ql {
+  line-height: 12px!important;
+  display: inline-block;
 }
 
 header .archive h2, header .archive h3 {
@@ -321,6 +415,9 @@ footer div {
   ul.main-menu-pages li a {
     margin-left: 30px;
   }
+  ul.main-menu-pages li a {
+    font-size: 20px;
+  }
 }
 
 @media print, screen and (max-width: 980px) {
@@ -339,6 +436,7 @@ footer div {
     right:50px;
 
   }
+
 }
 
 @media print, screen and (max-width: 720px) {
