@@ -15,4 +15,11 @@ We wanted to make a screencast that would be short, funny and informative enough
 
 Watch with sound!
 
-<iframe src="//player.vimeo.com/video/73128965" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="http://vimeo.com/73128965">Selenide Harlem Shake</a> from <a href="http://vimeo.com/user20427140">Selenide</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+<iframe src="//player.vimeo.com/video/73128965" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+</iframe>
+
+<p>
+  <a href="http://vimeo.com/73128965">Selenide Harlem Shake</a> from
+  <a href="http://vimeo.com/user20427140">Selenide</a> on
+  <a href="https://vimeo.com">Vimeo</a>.
+</p>
