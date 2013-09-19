@@ -12,7 +12,7 @@ group: navigation
 <h3>Quick start</h3>
 <h4>It's extremely easy to start using Selenide. Definitely not a rocket science.</h4>
 
-Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.3/selenide-2.3.jar">selenide.jar</a> to your project and you are done.<br>
+Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.4/selenide-2.4.jar">selenide.jar</a> to your project and you are done.<br>
 Here is the quick start guide to get you started.</div></div>
 
 <div class="quicklinks">
@@ -36,7 +36,7 @@ Add these lines to file pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
 </dependency>
 ```
 
@@ -47,7 +47,7 @@ Add these lines to file ivy.xml:
 ```xml
 <ivy-module>
   <dependencies>
-    <dependency org="com.codeborne" name="selenide" rev="2.3"/>
+    <dependency org="com.codeborne" name="selenide" rev="2.4"/>
   </dependencies>
 </ivy-module>
 ```
@@ -58,7 +58,7 @@ Add these lines to file build.gradle:
 
 ```groovy
 dependencies {
-  testCompile 'com.codeborne:selenide:2.3'
+  testCompile 'com.codeborne:selenide:2.4'
 }
 ```
 
