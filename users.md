@@ -10,10 +10,9 @@ group: navigation
 <div class="wrapper-color-content">
 
 <h3>Testimonials</h3>
-<h4>"Selenide really blew my mind. Who needs testers with a software like that?"</h4>
+<h4>"Selenide is a very nice piece of software, so that the UI tests are no longer a nightmare now."</h4>
 
-Andrey Solntsev<br/>
-Senior software engineer @ Codeborne<br>
+Nikolai Raitsev<br>
 </div></div>
 
 <div class="quicklinks">

@@ -62,10 +62,9 @@ The whole work with Selenide consists of three simple things! <br>
 <div class="wrapper-color-content">
 
 <h3>Testimonials</h3>
-<h4>"Selenide really blew my mind. Who needs testers with a software like that?"</h4>
+<h4>"Selenide is a very nice piece of software, so that the UI tests are no longer a nightmare now."</h4>
 
-Andrey Solntsev<br/>
-Senior software engineer @ Codeborne<br>
+Nikolai Raitsev<br>
 <a href="{{ BASE_PATH }}/users.html"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
 </div></div>
 
