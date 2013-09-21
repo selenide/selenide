@@ -1,11 +1,11 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400italic,700italic,400,700);
+@import url(http://fonts.googleapis.com/css?family=Lato:400italic,700italic,400,700);
 @import url(http://fonts.googleapis.com/css?family=Parisienne);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:700);
 @import url(http://fonts.googleapis.com/css?family=Courgette);
 
 * {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 body {
