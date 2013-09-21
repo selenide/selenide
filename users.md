@@ -79,8 +79,8 @@ Nikolai Raitsev<br>
 </a>
 
 <div>The only software company in Estonia that uses TDD and other XP practices in everyday work.
-Creators of open-source libraries <a href="https://github.com/jarmo/WatirSplash" target="_blank">WatirSplash</a> and
-<a href="http://selenide.org">Selenide</a>.</div>
+Creators of open-source libraries <a href="http://selenide.org">Selenide</a> and
+<a href="http://github.com/codeborne/mobileid" target="_blank">MobileID</a>.</div>
 
 <br/>
 <br/>
