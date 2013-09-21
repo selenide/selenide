@@ -131,10 +131,11 @@ Just add Selenide dependency to your project:
 </dependency>
 ```
 
-Import the class:
+Import required classes:
 
 ```java
 import static com.codeborne.selenide.Selenide.*
+import static com.codeborne.selenide.Condition.*
 ```
 
 and it's ready! Start writing tests!

@@ -66,7 +66,7 @@ dependencies {
 
 So easy! No more boring routines, we can start.
 
-Import one class:
+Import required classes:
 
 ```java
 import static com.codeborne.selenide.Selenide.*
