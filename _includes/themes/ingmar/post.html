@@ -1,7 +1,13 @@
-<section>
-  <h1>{{ page.title }}</h1>
+<div class="short docs">
+  <div class="wrapper-color-content">
+    <h4>{{ page.title }}</h4>
+    {{ page.header-text }}
+  </div>
+</div>
 
-  {{ content }}
-
-  {% include JB/comments %}
-</section>
+<div class="wrapper-content">
+  <section>
+    {{ content }}
+    {% include JB/comments %}
+  </section>
+</div>

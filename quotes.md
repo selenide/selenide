@@ -1,8 +1,11 @@
 ---
 layout: page
-title : Что говорят о Selenide
-header : Что говорят о Selenide
+title : What users say
+header : What users say
 group: navigation
+cssClass: quotes
+header-text:
+
 ---
 {% include JB/setup %}
 
