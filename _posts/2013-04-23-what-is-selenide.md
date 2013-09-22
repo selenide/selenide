@@ -127,7 +127,7 @@ Just add Selenide dependency to your project:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide</artifactId>
-    <version>2.4</version>
+    <version>{{site.SELENIDE_VERSION}}</version>
 </dependency>
 ```
 

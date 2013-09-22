@@ -1,4 +1,6 @@
-# This is the default format. 
+SELENIDE_VERSION : 2.4
+
+# This is the default format.
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink: /:categories/:year/:month/:day/:title 
 

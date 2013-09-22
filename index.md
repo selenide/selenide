@@ -29,7 +29,7 @@ tagline:
     <h3>Quick start</h3>
     <h4>It's extremely easy to start using Selenide. Definitely not a rocket science.</h4>
 
-    Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.4/selenide-2.4.jar">selenide.jar</a> to your project and you are done.<br>
+    Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/{{site.SELENIDE_VERSION}}/selenide-{{site.SELENIDE_VERSION}}.jar">selenide.jar</a> to your project and you are done.<br>
     See Quick start guide for more details.<br>
 
     <a href="{{ BASE_PATH }}/quick-start.html"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
