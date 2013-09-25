@@ -14,9 +14,9 @@ header-text: >
 {% include JB/setup %}
 
 ## Three simple things:
-<strong>1.</strong>  Open the page   <br>
-<strong>2.</strong>  $(find element).doAction()<br>
-<strong>3.</strong>  $(find element).checkCondition()<br>
+**1.**  Open the page   <br>
+**2.**  $(find element).doAction()<br>
+**3.**  $(find element).checkCondition()<br>
 
 ```java
   open("/login");
