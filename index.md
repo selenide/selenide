@@ -23,6 +23,8 @@ tagline:
 {% include themes/ingmar/_quicklinks.html %}
 
 
+TERE!!!!
+
 <div class="short howto">
   <div class="wrapper-color-content">
     <h3>Quick start</h3>
