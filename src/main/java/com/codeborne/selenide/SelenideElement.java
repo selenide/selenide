@@ -36,7 +36,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement setValue(String text);
 
   /**
-   * Same as #type(java.lang.String)
+   * Same as #setValue(java.lang.String)
    */
   SelenideElement val(String text);
 
