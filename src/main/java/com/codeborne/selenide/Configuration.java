@@ -20,7 +20,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dbrowser=ie".
-   * Supported values: "chrome", "firefox", "ie", "htmlunit"
+   * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera"
    * <p/>
    * Default value: "firefox"
    */

@@ -34,14 +34,14 @@ public class WebDriverRunner {
   public static final String HTMLUNIT = "htmlunit";
 
   /**
-   * To use OperaDriver, you need to include extra dependency to your project:
-   * <dependency org="com.github.detro.ghostdriver" name="phantomjsdriver" rev="1.+" conf="test->default"/>
+   * To use PhantomJS, you need to include extra dependency to your project:
+   * &lt;dependency org="com.github.detro.ghostdriver" name="phantomjsdriver" rev="1.+" conf="test-&gt;default"/&gt;
    */
   public static final String PHANTOMJS = "phantomjs";
 
   /**
    * To use OperaDriver, you need to include extra dependency to your project:
-   * <dependency org="com.opera" name="operadriver" rev="0.18" conf="test->default"/>
+   * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
 
