@@ -23,7 +23,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
+import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainer {
   protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
@@ -187,6 +187,8 @@ public class WebDriverThreadLocalContainer {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setJavascriptEnabled(true);
         capabilities.setCapability(TAKES_SCREENSHOT, true);
+        capabilities.setCapability(ACCEPT_SSL_CERTS, true);
+        capabilities.setCapability(SUPPORTS_ALERTS, true);
 
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
         return (WebDriver) constructor.newInstance(capabilities);
