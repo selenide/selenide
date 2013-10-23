@@ -34,8 +34,11 @@ dependencies {
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.13'
   provided 'junit:junit:4.11'
   provided 'org.testng:testng:6.8.7'
+  provided 'org.apache.ant:ant-junit:1.9.2'
+  provided 'org.apache.ant:ant-junit4:1.9.2'
   provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.0.4', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
+
 }
 
 task libs(type: Sync) {

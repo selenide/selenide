@@ -99,6 +99,13 @@ public class WebDriverRunner {
   }
 
   /**
+   * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
+   */
+  public static boolean isHeadless() {
+    return htmlUnit() || phantomjs();
+  }
+
+  /**
    * Is Selenide configured to use HtmlUnit browser
    */
   public static boolean htmlUnit() {

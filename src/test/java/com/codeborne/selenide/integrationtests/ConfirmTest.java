@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.htmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
@@ -49,7 +49,7 @@ public class ConfirmTest {
     catch (DialogTextMismatch expected) {
       return;
     }
-    if (!htmlUnit()) {
+    if (!isHeadless()) {
       fail("Should throw DialogTextMismatch for mismatching text");
     }
   }
