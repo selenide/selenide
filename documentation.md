@@ -126,7 +126,27 @@ SelenideElement is a wrapper around Selenium WebElement, giving it some addition
 *   textCaseSensitive(String substring)
 *   exactTextCaseSensitive(String wholeText)
 
-You can easily add your own conditions by implementing interface `com.codeborne.selenide.Condition`
+<br/>
+You can easily add your own conditions by extending class `com.codeborne.selenide.Condition`.
+
+For example:
+
+```java
+public static Condition css(final String propName, final String propValue) {
+    @Override
+    public boolean apply(WebElement element) {
+      return propValue.equalsIgnoreCase(element.getCssValue(propName));
+    }
+
+    @Override
+    public String actualValue(WebElement element) {
+        return element.getCssValue(propName);
+    }
+};
+
+// Example usage:
+$("h1").shouldHave(css("font-size", "16px"));
+```
 
 
 <h3>com.codeborne.selenide.Selectors
