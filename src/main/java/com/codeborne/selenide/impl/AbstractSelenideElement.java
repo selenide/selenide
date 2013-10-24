@@ -274,6 +274,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement waitUntil(Condition condition, long timeoutMs) {
+    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -315,6 +316,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void waitWhile(Condition condition, long timeoutMs) {
+    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -342,6 +344,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else {
       throw new ElementMatches(toString(), condition, element, timeoutMs);
+    }
+  }
+
+  protected void validateTimeout(long timeoutMs) {
+    if (timeoutMs < 100) {
+      throw new IllegalArgumentException("Invalid timeout: " + timeoutMs + "ms. Check that your timeout is in milliseconds.");
     }
   }
 
