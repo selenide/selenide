@@ -348,6 +348,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected WebElement tryToGetElement() {
     try {
       return getActualDelegate();
+    } catch (InvalidSelectorException invalidSelector) {
+      throw invalidSelector;
     } catch (NoSuchElementException ignore) {
       return null;
     } catch (WebDriverException ignore) {
