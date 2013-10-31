@@ -1,16 +1,12 @@
 ---
 layout: page
-title : Testimonials
+title : Selenide users
 header : Who uses Selenide
 group: navigation
 cssClass: testimonials
-header-text: >
-  <h4>"Selenide is a very nice piece of software, so that the UI tests are no longer a nightmare now."</h4>
-  Nikolai Raitsev
+header-text:
 ---
 {% include JB/setup %}
-
-### Who uses Selenide
 
 <br/>
 

@@ -434,5 +434,16 @@ footer div {
 }
 
 #languages a:hover {
-color: #46A3D1;
+  color: #46A3D1;
+}
+
+hr.divider {
+  width: 40%;
+  height: 2px;
+  text-align: center;
+  margin: 30px auto;
+}
+
+.author {
+  text-align: right;
 }

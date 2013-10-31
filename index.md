@@ -50,9 +50,11 @@ tagline:
 <div class="short testimonials">
   <div class="wrapper-color-content">
     <h3>Testimonials</h3>
-    <h4>"Selenide is a very nice piece of software, so that the UI tests are no longer a nightmare now."</h4>
+    <h4>"Selenide is really nice and capable tool for writing functional/acceptance tests for your browser-based UI. I encourage you to check Selenide out and give it a try."</h4>
 
-    Nikolai Raitsev<br>
+    KAUR MÄTAS, <br>
+    LiveRebel engineer at ZeroTurnaround<br>
+
     <a href="{{ BASE_PATH }}/users.html"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
   </div>
 </div>
