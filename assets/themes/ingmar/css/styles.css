@@ -437,6 +437,10 @@ footer div {
   color: #46A3D1;
 }
 
+.vspace {
+  height: 100px;
+}
+
 hr.divider {
   width: 40%;
   height: 2px;

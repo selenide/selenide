@@ -26,4 +26,4 @@ header-text:
 </blockquote>
 <div class="right">KAUR MÄTAS, <br/> LiveRebel engineer at ZeroTurnaround</div>
 
-<div style="height: 100px;"></div>
+<div class="vspace"></div>
