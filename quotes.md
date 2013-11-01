@@ -24,6 +24,11 @@ header-text:
 
 <hr class="divider"/>
 
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/asolntsev">@asolntsev</a> I love working with Selenide so much! Thanks for your awesome work here. The API is &quot;just right&quot; to make web testing a pleasure!</p>&mdash; Glen Smith (@glen_a_smith) <a href="https://twitter.com/glen_a_smith/statuses/396158312544079872">November 1, 2013</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<hr class="divider"/>
+
 <blockquote class="twitter-tweet"><p>Give Selenium WebDriver a boost with Selenide. Did I mention they are also an Estonian company? :-) <a href="https://twitter.com/jselenide">@jselenide</a> <a href="https://twitter.com/sele">@sele</a>…<a href="http://t.co/4jRxCDN67U">http://t.co/4jRxCDN67U</a></p>&mdash; Oliver White (@TheOTown) <a href="https://twitter.com/TheOTown/statuses/390478286217678848">October 16, 2013</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
