@@ -441,6 +441,10 @@ footer div {
   height: 100px;
 }
 
+.center {
+  text-align: center;
+}
+
 hr.divider {
   width: 40%;
   height: 2px;
