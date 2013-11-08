@@ -1,6 +1,7 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.junit.ScreenShooter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +28,11 @@ public class LongRunningAjaxRequestTest {
     $(byText("Run long request")).click();
     $(byText("Loading...")).should(exist);
     $("#loading").shouldHave(text("Loading"), text("..."));
+  }
+
+  @After
+  public final void restoreTimeout() {
+    timeout = 4000;
   }
 
   @Test

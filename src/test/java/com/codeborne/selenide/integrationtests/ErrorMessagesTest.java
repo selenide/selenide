@@ -1,21 +1,34 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
 public class ErrorMessagesTest {
   PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
+
+  @Before
+  public final void setTimeout() {
+    timeout = 1500;
+  }
+
+  @After
+  public final void restoreTimeout() {
+    timeout = 4000;
+  }
 
   @Test
   public void elementTextDoesNotMatch() {
@@ -25,7 +38,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", expected.toString());
+          "Timeout: 1.500 s.", expected.toString());
     }
   }
 
@@ -37,7 +50,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have attribute name=header {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", expected.toString());
+          "Timeout: 1.500 s.", expected.toString());
     }
   }
 
@@ -50,7 +63,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", expected.toString());
+          "Timeout: 1.500 s.", expected.toString());
     }
   }
 
@@ -62,7 +75,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", expected.toString());
+          "Timeout: 1.500 s.", expected.toString());
     }
   }
 
@@ -74,7 +87,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", expected.toString());
+          "Timeout: 1.500 s.", expected.toString());
     }
   }
 
@@ -95,7 +108,7 @@ public class ErrorMessagesTest {
     } catch (ElementNotFound e) {
       assertEquals("Element not found {By.id: invalid_id}\n" +
           "Expected: visible\n" +
-          "Timeout: 4 s.", e.toString());
+          "Timeout: 1.500 s.", e.toString());
     }
   }
 
@@ -107,7 +120,7 @@ public class ErrorMessagesTest {
     } catch (ElementShouldNot e) {
       assertEquals("Element should not exist {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Timeout: 4 s.", e.toString());
+          "Timeout: 1.500 s.", e.toString());
     }
   }
 
@@ -119,7 +132,7 @@ public class ErrorMessagesTest {
     } catch (ElementNotFound e) {
       assertEquals("Element not found {By.selector: h14}\n" +
           "Expected: not(hidden)\n" +
-          "Timeout: 4 s.", e.toString());
+          "Timeout: 1.500 s.", e.toString());
     }
   }
 
