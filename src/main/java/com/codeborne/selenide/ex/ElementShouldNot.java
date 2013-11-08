@@ -6,16 +6,15 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
-public class ElementMatches extends AssertionError {
-  public ElementMatches(String searchCriteria, Condition expectedCondition, WebElement element, long timeoutMs) {
-    super(searchCriteria +
-        "\nExpected: " + expectedCondition +
+public class ElementShouldNot extends AssertionError {
+  public ElementShouldNot(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, long timeoutMs) {
+    super("Element should not " + prefix + expectedCondition + " {" + searchCriteria + '}' +
         "\nElement: '" + Describe.describe(element) + '\'' +
         timeout(timeoutMs));
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + ' ' + getMessage();
+    return getMessage();
   }
 }

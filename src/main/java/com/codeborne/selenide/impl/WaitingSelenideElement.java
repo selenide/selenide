@@ -15,18 +15,22 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
 public class WaitingSelenideElement extends AbstractSelenideElement {
-  public static SelenideElement wrap(SelenideElement parent, By criteria, int index) {
+  public static SelenideElement wrap(By criteria) {
+    return wrap(null, criteria, 0);
+  }
+
+  public static SelenideElement wrap(SearchContext parent, By criteria, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
         new Class<?>[]{SelenideElement.class},
         new WaitingSelenideElement(parent, criteria, index));
   }
 
-  private final SelenideElement parent;
+  private final SearchContext parent;
   private final By criteria;
   private final int index;
 
-  WaitingSelenideElement(SelenideElement parent, By criteria, int index) {
+  WaitingSelenideElement(SearchContext parent, By criteria, int index) {
     this.parent = parent;
     this.criteria = criteria;
     this.index = index;
@@ -34,7 +38,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
 
   @Override
   protected WebElement getDelegate() {
-    return waitUntil(exist, timeout);
+    return waitUntil("", exist, timeout);
   }
 
   @Override
@@ -64,14 +68,18 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   }
 
   private SearchContext getSearchContext() {
-    return parent == null ? getWebDriver() : parent.toWebElement();
+    return parent == null ? getWebDriver() :
+        (parent instanceof SelenideElement) ? ((SelenideElement)parent).toWebElement() :
+        parent;
+  }
+
+  @Override
+  String getSearchCriteria() {
+    return index == 0 ? criteria.toString() : criteria.toString() + '[' + index + ']';
   }
 
   @Override
   public String toString() {
-    return "{" + criteria +
-        (parent == null ? "" : ", in: " + Describe.shortly(parent)) +
-        (index == 0 ? "" : ", index: " + index) +
-        '}';
+    return "{" + getSearchCriteria() + '}';
   }
 }

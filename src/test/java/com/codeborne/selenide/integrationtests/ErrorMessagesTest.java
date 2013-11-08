@@ -1,15 +1,15 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementMismatch;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShouldNot;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
@@ -21,10 +21,9 @@ public class ErrorMessagesTest {
   public void elementTextDoesNotMatch() {
     try {
       $("h2").shouldHave(text("expected text"));
-      fail("Expected ElementMismatch");
-    } catch (ElementMismatch expected) {
-      assertEquals("ElementMismatch {By.selector: h2}\n" +
-          "Expected: text 'expected text'\n" +
+      fail("Expected ElementShould");
+    } catch (ElementShould expected) {
+      assertEquals("Element should have text 'expected text' {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Timeout: 4 s.", expected.toString());
     }
@@ -34,10 +33,9 @@ public class ErrorMessagesTest {
   public void elementAttributeDoesNotMatch() {
     try {
       $("h2").shouldHave(attribute("name", "header"));
-      fail("Expected ElementMismatch");
-    } catch (ElementMismatch expected) {
-      assertEquals("ElementMismatch {By.selector: h2}\n" +
-          "Expected: attribute name=header\n" +
+      fail("Expected ElementShould");
+    } catch (ElementShould expected) {
+      assertEquals("Element should have attribute name=header {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Timeout: 4 s.", expected.toString());
     }
@@ -48,10 +46,9 @@ public class ErrorMessagesTest {
   public void wrapperTextDoesNotMatch() {
     try {
       $(getElement(By.tagName("h2"))).shouldHave(text("expected text"));
-      fail("Expected ElementMismatch");
-    } catch (ElementMismatch expected) {
-      assertEquals("ElementMismatch {By.tagName: h2}\n" +
-          "Expected: text 'expected text'\n" +
+      fail("Expected ElementShould");
+    } catch (ElementShould expected) {
+      assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Timeout: 4 s.", expected.toString());
     }
@@ -61,10 +58,9 @@ public class ErrorMessagesTest {
   public void pageObjectElementTextDoesNotMatch() {
     try {
       $(pageObject.header1).shouldHave(text("expected text"));
-      fail("Expected ElementMismatch");
-    } catch (ElementMismatch expected) {
-      assertEquals("ElementMismatch {By.tagName: h2}\n" +
-          "Expected: text 'expected text'\n" +
+      fail("Expected ElementShould");
+    } catch (ElementShould expected) {
+      assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Timeout: 4 s.", expected.toString());
     }
@@ -74,10 +70,9 @@ public class ErrorMessagesTest {
   public void pageObjectWrapperTextDoesNotMatch() {
     try {
       $(pageObject.header2).shouldHave(text("expected text"));
-      fail("Expected ElementMismatch");
-    } catch (ElementMismatch expected) {
-      assertEquals("ElementMismatch {By.tagName: h2: <h2>Dropdown list</h2>}\n" +
-          "Expected: text 'expected text'\n" +
+      fail("Expected ElementShould");
+    } catch (ElementShould expected) {
+      assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Timeout: 4 s.", expected.toString());
     }
@@ -88,7 +83,7 @@ public class ErrorMessagesTest {
     try {
       $(pageObject.categoryDropdown).selectOption("SomeOption");
     } catch (ElementNotFound e) {
-      assertContains(e, "ElementNotFound {By.id: invalid_id: ElementNotFound}", "Expected: present");
+      assertContains(e, "Element not found {By.id: invalid_id}", "Expected: exist");
     }
   }
 
@@ -98,15 +93,40 @@ public class ErrorMessagesTest {
       $(pageObject.categoryDropdown).click();
       fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
-      assertEquals("ElementNotFound {By.id: invalid_id: ElementNotFound}\n" +
+      assertEquals("Element not found {By.id: invalid_id}\n" +
           "Expected: visible\n" +
+          "Timeout: 4 s.", e.toString());
+    }
+  }
+
+  @Test
+  public void existingElementShouldNotBePresent() {
+    try {
+      $("h2").shouldNot(exist);
+      fail("Expected ElementFound");
+    } catch (ElementShouldNot e) {
+      assertEquals("Element should not exist {By.selector: h2}\n" +
+          "Element: '<h2>Dropdown list</h2>'\n" +
+          "Timeout: 4 s.", e.toString());
+    }
+  }
+
+  @Test
+  public void nonExistingElementShouldNotBeHidden() {
+    try {
+      $("h14").shouldNotBe(hidden);
+      fail("Expected ElementNotFound");
+    } catch (ElementNotFound e) {
+      assertEquals("Element not found {By.selector: h14}\n" +
+          "Expected: not(hidden)\n" +
           "Timeout: 4 s.", e.toString());
     }
   }
 
   private void assertContains(AssertionError e, String... expectedTexts) {
     for (String expectedText : expectedTexts) {
-      assertTrue("Error message: " + e.toString() + " does not contain " + expectedText, e.toString().contains(expectedText));
+      assertTrue("Text not found: " + expectedText + " in error message: " + e,
+          e.toString().contains(expectedText));
     }
   }
 

@@ -3,9 +3,9 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementMatches;
-import com.codeborne.selenide.ex.ElementMismatch;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShouldNot;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -28,6 +28,7 @@ import static java.lang.Thread.currentThread;
 abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
+  abstract String getSearchCriteria();
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -72,16 +73,28 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("text".equals(method.getName())) {
       return getDelegate().getText();
     }
-    else if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
-      return should(proxy, (Condition[]) args[0]);
+    else if ("should".equals(method.getName())) {
+      return should(proxy, "", (Condition[]) args[0]);
     }
-    else if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
-      return shouldNot(proxy, (Condition[]) args[0]);
+    else if ("shouldHave".equals(method.getName())) {
+      return should(proxy, "have ", (Condition[]) args[0]);
+    }
+    else if ("shouldBe".equals(method.getName())) {
+      return should(proxy, "be ", (Condition[]) args[0]);
+    }
+    else if ("shouldNot".equals(method.getName())) {
+      return shouldNot(proxy, "", (Condition[]) args[0]);
+    }
+    else if ("shouldNotHave".equals(method.getName())) {
+      return shouldNot(proxy, "have ", (Condition[]) args[0]);
+    }
+    else if ("shouldNotBe".equals(method.getName())) {
+      return shouldNot(proxy, "be ", (Condition[]) args[0]);
     }
     else if ("find".equals(method.getName()) || "$".equals(method.getName())) {
-      return WebElementProxy.wrap(args.length == 1 ?
+      return args.length == 1 ?
           find((SelenideElement) proxy, args[0], 0) :
-          find((SelenideElement) proxy, args[0], (Integer) args[1]));
+          find((SelenideElement) proxy, args[0], (Integer) args[1]);
     }
     else if ("findAll".equals(method.getName()) || "$$".equals(method.getName())) {
       final SelenideElement parent = (SelenideElement) proxy;
@@ -120,11 +133,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return getActualDelegate();
     }
     else if ("waitUntil".equals(method.getName())) {
-      waitUntil((Condition) args[0], (Long) args[1]);
+      waitUntil("", (Condition) args[0], (Long) args[1]);
       return proxy;
     }
     else if ("waitWhile".equals(method.getName())) {
-      waitWhile((Condition) args[0], (Long) args[1]);
+      waitWhile("", (Condition) args[0], (Long) args[1]);
       return proxy;
     }
     else if ("click".equals(method.getName())) {
@@ -135,13 +148,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return delegateMethod(getDelegate(), method, args);
   }
 
+  private WebElement waitForElement() {
+    return waitUntil("be ", visible, timeout);
+  }
+
   protected void click() {
-    WebElement element = waitUntil(visible, timeout);
-    element.click();
+    waitForElement().click();
   }
 
   protected void followLink() {
-    WebElement link = waitUntil(visible, timeout);
+    WebElement link = waitForElement();
     String href = link.getAttribute("href");
     link.click();
 
@@ -152,14 +168,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    WebElement element = waitUntil(visible, timeout);
+    WebElement element = waitForElement();
     element.clear();
     element.sendKeys(text);
     fireEvent("change");
   }
 
   protected void append(String text) {
-    WebElement element = waitUntil(visible, timeout);
+    WebElement element = waitForElement();
     element.sendKeys(text);
     fireEvent("change");
   }
@@ -178,16 +194,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     executeJavaScript(jsCodeToTriggerEvent);
   }
 
-  protected Object should(Object proxy, Condition[] conditions) {
+  protected Object should(Object proxy, String prefix, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitUntil(condition, timeout);
+      waitUntil(prefix, condition, timeout);
     }
     return proxy;
   }
 
-  protected Object shouldNot(Object proxy, Condition[] conditions) {
+  protected Object shouldNot(Object proxy, String prefix, Condition[] conditions) {
     for (Condition condition : conditions) {
-      waitWhile(condition, timeout);
+      waitWhile(prefix, condition, timeout);
     }
     return proxy;
   }
@@ -209,13 +225,13 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void selectOptionByText(WebElement selectField, String optionText) {
-    $(selectField).shouldBe(present);
+    $(selectField).should(exist);
     $(selectField).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    $(selectField).shouldBe(present);
+    $(selectField).should(exist);
     $(selectField).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
@@ -273,7 +289,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected WebElement waitUntil(Condition condition, long timeoutMs) {
+  protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
     validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
@@ -298,24 +314,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
     if (!exists(element)) {
-      throw new ElementNotFound(toString(), condition, timeoutMs);
+      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs);
     }
     else {
-      throw new ElementMismatch(toString(), condition, element, timeoutMs);
+      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs);
     }
   }
 
-  static boolean exists(WebElement element) {
-    try {
-      if (element == null) return false;
-      element.isDisplayed();
-      return true;
-    } catch (WebDriverException e) {
-      return false;
-    }
-  }
-
-  protected void waitWhile(Condition condition, long timeoutMs) {
+  protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
     validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
@@ -339,11 +345,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    if (element == null) {
-      throw new ElementNotFound(toString(), not(condition), timeoutMs);
+    if (!exists(element)) {
+      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs);
     }
     else {
-      throw new ElementMatches(toString(), condition, element, timeoutMs);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs);
+    }
+  }
+
+  static boolean exists(WebElement element) {
+    try {
+      if (element == null) return false;
+      element.isDisplayed();
+      return true;
+    } catch (WebDriverException e) {
+      return false;
     }
   }
 

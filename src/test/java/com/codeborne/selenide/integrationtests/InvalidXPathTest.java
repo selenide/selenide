@@ -30,7 +30,7 @@ public class InvalidXPathTest {
       $(By.xpath("//tagga")).should(exist);
       fail("Expected: ElementNotFound exception with cause");
     } catch (ElementNotFound expectedException) {
-      assertTrue(expectedException.toString().contains("ElementNotFound {By.xpath: //tagga}"));
+      assertTrue(expectedException.toString().contains("Element not found {By.xpath: //tagga}"));
       //assertTrue(expectedException.getCause() instanceof WebDriverException);
     }
   }

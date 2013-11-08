@@ -16,8 +16,8 @@ public class WaitingSelenideElementTest {
     when(parent.getTagName()).thenReturn("table");
 
     assertEquals("{By.id: app}", new WaitingSelenideElement(null, By.id("app"), 0).toString());
-    assertEquals("{By.id: app, index: 3}", new WaitingSelenideElement(null, By.id("app"), 3).toString());
-    assertEquals("{By.id: app, in: <table></table>}", new WaitingSelenideElement(parent, By.id("app"), 0).toString());
-    assertEquals("{By.id: app, in: <table></table>, index: 3}", new WaitingSelenideElement(parent, By.id("app"), 3).toString());
+    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(null, By.id("app"), 3).toString());
+    assertEquals("{By.id: app}", new WaitingSelenideElement(parent, By.id("app"), 0).toString());
+    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(parent, By.id("app"), 3).toString());
   }
 }

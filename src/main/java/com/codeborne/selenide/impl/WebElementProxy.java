@@ -32,11 +32,12 @@ public class WebElementProxy extends AbstractSelenideElement {
   }
 
   @Override
+  protected String getSearchCriteria() {
+    return delegate.toString();
+  }
+
+  @Override
   public String toString() {
-    try {
-      return "{" + delegate  + "}";
-    } catch (Exception e) {
-      return "{" + e  + "}";
-    }
+    return Describe.describe(delegate);
   }
 }

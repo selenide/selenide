@@ -19,30 +19,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelenideFieldDecorator extends DefaultFieldDecorator {
+  private final SearchContext searchContext;
+
   public SelenideFieldDecorator(SearchContext searchContext) {
     super(new DefaultElementLocatorFactory(searchContext));
+    this.searchContext = searchContext;
   }
 
   @Override
   public Object decorate(ClassLoader loader, Field field) {
     By selector = new Annotations(field).buildBy();
-    if (SelenideElement.class.isAssignableFrom(field.getType())) {
-      return ElementLocatorProxy.wrap(selector, factory.createLocator(field));
+    if (WebElement.class.isAssignableFrom(field.getType())) {
+      return WaitingSelenideElement.wrap(searchContext, selector, 0);
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
     } else if (isDecoratableList(field, ElementsContainer.class)) {
-      return createElementsContainerList(field);
+      return createElementsContainerList(field, selector);
     } else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
-    Object original = super.decorate(loader, field);
-    if (original instanceof WebElement) {
-      return ToStringElementProxy.wrap(selector, (WebElement) original);
-    }
-    return original;
+
+    return super.decorate(loader, field);
   }
 
-  private List<ElementsContainer> createElementsContainerList(Field field) {
+  private List<ElementsContainer> createElementsContainerList(Field field, By selector) {
     try {
       List<ElementsContainer> result = new ArrayList<ElementsContainer>();
       Class<?> listType = getListGenericType(field);
@@ -58,7 +58,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = ElementLocatorProxy.wrap(selector, factory.createLocator(field));
+      SelenideElement self = WaitingSelenideElement.wrap(searchContext, selector, 0);
       return initElementsContainer(field.getType(), self);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);

@@ -50,8 +50,9 @@ public class SelenideFieldDecoratorTest {
 
   @Test
   public void decoratesVanillaWebElements() throws NoSuchFieldException {
-    assertFalse(fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv")) instanceof SelenideElement);
-    assertTrue(fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv")) instanceof WebElement);
+    final Object someDiv = fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv"));
+    assertTrue("someDiv should not be instance of SelenideElement. Actual class: " + someDiv.getClass(),
+        someDiv instanceof SelenideElement);
   }
 
   @Test
@@ -120,7 +121,9 @@ public class SelenideFieldDecoratorTest {
     SelenideElement username;
     @FindBy(css = "table tbody tr")
     List<SelenideElement> rows;
+
     WebElement someDiv;
+
     @FindBy(css = "table tbody tr")
     List<WebElement> data;
     String unsupportedField;

@@ -1,7 +1,7 @@
 package com.codeborne.selenide.integrationtests;
 
-import com.codeborne.selenide.ex.ElementMatches;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -219,7 +219,7 @@ public class SelenideMethodsTest {
     $(byText("Unexisting text")).shouldNotBe(hidden);
   }
 
-  @Test(expected = ElementMatches.class)
+  @Test(expected = ElementShouldNot.class)
   public void shouldNotThrowsElementMatches() {
     $(byText("Bob")).shouldNotHave(cssClass("firstname"));
   }

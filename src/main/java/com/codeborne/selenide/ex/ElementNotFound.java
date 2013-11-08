@@ -9,19 +9,19 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 public class ElementNotFound extends AssertionError {
   public ElementNotFound(String searchCriteria, Condition expectedCondition, long timeoutMs) {
-    super(searchCriteria +
+    super("Element not found {" + searchCriteria + '}' +
         "\nExpected: " + expectedCondition +
         timeout(timeoutMs));
   }
 
   public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, long timeoutMs) {
-    super(collection.description() +
+    super("Element not found {" + collection.description() + '}' +
         "\nExpected: " + Arrays.toString(expectedTexts) +
         timeout(timeoutMs));
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + ' ' + getMessage();
+    return getMessage();
   }
 }

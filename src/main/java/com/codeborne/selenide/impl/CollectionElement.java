@@ -32,7 +32,12 @@ public class CollectionElement extends AbstractSelenideElement {
   }
 
   @Override
-  public String toString() {
+  String getSearchCriteria() {
     return collection.description() + '[' + index  + ']';
+  }
+
+  @Override
+  public String toString() {
+    return getSearchCriteria();
   }
 }

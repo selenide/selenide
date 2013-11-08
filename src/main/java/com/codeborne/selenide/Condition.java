@@ -35,7 +35,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition present = new Condition("present", false) {
+  public static final Condition exist = new Condition("exist", false) {
     @Override
     public boolean apply(WebElement element) {
       element.isDisplayed();
@@ -48,7 +48,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition exist = present;
+  public static final Condition present = exist;
 
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
