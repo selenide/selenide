@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.getFocusedElement;
 
 public abstract class Condition implements Predicate<WebElement> {
   public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ')', false) {
+    return new Condition("not(" + condition.name + ')') {
       @Override
       public boolean apply(WebElement element) {
         return !condition.apply(element);
@@ -24,7 +24,7 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  public static final Condition visible = new Condition("visible", false) {
+  public static final Condition visible = new Condition("visible") {
     @Override
     public boolean apply(WebElement element) {
       return element.isDisplayed();
@@ -35,7 +35,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition exist = new Condition("exist", false) {
+  public static final Condition exist = new Condition("exist") {
     @Override
     public boolean apply(WebElement element) {
       element.isDisplayed();
@@ -128,7 +128,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @return true iff attribute exists
    */
   public static Condition attribute(final String attributeName) {
-    return new Condition("hasAttribute", false) {
+    return new Condition("hasAttribute") {
       @Override
       public boolean apply(WebElement element) {
         return element.getAttribute(attributeName) != null;
@@ -150,7 +150,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param expectedAttributeValue expected value of attribute
    */
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
-    return new Condition("hasAttribute", false) {
+    return new Condition("hasAttribute") {
       @Override
       public boolean apply(WebElement element) {
         return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
@@ -218,7 +218,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * 2) For other elements, check that text is empty
    * $("h2").shouldBe(empty)
    */
-  public static final Condition empty = new Condition("empty", false) {
+  public static final Condition empty = new Condition("empty") {
     private final Condition emptyValue = value("");
     private final Condition emptyText = exactText("");
 
@@ -250,7 +250,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
   public static Condition matchText(final String regex) {
-    return new Condition("match", false) {
+    return new Condition("match") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.matches(element.getText(), regex);
@@ -286,7 +286,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition text(final String text) {
-    return new Condition("text", false) {
+    return new Condition("text") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.contains(element.getText(), text.toLowerCase());
@@ -310,7 +310,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition textCaseSensitive(final String text) {
-    return new Condition("textCaseSensitive", false) {
+    return new Condition("textCaseSensitive") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.containsCaseSensitive(element.getText(), text);
@@ -335,7 +335,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition exactText(final String text) {
-    return new Condition("exactText", false) {
+    return new Condition("exactText") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.equals(element.getText(), text);
@@ -359,7 +359,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition exactTextCaseSensitive(final String text) {
-    return new Condition("exactTextCaseSensitive", false) {
+    return new Condition("exactTextCaseSensitive") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.equalsCaseSensitive(element.getText(), text);
@@ -385,7 +385,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * $("input").shouldHave(options);
    */
-  public static final Condition options = new Condition("hasOptions", false) {
+  public static final Condition options = new Condition("hasOptions") {
     @Override
     public boolean apply(WebElement element) {
       try {
@@ -424,7 +424,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   public static Condition hasClass(final String cssClass) {
-    return new Condition("hasClass", false) {
+    return new Condition("hasClass") {
       @Override
       public boolean apply(WebElement element) {
         return hasClass(element, cssClass);
@@ -441,7 +441,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   public static Condition hasNotClass(final String cssClass) {
-    return new Condition("hasNotClass", false) {
+    return new Condition("hasNotClass") {
       @Override
       public boolean apply(WebElement element) {
         return !hasClass(element, cssClass);
@@ -457,7 +457,7 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  public static final Condition focused = new Condition("focused", false) {
+  public static final Condition focused = new Condition("focused") {
     @Override public boolean apply(WebElement webElement) {
       WebElement focusedElement = getFocusedElement();
       return focusedElement!= null && focusedElement.equals(webElement);
@@ -475,7 +475,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * Checks that element is not disabled
    * @see WebElement#isEnabled()
    */
-  public static final Condition enabled = new Condition("enabled", false) {
+  public static final Condition enabled = new Condition("enabled") {
     @Override public boolean apply(WebElement element) {
       return element.isEnabled();
     }
@@ -489,7 +489,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * Checks that element is disabled
    * @see WebElement#isEnabled()
    */
-  public static final Condition disabled = new Condition("disabled", false) {
+  public static final Condition disabled = new Condition("disabled") {
     @Override public boolean apply(WebElement element) {
       return !element.isEnabled();
     }
@@ -503,7 +503,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * Checks that element is selected
    * @see WebElement#isSelected()
    */
-  public static final Condition selected = new Condition("selected", false) {
+  public static final Condition selected = new Condition("selected") {
     @Override public boolean apply(WebElement element) {
       return element.isSelected();
     }
@@ -516,7 +516,12 @@ public abstract class Condition implements Predicate<WebElement> {
   protected final String name;
   protected final boolean nullIsAllowed;
 
-  protected Condition(String name, boolean nullIsAllowed) {
+
+  public Condition(String name) {
+    this(name, false);
+  }
+
+  public Condition(String name, boolean nullIsAllowed) {
     this.name = name;
     this.nullIsAllowed = nullIsAllowed;
   }
