@@ -31,6 +31,18 @@ public class ErrorMessagesTest {
   }
 
   @Test
+  public void elementNotFound() {
+    try {
+      $("h9").shouldHave(text("expected text"));
+      fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
+      assertEquals("Element not found {By.selector: h9}\n" +
+          "Expected: text 'expected text'\n" +
+          "Timeout: 1.500 s.", expected.toString());
+    }
+  }
+
+  @Test
   public void elementTextDoesNotMatch() {
     try {
       $("h2").shouldHave(text("expected text"));
