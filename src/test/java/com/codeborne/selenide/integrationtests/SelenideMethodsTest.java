@@ -226,7 +226,7 @@ public class SelenideMethodsTest {
 
   @Test
   public void userCanCheckCssClass() {
-    $(byText("Bob")).shouldHave(cssClass("firstname"));
+    $(byText("Bob")).shouldNotHave(cssClass("firstname"));
     $(byText("Dilan")).shouldHave(cssClass("lastname"));
     $(byText("25")).shouldHave(cssClass("age"));
     $(byText("First name")).shouldNotHave(cssClass("anything"));
