@@ -77,9 +77,9 @@ public class PageObjectTest {
     assertEquals(2, pageWithSelects.userInfoList.size());
 
     pageWithSelects.userInfoList.get(0).getSelf().shouldBe(visible);
-    pageWithSelects.userInfoList.get(0).firstName.shouldNotHave(text("Bob"));
+    pageWithSelects.userInfoList.get(0).firstName.shouldHave(text("Bob"));
 
-    pageWithSelects.userInfoList.get(1).lastName.shouldNotHave(text("Smith"));
+    pageWithSelects.userInfoList.get(1).lastName.shouldHave(text("Smith"));
     pageWithSelects.userInfoList.get(1).age.shouldHave(text("28"));
   }
 
