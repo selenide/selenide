@@ -87,7 +87,7 @@ public class LongRunningAjaxRequestTest {
 
   @Test
   public void shouldWaitsForCondition() {
-    $("#results").shouldHave(text("Result 1"));
+    $("#results").shouldHave(text("TODO-Result 1"));
   }
 
   @Test
