@@ -18,7 +18,7 @@ public class Selectors {
   }
 
   /**
-   * Find element HAVING given text (exactly this text)
+   * Find element that has EXACTLY this text
    *
    * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
    *
