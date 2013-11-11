@@ -9,7 +9,7 @@ compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
-defaultTasks 'libs', 'test', 'install'
+defaultTasks 'test', 'install'
 
 repositories {
   mavenCentral()
@@ -49,6 +49,8 @@ task libs(type: Sync) {
   into "$buildDir/lib"
 }
 
+classes.dependsOn libs
+
 test {
   systemProperties['file.encoding'] = 'UTF-8'
   testLogging.showStandardStreams = true
@@ -79,7 +81,7 @@ task firefox(type: Test) {
   maxParallelForks = 3
 }
 
-task allTests(dependsOn: ['clean', 'libs', 'test', 'firefox', 'chrome']) {}
+task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome']) {}
 
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
