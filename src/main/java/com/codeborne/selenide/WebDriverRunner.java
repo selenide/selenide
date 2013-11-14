@@ -47,7 +47,7 @@ public class WebDriverRunner {
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
-   * @param listener
+   * @param listener your listener of webdriver events
    */
   public static void addListener(WebDriverEventListener listener) {
     webdriverContainer.addListener(listener);

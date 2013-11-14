@@ -36,7 +36,7 @@ public class Selenide {
   }
 
   /**
-   * @see Selenide#open(java.lang.String)
+   * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
     navigator.open(absoluteUrl);
@@ -119,14 +119,14 @@ public class Selenide {
    * @return given WebElement wrapped into SelenideElement
    */
   public static SelenideElement $(WebElement webElement) {
-    return WebElementProxy.wrap(webElement);
+    return wrap(webElement);
   }
 
   /**
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector) {
     return getElement(By.cssSelector(cssSelector));
@@ -136,14 +136,14 @@ public class Selenide {
    * Find the first element matching given CSS selector
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(By seleniumSelector) {
     return getElement(seleniumSelector);
   }
 
   /**
-   * @see #getElement(org.openqa.selenium.By, int)
+   * @see #getElement(By, int)
    */
   public static SelenideElement $(By seleniumSelector, int index) {
     return getElement(seleniumSelector, index);
@@ -154,7 +154,7 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector) {
     return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), 0);
@@ -165,7 +165,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector, int index) {
     return WaitingSelenideElement.wrap(null, By.cssSelector(cssSelector), index);
@@ -177,7 +177,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), index);
@@ -227,7 +227,7 @@ public class Selenide {
 
   /**
    * Find all elements matching given criteria inside given parent element
-   * @see com.codeborne.selenide.Selenide#$$(org.openqa.selenium.WebElement, String)
+   * @see Selenide#$$(WebElement, String)
    */
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return new ElementsCollection(new BySelectorCollection(parent, seleniumSelector));
@@ -237,7 +237,7 @@ public class Selenide {
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria) {
     return WaitingSelenideElement.wrap(null, criteria, 0);
@@ -248,7 +248,7 @@ public class Selenide {
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria, int index) {
     return WaitingSelenideElement.wrap(null, criteria, index);
@@ -295,7 +295,7 @@ public class Selenide {
 
   public static void onConfirmReturn(boolean confirmReturnValue) {
     if (doDismissModalDialogs()) {
-      executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ";");
+      executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ';');
     }
   }
 
@@ -304,7 +304,7 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws com.codeborne.selenide.ex.DialogTextMismatch if confirmation message differs from expected message
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
   public static void confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
@@ -320,7 +320,7 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws com.codeborne.selenide.ex.DialogTextMismatch if confirmation message differs from expected message
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
   public static void dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
@@ -347,7 +347,7 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)
+   * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     try {
@@ -359,7 +359,7 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)
+   * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     PageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
