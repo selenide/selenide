@@ -39,7 +39,7 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
-    return By.xpath(".//*[@" + attributeName + " = " + escape.quotes(attributeValue) + "]");
+    return By.xpath(".//*[@" + attributeName + '=' + escape.quotes(attributeValue) + ']');
   }
 
   /**
