@@ -341,7 +341,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Ask browser to scroll to this element
    */
-  void scrollTo();
+  SelenideElement scrollTo();
 
   /**
    * @return the original Selenium WebElement wrapped by this object

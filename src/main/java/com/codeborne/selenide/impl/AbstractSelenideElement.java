@@ -401,7 +401,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void scrollTo() {
-    int elementPosition = getDelegate().getLocation().getY();
-    executeJavaScript("window.scrollTo(0, " + elementPosition + ')');
+    Point location = getDelegate().getLocation();
+    executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
   }
 }
