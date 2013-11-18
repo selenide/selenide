@@ -198,14 +198,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     executeJavaScript(jsCodeToTriggerEvent);
   }
 
-  protected Object should(Object proxy, String prefix, Condition[] conditions) {
+  protected Object should(Object proxy, String prefix, Condition... conditions) {
     for (Condition condition : conditions) {
       waitUntil(prefix, condition, timeout);
     }
     return proxy;
   }
 
-  protected Object shouldNot(Object proxy, String prefix, Condition[] conditions) {
+  protected Object shouldNot(Object proxy, String prefix, Condition... conditions) {
     for (Condition condition : conditions) {
       waitWhile(prefix, condition, timeout);
     }
@@ -388,19 +388,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return null;
     } catch (IndexOutOfBoundsException ignore) {
       return null;
-    }
-  }
-
-  protected String getActualValue(Condition condition) {
-    try {
-      WebElement element = getActualDelegate();
-      return element == null? "does not exist" : condition.actualValue(element);
-    }
-    catch (WebDriverException e) {
-      return Cleanup.of.webdriverExceptionMessage(e);
-    }
-    catch (IndexOutOfBoundsException e) {
-      return e.toString();
     }
   }
 
