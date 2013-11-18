@@ -140,6 +140,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       waitWhile("", (Condition) args[0], (Long) args[1]);
       return proxy;
     }
+    else if ("scrollTo".equals(method.getName())) {
+      scrollTo();
+      return proxy;
+    }
     else if ("click".equals(method.getName())) {
       click();
       return null;
@@ -190,7 +194,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         "  var evt = document.createEvent('HTMLEvents');\n " +
         "  evt.initEvent('" + event + "', true, true );\n " +
         "  return !document.activeElement.dispatchEvent(evt);\n" +
-        "}";
+        '}';
     executeJavaScript(jsCodeToTriggerEvent);
   }
 
@@ -407,5 +411,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected By getSelector(Object arg) {
     return arg instanceof By ? ((By) arg) : By.cssSelector((String) arg);
+  }
+
+  protected void scrollTo() {
+    int elementPosition = getDelegate().getLocation().getY();
+    String js = String.format("window.scrollTo(0, %s)", elementPosition);
+    executeJavaScript(js);
   }
 }

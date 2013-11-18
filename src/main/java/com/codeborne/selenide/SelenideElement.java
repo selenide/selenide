@@ -76,7 +76,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Short form of getText()
-   * @see org.openqa.selenium.WebElement#getText()
+   * @see WebElement#getText()
    */
   String text();
 
@@ -99,7 +99,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String val();
 
   /**
-   * Get value of attribute "data-<code>dataAttributeName</code>"
+   * Get value of attribute "data-<i>dataAttributeName</i>"
    */
 	String data(String dataAttributeName);
 
@@ -337,6 +337,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * Get text of selected option in select field
    */
   String getSelectedText();
+
+  /**
+   * Ask browser to scroll to this element
+   */
+  void scrollTo();
 
   /**
    * @return the original Selenium WebElement wrapped by this object
