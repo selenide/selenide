@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.*;
 
@@ -324,7 +325,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Find selected option from this select field
    * @return WebElement for selected &lt;option&gt; element
-   * @throws org.openqa.selenium.NoSuchElementException if no options are selected
+   * @throws NoSuchElementException if no options are selected
    */
   SelenideElement getSelectedOption();
 
@@ -342,6 +343,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * Ask browser to scroll to this element
    */
   SelenideElement scrollTo();
+
+  /**
+   * Download file linked by "href" attribute of this element
+   */
+  File download();
 
   /**
    * @return the original Selenium WebElement wrapped by this object
