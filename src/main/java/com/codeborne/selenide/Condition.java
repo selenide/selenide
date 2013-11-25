@@ -419,10 +419,18 @@ public abstract class Condition implements Predicate<WebElement> {
     return false;
   }
 
+  /**
+   * Usage:
+   * <code>$("input").shouldHave(cssClass("active"));</code>
+   */
   public static Condition cssClass(String cssClass) {
     return hasClass(cssClass);
   }
 
+  /**
+   * Usage:
+   * <code>$("input").waitUntil(hasClass("blocked"), 7000);</code>
+   */
   public static Condition hasClass(final String cssClass) {
     return new Condition("hasClass") {
       @Override

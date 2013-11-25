@@ -351,7 +351,7 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     try {
-      return page(pageObjectClass.newInstance());
+      return page(pageObjectClass.getConstructor().newInstance());
     } catch (Exception e) {
       throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
     }

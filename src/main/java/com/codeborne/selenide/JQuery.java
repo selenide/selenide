@@ -38,10 +38,15 @@ public class JQuery {
   }
 
   /**
-   * It works only if jQuery "scroll" plugin is included in page being tested
+   * <p>
+   * @deprecated Use method {@code $(...).scrollTo()} instead - it's jquery-agnostic.
+   * </p>
+   *
+   * <p>This method works only if jQuery "scroll" plugin is included in page being tested</p>
    *
    * @param element HTML element to scroll to.
    */
+  @Deprecated
   public void scrollTo(By element) {
     if (!isJQueryAvailable()) {
       throw new IllegalStateException("JQuery is not available on current page");

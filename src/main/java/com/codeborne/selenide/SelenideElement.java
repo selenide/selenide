@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.*;
 
@@ -76,7 +77,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Short form of getText()
-   * @see org.openqa.selenium.WebElement#getText()
+   * @see WebElement#getText()
    */
   String text();
 
@@ -99,7 +100,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String val();
 
   /**
-   * Get value of attribute "data-<code>dataAttributeName</code>"
+   * Get value of attribute "data-<i>dataAttributeName</i>"
    */
 	String data(String dataAttributeName);
 
@@ -324,7 +325,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Find selected option from this select field
    * @return WebElement for selected &lt;option&gt; element
-   * @throws org.openqa.selenium.NoSuchElementException if no options are selected
+   * @throws NoSuchElementException if no options are selected
    */
   SelenideElement getSelectedOption();
 
@@ -337,6 +338,16 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * Get text of selected option in select field
    */
   String getSelectedText();
+
+  /**
+   * Ask browser to scroll to this element
+   */
+  SelenideElement scrollTo();
+
+  /**
+   * Download file linked by "href" attribute of this element
+   */
+  File download();
 
   /**
    * @return the original Selenium WebElement wrapped by this object
