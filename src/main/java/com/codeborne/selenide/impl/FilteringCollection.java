@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -19,5 +19,10 @@ public class FilteringCollection implements WebElementsCollection {
   @Override
   public List<WebElement> getActualElements() {
     return Lists.newArrayList(Collections2.filter(originalCollection.getActualElements(), filter));
+  }
+
+  @Override
+  public String description() {
+    return originalCollection.description() + ".filter(" + filter + ')';
   }
 }

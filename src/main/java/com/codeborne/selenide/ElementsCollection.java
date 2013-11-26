@@ -9,6 +9,7 @@ import java.util.*;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
@@ -19,22 +20,29 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this.collection = collection;
   }
 
-  public void shouldHaveSize(int expectedSize) {
-    shouldHave(CollectionCondition.size(expectedSize));
+  public ElementsCollection shouldHaveSize(int expectedSize) {
+    return shouldHave(CollectionCondition.size(expectedSize));
   }
 
   /**
    * $$(".error").shouldBe(empty)
    */
-  public void shouldBe(CollectionCondition condition) {
-    shouldHave(condition);
+  public ElementsCollection shouldBe(CollectionCondition... conditions) {
+    return shouldHave(conditions);
   }
 
   /**
    * $$(".error").shouldHave(size(3))
    * $$(".error").shouldHave(texts("Error1", "Error2"))
    */
-  public void shouldHave(CollectionCondition condition) {
+  public ElementsCollection shouldHave(CollectionCondition... conditions) {
+    for (CollectionCondition condition : conditions) {
+      waitUntil(condition, timeout);
+    }
+    return this;
+  }
+
+  protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     final long startTime = System.currentTimeMillis();
     do {
       try {
@@ -46,8 +54,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       }
       sleep(pollingInterval);
     }
-    while (System.currentTimeMillis() - startTime < timeout);
-    condition.fail(actualElements);
+    while (System.currentTimeMillis() - startTime < timeoutMs);
+    condition.fail(collection, actualElements, timeoutMs);
   }
 
   public ElementsCollection filter(Condition condition) {
@@ -85,18 +93,44 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return getTexts(getActualElements());
   }
 
+  /**
+   * Fail-safe method for retrieving texts of given elements.
+   * @param elements Any collection of WebElements
+   * @return Array of texts (or exceptions in case of any WebDriverExceptions)
+   */
   public static String[] getTexts(Collection<WebElement> elements) {
     String[] texts = new String[elements.size()];
     int i = 0;
     for (WebElement element : elements) {
-      texts[i++] = element.getText();
+      texts[i++] = getText(element);
     }
     return texts;
   }
 
+  private static String getText(WebElement element) {
+    try {
+      return element.getText();
+    } catch (WebDriverException elementDisappeared) {
+      return elementDisappeared.toString();
+    }
+  }
+
+  public static String elementsToString(Collection<WebElement> elements) {
+    StringBuilder sb = new StringBuilder(256);
+    sb.append("[\n\t\t");
+    for (WebElement element : elements) {
+      if (sb.length() > 4) {
+        sb.append(",\n\t\t");
+      }
+      sb.append($(element).toString());
+    }
+    sb.append("\n]");
+    return sb.toString();
+  }
+
   @Override
   public SelenideElement get(int index) {
-    return WebElementProxy.wrap(getActualElements().get(index));
+    return CollectionElement.wrap(collection, index);
   }
 
   @Override
@@ -112,5 +146,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public ListIterator<SelenideElement> listIterator(int index) {
     return new SelenideElementListIterator(getActualElements().listIterator(index));
+  }
+
+  @Override
+  public String toString() {
+    return elementsToString(actualElements);
   }
 }

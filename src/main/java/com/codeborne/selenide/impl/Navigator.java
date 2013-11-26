@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
 
@@ -11,20 +12,10 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.ie;
 
 public class Navigator {
-  /**
-   * The main starting point in your tests.
-   * Open a browser window with given URL.
-   *
-   * If browser window was already opened before, it will be reused.
-   *
-   * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
-   *
-   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL. In this case, it's prepended by baseUrl
-   */
   public void open(String relativeOrAbsoluteUrl) {
     if (relativeOrAbsoluteUrl.startsWith("http:") ||
         relativeOrAbsoluteUrl.startsWith("https:") ||
-        relativeOrAbsoluteUrl.startsWith("file:")) {
+        isLocalFile(relativeOrAbsoluteUrl)) {
       navigateToAbsoluteUrl(relativeOrAbsoluteUrl);
     } else {
       navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl));
@@ -40,38 +31,36 @@ public class Navigator {
   }
 
   protected void navigateToAbsoluteUrl(String url) {
-    if (ie()) {
-      getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
-      waitUntilPageIsLoaded();
-      toBeSureThatPageIsNotCached();
+    if (ie() && !isLocalFile(url)) {
+      url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
-    else {
+
+    try {
       getWebDriver().navigate().to(url);
-      waitUntilPageIsLoaded();
+    } catch (WebDriverException e) {
+      e.addInfo("selenide.url", url);
+      e.addInfo("selenide.baseUrl", baseUrl);
+      throw e;
     }
+    waitUntilPageIsLoaded();
   }
 
   protected void waitUntilPageIsLoaded() {
     $(By.tagName("body")).should(appear);
   }
 
-  protected void toBeSureThatPageIsNotCached() {
-    String currentUrl = getWebDriver().getCurrentUrl();
-    if (!currentUrl.contains("timestamp=")) {
-      navigateToAbsoluteUrl(currentUrl);
+  protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
+    if (url.contains("timestamp=")) {
+      return url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
+          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
+    } else {
+      return url.contains("?") ?
+          url + "&timestamp=" + unique:
+          url + "?timestamp=" + unique;
     }
   }
 
-  protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    final String fullUrl;
-    if (url.contains("timestamp=")) {
-      fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    } else {
-      fullUrl = url.contains("?") ?
-          url + "&timestamp=" + unique :
-          url + "?timestamp=" + unique;
-    }
-    return fullUrl;
+  private boolean isLocalFile(String url) {
+    return url.startsWith("file:");
   }
 }

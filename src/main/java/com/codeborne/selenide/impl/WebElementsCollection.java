@@ -5,5 +5,6 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public interface WebElementsCollection {
-  abstract List<WebElement> getActualElements();
+  List<WebElement> getActualElements();
+  String description();
 }

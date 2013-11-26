@@ -20,7 +20,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dbrowser=ie".
-   * Supported values: "chrome", "firefox", "ie", "htmlunit"
+   * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera"
    * <p/>
    * Default value: "firefox"
    */
@@ -49,4 +49,12 @@ public class Configuration {
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
   public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
+
+  /**
+   * Mock "alert" and "confirm" javascript dialogs.
+   * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
+   *
+   * Default value: false (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
+   */
+  public static boolean dismissModalDialogs = Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 }

@@ -1,26 +1,36 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.TextsMismatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.CollectionCondition.*;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class CollectionMethods {
+public class CollectionMethodsTest {
   @Before
   public void openTestPageWithJQuery() {
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+  }
+
+  @Test
+  public void useTwoDollarsToGetListOfElements() {
+    $$("#radioButtons input").shouldHave(size(4));
+    getElements(By.cssSelector("#radioButtons input")).shouldHave(size(4));
+
+    $("#radioButtons").$$("input").shouldHave(size(4));
+    $("#radioButtons").$$(By.tagName("input")).shouldHave(size(4));
+    $("#radioButtons").findAll("input").shouldHave(size(4));
+    $("#radioButtons").findAll(By.tagName("input")).shouldHave(size(4));
   }
 
   @Test
@@ -30,7 +40,6 @@ public class CollectionMethods {
     assertEquals(4, $$("#radioButtons input").size());
     assertEquals(4, $$(By.xpath("//select[@name='domain']/option")).size());
     assertEquals(0, $$(By.name("non-existing-element")).size());
-    assertEquals(0, $$("#dynamic-content-container span").size());
   }
 
   @Test
@@ -47,20 +56,12 @@ public class CollectionMethods {
     $$("#radioButtons input").shouldHaveSize(4);
     $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
     $$(By.name("non-existing-element")).shouldHaveSize(0);
-    $$("#dynamic-content-container span").shouldHaveSize(0);
+    $$("#dynamic-content-container span").shouldHave(size(2));
   }
 
   @Test
   public void shouldWaitUntilCollectionGetsExpectedSize() {
     ElementsCollection spans = $$("#dynamic-content-container span");
-
-    assertEquals(0, spans.size());
-    assertArrayEquals(new String[]{}, spans.getTexts());
-
-    spans.shouldHave(size(1)); // appears after 1 second
-
-    assertEquals(1, spans.size());
-    assertArrayEquals(new String[]{"dynamic content"}, spans.getTexts());
 
     spans.shouldHave(size(2)); // appears after 2 seconds
 
@@ -70,7 +71,33 @@ public class CollectionMethods {
 
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
-    $$("#dynamic-content-container span").shouldHave(texts("dynamic-content", "dynamic-content2"));
+    $$("#dynamic-content-container span").shouldHave(
+        texts("dynamic content", "dynamic content2"),
+        texts("mic cont", "content2"),
+        exactTexts("dynamic content", "dynamic content2"));
+  }
+
+  @Test
+  public void ignoresWhitespacesInTexts() {
+    $$("#dynamic-content-container span").shouldHave(
+        texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
+        exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+  }
+
+  @Test(expected = TextsMismatch.class)
+  public void canCheckThatElementsHaveExactlyCorrectTexts() {
+    $$("#dynamic-content-container span").shouldHave(
+        exactTexts("content", "content2"));
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void textsCheckThrowsElementNotFound() {
+    $$(".non-existing-elements").shouldHave(texts("content1", "content2"));
+  }
+
+  @Test(expected = TextsMismatch.class)
+  public void textsCheckThrowsTextsMismatch() {
+    $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
   }
 
   @Test
@@ -90,5 +117,22 @@ public class CollectionMethods {
   @Test
   public void userCanFindMatchingElementFromList() {
     $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
+  }
+
+  @Test
+  public void findWaitsUntilElementMatches() {
+    $$("#dynamic-content-container span").findBy(text("dynamic content2")).shouldBe(visible);
+    $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(exist);
+  }
+
+  @Test
+  public void collectionMethodsCanBeChained() {
+    $$("#multirowTable tr").shouldHave(size(2))
+        .filterBy(text("Norris")).shouldHave(size(1));
+  }
+
+  @Test
+  public void shouldMethodsCanCheckMultipleConditions() {
+    $$("#multirowTable tr td").shouldHave(size(4), texts("Chack", "Norris", "Chack", "L'a Baskerville"));
   }
 }

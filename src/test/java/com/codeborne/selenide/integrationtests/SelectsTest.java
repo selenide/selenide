@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
@@ -35,5 +37,35 @@ public class SelectsTest {
     select.getSelectedOption().shouldBe(selected);
     assertEquals("мыло.ру", select.getSelectedValue());
     assertEquals("@мыло.ру", select.getSelectedText());
+  }
+
+  @Test
+  public void optionValueWithApostrophe() {
+    $("#hero").selectOptionByValue("john mc'lain");
+    $("#hero").getSelectedOption().shouldHave(text("John Mc'Lain"));
+  }
+
+  @Test
+  public void optionValueWithQuote() {
+    $("#hero").selectOptionByValue("arnold \"schwarzenegger\"");
+    $("#hero").getSelectedOption().shouldHave(text("Arnold \"Schwarzenegger\""));
+  }
+
+  @Test
+  public void optionTextWithApostrophe() {
+    $("#hero").selectOption("John Mc'Lain");
+    $("#hero").getSelectedOption().shouldHave(value("john mc'lain"));
+  }
+
+  @Test
+  public void optionTextWithQuote() {
+    $("#hero").selectOption("Arnold \"Schwarzenegger\"");
+    $("#hero").getSelectedOption().shouldHave(value("arnold \"schwarzenegger\""));
+  }
+
+  @Test
+  public void optionTextWithApostropheInsideQuote() {
+    $("#hero").selectOption("Mickey \"Rock'n'Roll\" Rourke");
+    $("#hero").getSelectedOption().shouldHave(value("mickey rourke"));
   }
 }

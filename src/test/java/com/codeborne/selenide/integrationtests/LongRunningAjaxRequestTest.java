@@ -1,6 +1,9 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.junit.ScreenShooter;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -9,11 +12,15 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LongRunningAjaxRequestTest {
+  @Rule
+  public ScreenShooter screenShooter = failedTests();
+
   @Before
   public void openTestPage() {
     timeout = 2500;
@@ -21,6 +28,11 @@ public class LongRunningAjaxRequestTest {
     $(byText("Run long request")).click();
     $(byText("Loading...")).should(exist);
     $("#loading").shouldHave(text("Loading"), text("..."));
+  }
+
+  @After
+  public final void restoreTimeout() {
+    timeout = 4000;
   }
 
   @Test
@@ -31,20 +43,6 @@ public class LongRunningAjaxRequestTest {
   @Test
   public void dollarWaitsForElementWithIndex() {
     $("#results li", 1).shouldHave(text("Result 2"));
-  }
-
-  @Test
-  public void findWaitsForParentAndChildElements() {
-    $(byText("Result 1")).find("#result-1").shouldNotBe(visible);
-    $(byText("Result 1")).find("#result-1").shouldHave(text("r1"));
-    $(byText("Result 1")).shouldBe(visible);
-    $("#results li", 1).find("#result-2").shouldHave(text("r2"));
-  }
-
-  @Test
-  public void findWaitsForParentAndChildElementsMeetsCondition() {
-    $("#unexisting-parent").shouldNotBe(visible);
-    $("#unexisting-parent").find("#unexisting-child").shouldNotBe(visible);
   }
 
   @Test

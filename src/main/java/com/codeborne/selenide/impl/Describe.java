@@ -4,8 +4,6 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
-
 public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
@@ -32,7 +30,8 @@ public class Describe {
 
   @Override
   public String toString() {
-    sb.append('>').append(element.getText()).append("</").append(element.getTagName()).append('>');
+    String text = element.getText();
+    sb.append('>').append(text == null ? "" : text).append("</").append(element.getTagName()).append('>');
     return sb.toString();
   }
 
@@ -50,7 +49,26 @@ public class Describe {
           .is("enabled", element.isEnabled(), false)
           .toString();
     } catch (WebDriverException elementDoesNotExist) {
-      return cleanupWebDriverExceptionMessage(elementDoesNotExist);
+      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
+    }
+    catch (IndexOutOfBoundsException e) {
+      return e.toString();
+    }
+  }
+
+  public static String shortly(WebElement element) {
+    try {
+      if (element == null) {
+        return "null";
+      }
+      return new Describe(element)
+          .attr("id").attr("name")
+          .toString();
+    } catch (WebDriverException elementDoesNotExist) {
+      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
+    }
+    catch (IndexOutOfBoundsException e) {
+      return e.toString();
     }
   }
 

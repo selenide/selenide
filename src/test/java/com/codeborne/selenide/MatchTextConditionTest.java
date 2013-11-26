@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 public class MatchTextConditionTest {
   @Test
   public void displaysHumanReadableName() {
-    assertEquals("matched text 'abc'", Condition.matchText("abc").toString());
+    assertEquals("match text 'abc'", Condition.matchText("abc").toString());
   }
 
   @Test

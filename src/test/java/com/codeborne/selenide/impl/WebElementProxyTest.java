@@ -11,7 +11,10 @@ public class WebElementProxyTest {
   @Test
   public void testToString() {
     WebElement element = mock(WebElement.class);
+    when(element.getTagName()).thenReturn("h2");
     when(element.toString()).thenReturn("webElement");
-    assertEquals("WebElementProxy{webElement}", new WebElementProxy(element).toString());
+    when(element.isDisplayed()).thenReturn(true);
+    when(element.isEnabled()).thenReturn(true);
+    assertEquals("<h2></h2>", new WebElementProxy(element).toString());
   }
 }

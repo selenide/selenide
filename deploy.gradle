@@ -1,7 +1,7 @@
 apply from: 'build.gradle'
 apply plugin: 'signing'
 
-defaultTasks 'clean', 'libs', 'test', 'firefox', 'chrome', 'install', 'uploadArchives'
+defaultTasks 'clean', 'allTests', 'install', 'uploadArchives'
 
 signing {
   sign configurations.archives
@@ -13,7 +13,7 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            //repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
               authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
             }
 
@@ -31,8 +31,8 @@ uploadArchives {
 
                licenses {
                    license {
-                       name 'GPL 1.0'
-                       url 'http://www.gnu.org/copyleft/gpl.html'
+                       name 'LGPL 3.0'
+                       url 'http://www.gnu.org/licenses/lgpl.html'
                        distribution 'repo'
                    }
                }

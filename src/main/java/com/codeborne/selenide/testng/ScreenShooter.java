@@ -16,7 +16,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestFailure(ITestResult result) {
     super.onTestFailure(result);
     if (captureFailingTests) {
-      System.err.println("Saved failed test screenshot to: " + takeScreenShot(getFileName(result)));
+      System.err.println("Saved failed test screenshot to: " + screenShot(result));
     }
   }
 
@@ -24,13 +24,13 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     super.onTestSuccess(result);
     if (captureSuccessfulTests) {
-      System.out.println("Saved succeeded test screenshot to: " + takeScreenShot(getFileName(result)));
+      System.out.println("Saved succeeded test screenshot to: " + screenShot(result));
     }
   }
 
-  protected String getFileName(ITestResult result) {
+  protected String screenShot(ITestResult result) {
     String className = result.getMethod().getTestClass().getName();
     String methodName = result.getMethod().getMethodName();
-    return className + "." + methodName;
+    return takeScreenShot(className, methodName);
   }
 }

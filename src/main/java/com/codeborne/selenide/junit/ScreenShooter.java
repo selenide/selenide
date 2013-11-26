@@ -32,14 +32,16 @@ public class ScreenShooter extends TestWatcher {
   @Override
   protected void failed(Throwable e, Description description) {
     if (captureFailingTests) {
-      System.err.println("Saved failed test screenshot to: " + takeScreenShot(description.getClassName() + "." + description.getMethodName()));
+      System.err.println("Saved failed test screenshot to: " +
+          takeScreenShot(description.getClassName(), description.getMethodName()));
     }
   }
 
   @Override
   protected void succeeded(Description description) {
     if (captureSuccessfulTests) {
-      System.err.println("Saved successful test screenshot to: " + takeScreenShot(description.getClassName() + "." + description.getMethodName()));
+      System.err.println("Saved successful test screenshot to: " +
+          takeScreenShot(description.getClassName(), description.getMethodName()));
     }
   }
 }

@@ -1,19 +1,17 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
-import java.util.regex.Pattern;
-
 import static com.codeborne.selenide.Selenide.getFocusedElement;
-import static java.util.regex.Pattern.DOTALL;
 
 public abstract class Condition implements Predicate<WebElement> {
   public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ')', false) {
+    return new Condition("not(" + condition.name + ')') {
       @Override
       public boolean apply(WebElement element) {
         return !condition.apply(element);
@@ -26,7 +24,7 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  public static final Condition visible = new Condition("visible", false) {
+  public static final Condition visible = new Condition("visible") {
     @Override
     public boolean apply(WebElement element) {
       return element.isDisplayed();
@@ -37,9 +35,10 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition present = new Condition("present", false) {
+  public static final Condition exist = new Condition("exist") {
     @Override
     public boolean apply(WebElement element) {
+      element.isDisplayed();
       return true;
     }
 
@@ -49,7 +48,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition exist = present;
+  public static final Condition present = exist;
 
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
@@ -129,7 +128,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @return true iff attribute exists
    */
   public static Condition attribute(final String attributeName) {
-    return new Condition("hasAttribute", false) {
+    return new Condition("hasAttribute") {
       @Override
       public boolean apply(WebElement element) {
         return element.getAttribute(attributeName) != null;
@@ -140,7 +139,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName;
+        return "attribute " + attributeName;
       }
     };
   }
@@ -151,7 +150,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param expectedAttributeValue expected value of attribute
    */
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
-    return new Condition("hasAttribute", false) {
+    return new Condition("hasAttribute") {
       @Override
       public boolean apply(WebElement element) {
         return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
@@ -162,7 +161,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got attribute " + attributeName + '=' + expectedAttributeValue;
+        return "attribute " + attributeName + '=' + expectedAttributeValue;
       }
     };
   }
@@ -219,7 +218,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * 2) For other elements, check that text is empty
    * $("h2").shouldBe(empty)
    */
-  public static final Condition empty = new Condition("empty", false) {
+  public static final Condition empty = new Condition("empty") {
     private final Condition emptyValue = value("");
     private final Condition emptyText = exactText("");
 
@@ -251,10 +250,10 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
   public static Condition matchText(final String regex) {
-    return new Condition("match", false) {
+    return new Condition("match") {
       @Override
       public boolean apply(WebElement element) {
-        return matches(element.getText(), regex);
+        return Html.text.matches(element.getText(), regex);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -262,18 +261,15 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "matched text '" + regex + '\'';
+        return "match text '" + regex + '\'';
       }
     };
-  }
-
-  private static boolean matches(String text, String regex) {
-    return Pattern.compile(".*" + regex + ".*", DOTALL).matcher(text).matches();
   }
 
   /**
    * $("h1").waitUntil(hasText("Hello"), 10000)
    * <p>Case insensitive</p>
+   * NB! Ignores multiple whitespaces between words
    * @param text expected text of HTML element
    */
   public static Condition hasText(String text) {
@@ -282,14 +278,18 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * $("h1").shouldHave(text("Hello\s*John"))
-   * <p>Case insensitive</p>
+   *
+   * <p>NB! Case insensitive</p>
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition text(final String text) {
-    return new Condition("text", false) {
+    return new Condition("text") {
       @Override
       public boolean apply(WebElement element) {
-        return element.getText().toLowerCase().contains(text.toLowerCase());
+        return Html.text.contains(element.getText(), text.toLowerCase());
       }
       @Override
       public String actualValue(WebElement element) {
@@ -297,20 +297,23 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + '\'';
+        return "text '" + text + '\'';
       }
     };
   }
 
   /**
    * $("h1").shouldHave(textCaseSensitive("Hello\s*John"))
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition textCaseSensitive(final String text) {
-    return new Condition("textCaseSensitive", false) {
+    return new Condition("textCaseSensitive") {
       @Override
       public boolean apply(WebElement element) {
-        return element.getText().contains(text);
+        return Html.text.containsCaseSensitive(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -318,21 +321,24 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got text '" + text + '\'';
+        return "text '" + text + '\'';
       }
     };
   }
 
   /**
    * $("h1").shouldHave(exactText("Hello"))
+   *
    * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition exactText(final String text) {
-    return new Condition("exactText", false) {
+    return new Condition("exactText") {
       @Override
       public boolean apply(WebElement element) {
-        return text.equalsIgnoreCase(element.getText());
+        return Html.text.equals(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -340,20 +346,23 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + '\'';
+        return "exactly the text '" + text + '\'';
       }
     };
   }
 
   /**
-   * $("h1").shouldHave(exactText("Hello"))
+   * $("h1").shouldHave(exactTextCaseSensitive("Hello"))
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
    * @param text expected text of HTML element
    */
   public static Condition exactTextCaseSensitive(final String text) {
-    return new Condition("exactTextCaseSensitive", false) {
+    return new Condition("exactTextCaseSensitive") {
       @Override
       public boolean apply(WebElement element) {
-        return text.equals(element.getText());
+        return Html.text.equalsCaseSensitive(element.getText(), text);
       }
       @Override
       public String actualValue(WebElement element) {
@@ -361,7 +370,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got exactly the text '" + text + '\'';
+        return "exactly the text '" + text + '\'';
       }
     };
   }
@@ -376,7 +385,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * $("input").shouldHave(options);
    */
-  public static final Condition options = new Condition("hasOptions", false) {
+  public static final Condition options = new Condition("hasOptions") {
     @Override
     public boolean apply(WebElement element) {
       try {
@@ -392,7 +401,7 @@ public abstract class Condition implements Predicate<WebElement> {
     }
     @Override
     public String toString() {
-      return "got any options";
+      return "any options";
     }
   };
 
@@ -410,12 +419,20 @@ public abstract class Condition implements Predicate<WebElement> {
     return false;
   }
 
+  /**
+   * Usage:
+   * <code>$("input").shouldHave(cssClass("active"));</code>
+   */
   public static Condition cssClass(String cssClass) {
     return hasClass(cssClass);
   }
 
+  /**
+   * Usage:
+   * <code>$("input").waitUntil(hasClass("blocked"), 7000);</code>
+   */
   public static Condition hasClass(final String cssClass) {
-    return new Condition("hasClass", false) {
+    return new Condition("hasClass") {
       @Override
       public boolean apply(WebElement element) {
         return hasClass(element, cssClass);
@@ -426,13 +443,13 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "got class '" + cssClass + '\'';
+        return "CSS class '" + cssClass + '\'';
       }
     };
   }
 
   public static Condition hasNotClass(final String cssClass) {
-    return new Condition("hasNotClass", false) {
+    return new Condition("hasNotClass") {
       @Override
       public boolean apply(WebElement element) {
         return !hasClass(element, cssClass);
@@ -443,12 +460,12 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "lose class '" + cssClass + '\'';
+        return "no CSS class '" + cssClass + '\'';
       }
     };
   }
 
-  public static final Condition focused = new Condition("focused", false) {
+  public static final Condition focused = new Condition("focused") {
     @Override public boolean apply(WebElement webElement) {
       WebElement focusedElement = getFocusedElement();
       return focusedElement!= null && focusedElement.equals(webElement);
@@ -462,7 +479,11 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition enabled = new Condition("enabled", false) {
+  /**
+   * Checks that element is not disabled
+   * @see WebElement#isEnabled()
+   */
+  public static final Condition enabled = new Condition("enabled") {
     @Override public boolean apply(WebElement element) {
       return element.isEnabled();
     }
@@ -472,7 +493,11 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition disabled = new Condition("disabled", false) {
+  /**
+   * Checks that element is disabled
+   * @see WebElement#isEnabled()
+   */
+  public static final Condition disabled = new Condition("disabled") {
     @Override public boolean apply(WebElement element) {
       return !element.isEnabled();
     }
@@ -482,7 +507,11 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  public static final Condition selected = new Condition("selected", false) {
+  /**
+   * Checks that element is selected
+   * @see WebElement#isSelected()
+   */
+  public static final Condition selected = new Condition("selected") {
     @Override public boolean apply(WebElement element) {
       return element.isSelected();
     }
@@ -492,10 +521,15 @@ public abstract class Condition implements Predicate<WebElement> {
     }
   };
 
-  private final String name;
-  private final boolean nullIsAllowed;
+  protected final String name;
+  protected final boolean nullIsAllowed;
 
-  protected Condition(String name, boolean nullIsAllowed) {
+
+  public Condition(String name) {
+    this(name, false);
+  }
+
+  public Condition(String name, boolean nullIsAllowed) {
     this.name = name;
     this.nullIsAllowed = nullIsAllowed;
   }
@@ -511,6 +545,6 @@ public abstract class Condition implements Predicate<WebElement> {
 
   @Override
   public String toString() {
-    return "become " + name;
+    return name;
   }
 }

@@ -3,7 +3,6 @@ package com.codeborne.selenide.integrationtests;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
@@ -27,8 +26,8 @@ public class ByTextTest {
 
   @Test
   public void spacesInTextAreIgnored() {
-    $(byText("Lä Baskerville")).shouldHave(text("Lä Baskerville"));
-    $(withText("Lä Baskerville")).shouldHave(text("Lä Baskerville"));
+    $(byText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
+    $(withText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
   }
 
   @Test
@@ -56,8 +55,6 @@ public class ByTextTest {
 
   @Test @Ignore
   public void canFindElementsByI18nText() {
-    System.out.println($(By.xpath("//input[@value='draft']")));
-    System.out.println($(By.xpath(".//*[normalize-space(text()) = 'Я тупица']")));
     $(byText("Я тупица")).shouldHave(text("Я тупица"));
     $(withText("Я туп")).shouldHave(text("Я тупица"));
 

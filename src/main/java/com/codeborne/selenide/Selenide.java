@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -11,8 +12,7 @@ import java.net.URL;
 import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Configuration.pollingInterval;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -20,14 +20,49 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Selenide {
   public static Navigator navigator = new Navigator();
 
+  /**
+   * The main starting point in your tests.
+   * Open a browser window with given URL.
+   *
+   * If browser window was already opened before, it will be reused.
+   *
+   * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
+   *
+   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL. In this case, it's prepended by baseUrl
+   */
   public static void open(String relativeOrAbsoluteUrl) {
     navigator.open(relativeOrAbsoluteUrl);
+    mockModalDialogs();
   }
 
+  /**
+   * @see Selenide#open(String)
+   */
   public static void open(URL absoluteUrl) {
     navigator.open(absoluteUrl);
+    mockModalDialogs();
   }
 
+  private static boolean doDismissModalDialogs() {
+    return isHeadless() || dismissModalDialogs;
+  }
+
+  private static void mockModalDialogs() {
+    if (doDismissModalDialogs()) {
+      String jsCode =
+          "  window._selenide_modalDialogReturnValue = true;\n" +
+          "  window.alert = function(message) {};\n" +
+          "  window.confirm = function(message) {\n" +
+          "    return window._selenide_modalDialogReturnValue;\n" +
+          "  };";
+      executeJavaScript(jsCode);
+    }
+  }
+
+  /**
+   * Open a web page and create PageObject for it.
+   * @return PageObject of given class
+   */
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl);
     return page(pageObjectClassClass);
@@ -36,6 +71,13 @@ public class Selenide {
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
     open(absoluteUrl);
     return page(pageObjectClassClass);
+  }
+
+  /**
+   * Close the browser if it's open
+   */
+  public static void close() {
+    closeWebDriver();
   }
 
   /**
@@ -63,19 +105,28 @@ public class Selenide {
   }
 
   /**
+   * Take the screenshot of current page and save to file fileName.html and fileName.png
+   * @param fileName Name of file (without extension) to save HTML and PNG to
+   * @return The name of resulting file
+   */
+  public static String screenshot(String fileName) {
+    return takeScreenShot(fileName);
+  }
+
+  /**
    * Wrap standard Selenium WebElement into SelenideElement to use additional methods like shouldHave(), selectOption() etc.
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
    */
   public static SelenideElement $(WebElement webElement) {
-    return WebElementProxy.wrap(webElement);
+    return wrap(webElement);
   }
 
   /**
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector) {
     return getElement(By.cssSelector(cssSelector));
@@ -85,14 +136,14 @@ public class Selenide {
    * Find the first element matching given CSS selector
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(By seleniumSelector) {
     return getElement(seleniumSelector);
   }
 
   /**
-   * @see #getElement(org.openqa.selenium.By, int)
+   * @see #getElement(By, int)
    */
   public static SelenideElement $(By seleniumSelector, int index) {
     return getElement(seleniumSelector, index);
@@ -103,7 +154,7 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector) {
     return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), 0);
@@ -114,7 +165,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector, int index) {
     return WaitingSelenideElement.wrap(null, By.cssSelector(cssSelector), index);
@@ -126,7 +177,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), index);
@@ -176,7 +227,7 @@ public class Selenide {
 
   /**
    * Find all elements matching given criteria inside given parent element
-   * @see com.codeborne.selenide.Selenide#$$(org.openqa.selenium.WebElement, String)
+   * @see Selenide#$$(WebElement, String)
    */
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return new ElementsCollection(new BySelectorCollection(parent, seleniumSelector));
@@ -186,7 +237,7 @@ public class Selenide {
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria) {
     return WaitingSelenideElement.wrap(null, criteria, 0);
@@ -197,7 +248,7 @@ public class Selenide {
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
-   * @throws org.openqa.selenium.NoSuchElementException if element was no found
+   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria, int index) {
     return WaitingSelenideElement.wrap(null, criteria, index);
@@ -242,63 +293,47 @@ public class Selenide {
     return null;
   }
 
+  public static void onConfirmReturn(boolean confirmReturnValue) {
+    if (doDismissModalDialogs()) {
+      executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ';');
+    }
+  }
+
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
+   * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
-  public static void confirm(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
+  public static void confirm(String expectedDialogText) {
+    if (!doDismissModalDialogs()) {
+      Alert alert = getWebDriver().switchTo().alert();
+      String actualDialogText = alert.getText();
       alert.accept();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
+      checkDialogText(expectedDialogText, actualDialogText);
     }
-
-    waitUntilAlertDisappears();
   }
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
-   * @param expectedConfirmationText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws AssertionError if confirmation message differs from expected message
+   * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
-  public static void dismiss(String expectedConfirmationText) {
-    try {
-      Alert alert = checkAlertMessage(expectedConfirmationText);
+  public static void dismiss(String expectedDialogText) {
+    if (!doDismissModalDialogs()) {
+      Alert alert = getWebDriver().switchTo().alert();
+      String actualDialogText = alert.getText();
       alert.dismiss();
-    } catch (UnsupportedOperationException alertIsNotSupportedInHtmlUnit) {
-      return;
+      checkDialogText(expectedDialogText, actualDialogText);
     }
-
-    waitUntilAlertDisappears();
   }
 
-  private static Alert checkAlertMessage(String expectedConfirmationText) {
-    Alert alert = getWebDriver().switchTo().alert();
-    if (expectedConfirmationText != null && !expectedConfirmationText.equals(alert.getText())) {
-      throw new AssertionError("Actual confirmation text is '" + alert.getText() +
-          "', but expected: '" + expectedConfirmationText + "'");
-    }
-    return alert;
-  }
-
-  private static void waitUntilAlertDisappears() {
-    try {
-      long start = System.currentTimeMillis();
-      while (getWebDriver().switchTo().alert() != null) {
-        getWebDriver().switchTo().alert();
-        if (System.currentTimeMillis() - start > timeout) {
-          fail("Confirmation dialog has not disappeared in " + timeout + " milliseconds");
-        }
-        sleep(pollingInterval);
-      }
-    }
-    catch (NoAlertPresentException ignore) {
+  private static void checkDialogText(String expectedDialogText, String actualDialogText) {
+    if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
+      throw new DialogTextMismatch(actualDialogText, expectedDialogText);
     }
   }
 
@@ -312,11 +347,11 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)
+   * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     try {
-      return page(pageObjectClass.newInstance());
+      return page(pageObjectClass.getConstructor().newInstance());
     } catch (Exception e) {
       throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
     }
@@ -324,7 +359,7 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
-   * @see org.openqa.selenium.support.PageFactory#initElements(org.openqa.selenium.WebDriver, Class)
+   * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     PageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);

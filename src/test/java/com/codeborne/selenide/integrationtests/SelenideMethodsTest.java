@@ -1,24 +1,29 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selectors.byValue;
-
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.by;
+import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.url;
-import static com.codeborne.selenide.Selectors.byAttribute;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.url;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
-public class SelenideMethods {
+public class SelenideMethodsTest {
+  @Rule
+  public ScreenShooter allScreens = ScreenShooter.failedTests();
+
   @Before
   public void openTestPageWithJQuery() {
     open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
@@ -65,12 +70,22 @@ public class SelenideMethods {
 
   @Test
   public void userCanFindElementByAttribute() {
-    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
     assertEquals("select", $(byAttribute("name", "domain")).getTagName());
     assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
     assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
     assertEquals(4, $$(byAttribute("type", "radio")).size());
     assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
+    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
+  }
+
+  @Test
+  public void userCanGetAttr() {
+    assertEquals("username", $(by("readonly", "readonly")).attr("name"));
+  }
+
+  @Test
+  public void userCanGetNameAttribute() {
+    assertEquals("username", $(by("readonly", "readonly")).name());
   }
 
   @Test
@@ -85,7 +100,15 @@ public class SelenideMethods {
 
   @Test @Ignore
   public void userCanSearchElementByDataAttribute() {
+    assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
+    assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
+    assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
     assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
+  }
+
+  @Test
+  public void userCanSearchElementByTitleAttribute() {
+    assertEquals("fieldset", $(byTitle("Login form")).getTagName());
   }
 
   @Test
@@ -111,6 +134,12 @@ public class SelenideMethods {
     assertEquals(-1, url().indexOf("#submitted-form"));
     $(By.name("password")).val("Going to press ENTER").pressEnter();
     assertTrue(url().contains("#submitted-form"));
+  }
+
+  @Test @Ignore // fails in HtmlUnit for unknown reason
+  public void userCanPressTab() {
+    $("#username").val("tere").pressTab();
+    $("#username-blur-counter").shouldHave(text("blur: 1"));
   }
 
   @Test
@@ -162,7 +191,7 @@ public class SelenideMethods {
   public void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).followLink();
 //    $(By.linkText("Want to see ajax in action?")).click();
-    assertTrue(url().endsWith("long_ajax_request.html"));
+    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
   @Test
@@ -183,6 +212,16 @@ public class SelenideMethods {
     actions().click($(By.name("rememberMe"))).build().perform();
 
     $(By.name("rememberMe")).shouldBe(selected);
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void shouldNotThrowsElementNotFound() {
+    $(byText("Unexisting text")).shouldNotBe(hidden);
+  }
+
+  @Test(expected = ElementShouldNot.class)
+  public void shouldNotThrowsElementMatches() {
+    $(byText("Bob")).shouldNotHave(cssClass("firstname"));
   }
 
   @Test
@@ -228,10 +267,31 @@ public class SelenideMethods {
   }
 
   @Test
+  public void findWaitsUntilParentAppears() {
+    $("#container").find("#dynamic-content2").shouldBe(visible);
+  }
+
+  @Test
+  public void findWaitsUntilElementMatchesCondition() {
+    $("#dynamic-content-container").find("#dynamic-content2").shouldBe(visible);
+  }
+
+  @Test
   public void userCanListMatchingSubElements() {
     $("#multirowTable").findAll(byText("Chack")).shouldHaveSize(2);
     $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);
     $("#multirowTable tr").findAll(byText("Chack")).shouldHaveSize(1);
     $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
+  }
+
+  @Test
+  public void errorMessageShouldContainUrlIfBrowserFailedToOpenPage() {
+    try {
+      baseUrl = "http://localhost:8080";
+      open("www.yandex.ru");
+    } catch (WebDriverException e) {
+      assertTrue(e.getAdditionalInformation().contains("selenide.baseUrl: http://localhost:8080"));
+      assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
+    }
   }
 }

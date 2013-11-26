@@ -1,30 +1,45 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.ElementShouldNot;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Set;
 
-import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.cleanupWebDriverExceptionMessage;
-import static com.codeborne.selenide.WebDriverRunner.fail;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.Thread.currentThread;
 
 abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
+  abstract String getSearchCriteria();
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -41,6 +56,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         return proxy;
       }
     }
+    else if ("attr".equals(method.getName())) {
+    	return getDelegate().getAttribute((String) args[0]);
+    }
+    else if ("name".equals(method.getName())) {
+    	return getDelegate().getAttribute("name");
+    }
     else if ("data".equals(method.getName())) {
     	return getDelegate().getAttribute("data-" + args[0]);
     }
@@ -52,23 +73,39 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       getDelegate().sendKeys(Keys.ENTER);
       return proxy;
     }
+    else if ("pressTab".equals(method.getName())) {
+      getDelegate().sendKeys(Keys.TAB);
+      return proxy;
+    }
     else if ("followLink".equals(method.getName())) {
-      followLink(getDelegate());
+      followLink();
       return null;
     }
     else if ("text".equals(method.getName())) {
       return getDelegate().getText();
     }
-    else if ("should".equals(method.getName()) || "shouldHave".equals(method.getName()) || "shouldBe".equals(method.getName())) {
-      return should(proxy, (Condition[]) args[0]);
+    else if ("should".equals(method.getName())) {
+      return should(proxy, "", (Condition[]) args[0]);
     }
-    else if ("shouldNot".equals(method.getName()) || "shouldNotHave".equals(method.getName()) || "shouldNotBe".equals(method.getName())) {
-      return shouldNot(proxy, (Condition[]) args[0]);
+    else if ("shouldHave".equals(method.getName())) {
+      return should(proxy, "have ", (Condition[]) args[0]);
+    }
+    else if ("shouldBe".equals(method.getName())) {
+      return should(proxy, "be ", (Condition[]) args[0]);
+    }
+    else if ("shouldNot".equals(method.getName())) {
+      return shouldNot(proxy, "", (Condition[]) args[0]);
+    }
+    else if ("shouldNotHave".equals(method.getName())) {
+      return shouldNot(proxy, "have ", (Condition[]) args[0]);
+    }
+    else if ("shouldNotBe".equals(method.getName())) {
+      return shouldNot(proxy, "be ", (Condition[]) args[0]);
     }
     else if ("find".equals(method.getName()) || "$".equals(method.getName())) {
-      return WebElementProxy.wrap(args.length == 1 ?
+      return args.length == 1 ?
           find((SelenideElement) proxy, args[0], 0) :
-          find((SelenideElement) proxy, args[0], (Integer) args[1]));
+          find((SelenideElement) proxy, args[0], (Integer) args[1]);
     }
     else if ("findAll".equals(method.getName()) || "$$".equals(method.getName())) {
       final SelenideElement parent = (SelenideElement) proxy;
@@ -107,18 +144,38 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return getActualDelegate();
     }
     else if ("waitUntil".equals(method.getName())) {
-      waitUntil((Condition) args[0], (Long) args[1]);
+      waitUntil("", (Condition) args[0], (Long) args[1]);
       return proxy;
     }
     else if ("waitWhile".equals(method.getName())) {
-      waitWhile((Condition) args[0], (Long) args[1]);
+      waitWhile("", (Condition) args[0], (Long) args[1]);
       return proxy;
+    }
+    else if ("scrollTo".equals(method.getName())) {
+      scrollTo();
+      return proxy;
+    }
+    else if ("download".equals(method.getName())) {
+      return download();
+    }
+    else if ("click".equals(method.getName())) {
+      click();
+      return null;
     }
 
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private void followLink(WebElement link) {
+  private WebElement waitForElement() {
+    return waitUntil("be ", visible, timeout);
+  }
+
+  protected void click() {
+    waitForElement().click();
+  }
+
+  protected void followLink() {
+    WebElement link = waitForElement();
     String href = link.getAttribute("href");
     link.click();
 
@@ -129,14 +186,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    WebElement element = getDelegate();
+    WebElement element = waitForElement();
     element.clear();
     element.sendKeys(text);
     fireEvent("change");
   }
 
   protected void append(String text) {
-    WebElement element = getDelegate();
+    WebElement element = waitForElement();
     element.sendKeys(text);
     fireEvent("change");
   }
@@ -151,27 +208,27 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         "  var evt = document.createEvent('HTMLEvents');\n " +
         "  evt.initEvent('" + event + "', true, true );\n " +
         "  return !document.activeElement.dispatchEvent(evt);\n" +
-        "}";
+        '}';
     executeJavaScript(jsCodeToTriggerEvent);
   }
 
-  private Object should(Object proxy, Condition[] conditions) {
+  protected Object should(Object proxy, String prefix, Condition... conditions) {
     for (Condition condition : conditions) {
-      waitUntil(condition, timeout);
+      waitUntil(prefix, condition, timeout);
     }
     return proxy;
   }
 
-  private Object shouldNot(Object proxy, Condition[] conditions) {
+  protected Object shouldNot(Object proxy, String prefix, Condition... conditions) {
     for (Condition condition : conditions) {
-      waitWhile(condition, timeout);
+      waitWhile(prefix, condition, timeout);
     }
     return proxy;
   }
 
 
 
-  private Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
+  protected Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
       throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
     }
@@ -186,34 +243,32 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void selectOptionByText(WebElement selectField, String optionText) {
-    $(selectField).shouldBe(present);
-    $(selectField, "option").shouldBe(present);
-    // TODO wait until the element has option with given text
+    $(selectField).should(exist);
+    $(selectField).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    $(selectField).shouldBe(present);
-    $(selectField, "option").shouldBe(present);
-    // TODO wait until the element has option with given value
+    $(selectField).should(exist);
+    $(selectField).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 
-  private String getSelectedValue(WebElement selectElement) {
+  protected String getSelectedValue(WebElement selectElement) {
     WebElement option = getSelectedOption(selectElement);
     return option == null ? null : option.getAttribute("value");
   }
 
-  private String getSelectedText(WebElement selectElement) {
+  protected String getSelectedText(WebElement selectElement) {
     WebElement option = getSelectedOption(selectElement);
     return option == null ? null : option.getText();
   }
 
-  private SelenideElement getSelectedOption(WebElement selectElement) {
+  protected SelenideElement getSelectedOption(WebElement selectElement) {
     return wrap(new Select(selectElement).getFirstSelectedOption());
   }
 
-  private boolean exists() {
+  protected boolean exists() {
     try {
       return getActualDelegate() != null;
     } catch (WebDriverException elementDoesNotExist) {
@@ -223,10 +278,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private boolean isDisplayed() {
+  protected boolean isDisplayed() {
     try {
-      WebElement delegate = getActualDelegate();
-      return delegate != null && delegate.isDisplayed();
+      WebElement element = getActualDelegate();
+      return element != null && element.isDisplayed();
     } catch (WebDriverException elementDoesNotExist) {
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
@@ -234,17 +289,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  private String describe() {
+  protected String describe() {
     try {
       return Describe.describe(getActualDelegate());
     } catch (WebDriverException elementDoesNotExist) {
-      return cleanupWebDriverExceptionMessage(elementDoesNotExist);
+      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return invalidElementIndex.toString();
     }
   }
 
-  private Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
+  static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
     try {
       return method.invoke(delegate, args);
     } catch (InvocationTargetException e) {
@@ -252,7 +307,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected WebElement waitUntil(Condition condition, long timeoutMs) {
+  protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
+    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -275,12 +331,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    return fail("Element " + toString() + " hasn't " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
+    if (!exists(element)) {
+      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs);
+    }
+    else {
+      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs);
+    }
   }
 
-  protected void waitWhile(Condition condition, long timeoutMs) {
+  protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
+    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -303,48 +363,128 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    fail("Element " + toString() + " has " + condition + " in " + timeoutMs + " ms.;" +
-        " actual value: '" + getActualValue(condition) + "';" +
-        (element == null ? "" : " element details: '" + Describe.describe(element) + "'"));
+    if (!exists(element)) {
+      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs);
+    }
+    else {
+      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs);
+    }
   }
 
-  private WebElement tryToGetElement() {
+  static boolean exists(WebElement element) {
+    try {
+      if (element == null) return false;
+      element.isDisplayed();
+      return true;
+    } catch (WebDriverException e) {
+      return false;
+    }
+  }
+
+  protected void validateTimeout(long timeoutMs) {
+    if (timeoutMs < 100) {
+      throw new IllegalArgumentException("Invalid timeout: " + timeoutMs + "ms. Check that your timeout is in milliseconds.");
+    }
+  }
+
+  protected WebElement tryToGetElement() {
     try {
       return getActualDelegate();
+    } catch (InvalidSelectorException invalidSelector) {
+      throw invalidSelector;
+    } catch (NoSuchElementException ignore) {
+      return null;
     } catch (WebDriverException ignore) {
+      // TODO Do not ignore this exception, but re-throw it later.
+      // For example, this information is useful:
+//      org.openqa.selenium.InvalidSelectorException: The given selector .//*/text()[contains(normalize-space(.), 'without')] is either invalid or does not result in a WebElement. The following error occurred:
+//          InvalidSelectorError: The result of the xpath expression ".//*/text()[contains(normalize-space(.), 'without')]" is: [object Text]. It should be an element.
       return null;
     } catch (IndexOutOfBoundsException ignore) {
       return null;
     }
   }
 
-  private String getActualValue(Condition condition) {
-    try {
-      WebElement element = getActualDelegate();
-      return element == null? "does not exist" : condition.actualValue(element);
-    }
-    catch (WebDriverException e) {
-      return cleanupWebDriverExceptionMessage(e);
-    }
-    catch (IndexOutOfBoundsException e) {
-      return e.toString();
-    }
-  }
-
   protected WebElement find(SelenideElement proxy, Object arg, int index) {
-    // TODO Do not evaluate element immediately.
-    if (index == 0) {
-      return arg instanceof By ?
-          getDelegate().findElement((By) arg) :
-          getDelegate().findElement(By.cssSelector((String) arg));
-    } else {
-      return arg instanceof By ?
-          getDelegate().findElements((By) arg).get(index) :
-          getDelegate().findElements(By.cssSelector((String) arg)).get(index);
-    }
+    By criteria = arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+    return WaitingSelenideElement.wrap(proxy, criteria, index);
   }
 
   protected By getSelector(Object arg) {
     return arg instanceof By ? ((By) arg) : By.cssSelector((String) arg);
   }
+
+  protected void scrollTo() {
+    Point location = getDelegate().getLocation();
+    executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
+  }
+
+  // TODO Extract to a separate class aka FileDownloader
+  protected File download() throws IOException, URISyntaxException {
+    String fileToDownloadLocation = getDelegate().getAttribute("href");
+    if (fileToDownloadLocation.trim().isEmpty()) {
+      throw new IllegalArgumentException("The element does not have href attribute");
+    }
+
+    URL fileToDownload = new URL(fileToDownloadLocation);
+
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    HttpGet httpGet = new HttpGet(fileToDownloadLocation);
+    HttpContext localContext = new BasicHttpContext();
+    localContext.setAttribute(ClientContext.COOKIE_STORE, mimicCookieState());
+
+    HttpResponse response = httpClient.execute(httpGet, localContext);
+    System.out.println("DOWNLOAD HEADERS:");
+    for (Header header : response.getAllHeaders()) {
+      System.out.println(header.getName() + '=' + header.getValue());
+    }
+
+    File downloadedFile = new File(Configuration.reportsFolder, getFileName(fileToDownload, response));
+    if (!downloadedFile.canWrite()) {
+      downloadedFile.setWritable(true);
+    }
+
+    try {
+      int httpStatusOfLastDownloadAttempt = response.getStatusLine().getStatusCode();
+      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+    }
+    finally {
+      response.getEntity().getContent().close();
+    }
+
+    return downloadedFile;
+  }
+
+  private String getFileName(URL fileToDownload, HttpResponse response) {
+    for (Header header : response.getAllHeaders()) {
+      if ("Content-Disposition".equals(header.getName()) &&
+          header.getValue().matches(".*filename=\"(.*)\".*")) {
+         return header.getValue().replaceFirst(".*filename=\"(.*)\".*", "$1");
+      }
+    }
+    return fileToDownload.getFile().replaceFirst("/|\\\\", "");
+  }
+
+  private BasicCookieStore mimicCookieState() {
+    Set<Cookie> seleniumCookieSet = WebDriverRunner.getWebDriver().manage().getCookies();
+    BasicCookieStore mimicWebDriverCookieStore = new BasicCookieStore();
+    for (Cookie seleniumCookie : seleniumCookieSet) {
+      BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
+      duplicateCookie.setDomain(seleniumCookie.getDomain());
+      duplicateCookie.setSecure(seleniumCookie.isSecure());
+      duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
+      duplicateCookie.setPath(seleniumCookie.getPath());
+      mimicWebDriverCookieStore.addCookie(duplicateCookie);
+    }
+
+    return mimicWebDriverCookieStore;
+  }
+
+//  TODO Use this data in unit-test
+//  public static void main(String[] args) {
+//    final String url = "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\"";
+//    System.out.println(url.matches(".*filename=\\\"(.*)\\\".*"));
+//    System.out.println(url.replaceFirst(".*filename=\"(.*)\".*", "$1"));
+//    Content-Disposition=attachment; filename=statement.xls
+//  }
 }

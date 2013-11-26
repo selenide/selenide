@@ -13,10 +13,11 @@ public class WaitingSelenideElementTest {
   public void testToString() {
     SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
+    when(parent.getTagName()).thenReturn("table");
 
-    assertEquals("WaitingSelenideElement{By.id: app}", new WaitingSelenideElement(null, By.id("app"), 0).toString());
-    assertEquals("WaitingSelenideElement{By.id: app, index: 3}", new WaitingSelenideElement(null, By.id("app"), 3).toString());
-    assertEquals("WaitingSelenideElement{By.id: app, in: table}", new WaitingSelenideElement(parent, By.id("app"), 0).toString());
-    assertEquals("WaitingSelenideElement{By.id: app, in: table, index: 3}", new WaitingSelenideElement(parent, By.id("app"), 3).toString());
+    assertEquals("{By.id: app}", new WaitingSelenideElement(null, By.id("app"), 0).toString());
+    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(null, By.id("app"), 3).toString());
+    assertEquals("{By.id: app}", new WaitingSelenideElement(parent, By.id("app"), 0).toString());
+    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(parent, By.id("app"), 3).toString());
   }
 }
