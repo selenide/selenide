@@ -10,6 +10,17 @@ header-text:
 
 <br/>
 
+<a href="http://bellwood.ru/" target="_blank">
+  <img src="{{ BASE_PATH }}/images/bellwood_logo.gif" alt="Bellwood systems"/>
+</a>
+
+<div class="text-right">
+  <a href="http://bellwood.ru/about.html" target="_blank">Bellwood Systems</a>
+  is a company providing scoring and underrating banking systems.
+</div>
+
+<hr class="divider"/>
+
 <a href="http://zeroturnaround.com" target="_blank">
   <img src="{{ BASE_PATH }}/images/logo-zt.png" alt="Zeroturnaround"/>
   <img src="{{ BASE_PATH }}/images/logo-liverebel-dark-small.png" alt="LiveRebel" align="right"/>
