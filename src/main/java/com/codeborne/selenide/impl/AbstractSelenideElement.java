@@ -1,20 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import org.apache.commons.io.FileUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -25,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.pollingInterval;
@@ -411,7 +401,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected By getSelector(Object arg) {
-    return arg instanceof By ? ((By) arg) : By.cssSelector((String) arg);
+    return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
   }
 
   protected void scrollTo() {
@@ -419,72 +409,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
   }
 
-  // TODO Extract to a separate class aka FileDownloader
   protected File download() throws IOException, URISyntaxException {
-    String fileToDownloadLocation = getDelegate().getAttribute("href");
-    if (fileToDownloadLocation.trim().isEmpty()) {
-      throw new IllegalArgumentException("The element does not have href attribute");
-    }
-
-    URL fileToDownload = new URL(fileToDownloadLocation);
-
-    CloseableHttpClient httpClient = HttpClients.createDefault();
-    HttpGet httpGet = new HttpGet(fileToDownloadLocation);
-    HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(ClientContext.COOKIE_STORE, mimicCookieState());
-
-    HttpResponse response = httpClient.execute(httpGet, localContext);
-    System.out.println("DOWNLOAD HEADERS:");
-    for (Header header : response.getAllHeaders()) {
-      System.out.println(header.getName() + '=' + header.getValue());
-    }
-
-    File downloadedFile = new File(Configuration.reportsFolder, getFileName(fileToDownload, response));
-    if (!downloadedFile.canWrite()) {
-      downloadedFile.setWritable(true);
-    }
-
-    try {
-      int httpStatusOfLastDownloadAttempt = response.getStatusLine().getStatusCode();
-      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-    }
-    finally {
-      response.getEntity().getContent().close();
-    }
-
-    return downloadedFile;
+    return FileDownloader.instance.download(getDelegate());
   }
-
-  private String getFileName(URL fileToDownload, HttpResponse response) {
-    for (Header header : response.getAllHeaders()) {
-      if ("Content-Disposition".equals(header.getName()) &&
-          header.getValue().matches(".*filename=\"(.*)\".*")) {
-         return header.getValue().replaceFirst(".*filename=\"(.*)\".*", "$1");
-      }
-    }
-    return fileToDownload.getFile().replaceFirst("/|\\\\", "");
-  }
-
-  private BasicCookieStore mimicCookieState() {
-    Set<Cookie> seleniumCookieSet = WebDriverRunner.getWebDriver().manage().getCookies();
-    BasicCookieStore mimicWebDriverCookieStore = new BasicCookieStore();
-    for (Cookie seleniumCookie : seleniumCookieSet) {
-      BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
-      duplicateCookie.setDomain(seleniumCookie.getDomain());
-      duplicateCookie.setSecure(seleniumCookie.isSecure());
-      duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
-      duplicateCookie.setPath(seleniumCookie.getPath());
-      mimicWebDriverCookieStore.addCookie(duplicateCookie);
-    }
-
-    return mimicWebDriverCookieStore;
-  }
-
-//  TODO Use this data in unit-test
-//  public static void main(String[] args) {
-//    final String url = "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\"";
-//    System.out.println(url.matches(".*filename=\\\"(.*)\\\".*"));
-//    System.out.println(url.replaceFirst(".*filename=\"(.*)\".*", "$1"));
-//    Content-Disposition=attachment; filename=statement.xls
-//  }
 }
