@@ -6,7 +6,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -18,10 +17,13 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class FileDownloader {
   public static FileDownloader instance = new FileDownloader();
@@ -32,36 +34,33 @@ public class FileDownloader {
       throw new IllegalArgumentException("The element does not have href attribute");
     }
 
-    URL fileToDownload = new URL(fileToDownloadLocation);
+    HttpResponse response = executeHttpRequest(fileToDownloadLocation);
 
+    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
+
+    return saveFileContent(response, downloadedFile);
+  }
+
+  protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
     HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(ClientContext.COOKIE_STORE, mimicCookieState());
+    localContext.setAttribute(COOKIE_STORE, mimicCookieState());
 
-    HttpResponse response = httpClient.execute(httpGet, localContext);
-    System.out.println("DOWNLOAD HEADERS:");
-    for (Header header : response.getAllHeaders()) {
-      System.out.println(header.getName() + '=' + header.getValue());
-    }
+    return httpClient.execute(httpGet, localContext);
+  }
 
-    File downloadedFile = new File(Configuration.reportsFolder, getFileName(fileToDownload, response));
+  protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
+    File downloadedFile = new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
     if (!downloadedFile.canWrite()) {
-      downloadedFile.setWritable(true);
+      if (!downloadedFile.setWritable(true)) {
+        throw new RuntimeException("Cannot write to file " + downloadedFile.getAbsolutePath());
+      }
     }
-
-    try {
-      int httpStatusOfLastDownloadAttempt = response.getStatusLine().getStatusCode();
-      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-    }
-    finally {
-      response.getEntity().getContent().close();
-    }
-
     return downloadedFile;
   }
 
-  protected String getFileName(URL fileToDownload, HttpResponse response) {
+  protected String getFileName(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
     for (Header header : response.getAllHeaders()) {
       if ("Content-Disposition".equals(header.getName())) {
         String fileName = getFileNameFromContentDisposition(header.getValue());
@@ -70,7 +69,13 @@ public class FileDownloader {
         }
       }
     }
-    return fileToDownload.getFile().replaceFirst("/|\\\\", "");
+
+    System.out.println("DOWNLOAD HEADERS:");
+    for (Header header : response.getAllHeaders()) {
+      System.out.println(header.getName() + '=' + header.getValue());
+    }
+
+    return new URL(fileToDownloadLocation).getFile().replaceFirst("/|\\\\", "");
   }
 
   protected String getFileNameFromContentDisposition(String contentDisposition) {
@@ -82,14 +87,29 @@ public class FileDownloader {
     Set<Cookie> seleniumCookieSet = WebDriverRunner.getWebDriver().manage().getCookies();
     BasicCookieStore mimicWebDriverCookieStore = new BasicCookieStore();
     for (Cookie seleniumCookie : seleniumCookieSet) {
-      BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
-      duplicateCookie.setDomain(seleniumCookie.getDomain());
-      duplicateCookie.setSecure(seleniumCookie.isSecure());
-      duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
-      duplicateCookie.setPath(seleniumCookie.getPath());
-      mimicWebDriverCookieStore.addCookie(duplicateCookie);
+      mimicWebDriverCookieStore.addCookie(duplicateCookie(seleniumCookie));
     }
 
     return mimicWebDriverCookieStore;
+  }
+
+  protected BasicClientCookie duplicateCookie(Cookie seleniumCookie) {
+    BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
+    duplicateCookie.setDomain(seleniumCookie.getDomain());
+    duplicateCookie.setSecure(seleniumCookie.isSecure());
+    duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
+    duplicateCookie.setPath(seleniumCookie.getPath());
+    return duplicateCookie;
+  }
+
+  protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
+    try {
+      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
+    }
+    finally {
+      response.getEntity().getContent().close();
+    }
+
+    return downloadedFile;
   }
 }
