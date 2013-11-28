@@ -11,12 +11,11 @@ header-text:
 <br/>
 
 <a href="http://bellwood.ru/" target="_blank">
-  <img src="{{ BASE_PATH }}/images/bellwood_logo.gif" alt="Bellwood systems"/>
+  <img src="{{ BASE_PATH }}/images/bellwood-logo.png" alt="Bellwood systems"/>
 </a>
 
 <div class="text-right">
-  <a href="http://bellwood.ru/about.html" target="_blank">Bellwood Systems</a>
-  is a company providing scoring and underrating banking systems.
+  a company providing scoring and underrating banking systems.
 </div>
 
 <hr class="divider"/>
