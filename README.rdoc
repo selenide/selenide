@@ -75,6 +75,13 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.6.1 (Released 29.11.2013)
+* The most wanted feature is finally here!
+  Added method $.download() for downloading file by "href" attribute!
+
+=== 2.6 (Released 26.11.2013)
+* Added method $.scrollTo()
+
 === 2.5 (Released 11.11.2013)
 * Created annotations for TestNG that automatically create browser per test/per class
 * Added method $.attr("name") as a synonym for $.getAttribute("name").
