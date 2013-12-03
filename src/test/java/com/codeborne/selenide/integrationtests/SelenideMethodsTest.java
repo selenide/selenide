@@ -294,4 +294,15 @@ public class SelenideMethodsTest {
       assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
     }
   }
+
+  @Test
+  public void userCanRightClickOnElement() {
+    $(By.name("password")).contextClick();
+
+    $("#login").click();
+    $("#login").contextClick();
+
+    $(By.name("domain")).find("option").click();
+    $(By.name("domain")).find("option").contextClick();
+  }
 }

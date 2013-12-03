@@ -152,6 +152,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       click();
       return null;
     }
+    else if ("contextClick".equals(method.getName())) {
+      contextClick();
+      return null;
+    }
 
     return delegateMethod(getDelegate(), method, args);
   }
@@ -162,6 +166,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void click() {
     waitForElement().click();
+  }
+
+  protected void contextClick() {
+    actions().contextClick(waitForElement()).perform();
   }
 
   protected void followLink() {

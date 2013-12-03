@@ -353,4 +353,6 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @return the original Selenium WebElement wrapped by this object
    */
   WebElement toWebElement();
+
+  SelenideElement contextClick();
 }
