@@ -18,11 +18,12 @@ public class ConfirmTest {
   public void openTestPage() {
     open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
     $("h1").shouldHave(text("Page with alerts"));
+    $(By.name("username")).val("Серафим");
+    sleep(200);
   }
 
   @Test
   public void canSubmitConfirmDialog() {
-    $(By.name("username")).val("Серафим");
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, Серафим?");
@@ -31,7 +32,6 @@ public class ConfirmTest {
 
   @Test
   public void canCancelConfirmDialog() {
-    $(By.name("username")).val("Серафим");
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, Серафим?");
@@ -41,7 +41,6 @@ public class ConfirmTest {
 
   @Test
   public void selenideChecksDialogText() {
-    $(By.name("username")).val("Серафим");
     $(byText("Confirm button")).click();
     try {
       confirm("Get out of this page, Мария?");
