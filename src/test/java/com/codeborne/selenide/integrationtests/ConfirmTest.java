@@ -1,7 +1,9 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -14,13 +16,14 @@ import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
 public class ConfirmTest {
+  @Rule
+  public ScreenShooter failedTests = ScreenShooter.failedTests();
+
   @Before
   public void openTestPage() {
     open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
     $("h1").shouldHave(text("Page with alerts"));
-    sleep(500);
     $(By.name("username")).val("Серафим");
-    sleep(1000);
   }
 
   @Test
