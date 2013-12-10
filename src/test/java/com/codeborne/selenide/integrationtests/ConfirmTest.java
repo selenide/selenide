@@ -19,6 +19,7 @@ public class ConfirmTest {
     open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val("Серафим");
+    sleep(500);
   }
 
   @Test
