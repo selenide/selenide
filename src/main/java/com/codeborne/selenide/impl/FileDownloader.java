@@ -51,22 +51,14 @@ public class FileDownloader {
   }
 
   protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
-    File downloadedFile = new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
-    if (!downloadedFile.canWrite()) {
-      if (!downloadedFile.setWritable(true)) {
-        throw new RuntimeException("Cannot write to file " + downloadedFile.getAbsolutePath());
-      }
-    }
-    return downloadedFile;
+    return new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
   }
 
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
     for (Header header : response.getAllHeaders()) {
-      if ("Content-Disposition".equals(header.getName())) {
-        String fileName = getFileNameFromContentDisposition(header.getValue());
-        if (fileName != null) {
-          return fileName;
-        }
+      String fileName = getFileNameFromContentDisposition(header.getName(), header.getValue());
+      if (fileName != null) {
+        return fileName;
       }
     }
 
@@ -78,9 +70,12 @@ public class FileDownloader {
     return new URL(fileToDownloadLocation).getFile().replaceFirst("/|\\\\", "");
   }
 
-  protected String getFileNameFromContentDisposition(String contentDisposition) {
-    Matcher regex = Pattern.compile(".*filename=\"?([^\"]*)\"?.*").matcher(contentDisposition);
-    return regex.matches() ? regex.replaceFirst("$1") : null;
+  protected String getFileNameFromContentDisposition(String headerName, String headerValue) {
+    if ("Content-Disposition".equalsIgnoreCase(headerName)) {
+      Matcher regex = Pattern.compile(".*filename=\"?([^\"]*)\"?.*").matcher(headerValue);
+      return regex.matches() ? regex.replaceFirst("$1") : null;
+    }
+    return null;
   }
 
   protected BasicCookieStore mimicCookieState() {
