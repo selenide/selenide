@@ -306,7 +306,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
-    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -338,7 +337,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
-    validateTimeout(timeoutMs);
     final long startTime = System.currentTimeMillis();
     WebElement element;
     do {
@@ -376,12 +374,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return true;
     } catch (WebDriverException e) {
       return false;
-    }
-  }
-
-  protected void validateTimeout(long timeoutMs) {
-    if (timeoutMs < 100) {
-      throw new IllegalArgumentException("Invalid timeout: " + timeoutMs + "ms. Check that your timeout is in milliseconds.");
     }
   }
 
