@@ -18,7 +18,8 @@ public class ScreenShotLaboratory {
   }
 
   protected String getScreenshotFileName(String className, String methodName) {
-    return className.replace('.', separatorChar) + separatorChar + methodName;
+    return className.replace('.', separatorChar) + separatorChar +
+        methodName + '.' + System.currentTimeMillis();
   }
 
   public String takeScreenShot(String fileName) {
@@ -68,11 +69,11 @@ public class ScreenShotLaboratory {
   protected void copyFile(InputStream in, File targetFile) throws IOException {
     ensureFolderExists(targetFile);
 
-    byte[] buffer = new byte[1024];
-    int len;
     try {
       final FileOutputStream out = new FileOutputStream(targetFile);
       try {
+        byte[] buffer = new byte[1024];
+        int len;
         while ((len = in.read(buffer)) != -1) {
           out.write(buffer, 0, len);
         }
