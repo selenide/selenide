@@ -19,7 +19,11 @@ public class ScreenShotLaboratory {
 
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
-        methodName + '.' + System.currentTimeMillis();
+        methodName + '.' + timestamp();
+  }
+
+  protected long timestamp() {
+    return System.currentTimeMillis();
   }
 
   public String takeScreenShot(String fileName) {
