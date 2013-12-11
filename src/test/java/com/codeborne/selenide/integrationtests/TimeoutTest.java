@@ -32,9 +32,14 @@ public class TimeoutTest {
     }
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void timeoutShouldBeInMilliseconds() {
-    $(By.xpath("//h16")).waitUntil(visible, 15);
+    try {
+      $(By.xpath("//h16")).waitUntil(visible, 15);
+    } catch (ElementNotFound expectedException) {
+      assertTrue("Error message should contain timeout '15 ms', but received: " +
+          expectedException.toString(), expectedException.toString().contains("15 ms"));
+    }
   }
 
   @Test
