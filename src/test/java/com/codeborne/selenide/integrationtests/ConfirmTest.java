@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
@@ -24,11 +25,11 @@ import static org.junit.Assert.fail;
 public class ConfirmTest {
   @Parameterized.Parameters
   public static List<Object[]> names() {
-    return Arrays.asList(new Object[]{"John McClane"}, new String[]{"Lucie"});
+    return Arrays.asList(new Object[]{"John Mc'Clane"}, new String[]{"L ucie"}, new String[]{"Серафим"});
   }
 
   @Rule
-  public ScreenShooter failedTests = ScreenShooter.failedTests();
+  public ScreenShooter screenshots = failedTests().succeededTests();
 
   private final String userName;
 
