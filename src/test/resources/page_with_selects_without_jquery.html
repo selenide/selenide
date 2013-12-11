@@ -1,8 +1,13 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript">
+      function fillTextArea() {
+        document.getElementById('text-area').innerHTML = 'This is text area';
+      }
+
       function onUsernameChanged(input) {
         document.getElementById('username-mirror').innerHTML = input.value;
       }
@@ -13,7 +18,7 @@
       }
     </script>
   </head>
-  <body>
+  <body onload="setTimeout(fillTextArea, 1000);">
     <h1>Page without JQuery</h1>
 
     <div>
@@ -85,6 +90,8 @@
             <input name="password" value=""/>
           </label> <br/>
           <input type="checkbox" name="rememberMe">Remember me<br/><br/>
+
+          <textarea id="text-area" rows="1" cols="60"></textarea>
           <input id="login" type="submit" value="Log in"/>
         </fieldset>
       </form>
@@ -135,6 +142,5 @@
         </fieldset>
       </form>
     </div>
-
   </body>
 </html>

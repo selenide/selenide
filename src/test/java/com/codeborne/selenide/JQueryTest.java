@@ -15,7 +15,13 @@ public class JQueryTest {
     assertEquals(".product_row", jQuery.getJQuerySelector(By.className("product_row")));
     assertEquals("*[name='products[0].quantity']", jQuery.getJQuerySelector(By.name("products[0].quantity")));
 
-    assertEquals("label[for='operatingAddressSameAsLegalfalse']", jQuery.getJQuerySelector(By.xpath("//label[@for='operatingAddressSameAsLegalfalse']")));
-    assertEquals("a[class='menu_item'][to='review']", jQuery.getJQuerySelector(By.xpath("//a[@class='menu_item'][@to='review']")));
+    assertEquals("label[for='operatingAddressSameAsLegalfalse']",
+        jQuery.getJQuerySelector(By.xpath("//label[@for='operatingAddressSameAsLegalfalse']")));
+
+    assertEquals("a[class='menu_item'][to='review']",
+        jQuery.getJQuerySelector(By.xpath("//a[@class='menu_item'][@to='review']")));
+
+    assertEquals("div[class='popup-content-container'] select[name='dropDownName']",
+        jQuery.getJQuerySelector(By.xpath("//div[@class='popup-content-container']//select[@name='dropDownName']")));
   }
 }

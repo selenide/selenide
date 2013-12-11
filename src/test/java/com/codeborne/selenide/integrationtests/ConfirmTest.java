@@ -1,7 +1,9 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -14,15 +16,18 @@ import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
 public class ConfirmTest {
+  @Rule
+  public ScreenShooter failedTests = ScreenShooter.failedTests();
+
   @Before
   public void openTestPage() {
     open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
     $("h1").shouldHave(text("Page with alerts"));
+    $(By.name("username")).val("Серафим");
   }
 
   @Test
   public void canSubmitConfirmDialog() {
-    $(By.name("username")).val("Серафим");
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, Серафим?");
@@ -31,7 +36,6 @@ public class ConfirmTest {
 
   @Test
   public void canCancelConfirmDialog() {
-    $(By.name("username")).val("Серафим");
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, Серафим?");
@@ -41,7 +45,6 @@ public class ConfirmTest {
 
   @Test
   public void selenideChecksDialogText() {
-    $(By.name("username")).val("Серафим");
     $(byText("Confirm button")).click();
     try {
       confirm("Get out of this page, Мария?");

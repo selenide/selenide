@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.6-SNAPSHOT'
+version='2.7-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.5
@@ -21,7 +21,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.37.1') {
+  compile('org.seleniumhq.selenium:selenium-java:2.38.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
@@ -29,7 +29,7 @@ dependencies {
     exclude group: 'org.webbitserver', module: 'webbit'
     exclude group: 'cglib', module: 'cglib-nodep'
   }
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.37.1', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.38.0', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.13', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.13'
   provided 'junit:junit:4.11'

@@ -170,6 +170,8 @@ public class SelenideMethodsTest {
     $("h2").shouldNotBe(empty);
     $(By.name("password")).shouldBe(empty);
     $("#login").shouldNotBe(empty);
+    $("#text-area").shouldBe(empty);
+    $("#text-area").shouldNotBe(empty);
   }
 
   @Test @Ignore
@@ -293,5 +295,16 @@ public class SelenideMethodsTest {
       assertTrue(e.getAdditionalInformation().contains("selenide.baseUrl: http://localhost:8080"));
       assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
     }
+  }
+
+  @Test
+  public void userCanRightClickOnElement() {
+    $(By.name("password")).contextClick();
+
+    $("#login").click();
+    $("#login").contextClick();
+
+    $(By.name("domain")).find("option").click();
+    $(By.name("domain")).find("option").contextClick();
   }
 }
