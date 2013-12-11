@@ -5,7 +5,12 @@ import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -15,22 +20,34 @@ import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
+@RunWith(Parameterized.class)
 public class ConfirmTest {
+  @Parameterized.Parameters
+  public static List<Object[]> names() {
+    return Arrays.asList(new Object[]{"John McClane"}, new String[]{"Lucie"});
+  }
+
   @Rule
   public ScreenShooter failedTests = ScreenShooter.failedTests();
+
+  private final String userName;
+
+  public ConfirmTest(String userName) {
+    this.userName = userName;
+  }
 
   @Before
   public void openTestPage() {
     open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
     $("h1").shouldHave(text("Page with alerts"));
-    $(By.name("username")).val("Серафим");
+    $(By.name("username")).val(userName);
   }
 
   @Test
   public void canSubmitConfirmDialog() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
-    confirm("Get out of this page, Серафим?");
+    confirm("Get out of this page, " + userName + '?');
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
@@ -38,8 +55,8 @@ public class ConfirmTest {
   public void canCancelConfirmDialog() {
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
-    dismiss("Get out of this page, Серафим?");
-    $("#message").shouldHave(text("Stay here, Серафим"));
+    dismiss("Get out of this page, " + userName + '?');
+    $("#message").shouldHave(text("Stay here, " + userName));
     $("#container").shouldNotBe(empty);
   }
 
@@ -47,7 +64,7 @@ public class ConfirmTest {
   public void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
     try {
-      confirm("Get out of this page, Мария?");
+      confirm("Get out of this page, Maria?");
     }
     catch (DialogTextMismatch expected) {
       return;
