@@ -7,9 +7,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,8 +34,11 @@ public class ErrorMessagesITest {
     timeout = 4000;
   }
 
+  private String reportsUrl;
+
   @Before
   public void mockScreenshots() {
+    reportsUrl = Configuration.reportsUrl;
     Configuration.reportsUrl = "http://ci.org/";
     WebDriverRunner.screenshots = new ScreenShotLaboratory() {
       @Override
@@ -48,8 +49,9 @@ public class ErrorMessagesITest {
   }
 
   @After
-  public void resetScreenshots() {
-    WebDriverRunner.screenshots = null;
+  public void restoreScreenshots() {
+    Configuration.reportsUrl = reportsUrl;
+    WebDriverRunner.screenshots = new ScreenShotLaboratory();
   }
 
   @Test

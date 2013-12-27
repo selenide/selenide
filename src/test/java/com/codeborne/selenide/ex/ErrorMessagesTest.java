@@ -3,6 +3,8 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,6 +12,20 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 public class ErrorMessagesTest {
+
+  private static String reportsUrl;
+
+  @BeforeClass
+  public static void rememberOldValues() {
+    reportsUrl = Configuration.reportsUrl;
+  }
+
+  @AfterClass
+  public static void restoreOldValues() {
+    Configuration.reportsUrl = reportsUrl;
+    WebDriverRunner.screenshots = new ScreenShotLaboratory();
+  }
+
   @Test
   public void formatsTimeoutToReadable() {
     assertEquals("\nTimeout: 0 ms.", ErrorMessages.timeout(0));
