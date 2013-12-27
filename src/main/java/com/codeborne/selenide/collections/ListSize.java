@@ -20,7 +20,7 @@ public class ListSize extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs, String screenshot) {
-    throw new ListSizeMismatch(expectedSize, collection, elements, timeoutMs, screenshot);
+  public void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs) {
+    throw new ListSizeMismatch(expectedSize, collection, elements, timeoutMs);
   }
 }

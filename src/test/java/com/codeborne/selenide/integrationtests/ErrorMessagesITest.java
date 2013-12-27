@@ -1,9 +1,12 @@
 package com.codeborne.selenide.integrationtests;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +14,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
-public class ErrorMessagesTest {
+public class ErrorMessagesITest {
   PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
 
   @Before
@@ -30,6 +36,22 @@ public class ErrorMessagesTest {
     timeout = 4000;
   }
 
+  @Before
+  public void mockScreenshots() {
+    Configuration.reportsUrl = "http://ci.org/";
+    WebDriverRunner.screenshots = new ScreenShotLaboratory() {
+      @Override
+      public String takeScreenShot() {
+        return new File(reportsFolder, "1.jpg").getAbsolutePath();
+      }
+    };
+  }
+
+  @After
+  public void resetScreenshots() {
+    WebDriverRunner.screenshots = null;
+  }
+
   @Test
   public void elementNotFound() {
     try {
@@ -38,6 +60,7 @@ public class ErrorMessagesTest {
     } catch (ElementNotFound expected) {
       assertEquals("Element not found {By.selector: h9}\n" +
           "Expected: text 'expected text'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -50,6 +73,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -62,6 +86,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have attribute name=header {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -75,6 +100,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -87,6 +113,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -99,6 +126,7 @@ public class ErrorMessagesTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -120,6 +148,7 @@ public class ErrorMessagesTest {
     } catch (ElementNotFound e) {
       assertEquals("Element not found {By.id: invalid_id}\n" +
           "Expected: visible\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", e.toString());
     }
   }
@@ -132,6 +161,7 @@ public class ErrorMessagesTest {
     } catch (ElementShouldNot e) {
       assertEquals("Element should not exist {By.selector: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", e.toString());
     }
   }
@@ -144,6 +174,7 @@ public class ErrorMessagesTest {
     } catch (ElementNotFound e) {
       assertEquals("Element not found {By.selector: h14}\n" +
           "Expected: not(hidden)\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", e.toString());
     }
   }

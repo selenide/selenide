@@ -6,19 +6,20 @@ import com.codeborne.selenide.impl.WebElementsCollection;
 import java.util.Arrays;
 
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
+import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 public class ElementNotFound extends AssertionError {
-  public ElementNotFound(String searchCriteria, Condition expectedCondition, long timeoutMs, String screenshot) {
+  public ElementNotFound(String searchCriteria, Condition expectedCondition, long timeoutMs) {
     super("Element not found {" + searchCriteria + '}' +
         "\nExpected: " + expectedCondition +
-        "\nScreenshot: " + screenshot +
+        screenshot() +
         timeout(timeoutMs));
   }
 
-  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, long timeoutMs, String screenshot) {
+  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, long timeoutMs) {
     super("Element not found {" + collection.description() + '}' +
         "\nExpected: " + Arrays.toString(expectedTexts) +
-        "\nScreenshot: " + screenshot +
+        screenshot() +
         timeout(timeoutMs));
   }
 

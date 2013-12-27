@@ -51,6 +51,28 @@ public class Configuration {
   public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
 
   /**
+   * Optional: URL of CI server where reports are published to.
+   * In case of Jenkins, it is "BUILD_URL/artifact" by default.
+   *
+   * If it's given, names of screenshots are printed as
+   * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
+   * failures in CI server.
+   */
+  public static String reportsUrl = getReportsUrl();
+
+  static String getReportsUrl() {
+    String reportsUrl = System.getProperty("selenide.reportsUrl");
+    if (reportsUrl == null || reportsUrl.trim().length() == 0) {
+      reportsUrl = getJenkinsReportsUrl();
+    }
+    return reportsUrl;
+  }
+
+  private static String getJenkinsReportsUrl() {
+    return System.getProperty("BUILD_URL") == null ? null : System.getProperty("BUILD_URL") + "artifact/";
+  }
+
+  /**
    * Mock "alert" and "confirm" javascript dialogs.
    * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
    *

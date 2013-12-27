@@ -6,15 +6,15 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static com.codeborne.selenide.ElementsCollection.elementsToString;
+import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 public class ListSizeMismatch extends AssertionError {
-  public ListSizeMismatch(int expectedSize, WebElementsCollection collection, List<WebElement> actualElements,
-                          long timeoutMs, String screenshot) {
+  public ListSizeMismatch(int expectedSize, WebElementsCollection collection, List<WebElement> actualElements, long timeoutMs) {
     super(": expected: " + expectedSize +
         ", actual: " + actualElements.size() +
         ", collection: " + collection.description() +
-        "\nScreenshot: " + screenshot +
+        screenshot() +
         timeout(timeoutMs) +
         "\nElements: " + elementsToString(actualElements)
     );

@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
-  public abstract void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs, String screenshot);
+  public abstract void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs);
 
   public static final CollectionCondition empty = size(0);
 

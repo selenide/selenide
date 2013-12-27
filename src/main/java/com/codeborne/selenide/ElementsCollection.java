@@ -11,7 +11,6 @@ import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.WebDriverRunner.takeScreenshot;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
@@ -57,8 +56,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    String screenshot = takeScreenshot();
-    condition.fail(collection, actualElements, timeoutMs, screenshot);
+    condition.fail(collection, actualElements, timeoutMs);
   }
 
   public ElementsCollection filter(Condition condition) {

@@ -23,7 +23,6 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.takeScreenshot;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
@@ -330,12 +329,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (currentTimeMillis() - startTime < timeoutMs);
 
-    String screenshot = takeScreenshot();
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs, screenshot);
+      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs, screenshot);
+      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs);
     }
   }
 
@@ -362,12 +360,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (currentTimeMillis() - startTime < timeoutMs);
 
-    String screenshot = takeScreenshot();
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs, screenshot);
+      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs);
     }
     else {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs, screenshot);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs);
     }
   }
 
