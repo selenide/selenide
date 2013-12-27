@@ -6,13 +6,17 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.io.File.separatorChar;
+import static java.lang.System.currentTimeMillis;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
+  protected AtomicLong screenshotCounter = new AtomicLong();
+
   public String takeScreenShot(String className, String methodName) {
     return takeScreenShot(getScreenshotFileName(className, methodName));
   }
@@ -26,6 +30,17 @@ public class ScreenShotLaboratory {
     return System.currentTimeMillis();
   }
 
+  public String takeScreenShot() {
+    String fileName = screenshotCounter.getAndIncrement() + "." + currentTimeMillis();
+    return takeScreenShot(fileName);
+  }
+
+  /**
+   * Takes screenshot of current browser window.
+   * Stores 2 files: html of page, and (if possible) image in PNG format.
+   * @param fileName name of file (without extension) to store screenshot to.
+   * @return the name of last saved file, it's either my_screenshot.png or my_screenshot.html (if failed to create png)
+   */
   public String takeScreenShot(String fileName) {
     WebDriver webdriver = getWebDriver();
     if (webdriver == null) {

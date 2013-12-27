@@ -37,11 +37,11 @@ public class ExactTexts extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs) {
+  public void fail(WebElementsCollection collection, List<WebElement> elements, long timeoutMs, String screenshot) {
     if (elements.isEmpty()) {
-      throw new ElementNotFound(collection, expectedTexts, timeoutMs);
+      throw new ElementNotFound(collection, expectedTexts, timeoutMs, screenshot);
     } else {
-      throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
+      throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs, screenshot);
     }
   }
 }

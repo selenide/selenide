@@ -147,4 +147,8 @@ public class WebDriverRunner {
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(fileName);
   }
+
+  public static String takeScreenshot() {
+    return screenshots.takeScreenShot();
+  }
 }

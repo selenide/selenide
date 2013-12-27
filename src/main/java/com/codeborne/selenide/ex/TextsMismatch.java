@@ -7,10 +7,12 @@ import java.util.Arrays;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 public class TextsMismatch extends AssertionError {
-  public TextsMismatch(WebElementsCollection collection, String[] actualTexts, String[] expectedTexts, long timeoutMs) {
+  public TextsMismatch(WebElementsCollection collection, String[] actualTexts,
+                       String[] expectedTexts, long timeoutMs, String screenshot) {
     super("\nActual: " + Arrays.toString(actualTexts) +
         "\nExpected: " + Arrays.toString(expectedTexts) +
         "\nCollection: " + collection.description() +
+        "\nScreenshot: " + screenshot +
         timeout(timeoutMs));
   }
 

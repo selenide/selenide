@@ -9,12 +9,15 @@ import static com.codeborne.selenide.ElementsCollection.elementsToString;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 public class ListSizeMismatch extends AssertionError {
-  public ListSizeMismatch(int expectedSize, WebElementsCollection collection, List<WebElement> actualElements, long timeoutMs) {
+  public ListSizeMismatch(int expectedSize, WebElementsCollection collection, List<WebElement> actualElements,
+                          long timeoutMs, String screenshot) {
     super(": expected: " + expectedSize +
         ", actual: " + actualElements.size() +
         ", collection: " + collection.description() +
+        "\nScreenshot: " + screenshot +
         timeout(timeoutMs) +
-        "\nElements: " + elementsToString(actualElements));
+        "\nElements: " + elementsToString(actualElements)
+    );
   }
 
   @Override

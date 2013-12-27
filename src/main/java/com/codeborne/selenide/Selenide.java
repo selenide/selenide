@@ -281,6 +281,8 @@ public class Selenide {
         return wrap(radio);
       }
     }
+
+    // TODO Take screenshot
     throw new NoSuchElementException(radioField + " and value " + value);
   }
 
@@ -333,6 +335,7 @@ public class Selenide {
 
   private static void checkDialogText(String expectedDialogText, String actualDialogText) {
     if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
+      // TODO Take screenshot
       throw new DialogTextMismatch(actualDialogText, expectedDialogText);
     }
   }

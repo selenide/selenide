@@ -23,7 +23,9 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.takeScreenshot;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
 
 abstract class AbstractSelenideElement implements InvocationHandler {
@@ -306,7 +308,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
-    final long startTime = System.currentTimeMillis();
+    final long startTime = currentTimeMillis();
     WebElement element;
     do {
       element = tryToGetElement();
@@ -326,18 +328,19 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
       sleep(pollingInterval);
     }
-    while (System.currentTimeMillis() - startTime < timeoutMs);
+    while (currentTimeMillis() - startTime < timeoutMs);
 
+    String screenshot = takeScreenshot();
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs);
+      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs, screenshot);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs);
+      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs, screenshot);
     }
   }
 
   protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
-    final long startTime = System.currentTimeMillis();
+    final long startTime = currentTimeMillis();
     WebElement element;
     do {
       element = tryToGetElement();
@@ -357,13 +360,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
       sleep(pollingInterval);
     }
-    while (System.currentTimeMillis() - startTime < timeoutMs);
+    while (currentTimeMillis() - startTime < timeoutMs);
 
+    String screenshot = takeScreenshot();
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs);
+      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs, screenshot);
     }
     else {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs, screenshot);
     }
   }
 
