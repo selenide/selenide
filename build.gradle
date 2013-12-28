@@ -69,11 +69,8 @@ task ie(type: Test) {
 }
 
 task chrome(type: Test) {
-  testLogging.showStandardStreams = true
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
-  systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
-  include '**/PageWithJQuery.*'
 }
 
 task phantomjs(type: Test) {
@@ -82,7 +79,6 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['browser'] = 'firefox'
-  maxParallelForks = 3
 }
 
 task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome']) {}
