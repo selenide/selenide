@@ -2,9 +2,13 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Configuration;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.WebDriverRunner.takeScreenshot;
 
 public class ErrorMessages {
+  private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());
+
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
       return "\nTimeout: " + timeoutMs + " ms.";
@@ -19,9 +23,14 @@ public class ErrorMessages {
   protected static String screenshot() {
     String screenshot = takeScreenshot();
     if (Configuration.reportsUrl != null) {
-      screenshot = screenshot.substring(System.getProperty("user.dir").length() + 1);
-      screenshot = Configuration.reportsUrl + screenshot;
+      String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
+      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath;
+      LOG.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" +
+        screenshotUrl + "'");
+      return "\nScreenshot: " + screenshotUrl;
     }
+
+    LOG.info("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
     return "\nScreenshot: " + screenshot;
   }
 }
