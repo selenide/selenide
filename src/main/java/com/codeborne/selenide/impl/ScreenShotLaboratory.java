@@ -31,7 +31,7 @@ public class ScreenShotLaboratory {
   }
 
   public String takeScreenShot() {
-    String fileName = screenshotCounter.getAndIncrement() + "." + currentTimeMillis();
+    String fileName = currentTimeMillis() + "." + screenshotCounter.getAndIncrement();
     return takeScreenShot(fileName);
   }
 
