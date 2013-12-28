@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
@@ -66,23 +65,26 @@ public class Configuration {
   public static String reportsUrl = getReportsUrl();
 
   static String getReportsUrl() {
-    Properties properties = System.getProperties();
-    for (String name : properties.stringPropertyNames()) {
-      LOG.info("System property: " + name + "=" + properties.getProperty(name));
-    }
+//    Properties properties = System.getProperties();
+//    for (String name : properties.stringPropertyNames()) {
+//      LOG.info("System property: " + name + "=" + properties.getProperty(name));
+//    }
     String reportsUrl = System.getProperty("selenide.reportsUrl");
-    if (reportsUrl == null || reportsUrl.trim().length() == 0) {
+    if (isEmpty(reportsUrl)) {
       reportsUrl = getJenkinsReportsUrl();
-    }
-    else {
+    } else {
       LOG.info("Using variable selenide.reportsUrl=" + reportsUrl);
     }
     return reportsUrl;
   }
 
+  private static boolean isEmpty(String s) {
+    return s == null || s.trim().length() == 0;
+  }
+
   private static String getJenkinsReportsUrl() {
     String build_url = System.getProperty("BUILD_URL");
-    if (build_url != null) {
+    if (!isEmpty(build_url)) {
       LOG.info("Using Jenkins BUILD_URL: " + build_url);
       return build_url + "artifact/";
     }

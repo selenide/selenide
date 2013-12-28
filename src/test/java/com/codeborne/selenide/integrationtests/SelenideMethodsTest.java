@@ -42,14 +42,14 @@ public class SelenideMethodsTest {
     assertFalse($("#theHiddenElement").isDisplayed());
     assertFalse($(By.name("non-existing-element")).isDisplayed());
 
-    $("#theHiddenElement").shouldBe(hidden).shouldBe(visible); // TODO
+    $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
     $("#theHiddenElement").waitUntil(disappears, 1000);
   }
 
   @Test
   public void userCanCheckIfElementIsReadonly() {
-    $(By.name("username")).shouldBe(readonly).shouldHave(text("TODO")); // TODO
+    $(By.name("username")).shouldBe(readonly);
     $(By.name("password")).shouldNotBe(readonly);
   }
 
@@ -116,7 +116,7 @@ public class SelenideMethodsTest {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
     $(By.name("password")).shouldBe(focused);
-    $(By.name("password")).shouldHave(value("sherlyn"), attribute("xxxxxx")); // TODO
+    $(By.name("password")).shouldHave(value("sherlyn"));
     $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
     assertEquals("sherlyn", $(By.name("password")).val());
   }

@@ -70,9 +70,10 @@ task chrome(type: Test) {
   testLogging.showStandardStreams = true
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
-  systemProperties['BUILD_URL'] = BUILD_URL
-  systemProperties['env.BUILD_URL'] = env.BUILD_URL
-  include '**/SelenideMethodsTest.*'
+//  systemProperties['BUILD_URL'] = ${BUILD_URL}
+  systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
+//  include '**/PageWithJQuery.*'
+//  include '**/ConditionTest.*'
 }
 
 task phantomjs(type: Test) {
