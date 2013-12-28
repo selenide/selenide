@@ -1,8 +1,13 @@
 package com.codeborne.selenide;
 
+import java.util.Properties;
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
 public class Configuration {
+  private static final Logger LOG = Logger.getLogger(Configuration.class.getName());
+
   public static String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
 
   public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
@@ -61,15 +66,30 @@ public class Configuration {
   public static String reportsUrl = getReportsUrl();
 
   static String getReportsUrl() {
+    Properties properties = System.getProperties();
+    for (String name : properties.stringPropertyNames()) {
+      LOG.info("System property: " + name + "=" + properties.getProperty(name));
+    }
     String reportsUrl = System.getProperty("selenide.reportsUrl");
     if (reportsUrl == null || reportsUrl.trim().length() == 0) {
       reportsUrl = getJenkinsReportsUrl();
+    }
+    else {
+      LOG.info("Using variable selenide.reportsUrl=" + reportsUrl);
     }
     return reportsUrl;
   }
 
   private static String getJenkinsReportsUrl() {
-    return System.getProperty("BUILD_URL") == null ? null : System.getProperty("BUILD_URL") + "artifact/";
+    String build_url = System.getProperty("BUILD_URL");
+    if (build_url != null) {
+      LOG.info("Using Jenkins BUILD_URL: " + build_url);
+      return build_url + "artifact/";
+    }
+    else {
+      LOG.info("No BUILD_URL variable found. It's not Jenkins.");
+      return null;
+    }
   }
 
   /**
