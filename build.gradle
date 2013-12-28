@@ -52,12 +52,7 @@ task libs(type: Sync) {
 classes.dependsOn libs
 
 test {
-  systemProperties['file.encoding'] = 'UTF-8'
-  testLogging.showStandardStreams = true
   systemProperties['browser'] = 'htmlunit'
-  systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
-  include '**/PageWithJQuery.*'
-  maxParallelForks = 3
 }
 
 task ie(type: Test) {
@@ -79,6 +74,14 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['browser'] = 'firefox'
+}
+
+tasks.withType(Test).all { testTask ->
+  testTask.systemProperties['file.encoding'] = 'UTF-8'
+  testTask.testLogging.showStandardStreams = true
+  testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
+//  testTask.include '**/ConditionTest.*'
+  testTask.maxParallelForks = 3
 }
 
 task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome']) {}
