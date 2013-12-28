@@ -67,9 +67,12 @@ task ie(type: Test) {
 }
 
 task chrome(type: Test) {
+  testLogging.showStandardStreams = true
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
-  maxParallelForks = 3
+  systemProperties['BUILD_URL'] = BUILD_URL
+  systemProperties['env.BUILD_URL'] = env.BUILD_URL
+  include '**/SelenideMethodsTest.*'
 }
 
 task phantomjs(type: Test) {
