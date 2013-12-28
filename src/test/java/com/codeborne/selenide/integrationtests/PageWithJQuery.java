@@ -31,6 +31,6 @@ public class PageWithJQuery {
     $("#username").append(" ");
     $("#username").append("bon-jovi");
 
-    $("h2").shouldHave(text("XXX john bon-jovi")); // TODO
+    $("h2").shouldHave(text("john bon-jovi"));
   }
 }

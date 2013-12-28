@@ -47,6 +47,13 @@ public class Configuration {
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
+   * Does Selenide need to take screenshots on failing tests.
+   *
+   * Default value: true
+   */
+  public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
+
+  /**
    * Folder to store screenshots to.
    * Can be configured either programmatically or by system property "-Dselenide.reports=true".
    *

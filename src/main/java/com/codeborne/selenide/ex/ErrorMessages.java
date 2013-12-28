@@ -21,6 +21,11 @@ public class ErrorMessages {
   }
 
   protected static String screenshot() {
+    if (!Configuration.screenshots) {
+      LOG.fine("Automatic screenshots are disabled.");
+      return "";
+    }
+
     String screenshot = takeScreenshot();
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
