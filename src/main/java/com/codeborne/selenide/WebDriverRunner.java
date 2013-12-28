@@ -92,6 +92,20 @@ public class WebDriverRunner {
   }
 
   /**
+   * Is Selenide configured to use Firefox browser
+   */
+  public static boolean isFirefox() {
+    return FIREFOX.equalsIgnoreCase(browser);
+  }
+
+  /**
+   * Is Selenide configured to use Chrome browser
+   */
+  public static boolean isChrome() {
+    return CHROME.equalsIgnoreCase(browser);
+  }
+
+  /**
    * Is Selenide configured to use Internet Explorer browser
    */
   public static boolean ie() {
