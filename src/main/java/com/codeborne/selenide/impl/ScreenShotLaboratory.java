@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.io.File.separatorChar;
-import static java.lang.System.currentTimeMillis;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
@@ -31,8 +30,11 @@ public class ScreenShotLaboratory {
   }
 
   public String takeScreenShot() {
-    String fileName = currentTimeMillis() + "." + screenshotCounter.getAndIncrement();
-    return takeScreenShot(fileName);
+    return takeScreenShot(generateScreenshotFileName());
+  }
+
+  protected String generateScreenshotFileName() {
+    return timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
   /**
