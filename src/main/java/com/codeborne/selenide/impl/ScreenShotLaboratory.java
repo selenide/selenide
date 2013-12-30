@@ -51,7 +51,7 @@ public class ScreenShotLaboratory {
    */
   public String takeScreenShot(String fileName) {
     WebDriver webdriver = getWebDriver();
-    if (webdriver == null) {
+    if (webdriver == null) {  // TODO it's never null. Use smarter check.
       System.err.println("Cannot take screenshot because browser is not started");
       return null;
     }

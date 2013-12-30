@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -12,7 +13,9 @@ import java.net.URL;
 import java.util.Collection;
 
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -282,8 +285,7 @@ public class Selenide {
       }
     }
 
-    // TODO Take screenshot
-    throw new NoSuchElementException(radioField + " and value " + value);
+    throw new ElementNotFound(radioField, value(value), 0);
   }
 
   public static SelenideElement getSelectedRadio(By radioField) {
@@ -371,7 +373,7 @@ public class Selenide {
 
   public static FluentWait<WebDriver> Wait() {
     return new FluentWait<WebDriver>(getWebDriver())
-        .withTimeout(Configuration.timeout, MILLISECONDS)
+        .withTimeout(timeout, MILLISECONDS)
         .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
   }
 

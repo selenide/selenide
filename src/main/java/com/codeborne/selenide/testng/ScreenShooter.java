@@ -4,6 +4,7 @@ import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
 import static com.codeborne.selenide.WebDriverRunner.screenshots;
+import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
  * Annotate your test class with <code>@Listeners({ ScreenShooter.class})</code>
@@ -30,7 +31,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     super.onTestSuccess(result);
     if (captureSuccessfulTests) {
-      System.out.println("Saved succeeded test screenshot to " + screenshots.takeScreenShot());
+      System.out.println(screenshot());
     }
     screenshots.endContext();
   }

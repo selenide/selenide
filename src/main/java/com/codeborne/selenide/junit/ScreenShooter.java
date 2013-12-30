@@ -4,7 +4,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import static com.codeborne.selenide.WebDriverRunner.screenshots;
-import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
+import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
  * Usage:
@@ -37,7 +37,7 @@ public class ScreenShooter extends TestWatcher {
   @Override
   protected void succeeded(Description test) {
     if (captureSuccessfulTests) {
-      System.err.println("Saved successful test screenshot to " + takeScreenShot());
+      System.out.println(screenshot());
     }
   }
 

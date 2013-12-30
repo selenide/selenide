@@ -2,6 +2,8 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Configuration;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
@@ -20,22 +22,28 @@ public class ErrorMessages {
     return "\nTimeout: " + String.format("%.3f", timeoutMs/1000.0) + " s.";
   }
 
-  protected static String screenshot() {
+  public static String screenshot() {
     if (!Configuration.screenshots) {
       LOG.fine("Automatic screenshots are disabled.");
       return "";
     }
 
-    String screenshot = takeScreenShot();
+    return formatScreenShotPath(takeScreenShot());
+  }
+
+  private static String formatScreenShotPath(String screenshot) {
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
       String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath;
-      LOG.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" +
-        screenshotUrl + "'");
+      LOG.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
       return "\nScreenshot: " + screenshotUrl;
     }
 
     LOG.info("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
-    return "\nScreenshot: " + screenshot;
+    try {
+      return "\nScreenshot: " + new File(screenshot).toURI().toURL().toExternalForm();
+    } catch (MalformedURLException e) {
+      return "\nScreenshot: file://" + screenshot;
+    }
   }
 }
