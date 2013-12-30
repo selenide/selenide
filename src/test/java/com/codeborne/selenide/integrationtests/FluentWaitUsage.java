@@ -19,6 +19,6 @@ public class FluentWaitUsage {
   public void canUseSeleniumFluentWaitAPI() {
     Wait().until(invisibilityOfElementLocated(By.id("magic-id")));
     Wait().until(presenceOfAllElementsLocatedBy(By.tagName("h1")));
-    Wait().until(textToBePresentInElement(By.tagName("h2"), "Dropdown list"));
+    Wait().until(textToBePresentInElementLocated(By.tagName("h2"), "Dropdown list"));
   }
 }
