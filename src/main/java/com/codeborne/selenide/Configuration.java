@@ -79,6 +79,9 @@ public class Configuration {
     String reportsUrl = System.getProperty("selenide.reportsUrl");
     if (isEmpty(reportsUrl)) {
       reportsUrl = getJenkinsReportsUrl();
+      if (isEmpty(reportsUrl)) {
+        LOG.info("Variable selenide.reportsUrl not found");
+      }
     } else {
       LOG.info("Using variable selenide.reportsUrl=" + reportsUrl);
     }
