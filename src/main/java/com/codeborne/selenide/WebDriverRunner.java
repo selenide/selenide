@@ -162,7 +162,7 @@ public class WebDriverRunner {
     return screenshots.takeScreenShot(fileName);
   }
 
-  public static String takeScreenshot() {
+  public static String takeScreenShot() {
     return screenshots.takeScreenShot();
   }
 }

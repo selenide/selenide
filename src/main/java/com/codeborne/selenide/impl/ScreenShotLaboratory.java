@@ -6,15 +6,21 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.google.common.base.Objects.firstNonNull;
 import static java.io.File.separatorChar;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
+  protected String currentContext = "";
+  protected List<String> currentContextScreenshots;
+  protected List<String> allScreenshots = new ArrayList<String>();
 
   public String takeScreenShot(String className, String methodName) {
     return takeScreenShot(getScreenshotFileName(className, methodName));
@@ -34,7 +40,7 @@ public class ScreenShotLaboratory {
   }
 
   protected String generateScreenshotFileName() {
-    return timestamp() + "." + screenshotCounter.getAndIncrement();
+    return currentContext + timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
   /**
@@ -50,28 +56,46 @@ public class ScreenShotLaboratory {
       return null;
     }
 
-    File targetFile = new File(reportsFolder, fileName + ".html");
+    File pageSource = savePageSourceToFile(fileName, webdriver);
+    File imageFile = savePageImageToFile(fileName, webdriver);
+
+    String screenshot = firstNonNull(imageFile, pageSource).getAbsolutePath();
+    return addToHistory(screenshot);
+  }
+
+  protected File savePageImageToFile(String fileName, WebDriver webdriver) {
+    File imageFile = null;
+    if (webdriver instanceof TakesScreenshot) {
+      imageFile = takeScreenshotImage((TakesScreenshot) webdriver, fileName);
+    } else if (webdriver instanceof RemoteWebDriver) {
+      WebDriver remoteDriver = new Augmenter().augment(webdriver);
+      if (remoteDriver instanceof TakesScreenshot) {
+        imageFile = takeScreenshotImage((TakesScreenshot) remoteDriver, fileName);
+      }
+    }
+    return imageFile;
+  }
+
+  protected File savePageSourceToFile(String fileName, WebDriver webdriver) {
+    File pageSource = new File(reportsFolder, fileName + ".html");
 
     try {
-      writeToFile(webdriver.getPageSource(), targetFile);
+      writeToFile(webdriver.getPageSource(), pageSource);
     } catch (Exception e) {
       System.err.println(e);
     }
-
-    if (webdriver instanceof TakesScreenshot) {
-      targetFile = takeScreenshotImage((TakesScreenshot) webdriver, fileName, targetFile);
-    }
-    else if (webdriver instanceof RemoteWebDriver) {
-      WebDriver remoteDriver = new Augmenter().augment(webdriver);
-      if (remoteDriver instanceof TakesScreenshot) {
-        targetFile = takeScreenshotImage((TakesScreenshot) remoteDriver, fileName, targetFile);
-      }
-    }
-
-    return targetFile.getAbsolutePath();
+    return pageSource;
   }
 
-  protected File takeScreenshotImage(TakesScreenshot driver, String fileName, final File targetFile) {
+  protected String addToHistory(String screenshot) {
+    if (currentContextScreenshots != null) {
+      currentContextScreenshots.add(screenshot);
+    }
+    allScreenshots.add(screenshot);
+    return screenshot;
+  }
+
+  protected File takeScreenshotImage(TakesScreenshot driver, String fileName) {
     try {
       File scrFile = driver.getScreenshotAs(FILE);
       File imageFile = new File(reportsFolder, fileName + ".png");
@@ -79,8 +103,8 @@ public class ScreenShotLaboratory {
       return imageFile;
     } catch (Exception e) {
       System.err.println(e);
+      return null;
     }
-    return targetFile;
   }
 
   protected void copyFile(File sourceFile, File targetFile) throws IOException {
@@ -119,5 +143,26 @@ public class ScreenShotLaboratory {
       }
     }
     return targetFile;
+  }
+
+  public void startContext(String className, String methodName) {
+    String context = className.replace('.', separatorChar) + separatorChar + methodName + separatorChar;
+    startContext(context);
+  }
+
+  public void startContext(String context) {
+    this.currentContext = context;
+    currentContextScreenshots = new ArrayList<String>();
+  }
+
+  public List<String> endContext() {
+    List<String> result = currentContextScreenshots;
+    this.currentContext = "";
+    currentContextScreenshots = null;
+    return result;
+  }
+
+  public List<String> getScreenshots() {
+    return allScreenshots;
   }
 }

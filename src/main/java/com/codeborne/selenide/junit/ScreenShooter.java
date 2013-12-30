@@ -3,6 +3,7 @@ package com.codeborne.selenide.junit;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import static com.codeborne.selenide.WebDriverRunner.screenshots;
 import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
 
 /**
@@ -14,7 +15,6 @@ import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
  * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().succeededTests();</pre>
  */
 public class ScreenShooter extends TestWatcher {
-  public boolean captureFailingTests = true;
   public boolean captureSuccessfulTests;
 
   private ScreenShooter() {
@@ -30,18 +30,19 @@ public class ScreenShooter extends TestWatcher {
   }
 
   @Override
-  protected void failed(Throwable e, Description description) {
-    if (captureFailingTests) {
-      System.err.println("Saved failed test screenshot to: " +
-          takeScreenShot(description.getClassName(), description.getMethodName()));
+  protected void starting(Description test) {
+    screenshots.startContext(test.getClassName(), test.getMethodName());
+  }
+
+  @Override
+  protected void succeeded(Description test) {
+    if (captureSuccessfulTests) {
+      System.err.println("Saved successful test screenshot to " + takeScreenShot());
     }
   }
 
   @Override
-  protected void succeeded(Description description) {
-    if (captureSuccessfulTests) {
-      System.err.println("Saved successful test screenshot to: " +
-          takeScreenShot(description.getClassName(), description.getMethodName()));
-    }
+  protected void finished(Description description) {
+    screenshots.endContext();
   }
 }

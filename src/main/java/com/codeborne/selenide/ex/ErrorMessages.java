@@ -4,7 +4,7 @@ import com.codeborne.selenide.Configuration;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.takeScreenshot;
+import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
 
 public class ErrorMessages {
   private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());
@@ -26,7 +26,7 @@ public class ErrorMessages {
       return "";
     }
 
-    String screenshot = takeScreenshot();
+    String screenshot = takeScreenShot();
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
       String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath;
