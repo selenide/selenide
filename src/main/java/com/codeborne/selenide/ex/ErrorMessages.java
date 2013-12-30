@@ -6,7 +6,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.takeScreenShot;
+import static com.codeborne.selenide.Screenshots.takeScreenShot;
 
 public class ErrorMessages {
   private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());

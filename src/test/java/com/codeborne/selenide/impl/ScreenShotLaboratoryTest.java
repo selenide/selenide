@@ -46,7 +46,7 @@ public class ScreenShotLaboratoryTest {
     assertEquals("ui/MyTest/test_some_method/12356789.1", screenshots.takeScreenShot());
     assertEquals("ui/MyTest/test_some_method/12356789.2", screenshots.takeScreenShot());
 
-    List<String> contextScreenshots = screenshots.endContext();
+    List<String> contextScreenshots = screenshots.finishContext();
     assertEquals(asList(
         "ui/MyTest/test_some_method/12356789.0",
         "ui/MyTest/test_some_method/12356789.1",
@@ -59,10 +59,10 @@ public class ScreenShotLaboratoryTest {
     screenshots.startContext("ui/MyTest/test_some_method/");
     screenshots.takeScreenShot();
     screenshots.takeScreenShot();
-    screenshots.endContext();
+    screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
     screenshots.takeScreenShot();
-    screenshots.endContext();
+    screenshots.finishContext();
     screenshots.takeScreenShot();
     screenshots.takeScreenShot();
 

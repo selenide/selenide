@@ -155,7 +155,7 @@ public class ScreenShotLaboratory {
     currentContextScreenshots = new ArrayList<String>();
   }
 
-  public List<String> endContext() {
+  public List<String> finishContext() {
     List<String> result = currentContextScreenshots;
     this.currentContext = "";
     currentContextScreenshots = null;

@@ -1,9 +1,9 @@
 package com.codeborne.selenide.junit;
 
+import com.codeborne.selenide.Screenshots;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import static com.codeborne.selenide.WebDriverRunner.screenshots;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -31,7 +31,7 @@ public class ScreenShooter extends TestWatcher {
 
   @Override
   protected void starting(Description test) {
-    screenshots.startContext(test.getClassName(), test.getMethodName());
+    Screenshots.startContext(test.getClassName(), test.getMethodName());
   }
 
   @Override
@@ -43,6 +43,6 @@ public class ScreenShooter extends TestWatcher {
 
   @Override
   protected void finished(Description description) {
-    screenshots.endContext();
+    Screenshots.finishContext();
   }
 }

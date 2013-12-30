@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -9,7 +8,6 @@ import static com.codeborne.selenide.Configuration.browser;
 
 public class WebDriverRunner {
   public static WebDriverThreadLocalContainer webdriverContainer = new WebDriverThreadLocalContainer();
-  public static ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
@@ -154,15 +152,19 @@ public class WebDriverRunner {
     return webdriverContainer.getCurrentUrl();
   }
 
+  /**
+   * @deprecated Use com.codeborne.selenide.Screenshots#takeScreenShot(java.lang.String, java.lang.String)
+   */
+  @Deprecated
   public static String takeScreenShot(String className, String methodName) {
-    return screenshots.takeScreenShot(className, methodName);
+    return Screenshots.takeScreenShot(className, methodName);
   }
 
+  /**
+   * @deprecated Use com.codeborne.selenide.Screenshots#takeScreenShot(java.lang.String)
+   */
+  @Deprecated
   public static String takeScreenShot(String fileName) {
-    return screenshots.takeScreenShot(fileName);
-  }
-
-  public static String takeScreenShot() {
-    return screenshots.takeScreenShot();
+    return Screenshots.takeScreenShot(fileName);
   }
 }

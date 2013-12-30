@@ -1,13 +1,15 @@
 package com.codeborne.selenide.integrationtests;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,7 +42,7 @@ public class ErrorMessagesITest {
   public void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
     Configuration.reportsUrl = "http://ci.org/";
-    WebDriverRunner.screenshots = new ScreenShotLaboratory() {
+    Screenshots.screenshots = new ScreenShotLaboratory() {
       @Override
       public String takeScreenShot() {
         return new File(reportsFolder, "1.jpg").getAbsolutePath();
@@ -51,7 +53,7 @@ public class ErrorMessagesITest {
   @After
   public void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
-    WebDriverRunner.screenshots = new ScreenShotLaboratory();
+    Screenshots.screenshots = new ScreenShotLaboratory();
   }
 
   @Test

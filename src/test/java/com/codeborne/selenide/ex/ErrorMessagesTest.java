@@ -1,12 +1,12 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.codeborne.selenide.Screenshots.screenshots;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -23,7 +23,7 @@ public class ErrorMessagesTest {
   @AfterClass
   public static void restoreOldValues() {
     Configuration.reportsUrl = reportsUrl;
-    WebDriverRunner.screenshots = new ScreenShotLaboratory();
+    screenshots = new ScreenShotLaboratory();
   }
 
   @Test
@@ -41,8 +41,8 @@ public class ErrorMessagesTest {
   public void convertsScreenshotFileNameToCIUrl() {
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     String currentDir = System.getProperty("user.dir");
-    WebDriverRunner.screenshots = mock(ScreenShotLaboratory.class);
-    doReturn(currentDir + "/test-result/12345.png").when(WebDriverRunner.screenshots).takeScreenShot();
+    screenshots = mock(ScreenShotLaboratory.class);
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png",
         ErrorMessages.screenshot());

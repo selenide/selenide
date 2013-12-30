@@ -1,9 +1,9 @@
 package com.codeborne.selenide.testng;
 
+import com.codeborne.selenide.Screenshots;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
-import static com.codeborne.selenide.WebDriverRunner.screenshots;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -18,13 +18,13 @@ public class ScreenShooter extends ExitCodeListener {
 
     String className = result.getMethod().getTestClass().getName();
     String methodName = result.getMethod().getMethodName();
-    screenshots.startContext(className, methodName);
+    Screenshots.startContext(className, methodName);
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
     super.onTestFailure(result);
-    screenshots.endContext();
+    Screenshots.finishContext();
   }
 
   @Override
@@ -33,6 +33,6 @@ public class ScreenShooter extends ExitCodeListener {
     if (captureSuccessfulTests) {
       System.out.println(screenshot());
     }
-    screenshots.endContext();
+    Screenshots.finishContext();
   }
 }
