@@ -26,8 +26,4 @@ public class Screenshots {
   public static List<String> finishContext() {
     return screenshots.finishContext();
   }
-
-  public static List<String> getScreenshots() {
-    return screenshots.getScreenshots();
-  }
 }
