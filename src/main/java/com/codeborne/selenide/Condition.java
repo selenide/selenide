@@ -10,20 +10,6 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Selenide.getFocusedElement;
 
 public abstract class Condition implements Predicate<WebElement> {
-  public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ')') {
-      @Override
-      public boolean apply(WebElement element) {
-        return !condition.apply(element);
-      }
-
-      @Override
-      public String actualValue(WebElement element) {
-        return condition.actualValue(element);
-      }
-    };
-  }
-
   /**
    * <code>$("input").shouldBe(visible);</code>
    */
@@ -223,20 +209,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * 2) For other elements, check that text is empty
    * <code>$("h2").shouldBe(empty)</code>
    */
-  public static final Condition empty = new Condition("empty") {
-    private final Condition emptyValue = value("");
-    private final Condition emptyText = exactText("");
-
-    @Override
-    public boolean apply(WebElement element) {
-      return emptyValue.apply(element) && emptyText.apply(element);
-    }
-
-    @Override
-    public String actualValue(WebElement element) {
-      return "value=" + getAttributeValue(element, "value") + ", text='" + element.getText() + '\'';
-    }
-  };
+  public static final Condition empty = and("empty", value(""), exactText(""));
 
   /**
    * <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code>
@@ -513,6 +486,61 @@ public abstract class Condition implements Predicate<WebElement> {
       return String.valueOf(element.isSelected());
     }
   };
+
+  /**
+   * Negate given condition.
+   *
+   * Used for methods like $.shouldNot(exist), $.shouldNotBe(visible)
+   *
+   * Typically you don't need to use it.
+   */
+  public static Condition not(final Condition condition) {
+    return new Condition("not(" + condition.name + ')') {
+      @Override
+      public boolean apply(WebElement element) {
+        return !condition.apply(element);
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return condition.actualValue(element);
+      }
+    };
+  }
+
+  /**
+   * Check if element matches all given conditions.
+   * @param name Name of this condition, like "empty" (that means empty text AND empty value).
+   * @param condition Conditions to match.
+   * @return logical AND for given conditions.
+   */
+  public static Condition and(String name, final Condition... condition) {
+    return new Condition(name) {
+      protected Condition lastFailedCondition;
+
+      @Override
+      public boolean apply(WebElement element) {
+        for (Condition c : condition) {
+          if (!c.apply(element)) {
+            lastFailedCondition = c;
+            return false;
+          }
+        }
+        return true;
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return lastFailedCondition == null ? null : lastFailedCondition.actualValue(element);
+      }
+
+      @Override
+      public String toString() {
+        return lastFailedCondition == null ? super.toString() : lastFailedCondition.toString();
+      }
+    };
+  }
+
 
   protected final String name;
   protected final boolean nullIsAllowed;
