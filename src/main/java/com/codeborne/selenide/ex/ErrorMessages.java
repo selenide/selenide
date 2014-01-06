@@ -1,6 +1,8 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -20,6 +22,16 @@ public class ErrorMessages {
     }
 
     return "\nTimeout: " + String.format("%.3f", timeoutMs/1000.0) + " s.";
+  }
+
+  public static String actualValue(Condition condition, WebElement element) {
+    if (element != null) {
+      String actualValue = condition.actualValue(element);
+      if (actualValue != null) {
+        return "\nActual value: " + actualValue;
+      }
+    }
+    return "";
   }
 
   public static String screenshot() {

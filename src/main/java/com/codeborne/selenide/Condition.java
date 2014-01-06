@@ -24,46 +24,55 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
+  /**
+   * <code>$("input").shouldBe(visible);</code>
+   */
   public static final Condition visible = new Condition("visible") {
     @Override
     public boolean apply(WebElement element) {
       return element.isDisplayed();
     }
-    @Override
-    public String actualValue(WebElement element) {
-      return element.isDisplayed() ? "visible" : "hidden";
-    }
   };
 
+  /**
+   * Check if element exist. It can be visible or hidden.
+   *
+   * <code>$("input").should(exist);</code>
+   */
   public static final Condition exist = new Condition("exist") {
     @Override
     public boolean apply(WebElement element) {
       element.isDisplayed();
       return true;
     }
-
-    @Override
-    public String actualValue(WebElement element) {
-      return "exists";
-    }
   };
 
+  /**
+   * @see #exist
+   *
+   * <code>$("input").shouldBe(present);</code>
+   */
   public static final Condition present = exist;
 
+  /**
+   * <code>$("input").should(notPresent);</code>
+   *
+   * @deprecated Use method $.shouldNot(exist) or $.shouldNotBe(present).
+   */
+  @Deprecated
   public static final Condition notPresent = new Condition("notPresent", true) {
     @Override
     public boolean apply(WebElement element) {
       return false;
     }
-
-    @Override
-    public String actualValue(WebElement element) {
-      return "exists";
-    }
   };
 
   /**
    * Checks that element is not visible or does not exists.
+   *
+   * Opposite to com.codeborne.selenide.Condition#appear
+   *
+   * <code>$("input").shouldBe(hidden);</code>
    */
   public static final Condition hidden = new Condition("hidden", true) {
     @Override
@@ -74,15 +83,12 @@ public abstract class Condition implements Predicate<WebElement> {
         return true;
       }
     }
-    @Override
-    public String actualValue(WebElement element) {
-      return element.isDisplayed() ? "visible" : "hidden";
-    }
   };
 
   /**
-   * Synonym for #visible - may be used for better readability
-   * $("#logoutLink").should(appear);
+   * Synonym for com.codeborne.selenide.Condition#appear - may be used for better readability
+   *
+   * <code>$("#logoutLink").should(appear);</code>
    */
   public static final Condition appear = visible;
 
@@ -91,24 +97,26 @@ public abstract class Condition implements Predicate<WebElement> {
    * $("#logoutLink").waitUntil(appears, 10000);
 
    * Thought the same can be done in a shorter way:
-   * waitFor(By.id("logoutLink");
+   * <code>waitFor(By.id("logoutLink");</code>
    */
   public static final Condition appears = visible;
 
   /**
-   * Synonym for #hidden - may be used for better readability:
-   * $("#loginLink").waitUntil(disappears, 9000);
+   * Synonym for com.codeborne.selenide.Condition#hidden - may be used for better readability:
+   *
+   * <code>$("#loginLink").waitUntil(disappears, 9000);</code>
    */
   public static final Condition disappears = hidden;
 
   /**
-     * Synonym for #hidden - may be used for better readability:
+     * Synonym for com.codeborne.selenide.Condition#hidden - may be used for better readability:
+   *
      * $("#loginLink").should(disappear);
      */
   public static final Condition disappear = hidden;
 
   /**
-   * $("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);
+   * <code>$("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);</code>
    * @param attributeName name of attribute
    * @param attributeValue expected value of attribute
    */
@@ -118,11 +126,15 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * Check if element has "readonly" attribute (with any value)
+   *
+   * <code>$("input").shouldBe(readonly);</code>
    */
   public static final Condition readonly = attribute("readonly");
 
   /**
    * Check if element has given attribute (with any value)
+   *
+   * <code>$("#mydiv").shouldHave(attribute("fileId"));</code>
    *
    * @param attributeName name of attribute, not null
    * @return true iff attribute exists
@@ -134,10 +146,6 @@ public abstract class Condition implements Predicate<WebElement> {
         return element.getAttribute(attributeName) != null;
       }
       @Override
-      public String actualValue(WebElement element) {
-        return element.getAttribute(attributeName);
-      }
-      @Override
       public String toString() {
         return "attribute " + attributeName;
       }
@@ -145,7 +153,8 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#mydiv").shouldHave(attribute("fileId", "12345"));
+   * <code>$("#mydiv").shouldHave(attribute("fileId", "12345"));</code>
+   *
    * @param attributeName name of attribute
    * @param expectedAttributeValue expected value of attribute
    */
@@ -154,10 +163,6 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public boolean apply(WebElement element) {
         return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
-      }
-      @Override
-      public String actualValue(WebElement element) {
-        return element.getAttribute(attributeName);
       }
       @Override
       public String toString() {
@@ -172,7 +177,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#input").shouldHave(value("John"))
+   * <code>$("#input").shouldHave(value("John"));</code>
    * @param value expected value of input field
    */
   public static Condition value(String value) {
@@ -188,7 +193,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#input").shouldHave(name("username"))
+   * <code>$("#input").shouldHave(name("username"))</code>
    * @param name expected name of input field
    */
   public static Condition name(String name) {
@@ -196,7 +201,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#input").shouldHave(type("checkbox"))
+   * <code>$("#input").shouldHave(type("checkbox"))</code>
    * @param type expected type of input field
    */
   public static Condition type(String type) {
@@ -204,7 +209,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#input").shouldHave(id("myForm"))
+   * <code>$("#input").shouldHave(id("myForm"))</code>
    * @param id expected id of input field
    */
   public static Condition id(String id) {
@@ -213,10 +218,10 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * 1) For input element, check that value is missing or empty
-   * $("#input").shouldBe(empty)
+   * <code>$("#input").shouldBe(empty)</code>
    *
    * 2) For other elements, check that text is empty
-   * $("h2").shouldBe(empty)
+   * <code>$("h2").shouldBe(empty)</code>
    */
   public static final Condition empty = new Condition("empty") {
     private final Condition emptyValue = value("");
@@ -234,7 +239,7 @@ public abstract class Condition implements Predicate<WebElement> {
   };
 
   /**
-   * $(".error_message").waitWhile(matchesText("Exception"), 12000)
+   * <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code>
    *
    * @see #matchText(String)
    */
@@ -245,7 +250,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Assert that given element's text matches given regular expression
    *
-   * $("h1").should(matchText("Hello\s*John"))
+   * <code>$("h1").should(matchText("Hello\s*John"))</code>
    *
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
@@ -256,10 +261,6 @@ public abstract class Condition implements Predicate<WebElement> {
         return Html.text.matches(element.getText(), regex);
       }
       @Override
-      public String actualValue(WebElement element) {
-        return element.getText();
-      }
-      @Override
       public String toString() {
         return "match text '" + regex + '\'';
       }
@@ -267,8 +268,10 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").waitUntil(hasText("Hello"), 10000)
+   * <code>$("h1").waitUntil(hasText("Hello"), 10000)</code>
+   *
    * <p>Case insensitive</p>
+   *
    * NB! Ignores multiple whitespaces between words
    * @param text expected text of HTML element
    */
@@ -277,7 +280,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").shouldHave(text("Hello\s*John"))
+   * <code>$("h1").shouldHave(text("Hello\s*John"))</code>
    *
    * <p>NB! Case insensitive</p>
    *
@@ -291,10 +294,7 @@ public abstract class Condition implements Predicate<WebElement> {
       public boolean apply(WebElement element) {
         return Html.text.contains(element.getText(), text.toLowerCase());
       }
-      @Override
-      public String actualValue(WebElement element) {
-        return element.getText();
-      }
+
       @Override
       public String toString() {
         return "text '" + text + '\'';
@@ -303,7 +303,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").shouldHave(textCaseSensitive("Hello\s*John"))
+   * <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -314,10 +314,6 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.containsCaseSensitive(element.getText(), text);
-      }
-      @Override
-      public String actualValue(WebElement element) {
-        return element.getText();
       }
       @Override
       public String toString() {
@@ -341,10 +337,6 @@ public abstract class Condition implements Predicate<WebElement> {
         return Html.text.equals(element.getText(), text);
       }
       @Override
-      public String actualValue(WebElement element) {
-        return element.getText();
-      }
-      @Override
       public String toString() {
         return "exactly the text '" + text + '\'';
       }
@@ -352,7 +344,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").shouldHave(exactTextCaseSensitive("Hello"))
+   * <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -365,10 +357,6 @@ public abstract class Condition implements Predicate<WebElement> {
         return Html.text.equalsCaseSensitive(element.getText(), text);
       }
       @Override
-      public String actualValue(WebElement element) {
-        return element.getText();
-      }
-      @Override
       public String toString() {
         return "exactly the text '" + text + '\'';
       }
@@ -376,15 +364,21 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#my-select-box").waitUntil(hasOptions(), 7000);
+   * <code>$("#my-select-box").waitUntil(hasOptions(), 7000);</code>
+   * @deprecated
+   * @see Condition#options
    */
+  @Deprecated
   public static Condition hasOptions() {
     return options;
   }
 
   /**
-   * $("input").shouldHave(options);
+   * <code>$("input").shouldHave(options);</code>
+   *
+   * @deprecated Not needed anymore. Use methods $.selectOption() or $.selectOptionByValue().
    */
+  @Deprecated
   public static final Condition options = new Condition("hasOptions") {
     @Override
     public boolean apply(WebElement element) {
@@ -438,25 +432,21 @@ public abstract class Condition implements Predicate<WebElement> {
         return hasClass(element, cssClass);
       }
       @Override
-      public String actualValue(WebElement element) {
-        return "class=" + element.getAttribute("class");
-      }
-      @Override
       public String toString() {
         return "CSS class '" + cssClass + '\'';
       }
     };
   }
 
+  /**
+   * @deprecated Use method $.shouldNotHave(cssClass("abc"))
+   */
+  @Deprecated
   public static Condition hasNotClass(final String cssClass) {
     return new Condition("hasNotClass") {
       @Override
       public boolean apply(WebElement element) {
         return !hasClass(element, cssClass);
-      }
-      @Override
-      public String actualValue(WebElement element) {
-        return "class=" + element.getAttribute("class");
       }
       @Override
       public String toString() {
@@ -465,6 +455,9 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
+  /**
+   * Check if browser focus is currently in given element.
+   */
   public static final Condition focused = new Condition("focused") {
     @Override public boolean apply(WebElement webElement) {
       WebElement focusedElement = getFocusedElement();
@@ -529,11 +522,17 @@ public abstract class Condition implements Predicate<WebElement> {
     this(name, false);
   }
 
-  public Condition(String name, boolean nullIsAllowed) {
+  public Condition(String name, boolean absentElementMatchesCondition) {
     this.name = name;
-    this.nullIsAllowed = nullIsAllowed;
+    this.nullIsAllowed = absentElementMatchesCondition;
   }
 
+  /**
+   * Check if given element matches this condition.
+   *
+   * @param element given WebElement
+   * @return true if element matches condition
+   */
   @Override
   public abstract boolean apply(WebElement element);
 
@@ -541,7 +540,17 @@ public abstract class Condition implements Predicate<WebElement> {
     return nullIsAllowed;
   }
 
-  public abstract String actualValue(WebElement element);
+  /**
+   * If element didn't match the condition, returns the actual value of element.
+   * Used in error reporting.
+   * Optional. Makes sense only if you need to add some additional important info to error message.
+   *
+   * @param element given WebElement
+   * @return any string that needs to be appended to error message.
+   */
+  public String actualValue(WebElement element) {
+    return null;
+  }
 
   @Override
   public String toString() {
