@@ -1,4 +1,4 @@
-= Selenide = Consice API for Selenium WebDriver
+= Selenide = Concise API for Selenium WebDriver
 
 {<img src="https://travis-ci.org/codeborne/selenide.png" align="right" />}[https://travis-ci.org/codeborne/selenide]
 
