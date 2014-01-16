@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.net.URL;
@@ -58,7 +59,7 @@ public class WebDriverRunnerTest {
 
   public static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
-    public WebDriver createDriver() {
+    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
       return driver;
     }
   }
