@@ -180,16 +180,16 @@ public class WebDriverThreadLocalContainer {
 
   protected WebDriver createInstanceOf(String className) {
     try {
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setJavascriptEnabled(true);
+      capabilities.setCapability(TAKES_SCREENSHOT, true);
+      capabilities.setCapability(ACCEPT_SSL_CERTS, true);
+      capabilities.setCapability(SUPPORTS_ALERTS, true);
+
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        return ((WebDriverProvider)clazz.newInstance()).createDriver();
+        return ((WebDriverProvider) clazz.newInstance()).createDriver(capabilities);
       } else {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setJavascriptEnabled(true);
-        capabilities.setCapability(TAKES_SCREENSHOT, true);
-        capabilities.setCapability(ACCEPT_SSL_CERTS, true);
-        capabilities.setCapability(SUPPORTS_ALERTS, true);
-
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
         return (WebDriver) constructor.newInstance(capabilities);
       }
