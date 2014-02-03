@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,5 +23,10 @@ public class ConfigurationTest {
   public void canConstructReportsUrlFromJenkinsProperty() {
     System.setProperty("BUILD_URL", "http://ci.org/job/123/");
     assertEquals("http://ci.org/job/123/artifact/", Configuration.getReportsUrl());
+  }
+
+  @After
+  public void resetBuildUrl() {
+    setUp();
   }
 }
