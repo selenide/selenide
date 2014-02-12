@@ -186,7 +186,11 @@ public class Selenide {
     return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), index);
   }
 
-  protected static SelenideElement $(WebElement parent, By selector, int index) {
+  public static SelenideElement $(WebElement parent, By selector) {
+    return WaitingSelenideElement.wrap($(parent), selector, 0);
+  }
+
+  public static SelenideElement $(WebElement parent, By selector, int index) {
     return WaitingSelenideElement.wrap($(parent), selector, index);
   }
 
