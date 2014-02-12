@@ -9,7 +9,7 @@ import java.io.File;
 
 public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,
     FindsByTagName, FindsByClassName, FindsByCssSelector,
-    FindsByXPath, WrapsDriver, Locatable {
+    FindsByXPath, WrapsDriver, WrapsElement, Locatable {
 
   /**
    * <p>

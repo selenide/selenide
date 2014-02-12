@@ -157,6 +157,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       contextClick();
       return null;
     }
+    else if ("getWrappedElement".equals(method.getName())) {
+      return getActualDelegate();
+    }
 
     return delegateMethod(getDelegate(), method, args);
   }
