@@ -23,12 +23,13 @@ public class Configuration {
 
   /**
    * Which browser to use.
-   * Can be configured either programmatically or by system property "-Dbrowser=ie".
+   * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
    * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera"
    * <p/>
    * Default value: "firefox"
    */
-  public static String browser = System.getProperty("browser", FIREFOX);
+  public static String browser = System.getProperty("selenide.browser",
+      System.getProperty("browser", FIREFOX));
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
