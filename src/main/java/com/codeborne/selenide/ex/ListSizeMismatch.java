@@ -12,7 +12,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 public class ListSizeMismatch extends AssertionError {
   public ListSizeMismatch(int expectedSize, WebElementsCollection collection, List<WebElement> actualElements, long timeoutMs) {
     super(": expected: " + expectedSize +
-        ", actual: " + actualElements.size() +
+        ", actual: " + (actualElements == null ? 0 : actualElements.size()) +
         ", collection: " + collection.description() +
         screenshot() +
         timeout(timeoutMs) +

@@ -95,6 +95,11 @@ public class CollectionMethodsTest {
     $$(".non-existing-elements").shouldHave(texts("content1", "content2"));
   }
 
+  @Test(expected = ElementNotFound.class)
+  public void exactTextsCheckThrowsElementNotFound() {
+    $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2"));
+  }
+
   @Test(expected = TextsMismatch.class)
   public void textsCheckThrowsTextsMismatch() {
     $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
