@@ -63,6 +63,8 @@ public class WebDriverRunner {
    * NB! Be sure to call this method before calling <code>open(url)</code>.
    * Otherwise Selenide will create its own WebDriver instance and would not close it.
    *
+   * NB! When using your custom webdriver, you are responsible for closing it. Selenide will not take care of it.
+   *
    * <p/>
    * <p/>
    * P.S. Alternatively, you can run tests with system property

@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -10,8 +9,6 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 
@@ -27,8 +24,10 @@ public class FirefoxWithProfileTest {
     driver.manage().window().maximize();
     try {
       WebDriverRunner.setWebDriver(driver);
-      open("http://google.com");
-      $(By.name("q")).shouldBe(enabled).val("selenide").pressEnter();
+      open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+
+      WebDriverRunner.setWebDriver(driver);
+      open(currentThread().getContextClassLoader().getResource("page_with_jquery.html"));
     }
     finally {
       WebDriverRunner.closeWebDriver();

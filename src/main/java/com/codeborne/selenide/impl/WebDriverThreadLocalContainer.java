@@ -44,7 +44,6 @@ public class WebDriverThreadLocalContainer {
   }
 
   public void setWebDriver(WebDriver webDriver) {
-    closeWebDriver();
     THREAD_WEB_DRIVER.set(webDriver);
     ALL_WEB_DRIVERS.add(webDriver);
   }
