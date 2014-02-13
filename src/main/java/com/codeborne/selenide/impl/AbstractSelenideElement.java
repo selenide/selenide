@@ -273,6 +273,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected boolean exists() {
     try {
       return getActualDelegate() != null;
+    } catch (InvalidSelectorException e) {
+      throw e;
     } catch (WebDriverException elementDoesNotExist) {
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
@@ -284,6 +286,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     try {
       WebElement element = getActualDelegate();
       return element != null && element.isDisplayed();
+    } catch (InvalidSelectorException e) {
+      throw e;
     } catch (WebDriverException elementDoesNotExist) {
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
@@ -320,9 +324,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
             return element;
           }
         }
+        catch (InvalidSelectorException e) {
+          throw e;
+        }
         catch (WebDriverException ignore) {
+          // TODO Do not ignore error. Attach it to AssertionError.
         }
         catch (IndexOutOfBoundsException ignore) {
+          // TODO Do not ignore error. Attach it to AssertionError.
         }
       }
       else if (condition.applyNull()) {
@@ -351,9 +360,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
             return;
           }
         }
+        catch (InvalidSelectorException e) {
+          throw e;
+        }
         catch (WebDriverException ignore) {
+          // TODO Do not ignore error. Attach it to AssertionError.
         }
         catch (IndexOutOfBoundsException ignore) {
+          // TODO Do not ignore error. Attach it to AssertionError.
         }
       }
       else if (!condition.applyNull()) {
@@ -376,6 +390,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       if (element == null) return false;
       element.isDisplayed();
       return true;
+    } catch (InvalidSelectorException e) {
+      throw e;
     } catch (WebDriverException e) {
       return false;
     }
