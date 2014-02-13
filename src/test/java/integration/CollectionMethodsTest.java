@@ -1,4 +1,4 @@
-package com.codeborne.selenide.integrationtests;
+package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementNotFound;

@@ -1,4 +1,4 @@
-package com.codeborne.selenide.integrationtests;
+package integration;
 
 import org.junit.Before;
 import org.junit.Ignore;

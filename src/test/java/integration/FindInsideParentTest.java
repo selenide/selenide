@@ -1,4 +1,4 @@
-package com.codeborne.selenide.integrationtests;
+package integration;
 
 import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
