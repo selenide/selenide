@@ -51,6 +51,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           return;
         }
       } catch (WebDriverException ignore) {
+        // TODO Do not ignore exception. Attach it to AssertionError.
       }
       sleep(pollingInterval);
     }
@@ -117,6 +118,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   public static String elementsToString(Collection<WebElement> elements) {
+    if (elements == null || elements.isEmpty()) {
+      return "[]";
+    }
+
     StringBuilder sb = new StringBuilder(256);
     sb.append("[\n\t\t");
     for (WebElement element : elements) {
