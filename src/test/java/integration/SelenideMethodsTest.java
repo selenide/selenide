@@ -107,6 +107,23 @@ public class SelenideMethodsTest {
     assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
   }
 
+  @Test
+  public void userCanGetInnerHtmlOfElement() {
+    assertEquals("@livemail.ru", $(byValue("livemail.ru")).innerHtml());
+    assertEquals("@myrambler.ru", $(byText("@myrambler.ru")).innerHtml());
+    assertEquals("@мыло.ру", $(byText("@мыло.ру")).innerHtml());
+    assertEquals("Dropdown list", $("h2").innerHtml());
+    assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
+    assertEquals("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>",
+        $("#status").innerHtml().trim());
+  }
+
+  @Test
+  public void userCanGetTextAndHtmlOfHiddenElement() {
+    assertEquals("Видишь суслика? И я не вижу. <b>А он есть</b>!", $("#theHiddenElement").innerHtml().trim());
+    assertEquals("Видишь суслика? И я не вижу. А он есть!", $("#theHiddenElement").innerText().trim());
+  }
+
   @Test @Ignore
   public void userCanSearchElementByDataAttribute() {
     assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));

@@ -82,6 +82,20 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String text();
 
   /**
+   * Get the text code of the element with children.
+   *
+   * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
+   */
+  String innerText();
+
+  /**
+   * Get the HTML code of the element with children.
+   *
+   * Short form of getAttribute("innerHTML")
+   */
+  String innerHtml();
+
+  /**
    * Get the attribute of the element. Synonym for getAttribute(String).
    * @return null if attribute is missing
    */

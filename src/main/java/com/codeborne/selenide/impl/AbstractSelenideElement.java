@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -74,6 +75,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("text".equals(method.getName())) {
       return getDelegate().getText();
+    }
+    else if ("innerText".equals(method.getName())) {
+      return getInnerText();
+    }
+    else if ("innerHtml".equals(method.getName())) {
+      return getInnerHtml();
     }
     else if ("should".equals(method.getName())) {
       return should(proxy, "", (Condition[]) args[0]);
@@ -164,7 +171,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private WebElement waitForElement() {
+  protected String getInnerText() {
+    WebElement element = waitUntil("", exist, timeout);
+    return WebDriverRunner.ie() ? element.getAttribute("innerText") : element.getAttribute("textContent");
+  }
+
+  protected String getInnerHtml() {
+    WebElement element = waitUntil("", exist, timeout);
+    return element.getAttribute("innerHTML");
+  }
+
+  protected WebElement waitForElement() {
     return waitUntil("be ", visible, timeout);
   }
 
