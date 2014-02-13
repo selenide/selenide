@@ -35,7 +35,7 @@ dependencies {
   provided 'org.testng:testng:6.8.7'
   provided 'org.apache.ant:ant-junit:1.9.2'
   provided 'org.apache.ant:ant-junit4:1.9.2'
-  provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.0.4', transitive: false
+  provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.1.0', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
 
 }
