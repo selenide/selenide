@@ -60,6 +60,7 @@ public class LongRunningAjaxRequestTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation")
   public void userCanWaitWhileConditionIsMet() {
     timeout = 1000;
     assertFalse($(byText("Result 2")).isDisplayed());

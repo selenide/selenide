@@ -113,7 +113,7 @@ public class Selenide {
    * @return The name of resulting file
    */
   public static String screenshot(String fileName) {
-    return takeScreenShot(fileName);
+    return Screenshots.takeScreenShot(fileName);
   }
 
   /**
