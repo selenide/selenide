@@ -15,10 +15,10 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.url;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
 
 public class SelenideMethodsTest {
   @Rule
@@ -113,19 +113,32 @@ public class SelenideMethodsTest {
     assertEquals("@myrambler.ru", $(byText("@myrambler.ru")).innerHtml());
     assertEquals("@мыло.ру", $(byText("@мыло.ру")).innerHtml());
     assertEquals("Dropdown list", $("h2").innerHtml());
-    assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
-    assertEquals("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>",
-        $("#status").innerHtml().trim());
+
+    if (htmlUnit()) {
+      assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
+      assertEquals("username: <span class=name>bob smith</span> last login: <span class=last-login>01.01.1970</span>",
+          $("#status").innerHtml().trim().toLowerCase());
+    }
+    else {
+      assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
+      assertEquals("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>",
+          $("#status").innerHtml().trim());
+    }
   }
 
   @Test
   public void userCanGetTextAndHtmlOfHiddenElement() {
-    assertEquals("Видишь суслика? И я не вижу. <b>А он есть</b>!", $("#theHiddenElement").innerHtml().trim());
-    assertEquals("Видишь суслика? И я не вижу. А он есть!", $("#theHiddenElement").innerText().trim());
+    assertEquals("видишь суслика? и я не вижу. <b>а он есть</b>!",
+        $("#theHiddenElement").innerHtml().trim().toLowerCase());
+
+    assertEquals("Видишь суслика? И я не вижу. А он есть!",
+        $("#theHiddenElement").innerText().trim());
   }
 
-  @Test @Ignore
+  @Test
   public void userCanSearchElementByDataAttribute() {
+    assumeFalse(isChrome() || htmlUnit() || phantomjs());
+
     assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
     assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
     assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
@@ -162,8 +175,10 @@ public class SelenideMethodsTest {
     assertTrue(url().contains("#submitted-form"));
   }
 
-  @Test @Ignore // fails in HtmlUnit for unknown reason
+  @Test
   public void userCanPressTab() {
+    assumeFalse(htmlUnit()); // fails in HtmlUnit for unknown reason
+
     $("#username").val("tere").pressTab();
     $("#username-blur-counter").shouldHave(text("blur: 1"));
   }

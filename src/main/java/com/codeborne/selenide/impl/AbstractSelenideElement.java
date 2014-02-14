@@ -1,9 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.*;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -24,6 +21,8 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.htmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.ie;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
@@ -173,11 +172,20 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected String getInnerText() {
     WebElement element = waitUntil("", exist, timeout);
-    return WebDriverRunner.ie() ? element.getAttribute("innerText") : element.getAttribute("textContent");
+    if (htmlUnit()) {
+      return executeJavaScript("return arguments[0].innerText", element);
+    }
+    else if (ie()) {
+      return element.getAttribute("innerText");
+    }
+    return element.getAttribute("textContent");
   }
 
   protected String getInnerHtml() {
     WebElement element = waitUntil("", exist, timeout);
+    if (htmlUnit()) {
+      return executeJavaScript("return arguments[0].innerHTML", element);
+    }
     return element.getAttribute("innerHTML");
   }
 
