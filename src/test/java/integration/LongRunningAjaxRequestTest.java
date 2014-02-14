@@ -63,7 +63,6 @@ public class LongRunningAjaxRequestTest {
   @SuppressWarnings("deprecation")
   public void userCanWaitWhileConditionIsMet() {
     timeout = 1000;
-    assertFalse($(byText("Result 2")).isDisplayed());
     $(byText("Result 2")).waitWhile(notPresent, 3000);
     assertTrue($(byText("Result 2")).isDisplayed());
   }
