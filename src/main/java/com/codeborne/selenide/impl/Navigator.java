@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
+import org.perf4j.StopWatch;
+import org.perf4j.javalog.JavaLogStopWatch;
 
 import java.net.URL;
 
@@ -31,6 +33,9 @@ public class Navigator {
   }
 
   protected void navigateToAbsoluteUrl(String url) {
+    String tag = "open:" + url;
+    StopWatch stopWatch = new JavaLogStopWatch(tag);
+
     if (ie() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
@@ -42,6 +47,10 @@ public class Navigator {
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
+    finally {
+      stopWatch.stop(tag);
+    }
+
     waitUntilPageIsLoaded();
   }
 

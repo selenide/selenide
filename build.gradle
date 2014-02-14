@@ -37,7 +37,7 @@ dependencies {
   provided 'org.apache.ant:ant-junit4:1.9.2'
   provided group: 'com.github.detro.ghostdriver', name: 'phantomjsdriver', version: '1.1.0', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
-
+  compile 'org.perf4j:perf4j:0.9.16'
 }
 
 task libs(type: Sync) {
