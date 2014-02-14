@@ -12,9 +12,10 @@
         document.getElementById('username-mirror').innerHTML = input.value;
       }
 
-      var blurCounter = 0;
+      blurCounter = 1;
       function onUsernameBlur() {
-        document.getElementById('username-blur-counter').innerHTML = "blur: " + ++blurCounter;
+        blurCounter++;
+        document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
       }
     </script>
   </head>
