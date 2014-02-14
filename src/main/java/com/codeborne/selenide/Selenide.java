@@ -270,8 +270,9 @@ public class Selenide {
     return $$(criteria);
   }
 
-  public static Object executeJavaScript(String jsCode) {
-    return ((JavascriptExecutor) getWebDriver()).executeScript(jsCode);
+  @SuppressWarnings("unchecked")
+  public static <T> T executeJavaScript(String jsCode, Object... arguments) {
+    return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
   }
 
   /**
