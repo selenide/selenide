@@ -1,6 +1,7 @@
 package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
@@ -24,6 +25,10 @@ public class ScreenShooter extends ExitCodeListener {
   @Override
   public void onTestFailure(ITestResult result) {
     super.onTestFailure(result);
+    if (!(result.getThrowable() instanceof UIAssertionError)) {
+      System.out.println(screenshot());
+    }
+
     Screenshots.finishContext();
   }
 

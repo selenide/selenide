@@ -6,26 +6,19 @@ import org.openqa.selenium.By;
 
 import java.util.Arrays;
 
-import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
-import static com.codeborne.selenide.ex.ErrorMessages.timeout;
-
-public class ElementNotFound extends AssertionError {
+public class ElementNotFound extends UIAssertionError {
   public ElementNotFound(By searchCriteria, Condition expectedCondition, long timeoutMs) {
     this(searchCriteria.toString(), expectedCondition, timeoutMs);
   }
 
   public ElementNotFound(String searchCriteria, Condition expectedCondition, long timeoutMs) {
     super("Element not found {" + searchCriteria + '}' +
-        "\nExpected: " + expectedCondition +
-        screenshot() +
-        timeout(timeoutMs));
+        "\nExpected: " + expectedCondition, timeoutMs);
   }
 
   public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, long timeoutMs) {
     super("Element not found {" + collection.description() + '}' +
-        "\nExpected: " + Arrays.toString(expectedTexts) +
-        screenshot() +
-        timeout(timeoutMs));
+        "\nExpected: " + Arrays.toString(expectedTexts), timeoutMs);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.junit;
 
 import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
@@ -37,6 +38,13 @@ public class ScreenShooter extends TestWatcher {
   @Override
   protected void succeeded(Description test) {
     if (captureSuccessfulTests) {
+      System.out.println(screenshot());
+    }
+  }
+
+  @Override
+  protected void failed(Throwable e, Description description) {
+    if (!(e instanceof UIAssertionError)) {
       System.out.println(screenshot());
     }
   }
