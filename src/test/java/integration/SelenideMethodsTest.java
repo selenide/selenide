@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -347,5 +348,19 @@ public class SelenideMethodsTest {
 
     $(By.name("domain")).find("option").click();
     $(By.name("domain")).find("option").contextClick();
+  }
+
+  @Test
+  public void userCanCheckConditions() {
+    assertTrue($("#login").is(visible));
+    assertTrue($("#multirowTable").has(text("Chack")));
+
+    assertFalse($(".non-existing-element").has(text("Ninja")));
+    assertFalse($("#multirowTable").has(text("Ninja")));
+  }
+
+  @Test(expected = InvalidSelectorException.class)
+  public void checkFailsForInvalidSelector() {
+    $("//input[:attr='al]").is(visible);
   }
 }

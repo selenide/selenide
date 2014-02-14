@@ -132,6 +132,16 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   boolean isDisplayed();
 
   /**
+   * Return true iff element matches given condition
+   */
+  boolean is(Condition condition);
+
+  /**
+   * Return true iff element matches given condition
+   */
+  boolean has(Condition condition);
+
+  /**
    * <p>Checks that given element meets all of given conditions.</p>
    *
    * <p>

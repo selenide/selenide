@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -117,6 +119,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("isDisplayed".equals(method.getName())) {
       return isDisplayed();
     }
+    else if ("is".equals(method.getName()) || "has".equals(method.getName())) {
+      return matches((Condition) args[0]);
+    }
     else if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
@@ -168,6 +173,24 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
 
     return delegateMethod(getDelegate(), method, args);
+  }
+
+  private boolean matches(Condition condition) {
+    try {
+      WebElement element = tryToGetElement();
+      if (element != null) {
+        return condition.apply(element);
+      }
+    }
+    catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+        throw Cleanup.of.wrap(elementNotFound);
+      }
+    }
+    catch (IndexOutOfBoundsException ignore) {
+    }
+
+    return condition.applyNull();
   }
 
   protected String getInnerText() {
@@ -298,9 +321,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected boolean exists() {
     try {
       return getActualDelegate() != null;
-    } catch (InvalidSelectorException e) {
-      throw e;
-    } catch (WebDriverException elementDoesNotExist) {
+    } catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+        throw Cleanup.of.wrap(elementNotFound);
+      }
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return false;
@@ -311,9 +335,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     try {
       WebElement element = getActualDelegate();
       return element != null && element.isDisplayed();
-    } catch (InvalidSelectorException e) {
-      throw e;
-    } catch (WebDriverException elementDoesNotExist) {
+    } catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+        throw Cleanup.of.wrap(elementNotFound);
+      }
       return false;
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return false;
@@ -349,10 +374,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
             return element;
           }
         }
-        catch (InvalidSelectorException e) {
-          throw e;
-        }
-        catch (WebDriverException ignore) {
+        catch (WebDriverException elementNotFound) {
+          if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+            throw Cleanup.of.wrap(elementNotFound);
+          }
+
           // TODO Do not ignore error. Attach it to AssertionError.
         }
         catch (IndexOutOfBoundsException ignore) {
@@ -385,10 +411,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
             return;
           }
         }
-        catch (InvalidSelectorException e) {
-          throw e;
-        }
-        catch (WebDriverException ignore) {
+        catch (WebDriverException elementNotFound) {
+          if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+            throw Cleanup.of.wrap(elementNotFound);
+          }
+
           // TODO Do not ignore error. Attach it to AssertionError.
         }
         catch (IndexOutOfBoundsException ignore) {
@@ -410,14 +437,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  static boolean exists(WebElement element) {
+  boolean exists(WebElement element) {
     try {
       if (element == null) return false;
       element.isDisplayed();
       return true;
-    } catch (InvalidSelectorException e) {
-      throw e;
-    } catch (WebDriverException e) {
+    } catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+        throw Cleanup.of.wrap(elementNotFound);
+      }
       return false;
     }
   }
@@ -425,11 +453,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected WebElement tryToGetElement() {
     try {
       return getActualDelegate();
-    } catch (InvalidSelectorException invalidSelector) {
-      throw invalidSelector;
-    } catch (NoSuchElementException ignore) {
-      return null;
-    } catch (WebDriverException ignore) {
+    } catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+        throw Cleanup.of.wrap(elementNotFound);
+      }
+
       // TODO Do not ignore this exception, but re-throw it later.
       // For example, this information is useful:
 //      org.openqa.selenium.InvalidSelectorException: The given selector .//*/text()[contains(normalize-space(.), 'without')] is either invalid or does not result in a WebElement. The following error occurred:
@@ -437,6 +465,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return null;
     } catch (IndexOutOfBoundsException ignore) {
       return null;
+    } catch (RuntimeException e) {
+      throw Cleanup.of.wrap(e);
     }
   }
 

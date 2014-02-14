@@ -1,8 +1,12 @@
 package com.codeborne.selenide.impl;
 
 import org.junit.Test;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.WebDriverException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CleanupTest {
   @Test
@@ -17,5 +21,15 @@ public class CleanupTest {
         "Capabilities [{platform=LINUX, chrome.chromedriverVersion=26.0.1383.0, acceptSslCerts=false, javascriptEnabled=true, browserName=chrome, rotatable=false, locationContextEnabled=false, version=24.0.1312.56, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, takesScreenshot=true}]";
     String expectedException = "NoSuchElementException: The element could not be found";
     assertEquals(expectedException, Cleanup.of.webdriverExceptionMessage(webdriverException));
+  }
+
+  @Test
+  public void detectsIfWebdriverReportedInvalidSelectorError() {
+    assertFalse(Cleanup.of.isInvalidSelectorError(new WebDriverException("Ups!")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new InvalidSelectorException("Wrong xpath")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("An invalid or illegal string was specified\n")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("invalid element state: Failed to execute query: '//input[:attr='al]' is not a valid selector.\n")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("Invalid selectors: //input[:attr='al]")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":\"SYNTAX_ERR: DOM Exception 12\",,\"post\":\"{\\\"using\\\":\\\"css selector\\\",\\\"value\\\":\\\"//input[:attr='al]\\\"}\"}}\n")));
   }
 }

@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.*;
-import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -51,9 +50,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         if (condition.apply(actualElements)) {
           return;
         }
-      } catch (InvalidSelectorException e) {
-        throw e;
-      } catch (WebDriverException ignore) {
+      } catch (WebDriverException elementNotFound) {
+        if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
+          throw Cleanup.of.wrap(elementNotFound);
+        }
+
         // TODO Do not ignore exception. Attach it to AssertionError.
       }
       sleep(pollingInterval);
