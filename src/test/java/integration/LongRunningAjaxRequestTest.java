@@ -25,9 +25,9 @@ public class LongRunningAjaxRequestTest {
   public void openTestPage() {
     timeout = 2500;
     open(currentThread().getContextClassLoader().getResource("long_ajax_request.html"));
+    $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
-    $(byText("Loading...")).should(exist);
-    $("#loading").shouldHave(text("Loading"), text("..."));
+    $("#loading").shouldBe(visible).shouldHave(text("Loading..."));
   }
 
   @After
