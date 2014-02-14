@@ -178,10 +178,10 @@ public class SelenideMethodsTest {
 
   @Test
   public void userCanPressTab() {
-    assumeFalse(htmlUnit() || isFirefox()); // fails in HtmlUnit for unknown reason
+    assumeFalse(htmlUnit()); // fails in HtmlUnit for unknown reason
 
     $("#username").val("tere").pressTab();
-    $("#username-blur-counter").shouldHave(text("blur: 1"));
+    $("#username-blur-counter").shouldHave(text("blur:"));
   }
 
   @Test
