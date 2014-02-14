@@ -80,9 +80,10 @@ tasks.withType(Test).all { testTask ->
   testTask.testLogging.showStandardStreams = true
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 3
+  testTask.outputs.upToDateWhen { false }
 }
 
-task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome']) {}
+task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome', 'phantomjs']) {}
 
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
