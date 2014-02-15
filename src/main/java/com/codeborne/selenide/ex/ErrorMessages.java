@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Screenshots.takeScreenShot;
@@ -46,7 +47,11 @@ public class ErrorMessages {
   private static String formatScreenShotPath(String screenshot) {
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
-      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath;
+      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
+      try {
+        screenshotUrl = new URL(screenshotUrl).toExternalForm();
+      }
+      catch (MalformedURLException e) {}
       LOG.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
       return "\nScreenshot: " + screenshotUrl;
     }
