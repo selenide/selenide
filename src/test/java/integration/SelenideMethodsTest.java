@@ -50,10 +50,10 @@ public class SelenideMethodsTest {
     $("#theHiddenElement").shouldBe(present);
     $("#theHiddenElement").waitUntil(present, 1000);
 
-//    $(".non-existing-element").should(not(exist));  TODO fix me
+    $(".non-existing-element").should(not(exist));
     $(".non-existing-element").shouldNot(exist);
     $(".non-existing-element").shouldNotBe(present);
-//    $(".non-existing-element").waitUntil(not(present), 1000); // TODO fix me
+    $(".non-existing-element").waitUntil(not(present), 1000);
     $(".non-existing-element").waitWhile(present, 1000);
   }
 
