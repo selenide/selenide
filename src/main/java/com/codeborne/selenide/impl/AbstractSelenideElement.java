@@ -8,8 +8,6 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
-import org.perf4j.StopWatch;
-import org.perf4j.javalog.JavaLogStopWatch;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.pollingInterval;
@@ -39,10 +36,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    String tag = getSearchCriteria() + "." + method.getName();
-    StopWatch stopWatch = new JavaLogStopWatch(tag);
-
-    try {
     if ("setValue".equals(method.getName())) {
       setValue((String) args[0]);
       return proxy;
@@ -180,10 +173,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
 
     return delegateMethod(getDelegate(), method, args);
-    }
-    finally {
-      stopWatch.stop(tag, Arrays.toString(args));
-    }
   }
 
   private boolean matches(Condition condition) {
