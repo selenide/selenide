@@ -75,6 +75,27 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+=== 2.8 (Released 15.02.2014)
+===== Non-backward compatible changes:
+* #96 Method `WebDriverRunner.setWebDriver()` does not close previous webdriver. You are responsible for webdriver lifecycle if you are using setWebDriver().
+* #63 Method `Condition.actualValue()` is optional (it's not needed in most cases). It makes creating custom conditions even more easier.
+
+===== Improvements:
+* #95 #79 - Selenide automatically takes screenshots on any test failure, not only if `$.shouldXXX` method fails.
+* Un-deprecated WebDriverProvider. It still can be useful.
+* #89 Do not exclude cglib dependency - it's needed for taking screenshots with RemoteWebDriver
+
+===== New features:
+* #93 User can get text and html of hidden element with new methods $.innerText() and $.innerHtml()
+* #77 Added methods back() and forward()
+* #71 Added method setSelected(boolean) for checking checkboxes
+* #86 - added methods $.is(condition), $.has(condition)
+* #62 Added composite condition AND
+* #94 SelenideElement implements WrapsElement
+* #88 Method $(WebElement parent, By selector, int index) made public. Added method $(WebElement parent, By selector).
+* #82 Added setting "selenide.browser" as a synonym for "browser"
+* Method executeJavaScript() can accept multiple arguments
+
 === 2.6.1 (Released 29.11.2013)
 * The most wanted feature is finally here!
   Added method $.download() for downloading file by "href" attribute!
