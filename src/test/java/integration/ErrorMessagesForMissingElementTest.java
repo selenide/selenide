@@ -23,7 +23,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 
-public class ErrorMessagesITest {
+public class ErrorMessagesForMissingElementTest {
   PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
 
   @Before
