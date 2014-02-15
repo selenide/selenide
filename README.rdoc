@@ -96,6 +96,12 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 * #82 Added setting "selenide.browser" as a synonym for "browser"
 * Method executeJavaScript() can accept multiple arguments
 
+=== 2.7 (Released 31.12.2013)
+* #59 Automatically take screenshot on any failures. More exactly, when any of methods $.shouldXXX(condition) fails.
+* #59 When running tests in Jenkinks, Selenide shows public URL of screenshots (using BUILD_URL variable provided by Jenkins). It's incredibly convenient because you can watch screenshots right in the Jenkins report.
+* #59 Added method getScreenshots() for retrieving all taken screenshots
+* Upgraded to Selenium 2.39.0
+
 === 2.6.1 (Released 29.11.2013)
 * The most wanted feature is finally here!
   Added method $.download() for downloading file by "href" attribute!
