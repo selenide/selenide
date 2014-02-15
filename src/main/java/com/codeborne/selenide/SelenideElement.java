@@ -142,6 +142,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   boolean has(Condition condition);
 
   /**
+   * Set checkbox state to CHECKED or UNCHECKED.
+   * @param selected true for checked and false for unchecked
+   */
+  SelenideElement setSelected(boolean selected);
+
+  /**
    * <p>Checks that given element meets all of given conditions.</p>
    *
    * <p>

@@ -363,4 +363,25 @@ public class SelenideMethodsTest {
   public void checkFailsForInvalidSelector() {
     $("//input[:attr='al]").is(visible);
   }
+
+  @Test
+  public void userCanCheckCheckbox() {
+    $(By.name("rememberMe")).setSelected(true);
+    $(By.name("rememberMe")).shouldBe(selected);
+
+    $(By.name("rememberMe")).setSelected(true);
+    $(By.name("rememberMe")).shouldBe(selected);
+  }
+
+  @Test
+  public void userCanUnCheckCheckbox() {
+    $(By.name("rememberMe")).setSelected(true);
+    $(By.name("rememberMe")).shouldBe(selected);
+
+    $(By.name("rememberMe")).setSelected(false);
+    $(By.name("rememberMe")).shouldNotBe(selected);
+
+    $(By.name("rememberMe")).setSelected(false);
+    $(By.name("rememberMe")).shouldNotBe(selected);
+  }
 }

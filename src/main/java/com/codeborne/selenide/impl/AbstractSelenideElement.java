@@ -122,6 +122,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("is".equals(method.getName()) || "has".equals(method.getName())) {
       return matches((Condition) args[0]);
     }
+    else if ("setSelected".equals(method.getName())) {
+      setSelected((Boolean) args[0]);
+      return proxy;
+    }
     else if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
@@ -175,7 +179,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private boolean matches(Condition condition) {
+  protected boolean matches(Condition condition) {
     try {
       WebElement element = tryToGetElement();
       if (element != null) {
@@ -191,6 +195,13 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
 
     return condition.applyNull();
+  }
+
+  protected void setSelected(boolean selected) {
+    WebElement element = tryToGetElement();
+    if (element.isSelected() ^ selected) {
+      element.click();
+    }
   }
 
   protected String getInnerText() {
