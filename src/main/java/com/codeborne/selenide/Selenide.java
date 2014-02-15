@@ -90,6 +90,20 @@ public class Selenide {
     navigator.open(url());
   }
 
+  /**
+   * Navigate browser back to previous page
+   */
+  public static void back() {
+    navigator.back();
+  }
+
+  /**
+   * Navigate browser forward to next page
+   */
+  public static void forward() {
+    navigator.forward();
+  }
+
   public static String title() {
     return getWebDriver().getTitle();
   }

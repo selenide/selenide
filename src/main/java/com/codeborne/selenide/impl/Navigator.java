@@ -60,7 +60,15 @@ public class Navigator {
     }
   }
 
-  private boolean isLocalFile(String url) {
+  protected boolean isLocalFile(String url) {
     return url.startsWith("file:");
+  }
+
+  public void back() {
+    getWebDriver().navigate().back();
+  }
+
+  public void forward() {
+    getWebDriver().navigate().forward();
   }
 }
