@@ -15,15 +15,16 @@ jekyll serve --watch --trace
 
 
 ### Tagging selenide
-git tag -a selenide-2.6 -m "Created tag selenide-2.6 for the last production version by now"
+git tag -a selenide-2.9 -m "Created tag selenide-2.9"
 git tag    (lists all tags)
 git push origin --tags
 
 
 ### Publishing javadoc
 selenide> gradle clean javadoc
-selenide> mv build/docs/javadoc/* ~/Dropbox/projects/selenide-web/javadoc/2.6/
-selenide-web> git add javadoc/2.6
+selenide> mkdir ../selenide-web/javadoc/2.9/
+selenide> mv build/docs/javadoc/* ../selenide-web/javadoc/2.9/
+selenide-web> git add javadoc/2.9
 
 
 
