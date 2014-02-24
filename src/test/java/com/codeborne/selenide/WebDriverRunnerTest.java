@@ -54,7 +54,6 @@ public class WebDriverRunnerTest {
     Configuration.browser = HTMLUNIT;
     open(url);
     verify(listener1).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
-
   }
 
   public static class CustomWebDriverProvider implements WebDriverProvider {
