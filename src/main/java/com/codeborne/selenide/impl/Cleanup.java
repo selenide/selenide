@@ -20,12 +20,13 @@ public class Cleanup {
             .trim();
   }
 
-  public boolean isInvalidSelectorError(RuntimeException error) {
+  public boolean isInvalidSelectorError(Throwable error) {
     return (error instanceof InvalidSelectorException) ||
         error.getMessage().contains("invalid or illegal string was specified") ||
-            error.getMessage().contains("nvalid selector") ||
-            error.getMessage().contains("is not a valid selector") ||
-            error.getMessage().contains("SYNTAX_ERR");
+        error.getMessage().contains("nvalid selector") ||
+        error.getMessage().contains("is not a valid selector") ||
+        error.getMessage().contains("SYNTAX_ERR") ||
+        error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
 
   public InvalidSelectorException wrap(RuntimeException error) {

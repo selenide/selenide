@@ -2,11 +2,10 @@ package com.codeborne.selenide.impl;
 
 import org.junit.Test;
 import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CleanupTest {
   @Test
@@ -31,5 +30,9 @@ public class CleanupTest {
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("invalid element state: Failed to execute query: '//input[:attr='al]' is not a valid selector.\n")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("Invalid selectors: //input[:attr='al]")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":\"SYNTAX_ERR: DOM Exception 12\",,\"post\":\"{\\\"using\\\":\\\"css selector\\\",\\\"value\\\":\\\"//input[:attr='al]\\\"}\"}}\n")));
+
+    RuntimeException cssException = new RuntimeException("Invalid selectors: //input[:attr='al]");
+    NoSuchElementException error = new NoSuchElementException("Unable to locate element using css", cssException);
+    assertTrue(Cleanup.of.isInvalidSelectorError(error));
   }
 }
