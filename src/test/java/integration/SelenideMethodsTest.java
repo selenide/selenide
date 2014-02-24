@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.junit.ScreenShooter;
@@ -212,7 +213,7 @@ public class SelenideMethodsTest {
     $("h2").shouldNotBe(empty);
     $(By.name("password")).shouldBe(empty);
     $("#login").shouldNotBe(empty);
-    $("#text-area").shouldBe(empty);
+    $("#text-area").shouldBe(empty);  // TODO Use another textarea that is always empty
     $("#text-area").shouldNotBe(empty);
   }
 
@@ -383,5 +384,17 @@ public class SelenideMethodsTest {
 
     $(By.name("rememberMe")).setSelected(false);
     $(By.name("rememberMe")).shouldNotBe(selected);
+  }
+
+  @Test
+  public void userCanUseOrCondition() {
+    Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
+    $("#baskerville").shouldBe(one_of_conditions);
+
+    Condition all_of_conditions = or("baskerville", text("Basker"), text("rville"));
+    $("#baskerville").shouldBe(all_of_conditions);
+
+    Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
+    $("#baskerville").shouldNotBe(none_of_conditions);
   }
 }

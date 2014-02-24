@@ -509,8 +509,8 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * Check if element matches all given conditions.
-   * @param name Name of this condition, like "empty" (that means empty text AND empty value).
+   * Check if element matches ALL given conditions.
+   * @param name Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
    * @param condition Conditions to match.
    * @return logical AND for given conditions.
    */
@@ -537,6 +537,41 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public String toString() {
         return lastFailedCondition == null ? super.toString() : lastFailedCondition.toString();
+      }
+    };
+  }
+
+  /**
+   * Check if element matches ANY of given conditions.
+   * @param name Name of this condition, like "error" (meaning e.g. "error" OR "failed").
+   * @param condition Conditions to match.
+   * @return logical OR for given conditions.
+   */
+  public static Condition or(String name, final Condition... condition) {
+    return new Condition(name) {
+      protected Condition firstFailedCondition;
+
+      @Override
+      public boolean apply(WebElement element) {
+        for (Condition c : condition) {
+          if (c.apply(element)) {
+            return true;
+          }
+          else if (firstFailedCondition == null) {
+            firstFailedCondition = c;
+          }
+        }
+        return false;
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return firstFailedCondition == null ? null : firstFailedCondition.actualValue(element);
+      }
+
+      @Override
+      public String toString() {
+        return firstFailedCondition == null ? super.toString() : firstFailedCondition.toString();
       }
     };
   }
