@@ -77,6 +77,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.8.1 (Released 24.02.2014)
+* #100 Use "jQuery" instead of "$" when sending jquery commands (to avoid conflicts with other JS frameworks)
 * Upgraded to Selenium 2.40.0, HtmlUnit 2.14 and TestNG 6.8.8
 
 === 2.8 (Released 15.02.2014)

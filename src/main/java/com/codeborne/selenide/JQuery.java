@@ -51,14 +51,14 @@ public class JQuery {
     if (!isJQueryAvailable()) {
       throw new IllegalStateException("JQuery is not available on current page");
     }
-    executeJavaScript("$.scrollTo('" + getJQuerySelector(element) + "')");
+    executeJavaScript("jQuery.scrollTo('" + getJQuerySelector(element) + "')");
   }
 
 
   public void executeJQueryMethod(By by, String method) {
     String selector = getJQuerySelector(by);
     if (selector != null) {
-      executeJavaScript("$(\"" + selector + "\")." + method);
+      executeJavaScript("jQuery(\"" + selector + "\")." + method);
     } else {
       System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
     }
