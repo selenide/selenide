@@ -75,6 +75,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 
 == Changelog
+
+=== 2.8.1 (Released 24.02.2014)
+* Upgraded to Selenium 2.40.0, HtmlUnit 2.14 and TestNG 6.8.8
+
 === 2.8 (Released 15.02.2014)
 ===== Non-backward compatible changes:
 * #96 Method `WebDriverRunner.setWebDriver()` does not close previous webdriver. You are responsible for webdriver lifecycle if you are using setWebDriver().
