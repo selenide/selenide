@@ -213,7 +213,7 @@ public class SelenideMethodsTest {
     $("h2").shouldNotBe(empty);
     $(By.name("password")).shouldBe(empty);
     $("#login").shouldNotBe(empty);
-    $("#text-area").shouldBe(empty);  // TODO Use another textarea that is always empty
+    $("#empty-text-area").shouldBe(empty);
     $("#text-area").shouldNotBe(empty);
   }
 
