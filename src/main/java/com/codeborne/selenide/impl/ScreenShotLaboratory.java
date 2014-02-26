@@ -83,6 +83,7 @@ public class ScreenShotLaboratory {
       writeToFile(webdriver.getPageSource(), pageSource);
     } catch (Exception e) {
       System.err.println(e);
+      e.printStackTrace(new PrintWriter(System.err));
     }
     return pageSource;
   }
@@ -103,6 +104,7 @@ public class ScreenShotLaboratory {
       return imageFile;
     } catch (Exception e) {
       System.err.println(e);
+      e.printStackTrace(new PrintWriter(System.err));
       return null;
     }
   }
