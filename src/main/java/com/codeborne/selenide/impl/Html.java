@@ -28,6 +28,6 @@ public class Html {
   }
 
   String reduceSpaces(String text) {
-    return text.replaceAll("[\\s\\n\\r]+", " ").trim();
+    return text.replaceAll("[\\s\\n\\r\u00a0]+", " ").trim();
   }
 }

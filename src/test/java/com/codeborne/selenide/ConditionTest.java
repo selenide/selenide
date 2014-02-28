@@ -27,6 +27,9 @@ public class ConditionTest {
     WebElement element = mock(WebElement.class);
     when(element.getText()).thenReturn("John  the\n Malkovich");
     assertTrue(Condition.text("john the malkovich").apply(element));
+
+    when(element.getText()).thenReturn("This is nonbreakable\u00a0space");
+    assertTrue(Condition.text("This is nonbreakable space").apply(element));
   }
 
   @Test
