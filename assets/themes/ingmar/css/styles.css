@@ -154,7 +154,7 @@ a small {
 }
 
 
-.short.docs {
+.short.docs, .short.blog {
   background-color:  #E5B755;
   padding-top: 25px;
   padding-bottom: 35px;
@@ -454,4 +454,18 @@ hr.divider {
 
 .author {
   text-align: right;
+}
+
+.main .wrapper-content.blog h2,
+.main .wrapper-content.blog h3
+{
+  display: none;
+}
+
+.main .wrapper-content.blog ul li span {
+  float: right;
+}
+
+.main .wrapper-content.blog ul li {
+  list-style: none;
 }
