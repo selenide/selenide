@@ -39,7 +39,7 @@ public class ErrorMessages {
 
   public static String screenshot() {
     if (!Configuration.screenshots) {
-      LOG.fine("Automatic screenshots are disabled.");
+      LOG.config("Automatic screenshots are disabled.");
       return "";
     }
 
@@ -54,11 +54,11 @@ public class ErrorMessages {
         screenshotUrl = new URL(screenshotUrl).toExternalForm();
       }
       catch (MalformedURLException e) {}
-      LOG.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
+      LOG.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
       return "\nScreenshot: " + screenshotUrl;
     }
 
-    LOG.info("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
+    LOG.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
     try {
       return "\nScreenshot: " + new File(screenshot).toURI().toURL().toExternalForm();
     } catch (MalformedURLException e) {

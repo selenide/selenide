@@ -73,18 +73,14 @@ public class Configuration {
   public static String reportsUrl = getReportsUrl();
 
   static String getReportsUrl() {
-//    Properties properties = System.getProperties();
-//    for (String name : properties.stringPropertyNames()) {
-//      LOG.info("System property: " + name + "=" + properties.getProperty(name));
-//    }
     String reportsUrl = System.getProperty("selenide.reportsUrl");
     if (isEmpty(reportsUrl)) {
       reportsUrl = getJenkinsReportsUrl();
       if (isEmpty(reportsUrl)) {
-        LOG.info("Variable selenide.reportsUrl not found");
+        LOG.config("Variable selenide.reportsUrl not found");
       }
     } else {
-      LOG.info("Using variable selenide.reportsUrl=" + reportsUrl);
+      LOG.config("Using variable selenide.reportsUrl=" + reportsUrl);
     }
     return reportsUrl;
   }
@@ -96,11 +92,11 @@ public class Configuration {
   private static String getJenkinsReportsUrl() {
     String build_url = System.getProperty("BUILD_URL");
     if (!isEmpty(build_url)) {
-      LOG.info("Using Jenkins BUILD_URL: " + build_url);
+      LOG.config("Using Jenkins BUILD_URL: " + build_url);
       return build_url + "artifact/";
     }
     else {
-      LOG.info("No BUILD_URL variable found. It's not Jenkins.");
+      LOG.config("No BUILD_URL variable found. It's not Jenkins.");
       return null;
     }
   }
