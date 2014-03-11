@@ -12,11 +12,16 @@ public class WebDriverRunner {
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
   public static final String FIREFOX = "firefox";
+
+  /**
+   * To use Safari webdriver, you need to include extra dependency to your project:
+   * &lt;dependency org="org.seleniumhq.selenium" name="selenium-safari-driver" rev="2.+" conf="test-&gt;default"/&gt;
+   */
   public static final String SAFARI = "safari";
 
   /**
    * To use HtmlUnitDriver, you need to include extra dependency to your project:
-   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.35.0" conf="test->default"/>
+   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.+" conf="test->default"/>
    *
    * It's also possible to run HtmlUnit driver emulating different browsers:
    * <p>
