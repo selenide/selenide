@@ -13,17 +13,17 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static java.lang.Thread.currentThread;
+import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static org.junit.Assert.*;
 
-public class PageObjectTest {
+public class PageObjectTest extends IntegrationTest {
 
   private SelectsPage pageWithSelects;
 
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
     sleep(100);
     pageWithSelects = page(SelectsPage.class);
   }

@@ -18,17 +18,16 @@ import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
-public class SelenideMethodsTest {
+public class SelenideMethodsTest extends IntegrationTest {
   @Rule
   public ScreenShooter allScreens = ScreenShooter.failedTests();
 
   @Before
   public void openTestPageWithJQuery() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

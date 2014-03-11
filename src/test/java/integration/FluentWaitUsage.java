@@ -5,14 +5,12 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.Wait;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
-public class FluentWaitUsage {
+public class FluentWaitUsage extends IntegrationTest {
   @Before
   public void openTestPageWithJQuery() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

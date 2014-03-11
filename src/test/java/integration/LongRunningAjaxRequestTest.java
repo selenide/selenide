@@ -11,20 +11,18 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class LongRunningAjaxRequestTest {
+public class LongRunningAjaxRequestTest extends IntegrationTest {
   @Rule
   public ScreenShooter screenShooter = failedTests();
 
   @Before
   public void openTestPage() {
     timeout = 2500;
-    open(currentThread().getContextClassLoader().getResource("long_ajax_request.html"));
+    openFile("long_ajax_request.html");
     $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
     $("#loading").shouldBe(visible).shouldHave(text("Loading..."));

@@ -6,16 +6,14 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertTrue;
 
-public class PageWithJQuery {
+public class PageWithJQuery extends IntegrationTest {
   JQuery jQuery = new JQuery();
 
   @Before
   public void openTestPageWithJQuery() {
-    open(currentThread().getContextClassLoader().getResource("page_with_jquery.html"));
+    openFile("page_with_jquery.html");
   }
 
   @Test

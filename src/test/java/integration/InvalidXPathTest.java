@@ -8,15 +8,13 @@ import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class InvalidXPathTest {
+public class InvalidXPathTest extends IntegrationTest {
   @Before
   public void openTestPageWithJQuery() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test(expected = InvalidSelectorException.class)

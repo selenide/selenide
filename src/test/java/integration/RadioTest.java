@@ -6,15 +6,13 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.getSelectedRadio;
 import static com.codeborne.selenide.Selenide.selectRadio;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class RadioTest {
+public class RadioTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

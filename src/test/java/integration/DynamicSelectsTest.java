@@ -6,14 +6,12 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 
-public class DynamicSelectsTest {
+public class DynamicSelectsTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_dynamic_select.html"));
+    openFile("page_with_dynamic_select.html");
   }
 
   @Test

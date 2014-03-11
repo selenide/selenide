@@ -5,18 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 
-public class SelectsTest {
+public class SelectsTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

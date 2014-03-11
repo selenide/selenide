@@ -8,16 +8,14 @@ import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class TimeoutTest {
+public class TimeoutTest extends IntegrationTest {
   @Before
   public void openTestPageWithJQuery() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

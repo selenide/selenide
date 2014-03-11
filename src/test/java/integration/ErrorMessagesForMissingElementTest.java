@@ -19,12 +19,12 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Selenide.*;
-import static java.lang.Thread.currentThread;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getElement;
 import static org.junit.Assert.*;
 
-public class ErrorMessagesForMissingElementTest {
-  PageObject pageObject = open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"), PageObject.class);
+public class ErrorMessagesForMissingElementTest extends IntegrationTest {
+  PageObject pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
 
   @Before
   public final void setTimeout() {

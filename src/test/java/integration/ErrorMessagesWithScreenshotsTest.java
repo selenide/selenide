@@ -10,16 +10,14 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class ErrorMessagesWithScreenshotsTest {
+public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   @Before
   public final void setTimeout() {
     timeout = 0;
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @After

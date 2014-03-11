@@ -18,11 +18,10 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
-public class ConfirmTest {
+public class ConfirmTest extends IntegrationTest {
   @Parameterized.Parameters
   public static List<Object[]> names() {
     // TODO Add ", new String[]{"Серафим"}". Now it works unstable in Chrome.
@@ -40,7 +39,7 @@ public class ConfirmTest {
 
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
+    openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
   }

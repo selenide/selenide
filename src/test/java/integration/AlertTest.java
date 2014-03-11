@@ -8,15 +8,15 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.fail;
 
-public class AlertTest {
+public class AlertTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_alerts.html"));
+    openFile("page_with_alerts.html");
   }
 
   @Test

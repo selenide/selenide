@@ -8,13 +8,12 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
-import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertEquals;
 
-public class ByTextTest {
+public class ByTextTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+    openFile("page_with_selects_without_jquery.html");
   }
 
   @Test

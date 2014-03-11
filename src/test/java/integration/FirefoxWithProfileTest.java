@@ -11,23 +11,22 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
+import static org.junit.Assume.assumeTrue;
 
-public class FirefoxWithProfileTest {
+public class FirefoxWithProfileTest extends IntegrationTest {
   @Test
   public void createFirefoxWithCustomProfile() {
-    if (!WebDriverRunner.isFirefox()) {
-      return;
-    }
+    assumeTrue(WebDriverRunner.isFirefox());
 
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
     WebDriver driver = new FirefoxDriver(profile);
     driver.manage().window().maximize();
     try {
       WebDriverRunner.setWebDriver(driver);
-      open(currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html"));
+      openFile("page_with_selects_without_jquery.html");
 
       WebDriverRunner.setWebDriver(driver);
-      open(currentThread().getContextClassLoader().getResource("page_with_jquery.html"));
+      openFile("page_with_jquery.html");
     }
     finally {
       WebDriverRunner.closeWebDriver();
