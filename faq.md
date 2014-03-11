@@ -74,3 +74,13 @@ takeScreenshot("my_file_name");
 ```
 
 Selenide will create two files: `my_file_name.png` и `my_file_name.html`
+
+
+## Browser windows / tabs
+
+> How can I switch between browser windows/tabs?
+
+You can use Selenium WebDriver API for switching between browser windows.
+
+  * `getWebDriver().getWindowHandles()` - returns set of all browser windows/tabs
+  * `getWebDriver().getWindowHandle()` - returns unique identifier of active window/tab
