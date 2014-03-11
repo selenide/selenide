@@ -154,7 +154,7 @@ a small {
 }
 
 
-.short.docs, .short.blog {
+.short.docs {
   background-color:  #E5B755;
   padding-top: 25px;
   padding-bottom: 35px;
@@ -178,7 +178,7 @@ a small {
   padding-bottom: 35px;
 }
 
-.short.howto {
+.short.howto, .short.blog {
   background-color: #55B7E7;
   padding-top: 25px;
   padding-bottom: 35px;
