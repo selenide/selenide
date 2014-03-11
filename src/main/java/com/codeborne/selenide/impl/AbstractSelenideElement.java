@@ -23,8 +23,8 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.htmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.ie;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
@@ -207,10 +207,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected String getInnerText() {
     WebElement element = waitUntil("", exist, timeout);
-    if (htmlUnit()) {
+    if (isHtmlUnit()) {
       return executeJavaScript("return arguments[0].innerText", element);
     }
-    else if (ie()) {
+    else if (isIE()) {
       return element.getAttribute("innerText");
     }
     return element.getAttribute("textContent");
@@ -218,7 +218,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected String getInnerHtml() {
     WebElement element = waitUntil("", exist, timeout);
-    if (htmlUnit()) {
+    if (isHtmlUnit()) {
       return executeJavaScript("return arguments[0].innerHTML", element);
     }
     return element.getAttribute("innerHTML");

@@ -115,7 +115,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("@мыло.ру", $(byText("@мыло.ру")).innerHtml());
     assertEquals("Dropdown list", $("h2").innerHtml());
 
-    if (htmlUnit()) {
+    if (isHtmlUnit()) {
       assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
       assertEquals("username: <span class=name>bob smith</span> last login: <span class=last-login>01.01.1970</span>",
           $("#status").innerHtml().trim().toLowerCase());
@@ -138,7 +138,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanSearchElementByDataAttribute() {
-    assumeFalse(isChrome() || htmlUnit() || phantomjs());
+    assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
 
     assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
     assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
@@ -178,7 +178,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanPressTab() {
-    assumeFalse(htmlUnit() || isFirefox()); // fails in HtmlUnit for unknown reason
+    assumeFalse(isHtmlUnit() || isFirefox()); // fails in HtmlUnit for unknown reason
 
     $("#username").val("tere").pressTab();
     $("#username-blur-counter").shouldHave(text("blur:"));

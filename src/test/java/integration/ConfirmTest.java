@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
 import static org.junit.Assert.fail;
 
@@ -70,7 +70,7 @@ public class ConfirmTest extends IntegrationTest {
     catch (DialogTextMismatch expected) {
       return;
     }
-    if (!isHeadless()) {
+    if (supportsModalDialogs()) {
       fail("Should throw DialogTextMismatch for mismatching text");
     }
   }

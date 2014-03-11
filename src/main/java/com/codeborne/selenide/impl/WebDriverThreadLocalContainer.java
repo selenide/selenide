@@ -114,12 +114,13 @@ public class WebDriverThreadLocalContainer {
   protected WebDriver createDriver() {
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
         CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
-            FIREFOX.equalsIgnoreCase(browser) ? createFirefoxDriver() :
-                htmlUnit() ? createHtmlUnitDriver() :
-                    ie() ? createInternetExplorerDriver() :
-                        PHANTOMJS.equals(browser) ? createPhantomJsDriver() :
+            isFirefox() ? createFirefoxDriver() :
+                isHtmlUnit() ? createHtmlUnitDriver() :
+                    isIE() ? createInternetExplorerDriver() :
+                        isPhantomjs() ? createPhantomJsDriver() :
                             OPERA.equalsIgnoreCase(browser) ? createOperaDriver() :
-                                createInstanceOf(browser);
+                                isSafari() ? createSafariDriver() :
+                                  createInstanceOf(browser);
     return listeners.isEmpty() ? webdriver : addListeners(webdriver);
   }
 
@@ -168,6 +169,10 @@ public class WebDriverThreadLocalContainer {
 
   protected WebDriver createOperaDriver() {
     return createInstanceOf("com.opera.core.systems.OperaDriver");
+  }
+
+  protected WebDriver createSafariDriver() {
+    return createInstanceOf("org.openqa.selenium.safari.SafariDriver");
   }
 
   protected WebDriver maximize(WebDriver driver) {

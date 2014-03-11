@@ -47,7 +47,7 @@ public class Selenide {
   }
 
   private static boolean doDismissModalDialogs() {
-    return isHeadless() || dismissModalDialogs;
+    return !supportsModalDialogs() || dismissModalDialogs;
   }
 
   private static void mockModalDialogs() {

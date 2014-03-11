@@ -12,6 +12,7 @@ public class WebDriverRunner {
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
   public static final String FIREFOX = "firefox";
+  public static final String SAFARI = "safari";
 
   /**
    * To use HtmlUnitDriver, you need to include extra dependency to your project:
@@ -108,29 +109,55 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use Internet Explorer browser
    */
-  public static boolean ie() {
+  public static boolean isIE() {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+  }
+
+  @Deprecated
+  public static boolean ie() {
+    return isIE();
+  }
+
+  public static boolean isSafari() {
+    return SAFARI.equalsIgnoreCase(browser);
   }
 
   /**
    * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
    */
   public static boolean isHeadless() {
-    return htmlUnit() || phantomjs();
+    return isHtmlUnit() || isPhantomjs();
+  }
+
+  /**
+   * Does this browser support "alert" and "confirm" dialogs.
+   */
+  public static boolean supportsModalDialogs() {
+    return !isHeadless() && !isSafari();
   }
 
   /**
    * Is Selenide configured to use HtmlUnit browser
    */
-  public static boolean htmlUnit() {
+  public static boolean isHtmlUnit() {
     return browser != null && browser.startsWith(HTMLUNIT);
+  }
+
+  @Deprecated
+  public static boolean htmlUnit() {
+    return isHtmlUnit();
   }
 
   /**
    * Is Selenide configured to use PhantomJS browser
    */
-  public static boolean phantomjs() {
+  public static boolean isPhantomjs() {
     return PHANTOMJS.equalsIgnoreCase(browser);
+  }
+
+  @Deprecated
+  public static boolean phantomjs() {
+    return isPhantomjs();
   }
 
   /**

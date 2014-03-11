@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.ie;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
@@ -31,7 +31,7 @@ public class Navigator {
   }
 
   protected void navigateToAbsoluteUrl(String url) {
-    if (ie() && !isLocalFile(url)) {
+    if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
 

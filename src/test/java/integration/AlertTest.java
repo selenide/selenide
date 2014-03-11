@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.confirm;
-import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.fail;
 
 public class AlertTest extends IntegrationTest {
@@ -38,7 +38,7 @@ public class AlertTest extends IntegrationTest {
     catch (DialogTextMismatch expected) {
       return;
     }
-    if (!isHeadless()) {
+    if (supportsModalDialogs()) {
       fail("Should throw DialogTextMismatch for mismatching text");
     }
   }
