@@ -29,7 +29,7 @@ public class Cleanup {
         error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
 
-  public InvalidSelectorException wrap(RuntimeException error) {
+  public InvalidSelectorException wrap(Exception error) {
     return (error instanceof InvalidSelectorException) ?
         (InvalidSelectorException) error :
         new InvalidSelectorException("Invalid selector", error);

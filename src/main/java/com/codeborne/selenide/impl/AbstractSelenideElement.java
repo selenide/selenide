@@ -188,18 +188,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
     }
     catch (WebDriverException elementNotFound) {
-      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-        throw Cleanup.of.wrap(elementNotFound);
-      }
+      lastError = elementNotFound;
     }
     catch (IndexOutOfBoundsException ignore) {
+      lastError = ignore;
+    }
+
+    if (Cleanup.of.isInvalidSelectorError(lastError)) {
+      throw Cleanup.of.wrap(lastError);
     }
 
     return condition.applyNull();
   }
 
   protected void setSelected(boolean selected) {
-    WebElement element = tryToGetElement();
+    WebElement element = waitForElement();
     if (element.isSelected() ^ selected) {
       element.click();
     }
@@ -379,6 +382,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     final long startTime = currentTimeMillis();
     WebElement element;
     do {
+      lastError = null;
       element = tryToGetElement();
       if (element != null) {
         try {
@@ -387,9 +391,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           }
         }
         catch (WebDriverException elementNotFound) {
-          if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-            throw Cleanup.of.wrap(elementNotFound);
-          }
           lastError = elementNotFound;
         }
         catch (IndexOutOfBoundsException ignore) {
@@ -403,7 +404,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (currentTimeMillis() - startTime < timeoutMs);
 
-    if (!exists(element)) {
+    if (Cleanup.of.isInvalidSelectorError(lastError)) {
+      throw Cleanup.of.wrap(lastError);
+    }
+    else if (!exists(element)) {
       throw new ElementNotFound(getSearchCriteria(), condition, lastError, timeoutMs);
     }
     else {
@@ -415,6 +419,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     final long startTime = currentTimeMillis();
     WebElement element;
     do {
+      lastError = null;
       element = tryToGetElement();
       if (element != null) {
         try {
@@ -423,9 +428,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           }
         }
         catch (WebDriverException elementNotFound) {
-          if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-            throw Cleanup.of.wrap(elementNotFound);
-          }
           lastError = elementNotFound;
         }
         catch (IndexOutOfBoundsException ignore) {
@@ -439,7 +441,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     while (currentTimeMillis() - startTime < timeoutMs);
 
-    if (!exists(element)) {
+    if (Cleanup.of.isInvalidSelectorError(lastError)) {
+      throw Cleanup.of.wrap(lastError);
+    }
+    else if (!exists(element)) {
       throw new ElementNotFound(getSearchCriteria(), not(condition), lastError, timeoutMs);
     }
     else {
@@ -447,15 +452,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  boolean exists(WebElement element) {
+  protected boolean exists(WebElement element) {
     try {
-      if (element == null) return false;
-      element.isDisplayed();
-      return true;
+      return element != null && element.isDisplayed();
     } catch (WebDriverException elementNotFound) {
-      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-        throw Cleanup.of.wrap(elementNotFound);
-      }
       return false;
     }
   }
@@ -464,9 +464,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     try {
       return getActualDelegate();
     } catch (WebDriverException elementNotFound) {
-      if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-        throw Cleanup.of.wrap(elementNotFound);
-      }
       lastError = elementNotFound;
       return null;
     } catch (IndexOutOfBoundsException ignore) {
