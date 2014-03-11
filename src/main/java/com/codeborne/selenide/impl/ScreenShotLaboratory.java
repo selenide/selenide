@@ -146,7 +146,7 @@ public class ScreenShotLaboratory {
   }
 
   protected void writeToFile(String content, File targetFile) throws IOException {
-    copyFile(new ByteArrayInputStream(content.getBytes()), targetFile);
+    copyFile(new ByteArrayInputStream(content.getBytes("UTF-8")), targetFile);
   }
 
   protected File ensureFolderExists(File targetFile) {
