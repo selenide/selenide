@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,
     FindsByTagName, FindsByClassName, FindsByCssSelector,
@@ -376,8 +377,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Download file linked by "href" attribute of this element
+   * @throws RuntimeException if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server
    */
-  File download();
+  File download() throws FileNotFoundException;
 
   /**
    * @return the original Selenium WebElement wrapped by this object

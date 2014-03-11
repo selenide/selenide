@@ -16,6 +16,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,6 +38,13 @@ public class FileDownloader {
     HttpResponse response = executeHttpRequest(fileToDownloadLocation);
 
     File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
+
+    if (response.getStatusLine().getStatusCode() >= 500) {
+      throw new RuntimeException("Failed to download file " + downloadedFile.getName() + ": " + response.getStatusLine());
+   }
+    if (response.getStatusLine().getStatusCode() >= 400) {
+      throw new FileNotFoundException("Failed to download file " + downloadedFile.getName() + ": " + response.getStatusLine());
+    }
 
     return saveFileContent(response, downloadedFile);
   }

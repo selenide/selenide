@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Selectors.byText;
@@ -30,11 +31,8 @@ public class FileDownloadTest extends IntegrationTest {
     assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
   }
 
-  @Test
+  @Test(expected = FileNotFoundException.class)
   public void downloadMissingFile() throws IOException {
     File missingFile = $(byText("Download missing file")).download();
-
-    // TODO should throw FileNotFoundException
-    assertEquals("", FileUtils.readFileToString(missingFile));
   }
 }
