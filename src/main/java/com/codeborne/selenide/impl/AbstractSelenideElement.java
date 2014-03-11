@@ -398,6 +398,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         }
       }
       else if (condition.applyNull()) {
+        if (Cleanup.of.isInvalidSelectorError(lastError)) {
+          throw Cleanup.of.wrap(lastError);
+        }
         return null;
       }
       sleep(pollingInterval);
@@ -435,6 +438,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         }
       }
       else if (!condition.applyNull()) {
+        if (Cleanup.of.isInvalidSelectorError(lastError)) {
+          throw Cleanup.of.wrap(lastError);
+        }
         return;
       }
       sleep(pollingInterval);

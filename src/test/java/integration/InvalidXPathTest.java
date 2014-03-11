@@ -29,7 +29,6 @@ public class InvalidXPathTest extends IntegrationTest {
       fail("Expected: ElementNotFound exception with cause");
     } catch (ElementNotFound expectedException) {
       assertTrue(expectedException.toString().contains("Element not found {By.xpath: //tagga}"));
-      //assertTrue(expectedException.getCause() instanceof WebDriverException);
     }
   }
 }
