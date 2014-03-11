@@ -18,7 +18,7 @@ public class LocalHttpServer {
 
   public LocalHttpServer(int port) throws IOException {
     server = HttpServer.create(new InetSocketAddress(port), 0);
-//    server.createContext("/test", new MyHandler());
+    server.createContext("/files", new FileDownloadHandler());
     server.createContext("/", new FileHandler());
     server.setExecutor(null);
   }
@@ -35,33 +35,37 @@ public class LocalHttpServer {
       byte[] fileContent = readFileContent(fileName);
 
       http.sendResponseHeaders(200, fileContent.length);
-      OutputStream os = http.getResponseBody();
-      try {
-        os.write(fileContent);
-      } finally {
-        os.close();
-      }
-
-    }
-
-    private byte[] readFileContent(String file) throws IOException {
-      InputStream in = currentThread().getContextClassLoader().getResourceAsStream(file);
-      try {
-        return IOUtils.toByteArray(in);
-      } finally {
-        in.close();
-      }
+      printResponse(http, fileContent);
     }
   }
 
-//  private static class MyHandler implements HttpHandler {
-//    @Override
-//    public void handle(HttpExchange t) throws IOException {
-//      String response = "This is the response";
-//      t.sendResponseHeaders(200, response.length());
-//      OutputStream os = t.getResponseBody();
-//      os.write(response.getBytes());
-//      os.close();
-//    }
-//  }
+  private static class FileDownloadHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange http) throws IOException {
+      String fileName = http.getRequestURI().getPath().replaceFirst("\\/files\\/(.*)", "$1");
+      byte[] fileContent = readFileContent(fileName);
+
+      http.sendResponseHeaders(200, fileContent.length);
+      http.getResponseHeaders().set("content-disposition", "attachment; filename=" + fileName);
+      printResponse(http, fileContent);
+    }
+  }
+
+  static byte[] readFileContent(String file) throws IOException {
+    InputStream in = currentThread().getContextClassLoader().getResourceAsStream(file);
+    try {
+      return IOUtils.toByteArray(in);
+    } finally {
+      in.close();
+    }
+  }
+
+  static void printResponse(HttpExchange http, byte[] fileContent) throws IOException {
+    OutputStream os = http.getResponseBody();
+    try {
+      os.write(fileContent);
+    } finally {
+      os.close();
+    }
+  }
 }
