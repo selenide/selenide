@@ -26,6 +26,7 @@ public class Cleanup {
         error.getMessage().contains("nvalid selector") ||
         error.getMessage().contains("is not a valid selector") ||
         error.getMessage().contains("SYNTAX_ERR") ||
+        error.getMessage().contains("INVALID_EXPRESSION_ERR") ||
         error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
 

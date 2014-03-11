@@ -30,6 +30,7 @@ public class CleanupTest {
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("invalid element state: Failed to execute query: '//input[:attr='al]' is not a valid selector.\n")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("Invalid selectors: //input[:attr='al]")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":\"SYNTAX_ERR: DOM Exception 12\",,\"post\":\"{\\\"using\\\":\\\"css selector\\\",\\\"value\\\":\\\"//input[:attr='al]\\\"}\"}}\n")));
+    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":\"Unable to locate an element with the xpath expression //xxx[@' because of the following error:\\nError: INVALID_EXPRESSION_ERR: DOM XPath Exception 51\"}}\n")));
 
     RuntimeException cssException = new RuntimeException("Invalid selectors: //input[:attr='al]");
     NoSuchElementException error = new NoSuchElementException("Unable to locate element using css", cssException);
