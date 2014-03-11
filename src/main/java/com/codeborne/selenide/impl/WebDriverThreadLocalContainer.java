@@ -15,7 +15,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,7 +92,7 @@ public class WebDriverThreadLocalContainer {
         ((Killable) webdriver).kill();
       } catch (Exception e) {
         System.err.println("Failed to kill browser " + webdriver + ':');
-        e.printStackTrace(new PrintWriter(System.err));
+        e.printStackTrace();
       }
     }
   }

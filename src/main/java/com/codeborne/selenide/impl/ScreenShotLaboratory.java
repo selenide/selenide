@@ -8,6 +8,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
@@ -21,6 +23,19 @@ public class ScreenShotLaboratory {
   protected String currentContext = "";
   protected List<String> currentContextScreenshots;
   protected List<String> allScreenshots = new ArrayList<String>();
+
+  protected Set<String> printedErrors = new ConcurrentSkipListSet<String>();
+
+  protected synchronized void printOnce(String action, Throwable error) {
+    if (!printedErrors.contains(action)) {
+      System.err.println("Failed to " + action + ": ");
+      error.printStackTrace();
+      printedErrors.add(action);
+    }
+    else {
+      System.err.println("Failed to " + action + ": " + error);
+    }
+  }
 
   public String takeScreenShot(String className, String methodName) {
     return takeScreenShot(getScreenshotFileName(className, methodName));
@@ -82,8 +97,7 @@ public class ScreenShotLaboratory {
     try {
       writeToFile(webdriver.getPageSource(), pageSource);
     } catch (Exception e) {
-      System.err.println(e);
-      e.printStackTrace(new PrintWriter(System.err));
+      printOnce("savePageSourceToFile", e);
     }
     return pageSource;
   }
@@ -103,8 +117,7 @@ public class ScreenShotLaboratory {
       copyFile(scrFile, imageFile);
       return imageFile;
     } catch (Exception e) {
-      System.err.println(e);
-      e.printStackTrace(new PrintWriter(System.err));
+      printOnce("takeScreenshotImage", e);
       return null;
     }
   }
