@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.TextsMismatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.*;
@@ -31,6 +32,11 @@ public class CollectionMethodsTest {
     $("#radioButtons").$$(By.tagName("input")).shouldHave(size(4));
     $("#radioButtons").findAll("input").shouldHave(size(4));
     $("#radioButtons").findAll(By.tagName("input")).shouldHave(size(4));
+  }
+
+  @Test(expected = InvalidSelectorException.class)
+  public void invalidSelector() {
+    $$(By.xpath("//xxx[@'")).shouldHave(size(0));
   }
 
   @Test

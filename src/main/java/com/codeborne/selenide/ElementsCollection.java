@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Selenide.sleep;
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
   private List<WebElement> actualElements;
+  private Exception lastError;
 
   public ElementsCollection(WebElementsCollection collection) {
     this.collection = collection;
@@ -43,6 +44,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
+    lastError = null;
     final long startTime = System.currentTimeMillis();
     do {
       try {
@@ -51,17 +53,17 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           return;
         }
       } catch (WebDriverException elementNotFound) {
+        lastError = elementNotFound;
+
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
           throw Cleanup.of.wrap(elementNotFound);
         }
-
-        // TODO Do not ignore exception. Attach it to AssertionError.
       }
       sleep(pollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    condition.fail(collection, actualElements, timeoutMs);
+    condition.fail(collection, actualElements, lastError, timeoutMs);
   }
 
   public ElementsCollection filter(Condition condition) {

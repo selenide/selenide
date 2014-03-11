@@ -62,10 +62,11 @@ public class ErrorMessagesForMissingElementTest {
       $("h9").shouldHave(text("expected text"));
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertEquals("Element not found {By.selector: h9}\n" +
+      assertStartsWith("Element not found {By.selector: h9}\n" +
           "Expected: text 'expected text'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
-          "Timeout: 1.500 s.", expected.toString());
+          "Timeout: 1.500 s.\n" +
+          "Caused by: NoSuchElementException:", expected);
     }
   }
 
@@ -150,11 +151,17 @@ public class ErrorMessagesForMissingElementTest {
       $(pageObject.categoryDropdown).click();
       fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
-      assertEquals("Element not found {By.id: invalid_id}\n" +
+      assertStartsWith("Element not found {By.id: invalid_id}\n" +
           "Expected: visible\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
-          "Timeout: 1.500 s.", e.toString());
+          "Timeout: 1.500 s.\n" +
+          "Caused by: NoSuchElementException:", e);
     }
+  }
+
+  private void assertStartsWith(String expectedMessageStart, Error error) {
+    assertTrue("Error should start with " + expectedMessageStart + ", but received: " + error,
+        error.toString().startsWith(expectedMessageStart));
   }
 
   @Test
@@ -176,10 +183,11 @@ public class ErrorMessagesForMissingElementTest {
       $("h14").shouldNotBe(hidden);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
-      assertEquals("Element not found {By.selector: h14}\n" +
+      assertStartsWith("Element not found {By.selector: h14}\n" +
           "Expected: not(hidden)\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
-          "Timeout: 1.500 s.", e.toString());
+          "Timeout: 1.500 s.\n" +
+          "Caused by: NoSuchElementException:", e);
     }
   }
 

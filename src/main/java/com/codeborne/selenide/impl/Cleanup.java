@@ -1,12 +1,11 @@
 package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.WebDriverException;
 
 public class Cleanup {
   public static Cleanup of = new Cleanup();
 
-  public String webdriverExceptionMessage(WebDriverException webDriverException) {
+  public String webdriverExceptionMessage(Exception webDriverException) {
     return webdriverExceptionMessage(webDriverException.toString());
   }
 

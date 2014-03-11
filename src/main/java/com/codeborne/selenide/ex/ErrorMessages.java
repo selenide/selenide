@@ -2,6 +2,8 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.impl.Cleanup;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -62,5 +64,15 @@ public class ErrorMessages {
     } catch (MalformedURLException e) {
       return "\nScreenshot: file://" + screenshot;
     }
+  }
+
+  public static String causedBy(Exception cause) {
+    if (cause == null) {
+      return "";
+    }
+    if (cause instanceof NoSuchElementException) {
+      return "\nCaused by: " + Cleanup.of.webdriverExceptionMessage(cause);
+    }
+    return "\nCaused by: " + cause;
   }
 }

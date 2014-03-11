@@ -33,6 +33,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
   abstract String getSearchCriteria();
+  protected Exception lastError;
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -389,11 +390,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
             throw Cleanup.of.wrap(elementNotFound);
           }
-
-          // TODO Do not ignore error. Attach it to AssertionError.
+          lastError = elementNotFound;
         }
         catch (IndexOutOfBoundsException ignore) {
-          // TODO Do not ignore error. Attach it to AssertionError.
+          lastError = ignore;
         }
       }
       else if (condition.applyNull()) {
@@ -404,10 +404,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     while (currentTimeMillis() - startTime < timeoutMs);
 
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), condition, timeoutMs);
+      throw new ElementNotFound(getSearchCriteria(), condition, lastError, timeoutMs);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, condition, element, timeoutMs);
+      throw new ElementShould(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);
     }
   }
 
@@ -426,11 +426,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
           if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
             throw Cleanup.of.wrap(elementNotFound);
           }
-
-          // TODO Do not ignore error. Attach it to AssertionError.
+          lastError = elementNotFound;
         }
         catch (IndexOutOfBoundsException ignore) {
-          // TODO Do not ignore error. Attach it to AssertionError.
+          lastError = ignore;
         }
       }
       else if (!condition.applyNull()) {
@@ -441,10 +440,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     while (currentTimeMillis() - startTime < timeoutMs);
 
     if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), not(condition), timeoutMs);
+      throw new ElementNotFound(getSearchCriteria(), not(condition), lastError, timeoutMs);
     }
     else {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, timeoutMs);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);
     }
   }
 
@@ -468,13 +467,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
         throw Cleanup.of.wrap(elementNotFound);
       }
-
-      // TODO Do not ignore this exception, but re-throw it later.
-      // For example, this information is useful:
-//      org.openqa.selenium.InvalidSelectorException: The given selector .//*/text()[contains(normalize-space(.), 'without')] is either invalid or does not result in a WebElement. The following error occurred:
-//          InvalidSelectorError: The result of the xpath expression ".//*/text()[contains(normalize-space(.), 'without')]" is: [object Text]. It should be an element.
+      lastError = elementNotFound;
       return null;
     } catch (IndexOutOfBoundsException ignore) {
+      lastError = ignore;
       return null;
     } catch (RuntimeException e) {
       throw Cleanup.of.wrap(e);

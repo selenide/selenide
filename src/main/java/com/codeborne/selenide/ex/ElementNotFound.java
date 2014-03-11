@@ -8,17 +8,17 @@ import java.util.Arrays;
 
 public class ElementNotFound extends UIAssertionError {
   public ElementNotFound(By searchCriteria, Condition expectedCondition, long timeoutMs) {
-    this(searchCriteria.toString(), expectedCondition, timeoutMs);
+    this(searchCriteria.toString(), expectedCondition, null, timeoutMs);
   }
 
-  public ElementNotFound(String searchCriteria, Condition expectedCondition, long timeoutMs) {
+  public ElementNotFound(String searchCriteria, Condition expectedCondition, Exception lastError, long timeoutMs) {
     super("Element not found {" + searchCriteria + '}' +
-        "\nExpected: " + expectedCondition, timeoutMs);
+        "\nExpected: " + expectedCondition, timeoutMs, lastError);
   }
 
-  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, long timeoutMs) {
+  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Exception lastError, long timeoutMs) {
     super("Element not found {" + collection.description() + '}' +
-        "\nExpected: " + Arrays.toString(expectedTexts), timeoutMs);
+        "\nExpected: " + Arrays.toString(expectedTexts), timeoutMs, lastError);
   }
 
   @Override
