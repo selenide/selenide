@@ -2,8 +2,6 @@ package integration;
 
 import org.junit.BeforeClass;
 
-import java.io.IOException;
-
 import static com.codeborne.selenide.Selenide.open;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
@@ -12,7 +10,7 @@ public abstract class IntegrationTest {
   private static LocalHttpServer server;
 
   @BeforeClass
-  public static void runLocalHttpServer() throws IOException {
+  public static void runLocalHttpServer() throws Exception {
     if (server == null) {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
