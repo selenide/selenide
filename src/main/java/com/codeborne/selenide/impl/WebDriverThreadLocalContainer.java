@@ -19,62 +19,83 @@ import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static java.lang.Thread.currentThread;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainer {
   protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
-  protected List<WebDriver> ALL_WEB_DRIVERS = new ArrayList<WebDriver>();
-  protected ThreadLocal<WebDriver> THREAD_WEB_DRIVER = new ThreadLocal<WebDriver>();
+  protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
+  protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
 
-  public WebDriverThreadLocalContainer() {
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        closeAllWebDrivers();
+  protected final AtomicBoolean killerThreadRun = new AtomicBoolean(false);
+
+  protected void closeUnusedWebdrivers() {
+    for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
+      if (!thread.isAlive()) {
+        closeWebDriver(thread);
       }
-    });
+    }
+  }
+
+  protected void closeAllWebDrivers() {
+    for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
+      closeWebDriver(thread);
+    }
   }
 
   public void addListener(WebDriverEventListener listener) {
     listeners.add(listener);
   }
 
-  public void setWebDriver(WebDriver webDriver) {
-    THREAD_WEB_DRIVER.set(webDriver);
-    ALL_WEB_DRIVERS.add(webDriver);
+  public WebDriver setWebDriver(WebDriver webDriver) {
+    THREAD_WEB_DRIVER.put(currentThread().getId(), webDriver);
+    return webDriver;
+  }
+
+  protected WebDriver autoClose(WebDriver webDriver) {
+    System.out.println(" === CREATE WEBDRIVER: " + currentThread().getId() + " -> " + webDriver);
+    ALL_WEB_DRIVERS_THREADS.add(currentThread());
+
+    if (!killerThreadRun.get()) {
+      synchronized (killerThreadRun) {
+        if (!killerThreadRun.get()) {
+          new KillerThread().start();
+          Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
+          killerThreadRun.set(true);
+        }
+      }
+    }
+    return webDriver;
   }
 
   public WebDriver getWebDriver() {
-    if (THREAD_WEB_DRIVER.get() == null) {
-      WebDriver webDriver = createDriver();
-      THREAD_WEB_DRIVER.set(webDriver);
-      ALL_WEB_DRIVERS.add(webDriver);
+    if (!THREAD_WEB_DRIVER.containsKey(currentThread().getId())) {
+      return setWebDriver(autoClose(createDriver()));
     }
-    return THREAD_WEB_DRIVER.get();
+    // TODO check if browser is already closed
+    return THREAD_WEB_DRIVER.get(currentThread().getId());
   }
 
   public void closeWebDriver() {
-    WebDriver webdriver = THREAD_WEB_DRIVER.get();
-    if (webdriver != null) {
-      closeWebDriver(webdriver);
-    }
+    closeWebDriver(currentThread());
   }
 
-  protected void closeAllWebDrivers() {
-    while (!ALL_WEB_DRIVERS.isEmpty()) {
-      closeWebDriver(ALL_WEB_DRIVERS.get(0));
-    }
-  }
+  protected void closeWebDriver(Thread thread) {
+    ALL_WEB_DRIVERS_THREADS.remove(thread);
+    WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
 
-  protected void closeWebDriver(WebDriver webdriver) {
-    THREAD_WEB_DRIVER.remove();
-    ALL_WEB_DRIVERS.remove(webdriver);
+    System.out.println(" === CLOSE WEBDRIVER: " + currentThread().getId() + " -> " + webdriver);
 
-    if (!holdBrowserOpen) {
+    if (webdriver != null && !holdBrowserOpen) {
       try {
         webdriver.quit();
       } catch (WebDriverException cannotCloseBrowser) {
@@ -98,8 +119,9 @@ public class WebDriverThreadLocalContainer {
   }
 
   public void clearBrowserCache() {
-    if (THREAD_WEB_DRIVER.get() != null) {
-      THREAD_WEB_DRIVER.get().manage().deleteAllCookies();
+    WebDriver webdriver = THREAD_WEB_DRIVER.get(currentThread().getId());
+    if (webdriver != null) {
+      webdriver.manage().deleteAllCookies();
     }
   }
 
@@ -210,6 +232,33 @@ public class WebDriverThreadLocalContainer {
       return new RemoteWebDriver(new URL(remote), capabilities);
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
+    }
+  }
+
+  protected class AbsoluteKillerThread extends Thread {
+      @Override
+      public void run() {
+        closeAllWebDrivers();
+      }
+  }
+
+  protected class KillerThread extends Thread {
+    public KillerThread() {
+      setDaemon(true);
+      setName("Webdrivers killer thread");
+    }
+
+    @Override
+    public void run() {
+      while (true) {
+        closeUnusedWebdrivers();
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          break;
+        }
+      }
     }
   }
 }
