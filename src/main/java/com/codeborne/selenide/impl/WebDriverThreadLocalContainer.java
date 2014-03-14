@@ -1,12 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.WebDriverProvider;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -168,9 +164,10 @@ public class WebDriverThreadLocalContainer {
                 isHtmlUnit() ? createHtmlUnitDriver() :
                     isIE() ? createInternetExplorerDriver() :
                         isPhantomjs() ? createPhantomJsDriver() :
-                            OPERA.equalsIgnoreCase(browser) ? createOperaDriver() :
+                            isOpera() ? createOperaDriver() :
                                 isSafari() ? createSafariDriver() :
                                   createInstanceOf(browser);
+    webdriver = maximize(webdriver);
     return listeners.isEmpty() ? webdriver : addListeners(webdriver);
   }
 
@@ -183,17 +180,11 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createChromeDriver() {
-    ChromeOptions options = new ChromeOptions();
-    if (startMaximized) {
-      // Due do bug in ChromeDriver we need this workaround
-      // http://stackoverflow.com/questions/3189430/how-do-i-maximize-the-browser-window-using-webdriver-selenium-2
-      options.addArguments("chrome.switches", "--start-maximized");
-    }
-    return new ChromeDriver(options);
+    return new ChromeDriver();
   }
 
   protected WebDriver createFirefoxDriver() {
-    return maximize(new FirefoxDriver());
+    return new FirefoxDriver();
   }
 
   protected WebDriver createHtmlUnitDriver() {
@@ -210,11 +201,11 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createInternetExplorerDriver() {
-    return maximize(new InternetExplorerDriver());
+    return new InternetExplorerDriver();
   }
 
   protected WebDriver createPhantomJsDriver() {
-    return maximize(createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver"));
+    return createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver");
   }
 
   protected WebDriver createOperaDriver() {
@@ -227,9 +218,31 @@ public class WebDriverThreadLocalContainer {
 
   protected WebDriver maximize(WebDriver driver) {
     if (startMaximized) {
-      driver.manage().window().maximize();
+      try {
+        if (isChrome()) {
+          maximizeChromeBrowser(driver.manage().window());
+        }
+        else {
+          driver.manage().window().maximize();
+        }
+      }
+      catch (Exception cannotMaximize) {
+        System.out.println("Cannot maximize " + browser + ": " + cannotMaximize);
+      }
     }
     return driver;
+  }
+
+  protected void maximizeChromeBrowser(WebDriver.Window window) {
+    // Chrome driver does not yet support maximizing. Let' apply black magic!
+    java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+
+    Dimension screenResolution = new Dimension(
+        (int) toolkit.getScreenSize().getWidth(),
+        (int) toolkit.getScreenSize().getHeight());
+
+    window.setSize(screenResolution);
+    window.setPosition(new org.openqa.selenium.Point(0, 0));
   }
 
   protected WebDriver createInstanceOf(String className) {
