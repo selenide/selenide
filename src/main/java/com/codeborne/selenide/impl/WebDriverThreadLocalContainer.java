@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,6 +13,8 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionNotFoundException;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
@@ -77,12 +80,37 @@ public class WebDriverThreadLocalContainer {
     return webDriver;
   }
 
-  public WebDriver getWebDriver() {
-    if (!THREAD_WEB_DRIVER.containsKey(currentThread().getId())) {
-      return setWebDriver(autoClose(createDriver()));
+  protected boolean isBrowserStillOpen(WebDriver webDriver) {
+    try {
+      webDriver.manage().window().getSize();
+      return true;
+    } catch (UnreachableBrowserException e) {
+      return false;
+    } catch (NoSuchWindowException e) {
+      return false;
+    } catch (SessionNotFoundException e) {
+      return false;
     }
-    // TODO check if browser is already closed
-    return THREAD_WEB_DRIVER.get(currentThread().getId());
+  }
+
+  public WebDriver getWebDriver() {
+    WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
+    return webDriver != null ? webDriver : setWebDriver(autoClose(createDriver()));
+  }
+
+  public WebDriver getAndCheckWebDriver() {
+    WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
+    if (webDriver != null) {
+      if (isBrowserStillOpen(webDriver)) {
+        return webDriver;
+      }
+      else {
+        System.out.println("Webdriver has been closed meanwhile. Let's re-create it.");
+        closeWebDriver();
+      }
+    }
+    return setWebDriver(autoClose(createDriver()));
+
   }
 
   public void closeWebDriver() {

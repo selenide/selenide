@@ -91,6 +91,14 @@ public class WebDriverRunner {
   }
 
   /**
+   * Get the underlying instance of Selenium WebDriver, and assert that it's still alive.
+   * @return new instance of WebDriver if the previous one has been closed meanwhile.
+   */
+  public static WebDriver getAndCheckWebDriver() {
+    return webdriverContainer.getAndCheckWebDriver();
+  }
+
+  /**
    * Close the browser if it's open
    */
   public static void closeWebDriver() {

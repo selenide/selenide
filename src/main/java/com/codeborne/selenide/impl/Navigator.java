@@ -8,6 +8,7 @@ import java.net.URL;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 
@@ -36,7 +37,7 @@ public class Navigator {
     }
 
     try {
-      getWebDriver().navigate().to(url);
+      getAndCheckWebDriver().navigate().to(url);
     } catch (WebDriverException e) {
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
