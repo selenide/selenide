@@ -76,7 +76,21 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.9 (Released 14.03.2014)
+* #102 $.shouldHave(text()) should also ignore \u00a0 character (unbreakable space)
+* If selenide cannot take screenshot, the error is logged with stack trace (but only once)
+* #103 Do not ignore webdriver exception, but attach to the assertion error being thrown.
+* #69 Added support for Safari webdriver
+* Added method ScreenShooter.to(folder)
+* #98 Selenide stores page source in UTF-8 encoding(independently of default system encoding)
+* Removed confusing messages about "reportsUrl" and "BUILD_URL"(use LOG.config log level)
+* #104 Method $.download() throws FileNotFoundException (for 40x error) or RuntimeException (for 50x error)
+* #105 Selenide should wait 4 seconds and re-try even in case of invalidSelectorException
+* #107 Selenide should cleanup all unused browsers immediately
+* #108 Consistently maximize browser windows independently of webdriver creation mode.
+
 === 2.8.1 (Released 24.02.2014)
+* #99 Added OR condition
 * #100 Use "jQuery" instead of "$" when sending jquery commands (to avoid conflicts with other JS frameworks)
 * Upgraded to Selenium 2.40.0, HtmlUnit 2.14 and TestNG 6.8.8
 
