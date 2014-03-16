@@ -1,6 +1,6 @@
 ---
 layout: default
-title:
+title: "Selenide: concise UI tests in Java"
 tagline:
 ---
 {% include JB/setup %}
