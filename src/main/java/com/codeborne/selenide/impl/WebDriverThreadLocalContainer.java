@@ -45,12 +45,6 @@ public class WebDriverThreadLocalContainer {
     }
   }
 
-  protected void closeAllWebDrivers() {
-    for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
-      closeWebDriver(thread);
-    }
-  }
-
   public void addListener(WebDriverEventListener listener) {
     listeners.add(listener);
   }
@@ -68,11 +62,11 @@ public class WebDriverThreadLocalContainer {
       synchronized (killerThreadRun) {
         if (!killerThreadRun.get()) {
           new KillerThread().start();
-          Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
           killerThreadRun.set(true);
         }
       }
     }
+    Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
     return webDriver;
   }
 
@@ -277,9 +271,11 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected class AbsoluteKillerThread extends Thread {
+      private final Thread thread =  currentThread();
+
       @Override
       public void run() {
-        closeAllWebDrivers();
+        closeWebDriver(thread);
       }
   }
 
