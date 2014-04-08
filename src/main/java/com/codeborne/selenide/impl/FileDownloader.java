@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class FileDownloader {
@@ -31,8 +32,8 @@ public class FileDownloader {
 
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
-    if (fileToDownloadLocation.trim().isEmpty()) {
-      throw new IllegalArgumentException("The element does not have href attribute");
+    if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
+      throw new IllegalArgumentException("The element does not have href attribute: " + describe(element));
     }
 
     HttpResponse response = executeHttpRequest(fileToDownloadLocation);
