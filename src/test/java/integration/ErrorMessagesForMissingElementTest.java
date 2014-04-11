@@ -22,6 +22,7 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getElement;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   PageObject pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
@@ -107,6 +108,19 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
+    }
+  }
+
+  @Test
+  public void clickHiddenElement() {
+    try {
+      $("#theHiddenElement").click();
+      fail("Expected ElementShould");
+    } catch (ElementShould elementShouldExist) {
+      assertEquals("Element should be visible {By.selector: #theHiddenElement}\n" +
+          "Element: '<div id=theHiddenElement displayed:false></div>'\n" +
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Timeout: 1.500 s.", elementShouldExist.toString());
     }
   }
 
