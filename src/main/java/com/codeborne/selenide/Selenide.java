@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Set;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
@@ -411,5 +412,17 @@ public class Selenide {
    */
   public static Actions actions() {
     return new Actions(getWebDriver());
+  }
+
+  public static void switchToWindow(String title) {
+    WebDriver driver = getWebDriver();
+    Set<String> windowHandles = driver.getWindowHandles();
+    for (String windowHandle : windowHandles) {
+      driver.switchTo().window(windowHandle);
+      if (title.equals(driver.getTitle())) {
+        return;
+      }
+    }
+    throw new IllegalArgumentException("Window with title not found: " + title);
   }
 }
