@@ -173,8 +173,9 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanPressTab() {
-    assumeFalse(isHtmlUnit() || isFirefox()); // fails in HtmlUnit for unknown reason
+    assumeFalse(isHtmlUnit()); // fails in HtmlUnit for unknown reason
 
+    $("#username-blur-counter").should(exist);
     $("#username").val("tere").pressTab();
     $("#username-blur-counter").shouldHave(text("blur:"));
   }
