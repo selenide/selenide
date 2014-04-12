@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +12,7 @@ import java.util.Set;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
 
 public class TabsTest extends IntegrationTest {
   @Before
@@ -58,5 +60,10 @@ public class TabsTest extends IntegrationTest {
 
     Selenide.switchToWindow("Test::tabs");
     $("h1").shouldHave(text("Tabs"));
+  }
+
+  @After
+  public void tearDown() {
+    close();
   }
 }

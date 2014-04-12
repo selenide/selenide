@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,5 +68,11 @@ public class ConfirmTest extends IntegrationTest {
     if (supportsModalDialogs()) {
       fail("Should throw DialogTextMismatch for mismatching text");
     }
+  }
+
+
+  @AfterClass
+  public static void tearDown() {
+    close();
   }
 }

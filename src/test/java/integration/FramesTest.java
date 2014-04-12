@@ -1,5 +1,6 @@
 package integration;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,5 +35,10 @@ public class FramesTest extends IntegrationTest {
     switchTo().defaultContent();
     switchTo().frame("mainFrame");
     $("h1").shouldHave(text("Page with JQuery"));
+  }
+
+  @AfterClass
+  public static void tearDown() {
+    close();
   }
 }
