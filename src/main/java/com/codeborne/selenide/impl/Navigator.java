@@ -1,16 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
 
-import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.*;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
@@ -43,11 +38,6 @@ public class Navigator {
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
-    waitUntilPageIsLoaded();
-  }
-
-  protected void waitUntilPageIsLoaded() {
-    $(By.tagName("body")).should(appear);
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
