@@ -173,6 +173,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       contextClick();
       return null;
     }
+    else if ("hover".equals(method.getName())) {
+      hover();
+      return null;
+    }
+    else if ("dragAndDropTo".equals(method.getName())) {
+      dragAndDropTo((String) args[0]);
+      return null;
+    }
     else if ("getWrappedElement".equals(method.getName())) {
       return getActualDelegate();
     }
@@ -237,6 +245,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void contextClick() {
     actions().contextClick(waitForElement()).perform();
+  }
+
+  protected void hover() {
+    actions().moveToElement(waitForElement()).perform();
+  }
+
+  protected void dragAndDropTo(String targetCssSelector) {
+    SelenideElement target = $(targetCssSelector).shouldBe(visible);
+    actions().dragAndDrop(waitForElement(), target).perform();
   }
 
   protected void followLink() {

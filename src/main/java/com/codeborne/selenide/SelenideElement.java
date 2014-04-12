@@ -387,5 +387,22 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    */
   WebElement toWebElement();
 
+  /**
+   * Click with right mouse button on this element
+   * @return this element
+   */
   SelenideElement contextClick();
+
+  /**
+   * Emulate "mouseOver" event. In other words, move mouse cursor over this element.
+   * @return this element
+   */
+  SelenideElement hover();
+
+  /**
+   * Drag and drop this element to the target.
+   * @param targetCssSelector CSS selector defining target element.
+   * @return this element
+   */
+  SelenideElement dragAndDropTo(String targetCssSelector);
 }

@@ -21,6 +21,12 @@
         $('#log').append('onRememberMeChanged(' + val + ')<br/>');
         $("h2").text(val);
       }
+      function onHover(element) {
+        $(element).text("It's hover!");
+      }
+      function offHover(element) {
+        $(element).text("It's not hover.");
+      }
     </script>
   </head>
   <body>
@@ -43,5 +49,7 @@
         </fieldset>
       </form>
     </div>
+
+    <div id="hoverable" onmouseover="onHover(this);" onmouseout="offHover(this);">It's not hover</div>
   </body>
 </html>
