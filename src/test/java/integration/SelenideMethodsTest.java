@@ -3,10 +3,8 @@ package integration;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
@@ -22,9 +20,6 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
 public class SelenideMethodsTest extends IntegrationTest {
-  @Rule
-  public ScreenShooter allScreens = ScreenShooter.failedTests();
-
   @Before
   public void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

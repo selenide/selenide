@@ -1,9 +1,7 @@
 package integration;
 
-import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -11,14 +9,10 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LongRunningAjaxRequestTest extends IntegrationTest {
-  @Rule
-  public ScreenShooter screenShooter = failedTests();
-
   @Before
   public void openTestPage() {
     timeout = 2500;

@@ -1,9 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import com.codeborne.selenide.junit.ScreenShooter;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +15,6 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
-import static com.codeborne.selenide.junit.ScreenShooter.failedTests;
 import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
@@ -27,9 +24,6 @@ public class ConfirmTest extends IntegrationTest {
     // TODO Add ", new String[]{"Серафим"}". Now it works unstable in Chrome.
     return Arrays.asList(new Object[]{"John Mc'Clane"}, new String[]{"L ucie"});
   }
-
-  @Rule
-  public ScreenShooter screenshots = failedTests().succeededTests();
 
   private final String userName;
 
