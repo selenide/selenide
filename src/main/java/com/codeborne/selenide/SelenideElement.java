@@ -259,6 +259,22 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   @Override String toString();
 
   /**
+   * Get parent element of this element
+   * For example, $("td").parent() could give some "tr".
+   * @return Parent element
+   */
+  SelenideElement parent();
+
+  /**
+   * Find closes ancestor element matching given criteria.
+   * For example, $("td").closest("table") could give some "table".
+   *
+   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
+   * @return Matching ancestor element
+   */
+  SelenideElement closest(String tagOrClass);
+
+  /**
    * <p>Find the first matching element inside given element</p>
    * <p>Short form of <code>webElement.findElement(By.cssSelector(cssSelector))</code></p>
    */

@@ -22,7 +22,7 @@
   <body onload="setTimeout(fillTextArea, 1000);">
     <h1>Page without JQuery</h1>
 
-    <div>
+    <div id="dropdown-list-container">
       <h2>Dropdown list</h2>
       <select name="domain">
         <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
@@ -59,13 +59,13 @@
     <br/>
     <br/>
 
-    <table id="multirowTable" border="1">
+    <table id="multirowTable" class="multirow_table" border="1">
       <tbody>
-        <tr>
+        <tr id="multirowTableFirstRow">
           <td class="first_row">Chack</td>
           <td>Norris</td>
         </tr>
-        <tr>
+        <tr id="multirowTableSecondRow">
           <td class="second_row">Chack</td>
           <td id="baskerville">   <span></span> L'a
             Baskerville

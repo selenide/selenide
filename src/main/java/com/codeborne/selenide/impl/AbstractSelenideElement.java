@@ -43,7 +43,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("val".equals(method.getName())) {
       if (args == null || args.length == 0) {
-        return getDelegate().getAttribute("value");
+        return getValue();
       }
       else {
         setValue((String) args[0]);
@@ -101,6 +101,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("shouldNotBe".equals(method.getName())) {
       return shouldNot(proxy, "be ", (Condition[]) args[0]);
+    }
+    else if ("parent".equals(method.getName())) {
+      return parent((SelenideElement) proxy);
+    }
+    else if ("closest".equals(method.getName())) {
+      return closest((SelenideElement) proxy, (String) args[0]);
     }
     else if ("find".equals(method.getName()) || "$".equals(method.getName())) {
       return args.length == 1 ?
@@ -272,6 +278,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     element.clear();
     element.sendKeys(text);
     fireEvent("change");
+  }
+
+  protected String getValue() {
+    return getDelegate().getAttribute("value");
   }
 
   protected void append(String text) {
@@ -499,13 +509,22 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected WebElement find(SelenideElement proxy, Object arg, int index) {
-    By criteria = arg instanceof By ? (By) arg : By.cssSelector((String) arg);
-    return WaitingSelenideElement.wrap(proxy, criteria, index);
+  protected SelenideElement find(SelenideElement proxy, Object arg, int index) {
+    return WaitingSelenideElement.wrap(proxy, getSelector(arg), index);
   }
 
   protected By getSelector(Object arg) {
     return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+  }
+
+  protected SelenideElement parent(SelenideElement me) {
+    return find(me, By.xpath(".."), 0);
+  }
+
+  protected SelenideElement closest(SelenideElement me, String tagOrClass) {
+    return tagOrClass.startsWith(".") ?
+        find(me, By.xpath("ancestor::*[@class='" + tagOrClass.replaceFirst("\\.", "")+ "']"), 0) :
+        find(me, By.xpath("ancestor::" + tagOrClass), 0);
   }
 
   protected void scrollTo() {
