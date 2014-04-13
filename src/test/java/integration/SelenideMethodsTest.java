@@ -176,7 +176,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assumeFalse(isHtmlUnit()); // fails in HtmlUnit for unknown reason
 
     $("#username-blur-counter").should(exist);
-    $("#username").click();
+    $("#username").sendKeys(" x ");
     $("#username").pressTab();
     $("#username-blur-counter").shouldHave(text("blur:"));
   }
