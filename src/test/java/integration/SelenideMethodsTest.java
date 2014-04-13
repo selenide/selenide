@@ -398,4 +398,19 @@ public class SelenideMethodsTest extends IntegrationTest {
     Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
     $("#baskerville").shouldNotBe(none_of_conditions);
   }
+
+  @Test
+  public void canCheckJavaScriptErrors() {
+    assumeFalse(isFirefox());  // window.onerror does not work in Firefox for unknown reason :(
+
+    openFile("page_with_js_errors.html");
+    assertNoJavascriptErrors();
+    $(byText("Generate JS Error")).click();
+    assertEquals(1, getJavascriptErrors().size());
+
+    String jsError = getJavascriptErrors().get(0);
+    assertTrue(jsError, jsError.contains("ReferenceError"));
+    assertTrue(jsError, jsError.contains("$"));
+    assertTrue(jsError, jsError.contains("/page_with_js_errors.html"));
+  }
 }

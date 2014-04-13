@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test::js errors</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript">
+      function generateJSError(input) {
+        $('#my-id').val('tere');
+        document.getElementWithId('display').innerHTML = input.value;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Page with JS errors</h1>
+
+    <h3 id="display">___</h3>
+    <div>
+      <button onclick="generateJSError(this); return false;">Generate JS Error</button>
+    </div>
+  </body>
+</html>

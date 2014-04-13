@@ -2,16 +2,17 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
@@ -424,5 +425,39 @@ public class Selenide {
       }
     }
     throw new IllegalArgumentException("Window with title not found: " + title);
+  }
+
+  /**
+   * Get JavaScript errors that happened on this page.
+   *
+   * Format can differ from browser to browser:
+   *  - Uncaught ReferenceError: $ is not defined at http://localhost:35070/page_with_js_errors.html:8
+   *  - ReferenceError: Can't find variable: $ at http://localhost:8815/page_with_js_errors.html:8
+   *
+   * Function returns nothing if the page has its own "window.onerror" handler.
+   *
+   * @return list of error messages
+   */
+  public static List<String> getJavascriptErrors() {
+    List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
+    if (errors == null || errors.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<String> result = new ArrayList<String>(errors.size());
+    for (Object error : errors) {
+      result.add(error.toString());
+    }
+    return result;
+  }
+
+  /**
+   * Check if there is not JS errors on the page
+   * @throws JavaScriptErrorsFound
+   */
+  public static void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
+    List<String> jsErrors = getJavascriptErrors();
+    if (jsErrors != null && !jsErrors.isEmpty()) {
+      throw new JavaScriptErrorsFound(jsErrors);
+    }
   }
 }

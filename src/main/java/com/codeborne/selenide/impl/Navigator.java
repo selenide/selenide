@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
@@ -32,12 +34,27 @@ public class Navigator {
     }
 
     try {
-      getAndCheckWebDriver().navigate().to(url);
+      WebDriver webdriver = getAndCheckWebDriver();
+      webdriver.navigate().to(url);
+      collectJavascriptErrors((JavascriptExecutor) webdriver);
     } catch (WebDriverException e) {
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
+  }
+
+  protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
+    webdriver.executeScript(
+        "window._selenide_jsErrors = [];\n" +
+            "if (!window.onerror) {\n" +
+            "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
+            "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
+            "    window._selenide_jsErrors.push(message);\n" +
+            "    return false;\n" +
+            "  }\n" +
+            "};\n"
+    );
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
