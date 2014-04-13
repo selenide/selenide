@@ -1,19 +1,17 @@
 package com.codeborne.selenide.ex;
 
-import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
-import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
-import static com.codeborne.selenide.ex.ErrorMessages.timeout;
+import static com.codeborne.selenide.ex.ErrorMessages.*;
 
 public class UIAssertionError extends AssertionError {
-  public UIAssertionError(String message) {
-    super(message + screenshot());
+  protected UIAssertionError(String message) {
+    super(message + screenshot() + jsErrors());
   }
 
-  public UIAssertionError(String message, long timeoutMs) {
-    super(message + screenshot() + timeout(timeoutMs));
+  protected UIAssertionError(String message, long timeoutMs) {
+    super(message + screenshot() + jsErrors() + timeout(timeoutMs));
   }
 
-  public UIAssertionError(String message, long timeoutMs, Exception cause) {
-    super(message + screenshot() + timeout(timeoutMs) + causedBy(cause));
+  protected UIAssertionError(String message, long timeoutMs, Exception cause) {
+    super(message + screenshot() + jsErrors() + timeout(timeoutMs) + causedBy(cause));
   }
 }

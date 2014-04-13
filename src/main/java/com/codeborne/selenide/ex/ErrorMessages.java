@@ -9,9 +9,11 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Screenshots.takeScreenShot;
+import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 
 public class ErrorMessages {
   private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());
@@ -74,5 +76,13 @@ public class ErrorMessages {
       return "\nCaused by: " + Cleanup.of.webdriverExceptionMessage(cause);
     }
     return "\nCaused by: " + cause;
+  }
+
+  public static String jsErrors() {
+    List<String> jsErrors = getJavascriptErrors();
+    if (jsErrors == null || jsErrors.isEmpty()) {
+      return "";
+    }
+    return "\nJavascript Errors: " + jsErrors;
   }
 }

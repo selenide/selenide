@@ -6,7 +6,7 @@ public class JavaScriptErrorsFound extends UIAssertionError {
   private final List<String> jsErrors;
 
   public JavaScriptErrorsFound(List<String> jsErrors) {
-    super("JavaScript errors found: " + jsErrors);
+    super("JavaScript errors found");
     this.jsErrors = jsErrors;
   }
 
