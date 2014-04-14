@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -92,10 +94,29 @@ public class ScreenShotLaboratory {
   }
 
   protected File savePageSourceToFile(String fileName, WebDriver webdriver) {
+    return savePageSourceToFile(fileName, webdriver, true);
+  }
+
+  protected File savePageSourceToFile(String fileName, WebDriver webdriver, boolean retryIfAlert) {
     File pageSource = new File(reportsFolder, fileName + ".html");
 
     try {
       writeToFile(webdriver.getPageSource(), pageSource);
+    } catch (UnhandledAlertException e) {
+      if (retryIfAlert) {
+        try {
+          Alert alert = webdriver.switchTo().alert();
+          System.err.println(e + ": " + alert.getText());
+          alert.accept();
+          savePageSourceToFile(fileName, webdriver, false);
+        }
+        catch (Exception unableToCloseAlert) {
+          System.err.println("Failed to close alert: " + unableToCloseAlert);
+        }
+      }
+      else {
+        printOnce("savePageSourceToFile", e);
+      }
     } catch (Exception e) {
       printOnce("savePageSourceToFile", e);
     }
