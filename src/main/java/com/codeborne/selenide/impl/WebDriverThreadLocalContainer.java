@@ -54,22 +54,6 @@ public class WebDriverThreadLocalContainer {
     return webDriver;
   }
 
-  protected WebDriver autoClose(WebDriver webDriver) {
-    System.out.println(" === CREATE WEBDRIVER: " + currentThread().getId() + " -> " + webDriver);
-    ALL_WEB_DRIVERS_THREADS.add(currentThread());
-
-    if (!killerThreadRun.get()) {
-      synchronized (killerThreadRun) {
-        if (!killerThreadRun.get()) {
-          new KillerThread().start();
-          killerThreadRun.set(true);
-        }
-      }
-    }
-    Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
-    return webDriver;
-  }
-
   protected boolean isBrowserStillOpen(WebDriver webDriver) {
     try {
       webDriver.manage().window().getSize();
@@ -85,7 +69,7 @@ public class WebDriverThreadLocalContainer {
 
   public WebDriver getWebDriver() {
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
-    return webDriver != null ? webDriver : setWebDriver(autoClose(createDriver()));
+    return webDriver != null ? webDriver : setWebDriver(createDriver());
   }
 
   public WebDriver getAndCheckWebDriver() {
@@ -99,7 +83,7 @@ public class WebDriverThreadLocalContainer {
         closeWebDriver();
       }
     }
-    return setWebDriver(autoClose(createDriver()));
+    return setWebDriver(createDriver());
 
   }
 
@@ -162,7 +146,10 @@ public class WebDriverThreadLocalContainer {
                                 isSafari() ? createSafariDriver() :
                                   createInstanceOf(browser);
     webdriver = maximize(webdriver);
-    return listeners.isEmpty() ? webdriver : addListeners(webdriver);
+
+    System.out.println(" === CREATE WEBDRIVER: " + currentThread().getId() + " -> " + webdriver);
+
+    return markForAutoClose(listeners.isEmpty() ? webdriver : addListeners(webdriver));
   }
 
   protected WebDriver addListeners(WebDriver webdriver) {
@@ -171,6 +158,21 @@ public class WebDriverThreadLocalContainer {
       wrapper.register(listener);
     }
     return wrapper;
+  }
+
+  protected WebDriver markForAutoClose(WebDriver webDriver) {
+    ALL_WEB_DRIVERS_THREADS.add(currentThread());
+
+    if (!killerThreadRun.get()) {
+      synchronized (killerThreadRun) {
+        if (!killerThreadRun.get()) {
+          new KillerThread().start();
+          killerThreadRun.set(true);
+        }
+      }
+    }
+    Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
+    return webDriver;
   }
 
   protected WebDriver createChromeDriver() {
