@@ -35,7 +35,7 @@ public class WebDriverThreadLocalContainer {
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
 
-  protected final AtomicBoolean killerThreadRun = new AtomicBoolean(false);
+  protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
   protected void closeUnusedWebdrivers() {
     for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
@@ -163,15 +163,15 @@ public class WebDriverThreadLocalContainer {
   protected WebDriver markForAutoClose(WebDriver webDriver) {
     ALL_WEB_DRIVERS_THREADS.add(currentThread());
 
-    if (!killerThreadRun.get()) {
-      synchronized (killerThreadRun) {
-        if (!killerThreadRun.get()) {
-          new KillerThread().start();
-          killerThreadRun.set(true);
+    if (!cleanupThreadStarted.get()) {
+      synchronized (cleanupThreadStarted) {
+        if (!cleanupThreadStarted.get()) {
+          new UnusedWebdriversCleanupThread().start();
+          cleanupThreadStarted.set(true);
         }
       }
     }
-    Runtime.getRuntime().addShutdownHook(new AbsoluteKillerThread());
+    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
     return webDriver;
   }
 
@@ -272,17 +272,21 @@ public class WebDriverThreadLocalContainer {
     }
   }
 
-  protected class AbsoluteKillerThread extends Thread {
-      private final Thread thread =  currentThread();
+  protected class WebdriversFinalCleanupThread extends Thread {
+    private final Thread thread;
 
-      @Override
-      public void run() {
-        closeWebDriver(thread);
-      }
+    public WebdriversFinalCleanupThread(Thread thread) {
+      this.thread = thread;
+    }
+
+    @Override
+    public void run() {
+      closeWebDriver(thread);
+    }
   }
 
-  protected class KillerThread extends Thread {
-    public KillerThread() {
+  protected class UnusedWebdriversCleanupThread extends Thread {
+    public UnusedWebdriversCleanupThread() {
       setDaemon(true);
       setName("Webdrivers killer thread");
     }
