@@ -69,19 +69,23 @@ public class WebDriverRunner {
    * NB! Be sure to call this method before calling <code>open(url)</code>.
    * Otherwise Selenide will create its own WebDriver instance and would not close it.
    *
+   * <p>
    * NB! When using your custom webdriver, you are responsible for closing it.
    *     Selenide will not take care of it.
+   * </p>
    *
+   * <p>
    * NB! Webdriver instance should be created and used in the same thread.
    *     A typical error is to create webdriver instance in one thread and use it in another. Selenide does not support it.
    *     If you really need using multiple threads, please use #com.codeborne.selenide.WebDriverProvider
+   * </p>
    *
-   * <p/>
-   * <p/>
+   * <p>
    * P.S. Alternatively, you can run tests with system property
    * <pre>  -Dbrowser=com.my.WebDriverFactory</pre>
    *
    * which should implement interface #com.codeborne.selenide.WebDriverProvider
+   * </p>
    */
   public static void setWebDriver(WebDriver webDriver) {
     webdriverContainer.setWebDriver(webDriver);
