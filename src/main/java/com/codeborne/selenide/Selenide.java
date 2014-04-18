@@ -22,6 +22,12 @@ import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+/**
+ * The main starting point of Selenide.
+ *
+ * You start with methods {@link #open(String)} for opening the tested application page and
+ * {@link #$(String)} for searching web elements.
+ */
 public class Selenide {
   public static Navigator navigator = new Navigator();
 

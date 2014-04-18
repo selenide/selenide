@@ -9,9 +9,12 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.getFocusedElement;
 
+/**
+ * Conditions to match web elements: checks for visibility, text etc.
+ */
 public abstract class Condition implements Predicate<WebElement> {
   /**
-   * <code>$("input").shouldBe(visible);</code>
+   * <p>Sample: {@code $("input").shouldBe(visible);}</p>
    */
   public static final Condition visible = new Condition("visible") {
     @Override
@@ -23,7 +26,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Check if element exist. It can be visible or hidden.
    *
-   * <code>$("input").should(exist);</code>
+   * <p>Sample: {@code $("input").should(exist);}</p>
    */
   public static final Condition exist = new Condition("exist") {
     @Override
@@ -34,14 +37,16 @@ public abstract class Condition implements Predicate<WebElement> {
   };
 
   /**
-   * @see #exist
+   * Check that element is present on the page.
    *
-   * <code>$("input").shouldBe(present);</code>
+   * Synonym for {@link #exist}.
+   *
+   * <p>Sample: {@code $("input").shouldBe(present);}</p>
    */
   public static final Condition present = exist;
 
   /**
-   * <code>$("input").should(notPresent);</code>
+   * <p>Sample: {@code $("input").should(notPresent);}</p>
    *
    * @deprecated Use method $.shouldNot(exist) or $.shouldNotBe(present).
    */
@@ -56,9 +61,9 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Checks that element is not visible or does not exists.
    *
-   * Opposite to com.codeborne.selenide.Condition#appear
+   * Opposite to {@link #appear}
    *
-   * <code>$("input").shouldBe(hidden);</code>
+   * <p>Sample: {@code $("input").shouldBe(hidden);}</p>
    */
   public static final Condition hidden = new Condition("hidden", true) {
     @Override
@@ -72,37 +77,40 @@ public abstract class Condition implements Predicate<WebElement> {
   };
 
   /**
-   * Synonym for com.codeborne.selenide.Condition#appear - may be used for better readability
+   * Synonym for {@link #visible} - may be used for better readability
    *
-   * <code>$("#logoutLink").should(appear);</code>
+   * <p>Sample: {@code $("#logoutLink").should(appear);}</p>
    */
   public static final Condition appear = visible;
 
   /**
-   * Synonym for #visible - may be used for better readability
-   * $("#logoutLink").waitUntil(appears, 10000);
+   * Synonym for {@link #visible} - may be used for better readability
+   * <p><code>$("#logoutLink").waitUntil(appears, 10000);</code></p>
 
-   * Thought the same can be done in a shorter way:
-   * <code>waitFor(By.id("logoutLink");</code>
+   * Though the same can be done in a shorter way:
+   * <p><code>waitFor(By.id("logoutLink");</code></p>
    */
   public static final Condition appears = visible;
 
   /**
-   * Synonym for com.codeborne.selenide.Condition#hidden - may be used for better readability:
+   * Synonym for {@link #hidden} - may be used for better readability:
    *
-   * <code>$("#loginLink").waitUntil(disappears, 9000);</code>
+   * <p>Sample: <code>$("#loginLink").waitUntil(disappears, 9000);</code></p>
    */
   public static final Condition disappears = hidden;
 
   /**
-     * Synonym for com.codeborne.selenide.Condition#hidden - may be used for better readability:
+   * Synonym for {@link #hidden} - may be used for better readability:
    *
-     * $("#loginLink").should(disappear);
-     */
+   * <p><code>$("#loginLink").should(disappear);</code></p>
+   */
   public static final Condition disappear = hidden;
 
   /**
-   * <code>$("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);</code>
+   * <p>
+   *   Sample:
+   *   <code>$("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);</code>
+   * </p>
    * @param attributeName name of attribute
    * @param attributeValue expected value of attribute
    */
@@ -113,14 +121,14 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Check if element has "readonly" attribute (with any value)
    *
-   * <code>$("input").shouldBe(readonly);</code>
+   * <p>Sample: <code>$("input").shouldBe(readonly);</code></p>
    */
   public static final Condition readonly = attribute("readonly");
 
   /**
    * Check if element has given attribute (with any value)
    *
-   * <code>$("#mydiv").shouldHave(attribute("fileId"));</code>
+   * <p>Sample: <code>$("#mydiv").shouldHave(attribute("fileId"));</code></p>
    *
    * @param attributeName name of attribute, not null
    * @return true iff attribute exists
@@ -139,7 +147,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#mydiv").shouldHave(attribute("fileId", "12345"));</code>
+   * <p>Sample: <code>$("#mydiv").shouldHave(attribute("fileId", "12345"));</code></p>
    *
    * @param attributeName name of attribute
    * @param expectedAttributeValue expected value of attribute
@@ -163,7 +171,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#input").shouldHave(value("John"));</code>
+   * <p>Sample: <code>$("#input").shouldHave(value("John"));</code></p>
    * @param value expected value of input field
    */
   public static Condition value(String value) {
@@ -171,7 +179,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("#myInput").waitUntil(hasValue("John"), 5000)
+   * <p>Sample: <code>$("#myInput").waitUntil(hasValue("John"), 5000)</p>
    * @param value expected value of input field
    */
   public static Condition hasValue(String value) {
@@ -179,7 +187,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#input").shouldHave(name("username"))</code>
+   * <p>Sample: <code>$("#input").shouldHave(name("username"))</code></p>
    * @param name expected name of input field
    */
   public static Condition name(String name) {
@@ -187,7 +195,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#input").shouldHave(type("checkbox"))</code>
+   * <p>Sample: <code>$("#input").shouldHave(type("checkbox"))</code></p>
    * @param type expected type of input field
    */
   public static Condition type(String type) {
@@ -195,7 +203,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#input").shouldHave(id("myForm"))</code>
+   * <p>Sample: <code>$("#input").shouldHave(id("myForm"))</code></p>
    * @param id expected id of input field
    */
   public static Condition id(String id) {
@@ -204,15 +212,15 @@ public abstract class Condition implements Predicate<WebElement> {
 
   /**
    * 1) For input element, check that value is missing or empty
-   * <code>$("#input").shouldBe(empty)</code>
+   * <p>Sample: <code>$("#input").shouldBe(empty)</code></p>
    *
    * 2) For other elements, check that text is empty
-   * <code>$("h2").shouldBe(empty)</code>
+   * <p>Sample: <code>$("h2").shouldBe(empty)</code></p>
    */
   public static final Condition empty = and("empty", value(""), exactText(""));
 
   /**
-   * <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code>
+   * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>
    *
    * @see #matchText(String)
    */
@@ -223,7 +231,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Assert that given element's text matches given regular expression
    *
-   * <code>$("h1").should(matchText("Hello\s*John"))</code>
+   * <p>Sample: <code>$("h1").should(matchText("Hello\s*John"))</code></p>
    *
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
@@ -241,7 +249,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("h1").waitUntil(hasText("Hello"), 10000)</code>
+   * <p>Sample: <code>$("h1").waitUntil(hasText("Hello"), 10000)</code></p>
    *
    * <p>Case insensitive</p>
    *
@@ -253,7 +261,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("h1").shouldHave(text("Hello\s*John"))</code>
+   * <p>Sample: <code>$("h1").shouldHave(text("Hello\s*John"))</code></p>
    *
    * <p>NB! Case insensitive</p>
    *
@@ -276,7 +284,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code>
+   * <p>Sample: <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -296,7 +304,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * $("h1").shouldHave(exactText("Hello"))
+   * <p>Sample: <code>$("h1").shouldHave(exactText("Hello"))</code></p>
    *
    * <p>Case insensitive</p>
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -317,7 +325,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code>
+   * <p>Sample: <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
@@ -337,7 +345,8 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("#my-select-box").waitUntil(hasOptions(), 7000);</code>
+   * <p>Sample: <code>$("#my-select-box").waitUntil(hasOptions(), 7000);</code></p>
+   * </code>
    * @deprecated
    * @see Condition#options
    */
@@ -347,7 +356,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <code>$("input").shouldHave(options);</code>
+   * <p>Sample: <code>$("input").shouldHave(options);</code></p>
    *
    * @deprecated Not needed anymore. Use methods $.selectOption() or $.selectOptionByValue().
    */
@@ -387,16 +396,14 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * Usage:
-   * <code>$("input").shouldHave(cssClass("active"));</code>
+   * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
   public static Condition cssClass(String cssClass) {
     return hasClass(cssClass);
   }
 
   /**
-   * Usage:
-   * <code>$("input").waitUntil(hasClass("blocked"), 7000);</code>
+   * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
    */
   public static Condition hasClass(final String cssClass) {
     return new Condition("hasClass") {
@@ -516,7 +523,7 @@ public abstract class Condition implements Predicate<WebElement> {
    */
   public static Condition and(String name, final Condition... condition) {
     return new Condition(name) {
-      protected Condition lastFailedCondition;
+      private Condition lastFailedCondition;
 
       @Override
       public boolean apply(WebElement element) {
@@ -549,7 +556,7 @@ public abstract class Condition implements Predicate<WebElement> {
    */
   public static Condition or(String name, final Condition... condition) {
     return new Condition(name) {
-      protected Condition firstFailedCondition;
+      private Condition firstFailedCondition;
 
       @Override
       public boolean apply(WebElement element) {

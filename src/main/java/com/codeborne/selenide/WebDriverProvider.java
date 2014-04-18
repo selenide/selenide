@@ -4,6 +4,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
+ * <p>
+ *   Interface for using custom WebDriver in your tests
+ * </p>
+ *
+ * <p>
  * To customize {@link WebDriver} creation one can use any of the alternatives:
  * <ul>
  * <li>Call method {@link com.codeborne.selenide.WebDriverRunner#setWebDriver(WebDriver)} explicitly.
@@ -11,6 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  * constructor and pass this class name as {@code browser} system variable value.
  * <li>Implement this very interface and pass the implementation class name as {@code browser} system variable value.
  * </ul>
+ * </p>
  */
 public interface WebDriverProvider {
 
