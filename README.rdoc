@@ -76,6 +76,19 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.10 (Released 18.04.2014)
+* Added method switchToWindow(String title)
+* Added methods $.hover() and $.dragAndDropTo(target)
+* Added methods $.parent(), $.closest("tag") and $.closest(".class")
+* Added functions getJavascriptErrors() and assertNoJavascriptErrors()
+* Automatically attach javascript errors to error message when test fails
+
+* Improved mechanism of closing webdrivers (suggested by Alexandr Gavrilenko)
+* #114 Selenide throws "Element should be visible" when trying to click invisible element  (instead of reporting "Element does not exist" that could be misleading)
+* Removed method Navigator.waitUntilPageIsLoaded - not all pages have "body". E.g. pages containing frames.
+* Method savePageSourceToFile tries to close unexpected alert/confirm dialog (if any)
+* Upgraded to Selenium 2.41.0
+
 === 2.9 (Released 14.03.2014)
 * #102 $.shouldHave(text()) should also ignore \u00a0 character (unbreakable space)
 * If selenide cannot take screenshot, the error is logged with stack trace (but only once)
