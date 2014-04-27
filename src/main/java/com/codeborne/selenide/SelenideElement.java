@@ -414,7 +414,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement contextClick();
 
   /**
-   * Emulate "mouseOver" event. In other words, move mouse cursor over this element.
+   * Emulate "mouseOver" event. In other words, move mouse cursor over this element (without clicking it).
    * @return this element
    */
   SelenideElement hover();
