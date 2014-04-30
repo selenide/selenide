@@ -83,7 +83,10 @@ public class JQuery {
       return seleniumSelector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
     } else if (seleniumSelector instanceof By.ByXPath) {
       String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
-      return seleniumXPath.replaceFirst("^//", "").replaceAll("//", " ").replaceAll("\\[@", "[");
+      return seleniumXPath.replaceFirst("^//", "").replaceFirst("^/", "")
+          .replaceAll("//", " ")
+          .replaceAll("\\[@", "[")
+          .replaceAll("\\[(\\d+)\\]", ":nth-child($1)");
     }
     return null;
   }

@@ -23,5 +23,8 @@ public class JQueryTest {
 
     assertEquals("div[class='popup-content-container'] select[name='dropDownName']",
         jQuery.getJQuerySelector(By.xpath("//div[@class='popup-content-container']//select[@name='dropDownName']")));
+
+    assertEquals("html h2:nth-child(1)", jQuery.getJQuerySelector(By.xpath("/html//h2[1]")));
+    assertEquals("html h2:nth-child(1)", jQuery.getJQuerySelector(By.xpath("html//h2[1]")));
   }
 }
