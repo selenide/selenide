@@ -85,6 +85,7 @@ public class JQuery {
       String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
       return seleniumXPath.replaceFirst("^//", "").replaceFirst("^/", "")
           .replaceAll("//", " ")
+          .replaceAll("/", " > ")
           .replaceAll("\\[@", "[")
           .replaceAll("\\[(\\d+)\\]", ":nth-child($1)");
     }

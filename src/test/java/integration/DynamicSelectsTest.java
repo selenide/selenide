@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
@@ -32,5 +33,11 @@ public class DynamicSelectsTest extends IntegrationTest {
     select.getSelectedOption().shouldBe(selected);
     assertEquals("\"est\"", select.getSelectedValue());
     assertEquals("l'a \"Eesti\"", select.getSelectedText());
+  }
+
+  @Test
+  public void selectByXPath() {
+    $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
+    assertEquals("l'a \"English\"", $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedText());
   }
 }

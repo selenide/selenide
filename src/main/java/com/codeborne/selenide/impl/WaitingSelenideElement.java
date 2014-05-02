@@ -51,12 +51,16 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   @Override
   protected void selectOptionByText(WebElement selectField, String optionText) {
     super.selectOptionByText(selectField, optionText);
+    
+    // TODO Try using `fireEvent("change")` instead of $.change() 
     jQuery.change(criteria, index); // TODO Use parent also
   }
 
   @Override
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
     super.selectOptionByValue(selectField, optionValue);
+
+    // TODO Try using `fireEvent("change")` instead of $.change()
     jQuery.change(criteria, index); // TODO Use parent also
   }
 
