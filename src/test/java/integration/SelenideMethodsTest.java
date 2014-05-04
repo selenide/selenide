@@ -108,7 +108,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("@livemail.ru", $(byValue("livemail.ru")).innerHtml());
     assertEquals("@myrambler.ru", $(byText("@myrambler.ru")).innerHtml());
     assertEquals("@мыло.ру", $(byText("@мыло.ру")).innerHtml());
-    assertEquals("Dropdown list", $("h2").innerHtml());
+    assertEquals("Dropdown list <span id=\"selectedDomain\"></span>", $("h2").innerHtml());
 
     if (isHtmlUnit()) {
       assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
