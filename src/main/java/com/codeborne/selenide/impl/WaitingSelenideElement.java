@@ -10,7 +10,6 @@ import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.JQuery.jQuery;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
@@ -46,22 +45,6 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
     return arg instanceof By ?
         wrap(proxy, (By) arg, index) :
         wrap(proxy, By.cssSelector((String) arg), index);
-  }
-
-  @Override
-  protected void selectOptionByText(WebElement selectField, String optionText) {
-    super.selectOptionByText(selectField, optionText);
-    
-    // TODO Try using `fireEvent("change")` instead of $.change() 
-    jQuery.change(criteria, index); // TODO Use parent also
-  }
-
-  @Override
-  protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    super.selectOptionByValue(selectField, optionValue);
-
-    // TODO Try using `fireEvent("change")` instead of $.change()
-    jQuery.change(criteria, index); // TODO Use parent also
   }
 
   @Override

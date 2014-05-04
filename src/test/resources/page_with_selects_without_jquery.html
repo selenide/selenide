@@ -17,14 +17,18 @@
         blurCounter++;
         document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
       }
+      
+      function onDomainChanged(select) {
+        document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
+      }
     </script>
   </head>
   <body onload="setTimeout(fillTextArea, 1000);">
     <h1>Page without JQuery</h1>
 
     <div id="dropdown-list-container">
-      <h2>Dropdown list</h2>
-      <select name="domain">
+      <h2>Dropdown list<span id="selectedDomain"></span></h2>
+      <select name="domain" onchange="onDomainChanged(this);">
         <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
         <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
         <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>

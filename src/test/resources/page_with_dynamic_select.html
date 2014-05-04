@@ -12,13 +12,17 @@
     }
 
     $(function () {
+      $('#language').on('change', function() {
+        $('h2').text($('#language').val());
+      });
+      
       setTimeout(drawOptions, 1000);
     });
   </script>
 </head>
 <body>
 <h1>Page with dynamic select</h1>
-
+<h2></h2>
 <br/>
 
 <div style="width: 400px">

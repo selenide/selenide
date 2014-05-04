@@ -64,4 +64,15 @@ public class SelectsTest extends IntegrationTest {
     $("#hero").selectOption("Mickey \"Rock'n'Roll\" Rourke");
     $("#hero").getSelectedOption().shouldHave(value("mickey rourke"));
   }
+
+  @Test
+  public void selectingOptionTriggersChangeEvent() {
+    $("#selectedDomain").shouldBe(empty);
+    
+    $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
+    $("#selectedDomain").shouldHave(text(("@мыло.ру")));
+    
+    $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
+    $("#selectedDomain").shouldHave(text(("@myrambler.ru")));
+  }
 }
