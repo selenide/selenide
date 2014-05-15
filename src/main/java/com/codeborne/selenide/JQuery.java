@@ -5,6 +5,12 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
+/**
+ * Avoid using this class. It's just bad to have dependency on some concrete JS framework.
+ * 
+ * @deprecated There are better options for every of JQuery methods.
+ */
+@Deprecated
 public class JQuery {
   /**
    * This instance is mutable so that you can replace it with your own custom object.
@@ -14,14 +20,20 @@ public class JQuery {
   /**
    * Calls onclick javascript code.
    * Useful for invisible (hovered) elements that cannot be clicked directly
-   * */
+   * 
+   * @deprecated Do not try to click invisible elements in your test. User cannot click them, so your test should not as well.  
+   */
+  @Deprecated
   public void onClick(By by) {
     executeJavaScript("eval(\"" + $(by).getAttribute("onclick") + "\")");
   }
 
   /**
    * Trigger "onchange" event on given element
+   * 
+   * @deprecated Not needed anymore. Methods $.setValue() and $.append() trigger change event automatically.
    */
+  @Deprecated
   public void change(By by) {
     if (isJQueryAvailable()) {
       executeJQueryMethod(by, "change()");
@@ -30,7 +42,10 @@ public class JQuery {
 
   /**
    * Trigger "onchange" event on given element
+   * 
+   * @deprecated Not needed anymore. Methods {@code $.setValue()} and {@code $.append()} trigger change event automatically.
    */
+  @Deprecated
   public void change(By by, int index) {
     if (isJQueryAvailable()) {
       executeJQueryMethod(by, "eq(" + index + ").change()");
@@ -54,7 +69,7 @@ public class JQuery {
     executeJavaScript("jQuery.scrollTo('" + getJQuerySelector(element) + "')");
   }
 
-
+  @Deprecated
   public void executeJQueryMethod(By by, String method) {
     String selector = getJQuerySelector(by);
     if (selector != null) {
@@ -64,6 +79,10 @@ public class JQuery {
     }
   }
 
+  /**
+   * @deprecated No need to depend on JQuery in your tests
+   */
+  @Deprecated
   public boolean isJQueryAvailable() {
     Object result = executeJavaScript("return (typeof jQuery);");
     return !"undefined".equalsIgnoreCase(String.valueOf(result));
