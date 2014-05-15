@@ -1,10 +1,14 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
+
+import static com.codeborne.selenide.Condition.visible;
 
 public class CollectionElement extends AbstractSelenideElement {
   public static SelenideElement wrap(WebElementsCollection collection, int index) {
@@ -34,6 +38,14 @@ public class CollectionElement extends AbstractSelenideElement {
   @Override
   String getSearchCriteria() {
     return collection.description() + '[' + index  + ']';
+  }
+
+  @Override
+  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
+    if (collection.getActualElements().isEmpty()) {
+      throw new ElementNotFound(collection.description(), visible, lastError, timeoutMs);
+    }
+    return super.throwElementNotFound(condition, timeoutMs);
   }
 
   @Override

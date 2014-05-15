@@ -33,7 +33,7 @@ public class WebElementProxy extends AbstractSelenideElement {
 
   @Override
   protected String getSearchCriteria() {
-    return delegate.toString();
+    return Describe.shortly(delegate);
   }
 
   @Override

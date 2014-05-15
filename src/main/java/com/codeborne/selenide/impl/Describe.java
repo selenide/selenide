@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -35,6 +36,10 @@ public class Describe {
     return sb.toString();
   }
 
+  public String flush() {
+    return sb.append('>').toString();
+  }
+
   public static String describe(WebElement element) {
     try {
       if (element == null) {
@@ -61,9 +66,7 @@ public class Describe {
       if (element == null) {
         return "null";
       }
-      return new Describe(element)
-          .attr("id").attr("name")
-          .toString();
+      return new Describe(element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     }
@@ -80,5 +83,12 @@ public class Describe {
     } catch (InvalidElementStateException e) {
       return false;
     }
+  }
+
+  public static String shortly(By selector) {
+    if (selector instanceof By.ByCssSelector) {
+      return selector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
+    }
+    return selector.toString();
   }
 }

@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class BySelectorCollection implements WebElementsCollection {
@@ -31,6 +30,6 @@ public class BySelectorCollection implements WebElementsCollection {
 
   @Override
   public String description() {
-    return parent == null ? selector.toString() : $(parent) + "/" + selector;
+    return parent == null ? selector.toString() : Describe.shortly(parent) + "/" + Describe.shortly(selector);
   }
 }

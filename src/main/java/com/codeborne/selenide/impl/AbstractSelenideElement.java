@@ -438,11 +438,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throw Cleanup.of.wrap(lastError);
     }
     else if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), condition, lastError, timeoutMs);
+      return throwElementNotFound(condition, timeoutMs);
     }
     else {
       throw new ElementShould(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);
     }
+  }
+
+  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
+    throw new ElementNotFound(getSearchCriteria(), condition, lastError, timeoutMs);
   }
 
   protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
@@ -478,7 +482,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throw Cleanup.of.wrap(lastError);
     }
     else if (!exists(element)) {
-      throw new ElementNotFound(getSearchCriteria(), not(condition), lastError, timeoutMs);
+      throwElementNotFound(not(condition), timeoutMs);
     }
     else {
       throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -9,7 +10,9 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
@@ -58,6 +61,18 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
     return parent == null ? getWebDriver() :
         (parent instanceof SelenideElement) ? ((SelenideElement)parent).toWebElement() :
         parent;
+  }
+
+  @Override
+  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
+    if (parent instanceof SelenideElement) {
+      ((SelenideElement) parent).shouldBe(visible);
+    }
+    else if (parent instanceof WebElement) {
+      $((WebElement) parent).shouldBe(visible);
+    }
+    
+    return super.throwElementNotFound(condition, timeoutMs);
   }
 
   @Override

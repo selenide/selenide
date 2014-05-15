@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
@@ -34,12 +33,28 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
           .shouldBe(visible);
       fail();
     } catch (ElementNotFound e) {
-      assertTrue(e.getMessage().contains("Element not found {By.selector: #nonexisting-form}"));
+      assertTrue("Actual error message: " + e.getMessage(),
+          e.getMessage().contains("Element not found {By.selector: #nonexisting-form}"));
     }
   }
 
-  @Test @Ignore // Issue #61. TODO Fix the code
+  @Test
   public void itShouldBeReportedWhichParentElementIsNotFound() {
+    try {
+      $("#multirowTable")
+          .find("thead")
+          .find(byText("mymail@gmail.com"))
+          .find(".trash")
+          .shouldBe(visible);
+      fail();
+    } catch (ElementNotFound e) {
+      assertTrue("Actual error message: " + e.getMessage(),
+          e.getMessage().contains("Element not found {By.selector: thead}"));
+    }
+  }
+
+  @Test
+  public void itShouldBeReportedIfParentCollectionIsNotFound() {
     try {
       $("#multirowTable")
           .findAll("thead")
@@ -48,21 +63,32 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
           .shouldBe(visible);
       fail();
     } catch (ElementNotFound e) {
-      assertTrue(e.getMessage().contains("Element not found {By.selector: thead}"));
+      assertTrue("Actual error message: " + e.getMessage(),
+          e.getMessage().contains("Element not found {<table id=multirowTable>/thead"));
     }
   }
 
-  @Test @Ignore // Issue #61. TODO Fix the code
+
+  @Test
   public void elementNotFoundInsideParent() {
     try {
       $("#multirowTable")
           .findAll("tbody tr")
           .findBy(text("Norris"))
-          .find(".first_row")
+          .find(".second_row")
           .shouldBe(visible);
       fail();
     } catch (ElementNotFound e) {
-      assertTrue(e.getMessage().contains("Element not found {By.selector: .first_row}"));
+      assertTrue("Actual error message: " + e.getMessage(),
+          e.getMessage().contains("Element not found {By.selector: .second_row}"));
     }
+  }
+
+  @Test
+  public void elementShouldNotBeFoundAndParentAlsoNotFound() {
+    $("#multirowTable")
+        .find("theeeead")
+        .find(".second_row")
+        .shouldNotBe(visible);
   }
 }
