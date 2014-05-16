@@ -179,6 +179,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
     if (!isHtmlUnit()) {
       // fails in HtmlUnit for unknown reason
+      $("#password").shouldBe(focused);
       $("#username-mirror").shouldHave(text(" x "));
       $("#username-blur-counter").shouldHave(text("blur: 1"));
     }

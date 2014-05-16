@@ -136,8 +136,10 @@
         document.getElementById('text-area').innerHTML = 'This is text area';
       }
 
+      var changedCounter = 0;
       function onUsernameChanged(input) {
-        document.getElementById('username-mirror').innerHTML = input.value;
+        changedCounter++;
+        document.getElementById('username-mirror').innerHTML = input.value + ' (' + changedCounter + ')';
       }
 
       var blurCounter = 0;
