@@ -100,7 +100,11 @@ public class WebDriverThreadLocalContainer {
     if (webdriver != null && !holdBrowserOpen) {
       try {
         webdriver.quit();
-      } catch (WebDriverException cannotCloseBrowser) {
+      }
+      catch (UnreachableBrowserException ignored) {
+        // It happens for Firefox. It's ok: browser is already closed.
+      }
+      catch (WebDriverException cannotCloseBrowser) {
         System.err.println("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
       }
       finally {
