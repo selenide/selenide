@@ -3,27 +3,8 @@
   <head>
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript">
-      function fillTextArea() {
-        document.getElementById('text-area').innerHTML = 'This is text area';
-      }
-
-      function onUsernameChanged(input) {
-        document.getElementById('username-mirror').innerHTML = input.value;
-      }
-
-      blurCounter = 1;
-      function onUsernameBlur() {
-        blurCounter++;
-        document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
-      }
-      
-      function onDomainChanged(select) {
-        document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
-      }
-    </script>
   </head>
-  <body onload="setTimeout(fillTextArea, 1000);">
+  <body onload="initBlur(); setTimeout(fillTextArea, 1000);">
     <h1>Page without JQuery</h1>
 
     <div id="dropdown-list-container">
@@ -138,16 +119,40 @@
 
     <h1>Now typing: </h1>
     <h3 id="username-mirror"></h3>
-    <span id="username-blur-counter">___</span>
+    <span id="username-blur-counter"> </span>
     <div style="width: 400px">
       <form>
         <fieldset title="Login form">
           <label> Username:
             <input id="username" name="username" value="" onchange="onUsernameChanged(this);" onblur="onUsernameBlur();"/>
           </label> <br/>
-          <input name="password" type="password"/>
+          <input id="password" name="password" type="password"/>
         </fieldset>
       </form>
     </div>
+
+    <script type="text/javascript">
+      function fillTextArea() {
+        document.getElementById('text-area').innerHTML = 'This is text area';
+      }
+
+      function onUsernameChanged(input) {
+        document.getElementById('username-mirror').innerHTML = input.value;
+      }
+
+      var blurCounter = 0;
+      function onUsernameBlur() {
+        blurCounter++;
+        document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
+      }
+
+      function initBlur() {
+        document.getElementById('username-blur-counter').innerHTML = '___';
+      }
+
+      function onDomainChanged(select) {
+        document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
+      }
+    </script>
   </body>
 </html>

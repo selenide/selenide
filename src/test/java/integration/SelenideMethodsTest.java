@@ -173,16 +173,14 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanPressTab() {
-    assumeFalse(isHtmlUnit());
-
-    $("#username-blur-counter").should(exist);
+    $("#username-blur-counter").shouldHave(text("___"));
     $("#username").sendKeys(" x ");
     $("#username").pressTab();
 
-    $("#username-mirror").shouldHave(text(" x "));
-    if (!isHtmlUnit() && !isChrome()) {
-      // fails in HtmlUnit and Chrome for unknown reason
-      $("#username-blur-counter").shouldHave(text("blur:"));
+    if (!isHtmlUnit()) {
+      // fails in HtmlUnit for unknown reason
+      $("#username-mirror").shouldHave(text(" x "));
+      $("#username-blur-counter").shouldHave(text("blur: 1"));
     }
   }
 
