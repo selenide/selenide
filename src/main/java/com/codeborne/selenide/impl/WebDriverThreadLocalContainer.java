@@ -95,9 +95,9 @@ public class WebDriverThreadLocalContainer {
     ALL_WEB_DRIVERS_THREADS.remove(thread);
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
 
-    System.out.println(" === CLOSE WEBDRIVER: " + currentThread().getId() + " -> " + webdriver);
-
     if (webdriver != null && !holdBrowserOpen) {
+      System.out.println(" === CLOSE WEBDRIVER: " + thread.getId() + " -> " + webdriver);
+
       try {
         webdriver.quit();
       }
