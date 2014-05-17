@@ -181,9 +181,9 @@ public class SelenideMethodsTest extends IntegrationTest {
       // fails in HtmlUnit and Chrome for unknown reason
       $("#password").shouldBe(focused);
       $("#username-mirror").shouldHave(text(" x "));
-//      if (!isChrome()) {
+      if (!isChrome()) {
         $("#username-blur-counter").shouldHave(text("blur: 1"));
-//      }
+      }
     }
   }
 
