@@ -76,6 +76,15 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.11 (Released 21.05.2014)
+Cleanup release. Dropping obsolette/useless functionality.
+* Methods $.selectOption() and $.selectOptionByValue() DO NOT trigger "change" event with jQuery.
+* Class `com.codeborne.selenide.JQuery` has been deprecated.
+
+* #61 Selenide clearly says if parent element/collection is not found
+* #118 Avoid logging annoying error message "UnreachableBrowserException: Error communicating with the remote browser. It may have died." when closing Firefox browser
+* Upgraded to PhantomJS 1.2.0
+
 === 2.10 (Released 18.04.2014)
 * Added method switchToWindow(String title)
 * Added methods $.hover() and $.dragAndDropTo(target)
