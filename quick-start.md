@@ -6,7 +6,7 @@ group: navigation
 cssClass: howto
 header-text: >
   <h4>It's extremely easy to start using Selenide. Definitely not a rocket science.</h4>
-  Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.10/selenide-2.10.jar">selenide.jar</a> to your project and you are done.<br/>
+  Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/2.11/selenide-2.11.jar">selenide.jar</a> to your project and you are done.<br/>
   Here is the quick start guide to get you started.
 
 ---
@@ -20,7 +20,7 @@ Add these lines to file pom.xml:
 <dependency>
     <groupId>com.codeborne</groupId>
     <artifactId>selenide</artifactId>
-    <version>2.10</version>
+    <version>2.11</version>
 </dependency>
 ```
 
@@ -31,7 +31,7 @@ Add these lines to file ivy.xml:
 ```xml
 <ivy-module>
   <dependencies>
-    <dependency org="com.codeborne" name="selenide" rev="2.10"/>
+    <dependency org="com.codeborne" name="selenide" rev="2.11"/>
   </dependencies>
 </ivy-module>
 ```
@@ -42,7 +42,7 @@ Add these lines to file build.gradle:
 
 ```groovy
 dependencies {
-  testCompile 'com.codeborne:selenide:2.10'
+  testCompile 'com.codeborne:selenide:2.11'
 }
 ```
 
