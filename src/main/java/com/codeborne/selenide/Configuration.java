@@ -9,7 +9,8 @@ public class Configuration {
 
   public static String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
 
-  public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
+  public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", 
+      System.getProperty("timeout", "4000")));
 
   public static long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
 
@@ -28,8 +29,7 @@ public class Configuration {
    * <p/>
    * Default value: "firefox"
    */
-  public static String browser = System.getProperty("selenide.browser",
-      System.getProperty("browser", FIREFOX));
+  public static String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
