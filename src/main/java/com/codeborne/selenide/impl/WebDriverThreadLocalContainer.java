@@ -15,6 +15,7 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class WebDriverThreadLocalContainer {
 
   protected boolean isBrowserStillOpen(WebDriver webDriver) {
     try {
-      webDriver.manage().window().getSize();
+      webDriver.getTitle();
       return true;
     } catch (UnreachableBrowserException e) {
       return false;
@@ -261,9 +262,16 @@ public class WebDriverThreadLocalContainer {
         return (WebDriver) constructor.newInstance(capabilities);
       }
     }
+    catch (InvocationTargetException e) {
+      throw runtime(e.getTargetException());
+    }
     catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
     }
+  }
+
+  protected RuntimeException runtime(Throwable exception) {
+    return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
   }
 
   protected WebDriver createRemoteDriver(String remote, String browser) {
