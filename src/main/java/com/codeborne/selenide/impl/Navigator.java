@@ -52,8 +52,8 @@ public class Navigator {
             "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
             "    window._selenide_jsErrors.push(message);\n" +
             "    return false;\n" +
-            "  }\n" +
-            "};\n"
+            "  };\n" +
+            "}\n"
     );
   }
 
