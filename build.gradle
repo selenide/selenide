@@ -52,7 +52,7 @@ task libs(type: Sync) {
 classes.dependsOn libs
 
 test {
-  systemProperties['browser'] = 'htmlunit'
+  include 'com/codeborne/selenide/**/*'
 }
 
 task ie(type: Test) {
@@ -66,6 +66,10 @@ task ie(type: Test) {
 task chrome(type: Test) {
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+}
+
+task htmlunit(type: Test) {
+  systemProperties['browser'] = 'htmlunit'
 }
 
 task phantomjs(type: Test) {
@@ -92,7 +96,7 @@ tasks.withType(Test).all { testTask ->
   testTask.outputs.upToDateWhen { false }
 }
 
-task allTests(dependsOn: ['clean', 'test', 'firefox', 'chrome', 'phantomjs']) {}
+task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'phantomjs']) {}
 
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
