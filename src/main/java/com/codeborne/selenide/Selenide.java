@@ -8,11 +8,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
@@ -465,5 +467,46 @@ public class Selenide {
     if (jsErrors != null && !jsErrors.isEmpty()) {
       throw new JavaScriptErrorsFound(jsErrors);
     }
+  }
+
+  /**
+   * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
+   * <br />
+   * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
+   * you can use:
+   * <br />
+   * <pre>
+   *   {@code
+   *     for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)){
+   *       Reporter.log(logEntry + "<br />");
+   *     }
+   *   }
+   * </pre>
+   * <br />
+   * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
+   * <br />
+   * List of the unsupported browsers and issues:
+   * <br />
+   * http://bit.ly/RZcmrM
+   * <br />
+   * http://bit.ly/1nZTaqu
+   * <br />
+   *
+   * @param logType WebDriver supported log types
+   * @param logLevel logging level that will be used to control logging output
+   * @return list of log entries
+   * @see org.openqa.selenium.logging.LogType,
+   * @see java.util.logging.Level
+   */
+  public static List<String> getWebDriverLogs(String logType, Level logLevel) {
+    List<LogEntry> logEntries = getWebDriver().manage().logs().get(logType).filter(logLevel);
+    if (logEntries == null || logEntries.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<String> result = new ArrayList<String>(logEntries.size());
+    for (LogEntry logEntry : logEntries) {
+      result.add(logEntry.toString());
+    }
+    return result;
   }
 }

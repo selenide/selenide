@@ -10,6 +10,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogType;
+
+import java.util.logging.Level;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -413,5 +416,17 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertTrue(jsError, jsError.contains("ReferenceError"));
     assertTrue(jsError, jsError.contains("$"));
     assertTrue(jsError, jsError.contains("/page_with_js_errors.html"));
+  }
+
+  @Test
+  public void canGetWebDriverBrowserConsoleLogEntry() {
+    openFile("page_with_js_errors.html");
+    $(byText("Generate JS Error")).click();
+    assertEquals(1, getWebDriverLogs(LogType.BROWSER, Level.ALL).size());
+
+    String logEntry = getWebDriverLogs(LogType.BROWSER, Level.ALL).get(0);
+    assertTrue(logEntry, logEntry.contains("ReferenceError"));
+    assertTrue(logEntry, logEntry.contains("$"));
+    assertTrue(logEntry, logEntry.contains("/page_with_js_errors.html"));
   }
 }
