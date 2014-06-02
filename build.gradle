@@ -59,6 +59,7 @@ task ie(type: Test) {
   systemProperties['browser'] = 'ie'
   systemProperties['timeout'] = '8000'
   systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
+  include 'integration/**/*'
   exclude '**/AlertText.*'
   exclude '**/ConfirmTest.*'
 }
@@ -66,26 +67,32 @@ task ie(type: Test) {
 task chrome(type: Test) {
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+  include 'integration/**/*'
 }
 
 task htmlunit(type: Test) {
   systemProperties['browser'] = 'htmlunit'
+  include 'integration/**/*'
 }
 
 task phantomjs(type: Test) {
   systemProperties['browser'] = 'phantomjs'
+  include 'integration/**/*'
 }
 
 task firefox(type: Test) {
   systemProperties['browser'] = 'firefox'
+  include 'integration/**/*'
 }
 
 task safari(type: Test) {
   systemProperties['browser'] = 'safari'
+  include 'integration/**/*'
 }
 
 task opera(type: Test) {
   systemProperties['browser'] = 'opera'
+  include 'integration/**/*'
 }
 
 tasks.withType(Test).all { testTask ->
