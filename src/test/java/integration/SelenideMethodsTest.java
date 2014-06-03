@@ -21,6 +21,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class SelenideMethodsTest extends IntegrationTest {
   @Before
@@ -420,6 +421,8 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void canGetWebDriverBrowserConsoleLogEntry() {
+    assumeTrue(isFirefox() || isChrome());
+
     openFile("page_with_js_errors.html");
     $(byText("Generate JS Error")).click();
     assertEquals(1, getWebDriverLogs(LogType.BROWSER, Level.ALL).size());
