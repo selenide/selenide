@@ -509,4 +509,44 @@ public class Selenide {
     }
     return result;
   }
+
+  /**
+   * Getting All of the WebDriver logs for specified LogType
+   * <br />
+   * For example to get All WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
+   * you can use:
+   * <br />
+   * <pre>
+   *   {@code
+   *     for(String logEntry : getWebDriverLogs(LogType.BROWSER)){
+   *       Reporter.log(logEntry + "<br />");
+   *     }
+   *   }
+   * </pre>
+   * <br />
+   * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
+   * <br />
+   * List of the unsupported browsers and issues:
+   * <br />
+   * http://bit.ly/RZcmrM
+   * <br />
+   * http://bit.ly/1nZTaqu
+   * <br />
+   *
+   * @param logType WebDriver supported log types
+   * @return list of log entries
+   * @see org.openqa.selenium.logging.LogType,
+   * @see java.util.logging.Level
+   */
+  public static List<String> getWebDriverLogs(String logType) {
+    List<LogEntry> logEntries = getWebDriver().manage().logs().get(logType).getAll();
+    if (logEntries == null || logEntries.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<String> result = new ArrayList<String>(logEntries.size());
+    for (LogEntry logEntry : logEntries) {
+      result.add(logEntry.toString());
+    }
+    return result;
+  }
 }

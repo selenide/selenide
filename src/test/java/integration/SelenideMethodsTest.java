@@ -420,15 +420,29 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  public void canGetWebDriverBrowserConsoleLogEntry() {
+  public void canGetFilteredWebDriverBrowserConsoleLogEntry() {
     assumeTrue(isFirefox() || isChrome());
 
     openFile("page_with_js_errors.html");
     $(byText("Generate JS Error")).click();
     assertNotNull(getWebDriverLogs(LogType.BROWSER, Level.ALL));
 
-    System.out.println("[WebDriver Browser Console Logs that was found during the test]:");
+    System.out.println("[Filtered WebDriver Browser Console Logs that was found during the test]:");
     for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)) {
+      System.out.println(logEntry);
+    }
+  }
+
+  @Test
+  public void canGetAllWebDriverBrowserConsoleLogEntry() {
+    assumeTrue(isFirefox() || isChrome());
+
+    openFile("page_with_js_errors.html");
+    $(byText("Generate JS Error")).click();
+    assertNotNull(getWebDriverLogs(LogType.BROWSER));
+
+    System.out.println("[All WebDriver Browser Console Logs that was found during the test]:");
+    for(String logEntry : getWebDriverLogs(LogType.BROWSER)) {
       System.out.println(logEntry);
     }
   }
