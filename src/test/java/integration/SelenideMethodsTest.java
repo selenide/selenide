@@ -10,6 +10,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogType;
+
+import java.util.logging.Level;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -18,6 +21,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class SelenideMethodsTest extends IntegrationTest {
   @Before
@@ -413,5 +417,33 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertTrue(jsError, jsError.contains("ReferenceError"));
     assertTrue(jsError, jsError.contains("$"));
     assertTrue(jsError, jsError.contains("/page_with_js_errors.html"));
+  }
+
+  @Test
+  public void canGetFilteredWebDriverBrowserConsoleLogEntry() {
+    assumeTrue(isFirefox() || isChrome());
+
+    openFile("page_with_js_errors.html");
+    $(byText("Generate JS Error")).click();
+    assertNotNull(getWebDriverLogs(LogType.BROWSER, Level.ALL));
+
+    System.out.println("[Filtered WebDriver Browser Console Logs that was found during the test]:");
+    for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)) {
+      System.out.println(logEntry);
+    }
+  }
+
+  @Test
+  public void canGetAllWebDriverBrowserConsoleLogEntry() {
+    assumeTrue(isFirefox() || isChrome());
+
+    openFile("page_with_js_errors.html");
+    $(byText("Generate JS Error")).click();
+    assertNotNull(getWebDriverLogs(LogType.BROWSER));
+
+    System.out.println("[All WebDriver Browser Console Logs that was found during the test]:");
+    for(String logEntry : getWebDriverLogs(LogType.BROWSER)) {
+      System.out.println(logEntry);
+    }
   }
 }
