@@ -76,6 +76,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.12 (Planned to 2x.06.2014)
+* Upgraded to Selenium 2.42.2[http://selenium.googlecode.com/git/java/CHANGELOG]
+* Upgraded to HtmlUnit 2.15[http://htmlunit.sourceforge.net/changes-report.html#a2.15]
+
 === 2.11 (Released 21.05.2014)
 Cleanup release. Dropping obsolette/useless functionality.
 * Methods $.selectOption() and $.selectOptionByValue() DO NOT trigger "change" event with jQuery.
