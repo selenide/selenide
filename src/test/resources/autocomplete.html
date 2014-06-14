@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test::jquery autocomplete</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="jquery-ui-1.10.4.css">
+    <script type="text/javascript" src="jquery-1.8.3.js" language="JavaScript"></script>
+    <script type="text/javascript" src="jquery-ui-1.10.4.js" language="JavaScript"></script>
+    <script type="text/javascript">
+      function log(e) {
+        console.log(e);
+      }
+      
+      $(function() {
+        $("#tags").keyup(log).keydown(log).keypress(log);
+        
+        var availableTags = [
+          "ActionScript",
+          "AppleScript",
+          "Asp",
+          "BASIC",
+          "C",
+          "C++",
+          "Clojure",
+          "COBOL",
+          "ColdFusion",
+          "Erlang",
+          "Fortran",
+          "Groovy",
+          "Haskell",
+          "Java",
+          "JavaScript",
+          "Lisp",
+          "Perl",
+          "PHP",
+          "Python",
+          "Ruby",
+          "Scala",
+          "Scheme"
+        ];
+        $( "#tags" ).autocomplete({
+          autoFocus: true,
+          source: availableTags,
+          change: function( event, ui ) {
+            $('h4').text("Yeah, " + $(event.currentTarget).val() + "!");
+          }
+        });
+      });
+    </script>
+    <style type="text/css" media="screen">
+      body {
+        font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+        font-size: 62.5%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Page with JQuery autocomplete</h1>
+
+    <br/>
+    <label for="tags">Tags:
+      <input id="tags"/>
+    </label>
+  
+    <h4></h4>
+  </body>
+</html>
