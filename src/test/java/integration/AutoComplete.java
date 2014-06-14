@@ -6,6 +6,8 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.junit.Assume.assumeFalse;
 
 public class AutoComplete extends IntegrationTest {
   @Before
@@ -15,6 +17,7 @@ public class AutoComplete extends IntegrationTest {
 
   @Test
   public void setValueTriggersKeyboardEvents() {
+    assumeFalse(isHtmlUnit());
     $("h4").shouldBe(empty);
     
     $("#tags").val("javasc");
