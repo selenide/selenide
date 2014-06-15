@@ -22,7 +22,7 @@ public class AutoCompleteTest extends IntegrationTest {
     
     $("#tags").val("javasc");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
-    $("#tags").pressTab();
+    $("#void").click();
     
     $("h4").shouldHave(text("This is JavaScript!"));
   }
