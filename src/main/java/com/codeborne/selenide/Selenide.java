@@ -499,6 +499,9 @@ public class Selenide {
    * @see java.util.logging.Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
+    if (isHtmlUnit()) {
+      return Collections.emptyList();
+    }
     List<LogEntry> logEntries = getWebDriver().manage().logs().get(logType).filter(logLevel);
     if (logEntries == null || logEntries.isEmpty()) {
       return Collections.emptyList();
