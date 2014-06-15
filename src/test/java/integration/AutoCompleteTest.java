@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 
-public class AutoComplete extends IntegrationTest {
+public class AutoCompleteTest extends IntegrationTest {
   @Before
   public void openTestPageWithAutocomplete() {
     openFile("autocomplete.html");
@@ -24,6 +24,6 @@ public class AutoComplete extends IntegrationTest {
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#tags").pressTab();
     
-    $("h4").shouldHave(text("Yeah, JavaScript!"));
+    $("h4").shouldHave(text("This is JavaScript!"));
   }
 }
