@@ -2,7 +2,6 @@ package integration;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.logging.LogType;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -13,11 +12,12 @@ import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
+import static org.openqa.selenium.logging.LogType.BROWSER;
 
 public class BrowserLogsTest extends IntegrationTest {
   @Before
   public void setUp() {
-    getWebDriverLogs(LogType.BROWSER, Level.ALL); // clear logs
+    getWebDriverLogs(BROWSER); // clear logs
     openFile("page_with_js_errors.html");
   }
 
@@ -40,13 +40,13 @@ public class BrowserLogsTest extends IntegrationTest {
   @Test
   public void canGetWebDriverBrowserConsoleLogEntry() {
     $(byText("Generate JS Error")).click();
-    List<String> webDriverLogs = getWebDriverLogs(LogType.BROWSER, Level.ALL);
+    List<String> webDriverLogs = getWebDriverLogs(BROWSER, Level.ALL);
 
     for (String logEntry : webDriverLogs) {
       System.out.println(logEntry);
     }
 
-    assumeFalse(isHtmlUnit() || isFirefox() || isSafari()); // chrome ok
+    assumeFalse(isHtmlUnit() || isPhantomjs() || isFirefox() || isSafari());
 
     assertEquals(1, webDriverLogs.size());
 
