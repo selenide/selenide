@@ -22,6 +22,7 @@ import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
@@ -449,7 +450,7 @@ public class Selenide {
   public static List<String> getJavascriptErrors() {
     List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
     if (errors == null || errors.isEmpty()) {
-      return Collections.emptyList();
+      return emptyList();
     }
     List<String> result = new ArrayList<String>(errors.size());
     for (Object error : errors) {
@@ -470,6 +471,17 @@ public class Selenide {
   }
 
   /**
+   * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
+   * 
+   * EXPERIMENTAL! Use with caution.
+   */
+  public static List<String> getWebDriverLogs(String logType) {
+    return getWebDriverLogs(logType, Level.ALL);
+  }
+
+  /**
+   * EXPERIMENTAL! Use with caution.
+   * 
    * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
    * <br />
    * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
@@ -499,57 +511,26 @@ public class Selenide {
    * @see java.util.logging.Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
-    if (isHtmlUnit()) {
-      return Collections.emptyList();
-    }
-    List<LogEntry> logEntries = getWebDriver().manage().logs().get(logType).filter(logLevel);
-    if (logEntries == null || logEntries.isEmpty()) {
-      return Collections.emptyList();
-    }
-    List<String> result = new ArrayList<String>(logEntries.size());
-    for (LogEntry logEntry : logEntries) {
-      result.add(logEntry.toString());
-    }
-    return result;
+    return listToString(getLogEntries(logType, logLevel));
   }
 
-  /**
-   * Getting All of the WebDriver logs for specified LogType
-   * <br />
-   * For example to get All WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
-   * you can use:
-   * <br />
-   * <pre>
-   *   {@code
-   *     for(String logEntry : getWebDriverLogs(LogType.BROWSER)){
-   *       Reporter.log(logEntry + "<br />");
-   *     }
-   *   }
-   * </pre>
-   * <br />
-   * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
-   * <br />
-   * List of the unsupported browsers and issues:
-   * <br />
-   * http://bit.ly/RZcmrM
-   * <br />
-   * http://bit.ly/1nZTaqu
-   * <br />
-   *
-   * @param logType WebDriver supported log types
-   * @return list of log entries
-   * @see org.openqa.selenium.logging.LogType,
-   * @see java.util.logging.Level
-   */
-  public static List<String> getWebDriverLogs(String logType) {
-    List<LogEntry> logEntries = getWebDriver().manage().logs().get(logType).getAll();
-    if (logEntries == null || logEntries.isEmpty()) {
-      return Collections.emptyList();
+  private static List<LogEntry> getLogEntries(String logType, Level logLevel) {
+    try {
+      return getWebDriver().manage().logs().get(logType).filter(logLevel);
     }
-    List<String> result = new ArrayList<String>(logEntries.size());
-    for (LogEntry logEntry : logEntries) {
-      result.add(logEntry.toString());
+    catch (UnsupportedOperationException ignore) {
+      return emptyList();
+    }
+  }
+
+  private static <T> List<String> listToString(List<T> objects) {
+    if (objects == null || objects.isEmpty()) {
+      return emptyList();
+    }
+    List<String> result = new ArrayList<String>(objects.size());
+    for (T object : objects) {
+      result.add(object.toString());
     }
     return result;
-  }
+  } 
 }
