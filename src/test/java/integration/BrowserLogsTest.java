@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
@@ -35,6 +37,20 @@ public class BrowserLogsTest extends IntegrationTest {
     assertTrue(jsError, jsError.contains("ReferenceError"));
     assertTrue(jsError, jsError.contains("$"));
     assertTrue(jsError, jsError.contains("/page_with_js_errors.html"));
+  }
+
+  @Test
+  public void canAssertNoJavaScriptErrors() {
+    assumeFalse(isFirefox());  // window.onerror does not work in Firefox for unknown reason :(
+    $(byText("Generate JS Error")).click();
+    try {
+      assertNoJavascriptErrors();
+      fail("Expected JavaScriptErrorsFound");
+    }
+    catch (JavaScriptErrorsFound expected) {
+      assertEquals(1, expected.getJsErrors().size());
+      assertTrue(expected.getJsErrors().get(0).contains("ReferenceError"));
+    }
   }
 
   @Test

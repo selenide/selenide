@@ -39,24 +39,30 @@ public class ErrorMessages {
   }
 
   public static String screenshot() {
+    return screenshot(formatScreenShotPath());
+  }
+  
+  public static String screenshot(String screenshotPath) {
+    return "\nScreenshot: " + screenshotPath;
+  }
+
+  // TODO Move this logic to ScreenShotLaboratory
+  static String formatScreenShotPath() {
     if (!Configuration.screenshots) {
       LOG.config("Automatic screenshots are disabled.");
       return "";
     }
 
-    return formatScreenShotPath(takeScreenShot());
-  }
-
-  private static String formatScreenShotPath(String screenshot) {
+    String screenshot = takeScreenShot();
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
       String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
       try {
         screenshotUrl = new URL(screenshotUrl).toExternalForm();
       }
-      catch (MalformedURLException e) {}
+      catch (MalformedURLException ignore) {}
       LOG.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
-      return "\nScreenshot: " + screenshotUrl;
+      return screenshotUrl;
     }
 
     LOG.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");

@@ -12,23 +12,23 @@ public class UIAssertionError extends AssertionError {
   
   protected UIAssertionError(String message) {
     super(message);
-    screenshot = screenshot();
+    screenshot = formatScreenShotPath();
     jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot + jsErrors(jsErrors);
+    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors);
   }
 
   protected UIAssertionError(String message, long timeoutMs) {
     super(message);
-    screenshot = screenshot();
+    screenshot = formatScreenShotPath();
     jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot + jsErrors(jsErrors) + timeout(timeoutMs);
+    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs);
   }
 
   protected UIAssertionError(String message, long timeoutMs, Exception cause) {
     super(message);
-    screenshot = screenshot();
+    screenshot = formatScreenShotPath();
     jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(cause);
+    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(cause);
   }
 
   @Override

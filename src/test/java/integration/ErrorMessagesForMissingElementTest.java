@@ -68,6 +68,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
           "Caused by: NoSuchElementException:", expected);
+      assertEquals("http://ci.org/build/reports/tests/1.jpg", expected.getScreenshot());
     }
   }
 
@@ -81,6 +82,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
+      assertEquals("http://ci.org/build/reports/tests/1.jpg", expected.getScreenshot());
     }
   }
 
@@ -121,6 +123,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
           "Element: '<div id=theHiddenElement displayed:false></div>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", elementShouldExist.toString());
+      assertEquals("http://ci.org/build/reports/tests/1.jpg", elementShouldExist.getScreenshot());
     }
   }
 

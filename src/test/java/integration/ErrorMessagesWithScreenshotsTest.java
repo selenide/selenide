@@ -1,18 +1,27 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
+  private String reportsUrl;
+
   @Before
   public final void setTimeout() {
     timeout = 0;
@@ -22,6 +31,24 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   @After
   public final void restoreTimeout() {
     timeout = 4000;
+  }
+
+  @Before
+  public void mockScreenshots() {
+    reportsUrl = Configuration.reportsUrl;
+    Configuration.reportsUrl = "http://ci.org/";
+    Screenshots.screenshots = new ScreenShotLaboratory() {
+      @Override
+      public String takeScreenShot() {
+        return new File(reportsFolder, "1.jpg").getAbsolutePath();
+      }
+    };
+  }
+
+  @After
+  public void restoreScreenshots() {
+    Configuration.reportsUrl = reportsUrl;
+    Screenshots.screenshots = new ScreenShotLaboratory();
   }
 
   @Test
@@ -50,6 +77,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
           e.getMessage().contains("Element not found {By.selector: thead}"));
+      assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
     }
   }
 
@@ -65,6 +93,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
           e.getMessage().contains("Element not found {<table id=multirowTable>/thead"));
+      assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
     }
   }
 
