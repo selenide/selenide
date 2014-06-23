@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Screenshots.takeScreenShot;
-import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 
 public class ErrorMessages {
   private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());
@@ -78,8 +77,7 @@ public class ErrorMessages {
     return "\nCaused by: " + cause;
   }
 
-  public static String jsErrors() {
-    List<String> jsErrors = getJavascriptErrors();
+  public static String jsErrors(List<String> jsErrors) {
     if (jsErrors == null || jsErrors.isEmpty()) {
       return "";
     }
