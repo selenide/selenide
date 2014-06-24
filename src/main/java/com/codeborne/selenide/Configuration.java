@@ -9,8 +9,7 @@ public class Configuration {
 
   public static String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
 
-  public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", 
-      System.getProperty("timeout", "4000")));
+  public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
   public static long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
 
