@@ -12,7 +12,7 @@
       }
       
       $(function() {
-        $("#tags").keyup(log).keydown(log).keypress(log);
+        //$('#tags').keyup(log).keydown(log).keypress(log);
         
         var availableTags = [
           "ActionScript",
@@ -38,7 +38,7 @@
           "Scala",
           "Scheme"
         ];
-        $( "#tags" ).autocomplete({
+        $('#tags').autocomplete({
           autoFocus: true,
           source: availableTags,
           change: function( event, ui ) {
@@ -64,6 +64,6 @@
   
     <h4></h4>
   
-    <button id="void" onclick="return false;">void</button>
+    <button id="void" onclick="return false;">search</button>
   </body>
 </html>
