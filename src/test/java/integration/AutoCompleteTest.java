@@ -1,6 +1,7 @@
 package integration;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.empty;
@@ -9,6 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 
+@Ignore
 public class AutoCompleteTest extends IntegrationTest {
   @Before
   public void openTestPageWithAutocomplete() {
