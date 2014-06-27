@@ -4,14 +4,11 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-
-import java.io.File;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -219,16 +216,6 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("#login").shouldNotBe(empty);
     $("#empty-text-area").shouldBe(empty);
     $("#text-area").shouldNotBe(empty);
-  }
-
-  @Test @Ignore
-  public void userCanUploadFileFromClasspath() {
-    $("#file_upload").uploadFromClasspath("some-file.txt");
-  }
-
-  @Test @Ignore
-  public void userCanUploadFiles() {
-    $("#file_upload").uploadFile(new File("some-file.txt"));
   }
 
   @Test

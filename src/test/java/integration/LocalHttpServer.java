@@ -1,5 +1,9 @@
 package integration;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -10,11 +14,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.lang.Thread.currentThread;
@@ -32,6 +36,7 @@ public class LocalHttpServer {
     server.setHandler(context);
 
     context.addServlet(new ServletHolder(new FileDownloadHandler()), "/files/*");
+    context.addServlet(new ServletHolder(new FileUploadHandler()), "/upload");
     context.addServlet(new ServletHolder(new FileHandler()), "/*");
   }
 
@@ -93,6 +98,23 @@ public class LocalHttpServer {
     }
   }
 
+  public final List<FileItem> uploadedFiles = new ArrayList<FileItem>(2);
+  
+  private class FileUploadHandler extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      DiskFileItemFactory factory = new DiskFileItemFactory();
+      factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+      ServletFileUpload upload = new ServletFileUpload(factory);
+      try {
+        List<FileItem> items = upload.parseRequest(request);
+        uploadedFiles.addAll(items);
+      } catch (FileUploadException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   private String getSessionId(HttpServletRequest request) {
     if (request.getCookies() != null) {
       for (Cookie cookie : request.getCookies()){
@@ -122,5 +144,10 @@ public class LocalHttpServer {
     } finally {
       os.close();
     }
+  }
+
+  public static void main(String[] args) throws Exception {
+    LocalHttpServer server = new LocalHttpServer(8080).start();
+    Thread.currentThread().join();
   }
 }

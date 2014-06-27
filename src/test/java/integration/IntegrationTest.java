@@ -12,7 +12,7 @@ public abstract class IntegrationTest {
   public ScreenShooter img = ScreenShooter.failedTests() ;
 
   private static int port;
-  private static LocalHttpServer server;
+  protected static LocalHttpServer server;
 
   @BeforeClass
   public static void runLocalHttpServer() throws Exception {

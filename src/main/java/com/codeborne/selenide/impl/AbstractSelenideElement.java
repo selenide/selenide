@@ -335,11 +335,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
 
     if (!file.exists()) {
-      throw new IllegalArgumentException("File not found: " + file);
+      throw new IllegalArgumentException("File not found: " + file.getAbsolutePath());
     }
-    
-    inputField.sendKeys(file.getCanonicalPath());
-    return file;
+
+    String canonicalPath = file.getCanonicalPath();
+    inputField.sendKeys(canonicalPath);
+    return new File(canonicalPath);
   }
 
   protected void selectOptionByText(WebElement selectField, String optionText) {
