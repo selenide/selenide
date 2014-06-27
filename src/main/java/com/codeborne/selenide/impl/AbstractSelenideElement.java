@@ -318,9 +318,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return proxy;
   }
 
-
-
-  protected Object uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException {
+  protected File uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException, IOException {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
       throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
     }
@@ -330,7 +328,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throw new IllegalArgumentException("File not found in classpath: " + fileName);
     }
     File file = new File(resource.toURI());
-    inputField.sendKeys(file.getAbsolutePath());
+    inputField.sendKeys(file.getCanonicalPath());
     return file;
   }
 
