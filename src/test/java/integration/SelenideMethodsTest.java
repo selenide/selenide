@@ -11,6 +11,8 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.*;
@@ -220,8 +222,13 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test @Ignore
-  public void userCanUploadFiles() {
+  public void userCanUploadFileFromClasspath() {
     $("#file_upload").uploadFromClasspath("some-file.txt");
+  }
+
+  @Test @Ignore
+  public void userCanUploadFiles() {
+    $("#file_upload").uploadFile(new File("some-file.txt"));
   }
 
   @Test

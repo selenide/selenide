@@ -133,6 +133,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       setSelected((Boolean) args[0]);
       return proxy;
     }
+    else if ("uploadFile".equals(method.getName())) {
+      return uploadFile(getDelegate(), (File) args[0]);
+    }
     else if ("uploadFromClasspath".equals(method.getName())) {
       return uploadFromClasspath(getDelegate(), (String) args[0]);
     }
@@ -319,15 +322,22 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected File uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException, IOException {
-    if (!"input".equalsIgnoreCase(inputField.getTagName())) {
-      throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
-    }
-
     URL resource = currentThread().getContextClassLoader().getResource(fileName);
     if (resource == null) {
       throw new IllegalArgumentException("File not found in classpath: " + fileName);
     }
-    File file = new File(resource.toURI());
+    return uploadFile(inputField, new File(resource.toURI()));
+  }
+  
+  protected File uploadFile(WebElement inputField, File file) throws IOException {
+    if (!"input".equalsIgnoreCase(inputField.getTagName())) {
+      throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
+    }
+
+    if (!file.exists()) {
+      throw new IllegalArgumentException("File not found: " + file);
+    }
+    
     inputField.sendKeys(file.getCanonicalPath());
     return file;
   }

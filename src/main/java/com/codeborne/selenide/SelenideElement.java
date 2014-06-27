@@ -362,6 +362,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File uploadFromClasspath(String fileName);
 
   /**
+   * <p>Upload file into file upload field.</p>
+   * <p>Short form of <code>webElement.sendKeys("c:/files/my-file.txt");</code></p>
+   */
+  File uploadFile(File file);
+
+  /**
    * Select an option from dropdown list
    * @param text visible text of option
    */
