@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: "jacoco"
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
@@ -52,6 +53,18 @@ task libs(type: Sync) {
 
 classes.dependsOn libs
 
+jacoco {
+  toolVersion = "0.7.0.201403182114"
+}
+
+jacocoTestReport {
+  reports {
+    xml.enabled false
+    csv.enabled false
+    html.destination "${buildDir}/reports/jacocoHtml"
+  }
+}
+
 test {
   include 'com/codeborne/selenide/**/*'
 }
@@ -101,6 +114,10 @@ tasks.withType(Test).all { testTask ->
   testTask.testLogging.showStandardStreams = true
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 3
+  testTask.jacoco {
+    enabled = true
+    include 'com/codeborne/selenide/**/*'
+  }
   testTask.outputs.upToDateWhen { false }
 }
 
