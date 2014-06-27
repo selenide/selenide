@@ -28,8 +28,8 @@ public class FileUploadTest extends IntegrationTest {
     assertEquals("firebug-1.11.4.xpi", f2.getName());
 
     assertEquals(2, server.uploadedFiles.size());
-    assertEquals("hello_world.txt", server.uploadedFiles.get(0).getName());
-    assertEquals("firebug-1.11.4.xpi", server.uploadedFiles.get(1).getName());
+    assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
+    assertTrue(server.uploadedFiles.get(1).getName().endsWith("firebug-1.11.4.xpi"));
     
     assertEquals("Hello, WinRar!", server.uploadedFiles.get(0).getString());
   }
@@ -40,6 +40,6 @@ public class FileUploadTest extends IntegrationTest {
     $("#submit").click();
     assertTrue(file.exists());
     assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
-    assertEquals("hello_world.txt", server.uploadedFiles.get(0).getName());
+    assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
   }
 }
