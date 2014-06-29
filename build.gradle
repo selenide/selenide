@@ -76,37 +76,44 @@ task ie(type: Test) {
   include 'integration/**/*'
   exclude '**/AlertText.*'
   exclude '**/ConfirmTest.*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task chrome(type: Test) {
   systemProperties['browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task htmlunit(type: Test) {
   systemProperties['browser'] = 'htmlunit'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task phantomjs(type: Test) {
   systemProperties['browser'] = 'phantomjs'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task firefox(type: Test) {
   systemProperties['browser'] = 'firefox'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task safari(type: Test) {
   systemProperties['browser'] = 'safari'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 task opera(type: Test) {
   systemProperties['browser'] = 'opera'
   include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
 }
 
 tasks.withType(Test).all { testTask ->
