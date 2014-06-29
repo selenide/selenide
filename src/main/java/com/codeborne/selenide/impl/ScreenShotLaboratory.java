@@ -6,6 +6,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -117,7 +118,13 @@ public class ScreenShotLaboratory {
       else {
         printOnce("savePageSourceToFile", e);
       }
-    } catch (Exception e) {
+    }
+    catch (UnreachableBrowserException e) {
+      writeToFile(e.toString(), pageSource);
+      return pageSource;
+    }
+    catch (Exception e) {
+      writeToFile(e.toString(), pageSource);
       printOnce("savePageSourceToFile", e);
     }
     return pageSource;
@@ -166,8 +173,14 @@ public class ScreenShotLaboratory {
     }
   }
 
-  protected void writeToFile(String content, File targetFile) throws IOException {
-    copyFile(new ByteArrayInputStream(content.getBytes("UTF-8")), targetFile);
+  protected void writeToFile(String content, File targetFile) {
+    try {
+      copyFile(new ByteArrayInputStream(content.getBytes("UTF-8")), targetFile);
+    }
+    catch (IOException e) {
+      System.err.println("Failed to write file " + targetFile.getAbsolutePath());
+      e.printStackTrace();
+    }
   }
 
   protected File ensureFolderExists(File targetFile) {
