@@ -278,9 +278,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void setValue(String text) {
     WebElement element = waitForElement();
-    element.clear();
-    element.sendKeys(text);
-    fireEvent("change");
+    if ("select".equalsIgnoreCase(element.getTagName())) {
+      selectOptionByValue(element, text);
+    }
+    else {
+      element.clear();
+      element.sendKeys(text);
+      fireEvent("change");
+    }
   }
 
   protected String getValue() {
@@ -344,14 +349,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void selectOptionByText(WebElement selectField, String optionText) {
-    $(selectField).should(exist);
-    $(selectField).find(byText(optionText)).shouldBe(visible);
+    $(selectField).should(exist).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    $(selectField).should(exist);
-    $(selectField).find(byValue(optionValue)).shouldBe(visible);
+    $(selectField).should(exist).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 

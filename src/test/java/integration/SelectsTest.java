@@ -26,6 +26,16 @@ public class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  public void valMethodSelectsOptionInCaseOfSelectBox() {
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+    select.val("myrambler.ru");
+
+    select.getSelectedOption().shouldBe(selected);
+    assertEquals("myrambler.ru", select.getSelectedValue());
+    assertEquals("@myrambler.ru", select.getSelectedText());
+  }
+
+  @Test
   public void userCanSelectOptionByText() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOption("@мыло.ру");
