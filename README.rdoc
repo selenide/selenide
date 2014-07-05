@@ -76,7 +76,14 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
-=== 2.12 (Planned to 2x.06.2014)
+=== 2.12 (Released 4.07.2014)
+* Added method $.uploadFile()
+* Fixed method $.uploadFromClasspath - it removes extra ".." parts from file name
+* In case of selectbox, $("select").val("...") selects an option (like in JQuery)
+* Added method getWebDriverLogs() for querying logs returned by `webdriver.manage().logs()` (thanks to Sergey Shimkiv for this pull request!)
+* Added methods for retrieving screenshot and javascript errors from UIAssertionError
+
+* Bugfix #119 for Opera (Opera does not support `webdriver.manage().window()`)
 * Upgraded to Selenium 2.42.2[http://selenium.googlecode.com/git/java/CHANGELOG]
 * Upgraded to HtmlUnit 2.15[http://htmlunit.sourceforge.net/changes-report.html#a2.15]
 
