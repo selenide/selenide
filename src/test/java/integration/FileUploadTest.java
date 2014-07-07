@@ -1,11 +1,13 @@
 package integration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -14,6 +16,13 @@ public class FileUploadTest extends IntegrationTest {
   public void openFileUploadForm() {
     openFile("file_upload_form.html");
     server.uploadedFiles.clear();
+  }
+
+  @After
+  public void restartUnstableWebdriver() {
+    if (isIE() || isPhantomjs()) {
+      closeWebDriver();
+    }
   }
 
   @Test
