@@ -296,9 +296,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
       char lastChar = text.charAt(text.length() - 1);
       executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
+      fireEvent(element, "change");
     }
     else {
+      element.clear();
       element.sendKeys(text);
+      fireEvent(element, "change");
     }
   }
 
