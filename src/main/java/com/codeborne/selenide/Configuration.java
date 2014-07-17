@@ -55,7 +55,7 @@ public class Configuration {
 
   /**
    * Folder to store screenshots to.
-   * Can be configured either programmatically or by system property "-Dselenide.reports=true".
+   * Can be configured either programmatically or by system property "-Dselenide.reports=test-result/reports".
    *
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
