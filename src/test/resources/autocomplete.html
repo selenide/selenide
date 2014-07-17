@@ -9,10 +9,11 @@
     <script type="text/javascript">
       function log(e) {
         if (typeof console !== "undefined") console.log(e);
+        $('#log').append('<li>' + e.type + ': ' + e.keyCode + ', ' + e.charCode + ', ' + e.which + '</li>');
       }
       
       $(function() {
-        //$('#tags').keyup(log).keydown(log).keypress(log);
+        $('#tags').keyup(log).keydown(log).keypress(log);
         
         var availableTags = [
           "ActionScript",
@@ -56,6 +57,9 @@
   </head>
   <body>
     <h1>Page with JQuery autocomplete</h1>
+
+    <ul id="log">
+    </ul>
 
     <br/>
     <label for="tags">Tags:

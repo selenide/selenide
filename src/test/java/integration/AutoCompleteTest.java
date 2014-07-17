@@ -19,8 +19,8 @@ public class AutoCompleteTest extends IntegrationTest {
   public void setValueTriggersKeyboardEvents() {
     assumeFalse(isHtmlUnit());
     $("h4").shouldBe(empty);
-    
-    $("#tags").sendKeys("javasc");
+
+    $("#tags").val("javasc");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#void").click();
     

@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.JQuery;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -281,10 +282,23 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     if ("select".equalsIgnoreCase(element.getTagName())) {
       selectOptionByValue(element, text);
     }
+    else if (text == null || text.isEmpty()) {
+      element.clear();
+    }
+    else if (JQuery.jQuery.isJQueryAvailable()) {
+      String jsCodeToTriggerEvent =
+          "arguments[0].value = arguments[1];" +
+          "var element = jQuery(arguments[0]);" +
+
+          "var e = jQuery.Event('keydown');  e.which = arguments[2]; element.trigger(e);" +
+          "var e = jQuery.Event('keypress'); e.which = arguments[2]; element.trigger(e);" +
+          "var e = jQuery.Event('keyup');    e.which = arguments[2]; element.trigger(e);";
+
+      char lastChar = text.charAt(text.length() - 1);
+      executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
+    }
     else {
-      executeJavaScript("arguments[0].value = arguments[1]", element, text);
-      fireEvent(element, "keyup");
-      fireEvent(element, "change");
+      element.sendKeys(text);
     }
   }
 
@@ -300,11 +314,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void fireEvent(WebElement element, final String event) {
     final String jsCodeToTriggerEvent
-        = "if (document.createEventObject){\n" +  // IE
+        = "if (document.createEventObject) {\n" +  // IE
         "  var evt = document.createEventObject();\n" +
         "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
         "}\n" +
-        "else{\n" +
+        "else {\n" +
         "  var evt = document.createEvent('HTMLEvents');\n " +
         "  evt.initEvent(arguments[1], true, true );\n " +
         "  return !arguments[0].dispatchEvent(evt);\n" +
