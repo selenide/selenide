@@ -283,6 +283,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
+      fireEvent(element, "keyup");
       fireEvent(element, "change");
     }
   }
