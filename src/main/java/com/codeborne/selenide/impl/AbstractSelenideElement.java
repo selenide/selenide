@@ -282,9 +282,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       selectOptionByValue(element, text);
     }
     else {
-      element.clear();
-      element.sendKeys(text);
-      fireEvent("change");
+      executeJavaScript("arguments[0].value = arguments[1]", element, text);
+      fireEvent(element, "change");
     }
   }
 
@@ -295,21 +294,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void append(String text) {
     WebElement element = waitForElement();
     element.sendKeys(text);
-    fireEvent("change");
+    fireEvent(element, "change");
   }
 
-  protected void fireEvent(final String event) {
+  protected void fireEvent(WebElement element, final String event) {
     final String jsCodeToTriggerEvent
         = "if (document.createEventObject){\n" +  // IE
         "  var evt = document.createEventObject();\n" +
-        "  return document.activeElement.fireEvent('on" + event + "', evt);\n" +
+        "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
         "}\n" +
         "else{\n" +
         "  var evt = document.createEvent('HTMLEvents');\n " +
-        "  evt.initEvent('" + event + "', true, true );\n " +
-        "  return !document.activeElement.dispatchEvent(evt);\n" +
+        "  evt.initEvent(arguments[1], true, true );\n " +
+        "  return !arguments[0].dispatchEvent(evt);\n" +
         '}';
-    executeJavaScript(jsCodeToTriggerEvent);
+    executeJavaScript(jsCodeToTriggerEvent, element, event);
   }
 
   protected Object should(Object proxy, String prefix, Condition... conditions) {

@@ -1,7 +1,6 @@
 package integration;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.empty;
@@ -10,7 +9,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 
-@Ignore
 public class AutoCompleteTest extends IntegrationTest {
   @Before
   public void openTestPageWithAutocomplete() {
@@ -22,7 +20,7 @@ public class AutoCompleteTest extends IntegrationTest {
     assumeFalse(isHtmlUnit());
     $("h4").shouldBe(empty);
     
-    $("#tags").val("javasc");
+    $("#tags").sendKeys("javasc");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#void").click();
     

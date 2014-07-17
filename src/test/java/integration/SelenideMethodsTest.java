@@ -149,7 +149,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void userCanSetValueToTextfield() {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
-    $(By.name("password")).shouldBe(focused);
+//    $(By.name("password")).shouldBe(focused);
     $(By.name("password")).shouldHave(value("sherlyn"));
     $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
     assertEquals("sherlyn", $(By.name("password")).val());
