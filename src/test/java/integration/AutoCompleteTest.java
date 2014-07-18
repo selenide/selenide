@@ -6,6 +6,7 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 
@@ -17,13 +18,13 @@ public class AutoCompleteTest extends IntegrationTest {
 
   @Test
   public void setValueTriggersKeyboardEvents() {
-    assumeFalse(isHtmlUnit());
+    assumeFalse(isHtmlUnit() || isFirefox());
     $("h4").shouldBe(empty);
 
     $("#tags").val("javasc");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
-    $("#void").click();
-    
+    $("#anyButton").click();
+
     $("h4").shouldHave(text("This is JavaScript!"));
   }
 }

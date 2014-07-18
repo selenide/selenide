@@ -43,6 +43,7 @@
           autoFocus: true,
           source: availableTags,
           change: function( event, ui ) {
+//            $('#log').append('<li>' + $(event.currentTarget).val() + '</li>');
             $('h4').text("This is " + $(event.currentTarget).val() + "!");
           }
         });
@@ -67,7 +68,7 @@
     </label>
   
     <h4></h4>
-  
-    <button id="void" onclick="return false;">search</button>
+
+    <button id="anyButton" onclick="void(0);">search</button>
   </body>
 </html>
