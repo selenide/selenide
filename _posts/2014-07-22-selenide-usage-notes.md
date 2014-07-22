@@ -78,6 +78,7 @@ To be able to select some dropdown element value you can:
 
  ```java
    SelenideElement parentDiv = $(".dropdown");
+   
    // Find `<button>` element and `click()` on it
    parentDiv.find("button").scrollTo().click();
    
@@ -85,7 +86,6 @@ To be able to select some dropdown element value you can:
    parentDiv.find(".dropdown-menu").find(withText("Action")).parent().click();
  ```
 
-<br/>
 <br/>
 In the next post I would like to share experience in the automated testing environment deployment (based on Grid2) if it will be interesting.
 <br/><br />
