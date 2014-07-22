@@ -9,7 +9,6 @@ tags: []
 {% include JB/setup %}
 
 Hello!
-
 May be current post will be useful for someone <br/> <br/>
 
 ### IE notes
@@ -22,7 +21,6 @@ The cause of it could be synthetic events usage. The workaround is to use native
  ```
  
  https://code.google.com/p/selenium/wiki/InternetExplorerDriver
-
 <br/>
 
 ### One way to add Selenide screenshot into the TestNG HTML reporter
@@ -53,7 +51,6 @@ And you have overridden `onTestFailure(ITestResult result)` method to collect so
 In such case it is possible that your screenshot gathering implementation will collect incorrect data because `finally` block can be performed before screenshot will be taken.
 
 Just keep in mind that Selenide's screenshot file name (that will be taken directly after some exception) could be taken from `result.getThrowable().getMessage();`
-
 <br/> 
 
 ### One way to work with customized Bootstrap HTML elements
@@ -90,8 +87,7 @@ To be able to select some dropdown element value you can:
 
 <br/>
 <br/>
-
 In the next post I would like to share experience in the automated testing environment deployment (based on Grid2) if it will be interesting.
-<br />
-Thanks to Selenide's authors for their great tool ;)
+<br/><br />
+Thanks to the Selenide's authors for their great tool ;)
 <br />
