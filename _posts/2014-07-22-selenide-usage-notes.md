@@ -9,11 +9,12 @@ tags: []
 {% include JB/setup %}
 
 Hello!
-May be current post will be useful for someone <br/> <br/>
+
+Below you can find some notes about Selenide/Selenium usage <br/> <br/>
 
 ### IE notes
 
-IE 11 x32/x64. In some cases after the actions with HTML elements (`click()` for example) you can receive an "org.openqa.selenium.ElementNotVisibleException" exception. <br />
+IE 11 x32/x64. In some cases after the actions with HTML elements (`click()` for example) you can receive an exception. <br />
 The cause of it could be synthetic events usage. The workaround is to use native events for IE:
  
  ```java
@@ -87,7 +88,7 @@ To be able to select some dropdown element value you can:
  ```
 
 <br/>
-In the next post I would like to share experience in the automated testing environment deployment (based on Grid2) if it will be interesting.
+In the next post I would like to share experience in the automated testing environment deployment (based on Grid2).
 <br/><br />
 Thanks to the Selenide's authors for their great tool ;)
 <br />
