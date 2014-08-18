@@ -461,7 +461,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
       sleep(pollingInterval);
     }
-    while (currentTimeMillis() - startTime < timeoutMs);
+    while (currentTimeMillis() - startTime <= timeoutMs);
 
     if (Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrap(lastError);
@@ -505,7 +505,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
       sleep(pollingInterval);
     }
-    while (currentTimeMillis() - startTime < timeoutMs);
+    while (currentTimeMillis() - startTime <= timeoutMs);
 
     if (Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrap(lastError);
