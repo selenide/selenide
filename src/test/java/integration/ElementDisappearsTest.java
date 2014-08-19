@@ -6,10 +6,13 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
+/**
+ * All checks in this class are equivalent
+ */
 public class ElementDisappearsTest extends IntegrationTest {
   @Before
   public void clickHidesElement() {
-    openFile("element_disappears.html");
+    openFile("element_disappears_on_click.html");
     $("button").click();
   }
 
