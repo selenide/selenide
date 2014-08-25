@@ -10,7 +10,7 @@ tags: []
 
 Hello!
 
-Below you can find some notes about Selenide/Selenium usage <br/> <br/>
+My name is Sergey Shimkiv. Below you can find some notes about Selenide/Selenium usage. <br/> <br/>
 
 ### IE notes
 
@@ -56,7 +56,9 @@ Just keep in mind that Selenide's screenshot file name (that will be taken direc
 
 ### One way to work with customized Bootstrap HTML elements
 
-For example Bootstrap's dropdown elements are represented via set of HTML elements. In common:
+Tests often get complicated when you need to test customized HTML controls with complex logic.
+
+For example, Bootstrap's dropdown elements are represented via set of HTML elements. In common:
 
  ```html
   <div class="dropdown">
@@ -92,3 +94,7 @@ In the next post I would like to share experience in the automated testing envir
 <br/><br />
 Thanks to the Selenide's authors for their great tool ;)
 <br />
+<br />
+
+Sergey Shimkiv
+<br/>
