@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Selenide usage simple notes"
+title: "Selenide usage simple notes: IE, TestNG, Bootstrap dropdown"
 description: ""
 category:
 header-text: "IE, One way to add Selenide screenshot into the TestNG HTML reporter, One way to work with customized Bootstrap HTML elements"
