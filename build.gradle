@@ -71,7 +71,6 @@ test {
 
 task ie(type: Test) {
   systemProperties['browser'] = 'ie'
-  systemProperties['timeout'] = '8000'
   systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
   include 'integration/**/*'
   exclude '**/AlertText.*'
