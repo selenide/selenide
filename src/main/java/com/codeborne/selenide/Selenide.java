@@ -5,7 +5,6 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntry;
@@ -13,7 +12,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 import static com.codeborne.selenide.Condition.enabled;
@@ -22,6 +24,7 @@ import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -342,11 +345,27 @@ public class Selenide {
    */
   public static void confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = getWebDriver().switchTo().alert();
+      Alert alert = waitForAlert();
       String actualDialogText = alert.getText();
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
     }
+  }
+  
+  private static Alert waitForAlert() {
+    final long startTime = currentTimeMillis();
+    NoAlertPresentException lastError;
+    do {
+      try {
+        return getWebDriver().switchTo().alert();
+      }
+      catch (NoAlertPresentException e) {
+        lastError = e;
+      }
+    }
+    while (currentTimeMillis() - startTime <= timeout);
+    
+    throw lastError;
   }
 
   /**
@@ -358,7 +377,7 @@ public class Selenide {
    */
   public static void dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = getWebDriver().switchTo().alert();
+      Alert alert = waitForAlert();
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
