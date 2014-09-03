@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.JQuery;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -16,9 +19,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.pollingInterval;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
@@ -192,8 +193,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("getWrappedElement".equals(method.getName())) {
       return getActualDelegate();
     }
+    else if ("isImage".equals(method.getName())) {
+      return isImage();
+    }
 
     return delegateMethod(getDelegate(), method, args);
+  }
+
+  protected boolean isImage() {
+    WebElement img = getActualDelegate();
+    if (!"img".equalsIgnoreCase(img.getTagName())) {
+      throw new IllegalArgumentException("Method isImage() is only applicable for img elements");
+    }
+    return executeJavaScript("return arguments[0].complete && " +
+        "typeof arguments[0].naturalWidth != 'undefined' && " +
+        "arguments[0].naturalWidth > 0", img);
   }
 
   protected boolean matches(Condition condition) {
