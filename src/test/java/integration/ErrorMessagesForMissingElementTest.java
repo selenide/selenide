@@ -25,16 +25,11 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
-  PageObject pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
+  private PageObject pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
 
   @Before
   public final void setTimeout() {
     timeout = 1500;
-  }
-
-  @After
-  public final void restoreTimeout() {
-    timeout = 4000;
   }
 
   private String reportsUrl;

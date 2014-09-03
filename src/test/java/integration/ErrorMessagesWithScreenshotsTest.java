@@ -21,16 +21,11 @@ import static org.junit.Assert.fail;
 
 public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
-
+  
   @Before
   public final void setTimeout() {
     timeout = 0;
     openFile("page_with_selects_without_jquery.html");
-  }
-
-  @After
-  public final void restoreTimeout() {
-    timeout = 4000;
   }
 
   @Before

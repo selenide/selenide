@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -20,11 +19,6 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
     $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
     $("#loading").shouldBe(visible).shouldHave(text("Loading..."));
-  }
-
-  @After
-  public final void restoreTimeout() {
-    timeout = 4000;
   }
 
   @Test
