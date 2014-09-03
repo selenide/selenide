@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import org.junit.Before;
 import org.junit.Test;
@@ -218,6 +219,38 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("#text-area").shouldNotBe(empty);
   }
 
+  @Test
+  public void canUseHaveWrapper() {
+    $("#username-blur-counter").should(have(text("___")));
+  }
+
+  @Test
+  public void canUseHaveWrapper_errorMessage() {
+    try {
+      $("#username-blur-counter").should(have(text("wrong-text")));
+      fail("Expected ElementShould exception");
+    } catch (ElementShould expected) {
+      assertTrue("Actual error message: " + expected.getMessage(),
+          expected.getMessage().startsWith("Element should have text 'wrong-text' {By.selector: #username-blur-counter}"));
+    }
+  }
+
+  @Test
+  public void canUseBeWrapper() {
+    $("br").should(be(empty));
+  }
+
+  @Test
+  public void canUseBeWrapper_errorMessage() {
+    try {
+      $("#username-blur-counter").should(be(disabled));
+      fail("Expected ElementShould exception");
+    } catch (ElementShould expected) {
+      assertTrue("Actual error message: " + expected.getMessage(),
+          expected.getMessage().startsWith("Element should be disabled {By.selector: #username-blur-counter}"));
+    }
+  }
+  
   @Test
   public void userCanGetOriginalWebElement() {
     WebElement selenideElement = $(By.name("domain")).toWebElement();

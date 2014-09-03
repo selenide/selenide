@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
@@ -134,14 +135,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @return true iff attribute exists
    */
   public static Condition attribute(final String attributeName) {
-    return new Condition("hasAttribute") {
+    return new Condition("attribute") {
       @Override
       public boolean apply(WebElement element) {
         return element.getAttribute(attributeName) != null;
       }
       @Override
       public String toString() {
-        return "attribute " + attributeName;
+        return name + " " + attributeName;
       }
     };
   }
@@ -153,14 +154,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param expectedAttributeValue expected value of attribute
    */
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
-    return new Condition("hasAttribute") {
+    return new Condition("attribute") {
       @Override
       public boolean apply(WebElement element) {
         return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
       }
       @Override
       public String toString() {
-        return "attribute " + attributeName + '=' + expectedAttributeValue;
+        return name + " " + attributeName + '=' + expectedAttributeValue;
       }
     };
   }
@@ -236,14 +237,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
   public static Condition matchText(final String regex) {
-    return new Condition("match") {
+    return new Condition("match text") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.matches(element.getText(), regex);
       }
       @Override
       public String toString() {
-        return "match text '" + regex + '\'';
+        return name + " '" + regex + '\'';
       }
     };
   }
@@ -270,17 +271,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition text(final String text) {
-    return new Condition("text") {
-      @Override
-      public boolean apply(WebElement element) {
-        return Html.text.contains(element.getText(), text.toLowerCase());
-      }
-
-      @Override
-      public String toString() {
-        return "text '" + text + '\'';
-      }
-    };
+    return new Text(text);
   }
 
   /**
@@ -298,7 +289,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return "text '" + text + '\'';
+        return name + " '" + text + '\'';
       }
     };
   }
@@ -312,14 +303,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition exactText(final String text) {
-    return new Condition("exactText") {
+    return new Condition("exact text") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.equals(element.getText(), text);
       }
       @Override
       public String toString() {
-        return "exactly the text '" + text + '\'';
+        return name + " '" + text + '\'';
       }
     };
   }
@@ -332,14 +323,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param text expected text of HTML element
    */
   public static Condition exactTextCaseSensitive(final String text) {
-    return new Condition("exactTextCaseSensitive") {
+    return new Condition("exact text case sensitive") {
       @Override
       public boolean apply(WebElement element) {
         return Html.text.equalsCaseSensitive(element.getText(), text);
       }
       @Override
       public String toString() {
-        return "exactly the text '" + text + '\'';
+        return name + " '" + text + '\'';
       }
     };
   }
@@ -396,24 +387,24 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
+   * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
    */
-  public static Condition cssClass(String cssClass) {
-    return hasClass(cssClass);
+  public static Condition hasClass(String cssClass) {
+    return cssClass(cssClass);
   }
 
   /**
-   * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
+   * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
-  public static Condition hasClass(final String cssClass) {
-    return new Condition("hasClass") {
+  public static Condition cssClass(final String cssClass) {
+    return new Condition("css class") {
       @Override
       public boolean apply(WebElement element) {
         return hasClass(element, cssClass);
       }
       @Override
       public String toString() {
-        return "CSS class '" + cssClass + '\'';
+        return name + " '" + cssClass + '\'';
       }
     };
   }
@@ -582,7 +573,33 @@ public abstract class Condition implements Predicate<WebElement> {
       }
     };
   }
+  
+  public static Condition be(Condition delegate) {
+    return wrap("be", delegate);
+  }
 
+  public static Condition have(Condition delegate) {
+    return wrap("have", delegate);
+  }
+
+  private static Condition wrap(final String prefix, final Condition delegate) {
+    return new Condition(delegate.name, delegate.applyNull()) {
+      @Override
+      public boolean apply(WebElement element) {
+        return delegate.apply(element);
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return delegate.actualValue(element);
+      }
+
+      @Override
+      public String toString() {
+        return prefix + ' ' + delegate.toString();
+      }
+    };
+  }
 
   protected final String name;
   protected final boolean nullIsAllowed;
