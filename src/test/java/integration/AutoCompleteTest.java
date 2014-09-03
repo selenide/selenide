@@ -25,7 +25,7 @@ public class AutoCompleteTest extends IntegrationTest {
 
   @Test
   public void setValueTriggersKeyboardEvents() {
-    assumeFalse(isHtmlUnit());
+    assumeFalse(isHtmlUnit() || isFirefox());
     startTypingForAutocomplete();
   }
 
