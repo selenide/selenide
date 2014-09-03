@@ -1,5 +1,7 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,9 +18,25 @@ public class AutoCompleteTest extends IntegrationTest {
     openFile("autocomplete.html");
   }
 
+  @After
+  public void tearDown() {
+    Configuration.fastSetValue = false;
+  }
+
   @Test
   public void setValueTriggersKeyboardEvents() {
+    assumeFalse(isHtmlUnit());
+    startTypingForAutocomplete();
+  }
+
+  @Test
+  public void setValueTriggersKeyboardEvents_fast_mode() {
     assumeFalse(isHtmlUnit() || isFirefox());
+    Configuration.fastSetValue = true;
+    startTypingForAutocomplete();
+  }
+
+  private void startTypingForAutocomplete() {
     $("h4").shouldBe(empty);
 
     $("#tags").val("javasc");

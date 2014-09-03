@@ -1,9 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.JQuery;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -19,6 +16,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
@@ -285,7 +283,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if (text == null || text.isEmpty()) {
       element.clear();
     }
-    else if (JQuery.jQuery.isJQueryAvailable()) {
+    else if (fastSetValue && JQuery.jQuery.isJQueryAvailable()) {
       String jsCodeToTriggerEvent =
           "arguments[0].value = arguments[1];" +
           "var element = jQuery(arguments[0]);" +
@@ -296,6 +294,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
       char lastChar = text.charAt(text.length() - 1);
       executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
+      fireEvent(element, "change");
+    }
+    else if (fastSetValue) {
+      executeJavaScript("arguments[0].value = arguments[1]", element, text);
       fireEvent(element, "change");
     }
     else {

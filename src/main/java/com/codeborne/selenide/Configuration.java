@@ -107,4 +107,17 @@ public class Configuration {
    * Default value: false (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
   public static boolean dismissModalDialogs = Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+
+  /**
+   * EXPERIMENTAL
+   * 
+   * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function 
+   * (that is quite low because it sends every character separately).
+   * 
+   * Still not tested well. Waiting for your feedback.
+   * https://github.com/codeborne/selenide/issues/135
+   * 
+   * Default value: false
+   */
+  public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
 }
