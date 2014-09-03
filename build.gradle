@@ -38,8 +38,8 @@ dependencies {
   provided 'org.testng:testng:6.8.8'
   provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
-  testCompile 'org.eclipse.jetty:jetty-server:9.2.1.v20140609'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.1.v20140609'
+  testCompile 'org.eclipse.jetty:jetty-server:9.2.2.v20140723'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
@@ -54,7 +54,7 @@ task libs(type: Sync) {
 classes.dependsOn libs
 
 jacoco {
-  toolVersion = "0.7.0.201403182114"
+  toolVersion = "0.7.1.201405082137"
 }
 
 jacocoTestReport {
