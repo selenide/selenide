@@ -22,24 +22,24 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.42.2') {
+  compile('org.seleniumhq.selenium:selenium-java:2.43.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     exclude group: 'org.webbitserver', module: 'webbit'
   }
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.42.2', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.43.1', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
-  testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.42.2'
+  testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.43.1'
   testRuntime group: 'com.opera', name: 'operadriver', version: '1.5'
   provided 'junit:junit:4.11'
   provided 'org.testng:testng:6.8.8'
   provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
   testCompile 'org.mockito:mockito-all:1.9.5'
-  testCompile 'org.eclipse.jetty:jetty-server:9.2.2.v20140723'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.2.v20140723'
+  testCompile 'org.eclipse.jetty:jetty-server:9.2.3.v20140905'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.3.v20140905'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
