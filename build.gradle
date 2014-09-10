@@ -72,6 +72,7 @@ test {
 task ie(type: Test) {
   systemProperties['browser'] = 'ie'
   systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
+  systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
   exclude '**/AlertText.*'
   exclude '**/ConfirmTest.*'
@@ -117,7 +118,6 @@ task opera(type: Test) {
 
 tasks.withType(Test).all { testTask ->
   testTask.systemProperties['file.encoding'] = 'UTF-8'
-  testTask.systemProperties['selenide.timeout'] = '8000'
   testTask.testLogging.showStandardStreams = true
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 2
