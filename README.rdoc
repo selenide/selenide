@@ -76,6 +76,12 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.13 (Released 11.09.2014)
+* Added method `$("img").isImage()`
+* Added alternate methods `be` and `have`: `$.should(have(text("___"))` - useful for using Selenide with EasyB
+* Added experimental feature "fast set value" (configurable via `Configuration.fastSetValue`); disabled by default.
+* upgraded to Selenium 2.43.1
+
 === 2.12 (Released 4.07.2014)
 * Added method $.uploadFile()
 * Fixed method $.uploadFromClasspath - it removes extra ".." parts from file name
