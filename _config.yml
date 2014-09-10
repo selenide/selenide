@@ -1,4 +1,4 @@
-SELENIDE_VERSION : "2.12"
+SELENIDE_VERSION : "2.13"
 
 # This is the default format.
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
