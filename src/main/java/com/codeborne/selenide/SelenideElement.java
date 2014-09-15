@@ -174,6 +174,29 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement should(Condition... condition);
 
   /**
+   * <p>Checks that given element meets all of given conditions.</p>
+   *
+   * <p>
+   * IMPORTANT: If element does not match then conditions immediately, waits up to
+   * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.
+   * </p>
+   *
+   * <p>Timeout is configurable via Configuration#timeout</p>
+   *
+   * <p>For example: <code>
+   *   $("#errorMessage").should(appear);
+   * </code></p>
+   *
+   * @param message added into detailed error report as business reason
+   *
+   * @return Given element, useful for chaining:
+   * <code>$("#errorMessage").should("on error user should see error message", appear).shouldBe(enabled);</code>
+   *
+   * @see Configuration#timeout
+   */
+  SelenideElement should(String message, Condition... condition);
+
+  /**
    * <p>Synonym for #should. Useful for better readability.</p>
    * <p>For example: <code>
    *   $("#errorMessage").shouldHave(text("Hello"), text("World"));
@@ -184,6 +207,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldHave(Condition... condition);
 
   /**
+   * @see SelenideElement#should(java.lang.String, com.codeborne.selenide.Condition...)
+   */
+  SelenideElement shouldHave(String message, Condition... condition);
+
+  /**
    * <p>Synonym for #should. Useful for better readability.</p>
    * <p>For example: <code>
    *   $("#errorMessage").shouldBe(visible, enabled);
@@ -192,6 +220,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see SelenideElement#should(com.codeborne.selenide.Condition...)
    */
   SelenideElement shouldBe(Condition... condition);
+
+  /**
+   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   */
+  SelenideElement shouldBe(String message, Condition... condition);
 
   /**
    * <p>Checks that given element does not meet given conditions.</p>
@@ -212,6 +245,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldNot(Condition... condition);
 
   /**
+   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   */
+  SelenideElement shouldNot(String message, Condition... condition);
+
+  /**
    * <p>Synonym for #shouldNot. Useful for better readability.</p>
    * <p>For example: <code>
    *   $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
@@ -222,6 +260,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldNotHave(Condition... condition);
 
   /**
+   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   */
+  SelenideElement shouldNotHave(String message, Condition... condition);
+
+  /**
    * <p>Synonym for #shouldNot. Useful for better readability.</p>
    * <p>For example: <code>
    *   $("#errorMessage").shouldNotBe(visible, enabled);
@@ -230,6 +273,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
    */
   SelenideElement shouldNotBe(Condition... condition);
+
+  /**
+   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   */
+  SelenideElement shouldNotBe(String message, Condition... condition);
 
   /**
    * <p>Wait until given element meets given conditions.</p>
@@ -243,6 +291,18 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
 
   /**
+   * <p>Wait until given element meets given conditions.</p>
+   *
+   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
+   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
+   *
+   * @param condition e.g. enabled, visible, text() and so on
+   * @param timeoutMilliseconds timeout in milliseconds.
+   * @param  message will be added in detailed error report as business reason
+   */
+  SelenideElement waitUntil(String message, Condition condition, long timeoutMilliseconds);
+
+  /**
    * <p>Wait until given element does not meet given conditions.</p>
    *
    * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
@@ -252,6 +312,18 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @param timeoutMilliseconds timeout in milliseconds.
    */
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
+
+  /**
+   * <p>Wait until given element does not meet given conditions.</p>
+   *
+   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
+   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
+   *
+   * @param condition e.g. enabled, visible, text() and so on
+   * @param timeoutMilliseconds timeout in milliseconds.
+   * @param  message will be added in detailed error report as business reason
+   */
+  SelenideElement waitWhile(String message, Condition condition, long timeoutMilliseconds);
 
   /**
    * Displays WebElement in human-readable format.

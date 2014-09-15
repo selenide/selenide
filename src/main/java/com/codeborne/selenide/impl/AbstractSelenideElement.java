@@ -85,22 +85,22 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return getInnerHtml();
     }
     else if ("should".equals(method.getName())) {
-      return should(proxy, "", (Condition[]) args[0]);
+      return invokeShould(proxy, "", args);
     }
     else if ("shouldHave".equals(method.getName())) {
-      return should(proxy, "have ", (Condition[]) args[0]);
+      return invokeShould(proxy, "have ", args);
     }
     else if ("shouldBe".equals(method.getName())) {
-      return should(proxy, "be ", (Condition[]) args[0]);
+      return invokeShould(proxy, "be ", args);
     }
     else if ("shouldNot".equals(method.getName())) {
-      return shouldNot(proxy, "", (Condition[]) args[0]);
+      return invokeShouldNot(proxy, "", args);
     }
     else if ("shouldNotHave".equals(method.getName())) {
-      return shouldNot(proxy, "have ", (Condition[]) args[0]);
+      return invokeShouldNot(proxy, "have ", args);
     }
     else if ("shouldNotBe".equals(method.getName())) {
-      return shouldNot(proxy, "be ", (Condition[]) args[0]);
+      return invokeShouldNot(proxy, "be ", args);
     }
     else if ("parent".equals(method.getName())) {
       return parent((SelenideElement) proxy);
@@ -160,11 +160,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return getActualDelegate();
     }
     else if ("waitUntil".equals(method.getName())) {
-      waitUntil("", (Condition) args[0], (Long) args[1]);
+      if (args[0] instanceof String) {
+        waitUntil("", (String) args[0], (Condition) args[1], (Long) args[2]);
+      }
+      else {
+        waitUntil("", (Condition) args[0], (Long) args[1]);
+      }
       return proxy;
     }
     else if ("waitWhile".equals(method.getName())) {
-      waitWhile("", (Condition) args[0], (Long) args[1]);
+      if (args[0] instanceof String) {
+        waitWhile("", (String) args[0], (Condition) args[1], (Long) args[2]);
+      }
+      else {
+        waitWhile("", (Condition) args[0], (Long) args[1]);
+      }
       return proxy;
     }
     else if ("scrollTo".equals(method.getName())) {
@@ -198,6 +208,20 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
 
     return delegateMethod(getDelegate(), method, args);
+  }
+
+  private Object invokeShould(Object proxy, String prefix, Object[] args) {
+    if (args[0] instanceof String) {
+      return should(proxy, prefix, (String) args[0], (Condition[]) args[1]);
+    }
+    return should(proxy, prefix, (Condition[]) args[0]);
+  }
+
+  private Object invokeShouldNot(Object proxy, String prefix, Object[] args) {
+    if (args[0] instanceof String) {
+      return shouldNot(proxy, prefix, (String) args[0], (Condition[]) args[1]);
+    }
+    return shouldNot(proxy, prefix, (Condition[]) args[0]);
   }
 
   protected boolean isImage() {
@@ -346,15 +370,23 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected Object should(Object proxy, String prefix, Condition... conditions) {
+    return should(proxy, prefix, null, conditions);
+  }
+
+  protected Object should(Object proxy, String prefix, String message, Condition... conditions) {
     for (Condition condition : conditions) {
-      waitUntil(prefix, condition, timeout);
+      waitUntil(prefix, message, condition, timeout);
     }
     return proxy;
   }
 
   protected Object shouldNot(Object proxy, String prefix, Condition... conditions) {
+    return shouldNot(proxy, prefix, null, conditions);
+  }
+
+  protected Object shouldNot(Object proxy, String prefix, String message, Condition... conditions) {
     for (Condition condition : conditions) {
-      waitWhile(prefix, condition, timeout);
+      waitWhile(prefix, message, condition, timeout);
     }
     return proxy;
   }
@@ -451,6 +483,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
+    return waitUntil(prefix, null, condition, timeoutMs);
+  }
+
+  protected WebElement waitUntil(String prefix, String message, Condition condition, long timeoutMs) {
     final long startTime = currentTimeMillis();
     WebElement element;
     do {
@@ -486,7 +522,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return throwElementNotFound(condition, timeoutMs);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);
+      throw new ElementShould(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
     }
   }
 
@@ -495,6 +531,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
+    waitWhile(prefix, null, condition, timeoutMs);
+  }
+  protected void waitWhile(String prefix, String message, Condition condition, long timeoutMs) {
     final long startTime = currentTimeMillis();
     WebElement element;
     do {
@@ -530,7 +569,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throwElementNotFound(not(condition), timeoutMs);
     }
     else {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, condition, element, lastError, timeoutMs);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
     }
   }
 

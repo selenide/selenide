@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -20,6 +21,10 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
 public class SelenideMethodsTest extends IntegrationTest {
+
+  private final String additionalMessage = "test message";
+  private final String becauseAdditionMessage = "because test message";
+
   @Before
   public void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
@@ -423,5 +428,73 @@ public class SelenideMethodsTest extends IntegrationTest {
 
     Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
     $("#baskerville").shouldNotBe(none_of_conditions);
+  }
+
+  @Test
+  public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
+    timeout = 100L;
+    try {
+      $("h1").should("test message", text("Some wrong test"));
+      fail("exception expected");
+    } catch (ElementShould expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+
+    try {
+      $("h1").shouldHave("test message", text("Some wrong test"));
+      fail("exception expected");
+    } catch (ElementShould expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+
+    try {
+      $("h1").shouldBe("test message", text("Some wrong test"));
+      fail("exception expected");
+    } catch (ElementShould expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+  }
+
+  @Test
+  public void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
+    timeout = 100L;
+    try {
+      $("h1").shouldNot(additionalMessage, text("Page without JQuery"));
+      fail("exception expected");
+    } catch (ElementShouldNot expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+
+    try {
+      $("h1").shouldNotHave(additionalMessage, text("Page without JQuery"));
+      fail("exception expected");
+    } catch (ElementShouldNot expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+
+    try {
+      $("h1").shouldNotBe(additionalMessage, text("Page without JQuery"));
+      fail("exception expected");
+    } catch (ElementShouldNot expected) {
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+  }
+
+  @Test
+  public void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
+    try {
+      $("h1").waitWhile("test message", visible, 100);
+    } catch (ElementShouldNot expected){
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
+  }
+
+  @Test
+  public void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
+    try {
+      $("h1").waitUntil("test message", hidden, 100);
+    } catch (ElementShould expected){
+      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+    }
   }
 }
