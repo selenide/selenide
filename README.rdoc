@@ -74,6 +74,15 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.14 (Released 16.09.2014)
+Added alternative with error message to all "should" methods.
+ 
+Now it's possible to write asserts with comment / error message:
+
+```java
+$("input#vatin").shouldBe("Vatin is required for government companies", visible, enabled);
+```
+
 === 2.13 (Released 11.09.2014)
 * Added method `$("img").isImage()`
 * Added alternate methods `be` and `have`: `$.should(have(text("___"))` - useful for using Selenide with EasyB
