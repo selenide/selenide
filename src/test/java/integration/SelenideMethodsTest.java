@@ -484,6 +484,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
       $("h1").waitWhile("test message", visible, 100);
+      fail("exception expected");
     } catch (ElementShouldNot expected){
       assertTrue(expected.getMessage().contains(becauseAdditionMessage));
     }
@@ -493,6 +494,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
       $("h1").waitUntil("test message", hidden, 100);
+      fail("exception expected");
     } catch (ElementShould expected){
       assertTrue(expected.getMessage().contains(becauseAdditionMessage));
     }
