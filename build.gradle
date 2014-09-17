@@ -4,7 +4,7 @@ apply plugin: "jacoco"
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.14'
+version='2.15-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
