@@ -21,6 +21,7 @@ Add these lines to file pom.xml:
     <groupId>com.codeborne</groupId>
     <artifactId>selenide</artifactId>
     <version>{{site.SELENIDE_VERSION}}</version>
+    <scope>test</scope>
 </dependency>
 ```
 
