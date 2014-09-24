@@ -39,7 +39,7 @@ public class WebDriverRunner {
 
   /**
    * To use PhantomJS, you need to include extra dependency to your project:
-   * &lt;dependency org="com.github.detro.ghostdriver" name="phantomjsdriver" rev="1.+" conf="test-&gt;default"/&gt;
+   * &lt;dependency org="com.github.detro" name="phantomjsdriver" rev="1.2.0" conf="test-&gt;default"/&gt;
    */
   public static final String PHANTOMJS = "phantomjs";
 
