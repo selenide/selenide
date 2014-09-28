@@ -49,7 +49,7 @@ public abstract class IntegrationTest {
 
   private void adjustBrowserWindowSize() {
     getWebDriver().manage().window().setSize(new Dimension(1024, 768));
-    System.out.println("Using browser window size: " + getWebDriver().manage().window().getSize());
+    System.out.println("Using browser " + browser + " with window size: " + getWebDriver().manage().window().getSize());
   }
 
 
