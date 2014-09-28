@@ -10,11 +10,16 @@
   <title>{{ page.title }}</title>
 
   <link rel="shortcut icon" href="{{ BASE_PATH }}/favicon.ico"/>
+  <link rel="stylesheet" href="http://dimsemenov.com/plugins/magnific-popup/site-assets/all.min.css?v=0.9.9">
   <link rel="stylesheet" href="{{ ASSET_PATH }}/css/styles.css">
   <link rel="stylesheet" href="{{ ASSET_PATH }}/css/pygment_trac.css">
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{{ BASE_PATH }}/rss.xml" />
 
   <script src="{{ ASSET_PATH }}/js/scale.fix.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+
+  <script src="http://dimsemenov.com/plugins/magnific-popup/dist/jquery.magnific-popup.min.js?v=0.9.9"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <!--[if lt IE 9]>
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -78,6 +83,14 @@
 <script type="text/javascript"><!--
 document.getElementById('lang_eng').setAttribute("href", window.location.href);
 document.getElementById('lang_rus').setAttribute("href", window.location.href.replace(/\/\//, '//ru.'));
+
+$(function(){
+  $('.video').magnificPopup({
+    type: 'iframe',
+    enableEscapeKey: true
+  });
+});
+
 //-->
 </script>
 

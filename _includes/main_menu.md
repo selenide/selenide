@@ -10,6 +10,10 @@
   <li style="display:none;"><a href="{{ BASE_PATH }}/thanks.html">Our thanks</a></li>
 </ul>
 
+<div class="news">
+  <a href="/2014/09/28/selenide-2.13-and-2.14/">Released Selenide 2.14</a>
+</div>
+
 <h3 style="display:none">Blog</h3>
 <div class="archive" style="display:none">
   {% assign posts_collate = site.posts %}

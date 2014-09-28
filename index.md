@@ -5,6 +5,15 @@ tagline:
 ---
 {% include JB/setup %}
 
+<script>
+  $(function(){
+    setTimeout(function() {
+      $("header .news").effect( "slide", "slow" );
+      $("header .news").effect( "shake", "slow" );
+    }, 500);
+  });
+</script>
+
 <div class="short wiki">
   <div class="wrapper-color-content">
     <h3>What is Selenide?</h3>
