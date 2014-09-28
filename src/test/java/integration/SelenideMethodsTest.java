@@ -394,7 +394,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test(expected = InvalidSelectorException.class)
   public void checkFailsForInvalidSelector() {
-    $("//input[:attr='al]").is(visible);
+    $(By.xpath("//input[:attr='al]")).is(visible);
   }
 
   @Test

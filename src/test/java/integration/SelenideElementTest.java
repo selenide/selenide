@@ -1,11 +1,13 @@
 package integration;
 
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.junit.Assert.*;
 
 public class SelenideElementTest extends IntegrationTest {
@@ -25,6 +27,8 @@ public class SelenideElementTest extends IntegrationTest {
   public void selenideElementImplementsWrapsWebdriver() {
     WebDriver wrappedDriver = $("#login").getWrappedDriver();
     assertNotNull(wrappedDriver);
-    assertTrue(wrappedDriver.getCurrentUrl().endsWith("page_with_selects_without_jquery.html"));
+    String currentUrl = wrappedDriver.getCurrentUrl();
+    assertTrue("Current URL is " + currentUrl,
+        currentUrl.contains("page_with_selects_without_jquery.html"));
   }
 }
