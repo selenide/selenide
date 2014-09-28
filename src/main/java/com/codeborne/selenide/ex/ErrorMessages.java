@@ -67,9 +67,9 @@ public class ErrorMessages {
 
     LOG.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
     try {
-      return "\nScreenshot: " + new File(screenshot).toURI().toURL().toExternalForm();
+      return new File(screenshot).toURI().toURL().toExternalForm();
     } catch (MalformedURLException e) {
-      return "\nScreenshot: file://" + screenshot;
+      return "file://" + screenshot;
     }
   }
 

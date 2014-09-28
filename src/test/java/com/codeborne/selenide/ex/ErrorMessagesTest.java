@@ -47,4 +47,15 @@ public class ErrorMessagesTest {
     assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png",
         ErrorMessages.screenshot());
   }
+
+  @Test
+  public void returnsScreenshotFileName() {
+    Configuration.reportsUrl = null;
+    String currentDir = System.getProperty("user.dir");
+    screenshots = mock(ScreenShotLaboratory.class);
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+
+    assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png",
+        ErrorMessages.screenshot());
+  }
 }
