@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Screenshots.screenshots;
+import static java.io.File.separatorChar;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -52,6 +53,10 @@ public class ErrorMessagesTest {
   public void returnsScreenshotFileName() {
     Configuration.reportsUrl = null;
     String currentDir = System.getProperty("user.dir");
+    if (separatorChar == '\\') {
+      currentDir = '/' + currentDir.replace('\\', '/');
+    }
+
     screenshots = mock(ScreenShotLaboratory.class);
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
