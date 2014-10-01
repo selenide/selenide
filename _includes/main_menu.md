@@ -11,7 +11,7 @@
 </ul>
 
 <div class="news">
-  <a href="/2014/09/28/selenide-2.13-and-2.14/">Released Selenide 2.14</a>
+  <a href="/2014/10/01/how-to-start-writing-ui-tests.md">How to start writing UI tests in 10 minutes</a>
 </div>
 
 <h3 style="display:none">Blog</h3>
