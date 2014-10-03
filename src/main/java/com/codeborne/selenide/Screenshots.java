@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 
+import java.io.File;
 import java.util.List;
 
 public class Screenshots {
@@ -17,6 +18,10 @@ public class Screenshots {
 
   public static String takeScreenShot() {
     return screenshots.takeScreenShot();
+  }
+
+  public static File getScreenShotAsFile(){
+      return screenshots.getScreenShotAsFile();
   }
 
   public static void startContext(String className, String methodName) {
