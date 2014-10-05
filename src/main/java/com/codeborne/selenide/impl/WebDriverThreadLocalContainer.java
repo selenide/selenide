@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -181,7 +182,9 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createChromeDriver() {
-    return new ChromeDriver();
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("test-type");
+    return new ChromeDriver(options);
   }
 
   protected WebDriver createFirefoxDriver() {
