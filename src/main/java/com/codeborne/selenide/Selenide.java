@@ -72,7 +72,12 @@ public class Selenide {
           "  window.confirm = function(message) {\n" +
           "    return window._selenide_modalDialogReturnValue;\n" +
           "  };";
-      executeJavaScript(jsCode);
+      try {
+        executeJavaScript(jsCode);
+      }
+      catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
+        System.err.println(cannotExecuteJsAgainstPlainTextPage.toString());
+      }
     }
   }
 

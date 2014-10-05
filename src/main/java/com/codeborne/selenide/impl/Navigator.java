@@ -45,16 +45,20 @@ public class Navigator {
   }
 
   protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
-    webdriver.executeScript(
-        "window._selenide_jsErrors = [];\n" +
-            "if (!window.onerror) {\n" +
-            "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
-            "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
-            "    window._selenide_jsErrors.push(message);\n" +
-            "    return false;\n" +
-            "  };\n" +
-            "}\n"
-    );
+    try {
+      webdriver.executeScript(
+          "window._selenide_jsErrors = [];\n" +
+              "if (!window.onerror) {\n" +
+              "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
+              "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
+              "    window._selenide_jsErrors.push(message);\n" +
+              "    return false;\n" +
+              "  };\n" +
+              "}\n"
+      );
+    } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
+      System.err.println(cannotExecuteJsAgainstPlainTextPage.toString());
+    }
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
