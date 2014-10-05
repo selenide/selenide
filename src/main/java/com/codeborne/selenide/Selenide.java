@@ -448,6 +448,9 @@ public class Selenide {
     return new Actions(getWebDriver());
   }
 
+  /**
+   * Switch to window/tab by title
+   */
   public static void switchToWindow(String title) {
     WebDriver driver = getWebDriver();
     Set<String> windowHandles = driver.getWindowHandles();
@@ -458,6 +461,16 @@ public class Selenide {
       }
     }
     throw new IllegalArgumentException("Window with title not found: " + title);
+  }
+
+  /**
+   * Switch to window/tab by index
+   * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
+   */
+  public static void switchToWindow(int index) {
+    WebDriver driver = getWebDriver();
+    List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
+    driver.switchTo().window(windowHandles.get(index));
   }
 
   /**

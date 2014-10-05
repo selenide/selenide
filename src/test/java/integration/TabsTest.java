@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.After;
 import org.junit.Before;
@@ -11,8 +10,10 @@ import java.util.Set;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class TabsTest extends IntegrationTest {
   @Before
@@ -48,18 +49,40 @@ public class TabsTest extends IntegrationTest {
     $(byText("Page3: jquery")).click();
 
     $("h1").shouldHave(text("Tabs"));
+    switchToWindow("Test::alerts"); $("h1").shouldHave(text("Page with alerts"));
+    switchToWindow("Test::jquery"); $("h1").shouldHave(text("Page with JQuery"));
+    switchToWindow("Test::uploads"); $("h1").shouldHave(text("File uploads"));
+    switchToWindow("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+  }
 
-    Selenide.switchToWindow("Test::alerts");
-    $("h1").shouldHave(text("Page with alerts"));
+  @Test
+  public void canSwitchToWindowByIndex_chrome() {
+    assumeTrue(isChrome());
+    $(byText("Page2: alerts")).click();
+    $(byText("Page1: uploads")).click();
+    $(byText("Page3: jquery")).click();
 
-    Selenide.switchToWindow("Test::jquery");
-    $("h1").shouldHave(text("Page with JQuery"));
-
-    Selenide.switchToWindow("Test::uploads");
-    $("h1").shouldHave(text("File uploads"));
-
-    Selenide.switchToWindow("Test::tabs");
     $("h1").shouldHave(text("Tabs"));
+
+    switchToWindow(1); $("h1").shouldHave(text("Page with JQuery"));
+    switchToWindow(2); $("h1").shouldHave(text("File uploads"));
+    switchToWindow(3); $("h1").shouldHave(text("Page with alerts"));
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+  }
+
+  @Test
+  public void canSwitchToWindowByIndex_other_browsers() {
+    assumeFalse(isChrome());
+    $(byText("Page2: alerts")).click();
+    $(byText("Page1: uploads")).click();
+    $(byText("Page3: jquery")).click();
+
+    $("h1").shouldHave(text("Tabs"));
+
+    switchToWindow(1); $("h1").shouldHave(text("Page with alerts"));
+    switchToWindow(2); $("h1").shouldHave(text("File uploads"));
+    switchToWindow(3); $("h1").shouldHave(text("Page with JQuery"));
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
   }
 
   @After
