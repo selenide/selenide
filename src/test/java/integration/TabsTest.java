@@ -12,6 +12,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -71,8 +72,8 @@ public class TabsTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchToWindowByIndex_other_browsers() {
-    assumeFalse(isChrome());
+  public void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
+    assumeFalse(isChrome() || isHtmlUnit());
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
