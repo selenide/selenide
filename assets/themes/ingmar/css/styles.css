@@ -357,6 +357,10 @@ header .news {
   position: absolute;
   right: 0;
   top: 105px;
+  text-align: right;
+}
+
+header .news .news-line {
   font-size: 20px;
   color: #000000;
   display: none;

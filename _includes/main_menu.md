@@ -11,7 +11,7 @@
 </ul>
 
 <div class="news">
-  <a class="video" href="http://vimeo.com/107647158">How to write UI test in 10 minutes</a>
+  <div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>
 </div>
 
 <h3 style="display:none">Blog</h3>

@@ -7,10 +7,16 @@ tagline:
 
 <script>
   $(function(){
-    setTimeout(function() {
-      $("header .news").effect( "slide", "slow" );
-      $("header .news").effect( "shake", "slow" );
-    }, 500);
+    function showNewsLine(newsLine) {
+      newsLine.effect( "slide", "slow" );
+      newsLine.effect( "shake", "slow" );
+    }
+
+    $("header .news .news-line").each(function(i, newsLine) {
+      setTimeout(function() {
+        showNewsLine($(newsLine));
+      }, 500 + i * 1000);
+    });
   });
 </script>
 
