@@ -5,7 +5,7 @@
   <li><a href="{{ BASE_PATH }}/blog.html">Blog</a></li>
   <li><a href="{{ BASE_PATH }}/javadoc.html">Javadoc</a></li>
   <li><a href="{{ BASE_PATH }}/users.html">Users</a></li>
-  <li style="display:none;"><a href="{{ BASE_PATH }}/quotes.html">What users say?</a></li>
+  <li><a href="{{ BASE_PATH }}/quotes.html">Quotes</a></li>
   <li><a href="{{ BASE_PATH }}/contacts.html">Feedback</a></li>
   <li style="display:none;"><a href="{{ BASE_PATH }}/thanks.html">Our thanks</a></li>
 </ul>
