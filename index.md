@@ -27,7 +27,7 @@ tagline:
 
     ✓ Concise API for tests&nbsp;&nbsp;
     ✓ Ajax support&nbsp;&nbsp;
-    ✓ Autostart browser&nbsp;&nbsp;
+    ✓ True Page Objects&nbsp;&nbsp;
     ✓ jQuery-style selectors<br>
     You don't need to think how to shutdown browser, handle timeouts or write monstrous code! Read wiki for more details<br>
 
