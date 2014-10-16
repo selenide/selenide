@@ -1,6 +1,6 @@
 <ul class="main-menu-pages">
   <li><a href="{{ BASE_PATH }}/quick-start.html">Quick start</a></li>
-  <li><a href="{{ BASE_PATH }}/documentation.html">Documentation</a></li>
+  <li><a href="{{ BASE_PATH }}/documentation.html">Docs</a></li>
   <li><a href="{{ BASE_PATH }}/faq.html">FAQ</a></li>
   <li><a href="{{ BASE_PATH }}/blog.html">Blog</a></li>
   <li><a href="{{ BASE_PATH }}/javadoc.html">Javadoc</a></li>
