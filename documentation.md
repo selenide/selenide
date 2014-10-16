@@ -13,10 +13,7 @@ header-text: >
 ---
 {% include JB/setup %}
 
-<div class="left-menu">
-  <div>✓ <a href="/documentation.html">API</a></div>
-  <div>✓ <a href="/documentation/page-objects.html">Page Objects</a></div>
-</div>
+{% include documentation-menu.md %}
 
 ## Three simple things:
 **1.**  Open the page   <br>
