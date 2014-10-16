@@ -93,6 +93,11 @@ a small {
 
 }
 
+.left-menu {
+  position: absolute;
+  left: 15px;
+}
+
 .head {
   background-color: #fff;
   width: 100%;

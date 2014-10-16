@@ -13,6 +13,11 @@ header-text: >
 ---
 {% include JB/setup %}
 
+<div class="left-menu">
+  <div>✓ <a href="/documentation.html">API</a></div>
+  <div>✓ <a href="/documentation/page-objects.html">Page Objects</a></div>
+</div>
+
 ## Three simple things:
 **1.**  Open the page   <br>
 **2.**  $(find element).doAction()<br>
