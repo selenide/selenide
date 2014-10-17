@@ -24,14 +24,16 @@ tagline:
   <div class="wrapper-color-content">
     <h3>What is Selenide?</h3>
     <h4>Selenide is a wrapper for <a href="http://docs.seleniumhq.org/projects/webdriver/" target="_blank">Selenium WebDriver</a> that brings the following advantages:</h4>
+    <div class="highlights">
+      <a href="/documentation.html">Concise API for tests</a>
+      <span>Ajax support</span>
+      <a href="/documentation/page-objects.html">True Page Objects</a>
+      <span>jQuery-style selectors</span>
+    </div>
+    You don't need to think how to shutdown browser, handle timeouts or write monstrous code!<br>
+    Concentrate on business logic!<br>
 
-    ✓ Concise API for tests&nbsp;&nbsp;
-    ✓ Ajax support&nbsp;&nbsp;
-    ✓ True Page Objects&nbsp;&nbsp;
-    ✓ jQuery-style selectors<br>
-    You don't need to think how to shutdown browser, handle timeouts or write monstrous code! Read wiki for more details<br>
-
-    <a href="https://github.com/codeborne/selenide/wiki" target="_blank"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
+    <a href="/quick-start.html"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
   </div>
 </div>
 

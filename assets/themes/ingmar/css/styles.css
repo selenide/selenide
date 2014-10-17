@@ -130,9 +130,31 @@ a small {
   font-size: 18px;
 }
 
+.short .highlights {
+  margin-bottom: 5px;
+}
+
 .short a {
-  text-decoration: underline;
+  text-decoration: none;
   color: #fff;
+
+  -webkit-transition: all 0.7s ease;
+  transition: all 0.7s ease;
+}
+
+.short .highlights a, .short .highlights span§ {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.short .highlights a:before, .short .highlights span:before {
+  content: '✓ ';
+}
+
+.short a:hover {
+  -webkit-transform:scale(1.05);
+  transform:scale(1.05);
+  text-decoration: underline;
 }
 
 .short h3 {
@@ -159,12 +181,6 @@ a small {
   letter-spacing: -1px;
 
 }
-
-.short h4 a {
-  text-decoration: underline;
-  color: #fff;
-}
-
 
 .short.docs, .short.faq {
   background-color:  #E5B755;
