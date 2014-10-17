@@ -13,7 +13,7 @@ header-text: Frequently Asked Questions
 
 Yes! You can use Page Objects with Selenide.
 
-Moreover, your page objects get concise and readable with Selenide. See [an example on github](https://github.com/codeborne/selenide_examples/blob/master/github/test/org/selenide/examples/github/SearchPage.java).
+Moreover, your page objects get concise and readable with Selenide. See [more details here](/documentation/page-objects.html).
 
 ## Motivation
 
