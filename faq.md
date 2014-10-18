@@ -57,30 +57,7 @@ Please look at [Wiki page](https://github.com/codeborne/selenide/wiki/Build-scri
 
 > Can I take screenshot?
 
-Typically you don't need it, because Selenide automatically takes screenshots on test failures. This is very useful for error analysis.
-
-For JUnit and TestNG there is a special support for taking screenshots also on succeeded tests.
-
-For JUnit:
-
-```java
-@Rule // automatically takes screenshot of every failed (and even succeeded) test
-public ScreenShooter makeScreenshotOnFailure = ScreenShooter.failedTests().succeededTests();
-```
-
-For TestNG:
-
-```java
-@Listeners({ ScreenShooter.class})
-```
-
-Additionally, you can take screenshot at any moment with a single line of code:
-
-```java
-takeScreenshot("my_file_name");
-```
-
-Selenide will create two files: `my_file_name.png` и `my_file_name.html`
+Yes. See [documentation](/documentation.html) -> [Screenshots](/documentation/screenshots.html)
 
 
 ## Browser windows / tabs
