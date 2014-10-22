@@ -224,7 +224,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return shouldNot(proxy, prefix, (Condition[]) args[0]);
   }
 
-  protected boolean isImage() {
+  protected Boolean isImage() {
     WebElement img = getActualDelegate();
     if (!"img".equalsIgnoreCase(img.getTagName())) {
       throw new IllegalArgumentException("Method isImage() is only applicable for img elements");
