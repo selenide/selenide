@@ -37,9 +37,9 @@ dependencies {
   provided 'junit:junit:4.11'
   provided 'org.testng:testng:6.8.8'
   provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
-  testCompile 'org.mockito:mockito-all:1.9.5'
-  testCompile 'org.eclipse.jetty:jetty-server:9.2.3.v20140905'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.3.v20140905'
+  testCompile 'org.mockito:mockito-all:1.10.8'
+  testCompile 'org.eclipse.jetty:jetty-server:9.3.0.M0'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.M0'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
