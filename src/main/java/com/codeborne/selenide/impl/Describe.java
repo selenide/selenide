@@ -5,6 +5,8 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.codeborne.selenide.Condition;
+
 public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
@@ -90,5 +92,12 @@ public class Describe {
       return selector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
     }
     return selector.toString();
+  }
+
+  public static String describeSubject(String step, 
+      String prefix, String message, Condition condition) {
+    return step + " " + prefix + condition + 
+            (message != null ? " because " + message : "");
+    
   }
 }

@@ -1,13 +1,15 @@
 package com.codeborne.selenide.impl;
 
+import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.WebDriverRunner.*;
+
+import java.net.URL;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
-import java.net.URL;
-
-import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
@@ -34,10 +36,13 @@ public class Navigator {
     }
 
     try {
+      SelenideLogger.beginStep(this, "open " + url);
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
       collectJavascriptErrors((JavascriptExecutor) webdriver);
+      SelenideLogger.commitStep(EventStatus.PASSED);
     } catch (WebDriverException e) {
+      SelenideLogger.commitStep(EventStatus.FAILED);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
