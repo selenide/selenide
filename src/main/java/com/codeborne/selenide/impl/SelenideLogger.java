@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.codeborne.selenide.logevents.LogEventListener;
 
+/**
+ * Logs Selenide test steps and notifies all registered LogEventListener about it
+ * 
+ */
 public class SelenideLogger {
   public enum EventStatus {
     PASSED, FAILED
