@@ -296,7 +296,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       SelenideLogger.commitStep(EventStatus.PASSED);
     }catch(Throwable t) {
       SelenideLogger.commitStep(EventStatus.FAILED);
-      throw t;
+      rethrow(t);
     }
   }
 
@@ -361,7 +361,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     catch(Throwable t) {
       SelenideLogger.commitStep(EventStatus.FAILED);
-      throw t;
+      rethrow(t);
     }
   }
 
@@ -401,7 +401,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         SelenideLogger.commitStep(EventStatus.PASSED);
       } catch (Throwable t) {
         SelenideLogger.commitStep(EventStatus.FAILED);
-        throw t;
+        rethrow(t);
       }
     }
     return proxy;
@@ -419,7 +419,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         SelenideLogger.commitStep(EventStatus.PASSED);
       } catch (Throwable t) {
         SelenideLogger.commitStep(EventStatus.FAILED);
-        throw t;
+        rethrow(t);
       }
     }
     return proxy;
@@ -656,5 +656,18 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected File download() throws IOException, URISyntaxException {
     return FileDownloader.instance.download(getDelegate());
+  }
+  
+  /**
+   * rethrow each throwable, also from methods without throws declaration
+   * @param t
+   */
+  protected static void rethrow(Throwable t){
+    AbstractSelenideElement.<RuntimeException>throwAny(t);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private static <E extends Throwable> void throwAny(Throwable t) throws E{
+    throw (E)t;
   }
 }

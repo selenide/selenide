@@ -6,6 +6,7 @@ import static org.hamcrest.core.StringContains.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -45,6 +46,11 @@ public class AbstractSelenideElementTest {
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);
+  }
+  
+  @After
+  public void after() {
+    SelenideLogger.clearListeners();
   }
 
   @Test

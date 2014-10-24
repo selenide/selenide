@@ -68,4 +68,8 @@ public class SelenideLogger {
     return listeners.get();
   }
 
+  public static void clearListeners() {
+    listeners.remove();
+  }
+
 }
