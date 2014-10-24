@@ -128,7 +128,8 @@ tasks.withType(Test).all { testTask ->
   testTask.outputs.upToDateWhen { false }
 }
 
-task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'phantomjs']) {}
+// TODO Add , 'phantomjs' when selenium-java 2.44.0 gets fixed
+task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit']) {}
 
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
