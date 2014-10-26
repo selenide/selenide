@@ -21,6 +21,17 @@ header-text:
 
 <hr class="divider"/>
 
+<a href="http://ubrr.ru/" target="_blank">
+  <img src="{{ BASE_PATH }}/images/ubrr-logo.jpeg" style="width: 150px;" alt="UBRR - Ural Bank of reconstruction and development"/>
+</a>
+<br/>
+
+<div class="text-right">
+  <a href="http://ubrr.ru/" target="_blank">UBRR</a> – Ural bank of reconstruction and development
+</div>
+
+<hr class="divider"/>
+
 <a href="http://www.tieto.ee/" target="_blank">
   <img src="{{ BASE_PATH }}/images/tieto.png" style="width: 96px; margin-left: 64px;" alt="Tieto Eesti AS" align="right"/>
 </a>
