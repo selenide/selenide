@@ -263,6 +263,7 @@ public class WebDriverThreadLocalContainer {
       DesiredCapabilities capabilities = createCommonCapabilities();
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
+      capabilities.setCapability(ACCEPT_SSL_CERTS, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
 
       Class<?> clazz = Class.forName(className);
