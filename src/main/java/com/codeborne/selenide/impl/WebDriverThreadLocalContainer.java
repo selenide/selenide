@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -13,7 +14,6 @@ import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
-import org.openqa.selenium.Proxy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -187,8 +187,11 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createChromeDriver() {
-	DesiredCapabilities capabilities = createCommonCapabilities();
-    return new ChromeDriver(capabilities);
+	  DesiredCapabilities capabilities = createCommonCapabilities();
+      ChromeOptions options = new ChromeOptions();
+      options.addArguments("test-type");
+      capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+      return new ChromeDriver(capabilities);
   }
 
   protected WebDriver createFirefoxDriver() {
@@ -260,7 +263,6 @@ public class WebDriverThreadLocalContainer {
       DesiredCapabilities capabilities = createCommonCapabilities();
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
-      capabilities.setCapability(ACCEPT_SSL_CERTS, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
 
       Class<?> clazz = Class.forName(className);
