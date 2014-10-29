@@ -1,6 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
@@ -99,6 +101,10 @@ public class WebDriverRunner {
     return webdriverContainer.getWebDriver();
   }
 
+  public static void setProxy(Proxy webProxy) {
+	    webdriverContainer.setProxy(webProxy);
+  }
+  
   /**
    * Get the underlying instance of Selenium WebDriver, and assert that it's still alive.
    * @return new instance of WebDriver if the previous one has been closed meanwhile.

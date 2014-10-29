@@ -81,6 +81,22 @@ public class ScreenShotLaboratory {
     return addToHistory(screenshot);
   }
 
+    public File getScreenShotAsFile() {
+        WebDriver webdriver = getWebDriver();
+        if (webdriver == null) {  // TODO it's never null. Use smarter check.
+            System.err.println("Cannot take screenshot because browser is not started");
+            return null;
+        }
+
+        //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
+        File scrFile = getPageImage(webdriver);
+
+        String screenshot = scrFile.getAbsolutePath();
+        addToHistory(screenshot);
+
+        return scrFile;
+    }
+
   protected File savePageImageToFile(String fileName, WebDriver webdriver) {
     File imageFile = null;
     if (webdriver instanceof TakesScreenshot) {
@@ -93,6 +109,19 @@ public class ScreenShotLaboratory {
     }
     return imageFile;
   }
+
+  protected File getPageImage(WebDriver webdriver) {
+        File scrFile = null;
+        if (webdriver instanceof TakesScreenshot) {
+            scrFile = takeScreenshotInMemory((TakesScreenshot) webdriver);
+        } else if (webdriver instanceof RemoteWebDriver) {
+            WebDriver remoteDriver = new Augmenter().augment(webdriver);
+            if (remoteDriver instanceof TakesScreenshot) {
+                scrFile = takeScreenshotInMemory((TakesScreenshot) remoteDriver);
+            }
+        }
+        return scrFile;
+    }
 
   protected File savePageSourceToFile(String fileName, WebDriver webdriver) {
     return savePageSourceToFile(fileName, webdriver, true);
@@ -149,6 +178,15 @@ public class ScreenShotLaboratory {
       return null;
     }
   }
+
+  protected File takeScreenshotInMemory(TakesScreenshot driver) {
+        try {
+            return driver.getScreenshotAs(FILE);
+        } catch (Exception e) {
+            printOnce("takeScreenshotAsFile", e);
+            return null;
+        }
+    }
 
   protected void copyFile(File sourceFile, File targetFile) throws IOException {
     copyFile(new FileInputStream(sourceFile), targetFile);

@@ -36,6 +36,7 @@ public class WebDriverThreadLocalContainer {
   protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
+  protected Proxy webProxySettings;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
@@ -54,6 +55,10 @@ public class WebDriverThreadLocalContainer {
   public WebDriver setWebDriver(WebDriver webDriver) {
     THREAD_WEB_DRIVER.put(currentThread().getId(), webDriver);
     return webDriver;
+  }
+  
+  public void setProxy(Proxy webProxy) {
+    webProxySettings=webProxy;
   }
 
   protected boolean isBrowserStillOpen(WebDriver webDriver) {
@@ -86,7 +91,6 @@ public class WebDriverThreadLocalContainer {
       }
     }
     return setWebDriver(createDriver());
-
   }
 
   public void closeWebDriver() {
@@ -182,20 +186,23 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createChromeDriver() {
+    DesiredCapabilities capabilities = createCommonCapabilities();
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
-    return new ChromeDriver(options);
+    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+    return new ChromeDriver(capabilities);
   }
 
   protected WebDriver createFirefoxDriver() {
-    return new FirefoxDriver();
+    DesiredCapabilities capabilities = createCommonCapabilities();
+    return new FirefoxDriver(capabilities);
   }
 
   protected WebDriver createHtmlUnitDriver() {
-    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
+    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnitWithJs();
+    capabilities.merge(createCommonCapabilities());
     capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
     capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
-    capabilities.setJavascriptEnabled(true);
     if (browser.indexOf(':') > -1) {
       // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
       String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
@@ -205,7 +212,8 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createInternetExplorerDriver() {
-    return new InternetExplorerDriver();
+    DesiredCapabilities capabilities = createCommonCapabilities();
+    return new InternetExplorerDriver(capabilities);
   }
 
   protected WebDriver createPhantomJsDriver() {
@@ -251,7 +259,7 @@ public class WebDriverThreadLocalContainer {
 
   protected WebDriver createInstanceOf(String className) {
     try {
-      DesiredCapabilities capabilities = new DesiredCapabilities();
+      DesiredCapabilities capabilities = createCommonCapabilities();
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(ACCEPT_SSL_CERTS, true);
@@ -279,7 +287,7 @@ public class WebDriverThreadLocalContainer {
 
   protected WebDriver createRemoteDriver(String remote, String browser) {
     try {
-      DesiredCapabilities capabilities = new DesiredCapabilities();
+      DesiredCapabilities capabilities = createCommonCapabilities();
       capabilities.setBrowserName(browser);
       return new RemoteWebDriver(new URL(remote), capabilities);
     } catch (MalformedURLException e) {
@@ -287,6 +295,14 @@ public class WebDriverThreadLocalContainer {
     }
   }
 
+  protected DesiredCapabilities createCommonCapabilities(){
+      DesiredCapabilities browserCapabilities = new DesiredCapabilities();
+      if (webProxySettings!=null){
+        browserCapabilities.setCapability(PROXY, webProxySettings);
+      }
+      return browserCapabilities;
+  }
+  
   protected class WebdriversFinalCleanupThread extends Thread {
     private final Thread thread;
 
