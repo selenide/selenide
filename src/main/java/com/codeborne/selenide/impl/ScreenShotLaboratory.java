@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.io.File.separatorChar;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -81,27 +81,27 @@ public class ScreenShotLaboratory {
     return addToHistory(screenshot);
   }
 
-    public File getScreenShotAsFile() {
-        WebDriver webdriver = getWebDriver();
-        if (webdriver == null) {  // TODO it's never null. Use smarter check.
-            System.err.println("Cannot take screenshot because browser is not started");
-            return null;
-        }
-
-        //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
-        File scrFile = getPageImage(webdriver);
-
-        String screenshot = scrFile.getAbsolutePath();
-        addToHistory(screenshot);
-
-        return scrFile;
+  public File getScreenShotAsFile() {
+    WebDriver webdriver = getWebDriver();
+    if (webdriver == null) {  // TODO it's never null. Use smarter check.
+      System.err.println("Cannot take screenshot because browser is not started");
+      return null;
     }
+
+    //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
+    File scrFile = getPageImage(webdriver);
+
+    String screenshot = scrFile.getAbsolutePath();
+    addToHistory(screenshot);
+
+    return scrFile;
+  }
 
   protected File savePageImageToFile(String fileName, WebDriver webdriver) {
     File imageFile = null;
     if (webdriver instanceof TakesScreenshot) {
       imageFile = takeScreenshotImage((TakesScreenshot) webdriver, fileName);
-    } else if (webdriver instanceof RemoteWebDriver) {
+    } else if (webdriver instanceof RemoteWebDriver) { // TODO Remove this obsolete branch
       WebDriver remoteDriver = new Augmenter().augment(webdriver);
       if (remoteDriver instanceof TakesScreenshot) {
         imageFile = takeScreenshotImage((TakesScreenshot) remoteDriver, fileName);
@@ -111,17 +111,17 @@ public class ScreenShotLaboratory {
   }
 
   protected File getPageImage(WebDriver webdriver) {
-        File scrFile = null;
-        if (webdriver instanceof TakesScreenshot) {
-            scrFile = takeScreenshotInMemory((TakesScreenshot) webdriver);
-        } else if (webdriver instanceof RemoteWebDriver) {
-            WebDriver remoteDriver = new Augmenter().augment(webdriver);
-            if (remoteDriver instanceof TakesScreenshot) {
-                scrFile = takeScreenshotInMemory((TakesScreenshot) remoteDriver);
-            }
-        }
-        return scrFile;
+    File scrFile = null;
+    if (webdriver instanceof TakesScreenshot) {
+      scrFile = takeScreenshotInMemory((TakesScreenshot) webdriver);
+    } else if (webdriver instanceof RemoteWebDriver) { // TODO Remove this obsolete branch
+      WebDriver remoteDriver = new Augmenter().augment(webdriver);
+      if (remoteDriver instanceof TakesScreenshot) {
+        scrFile = takeScreenshotInMemory((TakesScreenshot) remoteDriver);
+      }
     }
+    return scrFile;
+  }
 
   protected File savePageSourceToFile(String fileName, WebDriver webdriver) {
     return savePageSourceToFile(fileName, webdriver, true);
@@ -180,13 +180,13 @@ public class ScreenShotLaboratory {
   }
 
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
-        try {
-            return driver.getScreenshotAs(FILE);
-        } catch (Exception e) {
-            printOnce("takeScreenshotAsFile", e);
-            return null;
-        }
+    try {
+      return driver.getScreenshotAs(FILE);
+    } catch (Exception e) {
+      printOnce("takeScreenshotAsFile", e);
+      return null;
     }
+  }
 
   protected void copyFile(File sourceFile, File targetFile) throws IOException {
     copyFile(new FileInputStream(sourceFile), targetFile);

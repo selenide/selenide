@@ -297,7 +297,7 @@ public class WebDriverThreadLocalContainer {
 
   protected DesiredCapabilities createCommonCapabilities(){
       DesiredCapabilities browserCapabilities = new DesiredCapabilities();
-      if (webProxySettings!=null){
+      if (webProxySettings != null) {
         browserCapabilities.setCapability(PROXY, webProxySettings);
       }
       return browserCapabilities;
