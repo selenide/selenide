@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.DOM.waitFor;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.ie;
 import static org.junit.Assert.assertEquals;
 
 public class Navigation {
@@ -19,35 +18,8 @@ public class Navigation {
   }
 
   public static void navigateToAbsoluteUrl(String url) {
-    if (ie()) {
-      getWebDriver().navigate().to(makeUniqueUrlToAvoidIECaching(url, System.nanoTime()));
-      waitFor(By.tagName("body"));
-      toBeSureThatPageIsNotCached();
-    }
-    else {
-      getWebDriver().navigate().to(url);
-      waitFor(By.tagName("body"));
-    }
-  }
-
-  private static void toBeSureThatPageIsNotCached() {
-    String currentUrl = getWebDriver().getCurrentUrl();
-    if (!currentUrl.contains("timestamp=")) {
-      navigateToAbsoluteUrl(currentUrl);
-    }
-  }
-
-  static String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    final String fullUrl;
-    if (url.contains("timestamp=")) {
-      fullUrl = url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    } else {
-      fullUrl = url.contains("?") ?
-          url + "&timestamp=" + unique :
-          url + "?timestamp=" + unique;
-    }
-    return fullUrl;
+    getWebDriver().navigate().to(url);
+    waitFor(By.tagName("body"));
   }
 
   /**
