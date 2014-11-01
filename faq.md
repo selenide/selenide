@@ -68,3 +68,22 @@ You can use Selenium WebDriver API for switching between browser windows.
 
   * `getWebDriver().getWindowHandles()` - returns set of all browser windows/tabs
   * `getWebDriver().getWindowHandle()` - returns unique identifier of active window/tab
+
+## Source code of Selenide
+
+> Can I access source code of Selenide?
+
+Sure. Source code of Selenide is published [at github](https://github.com/codeborne/selenide/).
+
+> Can I modify Selenide?
+
+Sure! It's open-source. You can either create Pull Request or [Feature Request](https://github.com/codeborne/selenide/issues).
+
+## License
+
+> How much does Selenide cost?
+
+> Does Selenide license allow me to share source code of tests with my customer?
+
+Selenide - __free__ __open-source__ product distributed with [LGPL 3.0 license](https://github.com/codeborne/selenide/blob/master/LICENSE).
+Shortly said, it means that you can do anything with it.
