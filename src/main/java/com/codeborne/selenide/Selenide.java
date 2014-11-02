@@ -508,6 +508,18 @@ public class Selenide {
   }
 
   /**
+   * Zoom current page (in or out).
+   * @param factor e.g. 1.1 or 2.0 or 0.5
+   */
+  public static void zoom(double factor) {
+    executeJavaScript(
+        "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
+        "document.body.style.transformOrigin = '0 0';",
+        factor
+    );
+  }
+
+  /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
    * 
    * EXPERIMENTAL! Use with caution.
@@ -569,5 +581,5 @@ public class Selenide {
       result.add(object.toString());
     }
     return result;
-  } 
+  }
 }

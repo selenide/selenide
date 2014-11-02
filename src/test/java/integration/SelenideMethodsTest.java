@@ -499,4 +499,28 @@ public class SelenideMethodsTest extends IntegrationTest {
       assertTrue(expected.getMessage().contains(becauseAdditionMessage));
     }
   }
+
+  @Test
+  public void canZoomInAndOut() {
+    int initialX = $(By.name("domain")).getLocation().getX();
+    
+    zoom(1.1);
+    assertBetween($(By.name("domain")).getLocation().getY(), 140, 160);
+    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+    
+    zoom(2.0);
+    assertBetween($(By.name("domain")).getLocation().getY(), 240, 260);
+    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+
+    zoom(0.5);
+    assertBetween($(By.name("domain")).getLocation().getY(), 70, 80);
+    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+  }
+  
+  private static void assertBetween(int n, int lower, int upper) {
+    if (!isHtmlUnit()) {
+      assertTrue(n + " should be between " + lower + " and " + upper, n >= lower);
+      assertTrue(n + " should be between " + lower + " and " + upper, n <= upper);
+    }
+  }
 }
