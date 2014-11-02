@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
@@ -68,12 +69,12 @@ public class ScreenShotLaboratory {
    * @return the name of last saved file, it's either my_screenshot.png or my_screenshot.html (if failed to create png)
    */
   public String takeScreenShot(String fileName) {
-    WebDriver webdriver = getWebDriver();
-    if (webdriver == null) {  // TODO it's never null. Use smarter check.
+    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
       System.err.println("Cannot take screenshot because browser is not started");
       return null;
     }
 
+    WebDriver webdriver = getWebDriver();
     File pageSource = savePageSourceToFile(fileName, webdriver);
     File imageFile = savePageImageToFile(fileName, webdriver);
 
@@ -82,12 +83,12 @@ public class ScreenShotLaboratory {
   }
 
   public File getScreenShotAsFile() {
-    WebDriver webdriver = getWebDriver();
-    if (webdriver == null) {  // TODO it's never null. Use smarter check.
+    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
       System.err.println("Cannot take screenshot because browser is not started");
       return null;
     }
 
+    WebDriver webdriver = getWebDriver();
     //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
     File scrFile = getPageImage(webdriver);
 

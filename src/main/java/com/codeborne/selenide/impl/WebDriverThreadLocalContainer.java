@@ -74,6 +74,13 @@ public class WebDriverThreadLocalContainer {
     }
   }
 
+  /**
+   * @return true iff webdriver is started in current thread 
+   */
+  public boolean hasWebDriverStarted() {
+    return THREAD_WEB_DRIVER.containsKey(currentThread().getId());
+  }
+  
   public WebDriver getWebDriver() {
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
     return webDriver != null ? webDriver : setWebDriver(createDriver());
