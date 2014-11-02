@@ -19,17 +19,26 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class BrowserMobProxyTest extends IntegrationTest {
   ProxyServer proxyServer;
-  
+
   @Before
-  public void setUp() throws Exception {
+  public void closePreviousWebdriver() {
     WebDriverRunner.closeWebDriver();
+  }
+
+  @Before
+  public void startBrowserMobProxyServer() throws Exception {
     proxyServer = new ProxyServer(findFreePort());
     proxyServer.start();
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void stopBrowserMobProxyServer() throws Exception {
     proxyServer.stop();
+  }
+
+  @After
+  public void resetWebdriverProxySettings() {
+    WebDriverRunner.setProxy(null);
     WebDriverRunner.closeWebDriver();
   }
 
