@@ -22,6 +22,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
   
   @Before
   public void setUp() throws Exception {
+    WebDriverRunner.closeWebDriver();
     proxyServer = new ProxyServer(findFreePort());
     proxyServer.start();
   }
@@ -29,6 +30,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
   @After
   public void tearDown() throws Exception {
     proxyServer.stop();
+    WebDriverRunner.closeWebDriver();
   }
 
   private int requestCounter = 0;
@@ -51,7 +53,6 @@ public class BrowserMobProxyTest extends IntegrationTest {
 
     proxyServer.newHar("some-har");
 
-    WebDriverRunner.closeWebDriver();
     WebDriverRunner.setProxy(proxyServer.seleniumProxy());
     
     openFile("file_upload_form.html");
