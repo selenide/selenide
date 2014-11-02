@@ -25,7 +25,7 @@ public class BySelectorCollection implements WebElementsCollection {
   @Override
   public List<WebElement> getActualElements() {
     SearchContext searchContext = parent == null ? getWebDriver() : parent;
-    return searchContext.findElements(selector);
+    return WebElementSelector.instance.findElements(searchContext, selector);
   }
 
   @Override

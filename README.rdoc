@@ -76,6 +76,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.15 (in progress)
+* #140 Added support for Sizzle selectors
 * #139 Added support for multifile upload
 * #137 Added method for zooming page IN and OUT
 * #136 Can open non-html pages (e.g. plain text)

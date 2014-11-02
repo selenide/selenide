@@ -53,8 +53,8 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   @Override
   protected WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
-        getSearchContext().findElement(criteria) :
-        getSearchContext().findElements(criteria).get(index);
+        WebElementSelector.instance.findElement(getSearchContext(), criteria) :
+        WebElementSelector.instance.findElements(getSearchContext(), criteria).get(index);
   }
 
   private SearchContext getSearchContext() {

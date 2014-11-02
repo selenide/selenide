@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
 public class Configuration {
@@ -120,4 +121,26 @@ public class Configuration {
    * Default value: false
    */
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
+
+  /**
+   * EXPERIMENTAL
+   * 
+   * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
+   */
+  public static SelectorMode selectorMode = CSS;
+  
+  public static enum SelectorMode {
+    /**
+     * Default Selenium behavior
+     */
+    CSS,
+
+    /**
+     * Use Sizzle for CSS selectors.
+     * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
+     * 
+     * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
+     */
+    Sizzle
+  }
 }
