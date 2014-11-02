@@ -54,6 +54,10 @@ public class ErrorMessages {
     }
 
     String screenshot = takeScreenShot();
+    if (screenshot == null) {
+      return "";
+    }
+    
     if (Configuration.reportsUrl != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
       String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
