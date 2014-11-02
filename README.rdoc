@@ -78,9 +78,15 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 === 2.15 (in progress)
 * #140 Added support for Sizzle selectors
 * #139 Added support for multifile upload
+* #106 Added support for BrowserMob proxy (thanks to Vladimir Denisov @proton72) 
 * #137 Added method for zooming page IN and OUT
 * #136 Can open non-html pages (e.g. plain text)
+* #72 Added method for switching to frame/window/tab by index
+* Retrieving screenshot as file - could be useful for reporting frameworks like 'Yandex Allure' (thanks to Vladimir Denisov @proton72)
+
+And minor issues:
 * #138 Remove pointless warning in Chrome: "You are using an unsupported command-line flag: --ignore-certificate-errors"
+* Removed duplicate "Screenshot:" prefix in error messages
 * Upgraded to Selenium 2.44.0
 
 === 2.14 (Released 16.09.2014)
