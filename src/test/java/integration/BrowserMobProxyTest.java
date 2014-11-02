@@ -43,20 +43,15 @@ public class BrowserMobProxyTest extends IntegrationTest {
   }
 
   private int requestCounter = 0;
-  private int responseCounter = 0;
   
   @Test
   public void canUseBrowserMobProxy() {
     proxyServer.addRequestInterceptor(new HttpRequestInterceptor() {
       @Override
       public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
-        requestCounter++;
-      }
-    });
-    proxyServer.addResponseInterceptor(new HttpResponseInterceptor() {
-      @Override
-      public void process(HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
-        responseCounter++;
+        if (!"/favicon.ico".equals(httpRequest.getRequestLine().getUri())) {
+          requestCounter++;
+        }
       }
     });
 
@@ -70,13 +65,10 @@ public class BrowserMobProxyTest extends IntegrationTest {
     $("#submit").click();
     assertEquals(2, server.uploadedFiles.size());
 
-    assertEquals(3, requestCounter);
-    assertEquals(3, responseCounter);
+    assertEquals(2, requestCounter);
     
     List<HarEntry> harEntries = proxyServer.getHar().getLog().getEntries();
-    assertEquals(3, harEntries.size());
     assertTrue(harEntries.get(0).getRequest().getUrl().endsWith("/file_upload_form.html"));
-    assertTrue(harEntries.get(1).getRequest().getUrl().endsWith("/favicon.ico"));
-    assertTrue(harEntries.get(2).getRequest().getUrl().endsWith("/upload"));
+    assertTrue(harEntries.get(harEntries.size()-1).getRequest().getUrl().endsWith("/upload"));
   }
 }
