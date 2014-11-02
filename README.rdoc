@@ -68,6 +68,7 @@ etc.
 Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for more details.
 
 == Resources
+* First of all, selenide.org[http://selenide.org]
 * Presentation at TopConf conference[http://asolntsev.github.com/presentations/ui-tests/the_fast_and_the_continuous.topconf.html] (Tallinn, 1. Nov 2012)
 * Article on Habrahabr.ru[http://habrahabr.ru/post/143269/] (in Russian)
 
@@ -75,6 +76,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.15 (in progress)
+* #139 Added support for multifile upload
 * #136 Can open non-html pages (e.g. plain text)
 * #138 Remove pointless warning in Chrome: "You are using an unsupported command-line flag: --ignore-certificate-errors"
 * Upgraded to Selenium 2.44.0

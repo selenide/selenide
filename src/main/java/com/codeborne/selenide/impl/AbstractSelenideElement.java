@@ -1,9 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.JQuery;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -134,10 +131,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return proxy;
     }
     else if ("uploadFile".equals(method.getName())) {
-      return uploadFile(getDelegate(), (File) args[0]);
+      return uploadFile((SelenideElement) proxy, (File[]) args[0]);
     }
     else if ("uploadFromClasspath".equals(method.getName())) {
-      return uploadFromClasspath(getDelegate(), (String) args[0]);
+      return uploadFromClasspath((SelenideElement) proxy, (String[]) args[0]);
     }
     else if ("selectOption".equals(method.getName())) {
       selectOptionByText(getDelegate(), (String) args[0]);
@@ -210,14 +207,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return delegateMethod(getDelegate(), method, args);
   }
 
-  private Object invokeShould(Object proxy, String prefix, Object[] args) {
+  protected Object invokeShould(Object proxy, String prefix, Object[] args) {
     if (args[0] instanceof String) {
       return should(proxy, prefix, (String) args[0], (Condition[]) args[1]);
     }
     return should(proxy, prefix, (Condition[]) args[0]);
   }
 
-  private Object invokeShouldNot(Object proxy, String prefix, Object[] args) {
+  protected Object invokeShouldNot(Object proxy, String prefix, Object[] args) {
     if (args[0] instanceof String) {
       return shouldNot(proxy, prefix, (String) args[0], (Condition[]) args[1]);
     }
@@ -391,12 +388,50 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return proxy;
   }
 
-  protected File uploadFromClasspath(WebElement inputField, String fileName) throws URISyntaxException, IOException {
-    URL resource = currentThread().getContextClassLoader().getResource(fileName);
-    if (resource == null) {
-      throw new IllegalArgumentException("File not found in classpath: " + fileName);
+  protected File uploadFromClasspath(SelenideElement inputField, String... fileName) throws URISyntaxException, IOException {
+    File[] files = new File[fileName.length];
+    for (int i = 0; i < fileName.length; i++) {
+      files[i] = findFileInClasspath(fileName[i]);
     }
-    return uploadFile(inputField, new File(resource.toURI()));
+
+    return uploadFile(inputField, files);
+  }
+
+  protected File findFileInClasspath(String name) throws URISyntaxException {
+    URL resource = currentThread().getContextClassLoader().getResource(name);
+    if (resource == null) {
+      throw new IllegalArgumentException("File not found in classpath: " + name);
+    }
+    return new File(resource.toURI());
+  }
+
+  protected File uploadFile(SelenideElement inputField, File... file) throws IOException {
+    if (file.length == 0) {
+      throw new IllegalArgumentException("No files to upload");
+    }
+
+    File uploadedFile = uploadFile(inputField, file[0]);
+
+    if (file.length > 1) {
+      SelenideElement form = inputField.closest("form");
+      for (int i = 1; i < file.length; i++) {
+        uploadFile(cloneInputField(form, inputField), file[i]);
+      }
+    }
+    
+    return uploadedFile;
+  }
+
+  protected WebElement cloneInputField(SelenideElement form, SelenideElement inputField) {
+    return executeJavaScript(
+        "var fileInput = document.createElement('input');" +
+            "fileInput.setAttribute('type', arguments[1].getAttribute('type'));" +
+            "fileInput.setAttribute('name', arguments[1].getAttribute('name'));" +
+            "fileInput.style.width = '1px';" +
+            "fileInput.style.height = '1px';" +
+            "arguments[0].appendChild(fileInput);" +
+            "return fileInput;",
+        form, inputField);
   }
   
   protected File uploadFile(WebElement inputField, File file) throws IOException {

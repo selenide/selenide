@@ -430,14 +430,18 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * <p>Upload file into file upload field. File is searched from classpath.</p>
    * <p>Short form of <code>webElement.sendKeys("c:/files/my-file.txt");</code></p>
+   *
+   * <p>Multiple file upload is also supported. Just pass as many file names as you wish.</p>
    */
-  File uploadFromClasspath(String fileName);
+  File uploadFromClasspath(String... fileName);
 
   /**
    * <p>Upload file into file upload field.</p>
    * <p>Short form of <code>webElement.sendKeys("c:/files/my-file.txt");</code></p>
+   *
+   * <p>Multiple file upload is also supported. Just pass as many files as you wish.</p>
    */
-  File uploadFile(File file);
+  File uploadFile(File... file);
 
   /**
    * Select an option from dropdown list

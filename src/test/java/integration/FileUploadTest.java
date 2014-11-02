@@ -6,9 +6,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,5 +45,49 @@ public class FileUploadTest extends IntegrationTest {
     assertTrue(file.exists());
     assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
     assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
+  }
+
+  @Test
+  public void userCanUploadMultipleFilesFromClasspath() {
+    $("#multi-file-upload-form .file").uploadFromClasspath(
+        "hello_world.txt", 
+        "jquery-1.8.3.js", 
+        "jquery-ui-1.10.4.css",
+        "long_ajax_request.html",
+        "page_with_alerts.html",
+        "page_with_dynamic_select.html",
+        "page_with_frames.html",
+        "page_with_images.html",
+        "selenide-logo-big.png");
+    $("#multi-file-upload-form .submit").click();
+
+    assertEquals(9, server.uploadedFiles.size());
+    
+    assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
+    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery-1.8.3.js"));
+    assertTrue(server.uploadedFiles.get(2).getName().endsWith("jquery-ui-1.10.4.css"));
+    assertTrue(server.uploadedFiles.get(3).getName().endsWith("long_ajax_request.html"));
+    assertTrue(server.uploadedFiles.get(8).getName().endsWith("selenide-logo-big.png"));
+    
+    assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
+    assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library v1.8.3"));
+    assertTrue(server.uploadedFiles.get(2).getString().contains("jQuery UI - v1.10.4 - 2014-01-17"));
+  }
+
+  @Test
+  public void userCanUploadMultipleFiles() {
+    File file = $("#multi-file-upload-form .file").uploadFile(new File("src/test/java/../resources/hello_world.txt"), new File("src/test/resources/jquery-1.8.3.js"));
+    $("#multi-file-upload-form .submit").click();
+
+    assertTrue(file.exists());
+    assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
+
+    assertEquals(2, server.uploadedFiles.size());
+
+    assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
+    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery-1.8.3.js"));
+
+    assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
+    assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library v1.8.3"));
   }
 }

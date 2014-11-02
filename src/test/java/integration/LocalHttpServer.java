@@ -18,7 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.lang.Thread.currentThread;
@@ -109,6 +112,7 @@ public class LocalHttpServer {
       try {
         List<FileItem> items = upload.parseRequest(request);
         uploadedFiles.addAll(items);
+        printResponse(response, ("Uploaded " + items.size() + " files: " + items).getBytes("UTF-8"));
       } catch (FileUploadException e) {
         e.printStackTrace();
       }
