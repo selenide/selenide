@@ -75,7 +75,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
-=== 2.15 (in progress)
+=== 2.15 (Released 02.11.2014)
 * #140 Added support for Sizzle selectors
 * #139 Added support for multifile upload
 * #106 Added support for BrowserMob proxy (thanks to Vladimir Denisov @proton72) 
