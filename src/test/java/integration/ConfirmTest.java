@@ -22,8 +22,7 @@ import static org.junit.Assert.fail;
 public class ConfirmTest extends IntegrationTest {
   @Parameterized.Parameters
   public static List<Object[]> names() {
-    // TODO Add ", new String[]{"Серафим"}". Now it works unstable in Chrome.
-    return Arrays.asList(new Object[]{"John Mc'Clane"}, new String[]{"L ucie"});
+    return Arrays.asList(new Object[]{"John Mc'Clane"}, new String[]{"L ucie"}, new String[]{"Серафим"});
   }
 
   private final String userName;

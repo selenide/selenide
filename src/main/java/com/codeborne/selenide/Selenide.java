@@ -362,7 +362,9 @@ public class Selenide {
     NoAlertPresentException lastError;
     do {
       try {
-        return getWebDriver().switchTo().alert();
+        Alert alert = getWebDriver().switchTo().alert();
+        alert.getText(); // check that alert actually exists
+        return alert;
       }
       catch (NoAlertPresentException e) {
         lastError = e;
