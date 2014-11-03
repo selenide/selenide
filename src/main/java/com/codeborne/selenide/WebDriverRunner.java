@@ -5,13 +5,16 @@ import org.junit.Assert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -93,9 +96,30 @@ public class WebDriverRunner {
   public static void closeWebDriver() {
     if (webdriver != null) {
       if (!holdBrowserOpen) {
-        webdriver.close();
+        try {
+          webdriver.quit();
+        }
+        catch (UnreachableBrowserException ignored) {
+          // It happens for Firefox. It's ok: browser is already closed.
+        } catch (WebDriverException cannotCloseBrowser) {
+          System.err.println("Cannot close browser normally: " + cannotCloseBrowser);
+        }
+        finally {
+          killBrowser(webdriver);
+        }
       }
       webdriver = null;
+    }
+  }
+
+  protected static void killBrowser(WebDriver webdriver) {
+    if (webdriver instanceof Killable) {
+      try {
+        ((Killable) webdriver).kill();
+      } catch (Exception e) {
+        System.err.println("Failed to kill browser " + webdriver + ':');
+        e.printStackTrace();
+      }
     }
   }
 
