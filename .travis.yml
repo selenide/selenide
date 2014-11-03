@@ -1,3 +1,7 @@
+branches:
+  only:
+    - master
+
 language: java
 script: "gradle clean test firefox"
 before_script:
