@@ -9,7 +9,8 @@
 </ul>
 
 <div class="news">
-  <div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>
+  <!--<div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>-->
+  <div class="news-line"><a href="/2014/11/03/selenide-2.15/">Hot news: released Selenide 2.15: <br>Sizzle selectors, multifile upload, BrowserMob proxy, zooming!</a></div>
 </div>
 
 <h3 style="display:none">Blog</h3>

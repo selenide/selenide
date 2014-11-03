@@ -392,6 +392,7 @@ header .news .news-line {
   font-size: 20px;
   color: #000000;
   display: none;
+  white-space: nowrap;
 }
 
 .video {
