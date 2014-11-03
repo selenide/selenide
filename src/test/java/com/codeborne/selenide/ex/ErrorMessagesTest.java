@@ -45,8 +45,9 @@ public class ErrorMessagesTest {
     screenshots = mock(ScreenShotLaboratory.class);
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
-    assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png",
-        ErrorMessages.screenshot());
+    String screenshot = ErrorMessages.screenshot();
+    System.out.println("Actual value: " + screenshot);
+    assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png", screenshot);
   }
 
   @Test
@@ -60,7 +61,8 @@ public class ErrorMessagesTest {
     screenshots = mock(ScreenShotLaboratory.class);
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
-    assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png",
-        ErrorMessages.screenshot());
+    String screenshot = ErrorMessages.screenshot();
+    System.out.println("Actual value: " + screenshot);
+    assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png", screenshot);
   }
 }
