@@ -1,15 +1,18 @@
 package integration;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.http.*;
+import net.lightbody.bmp.core.har.HarEntry;
+import net.lightbody.bmp.proxy.ProxyServer;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.protocol.HttpContext;
-import org.browsermob.core.har.HarEntry;
-import org.browsermob.proxy.ProxyServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -45,7 +48,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
   private int requestCounter = 0;
   
   @Test
-  public void canUseBrowserMobProxy() {
+  public void canUseBrowserMobProxy() throws UnknownHostException {
     proxyServer.addRequestInterceptor(new HttpRequestInterceptor() {
       @Override
       public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
