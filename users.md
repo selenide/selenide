@@ -27,6 +27,17 @@ header-text:
     
     <hr class="divider"/>
     
+    <a href="http://autotank.ee/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/gilbarco-autotank-logo.jpg" style="width: 128px; margin-left: 32px;" alt="Gilbarco Autotank" align="right"/>
+    </a>
+    <br/>
+    
+    <div class="text-left">
+      <a href="http://autotank.ee/" target="_blank">Gilbarco Autotank</a> is management system for automatic fuel stations that is used by almost all stations in Estonia.
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="http://ubrr.ru/" target="_blank">
       <img src="{{ BASE_PATH }}/images/ubrr-logo.jpeg" style="width: 150px;" alt="UBRR - Ural Bank of reconstruction and development"/>
     </a>
