@@ -37,12 +37,12 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("http://0.0.0.0:" + port + "/" + fileName);
+    open("http://localhost:" + port + "/" + fileName);
     adjustBrowserWindowSize();
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    T page = open("http://0.0.0.0:" + port + "/" + fileName, pageObjectClass);
+    T page = open("http://localhost:" + port + "/" + fileName, pageObjectClass);
     adjustBrowserWindowSize();
     return page;
   }
