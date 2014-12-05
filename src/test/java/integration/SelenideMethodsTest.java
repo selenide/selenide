@@ -502,6 +502,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void canZoomInAndOut() {
+    assumeFalse(isPhantomjs());
     int initialX = $(By.name("domain")).getLocation().getX();
     
     zoom(1.1);
