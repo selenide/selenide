@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 public class FileUploadTest extends IntegrationTest {
   @Before
@@ -49,6 +50,8 @@ public class FileUploadTest extends IntegrationTest {
 
   @Test
   public void userCanUploadMultipleFilesFromClasspath() {
+    assumeFalse(isPhantomjs());
+    
     $("#multi-file-upload-form .file").uploadFromClasspath(
         "hello_world.txt", 
         "jquery-1.8.3.js", 
@@ -76,7 +79,12 @@ public class FileUploadTest extends IntegrationTest {
 
   @Test
   public void userCanUploadMultipleFiles() {
-    File file = $("#multi-file-upload-form .file").uploadFile(new File("src/test/java/../resources/hello_world.txt"), new File("src/test/resources/jquery-1.8.3.js"));
+    assumeFalse(isPhantomjs());
+
+    File file = $("#multi-file-upload-form .file").uploadFile(
+        new File("src/test/java/../resources/hello_world.txt"), 
+        new File("src/test/resources/jquery-1.8.3.js"));
+    
     $("#multi-file-upload-form .submit").click();
 
     assertTrue(file.exists());
