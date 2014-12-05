@@ -142,7 +142,7 @@ a small {
   transition: all 0.7s ease;
 }
 
-.short .highlights a, .short .highlights span§ {
+.short .highlights a, .short .highlights span {
   margin-left: 10px;
   margin-right: 20px;
 }
@@ -213,14 +213,18 @@ a small {
 }
 
 .short.thanks {
-  background-color: #e7e7e7;
   padding-top: 25px;
   padding-bottom: 35px;
+  margin-top: 50px;
+}
+
+.short.thanks h4 {
   color: #666;
 }
 
-.short.thanks a {
-  color: #666;
+.short.thanks img {
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 
