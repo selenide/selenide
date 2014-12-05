@@ -20,6 +20,8 @@ import static java.lang.Thread.currentThread;
  */
 public class WebElementSelector {
   public static WebElementSelector instance = new WebElementSelector();
+  
+  protected String sizzleSource;
 
   public WebElement findElement(SearchContext context, By selector) {
     if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
@@ -61,12 +63,15 @@ public class WebElementSelector {
       return false;
     }
   }
-
-  protected void injectSizzle() {
-    try {
-      executeJavaScript(IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js")));
-    } catch (IOException e) {
-      throw new RuntimeException("Cannot load sizzle.js from classpath", e);
+  
+  protected synchronized void injectSizzle() {
+    if (sizzleSource == null) {
+      try {
+        sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"));
+      } catch (IOException e) {
+        throw new RuntimeException("Cannot load sizzle.js from classpath", e);
+      }
     }
+    executeJavaScript(sizzleSource);
   }
 }
