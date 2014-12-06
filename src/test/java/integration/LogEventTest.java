@@ -1,11 +1,8 @@
 package integration;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.codeborne.selenide.impl.SelenideLogger;
+import com.codeborne.selenide.logevents.LogEvent;
+import com.codeborne.selenide.logevents.LogEventListener;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -15,9 +12,11 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.By;
 
-import com.codeborne.selenide.impl.SelenideLogger;
-import com.codeborne.selenide.logevents.LogEvent;
-import com.codeborne.selenide.logevents.LogEventListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$;
 
 public class LogEventTest extends IntegrationTest {
   

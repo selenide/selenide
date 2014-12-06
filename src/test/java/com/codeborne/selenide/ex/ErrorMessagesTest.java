@@ -1,18 +1,18 @@
 package com.codeborne.selenide.ex;
 
-import static com.codeborne.selenide.Screenshots.*;
-import static java.io.File.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Locale;
-
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import java.util.Locale;
+
+import static com.codeborne.selenide.Screenshots.screenshots;
+import static java.io.File.separatorChar;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 public class ErrorMessagesTest {
 

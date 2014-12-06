@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.logevents.LogEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.codeborne.selenide.logevents.LogEventListener;
 
 /**
  * Logs Selenide test steps and notifies all registered LogEventListener about it

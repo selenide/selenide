@@ -1,15 +1,14 @@
 package com.codeborne.selenide.impl;
 
-import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
-
-import java.net.URL;
-
+import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
-import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
+import java.net.URL;
+
+import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.WebDriverRunner.*;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
