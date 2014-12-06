@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Locale;
+
 import static com.codeborne.selenide.Screenshots.screenshots;
 import static java.io.File.separatorChar;
 import static org.junit.Assert.assertEquals;
@@ -29,6 +31,7 @@ public class ErrorMessagesTest {
 
   @Test
   public void formatsTimeoutToReadable() {
+    Locale.setDefault(Locale.UK);
     assertEquals("\nTimeout: 0 ms.", ErrorMessages.timeout(0));
     assertEquals("\nTimeout: 1 ms.", ErrorMessages.timeout(1));
     assertEquals("\nTimeout: 999 ms.", ErrorMessages.timeout(999));

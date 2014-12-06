@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -34,10 +35,13 @@ public class Navigator {
     }
 
     try {
+      SelenideLogger.beginStep(this, "open " + url);
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
       collectJavascriptErrors((JavascriptExecutor) webdriver);
+      SelenideLogger.commitStep(EventStatus.PASSED);
     } catch (WebDriverException e) {
+      SelenideLogger.commitStep(EventStatus.FAILED);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
