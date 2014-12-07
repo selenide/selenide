@@ -1,7 +1,9 @@
 package integration;
 
 import com.codeborne.selenide.junit.ScreenShooter;
+import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
+import org.junit.rules.TestRule;
 import org.openqa.selenium.Dimension;
 
 import static com.codeborne.selenide.Configuration.browser;
@@ -13,6 +15,9 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public abstract class IntegrationTest {
   @Rule
   public ScreenShooter img = ScreenShooter.failedTests() ;
+
+  @Rule
+  public TestRule prettyReportCreator = new PrettyReportCreator();
 
   private static int port;
   protected static LocalHttpServer server;
