@@ -1,11 +1,11 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-
-import com.codeborne.selenide.Condition;
 
 public class Describe {
   private WebElement element;
@@ -67,6 +67,9 @@ public class Describe {
     try {
       if (element == null) {
         return "null";
+      }
+      if (element instanceof SelenideElement) {
+        return shortly(((SelenideElement) element).toWebElement());
       }
       return new Describe(element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
