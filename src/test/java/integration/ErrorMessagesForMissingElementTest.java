@@ -58,7 +58,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h9").shouldHave(text("expected text"));
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertStartsWith("Element not found {By.selector: h9}\n" +
+      assertStartsWith("Element not found {h9}\n" +
           "Expected: text 'expected text'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
@@ -73,7 +73,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldHave(text("expected text"));
       fail("Expected ElementShould");
     } catch (ElementShould expected) {
-      assertEquals("Element should have text 'expected text' {By.selector: h2}\n" +
+      assertEquals("Element should have text 'expected text' {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
@@ -87,7 +87,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldHave(attribute("name", "header"));
       fail("Expected ElementShould");
     } catch (ElementShould expected) {
-      assertEquals("Element should have attribute name=header {By.selector: h2}\n" +
+      assertEquals("Element should have attribute name=header {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
@@ -114,7 +114,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("#theHiddenElement").click();
       fail("Expected ElementShould");
     } catch (ElementShould elementShouldExist) {
-      assertEquals("Element should be visible {By.selector: #theHiddenElement}\n" +
+      assertEquals("Element should be visible {#theHiddenElement}\n" +
           "Element: '<div id=theHiddenElement displayed:false></div>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", elementShouldExist.toString());
@@ -182,7 +182,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldNot(exist);
       fail("Expected ElementFound");
     } catch (ElementShouldNot e) {
-      assertEquals("Element should not exist {By.selector: h2}\n" +
+      assertEquals("Element should not exist {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", e.toString());
@@ -195,7 +195,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h14").shouldNotBe(hidden);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
-      assertStartsWith("Element not found {By.selector: h14}\n" +
+      assertStartsWith("Element not found {h14}\n" +
           "Expected: not(hidden)\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.\n" +

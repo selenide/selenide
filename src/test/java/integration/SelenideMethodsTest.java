@@ -234,7 +234,7 @@ public class SelenideMethodsTest extends IntegrationTest {
       fail("Expected ElementShould exception");
     } catch (ElementShould expected) {
       assertTrue("Actual error message: " + expected.getMessage(),
-          expected.getMessage().startsWith("Element should have text 'wrong-text' {By.selector: #username-blur-counter}"));
+          expected.getMessage().startsWith("Element should have text 'wrong-text' {#username-blur-counter}"));
     }
   }
 
@@ -250,7 +250,7 @@ public class SelenideMethodsTest extends IntegrationTest {
       fail("Expected ElementShould exception");
     } catch (ElementShould expected) {
       assertTrue("Actual error message: " + expected.getMessage(),
-          expected.getMessage().startsWith("Element should be disabled {By.selector: #username-blur-counter}"));
+          expected.getMessage().startsWith("Element should be disabled {#username-blur-counter}"));
     }
   }
   

@@ -56,7 +56,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       fail();
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
-          e.getMessage().contains("Element not found {By.selector: #nonexisting-form}"));
+          e.getMessage().contains("Element not found {#nonexisting-form}"));
     }
   }
 
@@ -71,7 +71,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       fail();
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
-          e.getMessage().contains("Element not found {By.selector: thead}"));
+          e.getMessage().contains("Element not found {thead}"));
       assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
     }
   }
@@ -104,7 +104,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       fail();
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
-          e.getMessage().contains("Element not found {By.selector: .second_row}"));
+          e.getMessage().contains("Element not found {.second_row}"));
     }
   }
 
