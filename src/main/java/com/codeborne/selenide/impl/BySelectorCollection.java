@@ -30,6 +30,8 @@ public class BySelectorCollection implements WebElementsCollection {
 
   @Override
   public String description() {
-    return parent == null ? selector.toString() : Describe.shortly(parent) + "/" + Describe.shortly(selector);
+    return parent == null ? 
+        Describe.selector(selector) : 
+        Describe.shortly(parent) + "/" + Describe.shortly(selector);
   }
 }

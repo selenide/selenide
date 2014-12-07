@@ -77,7 +77,9 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
 
   @Override
   String getSearchCriteria() {
-    return index == 0 ? criteria.toString() : criteria.toString() + '[' + index + ']';
+    return index == 0 ? 
+        Describe.selector(criteria) : 
+        Describe.selector(criteria) + '[' + index + ']';
   }
 
   @Override

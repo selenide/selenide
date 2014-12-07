@@ -100,4 +100,8 @@ public class Describe {
             (message != null ? " because " + message : "");
     
   }
+  
+  public static String selector(By selector) {
+    return selector.toString().replaceFirst("By\\.selector:\\s*", "");
+  }
 }
