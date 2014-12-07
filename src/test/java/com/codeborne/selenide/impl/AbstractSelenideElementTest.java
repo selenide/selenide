@@ -134,7 +134,7 @@ public class AbstractSelenideElementTest {
   }
   
   @Test
-  public void shouldLogSetValueSubject() throws Exception {
+  public void shouldLogSetValueSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener(createListener(selector, "set value", EventStatus.PASSED.name()));
     
@@ -144,7 +144,7 @@ public class AbstractSelenideElementTest {
   }
   
   @Test
-  public void shouldLogShouldSubject() throws Exception {
+  public void shouldLogShouldSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener(createListener(selector, "should have", EventStatus.PASSED.name()));
     
@@ -155,7 +155,7 @@ public class AbstractSelenideElementTest {
   }
   
   @Test
-  public void shouldLogShouldNotSubject() throws Exception {
+  public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener(createListener(selector, "should not have", EventStatus.PASSED.name()));
     
@@ -166,7 +166,7 @@ public class AbstractSelenideElementTest {
   }
   
   @Test(expected = ElementShould.class)
-  public void shouldLogFailedShouldNotSubject() throws Exception {
+  public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener(createListener(selector, "should have", EventStatus.FAILED.name()));
     

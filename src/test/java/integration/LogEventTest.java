@@ -81,7 +81,7 @@ public class LogEventTest extends IntegrationTest {
   
   
   @Test
-  public void shouldDoSomeChecksAndActions() throws Exception {
+  public void shouldDoSomeChecksAndActions() {
     $(By.name("username")).shouldBe(readonly);
     $(By.name("password")).shouldNotBe(readonly).should(be(empty));
     $(By.name("password")).setValue("123");
