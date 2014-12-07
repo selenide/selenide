@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -22,6 +23,11 @@ import static org.mockito.Mockito.*;
 public class WebDriverRunnerTest {
   static WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
   URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
+
+  @Before 
+  public void resetWebDriverContainer() {
+    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
+  }
 
   @After
   public void resetSettings() {

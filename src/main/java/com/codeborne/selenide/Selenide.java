@@ -484,9 +484,12 @@ public class Selenide {
    *
    * Function returns nothing if the page has its own "window.onerror" handler.
    *
-   * @return list of error messages
+   * @return list of error messages. Returns empty list if webdriver is not started properly. 
    */
   public static List<String> getJavascriptErrors() {
+    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
+      return emptyList();
+    }
     List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
     if (errors == null || errors.isEmpty()) {
       return emptyList();

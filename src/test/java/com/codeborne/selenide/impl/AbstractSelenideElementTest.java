@@ -26,13 +26,14 @@ import static org.mockito.Mockito.when;
 public class AbstractSelenideElementTest {
   WebDriver webdriver;
   WebElement element;
-  
-  
+
   @Before
   public void mockWebDriver() {
     Configuration.timeout = 3;
     Configuration.pollingInterval = 1;
     Configuration.screenshots = false;
+
+    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
     
     Screenshots.screenshots = mock(ScreenShotLaboratory.class);
     when(Screenshots.screenshots.takeScreenShot()).thenReturn("");
