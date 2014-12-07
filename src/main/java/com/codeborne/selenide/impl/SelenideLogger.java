@@ -2,7 +2,9 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.logevents.LogEventListener;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -16,7 +18,12 @@ public class SelenideLogger {
   protected static ThreadLocal<List<LogEventListener>> listeners =
       new ThreadLocal<List<LogEventListener>>();
 
-  protected static ThreadLocal<SelenideLog> eventLog = new ThreadLocal<SelenideLog>();
+  protected static ThreadLocal<Deque<SelenideLog>> eventLog = new ThreadLocal<Deque<SelenideLog>>() {
+    @Override
+    protected Deque<SelenideLog> initialValue() {
+      return new ArrayDeque<SelenideLog>();
+    }
+  };
 
   public static void addListener(LogEventListener listener) {
     List<LogEventListener> list = listeners.get();
@@ -28,21 +35,26 @@ public class SelenideLogger {
     listeners.set(list);
   }
 
-  public static void beginStep(Object el, String subject) {
-    if (el instanceof AbstractSelenideElement) {
-      eventLog.set(new SelenideLog(((AbstractSelenideElement) el).getSearchCriteria(), subject));
+  public static void beginStep(Object source, String subject) {
+    Deque<SelenideLog> eventLogs = eventLog.get();
+    if (source instanceof AbstractSelenideElement) {
+      eventLogs.add(new SelenideLog(((AbstractSelenideElement) source).getSearchCriteria(), subject));
     }
-    if (el instanceof Navigator) {
-      eventLog.set(new SelenideLog("", subject));
+    else if (source instanceof Navigator) {
+      eventLogs.add(new SelenideLog("", subject));
+    }
+    else {
+      throw new IllegalArgumentException("Unknown event source: " + source);
     }
   }
 
   public static void commitStep(EventStatus status) {
-    SelenideLog currentLog = eventLog.get();
-    if (currentLog == null) {
+    Deque<SelenideLog> eventLogs = eventLog.get();
+    if (eventLogs.size() == 0) {
       throw new IllegalStateException("Cannot commit step that is not started: " + status);
     }
-    
+
+    SelenideLog currentLog = eventLogs.peek();
     currentLog.setStatus(status);
 
     List<LogEventListener> listeners = getEventLoggerListeners();
@@ -50,7 +62,7 @@ public class SelenideLogger {
       listener.onEvent(currentLog);
     }
 
-    eventLog.set(null);
+    eventLogs.remove();
   }
 
   private static List<LogEventListener> getEventLoggerListeners() {
