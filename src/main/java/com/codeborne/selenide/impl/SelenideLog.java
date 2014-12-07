@@ -3,11 +3,18 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import com.codeborne.selenide.logevents.LogEvent;
 
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.IN_PROGRESS;
+
 public class SelenideLog implements LogEvent {
 
-  private String subject;
-  private EventStatus status;
-  private String element;
+  private final String subject;
+  private final String element;
+  private EventStatus status = IN_PROGRESS;
+
+  public SelenideLog(String element, String subject) {
+    this.element = element;
+    this.subject = subject;
+  }
 
   @Override
   public String getSubject() {
@@ -19,7 +26,7 @@ public class SelenideLog implements LogEvent {
     return this.status.name();
   }
   
-  void setStatus(EventStatus status) {
+  protected void setStatus(EventStatus status) {
     this.status = status;
   }
 
@@ -28,12 +35,8 @@ public class SelenideLog implements LogEvent {
     return this.element;
   }
 
-  void setElement(String element) {
-    this.element = element;
+  @Override
+  public String toString() {
+    return "$(" + element + ") " + subject;
   }
-
-  void setSubject(String subject) {
-    this.subject = subject;
-  }
-
 }

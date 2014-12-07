@@ -34,14 +34,7 @@ public class LogEventTest extends IntegrationTest {
   
   class PrettyReportCreator extends TestWatcher {
     @Override
-    protected void starting(Description description) {
-      super.starting(description);
-    }
-    
-    @Override
     protected void finished(Description description) {
-      super.finished(description);
-      
       System.out.println();
       System.out.println();
       System.out.println();
@@ -70,7 +63,6 @@ public class LogEventTest extends IntegrationTest {
   
   @BeforeClass
   public static void setUp() throws Exception {
-    runLocalHttpServer();
     SelenideLogger.addListener(logEventListener);
   }
   
@@ -79,7 +71,6 @@ public class LogEventTest extends IntegrationTest {
     openFile("page_with_selects_without_jquery.html");
   }
   
-  
   @Test
   public void shouldDoSomeChecksAndActions() {
     $(By.name("username")).shouldBe(readonly);
@@ -87,6 +78,4 @@ public class LogEventTest extends IntegrationTest {
     $(By.name("password")).setValue("123");
     $("#login").click();
   }
-  
-
 }
