@@ -26,6 +26,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
   @Before
   public void closePreviousWebdriver() {
     WebDriverRunner.closeWebDriver();
+    server.uploadedFiles.clear();
   }
 
   @Before
