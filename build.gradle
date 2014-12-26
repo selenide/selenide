@@ -35,16 +35,16 @@ dependencies {
   testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.44.0'
   testRuntime group: 'com.opera', name: 'operadriver', version: '1.5'
   provided 'junit:junit:4.12'
-  provided 'org.testng:testng:6.8.8'
+  provided 'org.testng:testng:6.8.13'
   //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
   provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0-beta-9', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.7'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.9'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
 
-  testCompile 'org.mockito:mockito-all:1.10.8'
+  testCompile 'org.mockito:mockito-all:1.10.17'
   testCompile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
