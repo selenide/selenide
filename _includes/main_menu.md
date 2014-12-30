@@ -9,6 +9,7 @@
 </ul>
 
 <div class="news">
+  <div class="news-line"><a href="/2014/12/28/how-to-test-gmail/">How to test GMail</a></div>
   <div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>
 </div>
 
