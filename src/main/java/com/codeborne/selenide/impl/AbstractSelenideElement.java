@@ -343,16 +343,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   
         char lastChar = text.charAt(text.length() - 1);
         executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
-        fireEvent(element, "change");
+        fireChangeEvent(element);
       }
       else if (fastSetValue) {
         executeJavaScript("arguments[0].value = arguments[1]", element, text);
-        fireEvent(element, "change");
+        fireChangeEvent(element);
       }
       else {
         element.clear();
         element.sendKeys(text);
-        fireEvent(element, "change");
+        fireChangeEvent(element);
       }
       SelenideLogger.commitStep(EventStatus.PASSED);
     }
@@ -362,6 +362,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
+  protected void fireChangeEvent(WebElement element) {
+    fireEvent(element, "change");
+  }
+
   protected String getValue() {
     return getDelegate().getAttribute("value");
   }
@@ -369,7 +373,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void append(String text) {
     WebElement element = waitForElement();
     element.sendKeys(text);
-    fireEvent(element, "change");
+    fireChangeEvent(element);
   }
 
   protected void fireEvent(WebElement element, final String event) {
