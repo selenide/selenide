@@ -150,7 +150,7 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void toStringPrintsOutLastFetchedElements() {
     assertEquals("[\n" +
-        "\t\t<textarea id=text-area type=textarea></textarea>\n" +
+        "\t<textarea id=text-area type=textarea></textarea>\n" +
         "]", $$("#text-area").toString());
   }
 
@@ -159,7 +159,7 @@ public class CollectionMethodsTest extends IntegrationTest {
     ElementsCollection collectionWithFetchedElements = $$("#text-area").shouldHave(texts("This is text area"));
     
     assertEquals("[\n" +
-        "\t\t<textarea id=text-area value=This is text area type=textarea>This is text area</textarea>\n" +
+        "\t<textarea id=text-area value=This is text area type=textarea>This is text area</textarea>\n" +
         "]", collectionWithFetchedElements.toString());
   }
 
