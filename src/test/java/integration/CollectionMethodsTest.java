@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CollectionMethodsTest extends IntegrationTest {
   @Before
@@ -145,28 +144,5 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void shouldMethodsCanCheckMultipleConditions() {
     $$("#multirowTable tr td").shouldHave(size(4), texts("Chack", "Norris", "Chack", "L'a Baskerville"));
-  }
-
-  @Test
-  public void toStringPrintsOutLastFetchedElements() {
-    assertEquals("[\n" +
-        "\t<textarea id=text-area type=textarea></textarea>\n" +
-        "]", $$("#text-area").toString());
-  }
-
-  @Test
-  public void toStringFetchedCollectionFromWebdriverIfNotFetchedYet() {
-    ElementsCollection collectionWithFetchedElements = $$("#text-area").shouldHave(texts("This is text area"));
-    
-    assertEquals("[\n" +
-        "\t<textarea id=text-area value=This is text area type=textarea>This is text area</textarea>\n" +
-        "]", collectionWithFetchedElements.toString());
-  }
-
-  @Test
-  public void toStringPrintsErrorIfFailedToFetchElements() {
-    String actual = $$(By.xpath("\\")).toString();
-    
-    assertTrue("Actual text: " + actual, actual.matches("\\[InvalidSelectorException:.*\\]"));
   }
 }
