@@ -72,7 +72,11 @@ public class BrowserMobProxyTest extends IntegrationTest {
     assertEquals(2, requestCounter);
     
     List<HarEntry> harEntries = proxyServer.getHar().getLog().getEntries();
-    assertTrue(harEntries.get(0).getRequest().getUrl().endsWith("/file_upload_form.html"));
-    assertTrue(harEntries.get(harEntries.size()-1).getRequest().getUrl().endsWith("/upload"));
+    assertEndsWith(harEntries.get(0).getRequest().getUrl(), "/file_upload_form.html");
+    assertEndsWith(harEntries.get(harEntries.size()-1).getRequest().getUrl(), "/upload");
+  }
+
+  private void assertEndsWith(String text, String suffix) {
+    assertTrue(String.format("Should end with '%s', but received: '%s'", suffix, text), text.endsWith(suffix));
   }
 }
