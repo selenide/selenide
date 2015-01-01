@@ -20,6 +20,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -118,7 +120,15 @@ public class AbstractSelenideElementTest {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     $("#firstName").shouldNot(exist);
   }
-  
+
+  @Test
+  public void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
+    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(((JavascriptExecutor) webdriver).executeScript(anyString(), anyVararg()))
+        .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
+    $("#firstName").setValue("john");
+  }
+
   protected LogEventListener createListener(final String selector, final String subject, 
                                             final String status) {
     return new LogEventListener() {
@@ -176,5 +186,4 @@ public class AbstractSelenideElementTest {
     
     $("#firstName").shouldHave(value("ABC"));
   }
-
 }

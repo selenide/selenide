@@ -363,7 +363,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void fireChangeEvent(WebElement element) {
-    fireEvent(element, "change");
+    try {
+      fireEvent(element, "change");
+    } catch (StaleElementReferenceException ignore) {
+    }
   }
 
   protected String getValue() {
