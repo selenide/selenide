@@ -124,17 +124,21 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   public static String elementsToString(Collection<WebElement> elements) {
-    if (elements == null || elements.isEmpty()) {
+    if (elements == null) {
+      return "[not loaded yet...]";
+    }
+
+    if (elements.isEmpty()) {
       return "[]";
     }
 
     StringBuilder sb = new StringBuilder(256);
-    sb.append("[\n\t\t");
+    sb.append("[\n\t");
     for (WebElement element : elements) {
       if (sb.length() > 4) {
-        sb.append(",\n\t\t");
+        sb.append(",\n\t");
       }
-      sb.append($(element).toString());
+      sb.append($(element));
     }
     sb.append("\n]");
     return sb.toString();
@@ -162,6 +166,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public String toString() {
-    return elementsToString(actualElements);
+    try {
+      return elementsToString(getActualElements());
+    } catch (Exception e) {
+      return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
+    }
   }
 }
