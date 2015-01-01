@@ -1,17 +1,15 @@
 package integration;
 
 import com.codeborne.selenide.WebDriverRunner;
+import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.ProxyServer;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.protocol.HttpContext;
+import net.lightbody.bmp.proxy.http.BrowserMobHttpRequest;
+import net.lightbody.bmp.proxy.http.RequestInterceptor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -50,10 +48,12 @@ public class BrowserMobProxyTest extends IntegrationTest {
   
   @Test
   public void canUseBrowserMobProxy() throws UnknownHostException {
-    proxyServer.addRequestInterceptor(new HttpRequestInterceptor() {
+    proxyServer.addRequestInterceptor(new RequestInterceptor() {
       @Override
-      public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
-        if (!"/favicon.ico".equals(httpRequest.getRequestLine().getUri())) {
+      public void process(BrowserMobHttpRequest httpRequest, Har har) {
+        String requestUri = httpRequest.getProxyRequest().getURI().toString();
+        System.out.println("request: " + requestUri);
+        if (!requestUri.endsWith("/favicon.ico") && !"http://ocsp.digicert.com/".equals(requestUri)) {
           requestCounter++;
         }
       }
