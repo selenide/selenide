@@ -11,6 +11,8 @@ import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
@@ -29,7 +31,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * $$(".error").shouldBe(empty)
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return shouldHave(conditions);
+    return should("be", conditions);
   }
 
   /**
@@ -37,10 +39,22 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * $$(".error").shouldHave(texts("Error1", "Error2"))
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    for (CollectionCondition condition : conditions) {
-      waitUntil(condition, timeout);
+    return should("have", conditions);
+  }
+  
+  protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
+    SelenideLogger.beginStep(this, "should " + prefix, conditions);
+    try {
+      for (CollectionCondition condition : conditions) {
+        waitUntil(condition, timeout);
+      }
+      SelenideLogger.commitStep(PASSED);
+      return this;
     }
-    return this;
+    catch (RuntimeException e) {
+      SelenideLogger.commitStep(FAILED);
+      throw e;
+    }
   }
 
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
