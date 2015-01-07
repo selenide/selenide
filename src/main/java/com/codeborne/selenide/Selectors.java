@@ -14,7 +14,7 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By withText(String elementText) {
-    return By.xpath(".//*/text()[contains(normalize-space(.), " + escape.quotes(elementText) + ")]/parent::*");
+    return new WithText(elementText);
   }
 
   /**
@@ -26,9 +26,9 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By byText(String elementText) {
-    return By.xpath(".//*/text()[normalize-space(.) = " + escape.quotes(elementText) + "]/parent::*");
+    return new ByText(elementText);
   }
-
+  
   /**
    * Find elements having attribute with given value.
    *
@@ -60,5 +60,33 @@ public class Selectors {
 
 	public static By byValue(String value) {
 	  return byAttribute("value", value);
+  }
+
+  public static class ByText extends By.ByXPath {
+    protected final String elementText;
+
+    public ByText(String elementText) {
+      super(".//*/text()[normalize-space(.) = " + escape.quotes(elementText) + "]/parent::*");
+      this.elementText = elementText;
+    }
+
+    @Override
+    public String toString() {
+      return "by text: " + elementText;
+    }
+  }
+
+  public static class WithText extends By.ByXPath {
+    protected final String elementText;
+
+    public WithText(String elementText) {
+      super(".//*/text()[contains(normalize-space(.), " + escape.quotes(elementText) + ")]/parent::*");
+      this.elementText = elementText;
+    }
+
+    @Override
+    public String toString() {
+      return "with text: " + elementText;
+    }
   }
 }
