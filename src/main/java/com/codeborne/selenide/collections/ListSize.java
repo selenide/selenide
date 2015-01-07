@@ -23,4 +23,9 @@ public class ListSize extends CollectionCondition {
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
     throw new ListSizeMismatch(expectedSize, collection, elements, lastError, timeoutMs);
   }
+
+  @Override
+  public String toString() {
+    return String.format("size(%s)", expectedSize);
+  }
 }

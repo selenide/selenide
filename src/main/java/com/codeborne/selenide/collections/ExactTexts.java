@@ -8,6 +8,7 @@ import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ExactTexts extends CollectionCondition {
@@ -43,5 +44,10 @@ public class ExactTexts extends CollectionCondition {
     } else {
       throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Exact texts " + Arrays.toString(expectedTexts);
   }
 }

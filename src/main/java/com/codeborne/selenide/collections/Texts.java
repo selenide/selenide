@@ -3,6 +3,7 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Texts extends ExactTexts {
@@ -24,5 +25,10 @@ public class Texts extends ExactTexts {
       }
     }
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Texts " + Arrays.toString(expectedTexts);
   }
 }
