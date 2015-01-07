@@ -18,6 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.*;
@@ -29,6 +31,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
+import static java.util.Arrays.asList;
 
 abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
@@ -36,10 +39,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   abstract String getSearchCriteria();
   protected Exception lastError;
 
+  private static final Set<String> methodsToSkipLogging = new HashSet<String>(asList(
+      "toWebElement",
+      "toString"
+  ));
+  
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
+    if (methodsToSkipLogging.contains(method.getName()))
+      return dispatch(proxy, method, args);
+
     SelenideLogger.beginStep(this, method.getName(), args);
-    
     try {
       Object result = dispatch(proxy, method, args);
       SelenideLogger.commitStep(EventStatus.PASSED);
