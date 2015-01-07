@@ -1,14 +1,17 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.logevents.LogEventListener;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
+ * EXPERIMENTAL
+ * to be refactored soon
+ * 
  * Logs Selenide test steps and notifies all registered LogEventListener about it
+ * 
+ * @since Selenide 2.16
  */
 public class SelenideLogger {
   public enum EventStatus {
@@ -35,6 +38,24 @@ public class SelenideLogger {
     listeners.set(list);
   }
 
+  public static void beginStep(Object source, String methodName, Object... args) {
+    beginStep(source, readableMethodName(methodName) + "(" + readableArguments(args) + ")");
+  }
+
+  static String readableMethodName(String methodName) {
+    return methodName.replaceAll("([A-Z])", " $1").toLowerCase();
+  }
+
+  static String readableArguments(Object... args) {
+    return args == null ? "" : 
+        (args[0] instanceof Object[]) ? arrayToString((Object[]) args[0]) :
+            arrayToString(args);
+  }
+
+  private static String arrayToString(Object[] args) {
+    return args.length == 1 ? args[0].toString() : Arrays.toString(args);
+  }
+
   public static void beginStep(Object source, String subject) {
     Deque<SelenideLog> eventLogs = eventLog.get();
     if (source instanceof AbstractSelenideElement) {
@@ -42,6 +63,9 @@ public class SelenideLogger {
     }
     else if (source instanceof Navigator) {
       eventLogs.add(new SelenideLog("", subject));
+    }
+    else if (source instanceof ElementsCollection) {
+      eventLogs.add(new SelenideLog("$$", subject));
     }
     else {
       throw new IllegalArgumentException("Unknown event source: " + source);

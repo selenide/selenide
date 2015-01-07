@@ -11,6 +11,8 @@ import java.util.List;
  * EXPERIMENTAL
  * 
  * Use with cautions! This API will likely be changed soon.
+ *
+ * @since Selenide 2.16
  */
 public class PrettyReportCreator extends TestWatcher {
   private final List<LogEvent> logEvents = new ArrayList<LogEvent>();

@@ -37,7 +37,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected Exception lastError;
 
   @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+  public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
+    SelenideLogger.beginStep(this, method.getName(), args);
+    
+    try {
+      Object result = dispatch(proxy, method, args);
+      SelenideLogger.commitStep(EventStatus.PASSED);
+      return result;
+    }
+    catch (Throwable t) {
+      SelenideLogger.commitStep(EventStatus.FAILED);
+      throw t;
+    }
+  }
+
+  protected Object dispatch(Object proxy, Method method, Object[] args) throws Throwable {
     if ("setValue".equals(method.getName())) {
       setValue((String) args[0]);
       return proxy;
@@ -287,14 +301,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void click() {
-    try {
-      SelenideLogger.beginStep(this, "click");
-      waitForElement().click();
-      SelenideLogger.commitStep(EventStatus.PASSED);
-    }catch(Throwable t) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
-      rethrow(t);
-    }
+    waitForElement().click();
   }
 
   protected void contextClick() {
@@ -322,43 +329,34 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    try {
-      SelenideLogger.beginStep(this, "set value '" + text + "‘");
-      
-      WebElement element = waitForElement();
-      if ("select".equalsIgnoreCase(element.getTagName())) {
-        selectOptionByValue(element, text);
-      }
-      else if (text == null || text.isEmpty()) {
-        element.clear();
-      }
-      else if (fastSetValue && JQuery.jQuery.isJQueryAvailable()) {
-        String jsCodeToTriggerEvent =
-            "arguments[0].value = arguments[1];" +
-            "var element = jQuery(arguments[0]);" +
-  
-            "var e = jQuery.Event('keydown');  e.which = arguments[2]; element.trigger(e);" +
-            "var e = jQuery.Event('keypress'); e.which = arguments[2]; element.trigger(e);" +
-            "var e = jQuery.Event('keyup');    e.which = arguments[2]; element.trigger(e);";
-  
-        char lastChar = text.charAt(text.length() - 1);
-        executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
-        fireChangeEvent(element);
-      }
-      else if (fastSetValue) {
-        executeJavaScript("arguments[0].value = arguments[1]", element, text);
-        fireChangeEvent(element);
-      }
-      else {
-        element.clear();
-        element.sendKeys(text);
-        fireChangeEvent(element);
-      }
-      SelenideLogger.commitStep(EventStatus.PASSED);
+    WebElement element = waitForElement();
+    if ("select".equalsIgnoreCase(element.getTagName())) {
+      selectOptionByValue(element, text);
     }
-    catch(Throwable t) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
-      rethrow(t);
+    else if (text == null || text.isEmpty()) {
+      element.clear();
+    }
+    else if (fastSetValue && JQuery.jQuery.isJQueryAvailable()) {
+      String jsCodeToTriggerEvent =
+          "arguments[0].value = arguments[1];" +
+          "var element = jQuery(arguments[0]);" +
+
+          "var e = jQuery.Event('keydown');  e.which = arguments[2]; element.trigger(e);" +
+          "var e = jQuery.Event('keypress'); e.which = arguments[2]; element.trigger(e);" +
+          "var e = jQuery.Event('keyup');    e.which = arguments[2]; element.trigger(e);";
+
+      char lastChar = text.charAt(text.length() - 1);
+      executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
+      fireChangeEvent(element);
+    }
+    else if (fastSetValue) {
+      executeJavaScript("arguments[0].value = arguments[1]", element, text);
+      fireChangeEvent(element);
+    }
+    else {
+      element.clear();
+      element.sendKeys(text);
+      fireChangeEvent(element);
     }
   }
 
@@ -399,14 +397,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected Object should(Object proxy, String prefix, String message, Condition... conditions) {
     for (Condition condition : conditions) {
-      try {
-        SelenideLogger.beginStep(this, Describe.describeSubject("should", prefix, message, condition));
-        waitUntil(prefix, message, condition, timeout);
-        SelenideLogger.commitStep(EventStatus.PASSED);
-      } catch (Throwable t) {
-        SelenideLogger.commitStep(EventStatus.FAILED);
-        rethrow(t);
-      }
+      waitUntil(prefix, message, condition, timeout);
     }
     return proxy;
   }
@@ -417,14 +408,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected Object shouldNot(Object proxy, String prefix, String message, Condition... conditions) {
     for (Condition condition : conditions) {
-      try {
-        SelenideLogger.beginStep(this, Describe.describeSubject("should not", prefix, message, condition));
-        waitWhile(prefix, message, condition, timeout);
-        SelenideLogger.commitStep(EventStatus.PASSED);
-      } catch (Throwable t) {
-        SelenideLogger.commitStep(EventStatus.FAILED);
-        rethrow(t);
-      }
+      waitWhile(prefix, message, condition, timeout);
     }
     return proxy;
   }
@@ -698,18 +682,5 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected File download() throws IOException, URISyntaxException {
     return FileDownloader.instance.download(getDelegate());
-  }
-  
-  /**
-   * rethrow each throwable, also from methods without throws declaration
-   * @param t
-   */
-  protected static void rethrow(Throwable t){
-    AbstractSelenideElement.<RuntimeException>throwAny(t);
-  }
-  
-  @SuppressWarnings("unchecked")
-  private static <E extends Throwable> void throwAny(Throwable t) throws E{
-    throw (E)t;
   }
 }
