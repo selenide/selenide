@@ -41,7 +41,7 @@ dependencies {
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0-beta-9', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.9'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.10'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
 
   testCompile 'org.mockito:mockito-all:1.10.19'
