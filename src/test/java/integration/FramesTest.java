@@ -19,7 +19,7 @@ import static org.junit.Assume.assumeFalse;
 
 public class FramesTest extends IntegrationTest {
   @Before
-  public void setUp() {
+  public void openPage() {
     openFile("page_with_frames.html");
   }
 
