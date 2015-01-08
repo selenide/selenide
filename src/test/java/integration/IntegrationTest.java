@@ -29,11 +29,15 @@ public abstract class IntegrationTest {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
         server = new LocalHttpServer(port).start();
-        Configuration.baseUrl = "http://0.0.0.0:" + port;
-        System.setProperty("selenide.start-maximized", "false");
         System.out.println("START " + browser + " TESTS");
       }
     }
+  }
+
+  @Before
+  public void setUp() {
+    Configuration.baseUrl = "http://0.0.0.0:" + port;
+    System.setProperty("selenide.start-maximized", "false");
   }
 
   @AfterClass
