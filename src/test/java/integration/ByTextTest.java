@@ -54,10 +54,10 @@ public class ByTextTest extends IntegrationTest {
 
   @Test @Ignore
   public void canFindElementsByI18nText() {
-    $(byText("Я тупица")).shouldHave(text("Я тупица"));
-    $(withText("Я туп")).shouldHave(text("Я тупица"));
+    $(byText("Маргарита")).shouldHave(text("Маргарита"));
+    $(withText("Марг")).shouldHave(text("Маргарита"));
 
-    assertEquals(1, $$($("#radioButtons"), withText("I don't speak Russian")).size());
+    assertEquals(1, $$($("#radioButtons"), withText("Theodor Woland")).size());
 
     assertEquals(3, $$($("#radioButtons"), withText("Я")).size());
     assertEquals(1, $$($("#radioButtons input"), withText("Я ")).size());

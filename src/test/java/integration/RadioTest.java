@@ -19,17 +19,17 @@ public class RadioTest extends IntegrationTest {
   public void userCanSelectRadioButtonByValue() {
     assertNull(getSelectedRadio(By.name("me")));
 
-    selectRadio(By.name("me"), "ready");
-    assertEquals("ready", getSelectedRadio(By.name("me")).val());
-//    assertEquals("Я готов", $.getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
+    selectRadio(By.name("me"), "cat");
+    assertEquals("cat", getSelectedRadio(By.name("me")).val());
+//    assertEquals("Кот Бегемот", $.getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
   }
 
   @Test
   public void userCanSelectRadioButtonByValueOldWay() {
     assertNull(getSelectedRadio(By.name("me")));
 
-    selectRadio(By.name("me"), "ready");
-    assertEquals("ready", getSelectedRadio(By.name("me")).getAttribute("value"));
-//    assertEquals("Я готов", getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
+    selectRadio(By.name("me"), "cat");
+    assertEquals("cat", getSelectedRadio(By.name("me")).getAttribute("value"));
+//    assertEquals("Кот Бегемот", getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
   }
 }
