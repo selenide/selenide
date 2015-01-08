@@ -270,18 +270,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 //    $(By.linkText("Want to see ajax in action?")).click();
     assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
-
-  @Test
-  public void userCanSelectCheckbox() {
-    $(By.name("rememberMe")).shouldNotBe(selected);
-
-    $(By.name("rememberMe")).click();
-
-    $(By.name("rememberMe")).shouldBe(selected);
-    assertEquals("<input name=rememberMe value=on type=checkbox selected:true></input>",
-        $(By.name("rememberMe")).toString());
-  }
-
+  
   @Test
   public void userCanUseSeleniumActions() {
     $(By.name("rememberMe")).shouldNotBe(selected);
@@ -396,28 +385,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void checkFailsForInvalidSelector() {
     $(By.xpath("//input[:attr='al]")).is(visible);
   }
-
-  @Test
-  public void userCanCheckCheckbox() {
-    $(By.name("rememberMe")).setSelected(true);
-    $(By.name("rememberMe")).shouldBe(selected);
-
-    $(By.name("rememberMe")).setSelected(true);
-    $(By.name("rememberMe")).shouldBe(selected);
-  }
-
-  @Test
-  public void userCanUnCheckCheckbox() {
-    $(By.name("rememberMe")).setSelected(true);
-    $(By.name("rememberMe")).shouldBe(selected);
-
-    $(By.name("rememberMe")).setSelected(false);
-    $(By.name("rememberMe")).shouldNotBe(selected);
-
-    $(By.name("rememberMe")).setSelected(false);
-    $(By.name("rememberMe")).shouldNotBe(selected);
-  }
-
+  
   @Test
   public void userCanUseOrCondition() {
     Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
