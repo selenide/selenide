@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
@@ -28,6 +29,7 @@ public abstract class IntegrationTest {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
         server = new LocalHttpServer(port).start();
+        Configuration.baseUrl = "http://0.0.0.0:" + port;
         System.setProperty("selenide.start-maximized", "false");
         System.out.println("START " + browser + " TESTS");
       }
@@ -42,12 +44,12 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("http://0.0.0.0:" + port + "/" + fileName);
+    open("/" + fileName);
     adjustBrowserWindowSize();
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    T page = open("http://0.0.0.0:" + port + "/" + fileName, pageObjectClass);
+    T page = open("/" + fileName, pageObjectClass);
     adjustBrowserWindowSize();
     return page;
   }

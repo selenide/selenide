@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.core.har.HarEntry;
@@ -11,7 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.Assert.assertEquals;
@@ -72,11 +75,11 @@ public class BrowserMobProxyTest extends IntegrationTest {
     assertEquals(2, requestCounter);
     
     List<HarEntry> harEntries = proxyServer.getHar().getLog().getEntries();
-    assertEndsWith(harEntries.get(0).getRequest().getUrl(), "/file_upload_form.html");
-    assertEndsWith(harEntries.get(harEntries.size()-1).getRequest().getUrl(), "/upload");
-  }
-
-  private void assertEndsWith(String text, String suffix) {
-    assertTrue(String.format("Should end with '%s', but received: '%s'", suffix, text), text.endsWith(suffix));
+    Set<String> requestedUrls = new HashSet<String>();
+    for (HarEntry harEntry : harEntries) {
+      requestedUrls.add(harEntry.getRequest().getUrl());
+    }
+    assertTrue(requestedUrls.toString(), requestedUrls.contains(Configuration.baseUrl + "/file_upload_form.html"));
+    assertTrue(requestedUrls.toString(), requestedUrls.contains(Configuration.baseUrl + "/upload"));
   }
 }
