@@ -3,11 +3,14 @@ package integration;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static org.junit.Assert.assertEquals;
 
 public class ByTextTest extends IntegrationTest {
@@ -56,10 +59,18 @@ public class ByTextTest extends IntegrationTest {
   public void canFindElementsByI18nText() {
     $(byText("Маргарита")).shouldHave(text("Маргарита"));
     $(withText("Марг")).shouldHave(text("Маргарита"));
+    $("#radioButtons").find(byText("Кот \"Бегемот\"")).click();
 
     assertEquals(1, $$($("#radioButtons"), withText("Theodor Woland")).size());
 
     assertEquals(3, $$($("#radioButtons"), withText("Я")).size());
     assertEquals(1, $$($("#radioButtons input"), withText("Я ")).size());
+  }
+
+  @Test
+  public void quotesInText() {
+    $(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
+    $("#hero").find(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
+    $("#apostrophes-and-quotes").find(By.linkText("Options with 'apostrophes' and \"quotes\"")).click();
   }
 }

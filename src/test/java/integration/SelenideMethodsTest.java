@@ -195,7 +195,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Page without JQuery", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
-    assertEquals("Radio buttons\nМастер Маргарита Кот Бегемот Theodor Woland", $("#radioButtons").text());
+    assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
 
     $("h1").shouldHave(text("Page "));
     $("h2").shouldHave(text("Dropdown list"));
@@ -209,7 +209,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
     $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "Мастер Маргарита Кот Бегемот Theodor Woland"));
+        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
   }
 
   @Test

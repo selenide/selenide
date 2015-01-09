@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getSelectedRadio;
 import static com.codeborne.selenide.Selenide.selectRadio;
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,6 @@ public class RadioTest extends IntegrationTest {
 
     selectRadio(By.name("me"), "cat");
     assertEquals("cat", getSelectedRadio(By.name("me")).val());
-//    assertEquals("Кот Бегемот", $.getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
   }
 
   @Test
@@ -30,6 +30,13 @@ public class RadioTest extends IntegrationTest {
 
     selectRadio(By.name("me"), "cat");
     assertEquals("cat", getSelectedRadio(By.name("me")).getAttribute("value"));
-//    assertEquals("Кот Бегемот", getSelectedRadio(By.name("me")).getText()); // Text is empty for unknown reason :(
+  }
+
+  @Test
+  public void userCanSelectRadioButtonUsingSetValue() {
+    assertNull(getSelectedRadio(By.name("me")));
+
+    $(By.name("me")).setValue("margarita");
+    assertEquals("cat", getSelectedRadio(By.name("me")).val());
   }
 }
