@@ -1,6 +1,7 @@
 package integration;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -32,7 +33,7 @@ public class RadioTest extends IntegrationTest {
     assertEquals("cat", getSelectedRadio(By.name("me")).getAttribute("value"));
   }
 
-  @Test
+  @Test @Ignore // idea for future
   public void userCanSelectRadioButtonUsingSetValue() {
     assertNull(getSelectedRadio(By.name("me")));
 

@@ -7,6 +7,8 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Selenide.executeJavaScript;
+
 public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
@@ -16,6 +18,13 @@ public class Describe {
     sb.append('<').append(element.getTagName());
   }
 
+  Describe appendAttributes() {
+    String attributes = executeJavaScript(
+        "var s = ''; var attrs = arguments[0].attributes; for (var i=0; i<attrs.length; ++i) { var a = attrs[i]; s += ' \"' + a.name + '=' + a.value + \"; } ; return s;", element);
+    sb.append(attributes);
+    return this;
+  }
+  
   Describe attr(String attributeName) {
     String attributeValue = element.getAttribute(attributeName);
     if (attributeValue != null && attributeValue.length() > 0) {
@@ -48,9 +57,10 @@ public class Describe {
         return "null";
       }
       return new Describe(element)
-          .attr("id").attr("name").attr("class").attr("href").attr("value").attr("disabled")
-          .attr("type").attr("placeholder")
-          .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
+          .appendAttributes()
+//          .attr("id").attr("name").attr("class").attr("href").attr("value").attr("disabled")
+//          .attr("type").attr("placeholder")
+//          .attr("onclick").attr("onClick").attr("onchange").attr("onChange")
           .is("selected", isSelected(element), true)
           .is("displayed", element.isDisplayed(), false)
           .is("enabled", element.isEnabled(), false)
