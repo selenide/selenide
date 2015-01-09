@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -9,6 +8,8 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {
@@ -34,24 +35,24 @@ public class Navigator {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
 
+    SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
-      SelenideLogger.beginStep("open", url);
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
       collectJavascriptErrors((JavascriptExecutor) webdriver);
-      SelenideLogger.commitStep(EventStatus.PASSED);
+      SelenideLogger.commitStep(log, PASSED);
     } catch (WebDriverException e) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
     catch (RuntimeException e) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       throw e;
     }
     catch (Error e) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       throw e;
     }
   }

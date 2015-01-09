@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -28,6 +27,8 @@ import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
+import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
@@ -49,14 +50,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return dispatch(proxy, method, args);
 
-    SelenideLogger.beginStep(getSearchCriteria(), method.getName(), args);
+    SelenideLog log = SelenideLogger.beginStep(getSearchCriteria(), method.getName(), args);
     try {
       Object result = dispatch(proxy, method, args);
-      SelenideLogger.commitStep(EventStatus.PASSED);
+      SelenideLogger.commitStep(log, PASSED);
       return result;
     }
     catch (Throwable t) {
-      SelenideLogger.commitStep(EventStatus.FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       throw t;
     }
   }

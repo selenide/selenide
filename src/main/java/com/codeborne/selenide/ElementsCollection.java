@@ -43,20 +43,20 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
   
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
-    SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
+    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, timeout);
       }
-      SelenideLogger.commitStep(PASSED);
+      SelenideLogger.commitStep(log, PASSED);
       return this;
     }
     catch (RuntimeException e) {
-      SelenideLogger.commitStep(FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       throw e;
     }
     catch (Error e) {
-      SelenideLogger.commitStep(FAILED);
+      SelenideLogger.commitStep(log, FAILED);
       throw e;
     }
   }

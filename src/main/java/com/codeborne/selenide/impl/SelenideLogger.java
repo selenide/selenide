@@ -19,13 +19,6 @@ public class SelenideLogger {
 
   protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<List<LogEventListener>>();
 
-  protected static ThreadLocal<Deque<SelenideLog>> eventLog = new ThreadLocal<Deque<SelenideLog>>() {
-    @Override
-    protected Deque<SelenideLog> initialValue() {
-    return new ArrayDeque<SelenideLog>();
-    }
-  };
-
   public static void addListener(LogEventListener listener) {
     List<LogEventListener> list = listeners.get();
     if (list == null) {
@@ -36,8 +29,8 @@ public class SelenideLogger {
     listeners.set(list);
   }
 
-  public static void beginStep(String source, String methodName, Object... args) {
-    beginStep(source, readableMethodName(methodName) + "(" + readableArguments(args) + ")");
+  public static SelenideLog beginStep(String source, String methodName, Object... args) {
+    return beginStep(source, readableMethodName(methodName) + "(" + readableArguments(args) + ")");
   }
 
   static String readableMethodName(String methodName) {
@@ -54,26 +47,17 @@ public class SelenideLogger {
     return args.length == 1 ? args[0].toString() : Arrays.toString(args);
   }
 
-  public static void beginStep(String source, String subject) {
-    Deque<SelenideLog> eventLogs = eventLog.get();
-    eventLogs.add(new SelenideLog(source, subject));
+  public static SelenideLog beginStep(String source, String subject) {
+    return new SelenideLog(source, subject);
   }
 
-  public static void commitStep(EventStatus status) {
-    Deque<SelenideLog> eventLogs = eventLog.get();
-    if (eventLogs.isEmpty()) {
-      throw new IllegalStateException("Cannot commit step that is not started: " + status);
-    }
-
-    SelenideLog currentLog = eventLogs.peek();
-    currentLog.setStatus(status);
+  public static void commitStep(SelenideLog log, EventStatus status) {
+    log.setStatus(status);
 
     List<LogEventListener> listeners = getEventLoggerListeners();
     for (LogEventListener listener : listeners) {
-      listener.onEvent(currentLog);
+      listener.onEvent(log);
     }
-
-    eventLogs.remove();
   }
 
   private static List<LogEventListener> getEventLoggerListeners() {
