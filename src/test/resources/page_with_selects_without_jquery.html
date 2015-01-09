@@ -7,15 +7,21 @@
   <body onload="initBlur(); setTimeout(fillTextArea, 1000);">
     <h1>Page without JQuery</h1>
 
-    <div id="dropdown-list-container">
-      <h2>Dropdown list</h2>
-      <h6 id="selectedDomain"></h6>
-      <select name="domain" onchange="onDomainChanged(this);">
-        <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
-        <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
-        <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
-        <option value="мыло.ру" data-mailServerId="111АБВГД">@мыло.ру</option>
-      </select>
+    <div class="container">
+      <div class="container">
+        <div id="domain-container" class="container">
+          <h2>Dropdown list</h2>
+          <h6 id="selectedDomain"></h6>
+          <div id="dropdown-list-container" class="container">
+            <select name="domain" onchange="onDomainChanged(this);">
+              <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
+              <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
+              <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
+              <option value="мыло.ру" data-mailServerId="111АБВГД">@мыло.ру</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
 
     <br/>

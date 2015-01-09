@@ -16,18 +16,23 @@ public class ParentTest extends IntegrationTest {
   @Test
   public void canGetImmediateParentElement() {
     assertEquals($("body"), $("#theHiddenElement").parent());
-    assertEquals($("#dropdown-list-container"), $("h2").parent());
+    assertEquals($("#domain-container"), $("h2").parent());
     assertEquals($("#dropdown-list-container"), $(By.name("domain")).parent());
 
     assertEquals($("#multirowTableSecondRow"), $(".second_row").parent());
   }
 
   @Test
-  public void canGetClosestMatchingAncestor() {
+  public void canGetClosestMatchingAncestorByTagName() {
     assertEquals($("body"), $("#theHiddenElement").closest("body"));
     assertEquals($("body"), $("h2").closest("body"));
     assertEquals($("#dropdown-list-container"), $(By.name("domain")).closest("div"));
+  }
 
+  @Test
+  public void canGetClosestMatchingAncestorByClassName() {
+    assertEquals($("#dropdown-list-container"), $(By.name("domain")).closest(".container"));
+    
     assertEquals($("#multirowTableSecondRow"), $(".second_row").closest("tr"));
     assertEquals($("#multirowTable"), $(".second_row").closest("table"));
     assertEquals($("#multirowTable"), $(".second_row").closest(".table"));
