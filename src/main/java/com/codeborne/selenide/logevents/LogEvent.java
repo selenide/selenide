@@ -15,4 +15,5 @@ public interface LogEvent {
   String getElement();
   String getSubject();
   String getStatus();
+  long getDuration();
 }

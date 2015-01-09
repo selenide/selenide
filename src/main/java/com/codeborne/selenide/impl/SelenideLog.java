@@ -7,6 +7,8 @@ import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.IN_PROGRESS
 
 public class SelenideLog implements LogEvent {
 
+  private final long startNs;
+  private long endNs;
   private final String subject;
   private final String element;
   private EventStatus status = IN_PROGRESS;
@@ -14,6 +16,7 @@ public class SelenideLog implements LogEvent {
   public SelenideLog(String element, String subject) {
     this.element = element;
     this.subject = subject;
+    startNs = System.nanoTime();
   }
 
   @Override
@@ -28,11 +31,17 @@ public class SelenideLog implements LogEvent {
   
   protected void setStatus(EventStatus status) {
     this.status = status;
+    endNs = System.nanoTime();
   }
 
   @Override
   public String getElement() {
     return this.element;
+  }
+  
+  @Override
+  public long getDuration() {
+    return (endNs-startNs) / 1000000;
   }
 
   @Override

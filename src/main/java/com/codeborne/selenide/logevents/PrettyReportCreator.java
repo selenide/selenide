@@ -40,10 +40,10 @@ public class PrettyReportCreator extends TestWatcher {
 
     System.out.println(hLine);
 
-    System.out.format("|%-20s|%-70s|%-10s|\n", "Element", "Subject", "Status");
+    System.out.format("|%-20s|%-70s|%-10s|%-10s|\n", "Element", "Subject", "Status", "ms.");
     System.out.println(hLine);
     for (LogEvent e : logEvents) {
-      System.out.format("|%-20s|%-70s|%-10s|\n", e.getElement(),  e.getSubject(), e.getStatus());
+      System.out.format("|%-20s|%-70s|%-10s|%-10s|\n", e.getElement(),  e.getSubject(), e.getStatus(), e.getDuration());
     }
     System.out.println(hLine);
     System.out.println();
