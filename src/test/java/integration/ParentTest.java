@@ -23,13 +23,14 @@ public class ParentTest extends IntegrationTest {
   }
 
   @Test
-  public void canGetClosestMatchingParentElement() {
+  public void canGetClosestMatchingAncestor() {
     assertEquals($("body"), $("#theHiddenElement").closest("body"));
     assertEquals($("body"), $("h2").closest("body"));
     assertEquals($("#dropdown-list-container"), $(By.name("domain")).closest("div"));
 
     assertEquals($("#multirowTableSecondRow"), $(".second_row").closest("tr"));
     assertEquals($("#multirowTable"), $(".second_row").closest("table"));
+    assertEquals($("#multirowTable"), $(".second_row").closest(".table"));
     assertEquals($("#multirowTable"), $(".second_row").closest(".multirow_table"));
   }
 }
