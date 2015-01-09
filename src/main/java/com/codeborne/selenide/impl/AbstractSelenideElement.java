@@ -49,7 +49,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return dispatch(proxy, method, args);
 
-    SelenideLogger.beginStep(this, method.getName(), args);
+    SelenideLogger.beginStep(getSearchCriteria(), method.getName(), args);
     try {
       Object result = dispatch(proxy, method, args);
       SelenideLogger.commitStep(EventStatus.PASSED);

@@ -35,7 +35,7 @@ public class Navigator {
     }
 
     try {
-      SelenideLogger.beginStep(this, "open " + url);
+      SelenideLogger.beginStep("open", url);
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
       collectJavascriptErrors((JavascriptExecutor) webdriver);
@@ -44,6 +44,14 @@ public class Navigator {
       SelenideLogger.commitStep(EventStatus.FAILED);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
+      throw e;
+    }
+    catch (RuntimeException e) {
+      SelenideLogger.commitStep(EventStatus.FAILED);
+      throw e;
+    }
+    catch (Error e) {
+      SelenideLogger.commitStep(EventStatus.FAILED);
       throw e;
     }
   }

@@ -43,7 +43,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
   
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
-    SelenideLogger.beginStep(this, "should " + prefix, conditions);
+    SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, timeout);
@@ -52,6 +52,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (RuntimeException e) {
+      SelenideLogger.commitStep(FAILED);
+      throw e;
+    }
+    catch (Error e) {
       SelenideLogger.commitStep(FAILED);
       throw e;
     }
