@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assert.assertEquals;
 
 public class CheckboxTest extends IntegrationTest {
@@ -21,8 +22,14 @@ public class CheckboxTest extends IntegrationTest {
     $(By.name("rememberMe")).click();
 
     $(By.name("rememberMe")).shouldBe(selected);
-    assertEquals("<input name=\"rememberMe\" type=\"checkbox\" selected:true></input>",
-        $(By.name("rememberMe")).toString());
+    if (isHtmlUnit()) {
+      assertEquals("<input name=\"rememberMe\" value=\"on\" type=\"checkbox\" selected:true></input>",
+          $(By.name("rememberMe")).toString());
+    }
+    else {
+      assertEquals("<input name=\"rememberMe\" type=\"checkbox\" selected:true></input>",
+          $(By.name("rememberMe")).toString());
+    }
   }
 
   @Test
