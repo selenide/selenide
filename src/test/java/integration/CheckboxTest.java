@@ -21,7 +21,7 @@ public class CheckboxTest extends IntegrationTest {
     $(By.name("rememberMe")).click();
 
     $(By.name("rememberMe")).shouldBe(selected);
-    assertEquals("<input name=rememberMe value=on type=checkbox selected:true></input>",
+    assertEquals("<input name=\"rememberMe\" type=\"checkbox\" selected:true></input>",
         $(By.name("rememberMe")).toString());
   }
 

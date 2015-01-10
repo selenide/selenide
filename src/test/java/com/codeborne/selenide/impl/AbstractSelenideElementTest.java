@@ -9,6 +9,7 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
+import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +21,13 @@ import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AbstractSelenideElementTest {
-  WebDriver webdriver;
-  WebElement element;
+  RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
+  WebElement element = mock(WebElement.class);
 
   @Before
   public void mockWebDriver() {
@@ -36,13 +36,14 @@ public class AbstractSelenideElementTest {
     Configuration.screenshots = false;
 
     WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
-    
+    WebDriverRunner.setWebDriver(webdriver);
+    when(webdriver
+        .executeScript(anyString(), any(WebElement.class)))
+        .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
+
     Screenshots.screenshots = mock(ScreenShotLaboratory.class);
     when(Screenshots.screenshots.takeScreenShot()).thenReturn("");
-    webdriver = mock(RemoteWebDriver.class);
-    WebDriverRunner.setWebDriver(webdriver);
 
-    element = mock(WebElement.class);
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);

@@ -87,7 +87,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       fail();
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
-          e.getMessage().contains("Element not found {<table id=multirowTable>/thead"));
+          e.getMessage().contains("Element not found {<table id=\"multirowTable\">/thead"));
       assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
     }
   }

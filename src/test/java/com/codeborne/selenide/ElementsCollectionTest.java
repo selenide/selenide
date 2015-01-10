@@ -1,11 +1,15 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -15,6 +19,12 @@ public class ElementsCollectionTest {
   WebElement element1 = element("h1");
   WebElement element2 = element("h2");
 
+  @Before
+  public final void mockWebDriver() {
+    browser = null;
+    webdriverContainer = mock(WebDriverThreadLocalContainer.class);
+  }
+  
   @Test
   public void toStringPrintsOutLastFetchedElements() {
     WebElementsCollection source = mock(WebElementsCollection.class);

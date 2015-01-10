@@ -116,7 +116,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementShould");
     } catch (ElementShould elementShouldExist) {
       assertEquals("Element should be visible {#theHiddenElement}\n" +
-          "Element: '<div id=theHiddenElement displayed:false></div>'\n" +
+          "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.", elementShouldExist.toString());
       assertEquals("http://ci.org/build/reports/tests/1.jpg", elementShouldExist.getScreenshot());

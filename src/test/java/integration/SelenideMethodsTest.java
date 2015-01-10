@@ -19,6 +19,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class SelenideMethodsTest extends IntegrationTest {
 
@@ -68,14 +69,40 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("<h1>Page without JQuery</h1>", $("h1").toString());
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
 
-    assertTrue($(By.name("rememberMe")).toString().contains("<input name=rememberMe"));
-    assertTrue($(By.name("rememberMe")).toString().contains("type=checkbox></input>"));
+    if (isHtmlUnit()) {
+      assertEquals("<input name=\"rememberMe\" value=\"on\" type=\"checkbox\"></input>", 
+          $(By.name("rememberMe")).toString());
+      
+      assertEquals("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>",
+              $(By.name("domain")).find("option").toString());
+      
+    } else {
+      assertEquals("<input name=\"rememberMe\" type=\"checkbox\"></input>", 
+          $(By.name("rememberMe")).toString());
 
-    assertEquals("<option value=livemail.ru selected:true>@livemail.ru</option>",
-        $(By.name("domain")).find("option").toString());
+      assertEquals("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>",
+              $(By.name("domain")).find("option").toString());
+    }
 
     assertTrue($(byText("Want to see ajax in action?")).toString().contains("<a href="));
     assertTrue($(byText("Want to see ajax in action?")).toString().contains(">Want to see ajax in action?</a>"));
+  }
+
+  @Test
+  public void toStringShowsAllAttributesButStyleSortedAlphabetically() {
+    assumeFalse(isHtmlUnit());
+    assertEquals("<div class=\"invisible-with-multiple-attributes\" " +
+        "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
+        "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
+        "displayed:false></div>", $("#gopher").toString());
+  }
+
+  @Test
+  public void toStringShowsOnlySomeAttributesInHtmlunit() {
+    assumeTrue(isHtmlUnit());
+    assertEquals("<div id=\"gopher\" class=\"invisible-with-multiple-attributes\" " +
+        "placeholder=\"Животное\" onclick=\"void(0);\" onchange=\"console.log(this);\" " +
+        "displayed:false></div>", $("#gopher").toString());
   }
 
   @Test
