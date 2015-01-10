@@ -75,6 +75,13 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.16 (Released 10.01.2015)
+* Added #37 Selenide can create a report of all actions in test
+* Fixed #152 `$.closest(".class")` works correctly
+* Fixed #151 Method `$$.toString()` fetches collection if it's not fetched yet
+* Added #154 `$.toString()` shows all attributes
+* Fixed #153 `$.setValue()` should not fail if element has disappeared while entering text
+
 === 2.15 (Released 02.11.2014)
 * #140 Added support for Sizzle selectors
 * #139 Added support for multifile upload
