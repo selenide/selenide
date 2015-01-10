@@ -35,6 +35,13 @@ public abstract class IntegrationTest {
   }
 
   @Before
+  public void restartReallyUnstableBrowsers() {
+    if (isSafari()) {
+      closeWebDriver();
+    }
+  }
+
+  @Before
   public void setBaseUrl() {
     Configuration.baseUrl = "http://0.0.0.0:" + port;
     System.setProperty("selenide.start-maximized", "false");
