@@ -2,9 +2,9 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "jacoco"
 
-group='com.codeborne'
+group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version='2.17-SNAPSHOT'
+version = '2.17-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
@@ -13,152 +13,155 @@ targetCompatibility = 1.6
 defaultTasks 'test', 'install'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
+
 }
 
 configurations {
-  provided
-  compile.extendsFrom provided
+    provided
+    compile.extendsFrom provided
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.44.0') {
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
-    exclude group: 'org.webbitserver', module: 'webbit'
-  }
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.44.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
-  testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.44.0'
-  testRuntime group: 'com.opera', name: 'operadriver', version: '1.5'
-  provided 'junit:junit:4.12'
-  provided 'org.testng:testng:6.8.13'
-  //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
-  provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
-  
-  // For BrowserMob Proxy:
-  testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0-beta-9', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.10'
-  testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
+    compile('org.seleniumhq.selenium:selenium-java:2.44.0') {
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
 
-  testCompile 'org.mockito:mockito-all:1.10.19'
-  testCompile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
-  testCompile 'commons-fileupload:commons-fileupload:1.3.1'
+        exclude group: 'org.webbitserver', module: 'webbit'
+    }
+    provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.44.0', transitive: false
+    provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
+    testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
+    testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.44.0'
+    testRuntime group: 'com.opera', name: 'operadriver', version: '1.5'
+    provided 'junit:junit:4.12'
+    provided 'org.testng:testng:6.8.13'
+    //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
+    provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
+
+    // For BrowserMob Proxy:
+    testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0-beta-9', transitive: false
+    testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.10'
+    testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '1.5.0'
+
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'org.eclipse.jetty:jetty-server:9.3.0.M1'
+    testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.M1'
+    testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
 task libs(type: Sync) {
-  from configurations.compile
-  from configurations.runtime
-  from configurations.testCompile
-  from configurations.testRuntime
-  into "$buildDir/lib"
+    from configurations.compile
+    from configurations.runtime
+    from configurations.testCompile
+    from configurations.testRuntime
+    into "$buildDir/lib"
 }
 
 classes.dependsOn libs
 
 jacoco {
-  toolVersion = "0.7.2.201409121644"
+    toolVersion = "0.7.2.201409121644"
 }
 
 jacocoTestReport {
-  reports {
-    xml.enabled false
-    csv.enabled false
-    html.destination "${buildDir}/reports/jacocoHtml"
-  }
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/reports/jacocoHtml"
+    }
 }
 
 test {
-  include 'com/codeborne/selenide/**/*'
+    include 'com/codeborne/selenide/**/*'
 }
 
 task ie(type: Test) {
-  systemProperties['browser'] = 'ie'
-  systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
-  systemProperties['selenide.timeout'] = '8000'
-  include 'integration/**/*'
-  exclude '**/AlertText.*'
-  exclude '**/ConfirmTest.*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'ie'
+    systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
+    systemProperties['selenide.timeout'] = '8000'
+    include 'integration/**/*'
+    exclude '**/AlertText.*'
+    exclude '**/ConfirmTest.*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task chrome(type: Test) {
-  systemProperties['browser'] = 'chrome'
-  systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'chrome'
+    systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task htmlunit(type: Test) {
-  systemProperties['browser'] = 'htmlunit'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'htmlunit'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task phantomjs(type: Test) {
-  systemProperties['browser'] = 'phantomjs'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'phantomjs'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task firefox(type: Test) {
-  systemProperties['browser'] = 'firefox'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'firefox'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task safari(type: Test) {
-  systemProperties['browser'] = 'safari'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'safari'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 task opera(type: Test) {
-  systemProperties['browser'] = 'opera'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+    systemProperties['browser'] = 'opera'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
 }
 
 tasks.withType(Test).all { testTask ->
-  testTask.systemProperties['file.encoding'] = 'UTF-8'
-  testTask.testLogging.showStandardStreams = true
-  testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
-  testTask.maxParallelForks = 2
-  testTask.jacoco {
-    enabled = true
-    include 'com/codeborne/selenide/**/*'
-  }
-  testTask.outputs.upToDateWhen { false }
+    testTask.systemProperties['file.encoding'] = 'UTF-8'
+    testTask.testLogging.showStandardStreams = true
+    testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
+    testTask.maxParallelForks = 2
+    testTask.jacoco {
+        enabled = true
+        include 'com/codeborne/selenide/**/*'
+    }
+    testTask.outputs.upToDateWhen { false }
 }
 
 task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'phantomjs']) {}
 
-task sourcesJar(type: Jar, dependsOn:classes) {
-  classifier = 'sources'
-  from sourceSets.main.allSource
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
 
 javadoc {
-  failOnError=false
+    failOnError = false
 }
 
-task javadocJar(type: Jar, dependsOn:javadoc) {
-  classifier = 'javadoc'
-  from javadoc.destinationDir
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 artifacts {
-  archives jar
-  archives sourcesJar
-  archives javadocJar
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.2.1'
-  jarFile = './gradle-wrapper/gradle-wrapper.jar'
-  scriptFile = './gradle'
+    gradleVersion = '2.2.1'
+    jarFile = './gradle-wrapper/gradle-wrapper.jar'
+    scriptFile = './gradle'
 }
