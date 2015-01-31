@@ -12,6 +12,11 @@ targetCompatibility = 1.6
 
 defaultTasks 'test', 'install'
 
+buildscript {
+    repositories { jcenter() }
+    dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.2' }
+}
+
 repositories {
   mavenCentral()
 }
@@ -35,7 +40,7 @@ dependencies {
   testRuntime group: 'org.seleniumhq.selenium', name: 'selenium-safari-driver', version: '2.44.0'
   testRuntime group: 'com.opera', name: 'operadriver', version: '1.5'
   provided 'junit:junit:4.12'
-  provided 'org.testng:testng:6.8.13'
+  provided 'org.testng:testng:6.8.17'
   //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
   provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
   
@@ -70,6 +75,16 @@ jacocoTestReport {
     csv.enabled false
     html.destination "${buildDir}/reports/jacocoHtml"
   }
+}
+
+apply plugin: 'info.solidsoft.pitest'
+
+pitest {
+  targetClasses = ["com.codeborne.selenide*"]
+  timestampedReports = false
+  threads = 4
+  outputFormats = ['XML', 'HTML']
+  enableDefaultIncrementalAnalysis = true
 }
 
 test {
