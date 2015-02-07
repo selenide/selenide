@@ -3,6 +3,11 @@ apply plugin: 'signing'
 
 defaultTasks 'clean', 'allTests', 'install', 'uploadArchives'
 
+buildscript {
+  repositories { jcenter() }
+  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.2' }
+}
+
 signing {
   sign configurations.archives
 }
