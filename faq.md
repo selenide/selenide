@@ -41,6 +41,12 @@ E.g. to run tests with PhantomJS browser:
 
 <br/>
 
+>Can I use Selenide with Selenium Grid?
+
+Yes, Selenide supports Selenium Grid. Just add property `-Dremote=http://localhost:5678/hub` when running tests.
+
+<br/>
+
 >How can I tell Selenide use browser with my custom profile?
 
 You can also provide Selenide an instance of webdriver that you configured according to your needs.
