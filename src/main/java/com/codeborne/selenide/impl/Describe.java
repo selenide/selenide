@@ -140,7 +140,9 @@ public class Describe {
 
   public static String shortly(By selector) {
     if (selector instanceof By.ByCssSelector) {
-      return selector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
+      return selector.toString()
+          .replaceFirst("By\\.selector:\\s*(.*)", "$1")
+          .replaceFirst("By\\.cssSelector:\\s*(.*)", "$1");
     }
     return selector.toString();
   }

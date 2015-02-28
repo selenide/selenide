@@ -92,7 +92,6 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     }
   }
 
-
   @Test
   public void elementNotFoundInsideParent() {
     try {

@@ -43,7 +43,10 @@ public class WebElementSelector {
   protected List<WebElement> evaluateSizzleSelector(SearchContext context, ByCssSelector sizzleCssSelector) {
     injectSizzleIfNeeded();
 
-    String sizzleSelector = sizzleCssSelector.toString().replace("By.selector: ", "");
+    String sizzleSelector = sizzleCssSelector.toString()
+        .replace("By.selector: ", "")
+        .replace("By.cssSelector: ", "");
+    
     if (context instanceof WebElement)
       return executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
     else
