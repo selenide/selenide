@@ -99,7 +99,9 @@ public class JQuery {
       String className = seleniumSelector.toString().replaceFirst("By\\.className:\\s*(.*)", "$1");
       return "." + className;
     } else if (seleniumSelector instanceof By.ByCssSelector) {
-      return seleniumSelector.toString().replaceFirst("By\\.selector:\\s*(.*)", "$1");
+      return seleniumSelector.toString()
+          .replaceFirst("By\\.selector:\\s*(.*)", "$1")
+          .replaceFirst("By\\.cssSelector:\\s*(.*)", "$1");
     } else if (seleniumSelector instanceof By.ByXPath) {
       String seleniumXPath = seleniumSelector.toString().replaceFirst("By\\.xpath:\\s*(.*)", "$1");
       return seleniumXPath.replaceFirst("^//", "").replaceFirst("^/", "")

@@ -146,6 +146,8 @@ public class Describe {
   }
 
   public static String selector(By selector) {
-    return selector.toString().replaceFirst("By\\.selector:\\s*", "");
+    return selector.toString()
+        .replaceFirst("By\\.selector:\\s*", "")
+        .replaceFirst("By\\.cssSelector:\\s*", "");
   }
 }
