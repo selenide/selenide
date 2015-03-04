@@ -17,8 +17,10 @@ import java.util.List;
 import java.util.Set;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class BrowserMobProxyTest extends IntegrationTest {
@@ -26,6 +28,8 @@ public class BrowserMobProxyTest extends IntegrationTest {
 
   @Before
   public void closePreviousWebdriver() {
+    assumeFalse(isPhantomjs());
+
     WebDriverRunner.closeWebDriver();
     server.uploadedFiles.clear();
   }
@@ -38,7 +42,9 @@ public class BrowserMobProxyTest extends IntegrationTest {
 
   @After
   public void stopBrowserMobProxyServer() throws Exception {
-    proxyServer.stop();
+    if (proxyServer != null) {
+      proxyServer.stop();
+    }
   }
 
   @After
