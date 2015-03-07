@@ -75,6 +75,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.17 (Released 08.03.2015)
+* upgrade to selenium webdriver 2.45.0
+* added "soft asserts" (JUnit and TestNG are supported out-of-the-box)
+
 === 2.16 (Released 10.01.2015)
 * Added #37 Selenide can create a report of all actions in test
 * Fixed #152 `$.closest(".class")` works correctly
