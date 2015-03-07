@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -7,11 +8,9 @@ import org.openqa.selenium.WebElement;
 import java.util.*;
 
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Configuration.pollingInterval;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
@@ -51,12 +50,21 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       SelenideLogger.commitStep(log, PASSED);
       return this;
     }
+    catch (UIAssertionError error) {
+      SelenideLogger.commitStep(log, error);
+      switch (assertionMode) {
+        case SOFT:
+          return this;
+        default:
+          throw error;
+      }
+    }
     catch (RuntimeException e) {
-      SelenideLogger.commitStep(log, FAILED);
+      SelenideLogger.commitStep(log, e);
       throw e;
     }
     catch (Error e) {
-      SelenideLogger.commitStep(log, FAILED);
+      SelenideLogger.commitStep(log, e);
       throw e;
     }
   }

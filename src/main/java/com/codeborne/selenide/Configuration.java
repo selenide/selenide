@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
@@ -143,4 +144,10 @@ public class Configuration {
      */
     Sizzle
   }
+
+
+
+  public static enum AssertionMode {STRICT, SOFT;};
+  
+  public static AssertionMode assertionMode = STRICT;
 }

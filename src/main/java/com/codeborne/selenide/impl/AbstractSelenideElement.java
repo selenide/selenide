@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -22,14 +23,14 @@ import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
@@ -44,7 +45,18 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       "toWebElement",
       "toString"
   ));
-  
+
+  private static final Set<String> methodsForSoftAssertion = new HashSet<String>(asList(
+      "should",
+      "shouldBe",
+      "shouldHave",
+      "shouldNot",
+      "shouldNotHave",
+      "shouldNotBe",
+      "waitUntil",
+      "waitWhile"
+  ));
+
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
@@ -56,9 +68,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       SelenideLogger.commitStep(log, PASSED);
       return result;
     }
-    catch (Throwable t) {
-      SelenideLogger.commitStep(log, FAILED);
-      throw t;
+    catch (UIAssertionError error) {
+      SelenideLogger.commitStep(log, error);
+      if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
+        return proxy;
+      else
+        throw error;
+    }
+    catch (Throwable error) {
+      SelenideLogger.commitStep(log, error);
+      throw error;
     }
   }
 
@@ -643,7 +662,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
     }
   }
-
+  
   protected boolean exists(WebElement element) {
     try {
       if (element == null) return false;

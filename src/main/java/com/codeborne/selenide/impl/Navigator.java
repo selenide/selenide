@@ -8,7 +8,6 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 
 public class Navigator {
@@ -42,17 +41,17 @@ public class Navigator {
       collectJavascriptErrors((JavascriptExecutor) webdriver);
       SelenideLogger.commitStep(log, PASSED);
     } catch (WebDriverException e) {
-      SelenideLogger.commitStep(log, FAILED);
+      SelenideLogger.commitStep(log, e);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
     catch (RuntimeException e) {
-      SelenideLogger.commitStep(log, FAILED);
+      SelenideLogger.commitStep(log, e);
       throw e;
     }
     catch (Error e) {
-      SelenideLogger.commitStep(log, FAILED);
+      SelenideLogger.commitStep(log, e);
       throw e;
     }
   }
