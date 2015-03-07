@@ -1,8 +1,13 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
 
 /**
  * EXPERIMENTAL
@@ -13,10 +18,6 @@ import java.util.*;
  * @since Selenide 2.16
  */
 public class SelenideLogger {
-  public enum EventStatus {
-    IN_PROGRESS, PASSED, FAILED
-  }
-
   protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<List<LogEventListener>>();
 
   public static void addListener(LogEventListener listener) {
@@ -51,7 +52,12 @@ public class SelenideLogger {
     return new SelenideLog(source, subject);
   }
 
-  public static void commitStep(SelenideLog log, EventStatus status) {
+  public static void commitStep(SelenideLog log, Throwable error) {
+    log.setError(error);
+    commitStep(log, FAILED);
+  }
+  
+  public static void commitStep(SelenideLog log, LogEvent.EventStatus status) {
     log.setStatus(status);
 
     List<LogEventListener> listeners = getEventLoggerListeners();

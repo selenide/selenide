@@ -11,9 +11,13 @@ package com.codeborne.selenide.logevents;
  */
 public interface LogEvent {
 
-  
+  public enum EventStatus {
+    IN_PROGRESS, PASSED, FAILED
+  }
+
   String getElement();
   String getSubject();
-  String getStatus();
+  EventStatus getStatus();
   long getDuration();
+  Throwable getError();
 }

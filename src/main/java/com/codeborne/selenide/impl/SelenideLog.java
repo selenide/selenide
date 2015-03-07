@@ -1,9 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import com.codeborne.selenide.logevents.LogEvent;
 
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.IN_PROGRESS;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 
 public class SelenideLog implements LogEvent {
 
@@ -12,6 +11,7 @@ public class SelenideLog implements LogEvent {
   private final String subject;
   private final String element;
   private EventStatus status = IN_PROGRESS;
+  private Throwable error;
 
   public SelenideLog(String element, String subject) {
     this.element = element;
@@ -25,8 +25,8 @@ public class SelenideLog implements LogEvent {
   }
 
   @Override
-  public String getStatus() {
-    return this.status.name();
+  public EventStatus getStatus() {
+    return this.status;
   }
   
   protected void setStatus(EventStatus status) {
@@ -42,6 +42,15 @@ public class SelenideLog implements LogEvent {
   @Override
   public long getDuration() {
     return (endNs-startNs) / 1000000;
+  }
+
+  @Override
+  public Throwable getError() {
+    return error;
+  }
+
+  public void setError(Throwable error) {
+    this.error = error;
   }
 
   @Override

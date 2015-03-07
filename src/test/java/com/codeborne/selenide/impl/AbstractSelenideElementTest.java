@@ -6,8 +6,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
-import com.codeborne.selenide.impl.SelenideLogger.EventStatus;
 import com.codeborne.selenide.logevents.LogEvent;
+import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.google.common.collect.ImmutableMap;
 import org.junit.After;
@@ -18,6 +18,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -125,13 +127,13 @@ public class AbstractSelenideElementTest {
   @Test
   public void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    when(((JavascriptExecutor) webdriver).executeScript(anyString(), anyVararg()))
+    when(webdriver.executeScript(anyString(), anyVararg()))
         .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
     $("#firstName").setValue("john");
   }
 
   protected LogEventListener createListener(final String selector, final String subject, 
-                                            final String status) {
+                                            final EventStatus status) {
     return new LogEventListener() {
       @Override
       public void onEvent(LogEvent currentLog) {
@@ -148,7 +150,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "set value", EventStatus.PASSED.name()));
+    SelenideLogger.addListener(createListener(selector, "set value", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
@@ -158,7 +160,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should have", EventStatus.PASSED.name()));
+    SelenideLogger.addListener(createListener(selector, "should have", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -169,7 +171,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should not have", EventStatus.PASSED.name()));
+    SelenideLogger.addListener(createListener(selector, "should not have", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -180,7 +182,7 @@ public class AbstractSelenideElementTest {
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should have", EventStatus.FAILED.name()));
+    SelenideLogger.addListener(createListener(selector, "should have", FAILED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");

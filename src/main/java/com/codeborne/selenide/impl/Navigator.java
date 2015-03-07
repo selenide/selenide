@@ -8,8 +8,8 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 
 public class Navigator {
   public void open(String relativeOrAbsoluteUrl) {

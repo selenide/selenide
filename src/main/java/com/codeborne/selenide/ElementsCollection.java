@@ -11,8 +11,8 @@ import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.FAILED;
-import static com.codeborne.selenide.impl.SelenideLogger.EventStatus.PASSED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
