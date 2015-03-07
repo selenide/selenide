@@ -22,6 +22,10 @@
           <root url="file://$MODULE_DIR$/build/lib" />
           <root url="jar://$USER_HOME$/.ideaLibSources/selenium-api-2.44.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ideaLibSources/junit-4.12-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/selenium-support-2.45.0-sources.jar!/" />
+          <root url="file://$MODULE_DIR$/../ghostdriver/binding/java/src/main/java" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/selenium-remote-driver-2.45.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/httpclient-4.3.6-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" type="SOURCES" />
