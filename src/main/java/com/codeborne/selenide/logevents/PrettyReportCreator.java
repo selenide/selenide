@@ -36,7 +36,7 @@ public class PrettyReportCreator extends TestWatcher {
     System.out.println();
     System.out.println("Report for " + description.getDisplayName());
 
-    String hLine = "+--------------------+----------------------------------------------------------------------+----------+";
+    String hLine = "+--------------------+----------------------------------------------------------------------+----------+----------+";
 
     System.out.println(hLine);
 
