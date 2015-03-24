@@ -16,6 +16,6 @@ public class ReplacingElementTest extends IntegrationTest {
   @Test
   public void shouldWaitsUntilElementIsReplaced() {
     $("#dynamic-element").shouldHave(text("I will be replaced soon"));
-    $("#dynamic-element").shouldHave(cssClass("reloaded"), text("I am back"));
+    $("#dynamic-element").shouldHave(text("I am back"), cssClass("reloaded"));
   }
 }

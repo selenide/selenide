@@ -10,7 +10,14 @@
       });
       function replaceElement() {
         $('#dynamic-element').remove();
-        $('body').append($('<div id="dynamic-element" class="reloaded">Hello, I am back again</div>'));
+        setTimeout(createElement, 100);
+      }
+      function createElement() {
+        $('body').append($('<div id="dynamic-element">Hello, I am back again</div>'));
+        setTimeout(addCssClass, 100);
+      }
+      function addCssClass() {
+        $('#dynamic-element').addClass('reloaded');
       }
     </script>
   </head>
