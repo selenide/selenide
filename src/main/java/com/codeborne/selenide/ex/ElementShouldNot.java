@@ -7,10 +7,10 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
 
 public class ElementShouldNot extends UIAssertionError {
-  public ElementShouldNot(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, Exception lastError, long timeoutMs) {
+  public ElementShouldNot(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, Throwable lastError, long timeoutMs) {
     this(searchCriteria, prefix, null, expectedCondition, element, lastError, timeoutMs);
   }
-  public ElementShouldNot(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Exception lastError, long timeoutMs) {
+  public ElementShouldNot(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Throwable lastError, long timeoutMs) {
     super("Element should not " + prefix + expectedCondition + " {" + searchCriteria + '}' + (message != null ? " because " + message : "") +
         "\nElement: '" + Describe.describe(element) + '\'' +
         actualValue(expectedCondition, element), timeoutMs, lastError);
