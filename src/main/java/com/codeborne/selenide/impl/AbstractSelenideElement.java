@@ -38,7 +38,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
   abstract String getSearchCriteria();
-  protected Exception lastError;
+  protected Throwable lastError; // TODO convert to local variable
 
   private static final Set<String> methodsToSkipLogging = new HashSet<String>(asList(
       "toWebElement",
@@ -63,7 +63,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
     SelenideLog log = SelenideLogger.beginStep(getSearchCriteria(), method.getName(), args);
     try {
-      Object result = dispatch(proxy, method, args);
+      Object result = dispatchAndRetry(proxy, method, args);
       SelenideLogger.commitStep(log, PASSED);
       return result;
     }
@@ -78,6 +78,27 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
+  }
+
+  protected Object dispatchAndRetry(Object proxy, Method method, Object[] args) throws Throwable {
+    long startTime = currentTimeMillis();
+
+    do {
+      lastError = null;
+      try {
+        return dispatch(proxy, method, args);
+      }
+      catch (WebDriverException elementNotFound) {
+        lastError = elementNotFound;
+      }
+      catch (AssertionError elementDoesNotMatchCondition) {
+        lastError = elementDoesNotMatchCondition;
+      }
+      sleep(pollingInterval);
+    }
+    while (currentTimeMillis() - startTime <= timeout);
+
+    throw lastError;
   }
 
   protected Object dispatch(Object proxy, Method method, Object[] args) throws Throwable {
@@ -563,38 +584,30 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected WebElement waitUntil(String prefix, String message, Condition condition, long timeoutMs) {
-    final long startTime = currentTimeMillis();
-    WebElement element;
-    do {
-      lastError = null;
-      element = tryToGetElement();
-      if (element != null) {
-        try {
-          if (condition.apply(element)) {
-            return element;
-          }
-        }
-        catch (WebDriverException elementNotFound) {
-          lastError = elementNotFound;
-        }
-        catch (IndexOutOfBoundsException ignore) {
-          lastError = ignore;
+    Throwable lastError = null;
+
+    WebElement element = getActualDelegate();
+    if (element != null) {
+      try {
+        if (condition.apply(element)) {
+          return element;
         }
       }
-      else if (condition.applyNull()) {
+      catch (WebDriverException elementNotFound) {
         if (Cleanup.of.isInvalidSelectorError(lastError)) {
           throw Cleanup.of.wrap(lastError);
         }
-        return null;
+        throw elementNotFound;
       }
-      sleep(pollingInterval);
     }
-    while (currentTimeMillis() - startTime <= timeoutMs);
+    else if (condition.applyNull()) {
+      if (Cleanup.of.isInvalidSelectorError(lastError)) {
+        throw Cleanup.of.wrap(lastError);
+      }
+      return null;
+    }
 
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
-    }
-    else if (!exists(element)) {
+    if (!exists(element)) {
       return throwElementNotFound(condition, timeoutMs);
     }
     else {
@@ -609,40 +622,33 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
     waitWhile(prefix, null, condition, timeoutMs);
   }
-  protected void waitWhile(String prefix, String message, Condition condition, long timeoutMs) {
-    final long startTime = currentTimeMillis();
-    WebElement element;
-    do {
-      lastError = null;
-      element = tryToGetElement();
-      if (element != null) {
-        try {
-          if (!condition.apply(element)) {
-            return;
-          }
-        }
-        catch (WebDriverException elementNotFound) {
-          lastError = elementNotFound;
-        }
-        catch (IndexOutOfBoundsException ignore) {
-          lastError = ignore;
+
+  protected WebElement waitWhile(String prefix, String message, Condition condition, long timeoutMs) {
+    Throwable lastError = null;
+
+    WebElement element = getActualDelegate();
+    if (element != null) {
+      try {
+        if (!condition.apply(element)) {
+          return element;
         }
       }
-      else if (!condition.applyNull()) {
+      catch (WebDriverException elementNotFound) {
         if (Cleanup.of.isInvalidSelectorError(lastError)) {
           throw Cleanup.of.wrap(lastError);
         }
-        return;
+        throw elementNotFound;
       }
-      sleep(pollingInterval);
     }
-    while (currentTimeMillis() - startTime <= timeoutMs);
+    else if (condition.applyNull()) {
+      if (Cleanup.of.isInvalidSelectorError(lastError)) {
+        throw Cleanup.of.wrap(lastError);
+      }
+      return null;
+    }
 
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
-    }
-    else if (!exists(element)) {
-      throwElementNotFound(not(condition), timeoutMs);
+    if (!exists(element)) {
+      return throwElementNotFound(condition, timeoutMs);
     }
     else {
       throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
