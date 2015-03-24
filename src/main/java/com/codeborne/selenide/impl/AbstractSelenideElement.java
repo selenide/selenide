@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.JQuery;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -22,8 +21,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
@@ -365,19 +364,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if (text == null || text.isEmpty()) {
       element.clear();
-    }
-    else if (fastSetValue && JQuery.jQuery.isJQueryAvailable()) {
-      String jsCodeToTriggerEvent =
-          "arguments[0].value = arguments[1];" +
-          "var element = jQuery(arguments[0]);" +
-
-          "var e = jQuery.Event('keydown');  e.which = arguments[2]; element.trigger(e);" +
-          "var e = jQuery.Event('keypress'); e.which = arguments[2]; element.trigger(e);" +
-          "var e = jQuery.Event('keyup');    e.which = arguments[2]; element.trigger(e);";
-
-      char lastChar = text.charAt(text.length() - 1);
-      executeJavaScript(jsCodeToTriggerEvent, element, text, (int) lastChar);
-      fireChangeEvent(element);
     }
     else if (fastSetValue) {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
