@@ -5,7 +5,7 @@ defaultTasks 'clean', 'allTests', 'install', 'uploadArchives'
 
 buildscript {
   repositories { jcenter() }
-  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.2' }
+  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' }
 }
 
 signing {
@@ -17,8 +17,8 @@ uploadArchives {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-//            repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
               authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
             }
 

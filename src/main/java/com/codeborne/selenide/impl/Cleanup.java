@@ -5,7 +5,7 @@ import org.openqa.selenium.InvalidSelectorException;
 public class Cleanup {
   public static Cleanup of = new Cleanup();
 
-  public String webdriverExceptionMessage(Exception webDriverException) {
+  public String webdriverExceptionMessage(Throwable webDriverException) {
     return webdriverExceptionMessage(webDriverException.toString());
   }
 
@@ -30,7 +30,7 @@ public class Cleanup {
         error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
 
-  public InvalidSelectorException wrap(Exception error) {
+  public InvalidSelectorException wrap(Throwable error) {
     return (error instanceof InvalidSelectorException) ?
         (InvalidSelectorException) error :
         new InvalidSelectorException("Invalid selector", error);

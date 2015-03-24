@@ -10,7 +10,7 @@ public class ElementShould extends UIAssertionError {
   public ElementShould(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, Exception lastError, long timeoutMs) {
     this(searchCriteria, prefix, null, expectedCondition, element, lastError, timeoutMs);
   }
-  public ElementShould(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Exception lastError, long timeoutMs) {
+  public ElementShould(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Throwable lastError, long timeoutMs) {
     super("Element should " + prefix + expectedCondition + " {" + searchCriteria + "}" + (message != null ? " because " + message : "") +
         "\nElement: '" + Describe.describe(element) + '\'' +
         actualValue(expectedCondition, element), timeoutMs, lastError);

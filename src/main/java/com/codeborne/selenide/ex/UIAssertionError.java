@@ -24,7 +24,7 @@ public class UIAssertionError extends AssertionError {
     detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs);
   }
 
-  protected UIAssertionError(String message, long timeoutMs, Exception cause) {
+  protected UIAssertionError(String message, long timeoutMs, Throwable cause) {
     super(message);
     screenshot = formatScreenShotPath();
     jsErrors = getJavascriptErrors();

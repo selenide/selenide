@@ -11,12 +11,12 @@ public class ElementNotFound extends UIAssertionError {
     this(searchCriteria.toString(), expectedCondition, null, timeoutMs);
   }
 
-  public ElementNotFound(String searchCriteria, Condition expectedCondition, Exception lastError, long timeoutMs) {
+  public ElementNotFound(String searchCriteria, Condition expectedCondition, Throwable lastError, long timeoutMs) {
     super("Element not found {" + searchCriteria + '}' +
         "\nExpected: " + expectedCondition, timeoutMs, lastError);
   }
 
-  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Exception lastError, long timeoutMs) {
+  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Throwable lastError, long timeoutMs) {
     super("Element not found {" + collection.description() + '}' +
         "\nExpected: " + Arrays.toString(expectedTexts), timeoutMs, lastError);
   }
