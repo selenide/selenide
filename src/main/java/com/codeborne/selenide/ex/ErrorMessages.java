@@ -77,7 +77,7 @@ public class ErrorMessages {
     }
   }
 
-  public static String causedBy(Exception cause) {
+  public static String causedBy(Throwable cause) {
     if (cause == null) {
       return "";
     }
