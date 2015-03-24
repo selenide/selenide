@@ -5,10 +5,8 @@ import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
 import org.junit.rules.TestRule;
-import org.openqa.selenium.Dimension;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.openqa.selenium.net.PortProber.findFreePort;
@@ -44,7 +42,7 @@ public abstract class IntegrationTest {
   @Before
   public void setBaseUrl() {
     Configuration.baseUrl = "http://0.0.0.0:" + port;
-    System.setProperty("selenide.start-maximized", "false");
+    startMaximized = false;
   }
 
   @AfterClass
@@ -56,20 +54,11 @@ public abstract class IntegrationTest {
 
   protected void openFile(String fileName) {
     open("/" + fileName);
-    adjustBrowserWindowSize();
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    T page = open("/" + fileName, pageObjectClass);
-    adjustBrowserWindowSize();
-    return page;
+    return open("/" + fileName, pageObjectClass);
   }
-
-  private void adjustBrowserWindowSize() {
-    getWebDriver().manage().window().setSize(new Dimension(1024, 768));
-    System.out.println("Using browser " + browser + " with window size: " + getWebDriver().manage().window().getSize());
-  }
-
 
   private long defaultTimeout;
 
