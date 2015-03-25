@@ -61,7 +61,7 @@ public class WebElementSelector {
 
   protected Boolean sizzleLoaded() {
     try {
-      return executeJavaScript("return Sizzle() != null");
+      return executeJavaScript("return typeof Sizzle != 'undefined'");
     } catch (WebDriverException e) {
       return false;
     }
