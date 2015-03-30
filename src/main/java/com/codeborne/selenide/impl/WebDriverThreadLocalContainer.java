@@ -302,12 +302,12 @@ public class WebDriverThreadLocalContainer {
     }
   }
 
-  protected DesiredCapabilities createCommonCapabilities(){
-      DesiredCapabilities browserCapabilities = new DesiredCapabilities();
-      if (webProxySettings != null) {
-        browserCapabilities.setCapability(PROXY, webProxySettings);
-      }
-      return browserCapabilities;
+  protected DesiredCapabilities createCommonCapabilities() {
+    DesiredCapabilities browserCapabilities = new DesiredCapabilities();
+    if (webProxySettings != null) {
+      browserCapabilities.setCapability(PROXY, webProxySettings);
+    }
+    return browserCapabilities;
   }
   
   protected class WebdriversFinalCleanupThread extends Thread {
