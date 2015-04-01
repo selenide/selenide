@@ -29,13 +29,6 @@ public class AutoCompleteTest extends IntegrationTest {
     startTypingForAutocomplete();
   }
 
-  @Test
-  public void setValueTriggersKeyboardEvents_fast_mode() {
-    assumeFalse(isHtmlUnit() || isFirefox());
-    Configuration.fastSetValue = true;
-    startTypingForAutocomplete();
-  }
-
   private void startTypingForAutocomplete() {
     $("h4").shouldBe(empty);
 
