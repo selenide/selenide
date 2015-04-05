@@ -172,10 +172,31 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * Assert that element has given "value" attribute.
+   * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
+   * 
+   * <p>Sample: <code>$("input").shouldHave(value("12345 666 77"));</code></p>
+   *
+   * @param expectedValue expected value of "value" attribute
+   */
+  public static Condition value(final String expectedValue) {
+    return new Condition("value") {
+      @Override
+      public boolean apply(WebElement element) {
+        return Html.text.equalsCaseSensitive(getAttributeValue(element, "value"), expectedValue);
+      }
+      @Override
+      public String toString() {
+        return name + " value=" + expectedValue;
+      }
+    };
+  }
+  
+  /**
    * <p>Sample: <code>$("#input").shouldHave(value("John"));</code></p>
    * @param value expected value of input field
    */
-  public static Condition value(String value) {
+  public static Condition exactValue(String value) {
     return hasAttribute("value", value);
   }
 

@@ -189,6 +189,15 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void valueCheckIgnoresDifferenceInInvisibleCharacters() {
+    $(By.name("password")).setValue("john   \u00a0 Malkovich");
+    $(By.name("password")).shouldHave(value("john Malkovich"));
+
+    $("#text-area").setValue("john   \u00a0 \r\nMalkovich\n");
+    $("#text-area").shouldHave(value("john Malkovich"));
+  }
+
+  @Test
   public void userCanAppendValueToTextfield() {
     $(By.name("password")).val("Sherlyn");
     $(By.name("password")).append(" theron");
