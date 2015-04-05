@@ -1,5 +1,7 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Configuration;
+
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.getJavascriptErrors;
@@ -10,6 +12,10 @@ public class UIAssertionError extends AssertionError {
   private final List<String> jsErrors;
   private final String detailedMessage;
   
+  public UIAssertionError(Throwable cause) {
+    this("UI assertion error", Configuration.timeout, cause);
+  }
+
   protected UIAssertionError(String message) {
     super(message);
     screenshot = formatScreenShotPath();

@@ -3,9 +3,11 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +24,7 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getElement;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   private PageObject pageObject;
@@ -204,7 +206,21 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     }
   }
 
-  private void assertContains(AssertionError e, String... expectedTexts) {
+  @Test
+  public void clickingNonClickableElement() {
+    assumeTrue(WebDriverRunner.isChrome());
+    
+    try {
+      $("#non-clickable-element a").shouldBe(visible).click();
+      fail("Expected WebDriverException");
+    } catch (UIAssertionError e) {
+      assertContains(e, "Element is not clickable at point",
+          "Other element would receive the click",
+          "Screenshot: http://ci.org/build/reports/tests/1.jpg");
+    }
+  }
+
+  private void assertContains(UIAssertionError e, String... expectedTexts) {
     for (String expectedText : expectedTexts) {
       assertTrue("Text not found: " + expectedText + " in error message: " + e,
           e.toString().contains(expectedText));

@@ -76,7 +76,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     catch (Throwable error) {
       SelenideLogger.commitStep(log, error);
-      throw error;
+      throw new UIAssertionError(error);
     }
   }
 

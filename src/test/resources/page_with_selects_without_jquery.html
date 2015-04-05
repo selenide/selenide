@@ -5,6 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   </head>
   <body onload="initBlur(); setTimeout(fillTextArea, 1000);">
+    <div id="non-clickable-element" 
+         style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
+      <a href="http://google.com">non-clickable element</a>
+    </div>
+    <div id="clickable-element" 
+         style="z-index: -90; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
+      <a href="http://www.yandex.ru/">clickable element</a>
+    </div>
+    
     <h1>Page without JQuery</h1>
 
     <div class="container">
