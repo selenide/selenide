@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.*;
 public class SoftAssertTestNGTest {
   @BeforeMethod
   public void switchToSoftAssertionsMode() {
-    open("http://google.com");
+    open("http://google.com/ncr");
     Configuration.assertionMode = SOFT;
     Configuration.timeout = 0;
   }
