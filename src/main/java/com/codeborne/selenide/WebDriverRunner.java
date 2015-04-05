@@ -119,6 +119,14 @@ public class WebDriverRunner {
   public static void closeWebDriver() {
     webdriverContainer.closeWebDriver();
   }
+  
+  /**
+   * Is instance of Selenium WebDriver exist
+   * @return true if instance of Selenium WebDriver exist
+   */
+  public static boolean isDriverExist() {
+    return webdriverContainer.isDriverExist();
+  }
 
   /**
    * Is Selenide configured to use Firefox browser
