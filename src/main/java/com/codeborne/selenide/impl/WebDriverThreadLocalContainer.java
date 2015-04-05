@@ -81,6 +81,20 @@ public class WebDriverThreadLocalContainer {
     return THREAD_WEB_DRIVER.containsKey(currentThread().getId());
   }
   
+  /**
+   * Is instance of Selenium WebDriver exist
+   * @return true if instance of Selenium WebDriver exist
+   */
+  public boolean isDriverExist() {
+    WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
+    if (webDriver != null) {
+      if (isBrowserStillOpen(webDriver)) {
+        return true;
+      }
+    }	
+	return false;
+  }
+  
   public WebDriver getWebDriver() {
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
     return webDriver != null ? webDriver : setWebDriver(createDriver());
