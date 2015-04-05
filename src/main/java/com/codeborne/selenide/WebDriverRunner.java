@@ -121,11 +121,10 @@ public class WebDriverRunner {
   }
   
   /**
-   * Is instance of Selenium WebDriver exist
-   * @return true if instance of Selenium WebDriver exist
+   * @return true iff instance of Selenium WebDriver is started in current thread
    */
-  public static boolean isDriverExist() {
-    return webdriverContainer.isDriverExist();
+  public static boolean hasWebDriverStarted() {
+    return webdriverContainer.hasWebDriverStarted();
   }
 
   /**
