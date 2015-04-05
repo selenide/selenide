@@ -239,7 +239,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * 2) For other elements, check that text is empty
    * <p>Sample: <code>$("h2").shouldBe(empty)</code></p>
    */
-  public static final Condition empty = and("empty", value(""), exactText(""));
+  public static final Condition empty = and("empty", exactValue(""), exactText(""));
 
   /**
    * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>

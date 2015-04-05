@@ -76,7 +76,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     catch (WebDriverException error) {
       SelenideLogger.commitStep(log, error);
-      throw new UIAssertionError(error);
+      throw Cleanup.of.isInvalidSelectorError(error) ? error : new UIAssertionError(error);
     }
     catch (Throwable error) {
       SelenideLogger.commitStep(log, error);
