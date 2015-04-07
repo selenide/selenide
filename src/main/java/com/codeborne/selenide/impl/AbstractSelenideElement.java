@@ -236,6 +236,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       click();
       return null;
     }
+    else if ("clickViaJs".equals(method.getName())) {
+      clickViaJs();
+      return null;
+    }
     else if ("contextClick".equals(method.getName())) {
       contextClick();
       return null;
@@ -306,7 +310,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void setSelected(boolean selected) {
     WebElement element = waitForElement();
     if (element.isSelected() ^ selected) {
-      element.click();
+		if(!clickViaJs) {
+			element.click();
+		} else {
+			executeJavaScript("arguments[0].click()", element);
+		}
     }
   }
 
@@ -334,7 +342,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void click() {
-    waitForElement().click();
+	if(!clickViaJs) {
+		waitForElement().click();
+	} else {
+		clickViaJs();
+	}
+  }
+
+  protected void clickViaJs() {
+	executeJavaScript("arguments[0].click()", waitForElement()); 
   }
 
   protected void contextClick() {
@@ -353,7 +369,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void followLink() {
     WebElement link = waitForElement();
     String href = link.getAttribute("href");
-    link.click();
+	if(!clickViaJs) {
+		link.click();
+	} else {
+		executeJavaScript("arguments[0].click()", link);
+	}
 
     // JavaScript $.click() doesn't take effect for <a href>
     if (href != null) {
