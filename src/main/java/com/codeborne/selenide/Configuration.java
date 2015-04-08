@@ -49,6 +49,15 @@ public class Configuration {
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
+   * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
+   * Use clicking via JavaScript instead common element clicking.
+   * This solution may be helpfull for testing in Internet Explorer.
+   *
+   * Default value: false
+   */
+  public static boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.click-via-js", "false"));
+
+  /**
    * Does Selenide need to take screenshots on failing tests.
    *
    * Default value: true
