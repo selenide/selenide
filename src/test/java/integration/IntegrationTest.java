@@ -68,7 +68,8 @@ public abstract class IntegrationTest {
   }
 
   @After
-  public final void restoreTimeout() {
+  public final void restoreDefaultProperties() {
     timeout = defaultTimeout;
+    clickViaJs = false;
   }
 }
