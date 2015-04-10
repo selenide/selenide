@@ -12,6 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -454,8 +455,21 @@ public class Selenide {
    * Switch to window/tab by title
    */
   public static void switchToWindow(String title) {
+    switchToWindowExceptHandles(title);
+  }
+
+  /**
+   * Switch to window/tab by title except some windows handles
+   */
+  public static void switchToWindowExceptHandles(String title, String ... exceptHandles) {
     WebDriver driver = getWebDriver();
     Set<String> windowHandles = driver.getWindowHandles();
+	
+	windowHandles.removeAll(Arrays.asList(exceptHandles));
+	if (windowHandles.isEmpty()) {
+		return;
+	}
+		
     for (String windowHandle : windowHandles) {
       driver.switchTo().window(windowHandle);
       if (title.equals(driver.getTitle())) {
@@ -474,7 +488,23 @@ public class Selenide {
     List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
     driver.switchTo().window(windowHandles.get(index));
   }
-
+  
+  /**
+   * Switch to last child frame in sequence.
+   */
+  public static void switchToLastFrame(String ... framesSequence) {        	
+	if (framesSequence.length <= 0) {
+		return;
+	} 		 
+	
+    driver.switchTo().defaultContent();  
+	
+	for (String _frame : framesSequence)
+	{
+		getDriver().switchTo().frame(_frame);
+	}
+  }
+  
   /**
    * Get JavaScript errors that happened on this page.
    *
