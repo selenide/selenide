@@ -238,15 +238,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("contextClick".equals(method.getName())) {
       contextClick();
-      return null;
+      return proxy;
     }
     else if ("hover".equals(method.getName())) {
       hover();
-      return null;
+      return proxy;
     }
     else if ("dragAndDropTo".equals(method.getName())) {
       dragAndDropTo((String) args[0]);
-      return null;
+      return proxy;
     }
     else if ("getWrappedElement".equals(method.getName())) {
       return getActualDelegate();

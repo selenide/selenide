@@ -14,8 +14,7 @@ public class HoverTest extends IntegrationTest {
 
   @Test
   public void canEmulateHover() {
-    $("#hoverable").hover();
-    $("#hoverable").shouldHave(text("It's hover"));
+    $("#hoverable").hover().shouldHave(text("It's hover"));
 
     $("h1").hover();
     $("#hoverable").shouldHave(text("It's not hover"));

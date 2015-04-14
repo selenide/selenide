@@ -401,8 +401,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void userCanRightClickOnElement() {
     $(By.name("password")).contextClick();
 
-    $("#login").click();
-    $("#login").contextClick();
+    $("#login").contextClick().click();
 
     $(By.name("domain")).find("option").click();
     $(By.name("domain")).find("option").contextClick();
