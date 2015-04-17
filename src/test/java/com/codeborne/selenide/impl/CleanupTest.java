@@ -25,6 +25,8 @@ public class CleanupTest {
   @Test
   public void detectsIfWebdriverReportedInvalidSelectorError() {
     assertFalse(Cleanup.of.isInvalidSelectorError(null));
+    assertFalse(Cleanup.of.isInvalidSelectorError(new NullPointerException()));
+    assertFalse(Cleanup.of.isInvalidSelectorError(new IllegalArgumentException()));
     assertFalse(Cleanup.of.isInvalidSelectorError(new WebDriverException("Ups!")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new InvalidSelectorException("Wrong xpath")));
     assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("An invalid or illegal string was specified\n")));
