@@ -51,7 +51,7 @@ public class Configuration {
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
-   * This solution may be helpfull for testing in Internet Explorer.
+   * This solution may be helpful for testing in Internet Explorer.
    *
    * Default value: false
    */

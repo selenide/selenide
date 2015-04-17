@@ -167,7 +167,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * </code></p>
    *
    * @return Given element, useful for chaining:
-   * <code>$("#errorMessage").should(appear).shouldBe(enabled);</code>
+   * {@code $("#errorMessage").should(appear).shouldBe(enabled);}
    *
    * @see Configuration#timeout
    */
@@ -488,6 +488,19 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @return the original Selenium WebElement wrapped by this object
    */
   WebElement toWebElement();
+
+  /**
+   * Click the element
+   * 
+   * <p>
+   * By default it uses default Selenium method click.
+   * </p>
+   * <p>
+   * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined. 
+   * It may be helpful for testing in Internet Explorer where native click doesn't always work correctly.
+   * </p>
+   */
+  @Override void click();
 
   /**
    * Click with right mouse button on this element
