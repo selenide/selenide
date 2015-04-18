@@ -6,15 +6,15 @@
     <script type="text/javascript" src="jquery-1.8.3.js" language="JavaScript"></script>
     <script type="text/javascript" language="JavaScript">
       $(function() {
-        setTimeout(replaceElement, 1000);
+        setInterval(replaceElement, 100);
       });
       function replaceElement() {
         $('#dynamic-element').remove();
         setTimeout(createElement, 100);
       }
       function createElement() {
-        $('body').append($('<div id="dynamic-element">Hello, I am back again</div>'));
-        setTimeout(addCssClass, 100);
+        $('body').append($('<input id="dynamic-element" value="Hello, I am back again"/>'));
+        setTimeout(addCssClass, 30);
       }
       function addCssClass() {
         $('#dynamic-element').addClass('reloaded');
@@ -23,8 +23,6 @@
   </head>
   <body>
     <h1>Page with replacing elements</h1>
-    <div id="dynamic-element">
-      I will be replaced soon
-    </div>
+    <input id="dynamic-element" value="I will be replaced soon"/>
   </body>
 </html>

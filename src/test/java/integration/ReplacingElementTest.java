@@ -3,9 +3,11 @@ package integration;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.Assert.assertEquals;
 
 public class ReplacingElementTest extends IntegrationTest {
   @Before
@@ -15,7 +17,40 @@ public class ReplacingElementTest extends IntegrationTest {
 
   @Test
   public void shouldWaitsUntilElementIsReplaced() {
-    $("#dynamic-element").shouldHave(text("I will be replaced soon"));
-    $("#dynamic-element").shouldHave(text("I am back"), cssClass("reloaded"));
+    $("#dynamic-element").shouldHave(value("I will be replaced soon"));
+    $("#dynamic-element").shouldHave(value("I am back"), cssClass("reloaded"));
+    $("#dynamic-element").setValue("New value");
+  }
+
+  @Test
+  public void getInnerText() {
+    assertEquals("", $("#dynamic-element").innerText());
+  }
+
+  @Test
+  public void getInnerHtml() {
+    assertEquals("", $("#dynamic-element").innerHtml());
+  }
+
+  @Test
+  public void findAll() {
+    $("#dynamic-element").findAll(".child").shouldBe(empty);
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals("<input id=\"dynamic-element\" value=\"I am back\"></input>", $("#dynamic-element").toString());
+  }
+
+  @Test
+  public void testSetSelected() {
+    $("#dynamic-element").setSelected(true);
+  }
+
+  @Test
+  public void tryToCatchStaleElementException() {
+    for (int i = 0; i < 10; i++) {
+      $("#dynamic-element").shouldHave(value("I am back"), cssClass("reloaded")).setValue("New value from test");
+    }
   }
 }
