@@ -47,4 +47,10 @@ public class DynamicSelectsTest extends IntegrationTest {
     $("#language").selectOption("l'a \"English\"");
     $("h2").shouldHave(text("'eng'"));
   }
+
+  @Test
+  public void selectingOptionRebuildsAnotherSelect() {
+    $("#language").selectOption("l'a \"Русский\"");
+    $("#books").selectOption("книжко");
+  }
 }

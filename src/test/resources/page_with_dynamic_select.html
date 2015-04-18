@@ -10,10 +10,23 @@
       $("<option/>").val("rus").text("l'a " + '"Русский"').appendTo(select);
       $("<option/>").val('"est"').text("l'a " + '"Eesti"').appendTo(select);
     }
+    
+    function rebuildBooks() {
+      $('#books').remove();
+      if ($('#language').val() == 'rus') {
+        setTimeout(buildBooks, 100);
+      }
+    }
+    
+    function buildBooks() {
+      $('form').append('<select id="books"></select>');
+      $('form select').append('<option value="1">книжко</option>');
+    }
 
     $(function () {
       $('#language').on('change', function() {
         $('h2').text($('#language').val());
+        setTimeout(rebuildBooks, 200); // a little bit longer than average Selenium command like "shouldBe(visible)".
       });
       
       setTimeout(drawOptions, 1000);
@@ -30,6 +43,14 @@
     <label> Language:
       <select id="language">
         <option>-- Choose language--</option>
+      </select>
+    </label>
+
+    <br/>
+    <label> Book:
+      <select id="books">
+        <option selected="" value="0" title="All">All</option>
+        <option value="1">книжко</option>
       </select>
     </label>
   </form>
