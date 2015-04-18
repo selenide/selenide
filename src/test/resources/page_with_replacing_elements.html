@@ -5,16 +5,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript" src="jquery-1.8.3.js" language="JavaScript"></script>
     <script type="text/javascript" language="JavaScript">
+      var commandDuration = window.location.search.substring(1);
+
       $(function() {
-        setInterval(replaceElement, 100);
+        setInterval(replaceElement, commandDuration*3);
       });
       function replaceElement() {
         $('#dynamic-element').remove();
-        setTimeout(createElement, 100);
+        setTimeout(createElement, commandDuration * 1.5); // a little bit longer than average Selenium command like "shouldBe(visible)".
       }
       function createElement() {
         $('body').append($('<input id="dynamic-element" value="Hello, I am back again"/>'));
-        setTimeout(addCssClass, 30);
+        setTimeout(addCssClass, commandDuration * 1.5); 
       }
       function addCssClass() {
         $('#dynamic-element').addClass('reloaded');

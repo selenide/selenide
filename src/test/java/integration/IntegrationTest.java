@@ -7,6 +7,7 @@ import org.junit.*;
 import org.junit.rules.TestRule;
 
 import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.openqa.selenium.net.PortProber.findFreePort;
@@ -20,6 +21,8 @@ public abstract class IntegrationTest {
 
   private static int port;
   protected static LocalHttpServer server;
+  private long defaultTimeout;
+  protected static long averageSeleniumCommandLength = -1;
 
   @BeforeClass
   public static void runLocalHttpServer() throws Exception {
@@ -53,14 +56,14 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("/" + fileName);
+    measureSeleniumCommandDuration();
+    open("/" + fileName + "?" + averageSeleniumCommandLength);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    return open("/" + fileName, pageObjectClass);
+    measureSeleniumCommandDuration();
+    return open("/" + fileName + "?" + averageSeleniumCommandLength, pageObjectClass);
   }
-
-  private long defaultTimeout;
 
   @Before
   public final void rememberTimeout() {
@@ -71,5 +74,17 @@ public abstract class IntegrationTest {
   public final void restoreDefaultProperties() {
     timeout = defaultTimeout;
     clickViaJs = false;
+  }
+
+  private void measureSeleniumCommandDuration() {
+    if (averageSeleniumCommandLength < 0) {
+      open("/start_page.html");
+      long start = System.currentTimeMillis();
+      for (int i = 0; i < 5; i++) {
+        $("h1").isDisplayed();
+      }
+      averageSeleniumCommandLength = (System.currentTimeMillis() - start) / 5;
+      System.out.println("Average selenium command duration: " + averageSeleniumCommandLength + " ms.");
+    }
   }
 }
