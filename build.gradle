@@ -36,8 +36,8 @@ dependencies {
   }
   compile 'com.google.guava:guava:18.0'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.45.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.16', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.16'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.8.21'
   //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
