@@ -20,6 +20,8 @@ import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
+import static org.mockito.Matchers.contains;
+import static org.mockito.Matchers.startsWith;
 
 public class SelenideMethodsTest extends IntegrationTest {
 
@@ -265,13 +267,10 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void canUseHaveWrapper_errorMessage() {
-    try {
-      $("#username-blur-counter").should(have(text("wrong-text")));
-      fail("Expected ElementShould exception");
-    } catch (ElementShould expected) {
-      assertTrue("Actual error message: " + expected.getMessage(),
-          expected.getMessage().startsWith("Element should have text 'wrong-text' {#username-blur-counter}"));
-    }
+    thrown.expect(ElementShould.class);
+    thrown.expectMessage(startsWith("Element should have text 'wrong-text' {#username-blur-counter}"));
+    
+    $("#username-blur-counter").should(have(text("wrong-text")));
   }
 
   @Test
@@ -281,13 +280,10 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void canUseBeWrapper_errorMessage() {
-    try {
-      $("#username-blur-counter").should(be(disabled));
-      fail("Expected ElementShould exception");
-    } catch (ElementShould expected) {
-      assertTrue("Actual error message: " + expected.getMessage(),
-          expected.getMessage().startsWith("Element should be disabled {#username-blur-counter}"));
-    }
+    thrown.expect(ElementShould.class);
+    thrown.expectMessage(startsWith("Element should be disabled {#username-blur-counter}"));
+    
+    $("#username-blur-counter").should(be(disabled));
   }
   
   @Test
@@ -316,13 +312,19 @@ public class SelenideMethodsTest extends IntegrationTest {
     $(By.name("rememberMe")).shouldBe(selected);
   }
 
-  @Test(expected = ElementNotFound.class)
+  @Test
   public void shouldNotThrowsElementNotFound() {
+    thrown.expect(ElementNotFound.class);
+    thrown.expectMessage("Element not found {by text: Unexisting text}");
+    
     $(byText("Unexisting text")).shouldNotBe(hidden);
   }
 
-  @Test(expected = ElementShouldNot.class)
+  @Test 
   public void shouldNotThrowsElementMatches() {
+    thrown.expect(ElementShouldNot.class);
+    thrown.expectMessage("Element should not have css class 'firstname' {by text: Bob}");
+    
     $(byText("Bob")).shouldNotHave(cssClass("firstname"));
   }
 
@@ -434,39 +436,38 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
+  public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
-    try {
-      $("h1").should("test message", text("Some wrong test"));
-      fail("exception expected");
-    } catch (ElementShould expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
-    }
+    thrown.expect(ElementShould.class);
+    thrown.expectMessage(contains(becauseAdditionMessage));
 
-    try {
-      $("h1").shouldHave("test message", text("Some wrong test"));
-      fail("exception expected");
-    } catch (ElementShould expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
-    }
+    $("h1").should("test message", text("Some wrong test"));
+  }
 
-    try {
-      $("h1").shouldBe("test message", text("Some wrong test"));
-      fail("exception expected");
-    } catch (ElementShould expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
-    }
+  @Test
+  public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
+    timeout = 100L;
+    thrown.expect(ElementShould.class);
+    thrown.expectMessage(contains(becauseAdditionMessage));
+
+    $("h1").shouldHave("test message", text("Some wrong test"));
+  }
+
+  @Test
+  public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
+    timeout = 100L;
+    thrown.expect(ElementShould.class);
+    thrown.expectMessage(contains(becauseAdditionMessage));
+
+    $("h1").shouldBe("test message", text("Some wrong test"));
   }
 
   @Test
   public void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
     timeout = 100L;
-    try {
-      $("h1").shouldNot(additionalMessage, text("Page without JQuery"));
-      fail("exception expected");
-    } catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
-    }
+    thrown.expect(ElementShouldNot.class);
+    thrown.expectMessage(contains(becauseAdditionMessage));
+    $("h1").shouldNot(additionalMessage, text("Page without JQuery"));
 
     try {
       $("h1").shouldNotHave(additionalMessage, text("Page without JQuery"));

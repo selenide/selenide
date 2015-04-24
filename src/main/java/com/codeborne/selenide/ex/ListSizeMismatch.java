@@ -13,8 +13,9 @@ public class ListSizeMismatch extends UIAssertionError {
     super(": expected: " + expectedSize +
         ", actual: " + (actualElements == null ? 0 : actualElements.size()) +
         ", collection: " + collection.description() +
-        "\nElements: " + elementsToString(actualElements), timeoutMs, lastError
+        "\nElements: " + elementsToString(actualElements), lastError
     );
+    super.timeoutMs = timeoutMs;
   }
 
   @Override

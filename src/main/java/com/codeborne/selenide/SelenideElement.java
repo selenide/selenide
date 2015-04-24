@@ -489,6 +489,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    */
   WebElement toWebElement();
 
+  @Override
+  WebElement getWrappedElement();
+  
   /**
    * Click the element
    * 

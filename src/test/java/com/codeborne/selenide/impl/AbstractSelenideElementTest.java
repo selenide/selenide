@@ -76,7 +76,7 @@ public class AbstractSelenideElementTest {
     $("#firstName").shouldBe(visible);
   }
 
-  @Test(expected = ElementNotFound.class)
+  @Test(expected = ElementShould.class)
   public void elementFoundButInvisible() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenThrow(new WebDriverException("failed to call isDisplayed"));
@@ -103,7 +103,8 @@ public class AbstractSelenideElementTest {
   
   @Test
   public void elementNotFoundAsExpected2() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new WebDriverException("failed to call isDisplayed"));
+    when(webdriver.findElement(By.cssSelector("#firstName")))
+        .thenThrow(new WebDriverException("element is not found and this is expected"));
     $("#firstName").shouldNot(exist);
     $("#firstName").shouldNotBe(present);
     $("#firstName").should(disappear);
@@ -114,13 +115,15 @@ public class AbstractSelenideElementTest {
 
   @Test(expected = InvalidSelectorException.class)
   public void webdriverReportsInvalidXpath_using_should() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
+    when(webdriver.findElement(By.cssSelector("#firstName")))
+        .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     $("#firstName").should(disappear);
   }
 
   @Test(expected = InvalidSelectorException.class)
   public void webdriverReportsInvalidXpath_using_shouldNot() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
+    when(webdriver.findElement(By.cssSelector("#firstName")))
+        .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     $("#firstName").shouldNot(exist);
   }
 

@@ -514,7 +514,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * Typically you don't need to use it.
    */
   public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ')', !condition.nullIsAllowed) {
+    return new Condition("not " + condition.name, !condition.nullIsAllowed) {
       @Override
       public boolean apply(WebElement element) {
         return !condition.apply(element);

@@ -1,45 +1,31 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Configuration;
-
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 import static com.codeborne.selenide.ex.ErrorMessages.*;
 
 public class UIAssertionError extends AssertionError {
-  private final String screenshot;
-  private final List<String> jsErrors;
-  private final String detailedMessage;
-  
+  private String screenshot;
+  private List<String> jsErrors;
+  public long timeoutMs;
+
   public UIAssertionError(Throwable cause) {
-    this("UI assertion error", Configuration.timeout, cause);
+    this(cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
   }
 
   protected UIAssertionError(String message) {
     super(message);
-    screenshot = formatScreenShotPath();
-    jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors);
   }
-
-  protected UIAssertionError(String message, long timeoutMs) {
-    super(message);
-    screenshot = formatScreenShotPath();
-    jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs);
-  }
-
-  protected UIAssertionError(String message, long timeoutMs, Throwable cause) {
-    super(message);
-    screenshot = formatScreenShotPath();
-    jsErrors = getJavascriptErrors();
-    detailedMessage = message + screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(cause);
+  
+  protected UIAssertionError(String message, Throwable cause) {
+    super(message, cause);
   }
 
   @Override
   public String getMessage() {
-    return detailedMessage;
+    takeCurrentSnapshot();
+    return super.getMessage() + screenshot(screenshot) + jsErrors(jsErrors) + ErrorMessages.timeout(timeoutMs) + causedBy(getCause());
   }
 
   /**
@@ -48,6 +34,7 @@ public class UIAssertionError extends AssertionError {
    * @return empty string if screenshots are disabled  
    */
   public String getScreenshot() {
+    takeCurrentSnapshot();
     return screenshot;
   }
 
@@ -57,6 +44,14 @@ public class UIAssertionError extends AssertionError {
    * @return empty list if no errors found 
    */
   public List<String> getJsErrors() {
+    takeCurrentSnapshot();
     return jsErrors;
+  }
+
+  private void takeCurrentSnapshot() {
+    if (screenshot == null)
+      screenshot = formatScreenShotPath();
+    if (jsErrors == null)
+      jsErrors = getJavascriptErrors();
   }
 }

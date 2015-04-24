@@ -7,13 +7,14 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
 
 public class ElementShould extends UIAssertionError {
-  public ElementShould(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, Exception lastError, long timeoutMs) {
-    this(searchCriteria, prefix, null, expectedCondition, element, lastError, timeoutMs);
+  public ElementShould(String searchCriteria, String prefix, Condition expectedCondition, WebElement element, Exception lastError) {
+    this(searchCriteria, prefix, null, expectedCondition, element, lastError);
   }
-  public ElementShould(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Throwable lastError, long timeoutMs) {
+
+  public ElementShould(String searchCriteria, String prefix, String message, Condition expectedCondition, WebElement element, Throwable lastError) {
     super("Element should " + prefix + expectedCondition + " {" + searchCriteria + "}" + (message != null ? " because " + message : "") +
         "\nElement: '" + Describe.describe(element) + '\'' +
-        actualValue(expectedCondition, element), timeoutMs, lastError);
+        actualValue(expectedCondition, element), lastError);
   }
 
   @Override

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -18,11 +19,14 @@ public abstract class IntegrationTest {
 
   @Rule
   public TestRule prettyReportCreator = new PrettyReportCreator();
+  
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   private static int port;
   protected static LocalHttpServer server;
   private long defaultTimeout;
-  protected static long averageSeleniumCommandLength = -1;
+  protected static long averageSeleniumCommandDuration = -1;
 
   @BeforeClass
   public static void runLocalHttpServer() throws Exception {
@@ -57,12 +61,12 @@ public abstract class IntegrationTest {
 
   protected void openFile(String fileName) {
     measureSeleniumCommandDuration();
-    open("/" + fileName + "?" + averageSeleniumCommandLength);
+    open("/" + fileName + "?" + averageSeleniumCommandDuration);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
     measureSeleniumCommandDuration();
-    return open("/" + fileName + "?" + averageSeleniumCommandLength, pageObjectClass);
+    return open("/" + fileName + "?" + averageSeleniumCommandDuration, pageObjectClass);
   }
 
   @Before
@@ -77,14 +81,14 @@ public abstract class IntegrationTest {
   }
 
   private void measureSeleniumCommandDuration() {
-    if (averageSeleniumCommandLength < 0) {
+    if (averageSeleniumCommandDuration < 0) {
       open("/start_page.html");
       long start = System.currentTimeMillis();
       for (int i = 0; i < 5; i++) {
         $("h1").isDisplayed();
       }
-      averageSeleniumCommandLength = (System.currentTimeMillis() - start) / 5;
-      System.out.println("Average selenium command duration: " + averageSeleniumCommandLength + " ms.");
+      averageSeleniumCommandDuration = Math.max((System.currentTimeMillis() - start) / 5, 100L);
+      System.out.println("Average selenium command duration: " + averageSeleniumCommandDuration + " ms.");
     }
   }
 }

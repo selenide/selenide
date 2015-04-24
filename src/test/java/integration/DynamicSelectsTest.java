@@ -15,7 +15,7 @@ public class DynamicSelectsTest extends IntegrationTest {
   public void openTestPage() {
     openFile("page_with_dynamic_select.html");
   }
-
+  
   @Test
   public void waitsUntilOptionWithTextAppears() {
     $("#language").selectOption("l'a \"English\"");

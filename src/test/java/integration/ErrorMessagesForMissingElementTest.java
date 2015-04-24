@@ -156,7 +156,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     try {
       $(pageObject.categoryDropdown).selectOption("SomeOption");
     } catch (ElementNotFound e) {
-      assertContains(e, "Element not found {By.id: invalid_id}", "Expected: exist");
+      assertContains(e, "Element not found {By.id: invalid_id}", "Expected: visible");
     }
   }
 
@@ -180,7 +180,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   }
 
   @Test
-  public void existingElementShouldNotBePresent() {
+  public void existingElementShouldNotExist() {
     try {
       $("h2").shouldNot(exist);
       fail("Expected ElementFound");
@@ -199,7 +199,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
       assertStartsWith("Element not found {h14}\n" +
-          "Expected: not(hidden)\n" +
+          "Expected: not hidden\n" +
           "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
           "Caused by: NoSuchElementException:", e);

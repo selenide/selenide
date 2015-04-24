@@ -8,14 +8,14 @@
       var commandDuration = window.location.search.substring(1);
 
       $(function() {
-        setInterval(replaceElement, commandDuration*3);
+        setInterval(replaceElement, commandDuration*5);
       });
       function replaceElement() {
         $('#dynamic-element').remove();
-        setTimeout(createElement, commandDuration * 1.5); // a little bit longer than average Selenium command like "shouldBe(visible)".
+        setTimeout(createElement, commandDuration * 1.5); // a little bit longer than average Selenium command like "isDisplayed()".
       }
       function createElement() {
-        $('body').append($('<input id="dynamic-element" value="Hello, I am back again"/>'));
+        $('body').append($('<input id="dynamic-element" value="Hello, I am back"/>'));
         setTimeout(addCssClass, commandDuration * 1.5); 
       }
       function addCssClass() {
