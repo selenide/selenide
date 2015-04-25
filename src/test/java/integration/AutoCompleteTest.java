@@ -8,14 +8,17 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static org.junit.Assume.assumeFalse;
 
 public class AutoCompleteTest extends IntegrationTest {
   @Before
   public void openTestPageWithAutocomplete() {
     openFile("autocomplete.html");
+    $("h4").shouldBe(empty);
+  }
+
+  @Before
+  public void setUp() {
+    Configuration.fastSetValue = false;
   }
 
   @After
@@ -25,14 +28,17 @@ public class AutoCompleteTest extends IntegrationTest {
 
   @Test
   public void setValueTriggersKeyboardEvents() {
-    assumeFalse(isHtmlUnit() || isFirefox());
+    $("#tags").setValue("javasc");
+    startTypingForAutocomplete();
+  }
+
+  @Test
+  public void sendKeysTriggersKeyboardEvents() {
+    $("#tags").sendKeys("javasc");
     startTypingForAutocomplete();
   }
 
   private void startTypingForAutocomplete() {
-    $("h4").shouldBe(empty);
-
-    $("#tags").val("javasc");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#anyButton").click();
 
