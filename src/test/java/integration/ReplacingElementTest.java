@@ -7,7 +7,9 @@ import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeFalse;
 
 public class ReplacingElementTest extends IntegrationTest {
   @Before
@@ -45,6 +47,7 @@ public class ReplacingElementTest extends IntegrationTest {
 
   @Test
   public void testSetSelected() {
+    assumeFalse(isPhantomjs());
     $("#dynamic-element").setSelected(true);
   }
 
