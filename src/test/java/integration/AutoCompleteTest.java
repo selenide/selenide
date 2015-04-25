@@ -1,10 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -28,17 +30,24 @@ public class AutoCompleteTest extends IntegrationTest {
 
   @Test
   public void setValueTriggersKeyboardEvents() {
-    $("#tags").setValue("javasc");
-    startTypingForAutocomplete();
+    waitUntilInputIsInitialized().setValue("javasc");
+    verifyAutocomplete();
   }
 
   @Test
   public void sendKeysTriggersKeyboardEvents() {
-    $("#tags").sendKeys("javasc");
-    startTypingForAutocomplete();
+    waitUntilInputIsInitialized().sendKeys("javasc");
+    verifyAutocomplete();
   }
 
-  private void startTypingForAutocomplete() {
+  private SelenideElement waitUntilInputIsInitialized() {
+    return $("#tags").shouldHave(cssClass("ui-autocomplete-input"));
+  }
+
+  private void verifyAutocomplete() {
+    System.out.println("=================");
+    System.out.println($("#tags"));
+    System.out.println("=================");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#anyButton").click();
 

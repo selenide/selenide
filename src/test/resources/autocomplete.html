@@ -13,8 +13,6 @@
       }
       
       $(function() {
-        $('#tags').keyup(log).keydown(log).keypress(log);
-        
         var availableTags = [
           "ActionScript",
           "AppleScript",
@@ -39,14 +37,17 @@
           "Scala",
           "Scheme"
         ];
-        $('#tags').autocomplete({
-          autoFocus: true,
-          source: availableTags,
-          change: function( event, ui ) {
-//            $('#log').append('<li>' + $(event.currentTarget).val() + '</li>');
-            $('h4').text("This is " + $(event.currentTarget).val() + "!");
-          }
-        });
+        $('#tags')
+            .keyup(log)
+            .keydown(log)
+            .keypress(log)
+            .autocomplete({
+              autoFocus: true,
+              source: availableTags,
+              change: function( event, ui ) {
+                $('h4').text("This is " + $(event.currentTarget).val() + "!");
+              }
+            });
       });
     </script>
     <style type="text/css" media="screen">
