@@ -6,9 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.empty;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
 public class AutoCompleteTest extends IntegrationTest {
@@ -41,7 +39,10 @@ public class AutoCompleteTest extends IntegrationTest {
   }
 
   private SelenideElement waitUntilInputIsInitialized() {
-    return $("#tags").shouldHave(cssClass("ui-autocomplete-input"));
+    System.out.println("-----------------");
+    System.out.println($("#tags"));
+    System.out.println("-----------------");
+    return $("#tags").shouldHave(attribute("autocomplete", "off"), cssClass("ui-autocomplete-input"));
   }
 
   private void verifyAutocomplete() {
