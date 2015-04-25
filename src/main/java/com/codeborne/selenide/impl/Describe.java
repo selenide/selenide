@@ -41,6 +41,8 @@ public class Describe {
     }
     if (!sortedByName.containsKey("value"))
       attr("value", element.getAttribute("value"));
+    if (!sortedByName.containsKey("type"))
+      attr("type", element.getAttribute("type"));
     return this;
   }
 

@@ -72,7 +72,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
 
     if (isHtmlUnit()) {
-      assertEquals("<input name=\"rememberMe\" value=\"on\" type=\"checkbox\" value=\"on\"></input>", 
+      assertEquals("<input name=\"rememberMe\" value=\"on\" type=\"checkbox\"></input>", 
           $(By.name("rememberMe")).toString());
       
       assertEquals("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>",
