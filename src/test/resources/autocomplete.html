@@ -45,7 +45,7 @@
             .autocomplete({
               autoFocus: true,
               source: availableTags,
-              change: function( event, ui ) {
+              change: function(event) {
                 $('h4').text("This is " + $(event.currentTarget).val() + "!");
               }
             });
