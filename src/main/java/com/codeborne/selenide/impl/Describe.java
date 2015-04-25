@@ -39,6 +39,8 @@ public class Describe {
     for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
       attr(entry.getKey(), entry.getValue());
     }
+    if (!sortedByName.containsKey("value"))
+      attr("value", element.getAttribute("value"));
     return this;
   }
 
