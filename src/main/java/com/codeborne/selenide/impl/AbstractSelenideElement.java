@@ -25,6 +25,8 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
@@ -233,11 +235,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return uploadFromClasspath((SelenideElement) proxy, (String[]) args[0]);
     }
     else if ("selectOption".equals(method.getName())) {
-      selectOptionByText(findAndAssertElementIsVisible(), (String) args[0]);
+      selectOptionByText((String) args[0]);
       return null;
     }
     else if ("selectOptionByValue".equals(method.getName())) {
-      selectOptionByValue(findAndAssertElementIsVisible(), (String) args[0]);
+      selectOptionByValue((String) args[0]);
       return null;
     }
     else if ("getSelectedOption".equals(method.getName())) {
@@ -376,7 +378,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void contextClick() {
-    actions().contextClick(getDelegate()).perform();
+    actions().contextClick(findAndAssertElementIsVisible()).perform();
   }
 
   protected void hover() {
@@ -400,9 +402,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    WebElement element = getDelegate();
+    WebElement element = findAndAssertElementIsVisible();
     if ("select".equalsIgnoreCase(element.getTagName())) {
-      selectOptionByValue(element, text);
+      selectOptionByValue(text);
     }
     else if (text == null || text.isEmpty()) {
       element.clear();
@@ -419,10 +421,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void fireChangeEvent(WebElement element) {
-    try {
-      fireEvent(element, "change");
-    } catch (StaleElementReferenceException ignore) {
-    }
+    fireEvent(element, "change");
   }
 
   protected String getValue() {
@@ -436,17 +435,20 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void fireEvent(WebElement element, final String event) {
-    final String jsCodeToTriggerEvent
-        = "if (document.createEventObject) {\n" +  // IE
-        "  var evt = document.createEventObject();\n" +
-        "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
-        "}\n" +
-        "else {\n" +
-        "  var evt = document.createEvent('HTMLEvents');\n " +
-        "  evt.initEvent(arguments[1], true, true );\n " +
-        "  return !arguments[0].dispatchEvent(evt);\n" +
-        '}';
-    executeJavaScript(jsCodeToTriggerEvent, element, event);
+    try {
+      final String jsCodeToTriggerEvent
+          = "if (document.createEventObject) {\n" +  // IE
+          "  var evt = document.createEventObject();\n" +
+          "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
+          "}\n" +
+          "else {\n" +
+          "  var evt = document.createEvent('HTMLEvents');\n " +
+          "  evt.initEvent(arguments[1], true, true );\n " +
+          "  return !arguments[0].dispatchEvent(evt);\n" +
+          '}';
+      executeJavaScript(jsCodeToTriggerEvent, element, event);
+    } catch (StaleElementReferenceException ignore) {
+    }
   }
 
   protected Object should(Object proxy, String prefix, String message, List<Condition> conditions) {
@@ -563,11 +565,19 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return new File(canonicalPath);
   }
 
-  protected void selectOptionByText(WebElement selectField, String optionText) {
+  protected void selectOptionByText(String optionText) {
+    WebElement selectField = getDelegate();
+    $(selectField).should(exist).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
+  protected void selectOptionByValue(String optionValue) {
+    WebElement selectField = getDelegate();
+    selectOptionByValue(selectField, optionValue);
+  }
+
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
+    $(selectField).should(exist).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 
