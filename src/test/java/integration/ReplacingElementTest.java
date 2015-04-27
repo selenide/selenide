@@ -20,7 +20,7 @@ public class ReplacingElementTest extends IntegrationTest {
   @Test
   public void shouldWaitsUntilElementIsReplaced() {
     $("#dynamic-element").shouldHave(value("I will be replaced soon"));
-    $("#dynamic-element").shouldHave(value("I am back"), cssClass("reloaded"));
+    $("#dynamic-element").shouldHave(value("Hello, I am back"), cssClass("reloaded"));
     $("#dynamic-element").setValue("New value");
   }
 
