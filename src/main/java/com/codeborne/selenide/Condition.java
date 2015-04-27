@@ -187,7 +187,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return name + " value=" + expectedValue;
+        return name + " '" + expectedValue + "'";
       }
     };
   }
