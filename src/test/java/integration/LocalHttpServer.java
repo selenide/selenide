@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -50,7 +51,10 @@ public class LocalHttpServer {
 
   private void logRequest(HttpServletRequest request, Object response, long startTime) {
     String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
-    System.out.println(time + " " + request.getRequestURL() + " -> " + response + " " + (System.nanoTime() - startTime) / 1000000 + " ms");
+    System.out.println(time + " " + 
+        on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) + 
+        " -> " + response + 
+        " " + (System.nanoTime() - startTime) / 1000000 + " ms");
   }
 
   private Set<String> sessions = new ConcurrentSkipListSet<String>();
@@ -77,7 +81,7 @@ public class LocalHttpServer {
       response.setContentLength(fileContent.length);
 
       printResponse(response, fileContent);
-      logRequest(request, "OK", start);
+      logRequest(request, "ok", start);
     }
     
     private void generateSessionId(HttpServletResponse http) {
@@ -109,7 +113,7 @@ public class LocalHttpServer {
       response.setContentLength(fileContent.length);
       response.setHeader("content-disposition", "attachment; filename=" + request.getPathInfo());
       printResponse(response, fileContent);
-      logRequest(request, "OK", start);
+      logRequest(request, "ok", start);
     }
   }
 
