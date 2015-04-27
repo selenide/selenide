@@ -92,7 +92,7 @@ test {
 }
 
 task ie(type: Test) {
-  systemProperties['browser'] = 'ie'
+  systemProperties['selenide.browser'] = 'ie'
   systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
   systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
@@ -102,26 +102,26 @@ task ie(type: Test) {
 }
 
 task chrome(type: Test) {
-  systemProperties['browser'] = 'chrome'
+  systemProperties['selenide.browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task htmlunit(type: Test) {
-  systemProperties['browser'] = 'htmlunit'
+  systemProperties['selenide.browser'] = 'htmlunit'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task phantomjs(type: Test) {
-  systemProperties['browser'] = 'phantomjs'
+  systemProperties['selenide.browser'] = 'phantomjs'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task firefox(type: Test) {
-  systemProperties['browser'] = 'firefox'
+  systemProperties['selenide.browser'] = 'firefox'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
