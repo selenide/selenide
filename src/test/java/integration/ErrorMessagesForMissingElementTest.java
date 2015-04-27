@@ -156,7 +156,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     try {
       $(pageObject.categoryDropdown).selectOption("SomeOption");
     } catch (ElementNotFound e) {
-      assertContains(e, "Element not found {By.id: invalid_id}", "Expected: visible");
+      assertContains(e, "Element not found {By.id: invalid_id}", "Expected: exist");
     }
   }
 
