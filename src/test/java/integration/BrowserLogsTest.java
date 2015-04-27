@@ -58,13 +58,9 @@ public class BrowserLogsTest extends IntegrationTest {
     $(byText("Generate JS Error")).click();
     List<String> webDriverLogs = getWebDriverLogs(BROWSER, Level.ALL);
 
-    for (String logEntry : webDriverLogs) {
-      System.out.println(logEntry);
-    }
-
     assumeFalse(isHtmlUnit() || isPhantomjs() || isFirefox() || isSafari());
 
-    assertEquals(1, webDriverLogs.size());
+    assertEquals("Expected 1 log, but received: " + webDriverLogs, 1, webDriverLogs.size());
 
     String logEntry = webDriverLogs.get(0);
     assertTrue(logEntry, logEntry.contains("ReferenceError"));
