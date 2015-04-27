@@ -24,6 +24,7 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
+    Map<String, String> sortedByName = null;
     Map<String, String> map = executeJavaScript(
         "var s = {};" +
             "var attrs = arguments[0].attributes;" +
@@ -35,14 +36,17 @@ public class Describe {
             "}" +
             "return s;", element);
 
-    Map<String, String> sortedByName = new TreeMap<String, String>(map);
-    for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
-      attr(entry.getKey(), entry.getValue());
+    try {
+      sortedByName = new TreeMap<String, String>(map);
+      for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
+        attr(entry.getKey(), entry.getValue());
+      }
+      if (!sortedByName.containsKey("value"))
+        attr("value", element.getAttribute("value"));
+      if (!sortedByName.containsKey("type"))
+        attr("type", element.getAttribute("type"));
+    } catch (NullPointerException nullPointerException) {
     }
-    if (!sortedByName.containsKey("value"))
-      attr("value", element.getAttribute("value"));
-    if (!sortedByName.containsKey("type"))
-      attr("type", element.getAttribute("type"));
     return this;
   }
 
