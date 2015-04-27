@@ -8,7 +8,6 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
@@ -18,15 +17,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
@@ -571,7 +569,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void selectOptionByText(String optionText) {
     WebElement selectField = getDelegate();
-    $(selectField).should(exist).find(byText(optionText)).shouldBe(visible);
     new Select(selectField).selectByVisibleText(optionText);
   }
 
@@ -581,7 +578,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    $(selectField).should(exist).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 
