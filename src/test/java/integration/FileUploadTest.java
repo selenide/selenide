@@ -54,8 +54,8 @@ public class FileUploadTest extends IntegrationTest {
   public void userCanUploadMultipleFilesFromClasspath() {
     $("#multi-file-upload-form .file").uploadFromClasspath(
         "hello_world.txt", 
-        "jquery-1.8.3.js", 
-        "jquery-ui-1.10.4.css",
+        "jquery.min.js", 
+        "jquery-ui.min.css",
         "long_ajax_request.html",
         "page_with_alerts.html",
         "page_with_dynamic_select.html",
@@ -67,21 +67,21 @@ public class FileUploadTest extends IntegrationTest {
     assertEquals(9, server.uploadedFiles.size());
     
     assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
-    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery-1.8.3.js"));
-    assertTrue(server.uploadedFiles.get(2).getName().endsWith("jquery-ui-1.10.4.css"));
+    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery.min.js"));
+    assertTrue(server.uploadedFiles.get(2).getName().endsWith("jquery-ui.min.css"));
     assertTrue(server.uploadedFiles.get(3).getName().endsWith("long_ajax_request.html"));
     assertTrue(server.uploadedFiles.get(8).getName().endsWith("selenide-logo-big.png"));
     
     assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
-    assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library v1.8.3"));
-    assertTrue(server.uploadedFiles.get(2).getString().contains("jQuery UI - v1.10.4 - 2014-01-17"));
+    assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library"));
+    assertTrue(server.uploadedFiles.get(2).getString().contains("jQuery UI"));
   }
 
   @Test
   public void userCanUploadMultipleFiles() {
     File file = $("#multi-file-upload-form .file").uploadFile(
         new File("src/test/java/../resources/hello_world.txt"), 
-        new File("src/test/resources/jquery-1.8.3.js"));
+        new File("src/test/resources/jquery.min.js"));
     
     $("#multi-file-upload-form .submit").click();
 
@@ -91,7 +91,7 @@ public class FileUploadTest extends IntegrationTest {
     assertEquals(2, server.uploadedFiles.size());
 
     assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
-    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery-1.8.3.js"));
+    assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery.min.js"));
 
     assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
     assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library v1.8.3"));
