@@ -411,7 +411,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if (fastSetValue) {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
-      fireChangeEvent(element);
+      fireEvent(element, "keydown", "keypress", "keyup", "change");
     }
     else {
       element.clear();
@@ -434,17 +434,21 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     fireChangeEvent(element);
   }
 
-  protected void fireEvent(WebElement element, final String event) {
+  protected void fireEvent(WebElement element, final String... event) {
     try {
-      final String jsCodeToTriggerEvent
-          = "if (document.createEventObject) {\n" +  // IE
-          "  var evt = document.createEventObject();\n" +
-          "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
-          "}\n" +
-          "else {\n" +
-          "  var evt = document.createEvent('HTMLEvents');\n " +
-          "  evt.initEvent(arguments[1], true, true );\n " +
-          "  return !arguments[0].dispatchEvent(evt);\n" +
+      final String jsCodeToTriggerEvent =
+          "var webElement = arguments[0];\n" +
+          "var eventNames = arguments[1];\n" +
+          "for (var i = 0; i < eventNames.length; i++) {" +
+          "  if (document.createEventObject) {\n" +  // IE
+          "    var evt = document.createEventObject();\n" +
+          "    webElement.fireEvent('on' + eventNames[i], evt);\n" + 
+          "  }\n" +
+          "  else {\n" +
+          "    var evt = document.createEvent('HTMLEvents');\n " +
+          "    evt.initEvent(eventNames[i], true, true );\n " +
+          "    webElement.dispatchEvent(evt);\n" +
+          "  }\n" +
           '}';
       executeJavaScript(jsCodeToTriggerEvent, element, event);
     } catch (StaleElementReferenceException ignore) {
