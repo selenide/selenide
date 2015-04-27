@@ -7,6 +7,7 @@ import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeFalse;
@@ -20,6 +21,8 @@ public class ReplacingElementTest extends IntegrationTest {
   @Test
   public void shouldWaitsUntilElementIsReplaced() {
     $("#dynamic-element").shouldHave(value("I will be replaced soon"));
+    
+    executeJavaScript("replaceElement()");
     $("#dynamic-element").shouldHave(value("Hello, I am back"), cssClass("reloaded"));
     $("#dynamic-element").setValue("New value");
   }
@@ -53,6 +56,7 @@ public class ReplacingElementTest extends IntegrationTest {
 
   @Test
   public void tryToCatchStaleElementException() {
+    executeJavaScript("startRegularReplacement()");
     for (int i = 0; i < 10; i++) {
       $("#dynamic-element").shouldHave(value("I am back"), cssClass("reloaded")).setValue("New value from test");
     }

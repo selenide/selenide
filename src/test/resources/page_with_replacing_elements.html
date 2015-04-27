@@ -7,9 +7,10 @@
     <script type="text/javascript" language="JavaScript">
       var commandDuration = window.location.search.substring(1);
 
-      $(function() {
+      function startRegularReplacement() {
         setInterval(replaceElement, commandDuration*7);
-      });
+      }
+      
       function replaceElement() {
         $('#dynamic-element').remove();
         setTimeout(createElement, commandDuration * 1.5); // a little bit longer than average Selenium command like "isDisplayed()".
