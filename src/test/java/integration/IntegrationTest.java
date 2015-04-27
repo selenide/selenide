@@ -87,8 +87,9 @@ public abstract class IntegrationTest {
       for (int i = 0; i < 5; i++) {
         $("h1").isDisplayed();
       }
-      averageSeleniumCommandDuration = Math.max((System.currentTimeMillis() - start) / 5, 100L);
-      System.out.println("Average selenium command duration: " + averageSeleniumCommandDuration + " ms.");
+      averageSeleniumCommandDuration = (System.currentTimeMillis() - start) / 5;
+      System.out.println("Average selenium command duration for " + browser + ": " + 
+          averageSeleniumCommandDuration + " ms.");
     }
   }
 }
