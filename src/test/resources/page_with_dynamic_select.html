@@ -16,7 +16,7 @@
     function rebuildBooks() {
       $('#books').remove();
       if ($('#language').val() == 'rus') {
-        setTimeout(buildBooks, 100);
+        setTimeout(buildBooks, commandDuration*1.5);
       }
     }
     
@@ -28,10 +28,10 @@
     $(function () {
       $('#language').on('change', function() {
         $('h2').text($('#language').val());
-        setTimeout(rebuildBooks, commandDuration*1.5); // a little bit longer than average Selenium command like "shouldBe(visible)".
+        setTimeout(rebuildBooks, commandDuration*1.5); // a little bit longer than average Selenium command like "isDisplayed()".
       });
       
-      setTimeout(drawOptions, 1000);
+      setTimeout(drawOptions, commandDuration*3);
     });
   </script>
 </head>
