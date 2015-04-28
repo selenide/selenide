@@ -135,7 +135,7 @@ tasks.withType(Test).all { testTask ->
   testTask.maxParallelForks = 2
   testTask.jacoco {
     enabled = true
-    include 'com/codeborne/selenide/**/*'
+    includes = ['com/codeborne/selenide/**/*']
   }
   testTask.outputs.upToDateWhen { false }
 }
