@@ -33,8 +33,10 @@ dependencies {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     exclude group: 'org.webbitserver', module: 'webbit'
+    exclude group: 'commons-codec', module: 'commons-codec'
   }
   compile 'com.google.guava:guava:18.0'
+  runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.45.0', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
