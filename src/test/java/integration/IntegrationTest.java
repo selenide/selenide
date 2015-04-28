@@ -6,11 +6,13 @@ import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static java.lang.Math.max;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public abstract class IntegrationTest {
@@ -84,11 +86,14 @@ public abstract class IntegrationTest {
     if (averageSeleniumCommandDuration < 0) {
       open("/start_page.html");
       long start = System.currentTimeMillis();
-      for (int i = 0; i < 5; i++) {
-        $("h1").isDisplayed();
-      }
-      averageSeleniumCommandDuration = (System.currentTimeMillis() - start) / 5;
-      System.out.println("Average selenium command duration for " + browser + ": " + 
+      $("h1").isDisplayed();
+      $("h1").isSelected();
+      $("h1").isEnabled();
+      $("body").findElement(By.tagName("h1"));
+      $("h1").getText();
+      
+      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 5);
+      System.out.println("Average selenium command duration for " + browser + ": " +
           averageSeleniumCommandDuration + " ms.");
     }
   }
