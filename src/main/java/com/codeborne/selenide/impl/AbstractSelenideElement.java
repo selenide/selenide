@@ -267,6 +267,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       contextClick();
       return proxy;
     }
+    else if ("doubleClick".equals(method.getName())) {
+      doubleClick();
+      return proxy;
+    }
     else if ("hover".equals(method.getName())) {
       hover();
       return proxy;
@@ -377,6 +381,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected void contextClick() {
     actions().contextClick(findAndAssertElementIsVisible()).perform();
+  }
+
+  protected void doubleClick() {
+    actions().doubleClick(findAndAssertElementIsVisible()).perform();
   }
 
   protected void hover() {

@@ -512,6 +512,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement contextClick();
 
   /**
+   * Double click the element
+   * @return this element
+   */
+  SelenideElement doubleClick();
+
+  /**
    * Emulate "mouseOver" event. In other words, move mouse cursor over this element (without clicking it).
    * @return this element
    */
