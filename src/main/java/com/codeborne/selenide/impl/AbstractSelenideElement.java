@@ -138,15 +138,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
     }
     else if ("attr".equals(method.getName())) {
-    	return getDelegate().getAttribute((String) args[0]);
+      return getDelegate().getAttribute((String) args[0]);
     }
     else if ("name".equals(method.getName())) {
-    	return getDelegate().getAttribute("name");
+      return getDelegate().getAttribute("name");
     }
     else if ("data".equals(method.getName())) {
-    	return getDelegate().getAttribute("data-" + args[0]);
+      return getDelegate().getAttribute("data-" + args[0]);
     }
-   	else if ("append".equals(method.getName())) {
+    else if ("append".equals(method.getName())) {
       append((String) args[0]);
       return proxy;
     }
