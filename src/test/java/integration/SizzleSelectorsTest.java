@@ -42,7 +42,7 @@ public class SizzleSelectorsTest extends IntegrationTest {
     $("input[name!='username'][name!='password']").shouldHave(attribute("name", "rememberMe"));
     $(":header").shouldHave(text("Page with JQuery"));
     $(":header", 1).shouldHave(text("Now typing"));
-    $(":contains('not hover')").shouldHave(text("It's not hover"));
+    $("div:contains('not hover')").shouldHave(text("It's not hover"));
     assertEquals("title", $(":parent:not('html'):not('head')").getTagName());
   }
 }
