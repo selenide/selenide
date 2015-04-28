@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
 
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
@@ -65,10 +65,10 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   @Override
   protected ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (parent instanceof SelenideElement) {
-      ((SelenideElement) parent).shouldBe(visible);
+      ((SelenideElement) parent).should(exist);
     }
     else if (parent instanceof WebElement) {
-      $((WebElement) parent).shouldBe(visible);
+      $((WebElement) parent).should(exist);
     }
     
     return super.createElementNotFoundError(condition, lastError);

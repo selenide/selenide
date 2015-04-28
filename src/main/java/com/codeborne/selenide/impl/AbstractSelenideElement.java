@@ -647,9 +647,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected boolean exists(WebElement element) {
     try {
       if (element == null) return false;
-      element.isDisplayed();
+      element.isSelected();
       return true;
     } catch (WebDriverException elementNotFound) {
+      return false;
+    } catch (IndexOutOfBoundsException elementNotFound) {
       return false;
     }
   }
