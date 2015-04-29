@@ -75,6 +75,21 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.18 (Released 29.04.2015)
+Behaviour changes:
+* #158 #167 do looping/waiting on a more upper-level, so that we could retry in case of more errors, e.g. StaleElementException thrown from Selenium
+* take screenshot in case of any other exception (not only UIAssertionError)
+* #145 $.shouldHave(value()) ignores difference in invisible characters; added check "exactValue" to save the previous behaviour.
+* #174 user can click using JavaScript using property `-Dselenide.click-via-js=true` (thanks to @dimand58 for pull request)
+* #177 Added method $.doubleClick()
+
+Bugfixes:
+* #176 Methods hover(), contextClick(), dragAndDropTo() can now be chained
+* #168 fixed Sizzle selectors in pages without jQuery (thanks to @Gert for pull request)
+* added method `WebDriverRunner.hasWebDriverStarted()` (thanks to @dimand58 for pull request)
+* #165 Now method `$.setValue()` triggers the following events in `fastSetValue` mode: "keydown", "keypress", "input", "keyup", "change.
+* Selenide depends on the newest version commons-codec 1.10 instead of old version commons-codec 1.6 (coming with Selenium)
+
 === 2.17 (Released 08.03.2015)
 * upgrade to selenium webdriver 2.45.0
 * added "soft asserts" (JUnit and TestNG are supported out-of-the-box)
