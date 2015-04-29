@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LongRunningAjaxRequestTest extends IntegrationTest {
@@ -41,7 +40,6 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
   @Test
   public void userCanWaitUntilConditionIsMet() {
     timeout = 10;
-    assertFalse($(byText("Result 2")).isDisplayed());
     $(byText("Result 2")).waitUntil(visible, 3000);
     assertTrue($(byText("Result 2")).isDisplayed());
   }

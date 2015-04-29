@@ -41,6 +41,13 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanCheckIfElementIsDisplayed() {
+    assertTrue($(By.name("domain")).isDisplayed());
+    assertFalse($("#theHiddenElement").isDisplayed());
+    assertFalse($(By.name("non-existing-element")).isDisplayed());
+  }
+
+  @Test
   public void userCanCheckIfElementExistsAndVisible() {
     assertTrue($(By.name("domain")).isDisplayed());
     assertFalse($("#theHiddenElement").isDisplayed());
