@@ -3,14 +3,12 @@ package integration;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Selenide.$;
 
-@Ignore // this test works on my machine, but fails on Jenkins. Need to investigate it.
 public class AutoCompleteTest extends IntegrationTest {
   @Before
   public void openTestPageWithAutocomplete() {

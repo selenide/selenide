@@ -38,10 +38,7 @@
           "Scheme"
         ];
         $('#tags')
-            .change(log)
-            .keyup(log)
-            .keydown(log)
-            .keypress(log)
+            .on('change keyup keydown keypress input paste', log)
             .autocomplete({
               autoFocus: true,
               source: availableTags,

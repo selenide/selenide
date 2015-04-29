@@ -417,7 +417,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if (fastSetValue) {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
-      fireEvent(element, "keydown", "keypress", "keyup", "change");
+      fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
     }
     else {
       element.clear();
