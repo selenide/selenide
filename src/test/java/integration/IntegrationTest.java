@@ -87,12 +87,11 @@ public abstract class IntegrationTest {
       open("/start_page.html");
       long start = System.currentTimeMillis();
       $("h1").isDisplayed();
-      $("h1").isSelected();
       $("h1").isEnabled();
       $("body").findElement(By.tagName("h1"));
       $("h1").getText();
       
-      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 5);
+      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
       System.out.println("Average selenium command duration for " + browser + ": " +
           averageSeleniumCommandDuration + " ms.");
     }
