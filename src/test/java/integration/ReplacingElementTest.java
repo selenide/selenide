@@ -1,6 +1,7 @@
 package integration;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
@@ -46,7 +47,7 @@ public class ReplacingElementTest extends IntegrationTest {
         $("#dynamic-element").toString());
   }
 
-  @Test
+  @Test @Ignore
   public void tryToCatchStaleElementException() {
     executeJavaScript("startRegularReplacement()");
     for (int i = 0; i < 10; i++) {
