@@ -43,7 +43,7 @@ public class ReplacingElementTest extends IntegrationTest {
 
   @Test
   public void testToString() {
-    assertEquals("<input id=\"dynamic-element\" value=\"I will be replaced soon\" type=\"text\"></input>", 
+    assertEquals("<input id=\"dynamic-element\" type=\"text\" value=\"I will be replaced soon\"></input>", 
         $("#dynamic-element").toString());
   }
 
