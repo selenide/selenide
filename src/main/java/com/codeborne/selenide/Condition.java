@@ -193,7 +193,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
   
   /**
-   * <p>Sample: <code>$("#input").shouldHave(value("John"));</code></p>
+   * <p>Sample: <code>$("#input").shouldHave(exactValue("John"));</code></p>
    * @param value expected value of input field
    */
   public static Condition exactValue(String value) {
