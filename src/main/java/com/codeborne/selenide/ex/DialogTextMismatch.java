@@ -8,6 +8,6 @@ public class DialogTextMismatch extends UIAssertionError {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + ' ' + getMessage();
+    return getClass().getSimpleName() + ' ' + getMessage() + uiDetails();
   }
 }

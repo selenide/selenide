@@ -23,9 +23,13 @@ public class UIAssertionError extends AssertionError {
   }
 
   @Override
-  public String getMessage() {
+  public String toString() {
+    return getClass().getSimpleName() + " " + getLocalizedMessage() + uiDetails();
+  }
+
+  protected String uiDetails() {
     takeCurrentSnapshot();
-    return super.getMessage() + screenshot(screenshot) + jsErrors(jsErrors) + ErrorMessages.timeout(timeoutMs) + causedBy(getCause());
+    return screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(getCause());
   }
 
   /**

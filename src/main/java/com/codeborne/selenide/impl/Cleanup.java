@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.InvalidSelectorException;
 
 public class Cleanup {
@@ -21,10 +20,6 @@ public class Cleanup {
   }
 
   public boolean isInvalidSelectorError(Throwable error) {
-    if (error instanceof UIAssertionError) {
-      return error.getCause() != error && isInvalidSelectorError(error.getCause());
-    }
-    
     if (error == null || error.getMessage() == null) return false;
     return (error instanceof InvalidSelectorException && !error.getMessage().contains("\"Element is not selectable\"")) ||
         error.getMessage().contains("invalid or illegal string was specified") ||
