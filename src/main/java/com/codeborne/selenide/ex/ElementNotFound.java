@@ -7,18 +7,18 @@ import org.openqa.selenium.By;
 import java.util.Arrays;
 
 public class ElementNotFound extends UIAssertionError {
-  public ElementNotFound(By searchCriteria, Condition expectedCondition, long timeoutMs) {
-    this(searchCriteria.toString(), expectedCondition, null, timeoutMs);
+  public ElementNotFound(By searchCriteria, Condition expectedCondition) {
+    this(searchCriteria.toString(), expectedCondition, null);
   }
 
-  public ElementNotFound(String searchCriteria, Condition expectedCondition, Throwable lastError, long timeoutMs) {
+  public ElementNotFound(String searchCriteria, Condition expectedCondition, Throwable lastError) {
     super("Element not found {" + searchCriteria + '}' +
-        "\nExpected: " + expectedCondition, timeoutMs, lastError);
+        "\nExpected: " + expectedCondition, lastError);
   }
 
-  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Throwable lastError, long timeoutMs) {
+  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Throwable lastError) {
     super("Element not found {" + collection.description() + '}' +
-        "\nExpected: " + Arrays.toString(expectedTexts), timeoutMs, lastError);
+        "\nExpected: " + Arrays.toString(expectedTexts), lastError);
   }
 
   @Override

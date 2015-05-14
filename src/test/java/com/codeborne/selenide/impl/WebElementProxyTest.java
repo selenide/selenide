@@ -53,6 +53,6 @@ public class WebElementProxyTest {
   public void toStringPrintsTagNameWithSomeAttributes() {
     browser = HTMLUNIT;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
-    assertEquals("<h2 id=\"id1\" class=\"class1 class2\"></h2>", new WebElementProxy(element).toString());
+    assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementProxy(element).toString());
   }
 }

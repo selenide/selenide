@@ -324,7 +324,7 @@ public class Selenide {
       }
     }
 
-    throw new ElementNotFound(radioField, value(value), 0);
+    throw new ElementNotFound(radioField, value(value));
   }
 
   public static SelenideElement getSelectedRadio(By radioField) {

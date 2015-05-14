@@ -39,4 +39,11 @@ public class CleanupTest {
     NoSuchElementException error = new NoSuchElementException("Unable to locate element using css", cssException);
     assertTrue(Cleanup.of.isInvalidSelectorError(error));
   }
+
+  @Test
+  public void phantomJsReportsStaleElementExceptionAsInvalidSelectorException() {
+    InvalidSelectorException staleElementExceptionInPhantomJs = new InvalidSelectorException(
+        "{\"errorMessage\":\"Element is not selectable\",\"request\": ..., takesScreenshot=true}]");
+    assertFalse(Cleanup.of.isInvalidSelectorError(staleElementExceptionInPhantomJs));
+  }
 }

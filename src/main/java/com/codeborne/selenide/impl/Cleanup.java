@@ -21,7 +21,7 @@ public class Cleanup {
 
   public boolean isInvalidSelectorError(Throwable error) {
     if (error == null || error.getMessage() == null) return false;
-    return (error instanceof InvalidSelectorException) ||
+    return (error instanceof InvalidSelectorException && !error.getMessage().contains("\"Element is not selectable\"")) ||
         error.getMessage().contains("invalid or illegal string was specified") ||
         error.getMessage().contains("nvalid selector") ||
         error.getMessage().contains("is not a valid selector") ||

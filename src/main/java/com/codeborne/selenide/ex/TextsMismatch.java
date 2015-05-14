@@ -9,7 +9,8 @@ public class TextsMismatch extends UIAssertionError {
                        String[] expectedTexts, long timeoutMs) {
     super("\nActual: " + Arrays.toString(actualTexts) +
         "\nExpected: " + Arrays.toString(expectedTexts) +
-        "\nCollection: " + collection.description(), timeoutMs);
+        "\nCollection: " + collection.description());
+    super.timeoutMs = timeoutMs;
   }
 
   @Override

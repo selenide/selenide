@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -10,8 +11,6 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Proxy;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
@@ -40,7 +39,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
 
   @Override
   protected WebElement getDelegate() {
-    return waitUntil("", exist, timeout);
+    return getActualDelegate();
   }
 
   @Override
@@ -64,15 +63,15 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   }
 
   @Override
-  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
+  protected ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (parent instanceof SelenideElement) {
-      ((SelenideElement) parent).shouldBe(visible);
+      ((SelenideElement) parent).should(exist);
     }
     else if (parent instanceof WebElement) {
-      $((WebElement) parent).shouldBe(visible);
+      $((WebElement) parent).should(exist);
     }
     
-    return super.throwElementNotFound(condition, timeoutMs);
+    return super.createElementNotFoundError(condition, lastError);
   }
 
   @Override

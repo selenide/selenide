@@ -4,7 +4,7 @@ apply plugin: "jacoco"
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.18-SNAPSHOT'
+version='2.19-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
@@ -33,13 +33,15 @@ dependencies {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     exclude group: 'org.webbitserver', module: 'webbit'
+    exclude group: 'commons-codec', module: 'commons-codec'
   }
   compile 'com.google.guava:guava:18.0'
+  runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.45.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.15'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.16', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.16'
   provided 'junit:junit:4.12'
-  provided 'org.testng:testng:6.8.21'
+  provided 'org.testng:testng:6.9.4'
   //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
   provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
   
@@ -47,7 +49,7 @@ dependencies {
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
   testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.12'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
-  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.5.2'
+  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
 
   testCompile 'org.mockito:mockito-core:1.10.19'
   testCompile 'org.eclipse.jetty:jetty-server:9.3.0.M2'
@@ -92,7 +94,7 @@ test {
 }
 
 task ie(type: Test) {
-  systemProperties['browser'] = 'ie'
+  systemProperties['selenide.browser'] = 'ie'
   systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
   systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
@@ -102,26 +104,26 @@ task ie(type: Test) {
 }
 
 task chrome(type: Test) {
-  systemProperties['browser'] = 'chrome'
+  systemProperties['selenide.browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task htmlunit(type: Test) {
-  systemProperties['browser'] = 'htmlunit'
+  systemProperties['selenide.browser'] = 'htmlunit'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task phantomjs(type: Test) {
-  systemProperties['browser'] = 'phantomjs'
+  systemProperties['selenide.browser'] = 'phantomjs'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task firefox(type: Test) {
-  systemProperties['browser'] = 'firefox'
+  systemProperties['selenide.browser'] = 'firefox'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -133,7 +135,7 @@ tasks.withType(Test).all { testTask ->
   testTask.maxParallelForks = 2
   testTask.jacoco {
     enabled = true
-    include 'com/codeborne/selenide/**/*'
+    includes = ['com/codeborne/selenide/**/*']
   }
   testTask.outputs.upToDateWhen { false }
 }
@@ -161,7 +163,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.3'
+  gradleVersion = '2.4'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }

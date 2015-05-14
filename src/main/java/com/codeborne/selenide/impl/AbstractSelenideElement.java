@@ -17,14 +17,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
@@ -38,7 +38,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
   abstract String getSearchCriteria();
-  protected Exception lastError;
 
   private static final Set<String> methodsToSkipLogging = new HashSet<String>(asList(
       "toWebElement",
@@ -59,11 +58,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
-      return dispatch(proxy, method, args);
+      return dispatchSelenideMethod(proxy, method, args);
 
     SelenideLog log = SelenideLogger.beginStep(getSearchCriteria(), method.getName(), args);
     try {
-      Object result = dispatch(proxy, method, args);
+      Object result = dispatchAndRetry(proxy, method, args);
       SelenideLogger.commitStep(log, PASSED);
       return result;
     }
@@ -84,7 +83,47 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected Object dispatch(Object proxy, Method method, Object[] args) throws Throwable {
+  protected Object dispatchAndRetry(Object proxy, Method method, Object[] args) throws Throwable {
+    long timeoutMs = getTimeoutMs(method, args);
+
+    final long startTime = currentTimeMillis();
+    Throwable lastError;
+    do {
+      try {
+        return method.getDeclaringClass() == SelenideElement.class ?
+            dispatchSelenideMethod(proxy, method, args) :
+            delegateSeleniumMethod(getDelegate(), method, args);
+      }
+      catch (Throwable e) {
+        if (Cleanup.of.isInvalidSelectorError(e)) {
+          throw Cleanup.of.wrap(e);
+        }
+        lastError = e;
+        sleep(pollingInterval);
+      }
+    }
+    while (currentTimeMillis() - startTime <= timeoutMs);
+
+    if (lastError instanceof UIAssertionError) {
+      UIAssertionError uiError = (UIAssertionError) lastError;
+      uiError.timeoutMs = timeoutMs;
+      throw uiError;
+      
+    }
+    else if (lastError instanceof WebDriverException) {
+      ElementNotFound uiError = createElementNotFoundError(exist, lastError);
+      uiError.timeoutMs = timeoutMs;
+      throw uiError;
+    }
+    throw lastError;
+  }
+
+  private long getTimeoutMs(Method method, Object[] args) {
+    return "waitUntil".equals(method.getName()) || "waitWhile".equals(method.getName()) ?
+        (Long) args[args.length - 1] : timeout;
+  }
+
+  protected Object dispatchSelenideMethod(Object proxy, Method method, Object[] args) throws Throwable {
     if ("setValue".equals(method.getName())) {
       setValue((String) args[0]);
       return proxy;
@@ -99,24 +138,24 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       }
     }
     else if ("attr".equals(method.getName())) {
-    	return getDelegate().getAttribute((String) args[0]);
+      return getDelegate().getAttribute((String) args[0]);
     }
     else if ("name".equals(method.getName())) {
-    	return getDelegate().getAttribute("name");
+      return getDelegate().getAttribute("name");
     }
     else if ("data".equals(method.getName())) {
-    	return getDelegate().getAttribute("data-" + args[0]);
+      return getDelegate().getAttribute("data-" + args[0]);
     }
-   	else if ("append".equals(method.getName())) {
+    else if ("append".equals(method.getName())) {
       append((String) args[0]);
       return proxy;
     }
     else if ("pressEnter".equals(method.getName())) {
-      getDelegate().sendKeys(Keys.ENTER);
+      findAndAssertElementIsVisible().sendKeys(Keys.ENTER);
       return proxy;
     }
     else if ("pressTab".equals(method.getName())) {
-      getDelegate().sendKeys(Keys.TAB);
+      findAndAssertElementIsVisible().sendKeys(Keys.TAB);
       return proxy;
     }
     else if ("followLink".equals(method.getName())) {
@@ -135,6 +174,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("should".equals(method.getName())) {
       return invokeShould(proxy, "", args);
     }
+    else if ("waitUntil".equals(method.getName())) {
+      return invokeShould(proxy, "be ", args);
+    }
     else if ("shouldHave".equals(method.getName())) {
       return invokeShould(proxy, "have ", args);
     }
@@ -143,6 +185,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("shouldNot".equals(method.getName())) {
       return invokeShouldNot(proxy, "", args);
+    }
+    else if ("waitWhile".equals(method.getName())) {
+      return invokeShouldNot(proxy, "be ", args);
     }
     else if ("shouldNotHave".equals(method.getName())) {
       return invokeShouldNot(proxy, "have ", args);
@@ -188,11 +233,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       return uploadFromClasspath((SelenideElement) proxy, (String[]) args[0]);
     }
     else if ("selectOption".equals(method.getName())) {
-      selectOptionByText(getDelegate(), (String) args[0]);
+      selectOptionByText((String) args[0]);
       return null;
     }
     else if ("selectOptionByValue".equals(method.getName())) {
-      selectOptionByValue(getDelegate(), (String) args[0]);
+      selectOptionByValue((String) args[0]);
       return null;
     }
     else if ("getSelectedOption".equals(method.getName())) {
@@ -206,24 +251,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if ("toWebElement".equals(method.getName())) {
       return getActualDelegate();
-    }
-    else if ("waitUntil".equals(method.getName())) {
-      if (args[0] instanceof String) {
-        waitUntil("", (String) args[0], (Condition) args[1], (Long) args[2]);
-      }
-      else {
-        waitUntil("", (Condition) args[0], (Long) args[1]);
-      }
-      return proxy;
-    }
-    else if ("waitWhile".equals(method.getName())) {
-      if (args[0] instanceof String) {
-        waitWhile("", (String) args[0], (Condition) args[1], (Long) args[2]);
-      }
-      else {
-        waitWhile("", (Condition) args[0], (Long) args[1]);
-      }
-      return proxy;
     }
     else if ("scrollTo".equals(method.getName())) {
       scrollTo();
@@ -240,6 +267,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       contextClick();
       return proxy;
     }
+    else if ("doubleClick".equals(method.getName())) {
+      doubleClick();
+      return proxy;
+    }
     else if ("hover".equals(method.getName())) {
       hover();
       return proxy;
@@ -254,22 +285,37 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("isImage".equals(method.getName())) {
       return isImage();
     }
-
-    return delegateMethod(getDelegate(), method, args);
+    else {
+      throw new IllegalArgumentException("Unknown Selenide method: " + method.getName());
+    }
   }
 
   protected Object invokeShould(Object proxy, String prefix, Object[] args) {
+    String message = null;
     if (args[0] instanceof String) {
-      return should(proxy, prefix, (String) args[0], (Condition[]) args[1]);
+      message = (String) args[0];
     }
-    return should(proxy, prefix, (Condition[]) args[0]);
+    return should(proxy, prefix, message, argsToConditions(args));
+  }
+
+  private List<Condition> argsToConditions(Object[] args) {
+    List<Condition> conditions = new ArrayList<Condition>(args.length);
+    for (Object arg : args) {
+      if (arg instanceof Condition) 
+        conditions.add((Condition) arg);
+      else if (arg instanceof Condition[]) 
+        conditions.addAll(asList((Condition[]) arg));
+      else if (!(arg instanceof String || arg instanceof Long))
+        throw new IllegalArgumentException("Unknown parameter: " + arg);
+    }
+    return conditions;
   }
 
   protected Object invokeShouldNot(Object proxy, String prefix, Object[] args) {
     if (args[0] instanceof String) {
-      return shouldNot(proxy, prefix, (String) args[0], (Condition[]) args[1]);
+      return shouldNot(proxy, prefix, (String) args[0], argsToConditions(args));
     }
-    return shouldNot(proxy, prefix, (Condition[]) args[0]);
+    return shouldNot(proxy, prefix, argsToConditions(args));
   }
 
   protected Boolean isImage() {
@@ -283,35 +329,23 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected boolean matches(Condition condition) {
-    try {
-      WebElement element = tryToGetElement();
-      if (element != null) {
-        return condition.apply(element);
-      }
-    }
-    catch (WebDriverException elementNotFound) {
-      lastError = elementNotFound;
-    }
-    catch (IndexOutOfBoundsException ignore) {
-      lastError = ignore;
-    }
-
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
+    WebElement element = getElementOrNull();
+    if (element != null) {
+      return condition.apply(element);
     }
 
     return condition.applyNull();
   }
 
   protected void setSelected(boolean selected) {
-    WebElement element = waitForElement();
+    WebElement element = getDelegate();
     if (element.isSelected() ^ selected) {
       click(element);
     }
   }
 
   protected String getInnerText() {
-    WebElement element = waitUntil("", exist, timeout);
+    WebElement element = getDelegate();
     if (isHtmlUnit()) {
       return executeJavaScript("return arguments[0].innerText", element);
     }
@@ -322,19 +356,15 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected String getInnerHtml() {
-    WebElement element = waitUntil("", exist, timeout);
+    WebElement element = getDelegate();
     if (isHtmlUnit()) {
       return executeJavaScript("return arguments[0].innerHTML", element);
     }
     return element.getAttribute("innerHTML");
   }
 
-  protected WebElement waitForElement() {
-    return waitUntil("be ", visible, timeout);
-  }
-
   protected void click() {
-    click(waitForElement());
+    click(findAndAssertElementIsVisible());
   }
 
   protected void click(WebElement element) {
@@ -345,21 +375,29 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
+  protected WebElement findAndAssertElementIsVisible() {
+    return checkCondition("be ", null, visible, false);
+  }
+
   protected void contextClick() {
-    actions().contextClick(waitForElement()).perform();
+    actions().contextClick(findAndAssertElementIsVisible()).perform();
+  }
+
+  protected void doubleClick() {
+    actions().doubleClick(findAndAssertElementIsVisible()).perform();
   }
 
   protected void hover() {
-    actions().moveToElement(waitForElement()).perform();
+    actions().moveToElement(getDelegate()).perform();
   }
 
   protected void dragAndDropTo(String targetCssSelector) {
     SelenideElement target = $(targetCssSelector).shouldBe(visible);
-    actions().dragAndDrop(waitForElement(), target).perform();
+    actions().dragAndDrop(getDelegate(), target).perform();
   }
 
   protected void followLink() {
-    WebElement link = waitForElement();
+    WebElement link = getDelegate();
     String href = link.getAttribute("href");
     click(link);
 
@@ -370,16 +408,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void setValue(String text) {
-    WebElement element = waitForElement();
+    WebElement element = findAndAssertElementIsVisible();
     if ("select".equalsIgnoreCase(element.getTagName())) {
-      selectOptionByValue(element, text);
+      selectOptionByValue(text);
     }
     else if (text == null || text.isEmpty()) {
       element.clear();
     }
     else if (fastSetValue) {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
-      fireChangeEvent(element);
+      fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
     }
     else {
       element.clear();
@@ -389,10 +427,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void fireChangeEvent(WebElement element) {
-    try {
-      fireEvent(element, "change");
-    } catch (StaleElementReferenceException ignore) {
-    }
+    fireEvent(element, "change");
   }
 
   protected String getValue() {
@@ -400,43 +435,82 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected void append(String text) {
-    WebElement element = waitForElement();
+    WebElement element = getDelegate();
     element.sendKeys(text);
     fireChangeEvent(element);
   }
 
-  protected void fireEvent(WebElement element, final String event) {
-    final String jsCodeToTriggerEvent
-        = "if (document.createEventObject) {\n" +  // IE
-        "  var evt = document.createEventObject();\n" +
-        "  return arguments[0].fireEvent('on' + arguments[1], evt);\n" +
-        "}\n" +
-        "else {\n" +
-        "  var evt = document.createEvent('HTMLEvents');\n " +
-        "  evt.initEvent(arguments[1], true, true );\n " +
-        "  return !arguments[0].dispatchEvent(evt);\n" +
-        '}';
-    executeJavaScript(jsCodeToTriggerEvent, element, event);
+  protected void fireEvent(WebElement element, final String... event) {
+    try {
+      final String jsCodeToTriggerEvent =
+          "var webElement = arguments[0];\n" +
+          "var eventNames = arguments[1];\n" +
+          "for (var i = 0; i < eventNames.length; i++) {" +
+          "  if (document.createEventObject) {\n" +  // IE
+          "    var evt = document.createEventObject();\n" +
+          "    webElement.fireEvent('on' + eventNames[i], evt);\n" + 
+          "  }\n" +
+          "  else {\n" +
+          "    var evt = document.createEvent('HTMLEvents');\n " +
+          "    evt.initEvent(eventNames[i], true, true );\n " +
+          "    webElement.dispatchEvent(evt);\n" +
+          "  }\n" +
+          '}';
+      executeJavaScript(jsCodeToTriggerEvent, element, event);
+    } catch (StaleElementReferenceException ignore) {
+    }
   }
 
-  protected Object should(Object proxy, String prefix, Condition... conditions) {
-    return should(proxy, prefix, null, conditions);
-  }
-
-  protected Object should(Object proxy, String prefix, String message, Condition... conditions) {
+  protected Object should(Object proxy, String prefix, String message, List<Condition> conditions) {
     for (Condition condition : conditions) {
-      waitUntil(prefix, message, condition, timeout);
+      checkCondition(prefix, message, condition, false);
     }
     return proxy;
   }
 
-  protected Object shouldNot(Object proxy, String prefix, Condition... conditions) {
+  protected WebElement checkCondition(String prefix, String message, Condition condition, boolean invert) {
+    Condition check = invert ? not(condition) : condition;
+    
+    Throwable lastError = null;
+    WebElement element = null;
+    try {
+      element = getActualDelegate();
+      if (element != null && check.apply(element)) {
+        return element;
+      }
+    } catch (WebDriverException elementNotFound) {
+      lastError = elementNotFound;
+    } catch (IndexOutOfBoundsException e) {
+      lastError = e;
+    } catch (RuntimeException e) {
+      throw Cleanup.of.wrap(e);
+    }
+
+    if (Cleanup.of.isInvalidSelectorError(lastError)) {
+      throw Cleanup.of.wrap(lastError);
+    }
+    
+    if (element == null) {
+      if (!check.applyNull()) {
+        throw createElementNotFoundError(check, lastError);
+      }
+    }
+    else if (invert) {
+      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, element, lastError);
+    }
+    else {
+      throw new ElementShould(getSearchCriteria(), prefix, message, condition, element, lastError);
+    }
+    return null;
+  }
+  
+  protected Object shouldNot(Object proxy, String prefix, List<Condition> conditions) {
     return shouldNot(proxy, prefix, null, conditions);
   }
 
-  protected Object shouldNot(Object proxy, String prefix, String message, Condition... conditions) {
+  protected Object shouldNot(Object proxy, String prefix, String message, List<Condition> conditions) {
     for (Condition condition : conditions) {
-      waitWhile(prefix, message, condition, timeout);
+      checkCondition(prefix, message, condition, true);
     }
     return proxy;
   }
@@ -501,13 +575,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return new File(canonicalPath);
   }
 
-  protected void selectOptionByText(WebElement selectField, String optionText) {
-    $(selectField).should(exist).find(byText(optionText)).shouldBe(visible);
+  protected void selectOptionByText(String optionText) {
+    WebElement selectField = getDelegate();
     new Select(selectField).selectByVisibleText(optionText);
   }
 
+  protected void selectOptionByValue(String optionValue) {
+    WebElement selectField = getDelegate();
+    selectOptionByValue(selectField, optionValue);
+  }
+
   protected void selectOptionByValue(WebElement selectField, String optionValue) {
-    $(selectField).should(exist).find(byValue(optionValue)).shouldBe(visible);
     new Select(selectField).selectByValue(optionValue);
   }
 
@@ -562,7 +640,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  static Object delegateMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
+  static Object delegateSeleniumMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
     try {
       return method.invoke(delegate, args);
     } catch (InvocationTargetException e) {
@@ -570,115 +648,30 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
   }
 
-  protected WebElement waitUntil(String prefix, Condition condition, long timeoutMs) {
-    return waitUntil(prefix, null, condition, timeoutMs);
-  }
-
-  protected WebElement waitUntil(String prefix, String message, Condition condition, long timeoutMs) {
-    final long startTime = currentTimeMillis();
-    WebElement element;
-    do {
-      lastError = null;
-      element = tryToGetElement();
-      if (element != null) {
-        try {
-          if (condition.apply(element)) {
-            return element;
-          }
-        }
-        catch (WebDriverException elementNotFound) {
-          lastError = elementNotFound;
-        }
-        catch (IndexOutOfBoundsException ignore) {
-          lastError = ignore;
-        }
-      }
-      else if (condition.applyNull()) {
-        if (Cleanup.of.isInvalidSelectorError(lastError)) {
-          throw Cleanup.of.wrap(lastError);
-        }
-        return null;
-      }
-      sleep(pollingInterval);
-    }
-    while (currentTimeMillis() - startTime <= timeoutMs);
-
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
-    }
-    else if (!exists(element)) {
-      return throwElementNotFound(condition, timeoutMs);
-    }
-    else {
-      throw new ElementShould(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
-    }
-  }
-
-  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
-    throw new ElementNotFound(getSearchCriteria(), condition, lastError, timeoutMs);
-  }
-
-  protected void waitWhile(String prefix, Condition condition, long timeoutMs) {
-    waitWhile(prefix, null, condition, timeoutMs);
-  }
-  protected void waitWhile(String prefix, String message, Condition condition, long timeoutMs) {
-    final long startTime = currentTimeMillis();
-    WebElement element;
-    do {
-      lastError = null;
-      element = tryToGetElement();
-      if (element != null) {
-        try {
-          if (!condition.apply(element)) {
-            return;
-          }
-        }
-        catch (WebDriverException elementNotFound) {
-          lastError = elementNotFound;
-        }
-        catch (IndexOutOfBoundsException ignore) {
-          lastError = ignore;
-        }
-      }
-      else if (!condition.applyNull()) {
-        if (Cleanup.of.isInvalidSelectorError(lastError)) {
-          throw Cleanup.of.wrap(lastError);
-        }
-        return;
-      }
-      sleep(pollingInterval);
-    }
-    while (currentTimeMillis() - startTime <= timeoutMs);
-
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
-    }
-    else if (!exists(element)) {
-      throwElementNotFound(not(condition), timeoutMs);
-    }
-    else {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, element, lastError, timeoutMs);
-    }
+  protected ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+    return new ElementNotFound(getSearchCriteria(), condition, lastError);
   }
   
   protected boolean exists(WebElement element) {
     try {
       if (element == null) return false;
-      element.isDisplayed();
+      element.isSelected();
       return true;
     } catch (WebDriverException elementNotFound) {
+      return false;
+    } catch (IndexOutOfBoundsException elementNotFound) {
       return false;
     }
   }
 
-  protected WebElement tryToGetElement() {
+  protected WebElement getElementOrNull() {
     try {
       return getActualDelegate();
     } catch (WebDriverException elementNotFound) {
-      lastError = elementNotFound;
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound))
+        throw Cleanup.of.wrap(elementNotFound);
       return null;
     } catch (IndexOutOfBoundsException ignore) {
-      lastError = ignore;
       return null;
     } catch (RuntimeException e) {
       throw Cleanup.of.wrap(e);

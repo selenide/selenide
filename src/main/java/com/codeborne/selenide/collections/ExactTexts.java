@@ -40,7 +40,9 @@ public class ExactTexts extends CollectionCondition {
   @Override
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
-      throw new ElementNotFound(collection, expectedTexts, lastError, timeoutMs);
+      ElementNotFound elementNotFound = new ElementNotFound(collection, expectedTexts, lastError);
+      elementNotFound.timeoutMs = timeoutMs;
+      throw elementNotFound;
     } else {
       throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
     }

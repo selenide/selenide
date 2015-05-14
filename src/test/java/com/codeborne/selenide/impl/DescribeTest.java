@@ -30,7 +30,7 @@ public class DescribeTest {
     
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(null, null, visible, webElement, null, 0)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(null, null, visible, webElement, null)).when(selenideElement).getTagName();
     
     assertEquals("StaleElementReferenceException: disappeared", Describe.shortly(selenideElement));
   }

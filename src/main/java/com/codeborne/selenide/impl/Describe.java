@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.*;
 
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
@@ -35,7 +36,17 @@ public class Describe {
             "}" +
             "return s;", element);
 
-    Map<String, String> sortedByName = new TreeMap<String, String>(map);
+    SortedMap<String, String> sortedByName = new TreeMap<String, String>();
+    if (map != null) {
+      sortedByName.putAll(map);
+    }
+    if (!sortedByName.containsKey("value")) {
+      sortedByName.put("value", element.getAttribute("value"));
+    }
+    if (!sortedByName.containsKey("type")) {
+      sortedByName.put("type", element.getAttribute("type"));
+    }
+    
     for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
       attr(entry.getKey(), entry.getValue());
     }
@@ -43,9 +54,9 @@ public class Describe {
   }
 
   private Describe appendPredefinedAttributes() {
-    return attr("id").attr("name").attr("class").attr("href").attr("value").attr("disabled")
-        .attr("type").attr("placeholder")
-        .attr("onclick").attr("onchange");
+    return attr("class").attr("disabled").attr("href").attr("id").attr("name")
+        .attr("onclick").attr("onchange").attr("placeholder")
+        .attr("type").attr("value");
   }
 
   private boolean supportsJavascriptAttributes() {

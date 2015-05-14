@@ -4,7 +4,7 @@
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   </head>
-  <body onload="initBlur(); setTimeout(fillTextArea, 1000);">
+  <body onload="initBlur(); scheduleFillTextArea();">
     <div id="non-clickable-element" 
          style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
       <a href="http://google.com">non-clickable element</a>
@@ -127,9 +127,11 @@
     <a href="long_ajax_request.html">Want to see ajax in action?</a>
 
     <script type="text/javascript">
-        setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, 1000);
-        setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, 1500);
-        setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, 2000);
+      var commandDuration = window.location.search.substring(1);
+
+      setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, commandDuration*3);
+      setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, commandDuration*4);
+      setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, commandDuration*5);
     </script>
 
     <h1>Now typing: </h1>
@@ -157,6 +159,10 @@
          ng-click="none">Суслик</div>
 
     <script type="text/javascript">
+      function scheduleFillTextArea() {
+        setTimeout(fillTextArea, commandDuration * 3);
+      }
+      
       function fillTextArea() {
         document.getElementById('text-area').innerHTML = 'This is text area';
       }

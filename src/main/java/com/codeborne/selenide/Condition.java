@@ -187,13 +187,13 @@ public abstract class Condition implements Predicate<WebElement> {
       }
       @Override
       public String toString() {
-        return name + " value=" + expectedValue;
+        return name + " '" + expectedValue + "'";
       }
     };
   }
   
   /**
-   * <p>Sample: <code>$("#input").shouldHave(value("John"));</code></p>
+   * <p>Sample: <code>$("#input").shouldHave(exactValue("John"));</code></p>
    * @param value expected value of input field
    */
   public static Condition exactValue(String value) {
@@ -514,7 +514,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * Typically you don't need to use it.
    */
   public static Condition not(final Condition condition) {
-    return new Condition("not(" + condition.name + ')', !condition.nullIsAllowed) {
+    return new Condition("not " + condition.name, !condition.nullIsAllowed) {
       @Override
       public boolean apply(WebElement element) {
         return !condition.apply(element);

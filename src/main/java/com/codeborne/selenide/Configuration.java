@@ -120,12 +120,12 @@ public class Configuration {
   public static boolean dismissModalDialogs = Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
-   * EXPERIMENTAL
-   * 
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function 
-   * (that is quite low because it sends every character separately).
+   * (that is quite slow because it sends every character separately).
    * 
-   * Still not tested well. Waiting for your feedback.
+   * Tested on Codeborne projects - works well, speed up ~30%.
+   * Some people reported 150% speedup (because sending characters one-by-one was especially slow via network to Selenium Grid on cloud).
+   * 
    * https://github.com/codeborne/selenide/issues/135
    * 
    * Default value: false

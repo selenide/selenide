@@ -18,13 +18,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.junit.Assert.assertTrue;
 
 public class LocalHttpServer {
@@ -48,6 +49,14 @@ public class LocalHttpServer {
     return this;
   }
 
+  private void logRequest(HttpServletRequest request, Object response, long startTime) {
+    String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
+    System.out.println(time + " " + 
+        on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) + 
+        " -> " + response + 
+        " " + (System.nanoTime() - startTime) / 1000000 + " ms");
+  }
+
   private Set<String> sessions = new ConcurrentSkipListSet<String>();
 
   private class FileHandler extends HttpServlet {
@@ -58,19 +67,23 @@ public class LocalHttpServer {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      long start = System.nanoTime();
+      
       byte[] fileContent = readFileContent(request);
       if (fileContent == null) {
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.setStatus(SC_NOT_FOUND);
+        logRequest(request, "NOT_FOUND", start);
         return;
       }
 
       generateSessionId(response);
-      response.setStatus(HttpServletResponse.SC_OK);
+      response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
 
       printResponse(response, fileContent);
+      logRequest(request, "ok", start);
     }
-
+    
     private void generateSessionId(HttpServletResponse http) {
       String sessionId = "" + System.currentTimeMillis();
       Cookie cookie = new Cookie("session_id", sessionId);
@@ -85,19 +98,22 @@ public class LocalHttpServer {
   private class FileDownloadHandler extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      long start = System.nanoTime();
       String sessionId = getSessionId(request);
       assertTrue(sessions.contains(sessionId));
 
       byte[] fileContent = readFileContent(request);
       if (fileContent == null) {
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.setStatus(SC_NOT_FOUND);
+        logRequest(request, "NOT_FOUND", start);
         return;
       }
 
-      response.setStatus(HttpServletResponse.SC_OK);
+      response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
       response.setHeader("content-disposition", "attachment; filename=" + request.getPathInfo());
       printResponse(response, fileContent);
+      logRequest(request, "ok", start);
     }
   }
 
@@ -106,14 +122,19 @@ public class LocalHttpServer {
   private class FileUploadHandler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      long start = System.nanoTime();
+      
       DiskFileItemFactory factory = new DiskFileItemFactory();
       factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
       ServletFileUpload upload = new ServletFileUpload(factory);
       try {
         List<FileItem> items = upload.parseRequest(request);
         uploadedFiles.addAll(items);
-        printResponse(response, ("Uploaded " + items.size() + " files: " + items).getBytes("UTF-8"));
+        String message = "Uploaded " + items.size() + " files: " + items;
+        printResponse(response, message.getBytes("UTF-8"));
+        logRequest(request, message, start);
       } catch (FileUploadException e) {
+        logRequest(request, e.getMessage(), start);
         e.printStackTrace();
       }
     }

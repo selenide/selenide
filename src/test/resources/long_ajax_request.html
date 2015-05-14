@@ -3,13 +3,15 @@
   <head>
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript" src="jquery-1.8.3.js" language="JavaScript"></script>
+    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
     <script type="text/javascript" language="JavaScript">
+      var commandDuration = window.location.search.substring(1);
+
       function runLongAjaxRequest() {
         $("#results").html("<span id='loading'>Loading...</span><br/><ul></ul>");
-        setTimeout(function() {$("#results ul").append("<li>Result 1<span id='result-1'>r1</span></li>");}, 1000);
-        setTimeout(function() {$("#results ul").append("<li>Result 2<span id='result-2'>r2</span></li>");}, 1500);
-        setTimeout(function() {$("#loading").remove();}, 2000);
+        setTimeout(function() {$("#results ul").append("<li>Result 1<span id='result-1'>r1</span></li>");}, commandDuration*3);
+        setTimeout(function() {$("#results ul").append("<li>Result 2<span id='result-2'>r2</span></li>");}, commandDuration*4);
+        setTimeout(function() {$("#loading").remove();}, commandDuration*10);
       }
     </script>
   </head>

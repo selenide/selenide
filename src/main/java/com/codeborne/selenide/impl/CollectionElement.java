@@ -41,11 +41,11 @@ public class CollectionElement extends AbstractSelenideElement {
   }
 
   @Override
-  protected WebElement throwElementNotFound(Condition condition, long timeoutMs) {
+  protected ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getActualElements().isEmpty()) {
-      throw new ElementNotFound(collection.description(), visible, lastError, timeoutMs);
+      return new ElementNotFound(collection.description(), visible, lastError);
     }
-    return super.throwElementNotFound(condition, timeoutMs);
+    return super.createElementNotFoundError(condition, lastError);
   }
 
   @Override
