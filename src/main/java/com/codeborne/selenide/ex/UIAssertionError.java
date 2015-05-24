@@ -1,5 +1,7 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.impl.Cleanup;
+
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.getJavascriptErrors;
@@ -28,7 +30,6 @@ public class UIAssertionError extends AssertionError {
   }
 
   protected String uiDetails() {
-    takeCurrentSnapshot();
     return screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(getCause());
   }
 
@@ -38,7 +39,6 @@ public class UIAssertionError extends AssertionError {
    * @return empty string if screenshots are disabled  
    */
   public String getScreenshot() {
-    takeCurrentSnapshot();
     return screenshot;
   }
 
@@ -48,14 +48,20 @@ public class UIAssertionError extends AssertionError {
    * @return empty list if no errors found 
    */
   public List<String> getJsErrors() {
-    takeCurrentSnapshot();
     return jsErrors;
   }
 
-  private void takeCurrentSnapshot() {
-    if (screenshot == null)
-      screenshot = formatScreenShotPath();
-    if (jsErrors == null)
-      jsErrors = getJavascriptErrors();
+  private void collectCurrentWebdriverData() {
+    screenshot = formatScreenShotPath();
+    jsErrors = getJavascriptErrors();
+  }
+
+  public static Error wrap(Error error) {
+    if (Cleanup.of.isInvalidSelectorError(error))
+      return error;
+
+    UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
+    uiError.collectCurrentWebdriverData();
+    return uiError;
   }
 }

@@ -50,20 +50,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       SelenideLogger.commitStep(log, PASSED);
       return this;
     }
-    catch (UIAssertionError error) {
+    catch (Error error) {
       SelenideLogger.commitStep(log, error);
       switch (assertionMode) {
         case SOFT:
           return this;
         default:
-          throw error;
+          throw UIAssertionError.wrap(error);
       }
     }
     catch (RuntimeException e) {
-      SelenideLogger.commitStep(log, e);
-      throw e;
-    }
-    catch (Error e) {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
