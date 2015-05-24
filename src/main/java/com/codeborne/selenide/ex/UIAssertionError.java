@@ -9,7 +9,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.*;
 
 public class UIAssertionError extends AssertionError {
   private String screenshot;
-  private List<String> jsErrors;
+  protected List<String> jsErrors;
   public long timeoutMs;
 
   public UIAssertionError(Throwable cause) {
