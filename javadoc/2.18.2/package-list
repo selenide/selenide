@@ -1,0 +1,8 @@
+com.codeborne.selenide
+com.codeborne.selenide.collections
+com.codeborne.selenide.conditions
+com.codeborne.selenide.ex
+com.codeborne.selenide.impl
+com.codeborne.selenide.junit
+com.codeborne.selenide.logevents
+com.codeborne.selenide.testng
