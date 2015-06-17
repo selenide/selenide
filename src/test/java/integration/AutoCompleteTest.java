@@ -18,11 +18,6 @@ public class AutoCompleteTest extends IntegrationTest {
     $("h4").shouldBe(empty);
   }
 
-  @After
-  public void tearDown() {
-    fastSetValue = false;
-  }
-
   @Test
   public void sendKeysTriggersKeyboardEvents() {
     waitUntilInputIsInitialized().sendKeys("javasc");
