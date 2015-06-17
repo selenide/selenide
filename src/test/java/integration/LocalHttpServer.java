@@ -5,9 +5,10 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -33,8 +34,10 @@ public class LocalHttpServer {
   private final Server server;
 
   public LocalHttpServer(int port) throws IOException {
-    server = new Server(port);
+    server = new Server();
 
+    configureHttps(port);
+    
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
     server.setHandler(context);
@@ -42,6 +45,30 @@ public class LocalHttpServer {
     context.addServlet(new ServletHolder(new FileDownloadHandler()), "/files/*");
     context.addServlet(new ServletHolder(new FileUploadHandler()), "/upload");
     context.addServlet(new ServletHolder(new FileHandler()), "/*");
+  }
+
+  // Configure Jetty to listen both http and https port
+  // as described here: http://java.dzone.com/articles/adding-ssl-support-embedded
+  private void configureHttps(int port) {
+//    ServerConnector connector = new ServerConnector(server);
+//    connector.setPort(httpPort);
+
+    HttpConfiguration https = new HttpConfiguration();
+    https.addCustomizer(new SecureRequestCustomizer());
+
+    SslContextFactory sslContextFactory = new SslContextFactory();
+    
+    // created with "keytool -genkey -alias test.selenide.org -keyalg RSA -keystore test-selenide.jks -keysize 2048"
+    sslContextFactory.setKeyStorePath(getClass().getResource("/test-selenide.jks").toExternalForm());
+    sslContextFactory.setKeyStorePassword("selenide.rulez");
+    sslContextFactory.setKeyManagerPassword("selenide.rulez");
+
+    ServerConnector sslConnector = new ServerConnector(server,
+        new SslConnectionFactory(sslContextFactory, "http/1.1"),
+        new HttpConnectionFactory(https));
+    sslConnector.setPort(port);
+
+    server.setConnectors(new Connector[] { sslConnector });
   }
 
   public LocalHttpServer start() throws Exception {
