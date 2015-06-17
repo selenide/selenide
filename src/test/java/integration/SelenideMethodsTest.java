@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -189,6 +190,17 @@ public class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).shouldHave(value("sherlyn"));
     $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
     assertEquals("sherlyn", $(By.name("password")).val());
+  }
+
+  @Test
+  public void userCanSetValueToTextArea() {
+    Configuration.fastSetValue = false;
+    $("#empty-text-area").val("text for textarea");
+    $("#empty-text-area").shouldHave(value("text for textarea"));
+
+    Configuration.fastSetValue = true;
+    $("#empty-text-area").val("another text");
+    $("#empty-text-area").shouldHave(value("another text"));
   }
 
   @Test
