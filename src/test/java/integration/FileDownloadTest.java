@@ -23,7 +23,7 @@ public class FileDownloadTest extends IntegrationTest {
   }
 
   @Test
-  public void userCanDownloadFiles() throws IOException {
+  public void downloadsFiles_usingHrefAttribute() throws IOException {
     File downloadedFile = $(byText("Download me")).download();
 
     assertEquals("hello_world.txt", downloadedFile.getName());
@@ -37,7 +37,7 @@ public class FileDownloadTest extends IntegrationTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void downloadUsesHrefAttribute() throws FileNotFoundException {
+  public void throwsIllegalArgumentException_ifElementHasNoHrefAttribute() throws FileNotFoundException {
     $("h1").download();
   }
 }

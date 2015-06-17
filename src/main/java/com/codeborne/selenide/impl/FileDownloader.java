@@ -6,20 +6,32 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +42,8 @@ import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 public class FileDownloader {
   public static FileDownloader instance = new FileDownloader();
 
+  public static boolean ignoreSelfSignedCerts = true;
+  
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
@@ -51,12 +65,44 @@ public class FileDownloader {
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
-    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();;
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
     HttpContext localContext = new BasicHttpContext();
     localContext.setAttribute(COOKIE_STORE, mimicCookieState());
 
     return httpClient.execute(httpGet, localContext);
+  }
+
+  /**
+   configure HttpClient to ignore self-signed certs
+   as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
+  */
+  private CloseableHttpClient createTrustingHttpClient() throws IOException {
+    try {
+      HttpClientBuilder builder = HttpClientBuilder.create();
+      SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+        @Override
+        public boolean isTrusted(X509Certificate[] arg0, String arg1) {
+          return true;
+        }
+      }).build();
+      builder.setSslcontext( sslContext);
+
+      HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+
+      SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+      Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+          .register("http", PlainConnectionSocketFactory.getSocketFactory())
+          .register("https", sslSocketFactory)
+          .build();
+
+      PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager( socketFactoryRegistry);
+      builder.setConnectionManager( connMgr);
+      return builder.build();
+    }
+    catch (Exception e) {
+      throw new IOException(e);
+    }
   }
 
   protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
