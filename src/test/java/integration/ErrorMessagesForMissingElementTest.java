@@ -19,6 +19,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
@@ -63,10 +64,10 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementNotFound expected) {
       assertStartsWith("Element not found {h9}\n" +
           "Expected: text 'expected text'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
           "Caused by: NoSuchElementException:", expected);
-      assertEquals("http://ci.org/build/reports/tests/1.jpg", expected.getScreenshot());
+      assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", expected.getScreenshot());
     }
   }
 
@@ -78,9 +79,9 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
-      assertEquals("http://ci.org/build/reports/tests/1.jpg", expected.getScreenshot());
+      assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", expected.getScreenshot());
     }
   }
 
@@ -92,7 +93,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have attribute name=header {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -106,7 +107,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -119,9 +120,9 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould elementShouldExist) {
       assertEquals("Element should be visible {#theHiddenElement}\n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", elementShouldExist.toString());
-      assertEquals("http://ci.org/build/reports/tests/1.jpg", elementShouldExist.getScreenshot());
+      assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", elementShouldExist.getScreenshot());
     }
   }
 
@@ -133,7 +134,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -146,7 +147,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShould expected) {
       assertEquals("Element should have text 'expected text' {By.tagName: h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", expected.toString());
     }
   }
@@ -168,7 +169,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertStartsWith("Element not found {By.id: invalid_id}\n" +
           "Expected: visible\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
           "Caused by: NoSuchElementException:", e);
     }
@@ -187,7 +188,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementShouldNot e) {
       assertEquals("Element should not exist {h2}\n" +
           "Element: '<h2>Dropdown list</h2>'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.", e.toString());
     }
   }
@@ -200,7 +201,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertStartsWith("Element not found {h14}\n" +
           "Expected: not hidden\n" +
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg\n" +
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg\n" +
           "Timeout: 1.500 s.\n" +
           "Caused by: NoSuchElementException:", e);
     }
@@ -216,7 +217,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
     } catch (UIAssertionError e) {
       assertContains(e, "Element is not clickable at point",
           "Other element would receive the click",
-          "Screenshot: http://ci.org/build/reports/tests/1.jpg");
+          "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg");
     }
   }
 

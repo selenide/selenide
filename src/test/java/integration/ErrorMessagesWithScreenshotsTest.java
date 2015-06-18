@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
@@ -72,7 +73,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
           e.getMessage().contains("Element not found {thead}"));
-      assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
+      assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", e.getScreenshot());
     }
   }
 
@@ -88,7 +89,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
           e.getMessage().contains("Element not found {<table id=\"multirowTable\">/thead"));
-      assertEquals("http://ci.org/build/reports/tests/1.jpg", e.getScreenshot());
+      assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", e.getScreenshot());
     }
   }
 

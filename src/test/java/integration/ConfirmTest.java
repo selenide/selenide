@@ -15,8 +15,10 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 
 @RunWith(Parameterized.class)
 public class ConfirmTest extends IntegrationTest {
@@ -33,6 +35,7 @@ public class ConfirmTest extends IntegrationTest {
 
   @Before
   public void openTestPage() {
+    assumeFalse(isFirefox());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);

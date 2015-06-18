@@ -19,6 +19,6 @@ public class ElementShould extends UIAssertionError {
 
   @Override
   public String toString() {
-    return getMessage();
+    return getMessage() + uiDetails();
   }
 }

@@ -66,18 +66,14 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       SelenideLogger.commitStep(log, PASSED);
       return result;
     }
-    catch (UIAssertionError error) {
+    catch (Error error) {
       SelenideLogger.commitStep(log, error);
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else
-        throw error;
+        throw UIAssertionError.wrap(error);
     }
-    catch (WebDriverException error) {
-      SelenideLogger.commitStep(log, error);
-      throw Cleanup.of.isInvalidSelectorError(error) ? error : new UIAssertionError(error);
-    }
-    catch (Throwable error) {
+    catch (RuntimeException error) {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
@@ -417,7 +413,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if (fastSetValue) {
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
-      fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+      fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
     }
     else {
       element.clear();

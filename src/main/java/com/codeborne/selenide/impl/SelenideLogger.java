@@ -45,7 +45,7 @@ public class SelenideLogger {
   }
 
   private static String arrayToString(Object[] args) {
-    return args.length == 1 ? args[0].toString() : Arrays.toString(args);
+    return args.length == 1 ? String.valueOf(args[0]) : Arrays.toString(args);
   }
 
   public static SelenideLog beginStep(String source, String subject) {

@@ -22,5 +22,7 @@ public class SelenideLoggerTest {
     assertEquals("[1, 2, 3]", SelenideLogger.readableArguments(1, 2, 3));
     assertEquals("a", SelenideLogger.readableArguments(new String[] {"a"}));
     assertEquals("[a, bb]", SelenideLogger.readableArguments(new String[] {"a", "bb"}));
+    assertEquals("null", SelenideLogger.readableArguments(new String[] {null}));
+    assertEquals("[null, a, null]", SelenideLogger.readableArguments(new String[] {null, "a", null}));
   }
 }

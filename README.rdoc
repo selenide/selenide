@@ -75,6 +75,12 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.18.2 (Released 24.05.2015)
+* #182 Bugfix: Selenide 2.18.1 tries to take screenshot too late (when browser is already closed)
+
+=== 2.18.1 (Released 15.05.2015)
+* #180 Bugfix: Selenide 2.18 takes screenshot many times while waiting for condition
+
 === 2.18 (Released 29.04.2015)
 Behaviour changes:
 * #158 #167 do looping/waiting on a more upper-level, so that we could retry in case of more errors, e.g. StaleElementException thrown from Selenium

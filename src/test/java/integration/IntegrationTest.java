@@ -49,8 +49,10 @@ public abstract class IntegrationTest {
   }
 
   @Before
-  public void setBaseUrl() {
-    Configuration.baseUrl = "http://0.0.0.0:" + port;
+  public void resetSettings() {
+    Configuration.baseUrl = "https://0.0.0.0:" + port;
+    Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
+    fastSetValue = false;
     startMaximized = false;
   }
 
