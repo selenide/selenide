@@ -11,6 +11,7 @@ import java.util.Set;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
@@ -86,6 +87,33 @@ public class TabsTest extends IntegrationTest {
     switchToWindow(0); $("h1").shouldHave(text("Tabs"));
   }
 
+  @Test
+  public void canSwitchBetweenWindowsWithSameTitles() {
+    $(byText("Page4: same title")).click();
+    $("h1").shouldHave(text("Tabs"));
+
+    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
+    String firstHandle = getWebDriver().getWindowHandle();
+    
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    $(byText("Page5: same title")).click();  
+    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    
+    switchToWindowExceptHandles("Test::tabs::title", firstHandle); $("body").shouldHave(text("Secret phrase 2"));
+    String secondHandle = getWebDriver().getWindowHandle();
+    
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    $(byText("Page6: same title")).click();    
+    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
+    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    
+    switchToWindowExceptHandles("Test::tabs::title", firstHandle, secondHandle); $("body").shouldHave(text("Secret phrase 3"));
+    
+    switchToWindow("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+    
+  }
+  
   @After
   public void tearDown() {
     close();

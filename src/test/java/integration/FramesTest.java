@@ -1,5 +1,6 @@
 package integration;
 
+import static com.codeborne.selenide.Condition.name;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,30 @@ public class FramesTest extends IntegrationTest {
     openFile("page_with_frames.html");
   }
 
+  @Test
+  public void canSwitchFramesViaSequence() {      
+    assumeFalse(isChrome());
+    assertEquals("Test::frames", title());
+
+    switchToLastFrame("parentFrame");
+    $("frame").shouldHave(name("childFrame_1"));
+        
+    switchToLastFrame("parentFrame", "childFrame_1");
+    assertTrue(source().contains("Hello, WinRar!"));
+    
+    switchToLastFrame("parentFrame", "childFrame_2");
+    $("frame").shouldHave(name("childFrame_2_1"));
+    
+    switchToLastFrame();
+    $("frame").shouldHave(name("childFrame_2_1"));
+    
+    switchToLastFrame("parentFrame", "childFrame_2", "childFrame_2_1");
+    assertTrue(source().contains("This is last frame!"));   
+    
+    switchToLastFrame("parentFrame");
+    $("frame").shouldHave(name("childFrame_1"));
+  }
+  
   @Test
   public void canSwitchBetweenFramesByTitle() {
     assumeFalse(isChrome());
