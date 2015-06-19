@@ -51,10 +51,10 @@ public class TabsTest extends IntegrationTest {
     $(byText("Page3: jquery")).click();
 
     $("h1").shouldHave(text("Tabs"));
-    switchToWindow("Test::alerts"); $("h1").shouldHave(text("Page with alerts"));
-    switchToWindow("Test::jquery"); $("h1").shouldHave(text("Page with JQuery"));
-    switchToWindow("Test::uploads"); $("h1").shouldHave(text("File uploads"));
-    switchToWindow("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+    switchTo().window("Test::alerts"); $("h1").shouldHave(text("Page with alerts"));
+    switchTo().window("Test::jquery"); $("h1").shouldHave(text("Page with JQuery"));
+    switchTo().window("Test::uploads"); $("h1").shouldHave(text("File uploads"));
+    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
 
   @Test
@@ -66,10 +66,10 @@ public class TabsTest extends IntegrationTest {
 
     $("h1").shouldHave(text("Tabs"));
 
-    switchToWindow(1); $("h1").shouldHave(text("Page with JQuery"));
-    switchToWindow(2); $("h1").shouldHave(text("File uploads"));
-    switchToWindow(3); $("h1").shouldHave(text("Page with alerts"));
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window(1); $("h1").shouldHave(text("Page with JQuery"));
+    switchTo().window(2); $("h1").shouldHave(text("File uploads"));
+    switchTo().window(3); $("h1").shouldHave(text("Page with alerts"));
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
   @Test
@@ -81,10 +81,10 @@ public class TabsTest extends IntegrationTest {
 
     $("h1").shouldHave(text("Tabs"));
 
-    switchToWindow(1); $("h1").shouldHave(text("Page with alerts"));
-    switchToWindow(2); $("h1").shouldHave(text("File uploads"));
-    switchToWindow(3); $("h1").shouldHave(text("Page with JQuery"));
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window(1); $("h1").shouldHave(text("Page with alerts"));
+    switchTo().window(2); $("h1").shouldHave(text("File uploads"));
+    switchTo().window(3); $("h1").shouldHave(text("Page with JQuery"));
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
   @Test
@@ -93,25 +93,25 @@ public class TabsTest extends IntegrationTest {
     $(byText("Page4: same title")).click();
     $("h1").shouldHave(text("Tabs"));
 
-    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
+    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
     String firstHandle = getWebDriver().getWindowHandle();
 
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
     $(byText("Page5: same title")).click();
-    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
 
     switchTo().windowExceptHandles("Test::tabs::title", firstHandle); $("body").shouldHave(text("Secret phrase 2"));
     String secondHandle = getWebDriver().getWindowHandle();
 
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
     $(byText("Page6: same title")).click();
-    switchToWindow("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1")); 
-    switchToWindow(0); $("h1").shouldHave(text("Tabs"));
+    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1")); 
+    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
 
     switchTo().windowExceptHandles("Test::tabs::title", firstHandle, secondHandle); $("body").shouldHave(text("Secret phrase 3"));
 
-    switchToWindow("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
   
   @After
