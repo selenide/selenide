@@ -502,7 +502,21 @@ public class Selenide {
 	
     for (String _frame : framesSequence)
     {
-            driver.switchTo().frame(_frame);
+        try
+        {
+            driver.switchTo().frame(driver.findElement(By.id(_frame)));
+        }
+        catch (NoSuchElementException ex1)
+        {
+            try
+            {
+                driver.switchTo().frame(driver.findElement(By.name(_frame)));  
+            }
+            catch (NoSuchElementException ex2)
+            {
+                throw new NoSuchFrameException("No frame found with id/name = " + _frame);
+            }
+        }
     }
   }
   
