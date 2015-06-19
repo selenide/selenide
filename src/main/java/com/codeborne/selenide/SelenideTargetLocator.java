@@ -3,6 +3,9 @@ package com.codeborne.selenide;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class SelenideTargetLocator implements TargetLocator {
@@ -69,6 +72,18 @@ public class SelenideTargetLocator implements TargetLocator {
         throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
       }
     }
+    return driver;
+  }
+
+  /**
+   * Switch to window/tab by index
+   * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
+   * @param index index of window (0-based)
+   */
+  public WebDriver window(int index) {
+    WebDriver driver = getWebDriver();
+    List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
+    delegate.window(windowHandles.get(index));
     return driver;
   }
 }

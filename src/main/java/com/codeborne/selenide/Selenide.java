@@ -480,13 +480,12 @@ public class Selenide {
   }
 
   /**
-   * Switch to window/tab by index
-   * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
+   * @deprecated The same as {@code switchTo().window(index);}
+   * @param index index of window (0-based)
    */
+  @Deprecated
   public static void switchToWindow(int index) {
-    WebDriver driver = getWebDriver();
-    List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
-    driver.switchTo().window(windowHandles.get(index));
+    switchTo().window(index);
   }
   
   /**
