@@ -21,7 +21,6 @@ public class FramesTest extends IntegrationTest {
 
   @Test
   public void canSwitchFramesViaSequence() {
-    assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
     switchToLastFrame("parentFrame");
@@ -45,7 +44,7 @@ public class FramesTest extends IntegrationTest {
   
   @Test
   public void canSwitchBetweenFramesByTitle() {
-    assumeFalse(isChrome());
+//    assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
     switchTo().frame("topFrame");
@@ -65,9 +64,6 @@ public class FramesTest extends IntegrationTest {
     assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
-//    List<WebElement> frames = getWebDriver().findElements(By.cssSelector("frame,iframe"));
-//    System.out.println(frames);
-    
     switchTo().frame(0);
     assertTrue(source().contains("Hello, WinRar!"));
 
