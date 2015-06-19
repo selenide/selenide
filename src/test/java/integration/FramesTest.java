@@ -20,31 +20,31 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchFramesViaSequence() {
+  public void canSwitchIntoInnerFrame() {
     assertEquals("Test::frames", title());
 
-    switchToLastFrame("parentFrame");
+    switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
 
-    switchToLastFrame("parentFrame", "childFrame_1");
+    switchTo().innerFrame("parentFrame", "childFrame_1");
     assertTrue(source().contains("Hello, WinRar!"));
 
-    switchToLastFrame("parentFrame", "childFrame_2");
+    switchTo().innerFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
 
-    switchToLastFrame("parentFrame", "childFrame_2", "childFrame_2_1");
+    switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");
     assertTrue(source().contains("This is last frame!"));
 
-    switchToLastFrame("parentFrame");
+    switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
   }
 
   @Test
-  public void switchToLastFrame_withoutParameters_switchesToDefaultContent() {
-    switchToLastFrame("parentFrame");
+  public void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
+    switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
-    
-    switchToLastFrame();
+
+    switchTo().innerFrame();
     $("frame").shouldHave(name("topFrame"));
   }
 

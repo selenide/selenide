@@ -399,8 +399,8 @@ public class Selenide {
     }
   }
 
-  public static TargetLocator switchTo() {
-    return getWebDriver().switchTo();
+  public static SelenideTargetLocator switchTo() {
+    return new SelenideTargetLocator(getWebDriver().switchTo());
   }
 
   public static WebElement getFocusedElement() {
@@ -487,24 +487,6 @@ public class Selenide {
     WebDriver driver = getWebDriver();
     List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
     driver.switchTo().window(windowHandles.get(index));
-  }
-
-  /**
-   * Switch to last child frame in sequence.
-   */
-  public static void switchToLastFrame(String... frames) {
-    WebDriver driver = getWebDriver();
-    driver.switchTo().defaultContent();
-
-    for (String frame : frames) {
-      try {
-        String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
-        driver.switchTo().frame(driver.findElement(By.cssSelector(selector)));
-      }
-      catch (NoSuchElementException e) {
-        throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
-      }
-    }
   }
   
   /**
