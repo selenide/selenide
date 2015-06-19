@@ -32,19 +32,24 @@ public class FramesTest extends IntegrationTest {
     switchToLastFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
 
-    switchToLastFrame();
-    $("frame").shouldHave(name("childFrame_2_1"));
-
     switchToLastFrame("parentFrame", "childFrame_2", "childFrame_2_1");
     assertTrue(source().contains("This is last frame!"));
 
     switchToLastFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
   }
-  
+
+  @Test
+  public void switchToLastFrame_withoutParameters_switchesToDefaultContent() {
+    switchToLastFrame("parentFrame");
+    $("frame").shouldHave(name("childFrame_1"));
+    
+    switchToLastFrame();
+    $("frame").shouldHave(name("topFrame"));
+  }
+
   @Test
   public void canSwitchBetweenFramesByTitle() {
-//    assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
     switchTo().frame("topFrame");

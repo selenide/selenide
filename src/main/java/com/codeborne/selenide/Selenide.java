@@ -493,10 +493,6 @@ public class Selenide {
    * Switch to last child frame in sequence.
    */
   public static void switchToLastFrame(String... frames) {
-    if (frames.length <= 0) {
-      return;
-    }
-
     WebDriver driver = getWebDriver();
     driver.switchTo().defaultContent();
 
