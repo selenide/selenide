@@ -504,18 +504,20 @@ public class Selenide {
     {
         try
         {
-            driver.switchTo().frame(driver.findElement(By.id(_frame)));
+            driver.switchTo()
+                  .frame(driver.findElement(By.cssSelector("frame#"
+                                                            + _frame
+                                                            + ",frame[name="
+                                                            + _frame
+                                                            + "],iframe#"
+                                                            + _frame
+                                                            + ",iframe[name=" 
+                                                            + _frame
+                                                            + "]")));                       
         }
-        catch (NoSuchElementException ex1)
+        catch (NoSuchElementException ex)
         {
-            try
-            {
-                driver.switchTo().frame(driver.findElement(By.name(_frame)));  
-            }
-            catch (NoSuchElementException ex2)
-            {
-                throw new NoSuchFrameException("No frame found with id/name = " + _frame);
-            }
+            throw new NoSuchFrameException("No frame found with id/name = " + _frame);
         }
     }
   }
