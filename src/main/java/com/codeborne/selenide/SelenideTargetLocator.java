@@ -4,7 +4,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
@@ -33,11 +35,6 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   public WebDriver parentFrame() {
     return delegate.parentFrame();
-  }
-
-  @Override
-  public WebDriver window(String nameOrHandle) {
-    return delegate.window(nameOrHandle);
   }
 
   @Override
@@ -85,5 +82,39 @@ public class SelenideTargetLocator implements TargetLocator {
     List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
     delegate.window(windowHandles.get(index));
     return driver;
+  }
+
+  /**
+   * Switch to window/tab by name/handle/title
+   * @param nameOrHandleOrTitle name or handle or title of window/tab
+   */
+  @Override
+  public WebDriver window(String nameOrHandleOrTitle) {
+    try {
+      return delegate.window(nameOrHandleOrTitle);
+    }
+    catch (NoSuchWindowException windowWithNameOrTitleNotFound) {
+      return windowExceptHandles(nameOrHandleOrTitle);
+    }
+  }
+
+  /**
+   * Switch to window/tab by name/handle/title except some windows handles
+   * @param nameOrHandleOrTitle name or handle or title of window/tab
+   * @param exceptHandles window handles that should be ignored
+   */
+  public WebDriver windowExceptHandles(String nameOrHandleOrTitle, String... exceptHandles) {
+    WebDriver driver = getWebDriver();
+    
+    Set<String> windowHandles = driver.getWindowHandles();
+    windowHandles.removeAll(Arrays.asList(exceptHandles));
+    
+    for (String windowHandle : windowHandles) {
+      driver.switchTo().window(windowHandle);
+      if (nameOrHandleOrTitle.equals(driver.getTitle())) {
+        return driver;
+      }
+    }
+    throw new NoSuchWindowException("Window with id/name/title not found: " + nameOrHandleOrTitle);
   }
 }

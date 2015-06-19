@@ -453,30 +453,11 @@ public class Selenide {
 
   /**
    * Switch to window/tab by title
+   * @deprecated Same as switchTo().window(title)
    */
+  @Deprecated
   public static void switchToWindow(String title) {
-    switchToWindowExceptHandles(title);
-  }
-
-  /**
-   * Switch to window/tab by title except some windows handles
-   */
-  public static void switchToWindowExceptHandles(String title, String... exceptHandles) {
-    WebDriver driver = getWebDriver();
-    Set<String> windowHandles = driver.getWindowHandles();
-
-    windowHandles.removeAll(Arrays.asList(exceptHandles));
-    if (windowHandles.isEmpty()) {
-      return;
-    }
-
-    for (String windowHandle : windowHandles) {
-      driver.switchTo().window(windowHandle);
-      if (title.equals(driver.getTitle())) {
-        return;
-      }
-    }
-    throw new IllegalArgumentException("Window with title not found: " + title);
+    switchTo().window(title);
   }
 
   /**
