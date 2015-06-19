@@ -89,6 +89,7 @@ public class TabsTest extends IntegrationTest {
 
   @Test
   public void canSwitchBetweenWindowsWithSameTitles() {
+    assumeFalse(isHtmlUnit());
     $(byText("Page4: same title")).click();
     $("h1").shouldHave(text("Tabs"));
 
