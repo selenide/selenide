@@ -461,15 +461,15 @@ public class Selenide {
   /**
    * Switch to window/tab by title except some windows handles
    */
-  public static void switchToWindowExceptHandles(String title, String ... exceptHandles) {
+  public static void switchToWindowExceptHandles(String title, String... exceptHandles) {
     WebDriver driver = getWebDriver();
     Set<String> windowHandles = driver.getWindowHandles();
-	
-	windowHandles.removeAll(Arrays.asList(exceptHandles));
-	if (windowHandles.isEmpty()) {
-		return;
-	}
-		
+
+    windowHandles.removeAll(Arrays.asList(exceptHandles));
+    if (windowHandles.isEmpty()) {
+      return;
+    }
+
     for (String windowHandle : windowHandles) {
       driver.switchTo().window(windowHandle);
       if (title.equals(driver.getTitle())) {
@@ -488,37 +488,26 @@ public class Selenide {
     List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
     driver.switchTo().window(windowHandles.get(index));
   }
-  
+
   /**
    * Switch to last child frame in sequence.
    */
-  public static void switchToLastFrame(String ... framesSequence) {        	
-    if (framesSequence.length <= 0) {
-            return;
-    } 		 
-    
+  public static void switchToLastFrame(String... frames) {
+    if (frames.length <= 0) {
+      return;
+    }
+
     WebDriver driver = getWebDriver();
-    driver.switchTo().defaultContent();  
-	
-    for (String _frame : framesSequence)
-    {
-        try
-        {
-            driver.switchTo()
-                  .frame(driver.findElement(By.cssSelector("frame#"
-                                                            + _frame
-                                                            + ",frame[name="
-                                                            + _frame
-                                                            + "],iframe#"
-                                                            + _frame
-                                                            + ",iframe[name=" 
-                                                            + _frame
-                                                            + "]")));                       
-        }
-        catch (NoSuchElementException ex)
-        {
-            throw new NoSuchFrameException("No frame found with id/name = " + _frame);
-        }
+    driver.switchTo().defaultContent();
+
+    for (String frame : frames) {
+      try {
+        String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
+        driver.switchTo().frame(driver.findElement(By.cssSelector(selector)));
+      }
+      catch (NoSuchElementException e) {
+        throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
+      }
     }
   }
   

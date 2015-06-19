@@ -4,14 +4,9 @@ import static com.codeborne.selenide.Condition.name;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.junit.Assert.assertEquals;
@@ -25,25 +20,25 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchFramesViaSequence() {      
+  public void canSwitchFramesViaSequence() {
     assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
     switchToLastFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
-        
+
     switchToLastFrame("parentFrame", "childFrame_1");
     assertTrue(source().contains("Hello, WinRar!"));
-    
+
     switchToLastFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
-    
+
     switchToLastFrame();
     $("frame").shouldHave(name("childFrame_2_1"));
-    
+
     switchToLastFrame("parentFrame", "childFrame_2", "childFrame_2_1");
-    assertTrue(source().contains("This is last frame!"));   
-    
+    assertTrue(source().contains("This is last frame!"));
+
     switchToLastFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
   }
