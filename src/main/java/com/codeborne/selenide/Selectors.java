@@ -57,9 +57,9 @@ public class Selectors {
   public static By byTitle(String title) {
     return byAttribute("title", title);
   }
-
-	public static By byValue(String value) {
-	  return byAttribute("value", value);
+  
+  public static By byValue(String value) {
+    return byAttribute("value", value);
   }
 
   public static class ByText extends By.ByXPath {

@@ -121,7 +121,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Get value of attribute "data-<i>dataAttributeName</i>"
    */
-	String data(String dataAttributeName);
+  String data(String dataAttributeName);
 
   /**
    * Checks if element exists true on the current page.

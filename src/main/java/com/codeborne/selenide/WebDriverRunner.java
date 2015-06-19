@@ -102,7 +102,7 @@ public class WebDriverRunner {
   }
 
   public static void setProxy(Proxy webProxy) {
-	    webdriverContainer.setProxy(webProxy);
+    webdriverContainer.setProxy(webProxy);
   }
   
   /**
