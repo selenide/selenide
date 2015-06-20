@@ -7,6 +7,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -50,7 +51,7 @@ public abstract class IntegrationTest {
 
   @Before
   public void resetSettings() {
-    Configuration.baseUrl = "https://0.0.0.0:" + port;
+    Configuration.baseUrl = "https://127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     startMaximized = false;
@@ -88,14 +89,19 @@ public abstract class IntegrationTest {
     if (averageSeleniumCommandDuration < 0) {
       open("/start_page.html");
       long start = System.currentTimeMillis();
-      $("h1").isDisplayed();
-      $("h1").isEnabled();
-      $("body").findElement(By.tagName("h1"));
-      $("h1").getText();
-      
-      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
-      System.out.println("Average selenium command duration for " + browser + ": " +
-          averageSeleniumCommandDuration + " ms.");
+      try {
+        $("h1").isDisplayed();
+        $("h1").isEnabled();
+        $("body").findElement(By.tagName("h1"));
+        $("h1").getText();
+        averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
+        System.out.println("Average selenium command duration for " + browser + ": " +
+            averageSeleniumCommandDuration + " ms.");
+      }
+      catch (WebDriverException e) {
+        System.err.println("Failed to calculate average selenium command duration. Using 100 by default.");
+        averageSeleniumCommandDuration = 100;
+      }
     }
   }
 }
