@@ -7,6 +7,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -90,10 +91,11 @@ public abstract class IntegrationTest {
       open("/start_page.html");
       long start = System.currentTimeMillis();
       try {
-        $("h1").isDisplayed();
-        $("h1").isEnabled();
-        $("body").findElement(By.tagName("h1"));
-        $("h1").getText();
+        WebDriver driver = getWebDriver();
+        driver.findElement(By.tagName("h1")).isDisplayed();
+        driver.findElement(By.tagName("h1")).isEnabled();
+        driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
+        driver.findElement(By.tagName("h1")).getText();
         averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
         System.out.println("Average selenium command duration for " + browser + ": " +
             averageSeleniumCommandDuration + " ms.");
