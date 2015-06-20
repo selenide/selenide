@@ -101,17 +101,17 @@ public class TabsTest extends IntegrationTest {
     switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
     switchTo().window(0); $("h1").shouldHave(text("Tabs"));
 
-    switchTo().windowExceptHandles("Test::tabs::title", firstHandle); $("body").shouldHave(text("Secret phrase 2"));
-    String secondHandle = getWebDriver().getWindowHandle();
-
-    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
-    $(byText("Page6: same title")).click();
-    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1")); 
-    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
-
-    switchTo().windowExceptHandles("Test::tabs::title", firstHandle, secondHandle); $("body").shouldHave(text("Secret phrase 3"));
-
-    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+//    switchTo().windowExceptHandles("Test::tabs::title", firstHandle); $("body").shouldHave(text("Secret phrase 2"));
+//    String secondHandle = getWebDriver().getWindowHandle();
+//
+//    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
+//    $(byText("Page6: same title")).click();
+//    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1")); 
+//    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
+//
+//    switchTo().windowExceptHandles("Test::tabs::title", firstHandle, secondHandle); $("body").shouldHave(text("Secret phrase 3"));
+//
+//    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
   
   @After

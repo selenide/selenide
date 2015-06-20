@@ -103,7 +103,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    * @param exceptHandles window handles that should be ignored
    */
-  public WebDriver windowExceptHandles(String nameOrHandleOrTitle, String... exceptHandles) {
+  protected WebDriver windowExceptHandles(String nameOrHandleOrTitle, String... exceptHandles) {
     WebDriver driver = getWebDriver();
     
     Set<String> windowHandles = driver.getWindowHandles();
