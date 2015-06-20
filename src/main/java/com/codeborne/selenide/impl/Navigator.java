@@ -70,6 +70,8 @@ public class Navigator {
       );
     } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
       System.err.println(cannotExecuteJsAgainstPlainTextPage.toString());
+    } catch (WebDriverException cannotExecuteJs) {
+      System.err.println(cannotExecuteJs.toString());
     }
   }
 

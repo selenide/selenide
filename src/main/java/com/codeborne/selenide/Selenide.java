@@ -484,15 +484,20 @@ public class Selenide {
     if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
       return emptyList();
     }
-    List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
-    if (errors == null || errors.isEmpty()) {
+    try {
+      List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
+      if (errors == null || errors.isEmpty()) {
+        return emptyList();
+      }
+      List<String> result = new ArrayList<String>(errors.size());
+      for (Object error : errors) {
+        result.add(error.toString());
+      }
+      return result;
+    } catch (WebDriverException cannotExecuteJs) {
+      System.err.println(cannotExecuteJs.toString());
       return emptyList();
     }
-    List<String> result = new ArrayList<String>(errors.size());
-    for (Object error : errors) {
-      result.add(error.toString());
-    }
-    return result;
   }
 
   /**
