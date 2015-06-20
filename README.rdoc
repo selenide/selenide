@@ -75,6 +75,14 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.19 (Released 21.06.2015)
+* #175 Add method to switch into inner frames: `switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");`
+* #164 Method `$.download()` accepts untrusted self-signed certificates
+* #185 PhantomJS accepts untrusted self-signed certificates
+* fastSetValue() also triggers "focus" event (just in case)
+* upgrade to Selenium webdriver 2.46.0
+* #161 test should not fail if webdriver failed to collect Javascript errors
+
 === 2.18.2 (Released 24.05.2015)
 * #182 Bugfix: Selenide 2.18.1 tries to take screenshot too late (when browser is already closed)
 
