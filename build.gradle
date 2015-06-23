@@ -142,6 +142,16 @@ tasks.withType(Test).all { testTask ->
 
 task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'phantomjs']) {}
 
+jar {
+  manifest {
+    attributes(
+      "Name": project.group + '.' + project.name,
+      "Implementation-Title": project.group + '.' + project.name,
+      "Implementation-Version": version,
+      "Implementation-Vendor": "Codeborne")
+  }
+}
+
 task sourcesJar(type: Jar, dependsOn:classes) {
   classifier = 'sources'
   from sourceSets.main.allSource
