@@ -24,10 +24,6 @@ import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.startsWith;
 
 public class SelenideMethodsTest extends IntegrationTest {
-
-  private final String additionalMessage = "test message";
-  private final String becauseAdditionMessage = "because test message";
-
   @Before
   public void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
@@ -469,74 +465,74 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains(becauseAdditionMessage));
+    thrown.expectMessage(contains("because it's wrong text"));
 
-    $("h1").should(text("Some wrong test").because("test message"));
+    $("h1").should(text("Some wrong test").because("it's wrong text"));
   }
 
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains(becauseAdditionMessage));
+    thrown.expectMessage(contains("because it's wrong text"));
 
-    $("h1").shouldHave(text("Some wrong test").because("test message"));
+    $("h1").shouldHave(text("Some wrong test").because("it's wrong text"));
   }
 
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains(becauseAdditionMessage));
+    thrown.expectMessage(contains("because it's wrong text"));
 
-    $("h1").shouldBe(text("Some wrong test").because("test message"));
+    $("h1").shouldBe(text("Some wrong test").because("it's wrong text"));
   }
 
   @Test
   public void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
     timeout = 100L;
     thrown.expect(ElementShouldNot.class);
-    thrown.expectMessage(contains(becauseAdditionMessage));
-    $("h1").shouldNot(text("Page without JQuery").because(additionalMessage));
+    thrown.expectMessage(contains("because it's wrong text"));
+    $("h1").shouldNot(text("Page without JQuery").because("it's wrong text"));
 
     try {
-      $("h1").shouldNotHave(text("Page without JQuery").because(additionalMessage));
+      $("h1").shouldNotHave(text("Page without JQuery").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+      assertTrue(expected.getMessage().contains("because it's wrong text"));
     }
 
     try {
-      $("h1").shouldNotBe(text("Page without JQuery").because(additionalMessage));
+      $("h1").shouldNotBe(text("Page without JQuery").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+      assertTrue(expected.getMessage().contains("because it's wrong text"));
     }
   }
 
   @Test
   public void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitWhile(visible.because("test message"), 100);
+      $("h1").waitWhile(visible.because("we expect it do disappear"), 100);
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
       assertTrue("Actual error: " + expected.getMessage(),
-          expected.getMessage().contains(becauseAdditionMessage));
+          expected.getMessage().contains("because we expect it do disappear"));
     }
   }
 
   @Test
   public void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitUntil(hidden.because("test message"), 100);
+      $("h1").waitUntil(hidden.because("it's sensitive information"), 100);
       fail("exception expected");
     }
     catch (ElementShould expected) {
       assertTrue("Actual error: " + expected.getMessage(), 
-          expected.getMessage().contains(becauseAdditionMessage));
+          expected.getMessage().contains("because it's sensitive information"));
     }
   }
 
