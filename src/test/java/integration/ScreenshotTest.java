@@ -31,7 +31,7 @@ public class ScreenshotTest extends IntegrationTest {
     System.out.println("Screenshot of element taken: " + screenshot.getAbsolutePath());
     
     BufferedImage img = ImageIO.read(screenshot);
-    assertBetween(img.getWidth(), 109, 131);
+    assertBetween(img.getWidth(), 100, 150);
     assertEquals(img.getHeight(), 19, 19);
   }
 }
