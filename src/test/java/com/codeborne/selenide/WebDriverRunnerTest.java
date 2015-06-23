@@ -4,9 +4,12 @@ import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.net.URL;
@@ -21,12 +24,23 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
-  static WebDriver driver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  static WebDriver driver;
+  
   URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
 
   @Before 
   public void resetWebDriverContainer() {
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
+    driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
+    doReturn(mock(Navigation.class)).when(driver).navigate();
+
+    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer() {
+      @Override
+      protected WebDriver createHtmlUnitDriver() {
+        return driver;
+      }
+    });
+    
+    doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), anyVararg());
   }
 
   @After
@@ -46,7 +60,8 @@ public class WebDriverRunnerTest {
 
   @Test
   public void allowsToSpecifyCustomWebDriverProgrammatically() {
-    HtmlUnitDriver myDriver = new HtmlUnitDriver(true);
+    RemoteWebDriver myDriver = mock(RemoteWebDriver.class);
+    doReturn(mock(Navigation.class)).when(myDriver).navigate();
     WebDriverRunner.setWebDriver(myDriver);
 
     open(url);
