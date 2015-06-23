@@ -621,10 +621,35 @@ public abstract class Condition implements Predicate<WebElement> {
       }
     };
   }
+  
+  private static class ExplainedCondition extends Condition {
+    private final Condition delegate;
+    private final String message;
+
+    private ExplainedCondition(Condition delegate, String message) {
+      super(delegate.name, delegate.nullIsAllowed);
+      this.delegate = delegate;
+      this.message = message;
+    }
+
+    @Override
+    public boolean apply(WebElement element) {
+      return delegate.apply(element);
+    }
+
+    @Override
+    public String actualValue(WebElement element) {
+      return delegate.actualValue(element);
+    }
+    
+    @Override
+    public String toString() {
+      return delegate.toString() + " (because " + message + ")";
+    }
+  }
 
   protected final String name;
   protected final boolean nullIsAllowed;
-
 
   public Condition(String name) {
     this(name, false);
@@ -658,6 +683,10 @@ public abstract class Condition implements Predicate<WebElement> {
    */
   public String actualValue(WebElement element) {
     return null;
+  }
+  
+  public Condition because(String message) {
+    return new ExplainedCondition(this, message);
   }
 
   @Override

@@ -471,7 +471,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     thrown.expect(ElementShould.class);
     thrown.expectMessage(contains(becauseAdditionMessage));
 
-    $("h1").should("test message", text("Some wrong test"));
+    $("h1").should(text("Some wrong test").because("test message"));
   }
 
   @Test
@@ -480,7 +480,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     thrown.expect(ElementShould.class);
     thrown.expectMessage(contains(becauseAdditionMessage));
 
-    $("h1").shouldHave("test message", text("Some wrong test"));
+    $("h1").shouldHave(text("Some wrong test").because("test message"));
   }
 
   @Test
@@ -489,7 +489,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     thrown.expect(ElementShould.class);
     thrown.expectMessage(contains(becauseAdditionMessage));
 
-    $("h1").shouldBe("test message", text("Some wrong test"));
+    $("h1").shouldBe(text("Some wrong test").because("test message"));
   }
 
   @Test
@@ -497,10 +497,10 @@ public class SelenideMethodsTest extends IntegrationTest {
     timeout = 100L;
     thrown.expect(ElementShouldNot.class);
     thrown.expectMessage(contains(becauseAdditionMessage));
-    $("h1").shouldNot(additionalMessage, text("Page without JQuery"));
+    $("h1").shouldNot(text("Page without JQuery").because(additionalMessage));
 
     try {
-      $("h1").shouldNotHave(additionalMessage, text("Page without JQuery"));
+      $("h1").shouldNotHave(text("Page without JQuery").because(additionalMessage));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -508,7 +508,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     }
 
     try {
-      $("h1").shouldNotBe(additionalMessage, text("Page without JQuery"));
+      $("h1").shouldNotBe(text("Page without JQuery").because(additionalMessage));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -519,22 +519,24 @@ public class SelenideMethodsTest extends IntegrationTest {
   @Test
   public void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitWhile("test message", visible, 100);
+      $("h1").waitWhile(visible.because("test message"), 100);
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+      assertTrue("Actual error: " + expected.getMessage(),
+          expected.getMessage().contains(becauseAdditionMessage));
     }
   }
 
   @Test
   public void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitUntil("test message", hidden, 100);
+      $("h1").waitUntil(hidden.because("test message"), 100);
       fail("exception expected");
     }
     catch (ElementShould expected) {
-      assertTrue(expected.getMessage().contains(becauseAdditionMessage));
+      assertTrue("Actual error: " + expected.getMessage(), 
+          expected.getMessage().contains(becauseAdditionMessage));
     }
   }
 

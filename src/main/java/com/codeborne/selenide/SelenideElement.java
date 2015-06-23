@@ -174,26 +174,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement should(Condition... condition);
 
   /**
-   * <p>Checks that given element meets all of given conditions.</p>
-   *
-   * <p>
-   * IMPORTANT: If element does not match then conditions immediately, waits up to
-   * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.
-   * </p>
-   *
-   * <p>Timeout is configurable via Configuration#timeout</p>
-   *
-   * <p>For example: <code>
-   *   $("#errorMessage").should(appear);
-   * </code></p>
-   *
-   * @param message added into detailed error report as business reason
-   *
-   * @return Given element, useful for chaining:
-   * <code>$("#errorMessage").should("on error user should see error message", appear).shouldBe(enabled);</code>
-   *
-   * @see Configuration#timeout
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement should(String message, Condition... condition);
 
   /**
@@ -207,8 +191,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldHave(Condition... condition);
 
   /**
-   * @see SelenideElement#should(java.lang.String, com.codeborne.selenide.Condition...)
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement shouldHave(String message, Condition... condition);
 
   /**
@@ -222,8 +208,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldBe(Condition... condition);
 
   /**
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement shouldBe(String message, Condition... condition);
 
   /**
@@ -245,8 +233,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldNot(Condition... condition);
 
   /**
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement shouldNot(String message, Condition... condition);
 
   /**
@@ -260,8 +250,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldNotHave(Condition... condition);
 
   /**
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement shouldNotHave(String message, Condition... condition);
 
   /**
@@ -275,8 +267,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement shouldNotBe(Condition... condition);
 
   /**
-   * @see SelenideElement#should(com.codeborne.selenide.Condition...)
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement shouldNotBe(String message, Condition... condition);
 
   /**
@@ -291,15 +285,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
 
   /**
-   * <p>Wait until given element meets given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
-   *
-   * @param condition e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @param  message will be added in detailed error report as business reason
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement waitUntil(String message, Condition condition, long timeoutMilliseconds);
 
   /**
@@ -314,15 +303,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
 
   /**
-   * <p>Wait until given element does not meet given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
-   *
-   * @param condition e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @param  message will be added in detailed error report as business reason
+   * @deprecated Method with "message" parameter will be removed in Selenide 3.0
+   * Use method com.codeborne.selenide.Condition#because instead
    */
+  @Deprecated
   SelenideElement waitWhile(String message, Condition condition, long timeoutMilliseconds);
 
   /**
