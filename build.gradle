@@ -145,7 +145,6 @@ task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'pha
 jar {
   manifest {
     attributes(
-      "Name": project.group + '.' + project.name,
       "Implementation-Title": project.group + '.' + project.name,
       "Implementation-Version": version,
       "Implementation-Vendor": "Codeborne")
