@@ -2,7 +2,11 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.Html;
+import com.google.common.base.Joiner;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 public class Text extends Condition {
   protected final String text;
@@ -13,7 +17,19 @@ public class Text extends Condition {
 
   @Override
   public boolean apply(WebElement element) {
-    return Html.text.contains(element.getText(), text.toLowerCase());
+    String elementText = "select".equalsIgnoreCase(element.getTagName()) ?
+        getSelectedOptionsTexts(element) :
+        element.getText();
+    return Html.text.contains(elementText, this.text.toLowerCase());
+  }
+
+  private String getSelectedOptionsTexts(WebElement element) {
+    List<WebElement> selectedOptions = new Select(element).getAllSelectedOptions();
+    StringBuilder sb = new StringBuilder();
+    for (WebElement selectedOption : selectedOptions) {
+      sb.append(selectedOption.getText());
+    }
+    return sb.toString();
   }
 
   @Override

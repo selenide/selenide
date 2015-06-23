@@ -158,8 +158,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       followLink();
       return null;
     }
-    else if ("text".equals(method.getName())) {
-      return getDelegate().getText();
+    else if ("text".equals(method.getName()) || "getText".equals(method.getName())) {
+      return getText();
     }
     else if ("innerText".equals(method.getName())) {
       return getInnerText();
@@ -338,6 +338,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     if (element.isSelected() ^ selected) {
       click(element);
     }
+  }
+
+  protected String getText() {
+    WebElement element = getDelegate();
+    return "select".equalsIgnoreCase(element.getTagName()) ? getSelectedText(element) : element.getText();
   }
 
   protected String getInnerText() {

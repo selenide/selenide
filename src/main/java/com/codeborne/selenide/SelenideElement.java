@@ -81,6 +81,14 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement pressTab();
 
   /**
+   * Get the visible text of this element, including sub-elements without leading/trailing whitespace.
+   * NB! For "select", returns text(s) of selected option(s).
+   *
+   * @return The innerText of this element
+   */
+  @Override String getText();
+
+  /**
    * Short form of getText()
    * @see WebElement#getText()
    */

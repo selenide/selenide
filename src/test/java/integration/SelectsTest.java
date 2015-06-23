@@ -46,6 +46,22 @@ public class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  public void getTextReturnsTextsOfSelectedOptions() {
+    assertEquals("-- Select your hero --", $("#hero").getText());
+
+    $("#hero").selectOptionByValue("john mc'lain");
+    assertEquals("John Mc'Lain", $("#hero").getText());
+  }
+
+  @Test
+  public void shouldHaveTextChecksSelectedOption() {
+    $("#hero").shouldNotHave(text("John Mc'Lain").because("Option is not selected yet"));
+
+    $("#hero").selectOptionByValue("john mc'lain");
+    $("#hero").shouldHave(text("John Mc'Lain").because("Option `john mc'lain` is selected"));
+  }
+
+  @Test
   public void optionValueWithApostrophe() {
     $("#hero").selectOptionByValue("john mc'lain");
     $("#hero").getSelectedOption().shouldHave(text("John Mc'Lain"));
