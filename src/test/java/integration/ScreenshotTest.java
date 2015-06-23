@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.SelenideMethodsTest.assertBetween;
@@ -31,7 +30,7 @@ public class ScreenshotTest extends IntegrationTest {
     System.out.println("Screenshot of element taken: " + screenshot.getAbsolutePath());
     
     BufferedImage img = ImageIO.read(screenshot);
-    assertBetween(img.getWidth(), 100, 150);
-    assertEquals(img.getHeight(), 19, 19);
+    assertBetween(img.getWidth(), 50, 200);
+    assertEquals(img.getHeight(), 10, 30);
   }
 }
