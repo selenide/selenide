@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -281,6 +282,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     else if ("isImage".equals(method.getName())) {
       return isImage();
     }
+    else if ("screenshot".equals(method.getName())) {
+      return screenshot();
+    }
     else {
       throw new IllegalArgumentException("Unknown Selenide method: " + method.getName());
     }
@@ -322,6 +326,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return executeJavaScript("return arguments[0].complete && " +
         "typeof arguments[0].naturalWidth != 'undefined' && " +
         "arguments[0].naturalWidth > 0", img);
+  }
+  
+  protected File screenshot() {
+    return Screenshots.takeScreenShot(getDelegate());
   }
 
   protected boolean matches(Condition condition) {

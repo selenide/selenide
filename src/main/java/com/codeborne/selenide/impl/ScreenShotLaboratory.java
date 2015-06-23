@@ -1,14 +1,14 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +80,37 @@ public class ScreenShotLaboratory {
 
     String screenshot = firstNonNull(imageFile, pageSource).getAbsolutePath();
     return addToHistory(screenshot);
+  }
+  
+  public File takeScreenshot(WebElement element) {
+    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
+      System.err.println("Cannot take screenshot because browser is not started");
+      return null;
+    }
+
+    WebDriver webdriver = getWebDriver();
+    if (!(webdriver instanceof TakesScreenshot)) {
+      System.err.println("Cannot take screenshot because browser does not support screenshots");
+      return null;
+    }
+    
+    File screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
+
+    Point p = element.getLocation();
+    Dimension elementSize = element.getSize();
+
+    try {
+      BufferedImage img = ImageIO.read(screen);
+      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementSize.getWidth(), elementSize.getHeight());
+      ImageIO.write(dest, "png", screen);
+      File screenshotOfElement = new File(generateScreenshotFileName());
+      FileUtils.copyFile(screen, screenshotOfElement);
+      return screenshotOfElement;
+    }
+    catch (IOException e) {
+      printOnce("takeScreenshotImage", e);
+      return null;
+    }
   }
 
   public File getScreenShotAsFile() {

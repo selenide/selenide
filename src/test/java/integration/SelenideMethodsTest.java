@@ -554,7 +554,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals(initialX, $(By.name("domain")).getLocation().getX());
   }
 
-  private static void assertBetween(int n, int lower, int upper) {
+  static void assertBetween(int n, int lower, int upper) {
     if (!isHtmlUnit()) {
       assertTrue(n + " should be between " + lower + " and " + upper, n >= lower);
       assertTrue(n + " should be between " + lower + " and " + upper, n <= upper);

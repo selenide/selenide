@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +23,10 @@ public class Screenshots {
 
   public static File getScreenShotAsFile(){
       return screenshots.getScreenShotAsFile();
+  }
+
+  public static File takeScreenShot(WebElement element){
+      return screenshots.takeScreenshot(element);
   }
 
   public static void startContext(String className, String methodName) {

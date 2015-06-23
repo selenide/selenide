@@ -531,4 +531,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @since 2.13
    */
   boolean isImage();
+
+  /**
+   * Take screenshot of this element
+   * @return file with screenshot (*.png)
+   */
+  File screenshot();
 }
