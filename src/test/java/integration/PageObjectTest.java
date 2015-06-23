@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
@@ -54,15 +55,29 @@ public class PageObjectTest extends IntegrationTest {
   }
 
   @Test
-  public void canUseExtendedWebElementsFunctionality() {
+  public void canInjectSelenideElement() {
+    pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
+    pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
+  }
+
+  @Test
+  public void canInjectListOfSelenideElements() {
     pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
 
     assertEquals(3, pageWithSelects.h2s.size());
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     pageWithSelects.h2s.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
+  }
 
-    pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
+  @Test
+  public void canInjectElementsCollection() {
+    pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
+
+    assertEquals(3, pageWithSelects.h2sElementsCollection.size());
+    pageWithSelects.h2sElementsCollection.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
+    pageWithSelects.h2sElementsCollection.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
+    pageWithSelects.h2sElementsCollection.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
   }
 
   @Test
@@ -92,6 +107,9 @@ public class PageObjectTest extends IntegrationTest {
 
     @FindBy(tagName = "h2")
     public List<SelenideElement> h2s;
+
+    @FindBy(tagName = "h2")
+    public ElementsCollection h2sElementsCollection;
 
     @FindBy(id = "dynamic-content")
     public SelenideElement dynamicContent;

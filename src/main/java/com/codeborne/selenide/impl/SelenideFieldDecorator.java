@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -31,6 +32,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return WaitingSelenideElement.wrap(searchContext, selector, 0);
+    } if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+      return new ElementsCollection(new BySelectorCollection(searchContext, selector));
     } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
     } else if (isDecoratableList(field, ElementsContainer.class)) {
