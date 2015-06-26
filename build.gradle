@@ -65,7 +65,7 @@ task libs(type: Sync) {
   into "$buildDir/lib"
 }
 
-classes.dependsOn libs
+compileJava.dependsOn libs
 
 jacoco {
   toolVersion = "0.7.5.201505241946"
