@@ -146,6 +146,7 @@ public class FileDownloader {
   protected BasicClientCookie duplicateCookie(Cookie seleniumCookie) {
     BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
     duplicateCookie.setDomain(seleniumCookie.getDomain());
+    duplicateCookie.setAttribute(BasicClientCookie.DOMAIN_ATTR, seleniumCookie.getDomain());
     duplicateCookie.setSecure(seleniumCookie.isSecure());
     duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
     duplicateCookie.setPath(seleniumCookie.getPath());
