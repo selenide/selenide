@@ -4,7 +4,7 @@ apply plugin: "jacoco"
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.19'
+version='2.20-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
@@ -172,7 +172,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.4'
+  gradleVersion = '2.5'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }
