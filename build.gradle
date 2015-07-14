@@ -34,6 +34,7 @@ dependencies {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     exclude group: 'org.webbitserver', module: 'webbit'
     exclude group: 'commons-codec', module: 'commons-codec'
+    exclude group: 'cglib', module: 'cglib-nodep'
   }
   compile 'com.google.guava:guava:18.0'
   runtime 'commons-codec:commons-codec:1.10'
