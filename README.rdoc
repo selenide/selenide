@@ -75,6 +75,15 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.20 (Planned to xx.08.2015)
+* #195 replace System.out and System.err to slf4 logger
+* Cookies are not sent in FileDownloader after httpclient update [by Philipp Kolesnikov]
+* #186 Selenide page factory can inject ElementsCollection
+* #134 for "select", $.getText() returns text(s) of selected option(s).
+* #66 can take screenshot of a single web element
+* All should-methods with "message" parameter are deprecated
+* exclude cglib-nodep from Selenide dependencies
+
 === 2.19 (Released 21.06.2015)
 * #175 Add method to switch into inner frames: `switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");`
 * #164 Method `$.download()` accepts untrusted self-signed certificates
