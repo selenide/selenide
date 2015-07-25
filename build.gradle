@@ -42,7 +42,7 @@ dependencies {
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.17', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.17'
   provided 'junit:junit:4.12'
-  provided 'org.testng:testng:6.9.5'
+  provided 'org.testng:testng:6.9.6'
   
   // For PhantomJS driver:
   //provided group: 'com.github.detro', name: 'phantomjsdriver', version: '1.2.0', transitive: false
@@ -52,7 +52,7 @@ dependencies {
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
   testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.12'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
-  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
+  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.6.0'
 
   testCompile 'org.mockito:mockito-core:1.10.19'
   testCompile 'org.eclipse.jetty:jetty-server:9.3.0.RC0'
