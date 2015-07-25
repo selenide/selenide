@@ -76,7 +76,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.20 (Planned to xx.08.2015)
-* #195 replace System.out and System.err to slf4 logger
+* #195 replace System.out and System.err by java.util.logging
 * Cookies are not sent in FileDownloader after httpclient update [by Philipp Kolesnikov]
 * #186 Selenide page factory can inject ElementsCollection
 * #134 for "select", $.getText() returns text(s) of selected option(s).

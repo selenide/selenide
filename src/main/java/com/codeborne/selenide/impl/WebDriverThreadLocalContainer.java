@@ -15,6 +15,7 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import java.awt.Toolkit;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static java.lang.Thread.currentThread;
+import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
@@ -70,10 +72,13 @@ public class WebDriverThreadLocalContainer {
       webDriver.getTitle();
       return true;
     } catch (UnreachableBrowserException e) {
+      log.log(FINE, "Browser is unreachable", e);
       return false;
     } catch (NoSuchWindowException e) {
+      log.log(FINE, "Browser window is now found", e);
       return false;
     } catch (SessionNotFoundException e) {
+      log.log(FINE, "Browser session is not found", e);
       return false;
     }
   }
@@ -87,7 +92,12 @@ public class WebDriverThreadLocalContainer {
   
   public WebDriver getWebDriver() {
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
-    return webDriver != null ? webDriver : setWebDriver(createDriver());
+    if (webDriver != null) {
+      return webDriver;
+    }
+
+    log.info("No webdriver is bound to current thread: " + currentThread().getId() + " - let's create new webdriver");
+    return setWebDriver(createDriver());
   }
 
   public WebDriver getAndCheckWebDriver() {
@@ -118,8 +128,9 @@ public class WebDriverThreadLocalContainer {
       try {
         webdriver.quit();
       }
-      catch (UnreachableBrowserException ignored) {
+      catch (UnreachableBrowserException e) {
         // It happens for Firefox. It's ok: browser is already closed.
+        log.log(FINE, "Browser is unreachable", e);
       }
       catch (WebDriverException cannotCloseBrowser) {
         log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
@@ -156,6 +167,10 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createDriver() {
+    log.config("Configuration.browser=" + browser);
+    log.config("Configuration.remote=" + remote);
+    log.config("Configuration.startMaximized=" + startMaximized);
+    
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
         CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
             isFirefox() ? createFirefoxDriver() :
@@ -167,14 +182,19 @@ public class WebDriverThreadLocalContainer {
                                   createInstanceOf(browser);
     webdriver = maximize(webdriver);
 
-    log.info("Create webdriver: " + currentThread().getId() + " -> " + webdriver);
+    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
 
-    return markForAutoClose(listeners.isEmpty() ? webdriver : addListeners(webdriver));
+    return markForAutoClose(addListeners(webdriver));
   }
 
   protected WebDriver addListeners(WebDriver webdriver) {
+    if (listeners.isEmpty()) {
+      return webdriver;
+    }
+    
     EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
     for (WebDriverEventListener listener : listeners) {
+      log.info("Add listener to webdriver: " + listener);
       wrapper.register(listener);
     }
     return wrapper;
@@ -257,14 +277,14 @@ public class WebDriverThreadLocalContainer {
 
   protected void maximizeChromeBrowser(WebDriver.Window window) {
     // Chrome driver does not yet support maximizing. Let' apply black magic!
-    java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     Dimension screenResolution = new Dimension(
         (int) toolkit.getScreenSize().getWidth(),
         (int) toolkit.getScreenSize().getHeight());
 
     window.setSize(screenResolution);
-    window.setPosition(new org.openqa.selenium.Point(0, 0));
+    window.setPosition(new Point(0, 0));
   }
 
   protected WebDriver createInstanceOf(String className) {
