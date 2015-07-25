@@ -39,16 +39,10 @@ public class AutoCompleteTest extends IntegrationTest {
   }
 
   private SelenideElement waitUntilInputIsInitialized() {
-    System.out.println("-----------------");
-    System.out.println($("#tags"));
-    System.out.println("-----------------");
     return $("#tags").shouldHave(attribute("autocomplete", "off"), cssClass("ui-autocomplete-input"));
   }
 
   private void verifyAutocomplete() {
-    System.out.println("=================");
-    System.out.println($("#tags"));
-    System.out.println("=================");
     $(".ui-autocomplete li").shouldHave(text("JavaScript")).click();
     $("#anyButton").click();
 

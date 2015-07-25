@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
@@ -26,6 +27,8 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @Ignore // TODO Un-ignore test and upgrade browsermobproxy to version that uses latest jetty
 public class BrowserMobProxyTest extends IntegrationTest {
+  private static final Logger log = Logger.getLogger(BrowserMobProxyTest.class.getName());
+  
   ProxyServer proxyServer;
 
   @Before
@@ -63,7 +66,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
       @Override
       public void process(BrowserMobHttpRequest httpRequest, Har har) {
         String requestUri = httpRequest.getProxyRequest().getURI().toString();
-        System.out.println("request: " + requestUri);
+        log.info("request: " + requestUri);
         if (!requestUri.endsWith("/favicon.ico") && !"http://ocsp.digicert.com/".equals(requestUri)) {
           requestCounter++;
         }

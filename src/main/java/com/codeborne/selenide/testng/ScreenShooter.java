@@ -5,12 +5,16 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
  * Annotate your test class with <code>@Listeners({ ScreenShooter.class})</code>
  */
 public class ScreenShooter extends ExitCodeListener {
+  private final Logger log = Logger.getLogger(getClass().getName());
+  
   public static boolean captureSuccessfulTests;
 
   @Override
@@ -26,7 +30,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestFailure(ITestResult result) {
     super.onTestFailure(result);
     if (!(result.getThrowable() instanceof UIAssertionError)) {
-      System.out.println(screenshot());
+      log.info(screenshot());
     }
 
     Screenshots.finishContext();
@@ -36,7 +40,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     super.onTestSuccess(result);
     if (captureSuccessfulTests) {
-      System.out.println(screenshot());
+      log.info(screenshot());
     }
     Screenshots.finishContext();
   }

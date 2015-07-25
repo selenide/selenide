@@ -15,14 +15,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.io.File.separatorChar;
+import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
+  private static final Logger log = Logger.getLogger(ScreenShotLaboratory.class.getName());
+
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected String currentContext = "";
   protected List<String> currentContextScreenshots;
@@ -32,12 +36,11 @@ public class ScreenShotLaboratory {
 
   protected synchronized void printOnce(String action, Throwable error) {
     if (!printedErrors.contains(action)) {
-      System.err.println("Failed to " + action + ": ");
-      error.printStackTrace();
+      log.log(SEVERE, error.getMessage(), error);
       printedErrors.add(action);
     }
     else {
-      System.err.println("Failed to " + action + ": " + error);
+      log.severe("Failed to " + action + ": " + error);
     }
   }
 
@@ -69,8 +72,8 @@ public class ScreenShotLaboratory {
    * @return the name of last saved file, it's either my_screenshot.png or my_screenshot.html (if failed to create png)
    */
   public String takeScreenShot(String fileName) {
-    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
-      System.err.println("Cannot take screenshot because browser is not started");
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
@@ -83,14 +86,14 @@ public class ScreenShotLaboratory {
   }
   
   public File takeScreenshot(WebElement element) {
-    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
-      System.err.println("Cannot take screenshot because browser is not started");
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
     WebDriver webdriver = getWebDriver();
     if (!(webdriver instanceof TakesScreenshot)) {
-      System.err.println("Cannot take screenshot because browser does not support screenshots");
+      log.warning("Cannot take screenshot because browser does not support screenshots");
       return null;
     }
     
@@ -114,8 +117,8 @@ public class ScreenShotLaboratory {
   }
 
   public File getScreenShotAsFile() {
-    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
-      System.err.println("Cannot take screenshot because browser is not started");
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
@@ -168,12 +171,12 @@ public class ScreenShotLaboratory {
       if (retryIfAlert) {
         try {
           Alert alert = webdriver.switchTo().alert();
-          System.err.println(e + ": " + alert.getText());
+          log.severe(e + ": " + alert.getText());
           alert.accept();
           savePageSourceToFile(fileName, webdriver, false);
         }
         catch (Exception unableToCloseAlert) {
-          System.err.println("Failed to close alert: " + unableToCloseAlert);
+          log.severe("Failed to close alert: " + unableToCloseAlert);
         }
       }
       else {
@@ -248,17 +251,16 @@ public class ScreenShotLaboratory {
       copyFile(new ByteArrayInputStream(content.getBytes("UTF-8")), targetFile);
     }
     catch (IOException e) {
-      System.err.println("Failed to write file " + targetFile.getAbsolutePath());
-      e.printStackTrace();
+      log.log(SEVERE, "Failed to write file " + targetFile.getAbsolutePath(), e);
     }
   }
 
   protected File ensureFolderExists(File targetFile) {
     File folder = targetFile.getParentFile();
     if (!folder.exists()) {
-      System.err.println("Creating folder: " + folder);
+      log.info("Creating folder: " + folder);
       if (!folder.mkdirs()) {
-        System.err.println("Failed to create " + folder);
+        log.severe("Failed to create " + folder);
       }
     }
     return targetFile;

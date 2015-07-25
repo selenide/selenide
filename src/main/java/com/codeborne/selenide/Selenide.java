@@ -5,19 +5,17 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
@@ -36,6 +34,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * {@link #$(String)} for searching web elements.
  */
 public class Selenide {
+  private static final Logger log = Logger.getLogger(Selenide.class.getName());
+
   public static Navigator navigator = new Navigator();
 
   /**
@@ -77,7 +77,7 @@ public class Selenide {
         executeJavaScript(jsCode);
       }
       catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
-        System.err.println(cannotExecuteJsAgainstPlainTextPage.toString());
+        log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
       }
     }
   }
@@ -495,7 +495,7 @@ public class Selenide {
       }
       return result;
     } catch (WebDriverException cannotExecuteJs) {
-      System.err.println(cannotExecuteJs.toString());
+      log.severe(cannotExecuteJs.toString());
       return emptyList();
     }
   }

@@ -6,6 +6,8 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -20,6 +22,8 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().to("test-results/img/");</pre>
  */
 public class ScreenShooter extends TestWatcher {
+  private final Logger log = Logger.getLogger(getClass().getName());
+
   public boolean captureSuccessfulTests;
 
   private ScreenShooter() {
@@ -42,14 +46,14 @@ public class ScreenShooter extends TestWatcher {
   @Override
   protected void succeeded(Description test) {
     if (captureSuccessfulTests) {
-      System.out.println(screenshot());
+      log.info(screenshot());
     }
   }
 
   @Override
   protected void failed(Throwable e, Description description) {
     if (!(e instanceof UIAssertionError)) {
-      System.out.println(screenshot());
+      log.info(screenshot());
     }
   }
 

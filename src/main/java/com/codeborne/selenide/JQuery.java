@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
@@ -12,6 +14,8 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
  */
 @Deprecated
 public class JQuery {
+  private static final Logger log = Logger.getLogger(JQuery.class.getName());
+
   /**
    * This instance is mutable so that you can replace it with your own custom object.
    */
@@ -75,7 +79,7 @@ public class JQuery {
     if (selector != null) {
       executeJavaScript("jQuery(\"" + selector + "\")." + method);
     } else {
-      System.err.println("Warning: can't convert " + by + " to JQuery selector, unable to execute " + method);
+      log.warning("Can't convert " + by + " to JQuery selector, unable to execute " + method);
     }
   }
 

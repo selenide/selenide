@@ -22,14 +22,17 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
+import static java.util.logging.Level.SEVERE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.junit.Assert.assertTrue;
 
 public class LocalHttpServer {
+  private static final Logger log = Logger.getLogger(LocalHttpServer.class.getName());
 
   private final Server server;
 
@@ -78,9 +81,9 @@ public class LocalHttpServer {
 
   private void logRequest(HttpServletRequest request, Object response, long startTime) {
     String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
-    System.out.println(time + " " + 
-        on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) + 
-        " -> " + response + 
+    log.info(time + " " +
+        on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) +
+        " -> " + response +
         " " + (System.nanoTime() - startTime) / 1000000 + " ms");
   }
 
@@ -162,7 +165,7 @@ public class LocalHttpServer {
         logRequest(request, message, start);
       } catch (FileUploadException e) {
         logRequest(request, e.getMessage(), start);
-        e.printStackTrace();
+        log.log(SEVERE, e.getMessage(), e);
       }
     }
   }

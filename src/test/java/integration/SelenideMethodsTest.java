@@ -542,22 +542,22 @@ public class SelenideMethodsTest extends IntegrationTest {
     int initialX = $(By.name("domain")).getLocation().getX();
 
     zoom(1.1);
-    assertBetween($(By.name("domain")).getLocation().getY(), 140, 160);
+    assertBetween("", $(By.name("domain")).getLocation().getY(), 140, 160);
     assertEquals(initialX, $(By.name("domain")).getLocation().getX());
 
     zoom(2.0);
-    assertBetween($(By.name("domain")).getLocation().getY(), 240, 260);
+    assertBetween("", $(By.name("domain")).getLocation().getY(), 240, 260);
     assertEquals(initialX, $(By.name("domain")).getLocation().getX());
 
     zoom(0.5);
-    assertBetween($(By.name("domain")).getLocation().getY(), 70, 80);
+    assertBetween("", $(By.name("domain")).getLocation().getY(), 70, 80);
     assertEquals(initialX, $(By.name("domain")).getLocation().getX());
   }
 
-  static void assertBetween(int n, int lower, int upper) {
+  static void assertBetween(String message, int n, int lower, int upper) {
     if (!isHtmlUnit()) {
-      assertTrue(n + " should be between " + lower + " and " + upper, n >= lower);
-      assertTrue(n + " should be between " + lower + " and " + upper, n <= upper);
+      assertTrue(message + n + " should be between " + lower + " and " + upper, n >= lower);
+      assertTrue(message + n + " should be between " + lower + " and " + upper, n <= upper);
     }
   }
 }

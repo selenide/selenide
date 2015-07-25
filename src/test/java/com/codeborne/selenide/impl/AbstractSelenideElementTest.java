@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
@@ -28,6 +30,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AbstractSelenideElementTest {
+  private static final Logger log = Logger.getLogger(AbstractSelenideElementTest.class.getName());
+  
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);
 
@@ -140,7 +144,7 @@ public class AbstractSelenideElementTest {
     return new LogEventListener() {
       @Override
       public void onEvent(LogEvent currentLog) {
-        System.out.println( "{" + currentLog.getElement() + "} " +
+        log.info( "{" + currentLog.getElement() + "} " +
                 currentLog.getSubject() + ": " + currentLog.getStatus()
             );
         assertThat(currentLog.getElement(), containsString(selector));

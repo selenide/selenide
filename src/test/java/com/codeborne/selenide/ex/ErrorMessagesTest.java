@@ -49,7 +49,6 @@ public class ErrorMessagesTest {
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
-    System.out.println("Actual value: " + screenshot);
     assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png", screenshot);
   }
 
@@ -65,7 +64,6 @@ public class ErrorMessagesTest {
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
-    System.out.println("Actual value: " + screenshot);
     assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png", screenshot);
   }
 }

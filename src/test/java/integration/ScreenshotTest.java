@@ -13,7 +13,6 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.SelenideMethodsTest.assertBetween;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeFalse;
 
 public class ScreenshotTest extends IntegrationTest {
@@ -27,10 +26,10 @@ public class ScreenshotTest extends IntegrationTest {
   public void canTakeScreenshotOfElement() throws IOException {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     File screenshot = select.screenshot();
-    System.out.println("Screenshot of element taken: " + screenshot.getAbsolutePath());
+    String info = "(Screenshot of element: " + screenshot.getAbsolutePath() + ") ";
     
     BufferedImage img = ImageIO.read(screenshot);
-    assertBetween(img.getWidth(), 50, 200);
-    assertEquals(img.getHeight(), 10, 30);
+    assertBetween("Screenshot doesn't fit width " + info, img.getWidth(), 50, 200);
+    assertBetween("Screenshot doesn't fit height " + info, img.getHeight(), 10, 30);
   }
 }

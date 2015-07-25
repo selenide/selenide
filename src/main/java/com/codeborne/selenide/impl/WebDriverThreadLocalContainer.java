@@ -8,7 +8,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
@@ -27,13 +26,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static java.lang.Thread.currentThread;
+import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainer {
+  private final Logger log = Logger.getLogger(getClass().getName());
+
   protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
@@ -94,7 +97,7 @@ public class WebDriverThreadLocalContainer {
         return webDriver;
       }
       else {
-        System.out.println("Webdriver has been closed meanwhile. Let's re-create it.");
+        log.info("Webdriver has been closed meanwhile. Let's re-create it.");
         closeWebDriver();
       }
     }
@@ -110,7 +113,7 @@ public class WebDriverThreadLocalContainer {
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
 
     if (webdriver != null && !holdBrowserOpen) {
-      System.out.println(" === CLOSE WEBDRIVER: " + thread.getId() + " -> " + webdriver);
+      log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
 
       try {
         webdriver.quit();
@@ -119,7 +122,7 @@ public class WebDriverThreadLocalContainer {
         // It happens for Firefox. It's ok: browser is already closed.
       }
       catch (WebDriverException cannotCloseBrowser) {
-        System.err.println("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
+        log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
       }
       finally {
         killBrowser(webdriver);
@@ -132,8 +135,7 @@ public class WebDriverThreadLocalContainer {
       try {
         ((Killable) webdriver).kill();
       } catch (Exception e) {
-        System.err.println("Failed to kill browser " + webdriver + ':');
-        e.printStackTrace();
+        log.log(SEVERE, "Failed to kill browser " + webdriver + ':', e);
       }
     }
   }
@@ -165,7 +167,7 @@ public class WebDriverThreadLocalContainer {
                                   createInstanceOf(browser);
     webdriver = maximize(webdriver);
 
-    System.out.println(" === CREATE WEBDRIVER: " + currentThread().getId() + " -> " + webdriver);
+    log.info("Create webdriver: " + currentThread().getId() + " -> " + webdriver);
 
     return markForAutoClose(listeners.isEmpty() ? webdriver : addListeners(webdriver));
   }
@@ -247,7 +249,7 @@ public class WebDriverThreadLocalContainer {
         }
       }
       catch (Exception cannotMaximize) {
-        System.out.println("Cannot maximize " + browser + ": " + cannotMaximize);
+        log.warning("Cannot maximize " + browser + ": " + cannotMaximize);
       }
     }
     return driver;

@@ -10,14 +10,22 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static java.lang.Math.max;
+import static java.util.logging.Level.WARNING;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public abstract class IntegrationTest {
+  static {
+    System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
+  }
+
+  private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
+
   @Rule
   public ScreenShooter img = ScreenShooter.failedTests() ;
 
@@ -38,7 +46,7 @@ public abstract class IntegrationTest {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
         server = new LocalHttpServer(port).start();
-        System.out.println("START " + browser + " TESTS");
+        log.info("START " + browser + " TESTS");
       }
     }
   }
@@ -97,11 +105,12 @@ public abstract class IntegrationTest {
         driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
         driver.findElement(By.tagName("h1")).getText();
         averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
-        System.out.println("Average selenium command duration for " + browser + ": " +
+        
+        log.info("Average selenium command duration for " + browser + ": " +
             averageSeleniumCommandDuration + " ms.");
       }
       catch (WebDriverException e) {
-        System.err.println("Failed to calculate average selenium command duration. Using 100 by default.");
+        log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
         averageSeleniumCommandDuration = 100;
       }
     }

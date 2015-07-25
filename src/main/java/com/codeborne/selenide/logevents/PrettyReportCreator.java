@@ -6,6 +6,7 @@ import org.junit.runner.Description;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * EXPERIMENTAL
@@ -15,14 +16,13 @@ import java.util.List;
  * @since Selenide 2.16
  */
 public class PrettyReportCreator extends TestWatcher {
+  private static final Logger log = Logger.getLogger(PrettyReportCreator.class.getName());
+
   private final List<LogEvent> logEvents = new ArrayList<LogEvent>();
   private final LogEventListener logEventListener = new LogEventListener() {
     @Override
     public void onEvent(LogEvent currentLog) {
       logEvents.add(currentLog);
-//      System.out.println( "{" + currentLog.getElement() + "} " +
-//          currentLog.getSubject() + ": " + currentLog.getStatus()
-//      );
     }
   };
 
@@ -33,19 +33,19 @@ public class PrettyReportCreator extends TestWatcher {
 
   @Override
   protected void finished(Description description) {
-    System.out.println();
-    System.out.println("Report for " + description.getDisplayName());
+    StringBuilder sb = new StringBuilder();
+    sb.append("Report for ").append(description.getDisplayName()).append('\n');
 
-    String hLine = "+--------------------+----------------------------------------------------------------------+----------+----------+";
+    String delimiter = "+--------------------+----------------------------------------------------------------------+----------+----------+\n";
 
-    System.out.println(hLine);
+    sb.append(delimiter);
+    sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|\n", "Element", "Subject", "Status", "ms."));
+    sb.append(delimiter);
 
-    System.out.format("|%-20s|%-70s|%-10s|%-10s|\n", "Element", "Subject", "Status", "ms.");
-    System.out.println(hLine);
     for (LogEvent e : logEvents) {
-      System.out.format("|%-20s|%-70s|%-10s|%-10s|\n", e.getElement(),  e.getSubject(), e.getStatus(), e.getDuration());
+      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|\n", e.getElement(), e.getSubject(), e.getStatus(), e.getDuration()));
     }
-    System.out.println(hLine);
-    System.out.println();
+    sb.append(delimiter);
+    log.info(sb.toString());
   }
 }

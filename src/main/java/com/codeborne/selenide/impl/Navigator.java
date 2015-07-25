@@ -5,12 +5,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 
 public class Navigator {
+  private static final Logger log = Logger.getLogger(Navigator.class.getName());
+
   public void open(String relativeOrAbsoluteUrl) {
     if (relativeOrAbsoluteUrl.startsWith("http:") ||
         relativeOrAbsoluteUrl.startsWith("https:") ||
@@ -69,9 +72,9 @@ public class Navigator {
               "}\n"
       );
     } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
-      System.err.println(cannotExecuteJsAgainstPlainTextPage.toString());
+      log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
     } catch (WebDriverException cannotExecuteJs) {
-      System.err.println(cannotExecuteJs.toString());
+      log.severe(cannotExecuteJs.toString());
     }
   }
 

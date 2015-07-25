@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,8 @@ import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class FileDownloader {
+  private static final Logger log = Logger.getLogger(FileDownloader.class.getName());
+  
   public static FileDownloader instance = new FileDownloader();
 
   public static boolean ignoreSelfSignedCerts = true;
@@ -117,9 +120,9 @@ public class FileDownloader {
       }
     }
 
-    System.out.println("DOWNLOAD HEADERS:");
+    log.info("DOWNLOAD HEADERS:");
     for (Header header : response.getAllHeaders()) {
-      System.out.println(header.getName() + '=' + header.getValue());
+      log.info(header.getName() + '=' + header.getValue());
     }
 
     return new URL(fileToDownloadLocation).getFile().replaceFirst("/|\\\\", "");
