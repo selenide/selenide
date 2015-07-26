@@ -37,7 +37,7 @@ import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainer {
-  private final Logger log = Logger.getLogger(getClass().getName());
+  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
 
   protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
@@ -49,6 +49,7 @@ public class WebDriverThreadLocalContainer {
   protected void closeUnusedWebdrivers() {
     for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
       if (!thread.isAlive()) {
+        log.info("Thread " + thread.getId() + " is dead. Let's close webdriver " + THREAD_WEB_DRIVER.get(thread.getId()));
         closeWebDriver(thread);
       }
     }
@@ -125,6 +126,40 @@ public class WebDriverThreadLocalContainer {
     if (webdriver != null && !holdBrowserOpen) {
       log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
 
+      long start = System.currentTimeMillis();
+
+      Thread t = new Thread(new CloseBrowser(webdriver));
+      t.setDaemon(true);
+      t.start();
+      
+      try {
+        t.join(closeBrowserTimeoutMs);
+      } catch (InterruptedException e) {
+        log.log(FINE, "Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds", e);
+      }
+
+      long duration = System.currentTimeMillis() - start;
+      if (duration >= closeBrowserTimeoutMs) {
+        log.severe("Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds");
+      }
+      else if (duration > 200) {
+        log.info("Closed webdriver in " + duration + " ms");
+      }
+      else {
+        log.fine("Closed webdriver in " + duration + " ms");
+      }
+    }
+  }
+  
+  private static class CloseBrowser implements Runnable {
+    private final WebDriver webdriver;
+
+    private CloseBrowser(WebDriver webdriver) {
+      this.webdriver = webdriver;
+    }
+
+    @Override
+    public void run() {
       try {
         webdriver.quit();
       }
@@ -139,18 +174,18 @@ public class WebDriverThreadLocalContainer {
         killBrowser(webdriver);
       }
     }
-  }
 
-  protected void killBrowser(WebDriver webdriver) {
-    if (webdriver instanceof Killable) {
-      try {
-        ((Killable) webdriver).kill();
-      } catch (Exception e) {
-        log.log(SEVERE, "Failed to kill browser " + webdriver + ':', e);
+    protected void killBrowser(WebDriver webdriver) {
+      if (webdriver instanceof Killable) {
+        try {
+          ((Killable) webdriver).kill();
+        } catch (Exception e) {
+          log.log(SEVERE, "Failed to kill browser " + webdriver + ':', e);
+        }
       }
     }
   }
-
+  
   public void clearBrowserCache() {
     WebDriver webdriver = THREAD_WEB_DRIVER.get(currentThread().getId());
     if (webdriver != null) {

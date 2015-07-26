@@ -24,6 +24,15 @@ public class Configuration {
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
   /**
+   * Timeout (in milliseconds) for closing/killing browser.
+   * <p/>
+   * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long. 
+   * <p/>
+   * Default value: 5000 (milliseconds)
+   */
+  public static long closeBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.closeBrowserTimeout", "5000"));
+
+  /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
    * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera"
@@ -96,7 +105,7 @@ public class Configuration {
   }
 
   private static boolean isEmpty(String s) {
-    return s == null || s.trim().length() == 0;
+    return s == null || s.trim().isEmpty();
   }
 
   private static String getJenkinsReportsUrl() {
@@ -139,7 +148,7 @@ public class Configuration {
    */
   public static SelectorMode selectorMode = CSS;
   
-  public static enum SelectorMode {
+  public enum SelectorMode {
     /**
      * Default Selenium behavior
      */
@@ -156,7 +165,7 @@ public class Configuration {
 
 
 
-  public static enum AssertionMode {STRICT, SOFT;};
+  public enum AssertionMode {STRICT, SOFT}
   
   public static AssertionMode assertionMode = STRICT;
 }
