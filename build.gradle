@@ -4,7 +4,7 @@ apply plugin: "jacoco"
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.20-SNAPSHOT'
+version='2.20'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
@@ -39,8 +39,8 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.46.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.17', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.17'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.6'
   
