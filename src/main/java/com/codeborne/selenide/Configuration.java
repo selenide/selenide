@@ -24,9 +24,16 @@ public class Configuration {
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
   /**
+   * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
+   * <p/>
+   * Default value: 15000 (milliseconds)
+   */
+  public static long openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "15000"));
+
+  /**
    * Timeout (in milliseconds) for closing/killing browser.
    * <p/>
-   * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long. 
+   * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long.
    * <p/>
    * Default value: 5000 (milliseconds)
    */

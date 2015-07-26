@@ -150,7 +150,7 @@ public class WebDriverThreadLocalContainer {
       }
     }
   }
-  
+
   private static class CloseBrowser implements Runnable {
     private final WebDriver webdriver;
 
@@ -202,24 +202,55 @@ public class WebDriverThreadLocalContainer {
   }
 
   protected WebDriver createDriver() {
-    log.config("Configuration.browser=" + browser);
-    log.config("Configuration.remote=" + remote);
-    log.config("Configuration.startMaximized=" + startMaximized);
-    
-    WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
-        CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
-            isFirefox() ? createFirefoxDriver() :
-                isHtmlUnit() ? createHtmlUnitDriver() :
-                    isIE() ? createInternetExplorerDriver() :
-                        isPhantomjs() ? createPhantomJsDriver() :
-                            isOpera() ? createOperaDriver() :
-                                isSafari() ? createSafariDriver() :
-                                  createInstanceOf(browser);
+    WebDriver webdriver = createWebDriverWithTimeout();
     webdriver = maximize(webdriver);
-
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
-
     return markForAutoClose(addListeners(webdriver));
+  }
+
+  protected WebDriver createWebDriverWithTimeout() {
+    for (int i = 0; i < 3; i++) {
+      CreateWebdriver create = new CreateWebdriver();
+      Thread t = new Thread(create);
+      t.setDaemon(true);
+      t.start();
+      try {
+        t.join(openBrowserTimeoutMs);
+        if (create.webdriver != null) {
+          return create.webdriver;
+        }
+      }
+      catch (InterruptedException e) {
+        throw runtime(e);
+      }
+    }
+    throw new RuntimeException("Could not create webdriver in " + openBrowserTimeoutMs + " ms");
+  }
+
+  private class CreateWebdriver implements Runnable {
+    WebDriver webdriver = null;
+
+    @Override
+    public void run() {
+      try {
+        log.config("Configuration.browser=" + browser);
+        log.config("Configuration.remote=" + remote);
+        log.config("Configuration.startMaximized=" + startMaximized);
+
+        webdriver = remote != null ? createRemoteDriver(remote, browser) :
+          CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
+              isFirefox() ? createFirefoxDriver() :
+                  isHtmlUnit() ? createHtmlUnitDriver() :
+                      isIE() ? createInternetExplorerDriver() :
+                          isPhantomjs() ? createPhantomJsDriver() :
+                              isOpera() ? createOperaDriver() :
+                                  isSafari() ? createSafariDriver() :
+                                      createInstanceOf(browser);
+      }
+      catch (Exception e) {
+        log.log(SEVERE, "Failed to create webdriver", e);
+      }
+    }
   }
 
   protected WebDriver addListeners(WebDriver webdriver) {
