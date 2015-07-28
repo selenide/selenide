@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "jacoco"
+apply plugin: 'findbugs'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
@@ -10,7 +11,7 @@ compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-defaultTasks 'test', 'install'
+defaultTasks 'test', 'check', 'install'
 
 buildscript {
   repositories { jcenter() }
@@ -69,6 +70,21 @@ task libs(type: Sync) {
 }
 
 compileJava.dependsOn libs
+
+findbugs {
+  toolVersion = "3.0.1"
+  sourceSets = [sourceSets.main]
+  effort = "max"
+  reportsDir = file("$project.buildDir/reports/findbugs")
+  excludeFilter = file("$rootProject.projectDir/src/config/findbugs/excludeFilter.xml")
+}
+
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
 
 jacoco {
   toolVersion = "0.7.4.201502262128"
