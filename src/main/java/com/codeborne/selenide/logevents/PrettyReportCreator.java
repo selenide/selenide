@@ -39,11 +39,11 @@ public class PrettyReportCreator extends TestWatcher {
     String delimiter = "+--------------------+----------------------------------------------------------------------+----------+----------+\n";
 
     sb.append(delimiter);
-    sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|\n", "Element", "Subject", "Status", "ms."));
+    sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
     sb.append(delimiter);
 
     for (LogEvent e : logEvents) {
-      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|\n", e.getElement(), e.getSubject(), e.getStatus(), e.getDuration()));
+      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(), e.getStatus(), e.getDuration()));
     }
     sb.append(delimiter);
     log.info(sb.toString());
