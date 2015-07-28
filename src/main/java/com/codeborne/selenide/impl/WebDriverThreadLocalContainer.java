@@ -270,7 +270,7 @@ public class WebDriverThreadLocalContainer {
     ALL_WEB_DRIVERS_THREADS.add(currentThread());
 
     if (!cleanupThreadStarted.get()) {
-      synchronized (cleanupThreadStarted) {
+      synchronized (this) {
         if (!cleanupThreadStarted.get()) {
           new UnusedWebdriversCleanupThread().start();
           cleanupThreadStarted.set(true);
