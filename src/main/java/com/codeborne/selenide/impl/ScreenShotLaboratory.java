@@ -224,31 +224,39 @@ public class ScreenShotLaboratory {
   }
 
   protected void copyFile(File sourceFile, File targetFile) throws IOException {
-    copyFile(new FileInputStream(sourceFile), targetFile);
+    FileInputStream in = new FileInputStream(sourceFile);
+    try {
+      copyFile(in, targetFile);
+    }
+    finally {
+      in.close();
+    }
   }
 
   protected void copyFile(InputStream in, File targetFile) throws IOException {
     ensureFolderExists(targetFile);
 
+    final FileOutputStream out = new FileOutputStream(targetFile);
     try {
-      final FileOutputStream out = new FileOutputStream(targetFile);
-      try {
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = in.read(buffer)) != -1) {
-          out.write(buffer, 0, len);
-        }
-      } finally {
-        out.close();
+      byte[] buffer = new byte[1024];
+      int len;
+      while ((len = in.read(buffer)) != -1) {
+        out.write(buffer, 0, len);
       }
     } finally {
-      in.close();
+      out.close();
     }
   }
 
   protected void writeToFile(String content, File targetFile) {
     try {
-      copyFile(new ByteArrayInputStream(content.getBytes("UTF-8")), targetFile);
+      ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
+      try {
+        copyFile(in, targetFile);
+      }
+      finally {
+        in.close();
+      }
     }
     catch (IOException e) {
       log.log(SEVERE, "Failed to write file " + targetFile.getAbsolutePath(), e);
