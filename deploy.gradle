@@ -1,7 +1,7 @@
 apply from: 'build.gradle'
 apply plugin: 'signing'
 
-defaultTasks 'clean', 'allTests', 'install', 'check', 'uploadArchives'
+defaultTasks 'clean', 'check', 'allTests', 'install', 'uploadArchives'
 
 buildscript {
   repositories { jcenter() }

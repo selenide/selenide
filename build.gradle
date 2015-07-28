@@ -11,7 +11,7 @@ compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-defaultTasks 'test', 'check', 'install'
+defaultTasks 'check', 'test', 'install'
 
 buildscript {
   repositories { jcenter() }
