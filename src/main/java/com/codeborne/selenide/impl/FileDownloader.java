@@ -89,7 +89,7 @@ public class FileDownloader {
           return true;
         }
       }).build();
-      builder.setSslcontext( sslContext);
+      builder.setSslcontext(sslContext);
 
       HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 
@@ -99,8 +99,8 @@ public class FileDownloader {
           .register("https", sslSocketFactory)
           .build();
 
-      PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager( socketFactoryRegistry);
-      builder.setConnectionManager( connMgr);
+      PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+      builder.setConnectionManager(connMgr);
       return builder.build();
     }
     catch (Exception e) {

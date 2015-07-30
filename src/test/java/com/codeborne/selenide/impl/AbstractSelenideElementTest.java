@@ -144,7 +144,7 @@ public class AbstractSelenideElementTest {
     return new LogEventListener() {
       @Override
       public void onEvent(LogEvent currentLog) {
-        log.info( "{" + currentLog.getElement() + "} " +
+        log.info("{" + currentLog.getElement() + "} " +
                 currentLog.getSubject() + ": " + currentLog.getStatus()
             );
         assertThat(currentLog.getElement(), containsString(selector));
