@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "jacoco"
 apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
@@ -76,7 +77,7 @@ findbugs {
   sourceSets = [sourceSets.main]
   effort = "max"
   reportsDir = file("$project.buildDir/reports/findbugs")
-  excludeFilter = file("$rootProject.projectDir/src/config/findbugs/excludeFilter.xml")
+  excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
 }
 
 tasks.withType(FindBugs) {
@@ -85,6 +86,14 @@ tasks.withType(FindBugs) {
     html.enabled = true
   }
 }
+
+task checkstyleHtml << {
+  ant.xslt(in: checkstyleMain.reports.xml.destination,
+    style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+    out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+}
+
+checkstyleMain.finalizedBy checkstyleHtml
 
 jacoco {
   toolVersion = "0.7.4.201502262128"
