@@ -6,7 +6,7 @@
 <module name="Checker">
   <module name="TreeWalker">
     <module name="ParenPad"/>
-    <!--TODO <module name="WhitespaceAfter"/>-->
+    <module name="WhitespaceAfter"/>
   </module>
   <module name="FileTabCharacter"/>
 </module>

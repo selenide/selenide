@@ -58,7 +58,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
 
   private SearchContext getSearchContext() {
     return parent == null ? getWebDriver() :
-        (parent instanceof SelenideElement) ? ((SelenideElement)parent).toWebElement() :
+        (parent instanceof SelenideElement) ? ((SelenideElement) parent).toWebElement() :
         parent;
   }
 
