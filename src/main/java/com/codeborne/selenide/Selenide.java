@@ -46,7 +46,8 @@ public class Selenide {
    *
    * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
    *
-   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL. In this case, it's prepended by baseUrl
+   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL.
+   *                              In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
     navigator.open(relativeOrAbsoluteUrl);
@@ -86,12 +87,14 @@ public class Selenide {
    * Open a web page and create PageObject for it.
    * @return PageObject of given class
    */
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
+                                                       Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl);
     return page(pageObjectClassClass);
   }
 
-  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, Class<PageObjectClass> pageObjectClassClass) {
+  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
+                                                       Class<PageObjectClass> pageObjectClassClass) {
     open(absoluteUrl);
     return page(pageObjectClassClass);
   }
@@ -151,7 +154,9 @@ public class Selenide {
   }
 
   /**
-   * Wrap standard Selenium WebElement into SelenideElement to use additional methods like shouldHave(), selectOption() etc.
+   * Wrap standard Selenium WebElement into SelenideElement
+   * to use additional methods like shouldHave(), selectOption() etc.
+   *
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
    */
@@ -235,7 +240,9 @@ public class Selenide {
   /**
    * Find all elements matching given CSS selector.
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
    */
@@ -246,7 +253,9 @@ public class Selenide {
   /**
    * Find all elements matching given CSS selector.
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    */
@@ -257,7 +266,9 @@ public class Selenide {
   /**
    * Find all elements matching given CSS selector inside given parent element
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface, meaning that you can call methods .sendKeys(), click() etc. on it.
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
@@ -542,7 +553,7 @@ public class Selenide {
    * <br />
    * <pre>
    *   {@code
-   *     for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)){
+   *     for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)) {
    *       Reporter.log(logEntry + "<br />");
    *     }
    *   }

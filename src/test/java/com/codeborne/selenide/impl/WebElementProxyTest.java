@@ -42,11 +42,12 @@ public class WebElementProxyTest {
   public void toStringPrintsTagNameWithAllAttributes() {
     browser = CHROME;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
-    when(((JavascriptExecutor)webdriverContainer.getWebDriver())
+    when(((JavascriptExecutor) webdriverContainer.getWebDriver())
         .executeScript(anyString(), any(WebElement.class)))
         .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
-    assertEquals("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>", new WebElementProxy(element).toString());
+    assertEquals("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>",
+        new WebElementProxy(element).toString());
   }
 
   @Test

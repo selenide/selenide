@@ -32,13 +32,17 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return WaitingSelenideElement.wrap(searchContext, selector, 0);
-    } if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+    }
+    if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return new ElementsCollection(new BySelectorCollection(searchContext, selector));
-    } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+    }
+    else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
-    } else if (isDecoratableList(field, ElementsContainer.class)) {
+    }
+    else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field, selector);
-    } else if (isDecoratableList(field, SelenideElement.class)) {
+    }
+    else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
 
@@ -68,7 +72,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
   }
 
-  private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self) throws InstantiationException, IllegalAccessException {
+  private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
+      throws InstantiationException, IllegalAccessException {
     ElementsContainer result = (ElementsContainer) type.newInstance();
     PageFactory.initElements(new SelenideFieldDecorator(self), result);
     result.setSelf(self);

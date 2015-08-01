@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * Wrapper around {@link org.openqa.selenium.WebElement} with additional methods like
+ * Wrapper around {@link WebElement} with additional methods like
  * {@link #shouldBe(Condition...)} and {@link #shouldHave(Condition...)}
  */
 public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,

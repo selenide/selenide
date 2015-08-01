@@ -9,7 +9,6 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.Selenide.open;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assume.assumeTrue;
 

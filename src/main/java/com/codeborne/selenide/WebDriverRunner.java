@@ -78,7 +78,8 @@ public class WebDriverRunner {
    *
    * <p>
    * NB! Webdriver instance should be created and used in the same thread.
-   *     A typical error is to create webdriver instance in one thread and use it in another. Selenide does not support it.
+   *     A typical error is to create webdriver instance in one thread and use it in another.
+   *     Selenide does not support it.
    *     If you really need using multiple threads, please use #com.codeborne.selenide.WebDriverProvider
    * </p>
    *

@@ -131,16 +131,19 @@ public class Configuration {
    * Mock "alert" and "confirm" javascript dialogs.
    * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
    *
-   * Default value: false (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
+   * Default value: false
+   *        (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
-  public static boolean dismissModalDialogs = Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+  public static boolean dismissModalDialogs =
+      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function 
    * (that is quite slow because it sends every character separately).
    * 
    * Tested on Codeborne projects - works well, speed up ~30%.
-   * Some people reported 150% speedup (because sending characters one-by-one was especially slow via network to Selenium Grid on cloud).
+   * Some people reported 150% speedup (because sending characters one-by-one was especially
+   * slow via network to Selenium Grid on cloud).
    * 
    * https://github.com/codeborne/selenide/issues/135
    * 
@@ -172,7 +175,7 @@ public class Configuration {
 
 
 
-  public enum AssertionMode {STRICT, SOFT}
-  
+  public enum AssertionMode { STRICT, SOFT }
+
   public static AssertionMode assertionMode = STRICT;
 }

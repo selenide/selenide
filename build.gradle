@@ -87,13 +87,20 @@ tasks.withType(FindBugs) {
   }
 }
 
-task checkstyleHtml << {
+task checkstyleHtmlMain << {
   ant.xslt(in: checkstyleMain.reports.xml.destination,
     style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
     out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
 }
 
-checkstyleMain.finalizedBy checkstyleHtml
+task checkstyleHtmlTest << {
+  ant.xslt(in: checkstyleTest.reports.xml.destination,
+    style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+    out: new File(checkstyleMain.reports.xml.destination.parent, 'test.html'))
+}
+
+checkstyleMain.finalizedBy checkstyleHtmlMain
+checkstyleTest.finalizedBy checkstyleHtmlTest
 
 jacoco {
   toolVersion = "0.7.4.201502262128"

@@ -149,7 +149,9 @@ public class SelenideMethodsTest extends IntegrationTest {
     }
     else {
       assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
-      assertEquals("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>",
+      assertEquals("Username: " +
+              "<span class=\"name\">Bob Smith</span>&nbsp;" +
+              "Last login: <span class=\"last-login\">01.01.1970</span>",
           $("#status").innerHtml().trim());
     }
   }

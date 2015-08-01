@@ -13,7 +13,8 @@ import static com.codeborne.selenide.Condition.visible;
 public class CollectionElement extends AbstractSelenideElement {
   public static SelenideElement wrap(WebElementsCollection collection, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
-            collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class}, new CollectionElement(collection, index));
+            collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+        new CollectionElement(collection, index));
   }
 
   private final WebElementsCollection collection;

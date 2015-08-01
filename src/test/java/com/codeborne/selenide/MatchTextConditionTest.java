@@ -16,8 +16,11 @@ public class MatchTextConditionTest {
 
   @Test
   public void matchesWholeString() {
-    assertTrue(Condition.matchText("Chuck Norris' gmail account is gmail@chuck.norris").apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
-    assertTrue(Condition.matchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris").apply(element("Chuck Norris' gmail    account is gmail@chuck.norris")));
+    assertTrue(Condition.matchText("Chuck Norris' gmail account is gmail@chuck.norris")
+        .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
+
+    assertTrue(Condition.matchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
+        .apply(element("Chuck Norris' gmail    account is gmail@chuck.norris")));
   }
 
   @Test

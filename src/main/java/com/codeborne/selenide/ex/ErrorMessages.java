@@ -25,7 +25,7 @@ public class ErrorMessages {
       return "\nTimeout: " + timeoutMs / 1000 + " s.";
     }
 
-    return "\nTimeout: " + String.format("%.3f", timeoutMs/1000.0) + " s.";
+    return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
   }
 
   public static String actualValue(Condition condition, WebElement element) {
@@ -64,7 +64,7 @@ public class ErrorMessages {
       try {
         screenshotUrl = new URL(screenshotUrl).toExternalForm();
       }
-      catch (MalformedURLException ignore) {}
+      catch (MalformedURLException ignore) { }
       LOG.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
       return screenshotUrl;
     }

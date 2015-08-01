@@ -65,7 +65,7 @@ public class WebDriverThreadLocalContainer {
   }
   
   public void setProxy(Proxy webProxy) {
-    webProxySettings=webProxy;
+    webProxySettings = webProxy;
   }
 
   protected boolean isBrowserStillOpen(WebDriver webDriver) {

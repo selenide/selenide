@@ -84,7 +84,7 @@ public class Navigator {
           .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
     } else {
       return url.contains("?") ?
-          url + "&timestamp=" + unique:
+          url + "&timestamp=" + unique :
           url + "?timestamp=" + unique;
     }
   }

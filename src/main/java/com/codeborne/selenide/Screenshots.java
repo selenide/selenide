@@ -21,12 +21,12 @@ public class Screenshots {
     return screenshots.takeScreenShot();
   }
 
-  public static File getScreenShotAsFile(){
-      return screenshots.getScreenShotAsFile();
+  public static File getScreenShotAsFile() {
+    return screenshots.getScreenShotAsFile();
   }
 
-  public static File takeScreenShot(WebElement element){
-      return screenshots.takeScreenshot(element);
+  public static File takeScreenShot(WebElement element) {
+    return screenshots.takeScreenshot(element);
   }
 
   public static void startContext(String className, String methodName) {

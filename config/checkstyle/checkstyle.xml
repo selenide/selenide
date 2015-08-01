@@ -4,9 +4,68 @@
     "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+  <!--Add more checks from google style guide:-->
+  <!--https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml-->
+
   <module name="TreeWalker">
+    <!--<module name="JavadocVariable"/>-->
+    <!--<module name="JavadocStyle"/>-->
+    <module name="PackageName">
+      <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+    </module>
+    <module name="IllegalImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports">
+      <property name="processJavadoc" value="true"/>
+    </module>
+    <module name="LineLength">
+      <property name="max" value="126"/>
+    </module>
+
     <module name="ParenPad"/>
-    <module name="WhitespaceAfter"/>
+    <module name="MethodParamPad"/>
+    <module name="NoWhitespaceAfter"/>
+    <module name="NoWhitespaceBefore"/>
+    <module name="WhitespaceAfter">
+      <!--<property name="tokens" value="COMMA, SEMI, TYPECAST"/>-->
+    </module>
+    <module name="WhitespaceAround">
+      <!--<property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, RCURLY, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, TYPE_EXTENSION_AND, WILDCARD_TYPE"/>-->
+    </module>
+
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+
+    <module name="LeftCurly">
+      <property name="maxLineLength" value="100"/>
+    </module>
+    <!--<module name="RightCurly"/>-->
+
+    <module name="SuperClone"/>
+    <module name="SuperFinalize"/>
+    <module name="DefaultComesLast"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="UnnecessaryParentheses"/>
+    <!--<module name="MutableException"/>-->
+    <module name="ClassFanOutComplexity">
+      <!--TODO use 20-->
+      <property name="max" value="36"/>
+    </module>
+    <module name="CyclomaticComplexity">
+      <!--TODO use 20-->
+      <property name="max" value="55"/>
+    </module>
+    <module name="NPathComplexity"/>
+
+
+    <module name="ArrayTypeStyle"/>
+    <module name="Indentation">
+      <property name="basicOffset" value="2"/>
+      <property name="braceAdjustment" value="0"/>
+      <property name="caseIndent" value="2"/>
+    </module>
   </module>
+
+  <module name="NewlineAtEndOfFile"/>
   <module name="FileTabCharacter"/>
 </module>

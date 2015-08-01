@@ -255,7 +255,7 @@ public abstract class Condition implements Predicate<WebElement> {
    *
    * <p>Sample: <code>$("h1").should(matchText("Hello\s*John"))</code></p>
    *
-   * @param regex e.g. Kicked.*Chuck Norris   -   in this case ".*" can contain any characters including spaces, tabs, CR etc.
+   * @param regex e.g. Kicked.*Chuck Norris - in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
   public static Condition matchText(final String regex) {
     return new Condition("match text") {
@@ -453,12 +453,12 @@ public abstract class Condition implements Predicate<WebElement> {
   public static final Condition focused = new Condition("focused") {
     @Override public boolean apply(WebElement webElement) {
       WebElement focusedElement = getFocusedElement();
-      return focusedElement!= null && focusedElement.equals(webElement);
+      return focusedElement != null && focusedElement.equals(webElement);
     }
 
     @Override public String actualValue(WebElement webElement) {
       WebElement focusedElement = getFocusedElement();
-      return focusedElement == null? "No focused focusedElement found " :
+      return focusedElement == null ? "No focused focusedElement found " :
           "Focused focusedElement: " + Describe.describe(focusedElement) +
           ", current focusedElement: " + Describe.describe(webElement);
     }

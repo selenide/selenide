@@ -2,7 +2,6 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.Html;
-import com.google.common.base.Joiner;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 

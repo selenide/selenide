@@ -1,13 +1,11 @@
 package integration;
 
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.junit.Assert.*;
 
 public class SelenideElementTest extends IntegrationTest {

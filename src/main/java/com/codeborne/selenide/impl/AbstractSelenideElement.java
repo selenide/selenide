@@ -31,6 +31,7 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.impl.WebElementProxy.wrap;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
+import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
@@ -700,9 +701,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   protected SelenideElement closest(SelenideElement me, String tagOrClass) {
-    return tagOrClass.startsWith(".") ?
-        find(me, By.xpath("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' " + tagOrClass.substring(1)+ " ')][1]"), 0) :
-        find(me, By.xpath("ancestor::" + tagOrClass + "[1]"), 0);
+    String xpath = tagOrClass.startsWith(".") ?
+        format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][1]", tagOrClass.substring(1)) :
+        format("ancestor::%s[1]", tagOrClass);
+    return find(me, By.xpath(xpath), 0);
   }
 
   protected void scrollTo() {

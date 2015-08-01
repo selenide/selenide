@@ -71,7 +71,7 @@ public class LocalHttpServer {
         new HttpConnectionFactory(https));
     sslConnector.setPort(port);
 
-    server.setConnectors(new Connector[] { sslConnector });
+    server.setConnectors(new Connector[] {sslConnector});
   }
 
   public LocalHttpServer start() throws Exception {
@@ -172,7 +172,7 @@ public class LocalHttpServer {
 
   private String getSessionId(HttpServletRequest request) {
     if (request.getCookies() != null) {
-      for (Cookie cookie : request.getCookies()){
+      for (Cookie cookie : request.getCookies()) {
         if ("session_id".equals(cookie.getName())) {
           return cookie.getValue();
         }

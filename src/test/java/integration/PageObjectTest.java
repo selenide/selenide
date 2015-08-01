@@ -75,9 +75,17 @@ public class PageObjectTest extends IntegrationTest {
     pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
 
     assertEquals(3, pageWithSelects.h2sElementsCollection.size());
-    pageWithSelects.h2sElementsCollection.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
-    pageWithSelects.h2sElementsCollection.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
-    pageWithSelects.h2sElementsCollection.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
+    pageWithSelects.h2sElementsCollection.get(0)
+        .shouldBe(visible)
+        .shouldHave(text("Dropdown list"));
+
+    pageWithSelects.h2sElementsCollection.get(1)
+        .shouldBe(visible)
+        .shouldHave(text("Options with 'apostrophes' and \"quotes\""));
+
+    pageWithSelects.h2sElementsCollection.get(2)
+        .shouldBe(visible)
+        .shouldHave(text("Radio buttons"));
   }
 
   @Test

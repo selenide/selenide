@@ -58,10 +58,12 @@ public class FileDownloader {
     File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
-      throw new RuntimeException("Failed to download file " + downloadedFile.getName() + ": " + response.getStatusLine());
-   }
+      throw new RuntimeException("Failed to download file " +
+          downloadedFile.getName() + ": " + response.getStatusLine());
+    }
     if (response.getStatusLine().getStatusCode() >= 400) {
-      throw new FileNotFoundException("Failed to download file " + downloadedFile.getName() + ": " + response.getStatusLine());
+      throw new FileNotFoundException("Failed to download file " +
+          downloadedFile.getName() + ": " + response.getStatusLine());
     }
 
     return saveFileContent(response, downloadedFile);
@@ -76,6 +78,13 @@ public class FileDownloader {
     return httpClient.execute(httpGet, localContext);
   }
 
+  private static class TrustAllStrategy implements TrustStrategy {
+    @Override
+    public boolean isTrusted(X509Certificate[] arg0, String arg1) {
+      return true;
+    }
+  }
+
   /**
    configure HttpClient to ignore self-signed certs
    as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
@@ -83,12 +92,7 @@ public class FileDownloader {
   private CloseableHttpClient createTrustingHttpClient() throws IOException {
     try {
       HttpClientBuilder builder = HttpClientBuilder.create();
-      SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-        @Override
-        public boolean isTrusted(X509Certificate[] arg0, String arg1) {
-          return true;
-        }
-      }).build();
+      SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy()).build();
       builder.setSslcontext(sslContext);
 
       HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;

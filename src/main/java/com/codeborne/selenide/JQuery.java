@@ -25,7 +25,8 @@ public class JQuery {
    * Calls onclick javascript code.
    * Useful for invisible (hovered) elements that cannot be clicked directly
    * 
-   * @deprecated Do not try to click invisible elements in your test. User cannot click them, so your test should not as well.  
+   * @deprecated Do not try to click invisible elements in your test.
+   *            User cannot click them, so your test should not as well.
    */
   @Deprecated
   public void onClick(By by) {
@@ -47,7 +48,8 @@ public class JQuery {
   /**
    * Trigger "onchange" event on given element
    * 
-   * @deprecated Not needed anymore. Methods {@code $.setValue()} and {@code $.append()} trigger change event automatically.
+   * @deprecated Not needed anymore.
+   * Methods {@code $.setValue()} and {@code $.append()} trigger change event automatically.
    */
   @Deprecated
   public void change(By by, int index) {

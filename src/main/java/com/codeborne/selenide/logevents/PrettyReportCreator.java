@@ -1,10 +1,12 @@
 package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.impl.SelenideLogger;
+import com.google.common.base.Joiner;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -36,7 +38,7 @@ public class PrettyReportCreator extends TestWatcher {
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(description.getDisplayName()).append('\n');
 
-    String delimiter = "+--------------------+----------------------------------------------------------------------+----------+----------+\n";
+    String delimiter = '+' + Joiner.on('+').join(line(20), line(70), line(10), line(10)) + "+\n";
 
     sb.append(delimiter);
     sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
@@ -47,5 +49,9 @@ public class PrettyReportCreator extends TestWatcher {
     }
     sb.append(delimiter);
     log.info(sb.toString());
+  }
+
+  private String line(int count) {
+    return Joiner.on("").join(Collections.nCopies(count, "-"));
   }
 }

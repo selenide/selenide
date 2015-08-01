@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

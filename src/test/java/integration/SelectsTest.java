@@ -96,9 +96,9 @@ public class SelectsTest extends IntegrationTest {
     $("#selectedDomain").shouldBe(empty);
     
     $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
-    $("#selectedDomain").shouldHave(text(("@мыло.ру")));
+    $("#selectedDomain").shouldHave(text("@мыло.ру"));
     
     $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
-    $("#selectedDomain").shouldHave(text(("@myrambler.ru")));
+    $("#selectedDomain").shouldHave(text("@myrambler.ru"));
   }
 }

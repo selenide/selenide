@@ -25,7 +25,8 @@ public class SelenideFieldDecoratorTest {
   @Test
   public void usesDefaultElementLocatorFactory() throws NoSuchFieldException {
     SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(mock(WebDriver.class));
-    assertTrue(fieldDecorator.getClass().getSuperclass().getDeclaredField("factory").getType().isAssignableFrom(DefaultElementLocatorFactory.class));
+    Field factoryField = fieldDecorator.getClass().getSuperclass().getDeclaredField("factory");
+    assertTrue(factoryField.getType().isAssignableFrom(DefaultElementLocatorFactory.class));
   }
 
   @Test
@@ -41,7 +42,11 @@ public class SelenideFieldDecoratorTest {
   @SuppressWarnings("unchecked")
   public void decoratesListOfSelenideElements() throws NoSuchFieldException {
     when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
-    List<SelenideElement> elements = (List<SelenideElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
+
+    Object decoratedField = fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
+
+    assertTrue(decoratedField instanceof List);
+    List<SelenideElement> elements = (List<SelenideElement>) decoratedField;
     assertEquals(2, elements.size());
     verify(webDriver).findElements(any(By.class));
     assertTrue(elements.get(0) instanceof SelenideElement);
@@ -103,7 +108,10 @@ public class SelenideFieldDecoratorTest {
     when(statusElement2.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
     when(statusElement2.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
 
-    List<StatusBlock> statusHistory = (List<StatusBlock>) fieldDecorator.decorate(getClass().getClassLoader(), getField("statusHistory"));
+    Object decoratedField = fieldDecorator.decorate(getClass().getClassLoader(), getField("statusHistory"));
+
+    assertTrue(decoratedField instanceof List);
+    List<StatusBlock> statusHistory = (List<StatusBlock>) decoratedField;
     assertNotNull(statusHistory);
     verify(webDriver).findElements(By.cssSelector("table.history tr.status"));
     assertEquals(2, statusHistory.size());

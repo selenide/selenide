@@ -17,7 +17,7 @@ public class Quotes {
       StringBuilder quoted = new StringBuilder("concat(");
       for (int i = 0; i < substrings.length; i++) {
         quoted.append("\"").append(substrings[i]).append("\"");
-        quoted.append(((i == substrings.length - 1) ? (quoteIsLast ? ", '\"')" : ")") : ", '\"', "));
+        quoted.append(i == substrings.length - 1 ? (quoteIsLast ? ", '\"')" : ")") : ", '\"', ");
       }
       return quoted.toString();
     }

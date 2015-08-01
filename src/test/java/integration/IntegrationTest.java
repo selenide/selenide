@@ -27,7 +27,7 @@ public abstract class IntegrationTest {
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
 
   @Rule
-  public ScreenShooter img = ScreenShooter.failedTests() ;
+  public ScreenShooter img = ScreenShooter.failedTests();
 
   @Rule
   public TestRule prettyReportCreator = new PrettyReportCreator();

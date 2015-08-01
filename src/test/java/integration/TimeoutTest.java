@@ -26,7 +26,8 @@ public class TimeoutTest extends IntegrationTest {
       fail("Looking for non-existing element should fail");
     } catch (NoSuchElementException expectedException) {
       long end = System.nanoTime();
-      assertTrue("Looking for non-existing element took more than 1 ms: " + (end - start) / 1000000 + " ms.", end - start < 1000000000L);
+      assertTrue("Looking for non-existing element took more than 1 ms: " + (end - start) / 1000000 + " ms.",
+          end - start < 1000000000L);
     }
   }
 

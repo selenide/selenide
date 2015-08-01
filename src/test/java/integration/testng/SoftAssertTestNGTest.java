@@ -29,7 +29,7 @@ public class SoftAssertTestNGTest {
     Configuration.timeout = 4000;
   }
 
-  @Test(enabled=false)
+  @Test(enabled = false)
   public void userCanUseSoftAssertWithTestNG() {
     $("#radioButtons input").shouldHave(value("777"));
     $("#xxx").shouldBe(visible);

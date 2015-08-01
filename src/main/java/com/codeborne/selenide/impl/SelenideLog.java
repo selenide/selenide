@@ -41,7 +41,7 @@ public class SelenideLog implements LogEvent {
   
   @Override
   public long getDuration() {
-    return (endNs-startNs) / 1000000;
+    return (endNs - startNs) / 1000000;
   }
 
   @Override
