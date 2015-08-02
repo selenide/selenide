@@ -75,7 +75,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
-=== 2.21 (Plannes to 0x.08.2015)
+=== 2.21 (Released 03.08.2015)
 * Selenide now requires Java 7 or higher
 * Upgrade to Selenium 2.47.1 <br>
  Release notes: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
