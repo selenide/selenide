@@ -480,17 +480,16 @@ footer div {
   }
 }
 
-
-
 #languages {
+  z-index: 1;
   position: relative;
   float: right;
   top: 15px;
 }
 
 #languages a {
-  margin-left: 10px;
   color: #444;
+  padding: 1px 7px 1px 7px;
 }
 
 #languages a:hover {
