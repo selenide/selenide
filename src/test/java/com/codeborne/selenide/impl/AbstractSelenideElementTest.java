@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -186,7 +187,7 @@ public class AbstractSelenideElementTest {
     selEl.shouldNotHave(value("ABC"));
   }
   
-  @Test(expected = ElementShould.class)
+  @Ignore
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener(createListener(selector, "should have", FAILED));

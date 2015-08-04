@@ -60,6 +60,7 @@ dependencies {
   testCompile 'org.eclipse.jetty:jetty-server:9.3.0.RC0'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.RC0'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
+  testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
 }
 
 task libs(type: Sync) {
