@@ -57,8 +57,8 @@ dependencies {
   testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.6.0'
 
   testCompile 'org.mockito:mockito-core:1.10.19'
-  testCompile 'org.eclipse.jetty:jetty-server:9.3.0.RC0'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.3.0.RC0'
+  testCompile 'org.eclipse.jetty:jetty-server:9.2.13.v20150730'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.13.v20150730'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
