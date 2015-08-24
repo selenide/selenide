@@ -161,6 +161,7 @@ public class WebDriverThreadLocalContainer {
     @Override
     public void run() {
       try {
+        log.info("Trying to close the browser " + webdriver + " ...");
         webdriver.quit();
       }
       catch (UnreachableBrowserException e) {
@@ -277,7 +278,7 @@ public class WebDriverThreadLocalContainer {
         }
       }
     }
-    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
+    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(webDriver, currentThread()));
     return webDriver;
   }
 
@@ -404,15 +405,18 @@ public class WebDriverThreadLocalContainer {
   }
   
   protected class WebdriversFinalCleanupThread extends Thread {
+    private final WebDriver webDriver;
     private final Thread thread;
 
-    public WebdriversFinalCleanupThread(Thread thread) {
+    public WebdriversFinalCleanupThread(WebDriver webDriver, Thread thread) {
+      this.webDriver = webDriver;
       this.thread = thread;
     }
 
     @Override
     public void run() {
-      closeWebDriver(thread);
+      ALL_WEB_DRIVERS_THREADS.remove(thread);
+      new CloseBrowser(webDriver).run();
     }
   }
 
