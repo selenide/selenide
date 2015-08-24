@@ -1,22 +1,14 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.impl.Cleanup;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.logging.Logger;
-
-import static com.codeborne.selenide.Screenshots.takeScreenShot;
 
 public class ErrorMessages {
-  private static final Logger LOG = Logger.getLogger(ErrorMessages.class.getName());
-
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
       return "\nTimeout: " + timeoutMs + " ms.";
@@ -39,42 +31,11 @@ public class ErrorMessages {
   }
 
   public static String screenshot() {
-    return screenshot(formatScreenShotPath());
+    return screenshot(Screenshots.screenshots.formatScreenShotPath());
   }
   
   public static String screenshot(String screenshotPath) {
     return "\nScreenshot: " + screenshotPath;
-  }
-
-  // TODO Move this logic to ScreenShotLaboratory
-  static String formatScreenShotPath() {
-    if (!Configuration.screenshots) {
-      LOG.config("Automatic screenshots are disabled.");
-      return "";
-    }
-
-    String screenshot = takeScreenShot();
-    if (screenshot == null) {
-      return "";
-    }
-    
-    if (Configuration.reportsUrl != null) {
-      String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
-      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
-      try {
-        screenshotUrl = new URL(screenshotUrl).toExternalForm();
-      }
-      catch (MalformedURLException ignore) { }
-      LOG.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
-      return screenshotUrl;
-    }
-
-    LOG.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
-    try {
-      return new File(screenshot).toURI().toURL().toExternalForm();
-    } catch (MalformedURLException e) {
-      return "file://" + screenshot;
-    }
   }
 
   public static String causedBy(Throwable cause) {

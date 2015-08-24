@@ -1,5 +1,6 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.impl.Cleanup;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class UIAssertionError extends AssertionError {
   }
 
   private void collectCurrentWebdriverData() {
-    screenshot = formatScreenShotPath();
+    screenshot = Screenshots.screenshots.formatScreenShotPath();
     jsErrors = getJavascriptErrors();
   }
 

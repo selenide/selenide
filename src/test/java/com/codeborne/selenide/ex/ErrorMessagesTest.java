@@ -11,6 +11,7 @@ import java.util.Locale;
 import static com.codeborne.selenide.Screenshots.screenshots;
 import static java.io.File.separatorChar;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -46,6 +47,7 @@ public class ErrorMessagesTest {
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     String currentDir = System.getProperty("user.dir");
     screenshots = mock(ScreenShotLaboratory.class);
+    doCallRealMethod().when(screenshots).formatScreenShotPath();
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
@@ -61,6 +63,7 @@ public class ErrorMessagesTest {
     }
 
     screenshots = mock(ScreenShotLaboratory.class);
+    doCallRealMethod().when(screenshots).formatScreenShotPath();
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();

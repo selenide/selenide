@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -10,6 +11,8 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +33,9 @@ public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected String currentContext = "";
   protected List<String> currentContextScreenshots;
-  protected List<String> allScreenshots = new ArrayList<String>();
+  protected List<String> allScreenshots = new ArrayList<>();
 
-  protected Set<String> printedErrors = new ConcurrentSkipListSet<String>();
+  protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
   protected synchronized void printOnce(String action, Throwable error) {
     if (!printedErrors.contains(action)) {
@@ -224,39 +227,26 @@ public class ScreenShotLaboratory {
   }
 
   protected void copyFile(File sourceFile, File targetFile) throws IOException {
-    FileInputStream in = new FileInputStream(sourceFile);
-    try {
+    try (FileInputStream in = new FileInputStream(sourceFile)) {
       copyFile(in, targetFile);
-    }
-    finally {
-      in.close();
     }
   }
 
   protected void copyFile(InputStream in, File targetFile) throws IOException {
     ensureFolderExists(targetFile);
 
-    final FileOutputStream out = new FileOutputStream(targetFile);
-    try {
+    try (FileOutputStream out = new FileOutputStream(targetFile)) {
       byte[] buffer = new byte[1024];
       int len;
       while ((len = in.read(buffer)) != -1) {
         out.write(buffer, 0, len);
       }
-    } finally {
-      out.close();
     }
   }
 
   protected void writeToFile(String content, File targetFile) {
-    try {
-      ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
-      try {
-        copyFile(in, targetFile);
-      }
-      finally {
-        in.close();
-      }
+    try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+      copyFile(in, targetFile);
     }
     catch (IOException e) {
       log.log(SEVERE, "Failed to write file " + targetFile.getAbsolutePath(), e);
@@ -281,7 +271,7 @@ public class ScreenShotLaboratory {
 
   public void startContext(String context) {
     this.currentContext = context;
-    currentContextScreenshots = new ArrayList<String>();
+    currentContextScreenshots = new ArrayList<>();
   }
 
   public List<String> finishContext() {
@@ -293,5 +283,35 @@ public class ScreenShotLaboratory {
 
   public List<String> getScreenshots() {
     return allScreenshots;
+  }
+
+  public String formatScreenShotPath() {
+    if (!Configuration.screenshots) {
+      log.config("Automatic screenshots are disabled.");
+      return "";
+    }
+
+    String screenshot = takeScreenShot();
+    if (screenshot == null) {
+      return "";
+    }
+
+    if (Configuration.reportsUrl != null) {
+      String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
+      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
+      try {
+        screenshotUrl = new URL(screenshotUrl).toExternalForm();
+      }
+      catch (MalformedURLException ignore) { }
+      log.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
+      return screenshotUrl;
+    }
+
+    log.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
+    try {
+      return new File(screenshot).toURI().toURL().toExternalForm();
+    } catch (MalformedURLException e) {
+      return "file://" + screenshot;
+    }
   }
 }

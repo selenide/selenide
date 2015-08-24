@@ -16,11 +16,7 @@ public class Screenshots {
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(fileName);
   }
-
-  public static String takeScreenShot() {
-    return screenshots.takeScreenShot();
-  }
-
+  
   public static File getScreenShotAsFile() {
     return screenshots.getScreenShotAsFile();
   }
