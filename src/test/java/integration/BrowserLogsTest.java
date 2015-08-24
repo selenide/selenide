@@ -58,7 +58,7 @@ public class BrowserLogsTest extends IntegrationTest {
     $(byText("Generate JS Error")).click();
     List<String> webDriverLogs = getWebDriverLogs(BROWSER, Level.ALL);
 
-    assumeFalse(isHtmlUnit() || isPhantomjs() || isFirefox() || isSafari());
+    assumeFalse(isHtmlUnit() || isPhantomjs() || isFirefox() || isSafari() || isChrome());
 
     assertEquals("Expected 1 log, but received: " + webDriverLogs, 1, webDriverLogs.size());
 
