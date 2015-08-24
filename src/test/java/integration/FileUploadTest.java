@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
@@ -28,6 +29,7 @@ public class FileUploadTest extends IntegrationTest {
     File f1 = $("#cv").uploadFromClasspath("hello_world.txt");
     File f2 = $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
+    $("h3").shouldHave(text("Uploaded 2 files"));
     
     assertTrue(f1.exists());
     assertTrue(f2.exists());
@@ -45,6 +47,7 @@ public class FileUploadTest extends IntegrationTest {
   public void userCanUploadFile() {
     File file = $("#cv").uploadFile(new File("src/test/java/../resources/hello_world.txt"));
     $("#submit").click();
+    $("h3").shouldHave(text("Uploaded 1 files"));
     assertTrue(file.exists());
     assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
     assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
@@ -64,6 +67,7 @@ public class FileUploadTest extends IntegrationTest {
         "selenide-logo-big.png");
     $("#multi-file-upload-form .submit").click();
 
+    $("h3").shouldHave(text("Uploaded 9 files"));
     assertEquals(9, server.uploadedFiles.size());
     
     assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
@@ -84,7 +88,8 @@ public class FileUploadTest extends IntegrationTest {
         new File("src/test/resources/jquery.min.js"));
     
     $("#multi-file-upload-form .submit").click();
-
+    $("h3").shouldHave(text("Uploaded 2 files"));
+    
     assertTrue(file.exists());
     assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
 

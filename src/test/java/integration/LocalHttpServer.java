@@ -87,7 +87,7 @@ public class LocalHttpServer {
         " " + (System.nanoTime() - startTime) / 1000000 + " ms");
   }
 
-  private Set<String> sessions = new ConcurrentSkipListSet<String>();
+  private Set<String> sessions = new ConcurrentSkipListSet<>();
 
   private class FileHandler extends HttpServlet {
     @Override
@@ -147,7 +147,7 @@ public class LocalHttpServer {
     }
   }
 
-  public final List<FileItem> uploadedFiles = new ArrayList<FileItem>(2);
+  public final List<FileItem> uploadedFiles = new ArrayList<>(2);
   
   private class FileUploadHandler extends HttpServlet {
     @Override
@@ -159,8 +159,13 @@ public class LocalHttpServer {
       ServletFileUpload upload = new ServletFileUpload(factory);
       try {
         List<FileItem> items = upload.parseRequest(request);
-        uploadedFiles.addAll(items);
-        String message = "Uploaded " + items.size() + " files: " + items;
+        for (FileItem item : items) {
+          if (item.getSize() > 0) {
+            uploadedFiles.add(item);
+          }
+        }
+        
+        String message = "<h3>Uploaded " + uploadedFiles.size() + " files</h3>" + items;
         printResponse(response, message.getBytes("UTF-8"));
         logRequest(request, message, start);
       } catch (FileUploadException e) {
@@ -193,11 +198,9 @@ public class LocalHttpServer {
   }
 
   static void printResponse(HttpServletResponse http, byte[] fileContent) throws IOException {
-    OutputStream os = http.getOutputStream();
-    try {
+    http.setContentType("text/html");
+    try (OutputStream os = http.getOutputStream()) {
       os.write(fileContent);
-    } finally {
-      os.close();
     }
   }
 
