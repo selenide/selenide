@@ -5,6 +5,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -222,7 +223,9 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void userCanPressEnter() {
     assertEquals(-1, url().indexOf("#submitted-form"));
     $(By.name("password")).val("Going to press ENTER").pressEnter();
-    assertTrue(url().contains("#submitted-form"));
+
+    sleep(500);
+    assertThat(url(), CoreMatchers.containsString("#submitted-form"));
   }
 
   @Test
