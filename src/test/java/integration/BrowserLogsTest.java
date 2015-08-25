@@ -26,7 +26,7 @@ public class BrowserLogsTest extends IntegrationTest {
 
   @Test
   public void canCheckJavaScriptErrors() {
-    assumeFalse(isFirefox());  // window.onerror does not work in Firefox for unknown reason :(
+    assumeFalse(isFirefox() || isChrome());  // window.onerror does not work in Firefox for unknown reason :(
 
     assertNoJavascriptErrors();
     $(byText("Generate JS Error")).click();
