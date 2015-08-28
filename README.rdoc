@@ -75,6 +75,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.22 (Released 29.08.2015)
+* #209 close browser in the same thread (without spawning a daemon thread)
+
 === 2.21 (Released 03.08.2015)
 * Selenide now requires Java 7 or higher
 * Upgrade to Selenium 2.47.1 <br>

@@ -6,7 +6,7 @@ apply plugin: 'checkstyle'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='2.22-SNAPSHOT'
+version='2.22'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.7
