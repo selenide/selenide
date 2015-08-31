@@ -1,5 +1,6 @@
 *.iml
 _site/*
+jekyll.log
 
 Thumbs.db
 .DS_Store
