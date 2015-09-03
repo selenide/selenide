@@ -426,16 +426,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       element.clear();
     }
     else if (fastSetValue) {
-      if(!ignoreElementMaxLength) {
-        try {
-          int elementMaxLength = Math.abs(Integer.parseInt(element.getAttribute("maxlength")));
-          if(text.length > elementMaxLength) {
-            text = text.substring(0, elementMaxLength);
-          }
-        } catch (NumberFormatException nfe) {
-        }
-      }
-
+      text = truncateMaxLength(element, text);
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
       fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
     }
@@ -443,6 +434,17 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       element.clear();
       element.sendKeys(text);
       fireChangeEvent(element);
+    }
+  }
+
+  private String truncateMaxLength(WebElement element, String text) {
+    try {
+      String maxlength = element.getAttribute("maxlength");
+      int elementMaxLength = Integer.parseInt(maxlength);
+      return text.length() > elementMaxLength ? text.substring(0, elementMaxLength) : text;
+    }
+    catch (NumberFormatException invalidMaxLength) {
+      return text;
     }
   }
 

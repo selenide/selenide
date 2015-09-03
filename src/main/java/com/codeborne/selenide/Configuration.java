@@ -150,14 +150,7 @@ public class Configuration {
    * Default value: false
    */
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
-
-  /**
-   * If set to false, elemet's "maxlength" attr will be taken into account for javascript value setter
-   * 
-   * Default value: true
-   */
-  public static boolean ignoreElementMaxLength = Boolean.parseBoolean(System.getProperty("selenide.ignoreElementMaxLength", "true"));
-
+  
   /**
    * EXPERIMENTAL
    * 

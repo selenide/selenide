@@ -8,10 +8,7 @@ import com.codeborne.selenide.ex.ElementShouldNot;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -200,6 +197,13 @@ public class SelenideMethodsTest extends IntegrationTest {
     Configuration.fastSetValue = true;
     $("#empty-text-area").val("another text");
     $("#empty-text-area").shouldHave(value("another text"));
+  }
+
+  @Test
+  public void userCannotSetValueLongerThanMaxLength() {
+    $(By.name("password")).shouldHave(attribute("maxlength", "24"));
+    $(By.name("password")).val("123456789_123456789_123456789_");
+    $(By.name("password")).shouldHave(value("123456789_123456789_1234"));
   }
 
   @Test
