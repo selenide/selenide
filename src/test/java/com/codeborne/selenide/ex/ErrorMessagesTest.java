@@ -3,6 +3,7 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,6 +29,11 @@ public class ErrorMessagesTest {
   public static void restoreOldValues() {
     Configuration.reportsUrl = reportsUrl;
     screenshots = new ScreenShotLaboratory();
+  }
+
+  @Before
+  public void setUp() {
+    Configuration.screenshots = true;
   }
 
   @Test
