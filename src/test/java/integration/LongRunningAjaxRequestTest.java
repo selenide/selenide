@@ -17,7 +17,6 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
     timeout = averageSeleniumCommandDuration * 30;
     $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
-    $("#loading").shouldBe(visible).shouldHave(text("Loading..."));
   }
 
   @Test
