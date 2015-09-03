@@ -426,6 +426,16 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       element.clear();
     }
     else if (fastSetValue) {
+      if(!ignoreElementMaxLength) {
+        try {
+          int elementMaxLength = Math.abs(Integer.parseInt(element.getAttribute("maxlength")));
+          if(text.length > elementMaxLength) {
+            text = text.substring(0, elementMaxLength);
+          }
+        } catch (NumberFormatException nfe) {
+        }
+      }
+
       executeJavaScript("arguments[0].value = arguments[1]", element, text);
       fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
     }
