@@ -51,7 +51,7 @@ How the test looks like? Here it is:
   resultsPage.results().get(0).shouldHave(text("Selenide: Concise UI Tests in Java"));
 ```
 
-Isn't is simple?
+Isn't it simple?
 
 ## Classic Page Object
 
