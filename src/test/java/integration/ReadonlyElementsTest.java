@@ -45,7 +45,7 @@ public class ReadonlyElementsTest extends IntegrationTest {
 
   @Test(expected = InvalidStateException.class)
   public void cannotSetValueToReadonlyRadiobutton() {
-    selectRadio(By.name("me"), "margarita");
+    $(By.name("me")).selectRadio("margarita");
   }
 
   @Test
@@ -80,10 +80,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
     $(By.name("rememberMe")).shouldBe(selected);
   }
 
-  @Test @Ignore("will be solved when method selectRadio() gets moved to SelenideElement")
+  @Test
   public void waitsUntilRadiobuttonGetsEditable() {
     $("#enable-inputs").click();
-    selectRadio(By.name("me"), "margarita");
+    $(By.name("me")).selectRadio("margarita");
     $(Selectors.byValue("margarita")).shouldBe(selected);
   }
 

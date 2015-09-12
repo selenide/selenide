@@ -32,7 +32,7 @@ public class RadioTest extends IntegrationTest {
     assertEquals("cat", getSelectedRadio(By.name("me")).getAttribute("value"));
   }
 
-  @Test @Ignore("idea for future")
+  @Test
   public void userCanSelectRadioButtonUsingSetValue() {
     $(By.name("me")).setValue("margarita");
     assertEquals("margarita", getSelectedRadio(By.name("me")).val());

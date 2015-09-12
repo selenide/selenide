@@ -443,6 +443,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     if ("select".equalsIgnoreCase(element.getTagName())) {
       selectOptionByValue(text);
     }
+    else if ("input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
+      selectRadio(text);
+    }
     else if (text == null || text.isEmpty()) {
       element.clear();
     }
