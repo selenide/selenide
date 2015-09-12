@@ -5,8 +5,19 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
   <script type="text/javascript">
-    $(function () {
+    function scheduleEnableInputs() {
+      setTimeout(enableInputs, 2000);
+      return false;
+    }
 
+    function enableInputs() {
+      $('[readonly]').each(function() {
+        $(this).removeAttr('readonly');
+      });
+    }
+    
+    $(function () {
+      $('#enable-inputs').on('click', scheduleEnableInputs)
     });
   </script>
 </head>
@@ -41,7 +52,8 @@
   </form>
 </div>
 
-<a href="long_ajax_request.html">Want to see ajax in action?</a>
+
+<a id="enable-inputs" href="#">Enable input fields</a>
 
 </body>
 </html>

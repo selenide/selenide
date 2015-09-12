@@ -1,14 +1,15 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.empty;
-import static com.codeborne.selenide.Condition.exactValue;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.selectRadio;
 import static org.junit.Assert.assertThat;
@@ -45,6 +46,45 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test(expected = InvalidStateException.class)
   public void cannotSetValueToReadonlyRadiobutton() {
     selectRadio(By.name("me"), "margarita");
+  }
+
+  @Test
+  public void waitsUntilInputGetsEditable_slowSetValue() {
+    $("#enable-inputs").click();
+    
+    Configuration.fastSetValue = false;
+    $(By.name("username")).val("another-username");
+    $(By.name("username")).shouldHave(exactValue("another-username"));
+  }
+
+  @Test
+  public void waitsUntilInputGetsEditable_fastSetValue() {
+    $("#enable-inputs").click();
+    
+    Configuration.fastSetValue = true;
+    $(By.name("username")).val("another-username");
+    $(By.name("username")).shouldHave(exactValue("another-username"));
+  }
+
+  @Test
+  public void waitsUntilTextareaGetsEditable() {
+    $("#enable-inputs").click();
+    $("#text-area").val("textarea value");
+    $("#text-area").shouldHave(exactValue("textarea value"));
+  }
+
+  @Test
+  public void waitsUntilCheckboxGetsEditable() {
+    $("#enable-inputs").click();
+    $(By.name("rememberMe")).setSelected(true);
+    $(By.name("rememberMe")).shouldBe(selected);
+  }
+
+  @Test @Ignore("will be solved when method selectRadio() gets moved to SelenideElement")
+  public void waitsUntilRadiobuttonGetsEditable() {
+    $("#enable-inputs").click();
+    selectRadio(By.name("me"), "margarita");
+    $(Selectors.byValue("margarita")).shouldBe(selected);
   }
 
   private void verifySetValueThrowsException(String expectedErrorMessage) {
