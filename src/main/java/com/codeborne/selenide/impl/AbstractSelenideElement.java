@@ -32,12 +32,13 @@ import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
   abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
   abstract String getSearchCriteria();
-
+  
   private static final Set<String> methodsToSkipLogging = new HashSet<String>(asList(
       "toWebElement",
       "toString"
@@ -226,6 +227,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       setSelected((Boolean) args[0]);
       return proxy;
     }
+    else if ("selectRadio".equals(method.getName())) {
+      return selectRadio((String) args[0]);
+    }
     else if ("uploadFile".equals(method.getName())) {
       return uploadFile((SelenideElement) proxy, (File[]) args[0]);
     }
@@ -351,6 +355,19 @@ abstract class AbstractSelenideElement implements InvocationHandler {
         throw new InvalidStateException("Cannot change value of readonly element");
       click(element);
     }
+  }
+
+  protected SelenideElement selectRadio(String value) {
+    List<WebElement> matchingRadioButtons = getAllMatchingElements();
+    for (WebElement radio : matchingRadioButtons) {
+      if (value.equals(radio.getAttribute("value"))) {
+        if (radio.getAttribute("readonly") != null)
+          throw new InvalidStateException("Cannot select readonly radio button");
+        click(radio);
+        return wrap(radio);
+      }
+    }
+    throw new ElementNotFound(getSearchCriteria(), value(value));
   }
 
   protected String getText() {
@@ -735,5 +752,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
 
   protected File download() throws IOException, URISyntaxException {
     return FileDownloader.instance.download(getDelegate());
+  }
+
+  protected List<WebElement> getAllMatchingElements() throws NoSuchElementException, IndexOutOfBoundsException {
+    return singletonList(getActualDelegate());
   }
 }

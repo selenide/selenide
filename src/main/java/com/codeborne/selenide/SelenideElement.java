@@ -127,6 +127,13 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String val();
 
   /**
+   * Select radio button
+   * @param value value of radio button to select
+   * @return selected "input type=radio" element
+   */
+  SelenideElement selectRadio(String value);
+  
+  /**
    * Get value of attribute "data-<i>dataAttributeName</i>"
    */
   String data(String dataAttributeName);

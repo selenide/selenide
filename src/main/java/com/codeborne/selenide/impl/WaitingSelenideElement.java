@@ -9,6 +9,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
@@ -54,6 +55,13 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
     return index == 0 ?
         WebElementSelector.instance.findElement(getSearchContext(), criteria) :
         WebElementSelector.instance.findElements(getSearchContext(), criteria).get(index);
+  }
+
+  @Override
+  protected List<WebElement> getAllMatchingElements() throws NoSuchElementException, IndexOutOfBoundsException {
+    return index == 0 ?
+        WebElementSelector.instance.findElements(getSearchContext(), criteria) :
+        super.getAllMatchingElements();
   }
 
   private SearchContext getSearchContext() {

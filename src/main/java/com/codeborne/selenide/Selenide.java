@@ -1,8 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
@@ -18,8 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -322,23 +318,15 @@ public class Selenide {
   }
 
   /**
+   * Not recommended. It's better to use method {@code $(radioField).selectRadio(value);}
+   * 
    * Select radio field by value
    * @param radioField any By selector for finding radio field
    * @param value value to select (should match an attribute "value")
    * @return the selected radio field
    */
   public static SelenideElement selectRadio(By radioField, String value) {
-    $(radioField).shouldBe(enabled);
-    for (WebElement radio : $$(radioField)) {
-      if (value.equals(radio.getAttribute("value"))) {
-        if (radio.getAttribute("readonly") != null)
-          throw new InvalidStateException("Cannot change value of readonly element");
-        radio.click();
-        return wrap(radio);
-      }
-    }
-
-    throw new ElementNotFound(radioField, value(value));
+    return $(radioField).selectRadio(value);
   }
 
   public static SelenideElement getSelectedRadio(By radioField) {

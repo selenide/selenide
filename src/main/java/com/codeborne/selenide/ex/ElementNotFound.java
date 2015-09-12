@@ -11,6 +11,11 @@ public class ElementNotFound extends UIAssertionError {
     this(searchCriteria.toString(), expectedCondition, null);
   }
 
+  public ElementNotFound(String searchCriteria, Condition expectedCondition) {
+    super("Element not found {" + searchCriteria + '}' +
+        "\nExpected: " + expectedCondition);
+  }
+
   public ElementNotFound(String searchCriteria, Condition expectedCondition, Throwable lastError) {
     super("Element not found {" + searchCriteria + '}' +
         "\nExpected: " + expectedCondition, lastError);
