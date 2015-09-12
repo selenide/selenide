@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
@@ -330,6 +331,8 @@ public class Selenide {
     $(radioField).shouldBe(enabled);
     for (WebElement radio : $$(radioField)) {
       if (value.equals(radio.getAttribute("value"))) {
+        if (radio.getAttribute("readonly") != null)
+          throw new InvalidStateException("Cannot change value of readonly element");
         radio.click();
         return wrap(radio);
       }

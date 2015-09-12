@@ -347,6 +347,8 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   protected void setSelected(boolean selected) {
     WebElement element = getDelegate();
     if (element.isSelected() ^ selected) {
+      if (element.getAttribute("readonly") != null)
+        throw new InvalidStateException("Cannot change value of readonly element");
       click(element);
     }
   }
