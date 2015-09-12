@@ -4,10 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ElementShould;
-import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.ex.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -107,6 +104,11 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       uiError.timeoutMs = timeoutMs;
       throw uiError;
       
+    }
+    else if (lastError instanceof InvalidElementStateException) {
+      InvalidStateException uiError = new InvalidStateException(lastError);
+      uiError.timeoutMs = timeoutMs;
+      throw uiError;
     }
     else if (lastError instanceof WebDriverException) {
       ElementNotFound uiError = createElementNotFoundError(exist, lastError);
@@ -427,7 +429,12 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     }
     else if (fastSetValue) {
       text = truncateMaxLength(element, text);
-      executeJavaScript("arguments[0].value = arguments[1]", element, text);
+      String error = executeJavaScript(
+          "if (arguments[0].getAttribute('readonly') != undefined) " +
+          "  return 'Cannot change value of readonly element';" +
+          "arguments[0].value = arguments[1];" +
+          "return null;", element, text);
+      if (error != null) throw new InvalidStateException(error);
       fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
     }
     else {

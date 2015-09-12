@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page with readonly elements</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript">
+    $(function () {
+
+    });
+  </script>
+</head>
+<body>
+
+<h1>Page with readonly elements</h1>
+
+<div id="radioButtons">
+  <h2>Radio buttons</h2>
+  <input type="radio" name="me" value="master">Мастер</input>
+  <input type="radio" name="me" value="margarita" readonly>Маргарита</input>
+  <input type="radio" name="me" value="cat">Кот "Бегемот"</input>
+  <input type="radio" name="me" value="woland">Theodor Woland</input>
+</div>
+
+<br/>
+<br/>
+
+<div style="width: 400px">
+  <form method="post">
+    <fieldset title="Login form">
+      <label> Username:
+        <input name="username" value="" readonly/>
+      </label> <br/>
+      <label>Password:
+        <input name="password" value="" maxlength="24"/>
+      </label> <br/>
+      <input type="checkbox" name="rememberMe" readonly>Remember me<br/><br/>
+      
+      <textarea id="text-area" rows="5" cols="40" readonly></textarea>
+    </fieldset>
+  </form>
+</div>
+
+<a href="long_ajax_request.html">Want to see ajax in action?</a>
+
+</body>
+</html>
