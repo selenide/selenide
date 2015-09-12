@@ -76,7 +76,8 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.23 (Planned to 2x.09.2015)
-* add method $.selectRadio()
+* add method `$.selectRadio()`
+* Method `$.setValue()` can also select radio button
 * user cannot change value of readonly field (input, radio, checkbox, textarea)
 
 === 2.22 (Released 29.08.2015)
