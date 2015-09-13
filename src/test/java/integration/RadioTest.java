@@ -2,13 +2,10 @@ package integration;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.getSelectedRadio;
-import static com.codeborne.selenide.Selenide.selectRadio;
+import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.contains;

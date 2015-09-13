@@ -1,11 +1,7 @@
 package demo.zoom;
 
-import com.codeborne.selenide.Condition;
-import org.junit.Test;
-
 import java.net.URL;
 
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class ZoomDemo {
