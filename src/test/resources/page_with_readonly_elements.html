@@ -5,8 +5,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
   <script type="text/javascript">
+    var commandDuration = window.location.search.substring(1);
+    
     function scheduleEnableInputs() {
-      setTimeout(enableInputs, 2000);
+      setTimeout(enableInputs, 3 * commandDuration);
       return false;
     }
 

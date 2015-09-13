@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -17,6 +18,7 @@ import static org.junit.Assert.fail;
 public class ReadonlyElementsTest extends IntegrationTest {
   @Before
   public void openTestPage() {
+    timeout = 6 * averageSeleniumCommandDuration;
     openFile("page_with_readonly_elements.html");
   }
 
