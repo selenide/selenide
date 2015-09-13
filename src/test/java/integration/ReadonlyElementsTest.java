@@ -18,8 +18,8 @@ import static org.junit.Assert.fail;
 public class ReadonlyElementsTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    timeout = 6 * averageSeleniumCommandDuration;
     openFile("page_with_readonly_elements.html");
+    timeout = 10 * averageSeleniumCommandDuration;
   }
 
   @Test
