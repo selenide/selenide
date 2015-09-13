@@ -49,7 +49,7 @@
     <!--<module name="MutableException"/>-->
     <module name="ClassFanOutComplexity">
       <!--TODO use 20-->
-      <property name="max" value="36"/>
+      <property name="max" value="38"/>
     </module>
     <module name="CyclomaticComplexity">
       <!--TODO use 20-->
