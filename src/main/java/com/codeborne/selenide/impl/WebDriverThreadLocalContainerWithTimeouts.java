@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -15,42 +17,60 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.awt.Toolkit;
+import java.awt.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverContainer {
-  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
+  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainerWithTimeouts.class.getName());
 
-  protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
-  protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
-  protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
+  protected final List<WebDriverEventListener> listeners = new ArrayList<>();
+  protected final List<WebDriver> CREATED_WEB_DRIVERS = new CopyOnWriteArrayList<>();
+  protected final List<ThreadWebdriver> THREAD_WEB_DRIVERS = new CopyOnWriteArrayList<>();
+  protected final Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<>();
   protected Proxy webProxySettings;
 
+  protected final AtomicBoolean systemShutdownStarted = new AtomicBoolean(false);
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+  protected Thread unusedWebdriversCleanupThread = new UnusedWebdriversCleanupThread();
+  protected WebdriversFinalCleanupThread finalCleanupThread = new WebdriversFinalCleanupThread();
 
-  protected void closeUnusedWebdrivers() {
-    for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
-      if (!thread.isAlive()) {
-        log.info("Thread " + thread.getId() + " is dead. Let's close webdriver " + THREAD_WEB_DRIVER.get(thread.getId()));
-        closeWebDriver(thread);
+  protected void closeWebdriversCreatedByDeadThreads() {
+    for (ThreadWebdriver tw : THREAD_WEB_DRIVERS) {
+      if (!tw.thread.isAlive()) {
+        log.info("Thread " + tw.thread.getId() + " is dead. Let's close webdriver " + tw.webdriver);
+        THREAD_WEB_DRIVERS.remove(tw);
+        closeWebDriver(tw.webdriver);
+      }
+    }
+  }
+
+  protected void closeWebdriversNotBoundToAnyThread() {
+    for (WebDriver webdriver : CREATED_WEB_DRIVERS) {
+      if (!THREAD_WEB_DRIVER.containsValue(webdriver)) {
+        log.info("Webdriver is not used by any thread. Let's close it: " + webdriver);
+        CREATED_WEB_DRIVERS.remove(webdriver);
+        closeWebDriver(webdriver);
       }
     }
   }
@@ -65,7 +85,7 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     THREAD_WEB_DRIVER.put(currentThread().getId(), webDriver);
     return webDriver;
   }
-
+  
   @Override
   public void setProxy(Proxy webProxy) {
     webProxySettings = webProxy;
@@ -94,7 +114,7 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
   public boolean hasWebDriverStarted() {
     return THREAD_WEB_DRIVER.containsKey(currentThread().getId());
   }
-
+  
   @Override
   public WebDriver getWebDriver() {
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
@@ -123,29 +143,42 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
   @Override
   public void closeWebDriver() {
-    closeWebDriver(currentThread());
+    closeAllWebDriversOf(currentThread());
   }
 
-  protected void closeWebDriver(Thread thread) {
-    ALL_WEB_DRIVERS_THREADS.remove(thread);
-    WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
+  protected void closeAllWebDriversOf(Thread thread) {
+    for (ThreadWebdriver tw : THREAD_WEB_DRIVERS) {
+      if (tw.thread.equals(thread)) {
+        log.info("Let's close webdriver created by thread " + tw.thread.getId() + ": " + tw.webdriver);
+        THREAD_WEB_DRIVERS.remove(tw);
+        closeWebDriver(tw.webdriver);
+      }
+    }
+  }
 
+  protected void closeWebDriver(WebDriver webdriver) {
     if (webdriver != null && !holdBrowserOpen) {
-      log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
+      CREATED_WEB_DRIVERS.remove(webdriver);
 
-      long start = System.currentTimeMillis();
+      for (Map.Entry<Long, WebDriver> entry : THREAD_WEB_DRIVER.entrySet()) {
+        if (entry.getValue().equals(webdriver))
+          THREAD_WEB_DRIVER.remove(entry.getKey());
+          log.info("Close webdriver: " + entry.getKey() + " -> " + webdriver);
+      }
+      
+      long start = currentTimeMillis();
 
-      Thread t = new Thread(new CloseBrowser(webdriver));
+      Thread t = new Thread(new CloseBrowser(webdriver, getStackTrace("close browser")));
       t.setDaemon(true);
       t.start();
-
+      
       try {
         t.join(closeBrowserTimeoutMs);
       } catch (InterruptedException e) {
         log.log(FINE, "Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds", e);
       }
 
-      long duration = System.currentTimeMillis() - start;
+      long duration = currentTimeMillis() - start;
       if (duration >= closeBrowserTimeoutMs) {
         log.severe("Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds");
       }
@@ -158,28 +191,44 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     }
   }
 
-  private static class CloseBrowser implements Runnable {
+  private class CloseBrowser implements Runnable {
     private final WebDriver webdriver;
+    private final String stackTrace;
 
-    private CloseBrowser(WebDriver webdriver) {
+    private CloseBrowser(WebDriver webdriver, String stackTrace) {
       this.webdriver = webdriver;
+      this.stackTrace = stackTrace;
     }
 
     @Override
     public void run() {
+      log.info("Trying to close the browser " + webdriver + " ..." );
+      System.out.println("Trying to close the browser " + webdriver + ": by request: " + stackTrace);
+
       try {
-        log.info("Trying to close the browser " + webdriver + " ...");
+        webdriver.close();
+      }
+      catch (UnreachableBrowserException e) {
+        // It happens for Firefox. It's ok: browser is already closed.
+        log.log(FINE, "Cannot close, browser is unreachable", e);
+        System.out.println("Cannot close, browser is unreachable: " + e);
+      }
+
+      try {
         webdriver.quit();
       }
       catch (UnreachableBrowserException e) {
         // It happens for Firefox. It's ok: browser is already closed.
-        log.log(FINE, "Browser is unreachable", e);
+        log.log(FINE, "Cannot quit, browser is unreachable", e);
+        System.out.println("Cannot quit, browser is unreachable: " + e);
       }
       catch (WebDriverException cannotCloseBrowser) {
         log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
+        System.out.println("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
       }
       finally {
         killBrowser(webdriver);
+        CREATED_WEB_DRIVERS.remove(webdriver);
       }
     }
 
@@ -193,7 +242,7 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
       }
     }
   }
-
+  
   @Override
   public void clearBrowserCache() {
     WebDriver webdriver = THREAD_WEB_DRIVER.get(currentThread().getId());
@@ -216,17 +265,22 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     WebDriver webdriver = createWebDriverWithTimeout();
     webdriver = maximize(webdriver);
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
-    return markForAutoClose(addListeners(webdriver));
+    markForAutoClose(currentThread(), addListeners(webdriver));
+    return webdriver;
   }
 
   protected WebDriver createWebDriverWithTimeout() {
     for (int i = 0; i < 3; i++) {
       CreateWebdriver create = new CreateWebdriver();
       Thread t = new Thread(create);
+      t.setName(t.getName() + ": create webdriver for " + currentThread());
       t.setDaemon(true);
       t.start();
       try {
-        t.join(openBrowserTimeoutMs);
+        long start = currentTimeMillis();
+        while (create.webdriver == null && currentTimeMillis() - start <= openBrowserTimeoutMs) {
+          Thread.sleep(100);
+        }
         if (create.webdriver != null) {
           return create.webdriver;
         }
@@ -240,23 +294,34 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
   private class CreateWebdriver implements Runnable {
     WebDriver webdriver = null;
+    String stackTrace = getStackTrace("create webdriver");
 
     @Override
     public void run() {
       try {
+        if (systemShutdownStarted.get()) {
+          log.warning("System shutdown started. Cancel webdriver creation.");
+          return;
+        }
+        
         log.config("Configuration.browser=" + browser);
         log.config("Configuration.remote=" + remote);
         log.config("Configuration.startMaximized=" + startMaximized);
 
         webdriver = remote != null ? createRemoteDriver(remote, browser) :
-            CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
-                isFirefox() ? createFirefoxDriver() :
-                    isHtmlUnit() ? createHtmlUnitDriver() :
-                        isIE() ? createInternetExplorerDriver() :
-                            isPhantomjs() ? createPhantomJsDriver() :
-                                isOpera() ? createOperaDriver() :
-                                    isSafari() ? createSafariDriver() :
-                                        createInstanceOf(browser);
+          CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
+              isFirefox() ? createFirefoxDriver() :
+                  isHtmlUnit() ? createHtmlUnitDriver() :
+                      isIE() ? createInternetExplorerDriver() :
+                          isPhantomjs() ? createPhantomJsDriver() :
+                              isOpera() ? createOperaDriver() :
+                                  isSafari() ? createSafariDriver() :
+                                      createInstanceOf(browser);
+
+        System.out.println("Added webdriver " + webdriver + " by request: " + stackTrace);
+        Thread.sleep(200);
+        addShutdownHook(new Thread(new CloseBrowser(webdriver, "close webdriver @ " + stackTrace)));
+        CREATED_WEB_DRIVERS.add(webdriver);
       }
       catch (Exception e) {
         log.log(SEVERE, "Failed to create webdriver", e);
@@ -264,11 +329,15 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     }
   }
 
+  protected void addShutdownHook(Thread hook) {
+    Runtime.getRuntime().addShutdownHook(hook);
+  }
+
   protected WebDriver addListeners(WebDriver webdriver) {
     if (listeners.isEmpty()) {
       return webdriver;
     }
-
+    
     EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
     for (WebDriverEventListener listener : listeners) {
       log.info("Add listener to webdriver: " + listener);
@@ -277,19 +346,18 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     return wrapper;
   }
 
-  protected WebDriver markForAutoClose(WebDriver webDriver) {
-    ALL_WEB_DRIVERS_THREADS.add(currentThread());
+  protected void markForAutoClose(Thread thread, WebDriver webDriver) {
+    THREAD_WEB_DRIVERS.add(new ThreadWebdriver(thread, webDriver));
 
     if (!cleanupThreadStarted.get()) {
       synchronized (this) {
         if (!cleanupThreadStarted.get()) {
-          new UnusedWebdriversCleanupThread().start();
+          unusedWebdriversCleanupThread.start();
+          addShutdownHook(finalCleanupThread);
           cleanupThreadStarted.set(true);
         }
       }
     }
-    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(webDriver, currentThread()));
-    return webDriver;
   }
 
   protected WebDriver createChromeDriver() {
@@ -413,20 +481,30 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     }
     return browserCapabilities;
   }
-
+  
   protected class WebdriversFinalCleanupThread extends Thread {
-    private final WebDriver webDriver;
-    private final Thread thread;
-
-    public WebdriversFinalCleanupThread(WebDriver webDriver, Thread thread) {
-      this.webDriver = webDriver;
-      this.thread = thread;
-    }
-
     @Override
     public void run() {
-      ALL_WEB_DRIVERS_THREADS.remove(thread);
-      new CloseBrowser(webDriver).run();
+      systemShutdownStarted.set(true);
+      System.out.println("System shutdown. Let's close " + CREATED_WEB_DRIVERS.size() + " webdrivers.");
+      unusedWebdriversCleanupThread.interrupt();
+      
+      while (!CREATED_WEB_DRIVERS.isEmpty()) {
+        try {
+          System.out.println("System shutdown. Waiting for " + CREATED_WEB_DRIVERS.size() + " webdrivers still open.");
+          sleep(100);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      System.out.println("System shutdown. Closed all webdrivers.");
+//      try {
+//        sleep(2000);
+//      }
+//      catch (InterruptedException e) {
+//        e.printStackTrace();
+//      }
     }
   }
 
@@ -438,8 +516,9 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
     @Override
     public void run() {
-      while (true) {
-        closeUnusedWebdrivers();
+      while (!systemShutdownStarted.get()) {
+        closeWebdriversCreatedByDeadThreads();
+        closeWebdriversNotBoundToAnyThread();
         try {
           Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -447,6 +526,30 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
           break;
         }
       }
+    }
+  }
+
+  private static class ThreadWebdriver {
+    final Thread thread;
+    final WebDriver webdriver;
+
+
+    private ThreadWebdriver(Thread thread, WebDriver webdriver) {
+      this.thread = thread;
+      this.webdriver = webdriver;
+    }
+  }
+
+  private static String getStackTrace(String message) {
+    try (StringWriter out = new StringWriter()) {
+      try (PrintWriter writer = new PrintWriter(out)) {
+        new Exception(message).printStackTrace(writer);
+      }
+      out.flush();
+      return out.toString().substring("java.lang.Exception: ".length());
+    }
+    catch (IOException e) {
+      return message + "[failed to get stack trace: " + e.toString() + "]";
     }
   }
 }
