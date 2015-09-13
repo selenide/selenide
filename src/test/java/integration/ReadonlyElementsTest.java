@@ -3,13 +3,14 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -22,13 +23,18 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test
   public void cannotSetValueToReadonlyField_slowSetValue() {
     Configuration.fastSetValue = false;
-    verifySetValueThrowsException("Element must be user-editable in order to clear it");
+
+    assertThat(verifySetValueThrowsException(), anyOf(
+        containsString("Element is read-only and so may not be used for actions"),
+        containsString("Element must be user-editable in order to clear it"),
+        containsString("You may only edit editable elements")
+    ));
   }
 
   @Test
   public void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
-    verifySetValueThrowsException("Cannot change value of readonly element");
+    assertThat(verifySetValueThrowsException(), containsString("Cannot change value of readonly element"));
   }
 
   @Test(expected = InvalidStateException.class)
@@ -85,15 +91,16 @@ public class ReadonlyElementsTest extends IntegrationTest {
     $(Selectors.byValue("margarita")).shouldBe(selected);
   }
 
-  private void verifySetValueThrowsException(String expectedErrorMessage) {
+  private String verifySetValueThrowsException() {
     try {
       $(By.name("username")).val("another-username");
       fail("should throw InvalidStateException where setting value to readonly element");
+      return null;
     }
     catch (InvalidStateException expected) {
-      assertThat(expected.getMessage(), CoreMatchers.containsString(expectedErrorMessage));
       $(By.name("username")).shouldBe(empty);
       $(By.name("username")).shouldHave(exactValue(""));
+      return expected.getMessage();
     }
   }
 }
