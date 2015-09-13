@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
-
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -9,7 +9,7 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import static com.codeborne.selenide.Configuration.browser;
 
 public class WebDriverRunner {
-  public static WebDriverThreadLocalContainer webdriverContainer = new WebDriverThreadLocalContainer();
+  public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";

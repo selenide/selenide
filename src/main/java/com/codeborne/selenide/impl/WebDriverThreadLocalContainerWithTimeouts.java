@@ -36,12 +36,12 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
-public class WebDriverThreadLocalContainer implements WebDriverContainer {
+public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverContainer {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
 
-  protected List<WebDriverEventListener> listeners = new ArrayList<>();
-  protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<>();
-  protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<>(4);
+  protected List<WebDriverEventListener> listeners = new ArrayList<WebDriverEventListener>();
+  protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<Thread>();
+  protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<Long, WebDriver>(4);
   protected Proxy webProxySettings;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
@@ -213,24 +213,55 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
-    log.config("Configuration.browser=" + browser);
-    log.config("Configuration.remote=" + remote);
-    log.config("Configuration.startMaximized=" + startMaximized);
-
-    WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
-        CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
-            isFirefox() ? createFirefoxDriver() :
-                isHtmlUnit() ? createHtmlUnitDriver() :
-                    isIE() ? createInternetExplorerDriver() :
-                        isPhantomjs() ? createPhantomJsDriver() :
-                            isOpera() ? createOperaDriver() :
-                                isSafari() ? createSafariDriver() :
-                                    createInstanceOf(browser);
+    WebDriver webdriver = createWebDriverWithTimeout();
     webdriver = maximize(webdriver);
-
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
-
     return markForAutoClose(addListeners(webdriver));
+  }
+
+  protected WebDriver createWebDriverWithTimeout() {
+    for (int i = 0; i < 3; i++) {
+      CreateWebdriver create = new CreateWebdriver();
+      Thread t = new Thread(create);
+      t.setDaemon(true);
+      t.start();
+      try {
+        t.join(openBrowserTimeoutMs);
+        if (create.webdriver != null) {
+          return create.webdriver;
+        }
+      }
+      catch (InterruptedException e) {
+        throw runtime(e);
+      }
+    }
+    throw new RuntimeException("Could not create webdriver in " + openBrowserTimeoutMs + " ms");
+  }
+
+  private class CreateWebdriver implements Runnable {
+    WebDriver webdriver = null;
+
+    @Override
+    public void run() {
+      try {
+        log.config("Configuration.browser=" + browser);
+        log.config("Configuration.remote=" + remote);
+        log.config("Configuration.startMaximized=" + startMaximized);
+
+        webdriver = remote != null ? createRemoteDriver(remote, browser) :
+            CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
+                isFirefox() ? createFirefoxDriver() :
+                    isHtmlUnit() ? createHtmlUnitDriver() :
+                        isIE() ? createInternetExplorerDriver() :
+                            isPhantomjs() ? createPhantomJsDriver() :
+                                isOpera() ? createOperaDriver() :
+                                    isSafari() ? createSafariDriver() :
+                                        createInstanceOf(browser);
+      }
+      catch (Exception e) {
+        log.log(SEVERE, "Failed to create webdriver", e);
+      }
+    }
   }
 
   protected WebDriver addListeners(WebDriver webdriver) {
@@ -250,14 +281,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     ALL_WEB_DRIVERS_THREADS.add(currentThread());
 
     if (!cleanupThreadStarted.get()) {
-      synchronized (cleanupThreadStarted) {
+      synchronized (this) {
         if (!cleanupThreadStarted.get()) {
           new UnusedWebdriversCleanupThread().start();
           cleanupThreadStarted.set(true);
         }
       }
     }
-    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
+    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(webDriver, currentThread()));
     return webDriver;
   }
 
@@ -384,15 +415,18 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected class WebdriversFinalCleanupThread extends Thread {
+    private final WebDriver webDriver;
     private final Thread thread;
 
-    public WebdriversFinalCleanupThread(Thread thread) {
+    public WebdriversFinalCleanupThread(WebDriver webDriver, Thread thread) {
+      this.webDriver = webDriver;
       this.thread = thread;
     }
 
     @Override
     public void run() {
-      closeWebDriver(thread);
+      ALL_WEB_DRIVERS_THREADS.remove(thread);
+      new CloseBrowser(webDriver).run();
     }
   }
 
