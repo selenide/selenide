@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +11,8 @@ import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class WebDriverThreadLocalContainerWithTimeoutsTest {

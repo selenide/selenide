@@ -18,9 +18,6 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -163,12 +160,12 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
       for (Map.Entry<Long, WebDriver> entry : THREAD_WEB_DRIVER.entrySet()) {
         if (entry.getValue().equals(webdriver))
           THREAD_WEB_DRIVER.remove(entry.getKey());
-          log.info("Close webdriver: " + entry.getKey() + " -> " + webdriver);
+        log.info("Close webdriver: " + entry.getKey() + " -> " + webdriver);
       }
       
       long start = currentTimeMillis();
 
-      Thread t = new Thread(new CloseBrowser(webdriver, getStackTrace("close browser")));
+      Thread t = new Thread(new CloseBrowser(webdriver));
       t.setDaemon(true);
       t.start();
       
@@ -193,17 +190,14 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
   private class CloseBrowser implements Runnable {
     private final WebDriver webdriver;
-    private final String stackTrace;
 
-    private CloseBrowser(WebDriver webdriver, String stackTrace) {
+    private CloseBrowser(WebDriver webdriver) {
       this.webdriver = webdriver;
-      this.stackTrace = stackTrace;
     }
 
     @Override
     public void run() {
-      log.info("Trying to close the browser " + webdriver + " ..." );
-      System.out.println("Trying to close the browser " + webdriver + ": by request: " + stackTrace);
+      log.info("Trying to close the browser " + webdriver + " ...");
 
       try {
         webdriver.close();
@@ -211,7 +205,6 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
       catch (UnreachableBrowserException e) {
         // It happens for Firefox. It's ok: browser is already closed.
         log.log(FINE, "Cannot close, browser is unreachable", e);
-        System.out.println("Cannot close, browser is unreachable: " + e);
       }
 
       try {
@@ -220,11 +213,9 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
       catch (UnreachableBrowserException e) {
         // It happens for Firefox. It's ok: browser is already closed.
         log.log(FINE, "Cannot quit, browser is unreachable", e);
-        System.out.println("Cannot quit, browser is unreachable: " + e);
       }
       catch (WebDriverException cannotCloseBrowser) {
         log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
-        System.out.println("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
       }
       finally {
         killBrowser(webdriver);
@@ -294,7 +285,6 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
   private class CreateWebdriver implements Runnable {
     WebDriver webdriver = null;
-    String stackTrace = getStackTrace("create webdriver");
 
     @Override
     public void run() {
@@ -318,9 +308,8 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
                                   isSafari() ? createSafariDriver() :
                                       createInstanceOf(browser);
 
-        System.out.println("Added webdriver " + webdriver + " by request: " + stackTrace);
-        Thread.sleep(200);
-        addShutdownHook(new Thread(new CloseBrowser(webdriver, "close webdriver @ " + stackTrace)));
+        Thread.sleep(200); // TODO avoid sleeping in working hours
+        addShutdownHook(new Thread(new CloseBrowser(webdriver)));
         CREATED_WEB_DRIVERS.add(webdriver);
       }
       catch (Exception e) {
@@ -486,25 +475,19 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     @Override
     public void run() {
       systemShutdownStarted.set(true);
-      System.out.println("System shutdown. Let's close " + CREATED_WEB_DRIVERS.size() + " webdrivers.");
+      log.info("System shutdown. Let's close " + CREATED_WEB_DRIVERS.size() + " webdrivers.");
       unusedWebdriversCleanupThread.interrupt();
       
       while (!CREATED_WEB_DRIVERS.isEmpty()) {
         try {
-          System.out.println("System shutdown. Waiting for " + CREATED_WEB_DRIVERS.size() + " webdrivers still open.");
+          log.info("System shutdown. Waiting for " + CREATED_WEB_DRIVERS.size() + " webdrivers still open.");
           sleep(100);
         }
         catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
-      System.out.println("System shutdown. Closed all webdrivers.");
-//      try {
-//        sleep(2000);
-//      }
-//      catch (InterruptedException e) {
-//        e.printStackTrace();
-//      }
+      log.info("System shutdown. Closed all webdrivers.");
     }
   }
 
@@ -537,19 +520,6 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
     private ThreadWebdriver(Thread thread, WebDriver webdriver) {
       this.thread = thread;
       this.webdriver = webdriver;
-    }
-  }
-
-  private static String getStackTrace(String message) {
-    try (StringWriter out = new StringWriter()) {
-      try (PrintWriter writer = new PrintWriter(out)) {
-        new Exception(message).printStackTrace(writer);
-      }
-      out.flush();
-      return out.toString().substring("java.lang.Exception: ".length());
-    }
-    catch (IOException e) {
-      return message + "[failed to get stack trace: " + e.toString() + "]";
     }
   }
 }
