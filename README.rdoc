@@ -75,10 +75,11 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
-=== 2.23 (Planned to 2x.09.2015)
+=== 2.23 (Released 15.09.2015)
 * add method `$.selectRadio()`
 * Method `$.setValue()` can also select radio button
-* user cannot change value of readonly field (input, radio, checkbox, textarea)
+* #216 user cannot change value of readonly field (input, radio, checkbox, textarea)
+* #215 Take into account element's "maxlength" attr for the JS value setter
 
 === 2.22 (Released 29.08.2015)
 * #209 close browser in the same thread (without spawning a daemon thread)
