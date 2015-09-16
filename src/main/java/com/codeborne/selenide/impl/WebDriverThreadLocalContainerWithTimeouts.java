@@ -200,14 +200,6 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
       log.info("Trying to close the browser " + webdriver + " ...");
 
       try {
-        webdriver.close();
-      }
-      catch (UnreachableBrowserException e) {
-        // It happens for Firefox. It's ok: browser is already closed.
-        log.log(FINE, "Cannot close, browser is unreachable", e);
-      }
-
-      try {
         webdriver.quit();
       }
       catch (UnreachableBrowserException e) {
