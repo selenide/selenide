@@ -225,6 +225,13 @@ public class WebDriverRunner {
   }
 
   /**
+   * @return the URL of current frame
+   */
+  public static String currentFrameUrl() {
+    return webdriverContainer.getCurrentFrameUrl();
+  }
+
+  /**
    * @deprecated Use com.codeborne.selenide.Screenshots#takeScreenShot(java.lang.String, java.lang.String)
    */
   @Deprecated

@@ -1,15 +1,20 @@
 package integration;
 
 import static com.codeborne.selenide.Condition.name;
+
+import com.codeborne.selenide.Configuration;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.source;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 
@@ -25,18 +30,23 @@ public class FramesTest extends IntegrationTest {
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
+    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_parent_frame.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_1");
     assertTrue(source().contains("Hello, WinRar!"));
+    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/hello_world.txt"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
+    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_child_frame.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");
     assertTrue(source().contains("This is last frame!"));
+    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/child_frame.txt"));
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
+    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_parent_frame.html"));
   }
 
   @Test
