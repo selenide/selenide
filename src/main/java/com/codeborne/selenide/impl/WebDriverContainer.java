@@ -16,4 +16,5 @@ public interface WebDriverContainer {
   void clearBrowserCache();
   String getPageSource();
   String getCurrentUrl();
+  String getCurrentFrameUrl();
 }
