@@ -152,9 +152,9 @@ task downloadAndUnzipIEDriver(dependsOn: downloadIEDriverZip, type: Copy) {
 }
 
 task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
-  println "Use IE driver: buildDir/IEDriverServer.exe"
+  println 'Use IE driver: ' + buildDir + '/IEDriverServer.exe'
   systemProperties['selenide.browser'] = 'ie'
-  systemProperties['webdriver.ie.driver'] = "buildDir/IEDriverServer.exe"
+  systemProperties['webdriver.ie.driver'] = new File(buildDir, '/IEDriverServer.exe')
   systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
   exclude '**/AlertText.*'
