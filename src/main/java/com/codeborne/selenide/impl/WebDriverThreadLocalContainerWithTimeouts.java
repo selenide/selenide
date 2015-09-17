@@ -246,7 +246,7 @@ public class WebDriverThreadLocalContainerWithTimeouts implements WebDriverConta
 
   @Override
   public String getCurrentFrameUrl() {
-    return ((JavascriptExecutor)getWebDriver()).executeScript("return window.location.href").toString();
+    return ((JavascriptExecutor) getWebDriver()).executeScript("return window.location.href").toString();
   }
 
   protected WebDriver createDriver() {

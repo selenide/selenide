@@ -214,7 +214,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public String getCurrentFrameUrl() {
-    return ((JavascriptExecutor)getWebDriver()).executeScript("return window.location.href").toString();
+    return ((JavascriptExecutor) getWebDriver()).executeScript("return window.location.href").toString();
   }
 
   protected WebDriver createDriver() {
