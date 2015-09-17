@@ -1,8 +1,18 @@
+buildscript {
+  repositories { jcenter() }
+  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' }
+}
+
+plugins {
+  id "de.undercouch.download" version "2.0.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "jacoco"
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
+apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
@@ -13,11 +23,6 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 defaultTasks 'check', 'test', 'install'
-
-buildscript {
-  repositories { jcenter() }
-  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' }
-}
 
 repositories {
   mavenCentral()
@@ -128,9 +133,28 @@ test {
   include 'com/codeborne/selenide/**/*'
 }
 
-task ie(type: Test) {
+import de.undercouch.gradle.tasks.download.Download
+
+task downloadIEDriverZip(type: Download) {
+  src 'http://selenium-release.storage.googleapis.com/2.47/IEDriverServer_Win32_2.47.0.zip'
+  dest new File(buildDir, 'IEDriverServer.zip')
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download IE driver: " + src
+}
+
+task downloadAndUnzipIEDriver(dependsOn: downloadIEDriverZip, type: Copy) {
+  println "Unzip IE driver: " + downloadIEDriverZip.dest
+  from zipTree(downloadIEDriverZip.dest)
+  into buildDir
+}
+
+task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
+  println "Use IE driver: buildDir/IEDriverServer.exe"
   systemProperties['selenide.browser'] = 'ie'
-  systemProperties['webdriver.ie.driver'] = 'C:/Programs/IEDriverServer.exe'
+  systemProperties['webdriver.ie.driver'] = "buildDir/IEDriverServer.exe"
   systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
   exclude '**/AlertText.*'
