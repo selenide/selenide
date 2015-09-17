@@ -1,10 +1,9 @@
 buildscript {
   repositories { jcenter() }
-  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' }
-}
-
-plugins {
-  id "de.undercouch.download" version "2.0.0"
+  dependencies { 
+    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' 
+    classpath 'de.undercouch:gradle-download-task:2.0.0'
+  }
 }
 
 apply plugin: 'java'
@@ -179,7 +178,7 @@ task downloadChromeDriverZip(type: Download) {
   overwrite true
   onlyIfNewer true
   compress false
-  println "Download Chrome driver: " + src
+  println "Download Chrome driver: " + src + " to " + dest
 }
 
 task downloadAndUnzipChromeDriver(dependsOn: downloadChromeDriverZip, type: Copy) {

@@ -1,12 +1,15 @@
+buildscript {
+  repositories { jcenter() }
+  dependencies { 
+    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' 
+    classpath 'de.undercouch:gradle-download-task:2.0.0'
+  }
+}
+
 apply from: 'build.gradle'
 apply plugin: 'signing'
 
 defaultTasks 'clean', 'check', 'allTests', 'install', 'uploadArchives'
-
-buildscript {
-  repositories { jcenter() }
-  dependencies { classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.4' }
-}
 
 signing {
   sign configurations.archives
