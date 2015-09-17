@@ -154,7 +154,7 @@ task downloadAndUnzipIEDriver(dependsOn: downloadIEDriverZip, type: Copy) {
 task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   println 'Use IE driver: ' + buildDir + '/IEDriverServer.exe'
   systemProperties['selenide.browser'] = 'ie'
-  systemProperties['webdriver.ie.driver'] = new File(buildDir, '/IEDriverServer.exe')
+  systemProperties['webdriver.ie.driver'] = new File(buildDir, 'IEDriverServer.exe')
   systemProperties['selenide.timeout'] = '8000'
   include 'integration/**/*'
   exclude '**/AlertText.*'
@@ -162,9 +162,36 @@ task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task chrome(type: Test) {
+import org.gradle.internal.os.OperatingSystem;
+
+task downloadChromeDriverZip(type: Download) {
+  if (OperatingSystem.current().isMacOsX()) {
+    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_mac32.zip'
+  }
+  else if (OperatingSystem.current().isLinux()) {
+    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux64.zip'
+  }
+  else {
+    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_win32.zip'
+  }
+  dest new File(buildDir, 'chromedriver.zip')
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Chrome driver: " + src
+}
+
+task downloadAndUnzipChromeDriver(dependsOn: downloadChromeDriverZip, type: Copy) {
+  println "Unzip Chrome driver: " + downloadChromeDriverZip.dest
+  from zipTree(downloadChromeDriverZip.dest)
+  into buildDir
+}
+
+task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
+  println 'Use Chrome driver: ' + buildDir + '/chromedriver'
   systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['webdriver.chrome.driver'] = '/usr/bin/chromedriver'
+  systemProperties['webdriver.chrome.driver'] = new File(buildDir, 'chromedriver')
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
