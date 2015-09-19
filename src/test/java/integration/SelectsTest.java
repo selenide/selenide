@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -23,6 +24,11 @@ public class SelectsTest extends IntegrationTest {
     select.getSelectedOption().shouldBe(selected);
     assertEquals("myrambler.ru", select.getSelectedValue());
     assertEquals("@myrambler.ru", select.getSelectedText());
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void throwsElementNotFound() {
+    $(By.xpath("//select[@name='domain']")).selectOption("unexisting-option");
   }
 
   @Test
