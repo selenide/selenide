@@ -100,7 +100,7 @@ task checkstyleHtmlMain << {
 task checkstyleHtmlTest << {
   ant.xslt(in: checkstyleTest.reports.xml.destination,
     style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
-    out: new File(checkstyleMain.reports.xml.destination.parent, 'test.html'))
+    out: new File(checkstyleTest.reports.xml.destination.parent, 'test.html'))
 }
 
 checkstyleMain.finalizedBy checkstyleHtmlMain
