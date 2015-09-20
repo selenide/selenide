@@ -1,7 +1,9 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.WebDriverProvider;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -11,19 +13,14 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.remote;
-import static com.codeborne.selenide.Configuration.startMaximized;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverFactory {
