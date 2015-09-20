@@ -1,8 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.impl.WebDriverThreadLocalContainerWithTimeouts;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
@@ -24,7 +22,6 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public abstract class IntegrationTest {
   static {
     System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainerWithTimeouts();
   }
 
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
