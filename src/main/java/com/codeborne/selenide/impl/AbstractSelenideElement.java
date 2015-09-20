@@ -159,6 +159,10 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       findAndAssertElementIsVisible().sendKeys(Keys.TAB);
       return proxy;
     }
+    else if ("pressEscape".equals(method.getName())) {
+      findAndAssertElementIsVisible().sendKeys(Keys.ESCAPE);
+      return proxy;
+    }
     else if ("followLink".equals(method.getName())) {
       followLink();
       return null;

@@ -75,6 +75,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.24 (Planned to 01.10.2015)
+* add method $.pressEscape()
+
 === 2.23 (Released 15.09.2015)
 * add method `$.selectRadio()`
 * Method `$.setValue()` can also select radio button

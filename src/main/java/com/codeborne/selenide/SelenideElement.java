@@ -81,6 +81,16 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement pressTab();
 
   /**
+   * Press ESCAPE. Useful for input field and textareas: <pre>
+   *  $(".edit").click().pressEscape();</pre>
+   *
+   * Implementation details:
+   * This is the same as <pre>
+   *  WebElement.sendKeys(Keys.ESCAPE)</pre>
+   */
+  SelenideElement pressEscape();
+
+  /**
    * Get the visible text of this element, including sub-elements without leading/trailing whitespace.
    * NB! For "select", returns text(s) of selected option(s).
    *
