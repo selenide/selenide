@@ -1,25 +1,13 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.awt.Toolkit;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,19 +18,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
-import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
 
+  protected WebDriverFactory factory = new WebDriverFactory();
+  
   protected List<WebDriverEventListener> listeners = new ArrayList<>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<>(4);
-  protected Proxy webProxySettings;
+  protected Proxy proxy;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
@@ -68,7 +56,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void setProxy(Proxy webProxy) {
-    webProxySettings = webProxy;
+    proxy = webProxy;
   }
 
   protected boolean isBrowserStillOpen(WebDriver webDriver) {
@@ -218,20 +206,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
-    log.config("Configuration.browser=" + browser);
-    log.config("Configuration.remote=" + remote);
-    log.config("Configuration.startMaximized=" + startMaximized);
-
-    WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser) :
-        CHROME.equalsIgnoreCase(browser) ? createChromeDriver() :
-            isFirefox() ? createFirefoxDriver() :
-                isHtmlUnit() ? createHtmlUnitDriver() :
-                    isIE() ? createInternetExplorerDriver() :
-                        isPhantomjs() ? createPhantomJsDriver() :
-                            isOpera() ? createOperaDriver() :
-                                isSafari() ? createSafariDriver() :
-                                    createInstanceOf(browser);
-    webdriver = maximize(webdriver);
+    WebDriver webdriver = factory.createWebDriver(proxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
 
@@ -265,129 +240,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
     return webDriver;
   }
-
-  protected WebDriver createChromeDriver() {
-    DesiredCapabilities capabilities = createCommonCapabilities();
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("test-type");
-    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-    return new ChromeDriver(capabilities);
-  }
-
-  protected WebDriver createFirefoxDriver() {
-    DesiredCapabilities capabilities = createCommonCapabilities();
-    return new FirefoxDriver(capabilities);
-  }
-
-  protected WebDriver createHtmlUnitDriver() {
-    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnitWithJs();
-    capabilities.merge(createCommonCapabilities());
-    capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
-    capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
-    if (browser.indexOf(':') > -1) {
-      // Use constants BrowserType.IE, BrowserType.FIREFOX, BrowserType.CHROME etc.
-      String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
-      capabilities.setVersion(emulatedBrowser);
-    }
-    return new HtmlUnitDriver(capabilities);
-  }
-
-  protected WebDriver createInternetExplorerDriver() {
-    DesiredCapabilities capabilities = createCommonCapabilities();
-    return new InternetExplorerDriver(capabilities);
-  }
-
-  protected WebDriver createPhantomJsDriver() {
-    return createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver");
-  }
-
-  protected WebDriver createOperaDriver() {
-    return createInstanceOf("com.opera.core.systems.OperaDriver");
-  }
-
-  protected WebDriver createSafariDriver() {
-    return createInstanceOf("org.openqa.selenium.safari.SafariDriver");
-  }
-
-  protected WebDriver maximize(WebDriver driver) {
-    if (startMaximized) {
-      try {
-        if (isChrome()) {
-          maximizeChromeBrowser(driver.manage().window());
-        }
-        else {
-          driver.manage().window().maximize();
-        }
-      }
-      catch (Exception cannotMaximize) {
-        log.warning("Cannot maximize " + browser + ": " + cannotMaximize);
-      }
-    }
-    return driver;
-  }
-
-  protected void maximizeChromeBrowser(WebDriver.Window window) {
-    // Chrome driver does not yet support maximizing. Let' apply black magic!
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-    Dimension screenResolution = new Dimension(
-        (int) toolkit.getScreenSize().getWidth(),
-        (int) toolkit.getScreenSize().getHeight());
-
-    window.setSize(screenResolution);
-    window.setPosition(new Point(0, 0));
-  }
-
-  protected WebDriver createInstanceOf(String className) {
-    try {
-      DesiredCapabilities capabilities = createCommonCapabilities();
-      capabilities.setJavascriptEnabled(true);
-      capabilities.setCapability(TAKES_SCREENSHOT, true);
-      capabilities.setCapability(ACCEPT_SSL_CERTS, true);
-      capabilities.setCapability(SUPPORTS_ALERTS, true);
-      if (isPhantomjs()) {
-        capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args" 
-            new String[] {"--web-security=no", "--ignore-ssl-errors=yes"});
-      }
-
-      Class<?> clazz = Class.forName(className);
-      if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        return ((WebDriverProvider) clazz.newInstance()).createDriver(capabilities);
-      } else {
-        Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
-        return (WebDriver) constructor.newInstance(capabilities);
-      }
-    }
-    catch (InvocationTargetException e) {
-      throw runtime(e.getTargetException());
-    }
-    catch (Exception invalidClassName) {
-      throw new IllegalArgumentException(invalidClassName);
-    }
-  }
-
-  protected RuntimeException runtime(Throwable exception) {
-    return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
-  }
-
-  protected WebDriver createRemoteDriver(String remote, String browser) {
-    try {
-      DesiredCapabilities capabilities = createCommonCapabilities();
-      capabilities.setBrowserName(browser);
-      return new RemoteWebDriver(new URL(remote), capabilities);
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
-    }
-  }
-
-  protected DesiredCapabilities createCommonCapabilities() {
-    DesiredCapabilities browserCapabilities = new DesiredCapabilities();
-    if (webProxySettings != null) {
-      browserCapabilities.setCapability(PROXY, webProxySettings);
-    }
-    return browserCapabilities;
-  }
-
+  
   protected class WebdriversFinalCleanupThread extends Thread {
     private final Thread thread;
 

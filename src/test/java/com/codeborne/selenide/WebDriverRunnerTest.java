@@ -32,13 +32,7 @@ public class WebDriverRunnerTest {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
-    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer() {
-      @Override
-      protected WebDriver createHtmlUnitDriver() {
-        return driver;
-      }
-    });
-    
+    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
     doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), anyVararg());
   }
 
