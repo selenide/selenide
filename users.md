@@ -16,13 +16,24 @@ header-text:
 <div class="wrapper-content">
   <section>
     
+    <a href="https://www.sportradar.com/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/sportradar-logo.jpeg" style="width: 150px;" alt="Sportradar"/>
+    </a>
+    <br/>
+    
+    <div class="text-right">
+      a global leader in understanding and leveraging the power of sports data
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="http://dpi.solutions/" target="_blank">
       <img src="{{ BASE_PATH }}/images/dpi-solutions-logo.png" style="width: 150px;" alt="DPI solutions"/>
     </a>
     <br/>
     
     <div class="text-right">
-      <a href="http://dpi.solutions/" target="_blank">DPI solutions</a> – High-quality software through multi-purpose IT consulting and professional trainings
+      High-quality software through multi-purpose IT consulting and professional trainings
     </div>
     
     <hr class="divider"/>
