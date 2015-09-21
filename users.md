@@ -16,6 +16,17 @@ header-text:
 <div class="wrapper-content">
   <section>
     
+    <a href="http://dpi.solutions/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/dpi-solutions-logo.png" style="width: 150px;" alt="DPI solutions"/>
+    </a>
+    <br/>
+    
+    <div class="text-right">
+      <a href="http://dpi.solutions/" target="_blank">DPI solutions</a> – High-quality software through multi-purpose IT consulting and professional trainings
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="http://www.citadele.lv/" target="_blank">
       <img src="{{ BASE_PATH }}/images/citadele-banka.png" style="width: 150px;" alt="Bank Citadele"/>
     </a>
