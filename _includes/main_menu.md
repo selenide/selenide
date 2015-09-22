@@ -9,6 +9,7 @@
 </ul>
 
 <div class="news">
+  <div class="news-line"><a href="/2015/09/23/selenide-on-seleniumconf/">Selenide on SeleniumConf 2015</a></div>
   <div class="news-line"><a href="/2015/09/15/selenide-2.23/">Released Selenide 2.23!</a></div>
   <!--<div class="news-line"><a href="https://t.co/Ih8FQ7VJMj">Selenide presentation at SeleniumConf 2015 in Portland!</a></div>-->
   <!--<div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>-->
