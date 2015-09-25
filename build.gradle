@@ -33,7 +33,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.47.1') {
+  compile('org.seleniumhq.selenium:selenium-java:2.47.2') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
@@ -44,7 +44,7 @@ dependencies {
   }
   compile 'com.google.guava:guava:18.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.47.1', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.47.2', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18'
   provided 'junit:junit:4.12'
