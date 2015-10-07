@@ -396,7 +396,7 @@ public class Selenide {
 
   private static void checkDialogText(String expectedDialogText, String actualDialogText) {
     if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
-      // TODO Take screenshot
+      Screenshots.takeScreenShot(Selenide.class.getName(),Thread.currentThread().getName());
       throw new DialogTextMismatch(actualDialogText, expectedDialogText);
     }
   }
