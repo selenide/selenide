@@ -3,6 +3,11 @@ branches:
     - master
 
 language: java
+sudo: false
+cache:
+  directories:
+  - $HOME/.gradle
+
 script: "gradle clean test firefox"
 before_script:
   - "export DISPLAY=:99.0"
