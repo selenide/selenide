@@ -36,15 +36,15 @@ import static java.util.Collections.singletonList;
 
 abstract class AbstractSelenideElement implements InvocationHandler {
   abstract WebElement getDelegate();
-  abstract WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException;
+  abstract WebElement getActualDelegate() throws IndexOutOfBoundsException;
   abstract String getSearchCriteria();
   
-  private static final Set<String> methodsToSkipLogging = new HashSet<String>(asList(
+  private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
       "toWebElement",
       "toString"
   ));
 
-  private static final Set<String> methodsForSoftAssertion = new HashSet<String>(asList(
+  private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
       "should",
       "shouldBe",
       "shouldHave",
@@ -310,7 +310,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
   }
 
   private List<Condition> argsToConditions(Object[] args) {
-    List<Condition> conditions = new ArrayList<Condition>(args.length);
+    List<Condition> conditions = new ArrayList<>(args.length);
     for (Object arg : args) {
       if (arg instanceof Condition) 
         conditions.add((Condition) arg);
@@ -533,12 +533,9 @@ abstract class AbstractSelenideElement implements InvocationHandler {
       if (element != null && check.apply(element)) {
         return element;
       }
-    } catch (WebDriverException elementNotFound) {
-      lastError = elementNotFound;
-    } catch (IndexOutOfBoundsException e) {
+    }
+    catch (RuntimeException e) {
       lastError = e;
-    } catch (RuntimeException e) {
-      throw Cleanup.of.wrap(e);
     }
 
     if (Cleanup.of.isInvalidSelectorError(lastError)) {
@@ -707,18 +704,6 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return new ElementNotFound(getSearchCriteria(), condition, lastError);
   }
   
-  protected boolean exists(WebElement element) {
-    try {
-      if (element == null) return false;
-      element.isSelected();
-      return true;
-    } catch (WebDriverException elementNotFound) {
-      return false;
-    } catch (IndexOutOfBoundsException elementNotFound) {
-      return false;
-    }
-  }
-
   protected WebElement getElementOrNull() {
     try {
       return getActualDelegate();
@@ -761,7 +746,7 @@ abstract class AbstractSelenideElement implements InvocationHandler {
     return FileDownloader.instance.download(getDelegate());
   }
 
-  protected List<WebElement> getAllMatchingElements() throws NoSuchElementException, IndexOutOfBoundsException {
+  protected List<WebElement> getAllMatchingElements() throws IndexOutOfBoundsException {
     return singletonList(getActualDelegate());
   }
 }
