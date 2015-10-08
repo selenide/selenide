@@ -420,3 +420,5 @@ The main committers are:
 
 == License
 LGPL[http://www.gnu.org/copyleft/lesser.html] 3.0
+
+[![Build Status](https://travis-ci.org/codeborne/selenide.svg)](https://travis-ci.org/codeborne/selenide)
