@@ -75,9 +75,10 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
-=== 2.24 (Planned to 01.10.2015)
+=== 2.24 (Planned to 11.11.2015)
 * add method $.pressEscape()
 * extract code for creating WebDriver to a separate class WebDriverFactory
+* #236 fix soft asserts with TestNG
 
 === 2.23 (Released 15.09.2015)
 * add method `$.selectRadio()`

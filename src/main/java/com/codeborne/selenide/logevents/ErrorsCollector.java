@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
-import static org.junit.Assert.fail;
 
 public class ErrorsCollector implements LogEventListener {
   private final List<Throwable> errors = new ArrayList<Throwable>();
@@ -22,7 +21,7 @@ public class ErrorsCollector implements LogEventListener {
 
   public void failIfErrors(String testName) {
     if (errors.size() == 1) {
-      fail(errors.get(0).toString());
+      throw new AssertionError(errors.get(0).toString());
     }
     if (!errors.isEmpty()) {
       StringBuilder sb = new StringBuilder();
@@ -34,7 +33,7 @@ public class ErrorsCollector implements LogEventListener {
         sb.append("\nFAIL #").append(++i).append(": ");
         sb.append(error).append('\n');
       }
-      fail(sb.toString());
+      throw new AssertionError(sb.toString());
     }
   }
 }
