@@ -3,6 +3,35 @@
   <head>
     <title>long ajax request</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript">
+      function scheduleFillTextArea() {
+        setTimeout(fillTextArea, commandDuration * 3);
+      }
+
+      function fillTextArea() {
+        document.getElementById('text-area').innerHTML = 'This is text area';
+      }
+
+      var changedCounter = 0;
+      function onUsernameChanged(input) {
+        changedCounter++;
+        document.getElementById('username-mirror').innerHTML = input.value + ' (' + changedCounter + ')';
+      }
+
+      var blurCounter = 0;
+      function onUsernameBlur() {
+        blurCounter++;
+        document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
+      }
+
+      function initBlur() {
+        document.getElementById('username-blur-counter').innerHTML = '___';
+      }
+
+      function onDomainChanged(select) {
+        document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
+      }
+    </script>
   </head>
   <body onload="initBlur(); scheduleFillTextArea();">
     <div id="non-clickable-element" 
@@ -157,35 +186,5 @@
          placeholder="Животное"
          ng-class="widget" 
          ng-click="none">Суслик</div>
-
-    <script type="text/javascript">
-      function scheduleFillTextArea() {
-        setTimeout(fillTextArea, commandDuration * 3);
-      }
-      
-      function fillTextArea() {
-        document.getElementById('text-area').innerHTML = 'This is text area';
-      }
-
-      var changedCounter = 0;
-      function onUsernameChanged(input) {
-        changedCounter++;
-        document.getElementById('username-mirror').innerHTML = input.value + ' (' + changedCounter + ')';
-      }
-
-      var blurCounter = 0;
-      function onUsernameBlur() {
-        blurCounter++;
-        document.getElementById('username-blur-counter').innerHTML = "blur: " + blurCounter;
-      }
-
-      function initBlur() {
-        document.getElementById('username-blur-counter').innerHTML = '___';
-      }
-
-      function onDomainChanged(select) {
-        document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
-      }
-    </script>
   </body>
 </html>
