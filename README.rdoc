@@ -79,6 +79,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 * add method $.pressEscape()
 * extract code for creating WebDriver to a separate class WebDriverFactory
 * #236 fix soft asserts with TestNG
+* upgrade to selenium 2.48.2
 
 === 2.23 (Released 15.09.2015)
 * add method `$.selectRadio()`
