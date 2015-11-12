@@ -75,6 +75,9 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 
 == Changelog
 
+=== 2.25 (Planned to xx.11.2015)
+* #246 add method Selenide.confirm() without text parameter. Sometimes you want to just confirm without verifying text.
+ 
 === 2.24 (Released 08.11.2015)
 * add method $.pressEscape()
 * extract code for creating WebDriver to a separate class WebDriverFactory

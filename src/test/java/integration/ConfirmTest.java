@@ -42,7 +42,15 @@ public class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  public void canSubmitConfirmDialog() {
+  public void canSubmitConfirmDialogWithoutCheckingText() {
+    onConfirmReturn(true);
+    $(byText("Confirm button")).click();
+    confirm();
+    $("h1").shouldHave(text("Page with JQuery"));
+  }
+
+  @Test
+  public void canSubmitConfirmDialogAndCheckText() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, " + userName + '?');

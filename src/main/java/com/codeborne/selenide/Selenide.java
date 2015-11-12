@@ -346,6 +346,13 @@ public class Selenide {
 
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
+   */
+  public static void confirm() {
+    confirm(null);
+  }
+  
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
