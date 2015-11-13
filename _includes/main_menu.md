@@ -9,8 +9,9 @@
 </ul>
 
 <div class="news">
+  <div class="news-line"><a class="video" href="//www.youtube.com/watch?v=BjEW08vDUfI">Selenide presentation at Devoxx 2015</a></div>
   <div class="news-line"><a href="/2015/11/08/selenide-2.24/">Released Selenide 2.24!</a></div>
-  <div class="news-line"><a href="/2015/09/23/selenide-on-seleniumconf/">Selenide on SeleniumConf 2015</a></div>
+  <!--<div class="news-line"><a href="/2015/09/23/selenide-on-seleniumconf/">Selenide on SeleniumConf 2015</a></div>-->
   <!--<div class="news-line"><a href="https://t.co/Ih8FQ7VJMj">Selenide presentation at SeleniumConf 2015 in Portland!</a></div>-->
   <!--<div class="news-line"><a class="video" href="//vimeo.com/107647158">How to write UI test in 10 minutes</a></div>-->
 </div>
