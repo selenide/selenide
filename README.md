@@ -6,25 +6,22 @@ Selenide blog in Russian
 
 
 ### For developers:
-sudo apt-get install ruby1.9.3
-sudo gem install jekyll
-sudo gem install redcarpet
-sudo gem install rake
-
-jekyll serve --watch --trace
+sudo apt-get install ruby
+sudo gem install jekyll bundler
+bundle exec jekyll serve --watch --trace
 
 
 ### Tagging selenide
-git tag -a selenide-2.18 -m "Create tag selenide-2.18"
+git tag -a selenide-2.18 -m "Create tag selenide-2.25"
 git tag    (lists all tags)
 git push origin --tags
 
 
 ### Publishing javadoc
 selenide> gradle clean javadoc
-selenide> mkdir ../selenide-web/javadoc/2.18/
-selenide> mv build/docs/javadoc/* ../selenide-web/javadoc/2.18/
-selenide-web> git add javadoc/2.18
+selenide> mkdir ../selenide-web/javadoc/2.25/
+selenide> mv build/docs/javadoc/* ../selenide-web/javadoc/2.25/
+selenide-web> git add javadoc/2.25
 
 
 
