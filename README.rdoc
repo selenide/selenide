@@ -76,6 +76,7 @@ Welcome to the Selenide Wiki[https://github.com/codeborne/selenide/wiki] for mor
 == Changelog
 
 === 2.25 (Planned to xx.11.2015)
+* Changed license from LGPL 3.0 to MIT (less restrictive)
 * #246 add method Selenide.confirm() without text parameter. Sometimes you want to just confirm without verifying text.
  
 === 2.24 (Released 08.11.2015)
@@ -425,6 +426,6 @@ The main committers are:
 
 
 == License
-LGPL[http://www.gnu.org/copyleft/lesser.html] 3.0
+MIT[http://choosealicense.com/licenses/mit/]
 
 [![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
