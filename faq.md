@@ -91,5 +91,5 @@ Sure! It's open-source. You can either create Pull Request or [Feature Request](
 
 > Does Selenide license allow me to share source code of tests with my customer?
 
-Selenide - __free__ __open-source__ product distributed with [LGPL 3.0 license](https://github.com/codeborne/selenide/blob/master/LICENSE).
+Selenide - __free__ __open-source__ product distributed with [MIT license](https://github.com/codeborne/selenide/blob/master/LICENSE).
 Shortly said, it means that you can do anything with it.
