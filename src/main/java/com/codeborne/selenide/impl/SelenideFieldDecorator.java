@@ -31,7 +31,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   public Object decorate(ClassLoader loader, Field field) {
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
-      return WaitingSelenideElement.wrap(searchContext, selector, 0);
+      return ElementFinder.wrap(searchContext, selector, 0);
     }
     if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return new ElementsCollection(new BySelectorCollection(searchContext, selector));
@@ -65,7 +65,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = WaitingSelenideElement.wrap(searchContext, selector, 0);
+      SelenideElement self = ElementFinder.wrap(searchContext, selector, 0);
       return initElementsContainer(field.getType(), self);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);

@@ -19,7 +19,7 @@ public class SelenideElementIterator implements Iterator<SelenideElement> {
 
   @Override
   public SelenideElement next() {
-    return WebElementProxy.wrap(webElementIterator.next());
+    return WebElementWrapper.wrap(webElementIterator.next());
   }
 
   @Override

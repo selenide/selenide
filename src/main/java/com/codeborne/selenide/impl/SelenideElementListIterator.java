@@ -20,7 +20,7 @@ public class SelenideElementListIterator extends SelenideElementIterator impleme
 
   @Override
   public SelenideElement previous() {
-    return WebElementProxy.wrap(webElementListIterator.previous());
+    return WebElementWrapper.wrap(webElementListIterator.previous());
   }
 
   @Override

@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
-public class WaitingSelenideElement extends AbstractSelenideElement {
+public class ElementFinder extends WebElementSource {
   public static SelenideElement wrap(By criteria) {
     return wrap(null, criteria, 0);
   }
@@ -25,43 +25,38 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
     return (SelenideElement) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
         new Class<?>[]{SelenideElement.class},
-        new WaitingSelenideElement(parent, criteria, index));
+        new SelenideElementProxy(new ElementFinder(parent, criteria, index)));
   }
 
   private final SearchContext parent;
   private final By criteria;
   private final int index;
 
-  WaitingSelenideElement(SearchContext parent, By criteria, int index) {
+  ElementFinder(SearchContext parent, By criteria, int index) {
     this.parent = parent;
     this.criteria = criteria;
     this.index = index;
   }
 
   @Override
-  protected WebElement getDelegate() {
-    return getActualDelegate();
-  }
-
-  @Override
-  protected SelenideElement find(SelenideElement proxy, Object arg, int index) {
+  public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return arg instanceof By ?
         wrap(proxy, (By) arg, index) :
         wrap(proxy, By.cssSelector((String) arg), index);
   }
 
   @Override
-  protected WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException {
+  public WebElement getWebElement() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
         WebElementSelector.instance.findElement(getSearchContext(), criteria) :
         WebElementSelector.instance.findElements(getSearchContext(), criteria).get(index);
   }
 
   @Override
-  protected List<WebElement> getAllMatchingElements() throws NoSuchElementException, IndexOutOfBoundsException {
+  public List<WebElement> findAll() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
         WebElementSelector.instance.findElements(getSearchContext(), criteria) :
-        super.getAllMatchingElements();
+        super.findAll();
   }
 
   private SearchContext getSearchContext() {
@@ -71,7 +66,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   }
 
   @Override
-  protected ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
+  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (parent instanceof SelenideElement) {
       ((SelenideElement) parent).should(exist);
     }
@@ -83,7 +78,7 @@ public class WaitingSelenideElement extends AbstractSelenideElement {
   }
 
   @Override
-  String getSearchCriteria() {
+  public String getSearchCriteria() {
     return index == 0 ? 
         Describe.selector(criteria) : 
         Describe.selector(criteria) + '[' + index + ']';

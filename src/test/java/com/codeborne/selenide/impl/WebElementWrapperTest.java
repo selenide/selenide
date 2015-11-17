@@ -18,7 +18,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class WebElementProxyTest {
+public class WebElementWrapperTest {
   WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -47,13 +47,13 @@ public class WebElementProxyTest {
         .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
     assertEquals("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>",
-        new WebElementProxy(element).toString());
+        new WebElementWrapper(element).toString());
   }
 
   @Test
   public void toStringPrintsTagNameWithSomeAttributes() {
     browser = HTMLUNIT;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
-    assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementProxy(element).toString());
+    assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
   }
 }

@@ -8,16 +8,16 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class WaitingSelenideElementTest {
+public class ElementFinderTest {
   @Test
   public void testToString() {
     SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
 
-    assertEquals("{By.id: app}", new WaitingSelenideElement(null, By.id("app"), 0).toString());
-    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(null, By.id("app"), 3).toString());
-    assertEquals("{By.id: app}", new WaitingSelenideElement(parent, By.id("app"), 0).toString());
-    assertEquals("{By.id: app[3]}", new WaitingSelenideElement(parent, By.id("app"), 3).toString());
+    assertEquals("{By.id: app}", new ElementFinder(null, By.id("app"), 0).toString());
+    assertEquals("{By.id: app[3]}", new ElementFinder(null, By.id("app"), 3).toString());
+    assertEquals("{By.id: app}", new ElementFinder(parent, By.id("app"), 0).toString());
+    assertEquals("{By.id: app[3]}", new ElementFinder(parent, By.id("app"), 3).toString());
   }
 }

@@ -29,8 +29,8 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractSelenideElementTest {
-  private static final Logger log = Logger.getLogger(AbstractSelenideElementTest.class.getName());
+public class SelenideElementProxyTest {
+  private static final Logger log = Logger.getLogger(SelenideElementProxyTest.class.getName());
   
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);

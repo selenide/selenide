@@ -1,0 +1,36 @@
+package com.codeborne.selenide.impl.commands;
+
+import com.codeborne.selenide.Command;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+
+public class Matches implements Command<Boolean> {
+  @Override
+  public Boolean execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+    Condition condition = (Condition) args[0];
+    WebElement element = getElementOrNull(locator);
+    if (element != null) {
+      return condition.apply(element);
+    }
+
+    return condition.applyNull();
+  }
+
+  protected WebElement getElementOrNull(WebElementSource locator) {
+    try {
+      return locator.getWebElement();
+    } catch (WebDriverException elementNotFound) {
+      if (Cleanup.of.isInvalidSelectorError(elementNotFound))
+        throw Cleanup.of.wrap(elementNotFound);
+      return null;
+    } catch (IndexOutOfBoundsException ignore) {
+      return null;
+    } catch (RuntimeException e) {
+      throw Cleanup.of.wrap(e);
+    }
+  }
+}

@@ -31,7 +31,7 @@ public class SelenideElementListProxy implements InvocationHandler {
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     List<SelenideElement> elements = new ArrayList<SelenideElement>();
     for (WebElement webElement : locator.findElements()) {
-      elements.add(WebElementProxy.wrap(webElement));
+      elements.add(WebElementWrapper.wrap(webElement));
     }
     try {
       return method.invoke(elements, args);

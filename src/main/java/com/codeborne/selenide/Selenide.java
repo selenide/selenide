@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.WebElementProxy.wrap;
+import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -207,7 +207,7 @@ public class Selenide {
    * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), 0);
+    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), 0);
   }
 
   /**
@@ -218,7 +218,7 @@ public class Selenide {
    * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return WaitingSelenideElement.wrap(null, By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap(null, By.cssSelector(cssSelector), index);
   }
 
   /**
@@ -230,15 +230,15 @@ public class Selenide {
    * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return WaitingSelenideElement.wrap($(parent), By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), index);
   }
 
   public static SelenideElement $(WebElement parent, By selector) {
-    return WaitingSelenideElement.wrap($(parent), selector, 0);
+    return ElementFinder.wrap($(parent), selector, 0);
   }
 
   public static SelenideElement $(WebElement parent, By selector, int index) {
-    return WaitingSelenideElement.wrap($(parent), selector, index);
+    return ElementFinder.wrap($(parent), selector, index);
   }
 
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
@@ -300,7 +300,7 @@ public class Selenide {
    * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria) {
-    return WaitingSelenideElement.wrap(null, criteria, 0);
+    return ElementFinder.wrap(null, criteria, 0);
   }
 
   /**
@@ -311,7 +311,7 @@ public class Selenide {
    * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria, int index) {
-    return WaitingSelenideElement.wrap(null, criteria, index);
+    return ElementFinder.wrap(null, criteria, index);
   }
 
   /**

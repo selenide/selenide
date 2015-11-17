@@ -1,38 +1,32 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
 
-public class WebElementProxy extends AbstractSelenideElement {
+public class WebElementWrapper extends WebElementSource {
   public static SelenideElement wrap(WebElement element) {
     return element instanceof SelenideElement ?
         (SelenideElement) element :
         (SelenideElement) Proxy.newProxyInstance(
-            element.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class}, new WebElementProxy(element));
+            element.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+            new SelenideElementProxy(new WebElementWrapper(element)));
   }
 
   private final WebElement delegate;
 
-  WebElementProxy(WebElement delegate) {
+  protected WebElementWrapper(WebElement delegate) {
     this.delegate = delegate;
   }
 
-
   @Override
-  protected WebElement getDelegate() {
+  public WebElement getWebElement() {
     return delegate;
   }
 
   @Override
-  protected WebElement getActualDelegate() throws NoSuchElementException, IndexOutOfBoundsException {
-    return getDelegate();
-  }
-
-  @Override
-  protected String getSearchCriteria() {
+  public String getSearchCriteria() {
     return Describe.shortly(delegate);
   }
 
