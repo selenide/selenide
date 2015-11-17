@@ -1,27 +1,29 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.*;
-import com.codeborne.selenide.ex.*;
-import com.codeborne.selenide.impl.commands.*;
-import org.openqa.selenium.*;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.InvalidStateException;
+import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.impl.commands.Commands;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
 
 class SelenideElementProxy implements InvocationHandler {
-  private static final Map<String, Command> commands = new HashMap<>(32);
-
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
       "toWebElement",
       "toString"
@@ -37,65 +39,6 @@ class SelenideElementProxy implements InvocationHandler {
       "waitUntil",
       "waitWhile"
   ));
-
-  static {
-    commands.put("append", new Append());
-    commands.put("click", new Click());
-    commands.put("contextClick", new ContextClick());
-    commands.put("closest", new GetClosest());
-    commands.put("followLink", new FollowLink());
-    commands.put("attr", new GetAttribute());
-    commands.put("data", new GetDataAttribute());
-    commands.put("doubleClick", new DoubleClick());
-    commands.put("download", new DownloadFile());
-    commands.put("dragAndDropTo", new DragAndDropTo());
-    commands.put("exists", new Exists());
-    commands.put("find", new Find());
-    commands.put("$", new Find());
-    commands.put("findAll", new FindAll());
-    commands.put("$$", new FindAll());
-    commands.put("hover", new Hover());
-    commands.put("innerText", new GetInnerText());
-    commands.put("innerHtml", new GetInnerHtml());
-    commands.put("has", new Matches());
-    commands.put("is", new Matches());
-    commands.put("isDisplayed", new IsDisplayed());
-    commands.put("isImage", new IsImage());
-    commands.put("getWrappedElement", new GetWrappedElement());
-    commands.put("getSelectedOption", new GetSelectedOption());
-    commands.put("getSelectedText", new GetSelectedText());
-    commands.put("getSelectedValue", new GetSelectedValue());
-    commands.put("getText", new GetText());
-    commands.put("name", new GetName());
-    commands.put("text", new GetText());
-    commands.put("parent", new GetParent());
-    commands.put("pressEnter", new PressEnter());
-    commands.put("pressEscape", new PressEscape());
-    commands.put("pressTab", new PressTab());
-    commands.put("screenshot", new TakeScreenshot());
-    commands.put("scrollTo", new ScrollTo());
-    commands.put("selectOption", new SelectOptionByText());
-    commands.put("selectOptionByValue", new SelectOptionByValue());
-    commands.put("selectRadio", new SelectRadio());
-    commands.put("setSelected", new SetSelected());
-    commands.put("setValue", new SetValue());
-    
-    commands.put("should", new Should(""));
-    commands.put("shouldHave", new Should("have "));
-    commands.put("shouldBe", new Should("be "));
-    commands.put("waitUntil", new Should("be "));
-    
-    commands.put("shouldNot", new ShouldNot(""));
-    commands.put("shouldNotHave", new ShouldNot("have "));
-    commands.put("shouldNotBe", new ShouldNot("be "));
-    commands.put("waitWhile", new ShouldNot("be "));
-
-    commands.put("uploadFile", new UploadFile());
-    commands.put("uploadFromClasspath", new UploadFileFromClasspath());
-    commands.put("toString", new ToString());
-    commands.put("toWebElement", new ToWebElement());
-    commands.put("val", new Val());
-  }
 
   private final WebElementSource webElementSource;
   
@@ -173,18 +116,7 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   protected Object dispatchSelenideMethod(Object proxy, Method method, Object[] args) throws Throwable {
-    if (commands.containsKey(method.getName())) {
-      return execute(proxy, method.getName(), args);
-    }
-    else {
-      throw new IllegalArgumentException("Unknown Selenide method: " + method.getName());
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private <T> T execute(Object proxy, String methodName, Object[] args) throws IOException {
-    Command command = commands.get(methodName);
-    return (T) command.execute((SelenideElement) proxy, webElementSource, args);
+    return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
   }
   
   static Object delegateSeleniumMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
