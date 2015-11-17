@@ -45,8 +45,8 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.48.2', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.18'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.9'
   
@@ -56,7 +56,7 @@ dependencies {
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.12'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.13'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
   testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
 
@@ -135,7 +135,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.47/IEDriverServer_Win32_2.47.0.zip'
+  src 'http://selenium-release.storage.googleapis.com/2.48/IEDriverServer_Win32_2.48.0.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true
@@ -165,13 +165,13 @@ import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_mac32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_mac32.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.19/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
   quiet false
