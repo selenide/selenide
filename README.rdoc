@@ -425,8 +425,13 @@ The main committers are:
 - Maksim Säkki <mailto:maksim@codeborne.com>
 - Vadim Gerasimov <mailto:vadim@codeborne.com>
 
+== Thanks
+
+Many thanks to these incredible tools that help us creating open-source software:
+
+http://www.jetbrains.com/idea/docs/logo_intellij_idea.png http://selenide.org/images/yourkit.png
 
 == License
-MIT[http://choosealicense.com/licenses/mit/]
+Selenide is open-source project, and distributed under the MIT[http://choosealicense.com/licenses/mit/] license
 
-[![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
+http://travis-ci.org/codeborne/selenide.svg
