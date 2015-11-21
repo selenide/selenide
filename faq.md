@@ -17,16 +17,12 @@ Moreover, your page objects get concise and readable with Selenide. See [more de
 
 ## Motivation
 
->Why Selenium webdriver is not enough?
+> Why Selenium webdriver is not enough?
 
-Selenium WebDriver is a great technology, but it's not a testing library. It's a browser manipulation tool.
-Selenide adds a possibility for easy and stable testing.
+> Why yet another Selenium wrapper?
 
->Why yet another Selenium wrapper?
+See answer [here](/documentation/selenide-vs-selenium.html)
 
-There are several testing libraries around Selenium webdriver.
-But it seems that they do not resolve the main problems of UI tests. Namely, instability of tests caused by dynamic
-content, JavaScript, Ajax, timeouts etc. Selenide was created to resolve these problems.
 
 ## Browsers
 >Can I run Selenide tests with Internet Explorer? Headless browser?

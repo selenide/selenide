@@ -3,6 +3,7 @@
   <div>✓ <a href="/documentation.html">API</a></div>
   <div>✓ <a href="/documentation/page-objects.html">Page Objects</a></div>
   <div>✓ <a href="/documentation/screenshots.html">Screenshots</a></div>
+  <div>✓ <a href="/documentation/selenide-vs-selenium.html">Selenide vs Selenium</a></div>
 
   <br/>
   <div>Resources</div>
