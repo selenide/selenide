@@ -171,6 +171,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return CollectionElement.wrap(collection, index);
   }
 
+  public SelenideElement first() {
+    return get(0);
+  }
+  
+  public SelenideElement last() {
+    return get(size() - 1);
+  }
+
   @Override
   public int size() {
     return getActualElements().size();

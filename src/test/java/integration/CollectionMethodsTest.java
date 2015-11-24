@@ -145,4 +145,22 @@ public class CollectionMethodsTest extends IntegrationTest {
   public void shouldMethodsCanCheckMultipleConditions() {
     $$("#multirowTable tr td").shouldHave(size(4), texts("Chack", "Norris", "Chack", "L'a Baskerville"));
   }
+
+  @Test
+  public void canGetCollectionElementByIndex() {
+    $$("#radioButtons input").get(0).shouldHave(value("master"));
+    $$("#radioButtons input").get(1).shouldHave(value("margarita"));
+    $$("#radioButtons input").get(2).shouldHave(value("cat"));
+    $$("#radioButtons input").get(3).shouldHave(value("woland"));
+  }
+
+  @Test
+  public void canGetCollectionFirstElement() {
+    $$("#radioButtons input").first().shouldHave(value("master"));
+  }
+
+  @Test
+  public void canGetCollectionLastElement() {
+    $$("#radioButtons input").last().shouldHave(value("woland"));
+  }
 }
