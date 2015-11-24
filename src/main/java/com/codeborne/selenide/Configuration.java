@@ -31,7 +31,8 @@ public class Configuration {
    * Default value: true
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
-  public static boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
+  public static boolean reopenBrowserOnFail = Boolean.parseBoolean(
+      System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
