@@ -118,7 +118,7 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public File getScreenShotAsFile() {
+  public File takeScreenShotAsFile() {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;

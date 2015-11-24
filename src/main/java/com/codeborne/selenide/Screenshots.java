@@ -16,9 +16,13 @@ public class Screenshots {
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(fileName);
   }
-  
-  public static File getScreenShotAsFile() {
-    return screenshots.getScreenShotAsFile();
+
+  /**
+   * Take screenshot and return as a file
+   * @return a temporary file, not guaranteed to be stored after tests complete.
+   */
+  public static File takeScreenShotAsFile() {
+    return screenshots.takeScreenShotAsFile();
   }
 
   public static File takeScreenShot(WebElement element) {
