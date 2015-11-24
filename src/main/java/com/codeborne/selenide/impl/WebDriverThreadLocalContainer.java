@@ -96,6 +96,10 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public WebDriver getAndCheckWebDriver() {
+    if (!reopenBrowserOnFail) {
+      return getWebDriver();
+    }
+    
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
     if (webDriver != null) {
       if (isBrowserStillOpen(webDriver)) {

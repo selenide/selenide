@@ -24,6 +24,16 @@ public class Configuration {
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
   /**
+   * Should Selenide re-spawn browser if it's disappeared (hangs, broken, unexpectedly closed).
+   * <p>
+   * Can be configured either programmatically or by system property "-Dselenide.reopenBrowserOnFail=false".
+   * <p>
+   * Default value: true
+   * Set this property to false if you want to disable automatic re-spawning the browser.
+   */
+  public static boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
+
+  /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
    * <p/>
    * Default value: 15000 (milliseconds)
