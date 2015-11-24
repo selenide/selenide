@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
 
@@ -80,6 +81,17 @@ public class ConfirmTest extends IntegrationTest {
     }
   }
 
+  @Test
+  public void confirmReturnsActualDialogText() {
+    $(byText("Confirm button")).click();
+    assertEquals("Get out of this page, " + userName + '?', confirm());
+  }
+
+  @Test
+  public void dismissReturnsActualDialogText() {
+    $(byText("Confirm button")).click();
+    assertEquals("Get out of this page, " + userName + '?', dismiss());
+  }
 
   @AfterClass
   public static void tearDown() {

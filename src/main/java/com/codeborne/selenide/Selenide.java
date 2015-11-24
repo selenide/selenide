@@ -346,9 +346,10 @@ public class Selenide {
 
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
+   * @return actual dialog text
    */
-  public static void confirm() {
-    confirm(null);
+  public static String confirm() {
+    return confirm(null);
   }
   
   /**
@@ -357,14 +358,17 @@ public class Selenide {
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
    * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @return actual dialog text
    */
-  public static void confirm(String expectedDialogText) {
+  public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
       Alert alert = waitForAlert();
       String actualDialogText = alert.getText();
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
+      return actualDialogText;
     }
+    return null;
   }
   
   private static Alert waitForAlert() {
@@ -387,18 +391,29 @@ public class Selenide {
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
+   * @return actual dialog text
+   */
+  public static String dismiss() {
+    return dismiss(null);
+  }
+
+  /**
+   * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
    * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @return actual dialog text
    */
-  public static void dismiss(String expectedDialogText) {
+  public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
       Alert alert = waitForAlert();
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
+      return actualDialogText;
     }
+    return null;
   }
 
   private static void checkDialogText(String expectedDialogText, String actualDialogText) {
