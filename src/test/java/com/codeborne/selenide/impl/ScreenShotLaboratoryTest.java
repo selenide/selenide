@@ -2,11 +2,13 @@ package com.codeborne.selenide.impl;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static java.io.File.separatorChar;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ScreenShotLaboratoryTest {
   ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
@@ -16,7 +18,8 @@ public class ScreenShotLaboratoryTest {
 
     @Override
     public String takeScreenShot(String fileName) {
-      return addToHistory(fileName);
+      addToHistory(new File(fileName));
+      return fileName;
     }
   };
 
@@ -46,12 +49,11 @@ public class ScreenShotLaboratoryTest {
     assertEquals("ui/MyTest/test_some_method/12356789.1", screenshots.takeScreenShot());
     assertEquals("ui/MyTest/test_some_method/12356789.2", screenshots.takeScreenShot());
 
-    List<String> contextScreenshots = screenshots.finishContext();
-    assertEquals(asList(
-        "ui/MyTest/test_some_method/12356789.0",
-        "ui/MyTest/test_some_method/12356789.1",
-        "ui/MyTest/test_some_method/12356789.2"
-    ), contextScreenshots);
+    List<File> contextScreenshots = screenshots.finishContext();
+    assertEquals(3, contextScreenshots.size());
+    assertEquals("ui/MyTest/test_some_method/12356789.0", contextScreenshots.get(0).toString());
+    assertEquals("ui/MyTest/test_some_method/12356789.1", contextScreenshots.get(1).toString());
+    assertEquals("ui/MyTest/test_some_method/12356789.2", contextScreenshots.get(2).toString());
   }
 
   @Test
@@ -66,12 +68,26 @@ public class ScreenShotLaboratoryTest {
     screenshots.takeScreenShot();
     screenshots.takeScreenShot();
 
-    assertEquals(asList(
-        "ui/MyTest/test_some_method/12356789.0",
-        "ui/MyTest/test_some_method/12356789.1",
-        "ui/YourTest/test_another_method/12356789.2",
-        "12356789.3",
-        "12356789.4"
-    ), screenshots.getScreenshots());
+    List<File> allScreenshots = screenshots.getScreenshots();
+    assertEquals(5, allScreenshots.size());
+    assertEquals("ui/MyTest/test_some_method/12356789.0", allScreenshots.get(0).toString());
+    assertEquals("ui/MyTest/test_some_method/12356789.1", allScreenshots.get(1).toString());
+    assertEquals("ui/YourTest/test_another_method/12356789.2", allScreenshots.get(2).toString());
+    assertEquals("12356789.3", allScreenshots.get(3).toString());
+    assertEquals("12356789.4", allScreenshots.get(4).toString());
+  }
+
+  @Test
+  public void canGetLastScreenshot() {
+    assertNull(screenshots.getLastScreenshot());
+    
+    screenshots.takeScreenShot();
+    assertEquals("12356789.0", screenshots.getLastScreenshot().toString());
+
+    screenshots.takeScreenShot();
+    assertEquals("12356789.1", screenshots.getLastScreenshot().toString());
+
+    screenshots.takeScreenShot();
+    assertEquals("12356789.2", screenshots.getLastScreenshot().toString());
   }
 }

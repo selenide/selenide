@@ -32,8 +32,8 @@ public class ScreenShotLaboratory {
 
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected String currentContext = "";
-  protected List<String> currentContextScreenshots;
-  protected List<String> allScreenshots = new ArrayList<>();
+  protected List<File> currentContextScreenshots;
+  protected List<File> allScreenshots = new ArrayList<>();
 
   protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
@@ -84,8 +84,7 @@ public class ScreenShotLaboratory {
     File pageSource = savePageSourceToFile(fileName, webdriver);
     File imageFile = savePageImageToFile(fileName, webdriver);
 
-    String screenshot = firstNonNull(imageFile, pageSource).getAbsolutePath();
-    return addToHistory(screenshot);
+    return addToHistory(firstNonNull(imageFile, pageSource)).getAbsolutePath();
   }
   
   public File takeScreenshot(WebElement element) {
@@ -128,10 +127,7 @@ public class ScreenShotLaboratory {
     WebDriver webdriver = getWebDriver();
     //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
     File scrFile = getPageImage(webdriver);
-
-    String screenshot = scrFile.getAbsolutePath();
-    addToHistory(screenshot);
-
+    addToHistory(scrFile);
     return scrFile;
   }
 
@@ -197,7 +193,7 @@ public class ScreenShotLaboratory {
     return pageSource;
   }
 
-  protected String addToHistory(String screenshot) {
+  protected File addToHistory(File screenshot) {
     if (currentContextScreenshots != null) {
       currentContextScreenshots.add(screenshot);
     }
@@ -274,15 +270,19 @@ public class ScreenShotLaboratory {
     currentContextScreenshots = new ArrayList<>();
   }
 
-  public List<String> finishContext() {
-    List<String> result = currentContextScreenshots;
+  public List<File> finishContext() {
+    List<File> result = currentContextScreenshots;
     this.currentContext = "";
     currentContextScreenshots = null;
     return result;
   }
 
-  public List<String> getScreenshots() {
+  public List<File> getScreenshots() {
     return allScreenshots;
+  }
+  
+  public File getLastScreenshot() {
+    return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
   }
 
   public String formatScreenShotPath() {

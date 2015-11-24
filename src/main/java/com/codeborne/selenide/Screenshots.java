@@ -29,7 +29,15 @@ public class Screenshots {
     screenshots.startContext(className, methodName);
   }
 
-  public static List<String> finishContext() {
+  public static List<File> finishContext() {
     return screenshots.finishContext();
+  }
+
+  /**
+   * Get the last screenshot taken
+   * @return null if there were no any screenshots taken
+   */
+  public static File getLastScreenshot() {
+    return screenshots.getLastScreenshot();
   }
 }
