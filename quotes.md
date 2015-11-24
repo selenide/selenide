@@ -9,6 +9,10 @@ header-text:
 ---
 {% include JB/setup %}
 
+<blockquote><p>It's nice to finally see a decent webDriver framework.</p>Philippe Cambien</blockquote>
+
+<hr class="divider"/>
+
 <blockquote class="twitter-tweet"><p>Writing my first Selenide tests - really concise and removes tons of boilerplate (<a href="http://t.co/3iKW8SZLmk">http://t.co/3iKW8SZLmk</a>) -- thanks for the tip <a href="https://twitter.com/RebelLabs">@RebelLabs</a>!</p>&mdash; Glen Smith (@glen_a_smith) <a href="https://twitter.com/glen_a_smith/statuses/394997859524698112">October 29, 2013</a></blockquote>
 
 <hr class="divider"/>
