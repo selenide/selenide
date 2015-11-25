@@ -20,6 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Parameterized.class)
 public class ConfirmTest extends IntegrationTest {
@@ -83,12 +84,16 @@ public class ConfirmTest extends IntegrationTest {
 
   @Test
   public void confirmReturnsActualDialogText() {
+    assumeTrue(supportsModalDialogs());
+
     $(byText("Confirm button")).click();
     assertEquals("Get out of this page, " + userName + '?', confirm());
   }
 
   @Test
   public void dismissReturnsActualDialogText() {
+    assumeTrue(supportsModalDialogs());
+
     $(byText("Confirm button")).click();
     assertEquals("Get out of this page, " + userName + '?', dismiss());
   }
