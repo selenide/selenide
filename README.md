@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
+
 # Selenide = Concise API for Selenium WebDriver
 
 ## What is Selenide?
@@ -57,5 +61,3 @@ Many thanks to these incredible tools that help us creating open-source software
 
 ## License
 Selenide is open-source project, and distributed under the [MIT](http://choosealicense.com/licenses/mit/) license
-
-[![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
