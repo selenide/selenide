@@ -23,7 +23,7 @@ public class SelenideLogger {
   public static void addListener(LogEventListener listener) {
     List<LogEventListener> list = listeners.get();
     if (list == null) {
-      list = new ArrayList<LogEventListener>();
+      list = new ArrayList<>();
     }
 
     list.add(listener);
@@ -73,7 +73,19 @@ public class SelenideLogger {
     return listeners.get();
   }
 
+  /**
+   * This method is dangerous because it clears ALL listeners (probably registered by others).
+   * @deprecated use method removeListener(LogEventListener).
+   */
+  @Deprecated
   public static void clearListeners() {
     listeners.remove();
+  }
+  
+  public static void removeListener(LogEventListener listener) {
+    listeners.get().remove(listener);
+    if (listeners.get().isEmpty()) {
+      listeners.remove();
+    }
   }
 }

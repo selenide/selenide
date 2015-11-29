@@ -34,6 +34,7 @@ public class AbstractSelenideElementTest {
   
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);
+  LogEventListener listener; 
 
   @Before
   public void mockWebDriver() {
@@ -57,7 +58,9 @@ public class AbstractSelenideElementTest {
   
   @After
   public void after() {
-    SelenideLogger.clearListeners();
+    if (listener != null) {
+      SelenideLogger.removeListener(listener);
+    }
   }
 
   @Test
@@ -157,7 +160,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "set value", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "set value", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
@@ -167,7 +170,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should have", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "should have", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -178,7 +181,7 @@ public class AbstractSelenideElementTest {
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should not have", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "should not have", PASSED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -189,7 +192,7 @@ public class AbstractSelenideElementTest {
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(createListener(selector, "should have", FAILED));
+    SelenideLogger.addListener(listener = createListener(selector, "should have", FAILED));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
