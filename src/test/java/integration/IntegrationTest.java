@@ -1,8 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.junit.TextReport;
 import com.codeborne.selenide.junit.ScreenShooter;
-import com.codeborne.selenide.logevents.PrettyReportCreator;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
@@ -30,7 +30,7 @@ public abstract class IntegrationTest {
   public ScreenShooter img = ScreenShooter.failedTests();
 
   @Rule
-  public TestRule prettyReportCreator = new PrettyReportCreator();
+  public TestRule report = new TextReport();
   
   @Rule
   public ExpectedException thrown = ExpectedException.none();
