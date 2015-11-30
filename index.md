@@ -64,6 +64,20 @@ tagline:
   </div>
 </div>
 
+<div class="short feedback">
+<div class="wrapper-color-content">
+
+  <h3>Contacts</h3>
+  <h4>Do you want to talk about it?</h4>
+
+  <div>Where You can ask question or discuss any topic about Selenide in English:</div>
+  <div class="highlights">
+    <a href="mailto:selenide@googlegroups.com">Google group</a>
+    <a href="mailto:andrei dot solntsev at gmail dot com">My email</a>
+  </div>
+
+</div></div>
+
 <div class="short testimonials">
   <div class="wrapper-color-content">
     <h3>Testimonials</h3>
