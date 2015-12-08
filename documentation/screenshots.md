@@ -13,11 +13,29 @@ header-text: >
 
 {% include documentation-menu.md %}
 
-## Can I take screenshot?
+## Can Selenide take screenshots?
 
-Yes, you can. Thought typically you don't need it, because Selenide automatically takes screenshots on test failures. This is very useful for error analysis.
+Yes, Selenide takes screenshots **automatically** on every test failure. This is very useful for error analysis.
 
-For JUnit and TestNG there is a special support for taking screenshots also on succeeded tests.
+By default Selenide puts screenshots to folder `build/reports/tests`.
+
+
+### Can I tell Selenide to put screenshots to a specific folder?
+
+Yes. 
+You can use property `-Dselenide.reports=test-result/reports` to set any directory to store screenshots to.
+
+Another option is to set this folder directly from your code:
+
+```java
+Configuration.reportsFolder = "test-result/reports";
+```
+
+
+## JUnit and TestNG support
+
+For JUnit and TestNG, there is a special support for taking screenshots also on successful tests.
+
 
 ### For JUnit:
 

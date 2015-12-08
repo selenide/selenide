@@ -61,6 +61,9 @@ Please look at [Wiki page](https://github.com/codeborne/selenide/wiki/Build-scri
 
 Yes. See [documentation](/documentation.html) -> [Screenshots](/documentation/screenshots.html)
 
+> Can I tell Selenide to put screenshots to a specific folder?
+
+Yes. See [documentation](/documentation.html) -> [Screenshots](/documentation/screenshots.html)
 
 ## Browser windows / tabs
 
