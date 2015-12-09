@@ -44,14 +44,6 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
   }
 
   @Test
-  @SuppressWarnings("deprecation")
-  public void userCanWaitWhileConditionIsMet() {
-    timeout = 10;
-    $(byText("Result 2")).waitWhile(notPresent, 3000);
-    assertTrue($(byText("Result 2")).isDisplayed());
-  }
-
-  @Test
   public void dollarWithParentWaitsUntilElementDisappears() {
     $($("#results"), "span#loading").should(exist);
     $($("#results"), "span#loading").shouldNot(exist);

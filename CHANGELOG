@@ -4,6 +4,13 @@
 * Refactor AbstractSelenideElement. Instead of single huge class, it's split to many small classes ("commands").
 * User can override any of these commands
 * User can add any custom commands to the standard Selenide methods
+* Remove deprecated conditions:
+  * `notPresent` -> Use method `$.shouldNot(exist)` or `$.shouldNotBe(present)`.
+  * `hasOptions` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
+  * `options` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
+  * `hasNotClass` -> Use method `$.shouldNotHave(cssClass("abc"))`
+* Remove deprecated classes:
+
 
 === 2.25 (Released 30.11.2015)
 * Changed license from LGPL 3.0 to MIT (less restrictive)

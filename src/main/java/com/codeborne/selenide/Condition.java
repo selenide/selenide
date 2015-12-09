@@ -47,19 +47,6 @@ public abstract class Condition implements Predicate<WebElement> {
   public static final Condition present = exist;
 
   /**
-   * <p>Sample: {@code $("input").should(notPresent);}</p>
-   *
-   * @deprecated Use method $.shouldNot(exist) or $.shouldNotBe(present).
-   */
-  @Deprecated
-  public static final Condition notPresent = new Condition("notPresent", true) {
-    @Override
-    public boolean apply(WebElement element) {
-      return false;
-    }
-  };
-
-  /**
    * Checks that element is not visible or does not exists.
    *
    * Opposite to {@link #appear}
@@ -356,43 +343,6 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  /**
-   * <p>Sample: <code>$("#my-select-box").waitUntil(hasOptions(), 7000);</code></p>
-   * </code>
-   * @deprecated
-   * @see Condition#options
-   */
-  @Deprecated
-  public static Condition hasOptions() {
-    return options;
-  }
-
-  /**
-   * <p>Sample: <code>$("input").shouldHave(options);</code></p>
-   *
-   * @deprecated Not needed anymore. Use methods $.selectOption() or $.selectOptionByValue().
-   */
-  @Deprecated
-  public static final Condition options = new Condition("hasOptions") {
-    @Override
-    public boolean apply(WebElement element) {
-      try {
-        return element.getText().length() > 0;
-      }
-      catch (NoSuchElementException e) {
-        return false;
-      }
-    }
-    @Override
-    public String actualValue(WebElement element) {
-      return element.getText();
-    }
-    @Override
-    public String toString() {
-      return "any options";
-    }
-  };
-
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
     return classes != null && contains(classes.split(" "), cssClass);
@@ -426,23 +376,6 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public String toString() {
         return name + " '" + cssClass + '\'';
-      }
-    };
-  }
-
-  /**
-   * @deprecated Use method $.shouldNotHave(cssClass("abc"))
-   */
-  @Deprecated
-  public static Condition hasNotClass(final String cssClass) {
-    return new Condition("hasNotClass") {
-      @Override
-      public boolean apply(WebElement element) {
-        return !hasClass(element, cssClass);
-      }
-      @Override
-      public String toString() {
-        return "no CSS class '" + cssClass + '\'';
       }
     };
   }
