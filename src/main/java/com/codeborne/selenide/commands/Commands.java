@@ -7,24 +7,32 @@ import com.codeborne.selenide.impl.WebElementSource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Commands {
   public static Commands collection = new Commands();
   
-  private final Map<String, Command> commands = new HashMap<>(64);
+  private final Map<String, Command> commands = new ConcurrentHashMap<>(128);
 
   public Commands() {
-    addFindCommands();
-    addClickCommands();
-    addModifyCommands();
-    addInfoCommands();
-    addSelectCommands();
-    addKeyboardCommands();
-    addActionsCommands();
-    addShouldCommands();
-    addShouldNotCommands();
-    addFileCommands();
-    addTechnicalCommands();
+    resetDefaults();
+  }
+
+  public final void resetDefaults() {
+    synchronized (commands) {
+      commands.clear();
+      addFindCommands();
+      addClickCommands();
+      addModifyCommands();
+      addInfoCommands();
+      addSelectCommands();
+      addKeyboardCommands();
+      addActionsCommands();
+      addShouldCommands();
+      addShouldNotCommands();
+      addFileCommands();
+      addTechnicalCommands();
+    }
   }
 
   private void addTechnicalCommands() {
@@ -113,8 +121,10 @@ public class Commands {
     commands.put("waitUntil", new ShouldBe());
   }
 
-  protected boolean contains(String command) {
-    return commands.containsKey(command);
+  public void add(String method, Command command) {
+    synchronized (commands) {
+      commands.put(method, command);
+    }
   }
 
   @SuppressWarnings("unchecked")
