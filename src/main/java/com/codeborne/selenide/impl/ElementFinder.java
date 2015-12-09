@@ -22,9 +22,14 @@ public class ElementFinder extends WebElementSource {
   }
 
   public static SelenideElement wrap(SearchContext parent, By criteria, int index) {
-    return (SelenideElement) Proxy.newProxyInstance(
+    return wrap(SelenideElement.class, parent, criteria, index);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(Class<T> clazz, SearchContext parent, By criteria, int index) {
+    return (T) Proxy.newProxyInstance(
         currentThread().getContextClassLoader(),
-        new Class<?>[]{SelenideElement.class},
+        new Class<?>[]{clazz},
         new SelenideElementProxy(new ElementFinder(parent, criteria, index)));
   }
 

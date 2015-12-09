@@ -77,7 +77,7 @@ class SelenideElementProxy implements InvocationHandler {
     Throwable lastError;
     do {
       try {
-        return method.getDeclaringClass() == SelenideElement.class ?
+        return SelenideElement.class.isAssignableFrom(method.getDeclaringClass()) ?
             dispatchSelenideMethod(proxy, method, args) :
             delegateSeleniumMethod(webElementSource.getWebElement(), method, args);
       }
