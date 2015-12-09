@@ -18,6 +18,8 @@
   * `WebDriverRunner.htmlUnit()` -> use method `WebDriverRunner.isHtmlUnit()`
   * `WebDriverRunner.phantomjs()` -> use method `WebDriverRunner.isPhantomjs()`
   * `WebDriverRunner.takeScreenShot()` -> use method `Screenshots.takeScreenShot()`
+* Remove deprecated methods
+  * `$.should*(String message, Condition condition)` -> use method `$.should*(condition.because(message))`
 
 
 === 2.25 (Released 30.11.2015)
