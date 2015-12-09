@@ -12,7 +12,11 @@ import static com.codeborne.selenide.commands.Util.argsToConditions;
 public class ShouldNot implements Command<SelenideElement> {
   private final String prefix;
 
-  public ShouldNot(String prefix) {
+  public ShouldNot() {
+    this("");
+  }
+
+  protected ShouldNot(String prefix) {
     this.prefix = prefix;
   }
 

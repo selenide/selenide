@@ -100,17 +100,17 @@ public class Commands {
   }
 
   private void addShouldNotCommands() {
-    commands.put("shouldNot", new ShouldNot(""));
-    commands.put("shouldNotHave", new ShouldNot("have "));
-    commands.put("shouldNotBe", new ShouldNot("be "));
-    commands.put("waitWhile", new ShouldNot("be "));
+    commands.put("shouldNot", new ShouldNot());
+    commands.put("shouldNotHave", new ShouldNotHave());
+    commands.put("shouldNotBe", new ShouldNotBe());
+    commands.put("waitWhile", new ShouldNotBe());
   }
 
   private void addShouldCommands() {
-    commands.put("should", new Should(""));
-    commands.put("shouldHave", new Should("have "));
-    commands.put("shouldBe", new Should("be "));
-    commands.put("waitUntil", new Should("be "));
+    commands.put("should", new Should());
+    commands.put("shouldHave", new ShouldHave());
+    commands.put("shouldBe", new ShouldBe());
+    commands.put("waitUntil", new ShouldBe());
   }
 
   protected boolean contains(String command) {
