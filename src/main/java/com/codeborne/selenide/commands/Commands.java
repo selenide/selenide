@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +18,7 @@ public class Commands {
   }
 
   public final void resetDefaults() {
-    synchronized (commands) {
+    synchronized (this) {
       commands.clear();
       addFindCommands();
       addClickCommands();
@@ -122,7 +121,7 @@ public class Commands {
   }
 
   public void add(String method, Command command) {
-    synchronized (commands) {
+    synchronized (this) {
       commands.put(method, command);
     }
   }

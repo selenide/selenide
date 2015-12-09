@@ -1,4 +1,4 @@
-package integration.custom_commands;
+package integration.customcommands;
 
 import com.codeborne.selenide.SelenideElement;
 

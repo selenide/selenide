@@ -1,4 +1,4 @@
-package integration.custom_commands;
+package integration.customcommands;
 
 import com.codeborne.selenide.commands.Commands;
 import integration.IntegrationTest;
@@ -6,9 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static integration.custom_commands.MyFramework.$_;
-import static integration.custom_commands.MyFramework.quadrupleClickCounter;
-import static integration.custom_commands.MyFramework.tripleClickCounter;
+import static integration.customcommands.MyFramework.$_;
+import static integration.customcommands.MyFramework.quadrupleClickCounter;
+import static integration.customcommands.MyFramework.tripleClickCounter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

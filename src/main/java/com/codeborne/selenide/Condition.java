@@ -4,7 +4,6 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 

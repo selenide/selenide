@@ -1,4 +1,4 @@
-package integration.custom_commands;
+package integration.customcommands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
@@ -6,7 +6,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 
 import java.io.IOException;
 
-import static integration.custom_commands.MyFramework.tripleClickCounter;
+import static integration.customcommands.MyFramework.tripleClickCounter;
 
 class TripleClick implements Command<MySelenideElement> {
   @Override
