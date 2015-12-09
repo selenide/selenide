@@ -1,5 +1,10 @@
 == Changelog
 
+=== 3.0 (Planned to xx.12.2015)
+* Refactor AbstractSelenideElement. Instead of single huge class, it's split to many small classes ("commands").
+* User can override any of these commands
+* User can add any custom commands to the standard Selenide methods
+
 === 2.25 (Released 30.11.2015)
 * Changed license from LGPL 3.0 to MIT (less restrictive)
 * #250 add TextReport (ex. PrettyReportCreator) for TestNG
