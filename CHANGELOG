@@ -9,7 +9,7 @@
   * `hasOptions` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
   * `options` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
   * `hasNotClass` -> Use method `$.shouldNotHave(cssClass("abc"))`
-* Remove deprecated classes:
+* Remove deprecated class JQuery
 
 
 === 2.25 (Released 30.11.2015)
