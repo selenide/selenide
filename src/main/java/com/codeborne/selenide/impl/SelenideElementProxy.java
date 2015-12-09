@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
-import com.codeborne.selenide.impl.commands.Commands;
+import com.codeborne.selenide.commands.Commands;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
