@@ -10,9 +10,14 @@
   * `options` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
   * `hasNotClass` -> Use method `$.shouldNotHave(cssClass("abc"))`
 * Remove deprecated class JQuery
-* Remove deprecated method
+* Remove deprecated methods
   * `Selenide.switchToWindow(title)` -> use method `switchTo().window(title)`
   * `Selenide.switchToWindow(index)` -> use method `switchTo().window(index)`
+* Remove deprecated methods
+  * `WebDriverRunner.ie()` -> use method `WebDriverRunner.isIE()`
+  * `WebDriverRunner.htmlUnit()` -> use method `WebDriverRunner.isHtmlUnit()`
+  * `WebDriverRunner.phantomjs()` -> use method `WebDriverRunner.isPhantomjs()`
+  * `WebDriverRunner.takeScreenShot()` -> use method `Screenshots.takeScreenShot()`
 
 
 === 2.25 (Released 30.11.2015)

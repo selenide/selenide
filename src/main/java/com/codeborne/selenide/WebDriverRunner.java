@@ -149,11 +149,6 @@ public class WebDriverRunner {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
   }
 
-  @Deprecated
-  public static boolean ie() {
-    return isIE();
-  }
-
   public static boolean isSafari() {
     return SAFARI.equalsIgnoreCase(browser);
   }
@@ -179,21 +174,11 @@ public class WebDriverRunner {
     return browser != null && browser.startsWith(HTMLUNIT);
   }
 
-  @Deprecated
-  public static boolean htmlUnit() {
-    return isHtmlUnit();
-  }
-
   /**
    * Is Selenide configured to use PhantomJS browser
    */
   public static boolean isPhantomjs() {
     return PHANTOMJS.equalsIgnoreCase(browser);
-  }
-
-  @Deprecated
-  public static boolean phantomjs() {
-    return isPhantomjs();
   }
 
   /**
@@ -229,21 +214,5 @@ public class WebDriverRunner {
    */
   public static String currentFrameUrl() {
     return webdriverContainer.getCurrentFrameUrl();
-  }
-
-  /**
-   * @deprecated Use com.codeborne.selenide.Screenshots#takeScreenShot(java.lang.String, java.lang.String)
-   */
-  @Deprecated
-  public static String takeScreenShot(String className, String methodName) {
-    return Screenshots.takeScreenShot(className, methodName);
-  }
-
-  /**
-   * @deprecated Use com.codeborne.selenide.Screenshots#takeScreenShot(java.lang.String)
-   */
-  @Deprecated
-  public static String takeScreenShot(String fileName) {
-    return Screenshots.takeScreenShot(fileName);
   }
 }
