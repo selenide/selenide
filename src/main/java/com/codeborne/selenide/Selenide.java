@@ -464,7 +464,7 @@ public class Selenide {
   }
 
   public static FluentWait<WebDriver> Wait() {
-    return new FluentWait<WebDriver>(getWebDriver())
+    return new FluentWait<>(getWebDriver())
         .withTimeout(timeout, MILLISECONDS)
         .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
   }
@@ -487,24 +487,6 @@ public class Selenide {
   }
 
   /**
-   * Switch to window/tab by title
-   * @deprecated Same as switchTo().window(title)
-   */
-  @Deprecated
-  public static void switchToWindow(String title) {
-    switchTo().window(title);
-  }
-
-  /**
-   * @deprecated The same as {@code switchTo().window(index);}
-   * @param index index of window (0-based)
-   */
-  @Deprecated
-  public static void switchToWindow(int index) {
-    switchTo().window(index);
-  }
-  
-  /**
    * Get JavaScript errors that happened on this page.
    *
    * Format can differ from browser to browser:
@@ -524,7 +506,7 @@ public class Selenide {
       if (errors == null || errors.isEmpty()) {
         return emptyList();
       }
-      List<String> result = new ArrayList<String>(errors.size());
+      List<String> result = new ArrayList<>(errors.size());
       for (Object error : errors) {
         result.add(error.toString());
       }
@@ -615,7 +597,7 @@ public class Selenide {
     if (objects == null || objects.isEmpty()) {
       return emptyList();
     }
-    List<String> result = new ArrayList<String>(objects.size());
+    List<String> result = new ArrayList<>(objects.size());
     for (T object : objects) {
       result.add(object.toString());
     }
