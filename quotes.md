@@ -9,6 +9,10 @@ header-text:
 ---
 {% include JB/setup %}
 
+<blockquote><p>"<a href="http://qiita.com/kazuki-ma/items/d6432fc41c82538a61bd">Wrapper of magic to increase the productivity</a>"</p><a href="http://qiita.com/kazuki-ma">kazuki-ma</a></blockquote>
+
+<hr class="divider"/>
+
 <blockquote><p>It's nice to finally see a decent webDriver framework.</p>Philippe Cambien</blockquote>
 
 <hr class="divider"/>
