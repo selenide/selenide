@@ -43,7 +43,7 @@ public class Selenide {
    *
    * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
    *
-   * @param relativeOrAbsoluteUrl If starting with "http://" or "https://" or "file://", it's considered to be relative URL.
+   * @param relativeOrAbsoluteUrl If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
    *                              In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
