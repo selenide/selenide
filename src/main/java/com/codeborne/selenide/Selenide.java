@@ -58,6 +58,17 @@ public class Selenide {
     navigator.open(absoluteUrl);
     mockModalDialogs();
   }
+  
+  /**
+   * Update the hash of the window location (usefull to navigate in ajax apps, since open(url) makes a full page reload).
+   * @param hash value for window.location.hash
+   */
+  public static void updateHash(String hash) {
+    if (hash.startsWith("#")) {
+        throw new IllegalArgumentException("hash should not start with #");
+    }
+    executeJavaScript("window.location.hash='" + hash + "'");
+  }
 
   private static boolean doDismissModalDialogs() {
     return !supportsModalDialogs() || dismissModalDialogs;
