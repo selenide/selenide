@@ -61,13 +61,12 @@ public class Selenide {
   
   /**
    * Update the hash of the window location (usefull to navigate in ajax apps, since open(url) makes a full page reload).
+   * Accept either "#hash" or "hash".
    * @param hash value for window.location.hash
    */
   public static void updateHash(String hash) {
-    if (hash.startsWith("#")) {
-        throw new IllegalArgumentException("hash should not start with #");
-    }
-    executeJavaScript("window.location.hash='" + hash + "'");
+    String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
+    executeJavaScript("window.location.hash='" + localHash + "'");
   }
 
   private static boolean doDismissModalDialogs() {
