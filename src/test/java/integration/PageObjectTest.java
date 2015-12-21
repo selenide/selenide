@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 import static org.junit.Assert.*;
@@ -106,6 +108,25 @@ public class PageObjectTest extends IntegrationTest {
     pageWithSelects.userInfoList.get(1).age.shouldHave(text("28"));
   }
 
+  @Test
+  public void pageObjectShouldNotRequireElementExistenceAtCreation() {
+    MissingSelectsPage page = page(MissingSelectsPage.class);
+    assertFalse(page.domainSelect.isDisplayed());
+    assertFalse(page.status.name.isDisplayed());
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void pageObjectShouldFailWhenTryingToOperateMissingElements() {
+    MissingSelectsPage page = page(MissingSelectsPage.class);
+    page.domainSelect.click();
+  }
+
+  @Test(expected = ElementNotFound.class)
+  public void pageObjectShouldFailWhenTryingToOperateElementsInMissingContainer() {
+    MissingSelectsPage page = page(MissingSelectsPage.class);
+    page.status.lastLogin.click();
+  }
+
   public static class SelectsPage {
     @FindBy(xpath = "//select[@name='domain']")
     public WebElement domainSelect;
@@ -133,13 +154,11 @@ public class PageObjectTest extends IntegrationTest {
     }
 
     public void selectDomain(String domainValue) {
-      new Select(domainSelect).selectByValue(domainValue);
-      sleep(500);
+      $(domainSelect).selectOptionByValue(domainValue);
     }
 
     public void selectDomainByText(String domainValue) {
-      new Select(domainSelect).selectByVisibleText(domainValue);
-      sleep(500);
+      $(domainSelect).selectOption(domainValue);
     }
   }
 
@@ -158,5 +177,13 @@ public class PageObjectTest extends IntegrationTest {
     SelenideElement lastName;
     @FindBy(className = "age")
     SelenideElement age;
+  }
+
+  public static class MissingSelectsPage {
+    @FindBy(xpath = "//select[@name='wrong-select-name']")
+    public WebElement domainSelect;
+
+    @FindBy(id = "wrong-id")
+    public StatusBlock status;
   }
 }
