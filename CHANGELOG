@@ -1,6 +1,9 @@
 == Changelog
 
 === 3.0 (Planned to xx.12.2015)
+* Add method Selenide.updateHash() (thanks to @fabienbancharel for pull request #254)
+* upgrade to sizzle 2.2.1
+
 * Refactor AbstractSelenideElement. Instead of single huge class, it's split to many small classes ("commands").
 * User can override any of these commands
 * User can add any custom commands to the standard Selenide methods

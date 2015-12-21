@@ -61,8 +61,11 @@ public class Selenide {
   }
   
   /**
-   * Update the hash of the window location (usefull to navigate in ajax apps, since open(url) makes a full page reload).
-   * @param hash value for window.location.hash
+   * Update the hash of the window location.
+   * 
+   * Useful to navigate in ajax apps without page reload, since open(url) makes a full page reload.
+   * 
+   * @param hash value for window.location.hash - without leading "#"
    */
   public static void updateHash(String hash) {
     if (hash.startsWith("#")) {
