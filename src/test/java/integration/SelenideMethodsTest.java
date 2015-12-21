@@ -445,6 +445,15 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void toStringShowsCurrentValue_evenIfItWasDynamicallyChanged() {
+    openFile("page_with_jquery.html");
+    assertEquals("<input id=\"double-clickable-button\" type=\"button\" value=\"double click me\"></input>", $("#double-clickable-button").toString());
+
+    $("#double-clickable-button").doubleClick();
+    assertEquals("<input disabled=\"disabled\" id=\"double-clickable-button\" type=\"button\" value=\"do not click me anymore\"></input>", $("#double-clickable-button").toString());
+  }
+
+  @Test
   public void userCanCheckConditions() {
     assertTrue($("#login").is(visible));
     assertTrue($("#multirowTable").has(text("Chack")));
