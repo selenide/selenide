@@ -163,4 +163,11 @@ public class CollectionMethodsTest extends IntegrationTest {
   public void canGetCollectionLastElement() {
     $$("#radioButtons input").last().shouldHave(value("woland"));
   }
+  
+  @Test
+  public void canFindElementsByMultipleSelectors() {
+    $$(".first_row").shouldHave(size(1));
+    $$(".second_row").shouldHave(size(1));
+    $$(".first_row,.second_row").shouldHave(size(2));
+  }
 }
