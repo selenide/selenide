@@ -14,14 +14,16 @@ public class UpdateHashTest extends IntegrationTest {
   }
 
   @Test
-  public void canChangeHash() {
+  public void userCanUpdateHashWithoutReloadingThePage() {
     $("h2").shouldHave(exactText("Current hash is: ''"));
     Selenide.updateHash("some-page");
     $("h2").shouldHave(exactText("Current hash is: '#some-page'"));
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void hashShouldNotStartWithDiez() {
+  @Test
+  public void hashCanStartWithDiez() {
+    $("h2").shouldHave(exactText("Current hash is: ''"));
     Selenide.updateHash("#some-page");
+    $("h2").shouldHave(exactText("Current hash is: '#some-page'"));
   }
 }
