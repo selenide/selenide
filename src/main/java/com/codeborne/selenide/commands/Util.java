@@ -7,13 +7,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class Util {
-//   TODO is it used?
-//  static WebElement assertIsVisible(WebElement element) {
-//    if (!element.isDisplayed())
-//    return checkCondition("be ", null, visible, false);
-//  }
-
+class Util {
   static List<Condition> argsToConditions(Object[] args) {
     List<Condition> conditions = new ArrayList<>(args.length);
     for (Object arg : args) {
