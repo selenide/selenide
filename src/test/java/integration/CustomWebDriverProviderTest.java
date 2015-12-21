@@ -40,7 +40,7 @@ public class CustomWebDriverProviderTest extends IntegrationTest {
   private static class CustomFirefoxDriver extends FirefoxDriver {
   }
   
-  public static class CustomWebDriverProvider implements WebDriverProvider {
+  private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
       return new CustomFirefoxDriver();

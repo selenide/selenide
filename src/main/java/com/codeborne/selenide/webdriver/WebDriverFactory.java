@@ -149,7 +149,9 @@ public class WebDriverFactory {
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        return ((WebDriverProvider) clazz.newInstance()).createDriver(capabilities);
+        Constructor<?> constructor = clazz.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities);
       } else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
         return (WebDriver) constructor.newInstance(capabilities);
