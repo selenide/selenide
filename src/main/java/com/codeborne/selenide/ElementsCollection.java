@@ -58,7 +58,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         case SOFT:
           return this;
         default:
-          throw UIAssertionError.wrap(error);
+          throw UIAssertionError.wrap(error, timeout);
       }
     }
     catch (RuntimeException e) {

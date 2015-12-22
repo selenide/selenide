@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Commands;
-import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -51,9 +50,10 @@ class SelenideElementProxy implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
 
+    long timeoutMs = getTimeoutMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
     try {
-      Object result = dispatchAndRetry(proxy, method, args);
+      Object result = dispatchAndRetry(timeoutMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASSED);
       return result;
     }
@@ -62,7 +62,7 @@ class SelenideElementProxy implements InvocationHandler {
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else
-        throw UIAssertionError.wrap(error);
+        throw UIAssertionError.wrap(error, timeoutMs);
     }
     catch (RuntimeException error) {
       SelenideLogger.commitStep(log, error);
@@ -70,9 +70,7 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
-  protected Object dispatchAndRetry(Object proxy, Method method, Object[] args) throws Throwable {
-    long timeoutMs = getTimeoutMs(method, args);
-
+  protected Object dispatchAndRetry(long timeoutMs, Object proxy, Method method, Object[] args) throws Throwable {
     final long startTime = currentTimeMillis();
     Throwable lastError;
     do {
@@ -94,20 +92,13 @@ class SelenideElementProxy implements InvocationHandler {
     while (currentTimeMillis() - startTime <= timeoutMs);
 
     if (lastError instanceof UIAssertionError) {
-      UIAssertionError uiError = (UIAssertionError) lastError;
-      uiError.timeoutMs = timeoutMs;
-      throw uiError;
-      
+      throw lastError;
     }
     else if (lastError instanceof InvalidElementStateException) {
-      InvalidStateException uiError = new InvalidStateException(lastError);
-      uiError.timeoutMs = timeoutMs;
-      throw uiError;
+      throw new InvalidStateException(lastError);
     }
     else if (lastError instanceof WebDriverException) {
-      ElementNotFound uiError = webElementSource.createElementNotFoundError(exist, lastError);
-      uiError.timeoutMs = timeoutMs;
-      throw uiError;
+      throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
   }

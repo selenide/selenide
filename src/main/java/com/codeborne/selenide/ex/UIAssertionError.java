@@ -52,17 +52,14 @@ public class UIAssertionError extends AssertionError {
     return jsErrors;
   }
 
-  private void collectCurrentWebdriverData() {
-    screenshot = Screenshots.screenshots.formatScreenShotPath();
-    jsErrors = getJavascriptErrors();
-  }
-
-  public static Error wrap(Error error) {
+  public static Error wrap(Error error, long timeoutMs) {
     if (Cleanup.of.isInvalidSelectorError(error))
       return error;
 
     UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
-    uiError.collectCurrentWebdriverData();
+    uiError.timeoutMs = timeoutMs;
+    uiError.screenshot = Screenshots.screenshots.formatScreenShotPath();
+    uiError.jsErrors = getJavascriptErrors();
     return uiError;
   }
 }
