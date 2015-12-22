@@ -1,7 +1,7 @@
 package com.codeborne.selenide.junit;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
-import com.codeborne.selenide.impl.SelenideLogger;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;

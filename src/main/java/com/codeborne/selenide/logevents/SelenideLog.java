@@ -1,4 +1,4 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.logevents.LogEvent;
 

@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.logevents.SelenideLog;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;

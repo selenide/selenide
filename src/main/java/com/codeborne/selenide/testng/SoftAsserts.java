@@ -1,7 +1,7 @@
 package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
-import com.codeborne.selenide.impl.SelenideLogger;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 

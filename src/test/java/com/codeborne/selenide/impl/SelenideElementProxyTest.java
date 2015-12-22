@@ -9,6 +9,7 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;

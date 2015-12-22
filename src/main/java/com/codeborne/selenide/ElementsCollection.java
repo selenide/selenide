@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.*;
+import com.codeborne.selenide.logevents.SelenideLog;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 

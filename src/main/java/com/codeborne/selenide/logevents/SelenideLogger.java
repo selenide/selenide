@@ -1,7 +1,4 @@
-package com.codeborne.selenide.impl;
-
-import com.codeborne.selenide.logevents.LogEvent;
-import com.codeborne.selenide.logevents.LogEventListener;
+package com.codeborne.selenide.logevents;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,12 +7,7 @@ import java.util.List;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
 
 /**
- * EXPERIMENTAL
- * to be refactored soon
- * <p/>
  * Logs Selenide test steps and notifies all registered LogEventListener about it
- *
- * @since Selenide 2.16
  */
 public class SelenideLogger {
   protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<>();

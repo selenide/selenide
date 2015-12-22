@@ -1,17 +1,12 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.impl.SelenideLogger;
 import com.google.common.base.Joiner;
 
 import java.util.Collections;
 import java.util.logging.Logger;
 
 /**
- * EXPERIMENTAL
- * 
- * Use with cautions! This API will likely be changed soon.
- *
- * @since Selenide 2.25
+ * A simple text report of Selenide actions performed during test run
  */
 public class SimpleReport {
   private static final Logger log = Logger.getLogger(SimpleReport.class.getName());
