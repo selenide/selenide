@@ -73,6 +73,10 @@ public class Selectors {
     public String toString() {
       return "by text: " + elementText;
     }
+
+    String getXPath() {
+      return super.toString().replace("By.xpath: ", "");
+    }
   }
 
   public static class WithText extends By.ByXPath {
@@ -86,6 +90,10 @@ public class Selectors {
     @Override
     public String toString() {
       return "with text: " + elementText;
+    }
+    
+    String getXPath() {
+      return super.toString().replace("By.xpath: ", "");
     }
   }
 }
