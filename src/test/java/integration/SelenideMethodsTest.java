@@ -5,10 +5,12 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
@@ -16,6 +18,7 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 import static org.mockito.Matchers.contains;
@@ -229,7 +232,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).val("Going to press ENTER").pressEnter();
 
     sleep(500);
-    assertThat(url(), CoreMatchers.containsString("#submitted-form"));
+    assertThat(url(), containsString("#submitted-form"));
   }
 
   @Test
@@ -447,10 +450,10 @@ public class SelenideMethodsTest extends IntegrationTest {
   @Test
   public void toStringShowsCurrentValue_evenIfItWasDynamicallyChanged() {
     openFile("page_with_jquery.html");
-    assertEquals("<input id=\"double-clickable-button\" type=\"button\" value=\"double click me\"></input>", $("#double-clickable-button").toString());
+    assertThat($("#double-clickable-button").toString(), containsString("value=\"double click me\""));
 
     $("#double-clickable-button").doubleClick();
-    assertEquals("<input disabled=\"disabled\" id=\"double-clickable-button\" type=\"button\" value=\"do not click me anymore\"></input>", $("#double-clickable-button").toString());
+    assertThat($("#double-clickable-button").toString(), containsString("value=\"do not click me anymore\""));
   }
 
   @Test
