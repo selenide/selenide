@@ -6,7 +6,7 @@ import java.util.List;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
 
 public class ErrorsCollector implements LogEventListener {
-  private final List<Throwable> errors = new ArrayList<Throwable>();
+  private final List<Throwable> errors = new ArrayList<>();
 
   @Override
   public void onEvent(LogEvent event) {

@@ -29,7 +29,7 @@ public class SelenideElementListProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    List<SelenideElement> elements = new ArrayList<SelenideElement>();
+    List<SelenideElement> elements = new ArrayList<>();
     for (WebElement webElement : locator.findElements()) {
       elements.add(WebElementWrapper.wrap(webElement));
     }

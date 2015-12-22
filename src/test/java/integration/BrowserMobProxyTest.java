@@ -86,7 +86,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
     assertEquals(2, requestCounter);
     
     List<HarEntry> harEntries = proxyServer.getHar().getLog().getEntries();
-    Set<String> requestedUrls = new HashSet<String>();
+    Set<String> requestedUrls = new HashSet<>();
     for (HarEntry harEntry : harEntries) {
       requestedUrls.add(harEntry.getRequest().getUrl());
     }

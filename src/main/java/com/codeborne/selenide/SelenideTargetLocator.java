@@ -79,7 +79,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   public WebDriver window(int index) {
     WebDriver driver = getWebDriver();
-    List<String> windowHandles = new ArrayList<String>(driver.getWindowHandles());
+    List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
     delegate.window(windowHandles.get(index));
     return driver;
   }

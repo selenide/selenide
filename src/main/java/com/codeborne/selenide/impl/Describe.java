@@ -36,7 +36,7 @@ public class Describe {
             "}" +
             "return s;", element);
 
-    SortedMap<String, String> sortedByName = new TreeMap<String, String>();
+    SortedMap<String, String> sortedByName = new TreeMap<>();
     if (map != null) {
       sortedByName.putAll(map);
     }

@@ -40,7 +40,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
       return createElementsContainer(selector, field);
     }
     else if (isDecoratableList(field, ElementsContainer.class)) {
-      return createElementsContainerList(field, selector);
+      return createElementsContainerList(field);
     }
     else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
@@ -49,15 +49,15 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     return super.decorate(loader, field);
   }
 
-  private List<ElementsContainer> createElementsContainerList(Field field, By selector) {
+  private List<ElementsContainer> createElementsContainerList(Field field) {
     try {
-      List<ElementsContainer> result = new ArrayList<ElementsContainer>();
+      List<ElementsContainer> result = new ArrayList<>();
       Class<?> listType = getListGenericType(field);
       List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
       for (SelenideElement element : selfList) {
         result.add(initElementsContainer(listType, element));
       }
-      return result;  //To change body of created methods use File | Settings | File Templates.
+      return result;
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
     }
