@@ -27,7 +27,8 @@
   * `WebDriverRunner.takeScreenShot()` -> use method `Screenshots.takeScreenShot()`
 * Remove deprecated methods
   * `$.should*(String message, Condition condition)` -> use method `$.should*(condition.because(message))`
-
+* Remove class com.codeborne.selenide.impl.Quotes 
+  because it was migrated to Selenium Webdriver (org.openqa.selenium.support.ui.Quotes)
 
 === 2.25 (Released 30.11.2015)
 * Changed license from LGPL 3.0 to MIT (less restrictive)
