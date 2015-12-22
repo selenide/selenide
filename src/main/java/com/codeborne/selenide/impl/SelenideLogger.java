@@ -18,7 +18,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
  * @since Selenide 2.16
  */
 public class SelenideLogger {
-  protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<List<LogEventListener>>();
+  protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<>();
 
   public static void addListener(LogEventListener listener) {
     List<LogEventListener> list = listeners.get();
@@ -71,15 +71,6 @@ public class SelenideLogger {
       listeners.set(new ArrayList<LogEventListener>());
     }
     return listeners.get();
-  }
-
-  /**
-   * This method is dangerous because it clears ALL listeners (probably registered by others).
-   * @deprecated use method removeListener(LogEventListener).
-   */
-  @Deprecated
-  public static void clearListeners() {
-    listeners.remove();
   }
   
   public static void removeListener(LogEventListener listener) {
