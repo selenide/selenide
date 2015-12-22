@@ -22,7 +22,8 @@ public class SelectorsTest {
     By selector = Selectors.withText("Ludvig'van\"Beethoven");
     assertEquals("with text: Ludvig'van\"Beethoven", selector.toString());
     assertTrue(selector instanceof By.ByXPath);
-    assertEquals(".//*/text()[contains(normalize-space(.), concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*", ((WithText) selector).getXPath());
+    assertEquals(".//*/text()[contains(normalize-space(.), concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*", 
+        ((WithText) selector).getXPath());
   }
 
   @Test
@@ -38,7 +39,8 @@ public class SelectorsTest {
     By selector = Selectors.byText("Ludvig'van\"Beethoven");
     assertEquals("by text: Ludvig'van\"Beethoven", selector.toString());
     assertTrue(selector instanceof By.ByXPath);
-    assertEquals(".//*/text()[normalize-space(.) = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*", ((ByText) selector).getXPath());
+    assertEquals(".//*/text()[normalize-space(.) = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*", 
+        ((ByText) selector).getXPath());
   }
 
   @Test

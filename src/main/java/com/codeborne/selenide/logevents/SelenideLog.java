@@ -1,7 +1,5 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.logevents.LogEvent;
-
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 
 public class SelenideLog implements LogEvent {
