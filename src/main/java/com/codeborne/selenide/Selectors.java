@@ -1,8 +1,7 @@
 package com.codeborne.selenide;
 
 import org.openqa.selenium.By;
-
-import static com.codeborne.selenide.impl.Quotes.escape;
+import org.openqa.selenium.support.ui.Quotes;
 
 public class Selectors {
   /**
@@ -39,7 +38,7 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
-    return By.xpath(".//*[@" + attributeName + '=' + escape.quotes(attributeValue) + ']');
+    return By.xpath(".//*[@" + attributeName + '=' + Quotes.escape(attributeValue) + ']');
   }
 
   /**
@@ -66,7 +65,7 @@ public class Selectors {
     protected final String elementText;
 
     public ByText(String elementText) {
-      super(".//*/text()[normalize-space(.) = " + escape.quotes(elementText) + "]/parent::*");
+      super(".//*/text()[normalize-space(.) = " + Quotes.escape(elementText) + "]/parent::*");
       this.elementText = elementText;
     }
 
@@ -80,7 +79,7 @@ public class Selectors {
     protected final String elementText;
 
     public WithText(String elementText) {
-      super(".//*/text()[contains(normalize-space(.), " + escape.quotes(elementText) + ")]/parent::*");
+      super(".//*/text()[contains(normalize-space(.), " + Quotes.escape(elementText) + ")]/parent::*");
       this.elementText = elementText;
     }
 
