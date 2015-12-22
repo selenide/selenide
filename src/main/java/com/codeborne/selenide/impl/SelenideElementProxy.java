@@ -1,18 +1,16 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
-import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +49,7 @@ class SelenideElementProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
-      return dispatchSelenideMethod(proxy, method, args);
+      return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
 
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
     try {
@@ -79,9 +77,11 @@ class SelenideElementProxy implements InvocationHandler {
     Throwable lastError;
     do {
       try {
-        return SelenideElement.class.isAssignableFrom(method.getDeclaringClass()) ?
-            dispatchSelenideMethod(proxy, method, args) :
-            delegateSeleniumMethod(webElementSource.getWebElement(), method, args);
+        if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
+          return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+        }
+
+        return method.invoke(webElementSource.getWebElement(), args);
       }
       catch (Throwable e) {
         if (Cleanup.of.isInvalidSelectorError(e)) {
@@ -115,17 +115,5 @@ class SelenideElementProxy implements InvocationHandler {
   private long getTimeoutMs(Method method, Object[] args) {
     return "waitUntil".equals(method.getName()) || "waitWhile".equals(method.getName()) ?
         (Long) args[args.length - 1] : timeout;
-  }
-
-  protected Object dispatchSelenideMethod(Object proxy, Method method, Object[] args) throws Throwable {
-    return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
-  }
-  
-  static Object delegateSeleniumMethod(WebElement delegate, Method method, Object[] args) throws Throwable {
-    try {
-      return method.invoke(delegate, args);
-    } catch (InvocationTargetException e) {
-      throw e.getTargetException();
-    }
   }
 }
