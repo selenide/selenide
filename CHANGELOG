@@ -4,6 +4,8 @@
 ===== New functions:
 * Add method Selenide.updateHash() (thanks to @fabienbancharel for pull request #254)
 * upgrade to sizzle 2.2.1
+* upgrade to guava 19.0
+* upgrade to testng 6.9.10
 
 ===== Big refactoring:
 * Refactor AbstractSelenideElement. Instead of single huge class, it's split to many small classes ("commands").
