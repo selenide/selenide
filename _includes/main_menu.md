@@ -9,7 +9,8 @@
 </ul>
 
 <div class="news">
-  <div class="news-line"><a href="/2015/11/30/selenide-2.25/">Released Selenide 2.25!</a></div>
+  <div class="news-line"><a href="/2015/11/30/selenide-3.0/">Released Selenide 3.0!</a></div>
+  <!--<div class="news-line"><a href="/2015/11/30/selenide-2.25/">Released Selenide 2.25!</a></div>-->
   <!--<div class="news-line"><a class="video" href="//www.youtube.com/watch?v=BjEW08vDUfI">Selenide presentation at Devoxx 2015</a></div>-->
   <!--<div class="news-line"><a href="/2015/11/08/selenide-2.24/">Released Selenide 2.24!</a></div>-->
   <!--<div class="news-line"><a href="/2015/09/23/selenide-on-seleniumconf/">Selenide on SeleniumConf 2015</a></div>-->
