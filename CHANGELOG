@@ -1,6 +1,6 @@
 == Changelog
 
-=== 3.0 (Planned to xx.12.2015)
+=== 3.0 (Released 24.12.2015)
 ===== New functions:
 * Add method Selenide.updateHash() (thanks to @fabienbancharel for pull request #254)
 * upgrade to sizzle 2.2.1
@@ -19,6 +19,7 @@
   * `options` -> Not needed anymore. Use methods `$.selectOption()` or `$.selectOptionByValue()`.
   * `hasNotClass` -> Use method `$.shouldNotHave(cssClass("abc"))`
 * Remove deprecated class JQuery
+* Remove deprecated class PrettyReportCreator (use class `TextReport` for JUnit or TestNG)
 * Remove deprecated methods
   * `Selenide.switchToWindow(title)` -> use method `switchTo().window(title)`
   * `Selenide.switchToWindow(index)` -> use method `switchTo().window(index)`
