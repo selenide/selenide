@@ -17,6 +17,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.util.*;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.browser;
@@ -30,9 +31,11 @@ import static org.junit.Assume.assumeTrue;
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   private PageObject pageObject;
 
+
   @Before
   public final void setTimeout() {
     timeout = 1500;
+    Locale.setDefault(Locale.ENGLISH);
     pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
   }
 
@@ -210,7 +213,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   @Test
   public void clickingNonClickableElement() {
     assumeTrue(WebDriverRunner.isChrome());
-    
+
     try {
       $("#non-clickable-element a").shouldBe(visible).click();
       fail("Expected WebDriverException");

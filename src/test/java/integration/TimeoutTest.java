@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
+import java.util.*;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -15,6 +17,7 @@ import static org.junit.Assert.fail;
 public class TimeoutTest extends IntegrationTest {
   @Before
   public void openTestPageWithJQuery() {
+    Locale.setDefault(Locale.ENGLISH);
     openFile("page_with_selects_without_jquery.html");
   }
 
