@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
+import java.util.*;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -22,6 +23,7 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public abstract class IntegrationTest {
   static {
     System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
+    Locale.setDefault(Locale.ENGLISH);
   }
 
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
@@ -31,7 +33,7 @@ public abstract class IntegrationTest {
 
   @Rule
   public TestRule report = new TextReport();
-  
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -105,7 +107,7 @@ public abstract class IntegrationTest {
         driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
         driver.findElement(By.tagName("h1")).getText();
         averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
-        
+
         log.info("Average selenium command duration for " + browser + ": " +
             averageSeleniumCommandDuration + " ms.");
       }

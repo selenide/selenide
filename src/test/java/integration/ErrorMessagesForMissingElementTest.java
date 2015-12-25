@@ -1,32 +1,19 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Screenshots;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ElementShould;
-import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.ex.UIAssertionError;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import com.codeborne.selenide.*;
+import com.codeborne.selenide.ex.*;
+import com.codeborne.selenide.impl.*;
+import org.junit.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.*;
 
-import java.io.File;
-import java.util.*;
+import java.io.*;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.reportsFolder;
-import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.getElement;
+import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.Assume.*;
 
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   private PageObject pageObject;
@@ -35,7 +22,6 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   @Before
   public final void setTimeout() {
     timeout = 1500;
-    Locale.setDefault(Locale.ENGLISH);
     pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
   }
 

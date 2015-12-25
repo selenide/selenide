@@ -1,23 +1,17 @@
 package integration;
 
-import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import com.codeborne.selenide.ex.*;
+import org.junit.*;
+import org.openqa.selenium.*;
 
-import java.util.*;
-
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.*;
+import static org.junit.Assert.*;
 
 public class TimeoutTest extends IntegrationTest {
   @Before
   public void openTestPageWithJQuery() {
-    Locale.setDefault(Locale.ENGLISH);
     openFile("page_with_selects_without_jquery.html");
   }
 
