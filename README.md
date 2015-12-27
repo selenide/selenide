@@ -11,7 +11,7 @@ Selenide is a library for easier using of Selenium WebDriver for automated tests
 @Test
 public void testLogin() {
  open("/login");
- $(By.name("user.name")).type("johny");
+ $(By.name("user.name")).setValue("johny");
  $("#submit").click();
  $("#username").shouldHave(text("Hello, Johny!"));
 }
