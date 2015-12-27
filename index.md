@@ -23,12 +23,12 @@ tagline:
 <div class="short wiki">
   <div class="wrapper-color-content">
     <h3>What is Selenide?</h3>
-    <h4>Selenide is a wrapper for <a href="http://docs.seleniumhq.org/projects/webdriver/" target="_blank">Selenium WebDriver</a> that brings the following advantages:</h4>
+    <h4>Selenide is a framework for test automation powered by <a href="http://docs.seleniumhq.org/projects/webdriver/" target="_blank">Selenium WebDriver</a> that brings the following advantages:</h4>
     <div class="highlights">
-      <a href="/documentation.html">Concise API for tests</a>
+      <a href="/documentation.html">Concise fluent API for tests</a>
       <span>Ajax support</span>
       <a href="/documentation/page-objects.html">True Page Objects</a>
-      <span>jQuery-style selectors</span>
+      <span>Powerful selectors</span>
     </div>
     You don't need to think how to shutdown browser, handle timeouts or write monstrous code!<br>
     Concentrate on business logic!<br>
