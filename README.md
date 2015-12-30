@@ -2,10 +2,12 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 
-# Selenide = Concise API for Selenium WebDriver
+# Selenide = UI Testing Framework powered by Selenium WebDriver
 
 ## What is Selenide?
-Selenide is a library for easier using of Selenium WebDriver for automated tests in Java.
+Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
+It defines concise fluent API, natural language assertions and does some magic for ajax-bases applications to let you focus entirely on the business logic of your tests.
+Selenide is based on and is compapatible to Selenium WebDriver 2.0
 
 ```java
 @Test
