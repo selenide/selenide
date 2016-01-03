@@ -5,7 +5,7 @@ SELENIDE_VERSION : "3.0"
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-highlighter: true
+highlighter: pygments
 markdown: redcarpet
 
 # Themes are encouraged to use these universal variables 
