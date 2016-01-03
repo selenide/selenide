@@ -26,12 +26,12 @@ tagline:
     <h4>Selenide is a framework for test automation powered by <a href="http://docs.seleniumhq.org/projects/webdriver/" target="_blank">Selenium WebDriver</a> that brings the following advantages:</h4>
     <div class="highlights">
       <a href="/documentation.html">Concise fluent API for tests</a>
-      <span>Ajax support</span>
-      <a href="/documentation/page-objects.html">True Page Objects</a>
+      <span>Ajax support for stable tests</span>
       <span>Powerful selectors</span>
+      <a href="/documentation/page-objects.html">True Page Objects</a>
     </div>
-    You don't need to think how to shutdown browser, handle timeouts or write monstrous code!<br>
-    Concentrate on business logic!<br>
+    You don't need to think how to shutdown browser, handle timeouts and StaleElement Exceptions or search for relevant log lines, debugging your tests.<br>
+    Just focus on your business logic and let Selenide do the rest!<br>
 
     <a href="/quick-start.html"> <img style="margin-top: 15px; margin-bottom: -33px" src="{{ BASE_PATH }}/images/arrow-down.png" width="30" height="55" border="0"/> </a>
   </div>
