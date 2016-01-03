@@ -49,55 +49,73 @@ Just for reference, these are Selenide classes you will probably need for work:
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html">[javadoc]</a>
 </h3>
 
-The main class for using Selenide library. Two basic methods are `open` and `dollar`:
+The main class for using Selenide library. The basic methods are `open`, `$` and `$$` :
 <ul>
-  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#open(java.lang.String)">open(URL)</a>, and</li>
-  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$(java.lang.String)">$(String cssSelector)</a>   - returns SelenideElement</li>
-  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$(org.openqa.selenium.By)">$(By)</a>   - returns SelenideElement</li>
-  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$$(java.lang.String)">$$(String cssSelector)</a>   - returns collection of elements</li>
+  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#open(java.lang.String)">open(String URL)</a> opens the browser</li>
+  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$(java.lang.String)">$(String cssSelector)</a>   - defines CSS locator, returns SelenideElement</li>
+  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$(org.openqa.selenium.By)">$(By)</a> defines any other locator (id, name, text, xpath etc.)  - returns SelenideElement</li>
+  <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$$(java.lang.String)">$$(String cssSelector)</a>   - defines CSS locator, returns collection of elements</li>
   <li><a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#$$(org.openqa.selenium.By)">$$(By)</a>   - returns collection of elements</li>
 </ul>
 
-When received a SelenideElement instance, you can either do action with it (`click`, `setValue`) or
-check a condition: `shouldHave(text("abc"))`.
+Defining SelenideElement doesn't trigger the search in DOM yet, so you can save the locators in variables for later use at any place.
+With a SelenideElement instance, you can either do action with it (`click`, `setValue` etc.) or
+check a condition: `shouldHave(text("abc"))`. Both will trigger the search of the elements in DOM.
 
 There is also a number of other less frequently used methods in Selenide class:
 <a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#sleep(long)">sleep()</a>,
 <a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#refresh()">refresh()</a> and
 <a href="{{BASE_PATH}}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Selenide.html#title()">title()</a>.
 
+Look for more documentation in Wiki (soon).
+
 <h3>com.codeborne.selenide.SelenideElement
   <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/SelenideElement.java">[src]</a>
   <a target="_blank" href="{{ BASE_PATH }}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/SelenideElement.html">[javadoc]</a>
 </h3>
 
-SelenideElement is a wrapper around Selenium WebElement, giving it some additional convenient method:
+SelenideElement is a wrapper around Selenium WebElement, giving it some additional convenience methods to do Selenide magic.
+
+You can chain SelenideElements with `$` eg.  `$("#page").$("#table").$("#header")` which doesn't trigger DOM search.
+
+Assertions trigger the DOM search and returning SelenideElement allowing fluent interface.
 
 *  should(Condition)
 *  shouldBe(Condition)
 *  shouldHave(Condition)
 *  shouldNot(Condition)
 *  shouldNotBe(Condition)
-*  shouldNotHave(Condition)<br/>
-*  waitUntil(Condition, milliseconds)
-*  waitWhile(Condition, milliseconds)<br/>
-*  find(String | By)
-*  findAll(String | By)<br/>
+*  shouldNotHave(Condition)
+
+Actions on the elements:
+
+*  click()
+*  doubleClick()
+*  pressEnter(String)
+*  selectOption(String text)
+*  selectOptionByValue(String value)
 *  setValue(String)
 *  val(String)
 *  append(String)
-*  pressEnter(String)<br/>
+
+
+Getting status and values of elements:
+
 *  val()
 *  data()
 *  text()
 *  isDisplayed()
-*  exists()<br/>
-*  selectOption(String text)
-*  selectOptionByValue(String value)
+*  exists()
 *  getSelectedOption()
 *  getSelectedText()
 *  getSelectedValue()<br/>
+
+Other useful commands:
+
+*  waitUntil(Condition, milliseconds)
+*  waitWhile(Condition, milliseconds)
 *  uploadFromClasspath(String fileName)
+*  download()
 *  toWebElement()
 
 <h3>com.codeborne.selenide.Condition
