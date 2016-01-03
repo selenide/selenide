@@ -233,6 +233,22 @@ This class contains some browser related functions (e.g.):
 
 Look for more documentation in Wiki (soon).
 
+<h3>com.codeborne.selenide.Configuration
+  <a target="_blank" href="https://github.com/codeborne/selenide/blob/master/src/main/java/com/codeborne/selenide/Configuration.java">[src]</a>
+  <a target="_blank" href="{{ BASE_PATH }}/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Configuration.html">[javadoc]</a>
+</h3>
+
+This class contains configurations for test runs e.g.:
+
+*  timeout - (String) can be changed in runtime
+*  browser (e.g. chrome, ie, firefox)
+*  baseUrl
+*  reportsFolder
+
+You can also pass the configuration parameters in as system properties to make use of CI Jobs (e.g. -Dselenide.baseUrl=http://staging-server.com/start)
+
+Look for more documentation in Wiki (soon).
+
 See more details on these and other classes in [javadoc]({{ BASE_PATH }}/javadoc.html)
 
 Stay tuned!
