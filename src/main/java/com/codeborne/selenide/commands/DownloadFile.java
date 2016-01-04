@@ -11,6 +11,6 @@ import java.io.IOException;
 public class DownloadFile implements Command<File> {
   @Override
   public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
-    return FileDownloader.instance.download(linkWithHref.getWebElement());
+    return FileDownloader.instance.download(linkWithHref.findAndAssertElementIsVisible());
   }
 }
