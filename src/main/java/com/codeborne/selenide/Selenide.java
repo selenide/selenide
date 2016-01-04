@@ -7,6 +7,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
@@ -20,7 +21,6 @@ import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
-import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -374,7 +374,7 @@ public class Selenide {
    */
   public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = waitForAlert();
+      Alert alert = waitForAlert(getWebDriver().switchTo());
       String actualDialogText = alert.getText();
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
@@ -382,23 +382,56 @@ public class Selenide {
     }
     return null;
   }
-  
-  private static Alert waitForAlert() {
-    final long startTime = currentTimeMillis();
-    NoAlertPresentException lastError;
-    do {
-      try {
-        Alert alert = getWebDriver().switchTo().alert();
-        alert.getText(); // check that alert actually exists
-        return alert;
-      }
-      catch (NoAlertPresentException e) {
-        lastError = e;
-      }
-    }
-    while (currentTimeMillis() - startTime <= timeout);
-    
-    throw lastError;
+
+
+  /**
+   * Waits alert within Selenide timeout
+   *
+   * @param delegate example: getWebDriver().switchTo()
+   * @throws NoAlertPresentException, TimeoutException if alert is not appeared
+   * @return actual alert dialog
+   */
+  static Alert waitForAlert(WebDriver.TargetLocator delegate) {
+    return Wait().until(ExpectedConditions.alertIsPresent());
+  }
+
+
+  /**
+   * Waits frame within Selenide timeout
+   *
+   * @param delegate example: getWebDriver().switchTo()
+   * @param element frame element
+   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
+   * @return actual webdriver after switching on frame
+   */
+  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, WebElement element) {
+    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(element));
+  }
+
+
+  /**
+   * Waits frame within Selenide timeout
+   *
+   * @param delegate example: getWebDriver().switchTo()
+   * @param frameIndex frame index
+   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
+   * @return actual webdriver after switching on frame
+   */
+  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, int frameIndex) {
+    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameIndex));
+  }
+
+
+  /**
+   * Waits frame within Selenide timeout
+   *
+   * @param delegate example: getWebDriver().switchTo()
+   * @param frameNameOrId frame element name or ID
+   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
+   * @return actual webdriver after switching on frame
+   */
+  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, String frameNameOrId) {
+    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameNameOrId));
   }
 
   /**
@@ -419,7 +452,7 @@ public class Selenide {
    */
   public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = waitForAlert();
+      Alert alert = waitForAlert(getWebDriver().switchTo());
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
