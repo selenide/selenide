@@ -45,6 +45,15 @@ public class AlertTest extends IntegrationTest {
     }
   }
 
+  @Test
+  public void waitsUntilAlertDialogAppears() {
+    $(By.name("username")).val("Быстрый Гарри");
+    $(byValue("Slow alert")).click();
+    confirm("Are you sure, Быстрый Гарри?");
+    $("#message").shouldHave(text("Hello, Быстрый Гарри!"));
+    $("#container").shouldBe(empty);
+  }
+  
   @AfterClass
   public static void tearDown() {
     close();
