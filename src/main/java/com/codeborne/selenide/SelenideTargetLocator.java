@@ -19,17 +19,17 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public WebDriver frame(int index) {
-    return delegate.frame(index);
+    return Selenide.waitForFrame(delegate, index);
   }
 
   @Override
   public WebDriver frame(String nameOrId) {
-    return delegate.frame(nameOrId);
+    return Selenide.waitForFrame(delegate, nameOrId);
   }
 
   @Override
   public WebDriver frame(WebElement frameElement) {
-    return delegate.frame(frameElement);
+    return Selenide.waitForFrame(delegate, frameElement);
   }
 
   @Override
@@ -49,7 +49,7 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public Alert alert() {
-    return delegate.alert();
+    return Selenide.waitForAlert(delegate);
   }
 
 
@@ -63,12 +63,13 @@ public class SelenideTargetLocator implements TargetLocator {
     for (String frame : frames) {
       try {
         String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
-        delegate.frame(driver.findElement(By.cssSelector(selector)));
+        Selenide.waitForFrame(delegate, driver.findElement(By.cssSelector(selector)));
       }
-      catch (NoSuchElementException e) {
+      catch (NoSuchElementException | TimeoutException e) {
         throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
       }
     }
+
     return driver;
   }
 
