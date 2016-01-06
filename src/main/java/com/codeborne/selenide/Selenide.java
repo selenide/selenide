@@ -1,28 +1,23 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.DialogTextMismatch;
-import com.codeborne.selenide.ex.JavaScriptErrorsFound;
+import com.codeborne.selenide.ex.*;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.interactions.*;
+import org.openqa.selenium.logging.*;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.*;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.*;
+import java.util.*;
+import java.util.logging.*;
 
-import static com.codeborne.selenide.Configuration.dismissModalDialogs;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
-import static java.util.Collections.emptyList;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static com.codeborne.selenide.impl.WebElementWrapper.*;
+import static java.util.Collections.*;
+import static java.util.concurrent.TimeUnit.*;
 
 /**
  * The main starting point of Selenide.
@@ -43,7 +38,7 @@ public class Selenide {
    *
    * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
    *
-   * @param relativeOrAbsoluteUrl 
+   * @param relativeOrAbsoluteUrl
    *   If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
    *   In this case, it's prepended by baseUrl
    */
@@ -59,11 +54,11 @@ public class Selenide {
     navigator.open(absoluteUrl);
     mockModalDialogs();
   }
-  
+
   /**
    * Update the hash of the window location.
    * Useful to navigate in ajax apps without reloading the page, since open(url) makes a full page reload.
-   * 
+   *
    * @param hash value for window.location.hash - Accept either "#hash" or "hash".
    */
   public static void updateHash(String hash) {
@@ -102,6 +97,10 @@ public class Selenide {
     return page(pageObjectClassClass);
   }
 
+  /**
+   * Open a web page and create PageObject for it.
+   * @return PageObject of given class
+   */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     open(absoluteUrl);
@@ -136,6 +135,10 @@ public class Selenide {
     navigator.forward();
   }
 
+  /**
+   *
+   * @return title of the page
+   */
   public static String title() {
     return getWebDriver().getTitle();
   }
@@ -234,14 +237,34 @@ public class Selenide {
     return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), index);
   }
 
-  public static SelenideElement $(WebElement parent, By selector) {
-    return ElementFinder.wrap($(parent), selector, 0);
+  /**
+   * Find the first element matching given criteria
+   * @param parent the WebElement to search elements in
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return SelenideElement
+   * @throws NoSuchElementException if element was no found
+   */
+  public static SelenideElement $(WebElement parent, By seleniumSelector) {
+    return ElementFinder.wrap($(parent), seleniumSelector, 0);
   }
 
-  public static SelenideElement $(WebElement parent, By selector, int index) {
-    return ElementFinder.wrap($(parent), selector, index);
+  /**
+   * Find the Nth element matching given criteria
+   * @param parent the WebElement to search elements in
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param index 0..N
+   * @return SelenideElement
+   * @throws NoSuchElementException if element was no found
+   */
+  public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
+    return ElementFinder.wrap($(parent), seleniumSelector, index);
   }
 
+  /**
+   * Initialize collection with Elements
+   * @param elements
+   * @return
+   */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
     return new ElementsCollection(new WebElementsCollectionWrapper(elements));
   }
@@ -331,7 +354,7 @@ public class Selenide {
 
   /**
    * Not recommended. It's better to use method {@code $(radioField).selectRadio(value);}
-   * 
+   *
    * Select radio field by value
    * @param radioField any By selector for finding radio field
    * @param value value to select (should match an attribute "value")
@@ -341,6 +364,11 @@ public class Selenide {
     return $(radioField).selectRadio(value);
   }
 
+  /**
+   * Returns selected element in radio group
+   * @param radioField
+   * @return null, if nothing selected
+   */
   public static SelenideElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField)) {
       if (radio.getAttribute("checked") != null) {
@@ -363,7 +391,7 @@ public class Selenide {
   public static String confirm() {
     return confirm(null);
   }
-  
+
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
@@ -472,6 +500,10 @@ public class Selenide {
     return new SelenideTargetLocator(getWebDriver().switchTo());
   }
 
+  /**
+   *
+   * @return WebElement, not SelenideElement! which has focus on it
+   */
   public static WebElement getFocusedElement() {
     return (WebElement) executeJavaScript("return document.activeElement");
   }
@@ -529,7 +561,7 @@ public class Selenide {
    *
    * Function returns nothing if the page has its own "window.onerror" handler.
    *
-   * @return list of error messages. Returns empty list if webdriver is not started properly. 
+   * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
     if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
@@ -576,7 +608,7 @@ public class Selenide {
 
   /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
-   * 
+   *
    * EXPERIMENTAL! Use with caution.
    */
   public static List<String> getWebDriverLogs(String logType) {
@@ -585,7 +617,7 @@ public class Selenide {
 
   /**
    * EXPERIMENTAL! Use with caution.
-   * 
+   *
    * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
    * <br />
    * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
