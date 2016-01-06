@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,11 +33,7 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public WebDriver frame(WebElement frameElement) {
-    return waitForFrame(frameElement);
-  }
-
-  protected WebDriver waitForFrame(WebElement element) {
-    return Wait().until(frameToBeAvailableAndSwitchToIt(element));
+    return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
   }
 
   @Override
@@ -69,7 +66,7 @@ public class SelenideTargetLocator implements TargetLocator {
     for (String frame : frames) {
       try {
         String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
-        waitForFrame(driver.findElement(By.cssSelector(selector)));
+        Wait().until(frameToBeAvailableAndSwitchToIt_fixed(By.cssSelector(selector)));
       }
       catch (NoSuchElementException | TimeoutException e) {
         throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
@@ -77,6 +74,26 @@ public class SelenideTargetLocator implements TargetLocator {
     }
 
     return driver;
+  }
+
+  private static ExpectedCondition<WebDriver> frameToBeAvailableAndSwitchToIt_fixed(final By locator) {
+    return new ExpectedCondition<WebDriver>() {
+      @Override
+      public WebDriver apply(WebDriver driver) {
+        try {
+          return driver.switchTo().frame(driver.findElement(locator));
+        } catch (NoSuchFrameException e) {
+          return null;
+        } catch (WebDriverException e) {
+          return null;
+        }
+      }
+
+      @Override
+      public String toString() {
+        return "frame to be available: " + locator;
+      }
+    };
   }
 
   /**
