@@ -1,31 +1,28 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.*;
+import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.interactions.*;
-import org.openqa.selenium.logging.*;
-import org.openqa.selenium.support.*;
-import org.openqa.selenium.support.ui.*;
 
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.dismissModalDialogs;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
-import static com.codeborne.selenide.impl.WebElementWrapper.*;
-import static java.util.Collections.*;
-import static java.util.concurrent.TimeUnit.*;
 
 /**
  * The main starting point of Selenide.
