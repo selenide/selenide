@@ -88,7 +88,7 @@ public class ConfirmTest extends IntegrationTest {
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
     
-    if (!isPhantomjs()) {
+    if (!isHeadless()) {
       assertEquals("Get out of this page, " + userName + '?', confirmDialogText);
     }
   }
