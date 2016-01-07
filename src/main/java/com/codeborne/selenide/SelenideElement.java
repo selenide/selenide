@@ -486,8 +486,6 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Check if image is properly loaded.
    * 
-   * EXPERIMENTAL since Selenide 2.13
-   *
    * @throws IllegalArgumentException if argument is not an "img" element
    * @since 2.13
    */

@@ -563,16 +563,12 @@ public class Selenide {
 
   /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
-   *
-   * EXPERIMENTAL! Use with caution.
    */
   public static List<String> getWebDriverLogs(String logType) {
     return getWebDriverLogs(logType, Level.ALL);
   }
 
   /**
-   * EXPERIMENTAL! Use with caution.
-   *
    * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
    * <br />
    * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
