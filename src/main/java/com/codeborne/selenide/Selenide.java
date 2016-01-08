@@ -1,23 +1,28 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.*;
+import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.interactions.*;
-import org.openqa.selenium.logging.*;
-import org.openqa.selenium.support.*;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
 
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.dismissModalDialogs;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.impl.WebElementWrapper.*;
-import static java.util.Collections.*;
-import static java.util.concurrent.TimeUnit.*;
+import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
 /**
  * The main starting point of Selenide.
@@ -426,7 +431,7 @@ public class Selenide {
    */
   public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = waitForAlert(getWebDriver().switchTo());
+      Alert alert = Wait().until(alertIsPresent());
       String actualDialogText = alert.getText();
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
@@ -435,56 +440,6 @@ public class Selenide {
     return null;
   }
 
-
-  /**
-   * Waits alert within Selenide timeout
-   *
-   * @param delegate example: getWebDriver().switchTo()
-   * @throws NoAlertPresentException, TimeoutException if alert is not appeared
-   * @return actual alert dialog
-   */
-  static Alert waitForAlert(WebDriver.TargetLocator delegate) {
-    return Wait().until(ExpectedConditions.alertIsPresent());
-  }
-
-
-  /**
-   * Waits frame within Selenide timeout
-   *
-   * @param delegate example: getWebDriver().switchTo()
-   * @param element frame element
-   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
-   * @return actual webdriver after switching on frame
-   */
-  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, WebElement element) {
-    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(element));
-  }
-
-
-  /**
-   * Waits frame within Selenide timeout
-   *
-   * @param delegate example: getWebDriver().switchTo()
-   * @param frameIndex frame index
-   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
-   * @return actual webdriver after switching on frame
-   */
-  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, int frameIndex) {
-    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameIndex));
-  }
-
-
-  /**
-   * Waits frame within Selenide timeout
-   *
-   * @param delegate example: getWebDriver().switchTo()
-   * @param frameNameOrId frame element name or ID
-   * @throws NoSuchFrameException, TimeoutException if frame is not appeared
-   * @return actual webdriver after switching on frame
-   */
-  static WebDriver waitForFrame(WebDriver.TargetLocator delegate, String frameNameOrId) {
-    return Wait().until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameNameOrId));
-  }
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
@@ -504,7 +459,7 @@ public class Selenide {
    */
   public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = waitForAlert(getWebDriver().switchTo());
+      Alert alert = Wait().until(alertIsPresent());
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
@@ -632,16 +587,12 @@ public class Selenide {
 
   /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
-   *
-   * EXPERIMENTAL! Use with caution.
    */
   public static List<String> getWebDriverLogs(String logType) {
     return getWebDriverLogs(logType, Level.ALL);
   }
 
   /**
-   * EXPERIMENTAL! Use with caution.
-   *
    * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
    * <br />
    * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)

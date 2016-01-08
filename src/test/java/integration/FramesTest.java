@@ -1,21 +1,17 @@
 package integration;
 
-import static com.codeborne.selenide.Condition.name;
-
 import com.codeborne.selenide.Configuration;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.source;
+import static com.codeborne.selenide.WebDriverRunner.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
 public class FramesTest extends IntegrationTest {
@@ -33,7 +29,7 @@ public class FramesTest extends IntegrationTest {
     assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_parent_frame.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_1");
-    assertTrue(source().contains("Hello, WinRar!"));
+    assertThat(source(), containsString("Hello, WinRar!"));
     assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/hello_world.txt"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2");
@@ -41,7 +37,7 @@ public class FramesTest extends IntegrationTest {
     assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_child_frame.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");
-    assertTrue(source().contains("This is last frame!"));
+    assertThat(source(), containsString("This is last frame!"));
     assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/child_frame.txt"));
 
     switchTo().innerFrame("parentFrame");
@@ -63,7 +59,7 @@ public class FramesTest extends IntegrationTest {
     assertEquals("Test::frames", title());
 
     switchTo().frame("topFrame");
-    assertTrue(source().contains("Hello, WinRar!"));
+    assertThat(source(), containsString("Hello, WinRar!"));
 
     switchTo().defaultContent();
     switchTo().frame("leftFrame");
@@ -80,7 +76,7 @@ public class FramesTest extends IntegrationTest {
     assertEquals("Test::frames", title());
 
     switchTo().frame(0);
-    assertTrue(source().contains("Hello, WinRar!"));
+    assertThat(source(), containsString("Hello, WinRar!"));
 
     switchTo().defaultContent();
     switchTo().frame(1);

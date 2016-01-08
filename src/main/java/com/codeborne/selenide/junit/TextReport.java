@@ -5,10 +5,6 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 /**
- * EXPERIMENTAL
- * 
- * Use with cautions! This API will likely be changed soon.
- *
  * @since Selenide 2.25
  */
 public class TextReport extends TestWatcher {
