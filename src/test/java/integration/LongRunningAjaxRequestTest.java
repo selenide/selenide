@@ -45,15 +45,15 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
 
   @Test
   public void dollarWithParentWaitsUntilElementDisappears() {
-    $($("#results"), "span#loading").should(exist);
-    $($("#results"), "span#loading").shouldNot(exist);
+    $("#results").$("span#loading").should(exist);
+    $("#results").$("span#loading").shouldNot(exist);
   }
 
   @Test
   public void dollarWithParentAndIndexWaitsUntilElementDisappears() {
-    $($("#results"), "span#loading", 0).should(exist);
-    $($("#results"), "span#loading", 0).shouldNot(exist);
-    $($("#results"), "span#loading", 666).shouldNot(exist);
+    $("#results").$("span#loading", 0).should(exist);
+    $("#results").$("span#loading", 0).shouldNot(exist);
+    $("#results").$("span#loading", 666).shouldNot(exist);
   }
 
   @Test(expected = AssertionError.class)
@@ -90,8 +90,8 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
 
   @Test
   public void shouldNotExistWithinParentElement() {
-    $($("body"), "#non-existing-element").shouldNot(exist);
-    $($("body"), "#non-existing-element", 4).shouldNot(exist);
+    $("body").$("#non-existing-element").shouldNot(exist);
+    $("body").$("#non-existing-element", 4).shouldNot(exist);
   }
 
   @Test
@@ -104,7 +104,7 @@ public class LongRunningAjaxRequestTest extends IntegrationTest {
 
   @Test
   public void shouldNotBeVisibleWithinParentElement() {
-    $($("body"), "#non-existing-element").shouldNotBe(visible);
-    $($("body"), "#non-existing-element", 4).shouldNotBe(visible);
+    $("body").$("#non-existing-element").shouldNotBe(visible);
+    $("body").$("#non-existing-element", 4).shouldNotBe(visible);
   }
 }

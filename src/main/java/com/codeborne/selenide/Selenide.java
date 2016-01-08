@@ -204,6 +204,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$(String) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$(String)
+   *
    * Find the first element matching given CSS selector
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
@@ -226,6 +230,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$(String, int) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$(String, int)
+   *
    * Find the Nth element matching given criteria
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
@@ -238,6 +246,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$(By) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$(By)
+   *
    * Find the first element matching given criteria
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
@@ -249,6 +261,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$(By, int) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$(By, int)
+   *
    * Find the Nth element matching given criteria
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
@@ -296,6 +312,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$$(String) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$$(String)
+   *
    * Find all elements matching given CSS selector inside given parent element
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
@@ -310,6 +330,10 @@ public class Selenide {
   }
 
   /**
+   * @deprecated please use $(parent).$$(By) which is the same
+   * (method will not be removed until 4.x or later)
+   * @see  #$$(By)
+   *
    * Find all elements matching given criteria inside given parent element
    * @see Selenide#$$(WebElement, String)
    */
