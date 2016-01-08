@@ -219,6 +219,7 @@ public class Selenide {
    * @return SelenideElement
    * @throws NoSuchElementException if element was no found
    */
+  @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
     return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), 0);
   }
@@ -246,6 +247,7 @@ public class Selenide {
    * @return SelenideElement
    * @throws NoSuchElementException if element was no found
    */
+  @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), index);
   }
@@ -261,6 +263,7 @@ public class Selenide {
    * @return SelenideElement
    * @throws NoSuchElementException if element was no found
    */
+  @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
     return ElementFinder.wrap($(parent), seleniumSelector, 0);
   }
@@ -277,6 +280,7 @@ public class Selenide {
    * @return SelenideElement
    * @throws NoSuchElementException if element was no found
    */
+  @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
     return ElementFinder.wrap($(parent), seleniumSelector, index);
   }
@@ -330,6 +334,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
    */
+  @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
     return new ElementsCollection(new BySelectorCollection(parent, By.cssSelector(cssSelector)));
   }
@@ -342,6 +347,7 @@ public class Selenide {
    * Find all elements matching given criteria inside given parent element
    * @see Selenide#$$(WebElement, String)
    */
+  @Deprecated
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return new ElementsCollection(new BySelectorCollection(parent, seleniumSelector));
   }
