@@ -102,6 +102,7 @@ public class Commands {
 
   private void addFileCommands() {
     commands.put("download", new DownloadFile());
+    commands.put("prepareDownload", new PrepareDownload());
     commands.put("uploadFile", new UploadFile());
     commands.put("uploadFromClasspath", new UploadFileFromClasspath());
   }

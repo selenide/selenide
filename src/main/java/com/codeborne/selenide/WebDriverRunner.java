@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import net.lightbody.bmp.BrowserMobProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -50,6 +51,13 @@ public class WebDriverRunner {
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
+
+  /**
+   * Browser Mob Proxy will be created within driver or not
+   * <p/>
+   * Default value: false
+   */
+  public static boolean isBrowserMobActive = false;
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -102,16 +110,34 @@ public class WebDriverRunner {
     return webdriverContainer.getWebDriver();
   }
 
+
+  /**
+   * Activating Browser Mob Proxy for file downloading<br/>
+   * This method must be called BEFORE creating of WebDriver instance
+   *
+   */
+  public static void setProxyBrowserMob(boolean active) {
+    isBrowserMobActive = active;
+  }
+
+
   public static void setProxy(Proxy webProxy) {
     webdriverContainer.setProxy(webProxy);
   }
-  
+
   /**
    * Get the underlying instance of Selenium WebDriver, and assert that it's still alive.
    * @return new instance of WebDriver if the previous one has been closed meanwhile.
    */
   public static WebDriver getAndCheckWebDriver() {
     return webdriverContainer.getAndCheckWebDriver();
+  }
+
+  /**
+   * @return BrowserMob Proxy instance for current thread. Can be NULL !
+   */
+  public static BrowserMobProxyServer getBrowserMobProxy() {
+    return webdriverContainer.getBrowserMobProxy();
   }
 
   /**

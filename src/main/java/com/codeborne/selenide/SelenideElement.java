@@ -438,6 +438,19 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File download() throws FileNotFoundException;
 
   /**
+   * Prepare BrowserMobProxy for catch file (via Content-Type) from next http responses.<br/>
+   * When response with selected Content-Type will be received you will see page with full path to downloaded file.<br/>
+   * Then you can use: $(By.tagName("body")).getText();<br/>
+   * For manual clearing of filters: WebDriverRunner.getBrowserMobProxy().getFilterFactories().clear();
+   * @param toFolder downloads folder absolute path
+   * @param fileName name for output file. Can be empty (name from response will be used).
+   * @param expectedContentTypes array with content types like application/pdf and etc
+   * @throws IllegalStateException if BrowserMobProxy server is null or stopped for current thread
+   * @throws IllegalArgumentException if toFolder or expectedContentTypes are empty
+   */
+  SelenideElement prepareDownload(String toFolder, String fileName, String ... expectedContentTypes);
+
+  /**
    * @return the original Selenium WebElement wrapped by this object
    */
   WebElement toWebElement();

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -46,7 +47,7 @@ public class FileDownloader {
   public static FileDownloader instance = new FileDownloader();
 
   public static boolean ignoreSelfSignedCerts = true;
-  
+
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
@@ -67,6 +68,26 @@ public class FileDownloader {
     }
 
     return saveFileContent(response, downloadedFile);
+  }
+
+  public void prepareDownloadViaBrowserMob(String toFolder, String fileName, List<String> contentTypes)
+          throws IllegalArgumentException, IllegalStateException  {
+    if (WebDriverRunner.getBrowserMobProxy() == null || WebDriverRunner.getBrowserMobProxy().isStopped()) {
+      throw new IllegalStateException("BrowserMob Proxy is not exist or stopped");
+    }
+    if (toFolder.isEmpty()) {
+      throw new IllegalArgumentException("Downloads folder path can not be empty");
+    }
+    if (contentTypes.isEmpty()) {
+      throw new IllegalArgumentException("Content types list can not be empty");
+    }
+
+    ResponseFilterImpl filter = new ResponseFilterImpl(toFolder)
+            .withFileName(fileName)
+            .withContentTypes(contentTypes);
+
+    WebDriverRunner.getBrowserMobProxy().getFilterFactories().clear();
+    WebDriverRunner.getBrowserMobProxy().addResponseFilter(filter);
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {

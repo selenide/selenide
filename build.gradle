@@ -55,7 +55,7 @@ dependencies {
   provided group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
   
   // For BrowserMob Proxy:
-  testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
+  compile group: 'net.lightbody.bmp', name: 'browsermob-core-littleproxy', version: '2.1.0-beta-4'
   testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.13'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
   testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.6.4'

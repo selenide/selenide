@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,6 +59,14 @@ public class Selenide {
   public static void open(URL absoluteUrl) {
     navigator.open(absoluteUrl);
     mockModalDialogs();
+  }
+
+  /**
+   * @see SelenideElement#prepareDownload(String, String, String...)
+   */
+  public static void prepareDownload(String toFolder, String fileName, String ... expectedContentTypes) {
+    FileDownloader.instance
+                  .prepareDownloadViaBrowserMob(toFolder, fileName, Arrays.asList(expectedContentTypes));
   }
   
   /**

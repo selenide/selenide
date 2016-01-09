@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
 import org.openqa.selenium.*;
 import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.SessionNotFoundException;
@@ -21,6 +24,7 @@ import static com.codeborne.selenide.Configuration.*;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
+import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
@@ -30,6 +34,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   protected List<WebDriverEventListener> listeners = new ArrayList<>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<>(4);
+  protected Map<Long, BrowserMobProxyServer> THREAD_PROXY_BROWSERMOB = new ConcurrentHashMap<>(4);
   protected Proxy proxy;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
@@ -94,6 +99,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return setWebDriver(createDriver());
   }
 
+  /**
+   * @return BrowserMob Proxy instance for current thread. Can be NULL !
+   */
+  public BrowserMobProxyServer getBrowserMobProxy() {
+    return THREAD_PROXY_BROWSERMOB.get(currentThread().getId());
+  }
+
   @Override
   public WebDriver getAndCheckWebDriver() {
     if (!reopenBrowserOnFail) {
@@ -119,6 +131,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected void closeWebDriver(Thread thread) {
+
+    BrowserMobProxyServer proxyBrowserMobServer = THREAD_PROXY_BROWSERMOB.remove(thread.getId());
+    if (proxyBrowserMobServer != null) {
+      log.info("Stop BrowserMobProxy: "
+              + thread.getId()
+              + " on port "
+              + proxyBrowserMobServer.getPort());
+      proxyBrowserMobServer.stop();
+    }
+
     ALL_WEB_DRIVERS_THREADS.remove(thread);
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
 
@@ -210,6 +232,15 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
+
+    if (WebDriverRunner.isBrowserMobActive) {
+      BrowserMobProxyServer proxyBrowserMobServer = new BrowserMobProxyServer(findFreePort());
+      log.info("Start BrowserMobProxy on port: " + proxyBrowserMobServer.getPort());
+      proxyBrowserMobServer.start();
+      proxy = ClientUtil.createSeleniumProxy(proxyBrowserMobServer);
+      THREAD_PROXY_BROWSERMOB.put(currentThread().getId(), proxyBrowserMobServer);
+    }
+
     WebDriver webdriver = factory.createWebDriver(proxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
