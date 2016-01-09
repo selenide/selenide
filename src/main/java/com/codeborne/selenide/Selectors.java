@@ -95,5 +95,33 @@ public class Selectors {
     String getXPath() {
       return super.toString().replace("By.xpath: ", "");
     }
+    
+    /**
+     * @see By#name(java.lang.String)
+     */
+    public static By byName(String xpath) {
+      return By.name(xpath);
+    }
+    
+    /**
+     * @see By#xpath(java.lang.String)
+     */
+    public static By byXpath(String xpath) {
+      return By.xpath(xpath);
+    }
+
+    /**
+     * @see By#linkText(java.lang.String)
+     */
+    public static By byLinkText(String xpath) {
+      return By.linkText(xpath);
+    }
+
+    /**
+     * @see By#partialLinkText(java.lang.String)
+     */
+    public static By byPartialLinkText(String xpath) {
+      return By.partialLinkText(xpath);
+    }
   }
 }
