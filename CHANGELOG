@@ -5,6 +5,7 @@
 * #263 Now Selenide does **not** allow to download file via invisible link
 * #206 Method `switchTo(alert())` now waits until alert appears
 * #206 Method `switchTo(frame())` now waits until frame appears
+* Added methods `byName`, `byXpath`, `byLinkText`, `byPartialLinkText` that duplicate Selenium `By.*` methods
 
 === 3.0 (Released 24.12.2015)
 ===== New functions:
