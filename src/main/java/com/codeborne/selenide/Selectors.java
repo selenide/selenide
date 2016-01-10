@@ -121,6 +121,6 @@ public class Selectors {
    * @see By#partialLinkText(java.lang.String)
    */
   public static By byPartialLinkText(String partialLinkText) {
-      return By.partialLinkText(partialLinkText);
-    }
+    return By.partialLinkText(partialLinkText);
+  }
 }
