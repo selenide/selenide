@@ -10,11 +10,12 @@ import java.util.Arrays;
 public class PrepareDownload implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    String[] params = Arrays.copyOf(args, args.length, String[].class);
+    String[] types = (String[]) args[2];
+
     FileDownloader.instance
-                  .prepareDownloadViaBrowserMob(params[0],
-                                                params[1],
-                                                Arrays.asList(params).subList(2, params.length - 1));
+                  .prepareDownloadViaBrowserMob((String) args[0],
+                                                (String) args[1],
+                                                Arrays.asList(types));
 
     return proxy;
   }

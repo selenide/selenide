@@ -7,8 +7,9 @@ import net.lightbody.bmp.util.HttpMessageInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 
@@ -47,38 +48,32 @@ public class ResponseFilterImpl implements ResponseFilter {
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     String contentType = response.headers().get("Content-Type");
     if (contentTypes.contains(contentType)) {
-      try {
-        String actualFileName = getFileName(messageInfo.getUrl(), response);
-        if (fileName.isEmpty() && !actualFileName.isEmpty()) fileName = actualFileName;
+      String actualFileName = getFileName(messageInfo.getUrl(), response);
+      if (fileName.isEmpty() && !actualFileName.isEmpty()) fileName = actualFileName;
 
-        String postfix = contentType.substring(contentType.indexOf('/') + 1);
+      String postfix = contentType.substring(contentType.indexOf('/') + 1);
+      try {
         if (fileName.isEmpty()) {
           tempFile = File.createTempFile("downloaded", "." + postfix, tempDir);
-          tempFile.deleteOnExit();
         }
         else {
           tempFile =  new File(tempDir.getAbsolutePath() + "/" + fileName);
         }
 
         outputTextContent = tempFile.getAbsolutePath();
-
-        try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
-          outputStream.write(contents.getBinaryContents());
-        }
-        catch (Throwable ex) {
-          outputTextContent = ex.getMessage();
-        }
-
-        response.headers().remove("Content-Type");
-        response.headers().remove("Content-Encoding");
-        response.headers().remove("Content-Disposition");
-
-        response.headers().add("Content-Type", "text/html");
-        response.headers().add("Content-Length", "" + outputTextContent.length());
-        contents.setTextContents(outputTextContent);
+        Files.write(tempFile.toPath(),
+                    contents.getBinaryContents(),
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
       } catch (IOException e) {
-        e.printStackTrace();
+        outputTextContent = e.getMessage();
       }
+
+      response.headers().clear();
+      response.headers().add("Content-Type", "text/html");
+      response.headers().add("Content-Length", "" + outputTextContent.length());
+      contents.setTextContents(outputTextContent);
     }
   }
 
@@ -92,7 +87,7 @@ public class ResponseFilterImpl implements ResponseFilter {
       }
     }
 
-    String ret = "";
+    String ret;
     if (requestUrl.indexOf("\\") > requestUrl.indexOf("/")) {
       ret = StringUtils.substringAfterLast(requestUrl, "\\");
     } else  {
