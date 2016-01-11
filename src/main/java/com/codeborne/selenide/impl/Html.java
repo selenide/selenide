@@ -24,7 +24,7 @@ public class Html {
   }
 
   public boolean equalsCaseSensitive(String text, String subtext) {
-    return reduceSpaces(text).contains(reduceSpaces(subtext));
+    return reduceSpaces(text).equals(reduceSpaces(subtext));
   }
 
   String reduceSpaces(String text) {

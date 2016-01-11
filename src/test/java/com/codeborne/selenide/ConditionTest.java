@@ -62,6 +62,6 @@ public class ConditionTest {
     when(element.getText()).thenReturn("John Malkovich");
     assertFalse(Condition.exactTextCaseSensitive("john malkovich").apply(element));
     assertTrue(Condition.exactTextCaseSensitive("John Malkovich").apply(element));
-    assertFalse(Condition.exactText("John").apply(element));
+    assertFalse(Condition.exactTextCaseSensitive("John").apply(element));
   }
 }
