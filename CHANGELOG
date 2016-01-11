@@ -6,6 +6,9 @@
 * #206 Method `switchTo(alert())` now waits until alert appears
 * #206 Method `switchTo(frame())` now waits until frame appears
 * Added methods `byName`, `byXpath`, `byLinkText`, `byPartialLinkText` that duplicate Selenium `By.*` methods
+* Bugfix: Condition.exactTextCaseSensitive now fails searchText is only a substring.
+* Deprecated $(WebElement,...) $$(WebElement) - use $(WebElement).$(...) instead
+
 
 === 3.0 (Released 24.12.2015)
 ===== New functions:
@@ -37,7 +40,7 @@
   * `WebDriverRunner.takeScreenShot()` -> use method `Screenshots.takeScreenShot()`
 * Remove deprecated methods
   * `$.should*(String message, Condition condition)` -> use method `$.should*(condition.because(message))`
-* Remove class com.codeborne.selenide.impl.Quotes 
+* Remove class com.codeborne.selenide.impl.Quotes
   because it was migrated to Selenium Webdriver (org.openqa.selenium.support.ui.Quotes)
 
 === 2.25 (Released 30.11.2015)
@@ -50,7 +53,7 @@
 * #232 methods `confirm()` and `dismiss()` return actual dialog text
 * #244 add ability to skip re-spawning browser after it disappears/closes unexpectedly (added property `-Dselenide.reopenBrowserOnFail=false`)
 * upgrade to htmlunit 2.19
- 
+
 === 2.24 (Released 08.11.2015)
 * add method $.pressEscape()
 * extract code for creating WebDriver to a separate class WebDriverFactory
@@ -125,7 +128,7 @@ Bugfixes:
 === 2.15 (Released 02.11.2014)
 * #140 Added support for Sizzle selectors
 * #139 Added support for multifile upload
-* #106 Added support for BrowserMob proxy (thanks to Vladimir Denisov @proton72) 
+* #106 Added support for BrowserMob proxy (thanks to Vladimir Denisov @proton72)
 * #137 Added method for zooming page IN and OUT
 * #136 Can open non-html pages (e.g. plain text)
 * #72 Added method for switching to frame/window/tab by index
@@ -138,7 +141,7 @@ And minor issues:
 
 === 2.14 (Released 16.09.2014)
 Added alternative with error message to all "should" methods.
- 
+
 Now it's possible to write asserts with comment / error message:
 
 ```java
