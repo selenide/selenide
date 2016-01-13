@@ -22,17 +22,17 @@ public class InputFieldTest extends IntegrationTest {
   @Test
   public void selenideClearTest(){
     SelenideElement input=$(By.id("id1"));
-    Assert.assertThat(input.val(),is(equalTo("")));
+    Assert.assertThat(input.getValue(),is(equalTo("")));
     input.clear();
     input.setValue(",.123");
     input.clear();
     input.setValue("456");
-    Assert.assertThat(input.val(),is(equalTo("456")));
+    Assert.assertThat(input.getValue(),is(equalTo("456")));
     input.clear();
     input.setValue(",.123");
     input.clear();
     input.setValue("456");
-    Assert.assertThat(input.val(),is(equalTo("456")));
+    Assert.assertThat(input.getValue(),is(equalTo("456")));
   }
 
 

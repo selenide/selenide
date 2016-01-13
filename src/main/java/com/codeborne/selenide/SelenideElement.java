@@ -132,9 +132,18 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Get the "value" attribute of the element
+   * Same as #getValue()
    * @return attribute "value" value or null if attribute is missing
+   *
    */
   String val();
+
+  /**
+   * Get the "value" attribute of the element
+   * @return attribute "value" value or null if attribute is missing
+   * @since 3.1
+   */
+  String getValue();
 
   /**
    * Select radio button
@@ -142,7 +151,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @return selected "input type=radio" element
    */
   SelenideElement selectRadio(String value);
-  
+
   /**
    * Get value of attribute "data-<i>dataAttributeName</i>"
    */
@@ -444,15 +453,15 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   @Override
   WebElement getWrappedElement();
-  
+
   /**
    * Click the element
-   * 
+   *
    * <p>
    * By default it uses default Selenium method click.
    * </p>
    * <p>
-   * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined. 
+   * But it uses JavaScript method to click if {@code com.codeborne.selenide.Configuration#clickViaJs} is defined.
    * It may be helpful for testing in Internet Explorer where native click doesn't always work correctly.
    * </p>
    */
@@ -485,7 +494,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Check if image is properly loaded.
-   * 
+   *
    * @throws IllegalArgumentException if argument is not an "img" element
    * @since 2.13
    */
