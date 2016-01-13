@@ -34,4 +34,9 @@ public class SelectorsTest extends IntegrationTest {
     $(byPartialLinkText("'apostrophes")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     $(byPartialLinkText("quotes\"")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
   }
+
+  @Test
+  public void canFindElementById() {
+    $(byId("status")).shouldHave(text("Username:"));
+  }
 }
