@@ -5,9 +5,10 @@
 * #263 Now Selenide does **not** allow to download file via invisible link
 * #206 Method `switchTo(alert())` now waits until alert appears
 * #206 Method `switchTo(frame())` now waits until frame appears
-* Added methods `byName`, `byXpath`, `byLinkText`, `byPartialLinkText` that duplicate Selenium `By.*` methods
-* Bugfix: Condition.exactTextCaseSensitive now fails searchText is only a substring.
-* Deprecated $(WebElement,...) $$(WebElement) - use $(WebElement).$(...) instead
+* Added methods `byName`, `byXpath`, `byLinkText`, `byPartialLinkText`,`byId` for Selectors duplicating Selenium `By.*` methods
+* Bugfix: `Condition.exactTextCaseSensitiv` now fails searchText is only a substring.
+* Deprecated `$(WebElement,...) $$(WebElement,..)` - use ``$(WebElement).$(...) instead
+* Added `getValue` method for SelenideElement (the same as `val()`)
 
 
 === 3.0 (Released 24.12.2015)
