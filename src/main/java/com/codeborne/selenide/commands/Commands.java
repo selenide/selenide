@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Commands {
   public static Commands collection = new Commands();
-  
+
   private final Map<String, Command> commands = new ConcurrentHashMap<>(128);
 
   public Commands() {
@@ -60,6 +60,7 @@ public class Commands {
     commands.put("getText", new GetText());
     commands.put("name", new GetName());
     commands.put("text", new GetText());
+    commands.put("getValue", new GetValue());
   }
 
   private void addClickCommands() {

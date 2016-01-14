@@ -10,7 +10,7 @@ public class Selectors {
    * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
    *
    * @param elementText Text to search inside element
-   * @return standard selenium By criteria
+   * @return standard selenium By criteria`
    */
   public static By withText(String elementText) {
     return new WithText(elementText);
@@ -27,7 +27,7 @@ public class Selectors {
   public static By byText(String elementText) {
     return new ByText(elementText);
   }
-  
+
   /**
    * Find elements having attribute with given value.
    *
@@ -56,7 +56,7 @@ public class Selectors {
   public static By byTitle(String title) {
     return byAttribute("title", title);
   }
-  
+
   public static By byValue(String value) {
     return byAttribute("value", value);
   }
@@ -98,13 +98,15 @@ public class Selectors {
   }
   /**
    * @see By#name(java.lang.String)
+   * @since 3.1
    */
   public static By byName(String name) {
     return By.name(name);
   }
-  
+
   /**
    * @see By#xpath(java.lang.String)
+   * @since 3.1
    */
   public static By byXpath(String xpath) {
     return By.xpath(xpath);
@@ -112,6 +114,7 @@ public class Selectors {
 
   /**
    * @see By#linkText(java.lang.String)
+   * @since 3.1
    */
   public static By byLinkText(String linkText) {
     return By.linkText(linkText);
@@ -119,8 +122,17 @@ public class Selectors {
 
   /**
    * @see By#partialLinkText(java.lang.String)
+   * @since 3.1
    */
   public static By byPartialLinkText(String partialLinkText) {
     return By.partialLinkText(partialLinkText);
+  }
+
+  /**
+   * @see By#id(java.lang.String)
+   * @since 3.1
+   */
+  public static By byId(String id) {
+    return By.id(id);
   }
 }
