@@ -9,3 +9,4 @@ out
 chromedriver.log
 phantomjsdriver.log
 .settings
+integration/ScreenshotTest/canTakeScreenshotOfElement/
