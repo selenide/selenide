@@ -56,6 +56,10 @@ public class UIAssertionError extends AssertionError {
     if (Cleanup.of.isInvalidSelectorError(error))
       return error;
 
+    return wrapThrowable(error, timeoutMs);
+  }
+
+  public static Error wrapThrowable(Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
     uiError.screenshot = Screenshots.screenshots.formatScreenShotPath();

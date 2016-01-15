@@ -5,12 +5,13 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.ex.UIAssertionError.wrapThrowable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
@@ -95,6 +96,47 @@ public class SelenideTargetLocator implements TargetLocator {
       }
     };
   }
+  
+  private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final String nameOrHandleOrTitle) {
+    return new ExpectedCondition<WebDriver>() {
+      @Override
+      public WebDriver apply(WebDriver driver) {
+        try {
+          return driver.switchTo().window(nameOrHandleOrTitle);
+        } catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
+          try {
+            return windowByTitle(nameOrHandleOrTitle);
+          } catch (NoSuchWindowException e) {
+            return null;
+          }
+        }
+      }
+
+      @Override
+      public String toString() {
+        return "window to be available by name or handle or title: " + nameOrHandleOrTitle;
+      }
+    };
+  }
+  
+  private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final int index) {
+    return new ExpectedCondition<WebDriver>() {
+      @Override
+      public WebDriver apply(WebDriver driver) {
+        try {
+          List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
+          return driver.switchTo().window(windowHandles.get(index));
+        } catch (IndexOutOfBoundsException windowWithIndexNotFound) {
+          return null;
+        }
+      }
+
+      @Override
+      public String toString() {
+        return "window to be available by index: " + index;
+      }
+    };
+  }
 
   /**
    * Switch to window/tab by index
@@ -102,10 +144,12 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param index index of window (0-based)
    */
   public WebDriver window(int index) {
-    WebDriver driver = getWebDriver();
-    List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
-    delegate.window(windowHandles.get(index));
-    return driver;
+    try {
+      return Wait().until(windowToBeAvailableAndSwitchToIt(index));
+    }
+    catch (TimeoutException e) {
+      throw wrapThrowable(e, timeout);
+    }
   }
 
   /**
@@ -115,30 +159,31 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
-      return delegate.window(nameOrHandleOrTitle);
+      return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
     }
-    catch (NoSuchWindowException windowWithNameOrTitleNotFound) {
-      return windowExceptHandles(nameOrHandleOrTitle);
+    catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
+      return windowByTitle(nameOrHandleOrTitle);
+    }
+    catch (TimeoutException e) {
+      throw wrapThrowable(e, timeout);
     }
   }
 
   /**
    * Switch to window/tab by name/handle/title except some windows handles
-   * @param nameOrHandleOrTitle name or handle or title of window/tab
-   * @param exceptHandles window handles that should be ignored
+   * @param title title of window/tab
    */
-  protected WebDriver windowExceptHandles(String nameOrHandleOrTitle, String... exceptHandles) {
+  protected static WebDriver windowByTitle(String title) {
     WebDriver driver = getWebDriver();
     
     Set<String> windowHandles = driver.getWindowHandles();
-    windowHandles.removeAll(Arrays.asList(exceptHandles));
     
     for (String windowHandle : windowHandles) {
       driver.switchTo().window(windowHandle);
-      if (nameOrHandleOrTitle.equals(driver.getTitle())) {
+      if (title.equals(driver.getTitle())) {
         return driver;
       }
     }
-    throw new NoSuchWindowException("Window with id/name/title not found: " + nameOrHandleOrTitle);
+    throw new NoSuchWindowException("Window with title not found: " + title);
   }
 }
