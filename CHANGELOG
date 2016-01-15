@@ -9,7 +9,7 @@
 * Bugfix: `Condition.exactTextCaseSensitiv` now fails searchText is only a substring.
 * Deprecated `$(WebElement,...) $$(WebElement,..)` - use ``$(WebElement).$(...) instead
 * Added `getValue` method for SelenideElement (the same as `val()`)
-
+* Upgraded to selenium-java 2.49.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
 
 === 3.0 (Released 24.12.2015)
 ===== New functions:
