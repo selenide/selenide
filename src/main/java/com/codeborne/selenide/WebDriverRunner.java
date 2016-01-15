@@ -40,8 +40,7 @@ public class WebDriverRunner {
   public static final String HTMLUNIT = "htmlunit";
 
   /**
-   * To use PhantomJS, you need to include extra dependency to your project:
-   * &lt;dependency org="com.github.detro" name="phantomjsdriver" rev="1.2.0" conf="test-&gt;default"/&gt;
+   * To use PhantomJS, you need to set system property: -Dselenide.browser=phantomjs
    */
   public static final String PHANTOMJS = "phantomjs";
 
