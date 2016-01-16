@@ -1,6 +1,6 @@
 == Changelog
 
-=== 3.1 (Planned to January 2016)
+=== 3.1 (Released 17.01.2016)
 * Update documentation
 * #263 Now Selenide does **not** allow to download file via invisible link
 * #206 Method `switchTo(alert())` now waits until alert appears
