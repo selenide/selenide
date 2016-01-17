@@ -2,10 +2,12 @@ package integration;
 
 import com.codeborne.selenide.*;
 import org.junit.*;
-import org.openqa.selenium.*;
 
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.Assume.*;
 
 /**
  * Created by vinogradov on 11.01.16.

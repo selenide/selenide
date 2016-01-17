@@ -32,7 +32,8 @@ public class SimpleReport {
     sb.append(delimiter);
 
     for (LogEvent e : logEventListener.events()) {
-      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(), convertTestStatus(e.getStatus()), e.getDuration()));
+      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(),
+              convertTestStatus(e.getStatus()), e.getDuration()));
     }
     sb.append(delimiter);
     log.info(sb.toString());
