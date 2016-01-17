@@ -3,14 +3,14 @@ package com.codeborne.selenide.logevents;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {
   private final List<Throwable> errors = new ArrayList<>();
 
   @Override
   public void onEvent(LogEvent event) {
-    if (event.getStatus() == FAILED) {
+    if (event.getStatus() == FAIL) {
       errors.add(event.getError());
     }
   }

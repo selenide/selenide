@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -161,7 +161,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "set value", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "set value", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
@@ -171,7 +171,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "should have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -182,7 +182,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should not have", PASSED));
+    SelenideLogger.addListener(listener = createListener(selector, "should not have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -193,7 +193,7 @@ public class SelenideElementProxyTest {
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", FAILED));
+    SelenideLogger.addListener(listener = createListener(selector, "should have", FAIL));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");

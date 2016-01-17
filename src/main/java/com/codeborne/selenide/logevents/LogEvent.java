@@ -4,15 +4,12 @@ package com.codeborne.selenide.logevents;
  * Events, created on Selenide actions 
  * like "navigate to url", "click on element", "check a condition" <br/><br/>
  * 
- * An event contains a string representation of the element, the subject and its status.<br/><br/>
- *  
- * Depends on implementation, status can be something like "PASSED", "FAILED" or something else.
- * 
+ * An event contains a string representation of the element, the subject and its status.
  */
 public interface LogEvent {
 
-  public enum EventStatus {
-    IN_PROGRESS, PASSED, FAILED
+  enum EventStatus {
+    IN_PROGRESS, PASS, FAIL
   }
 
   String getElement();
