@@ -1,4 +1,6 @@
 == Changelog
+=== 3.2 (in progress)
+* Renamed FAILED->FAIL, PASSED->PASS in the print output of steps-reports to avoid confusion between failed steps and failed tests.
 
 === 3.1 (Released 17.01.2016)
 * Update documentation
