@@ -2,6 +2,9 @@ branches:
   only:
     - master
 
+notifications:
+  slack: softwaretesters:YZeMZPy2nCiFXiNLgO2sUFOA
+  
 language: java
 sudo: false
 cache:
