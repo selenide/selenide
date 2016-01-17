@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
@@ -49,7 +49,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, timeout);
       }
-      SelenideLogger.commitStep(log, PASSED);
+      SelenideLogger.commitStep(log, PASS);
       return this;
     }
     catch (Error error) {

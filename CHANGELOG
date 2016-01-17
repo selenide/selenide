@@ -9,7 +9,7 @@
 * #206 Method `switchTo(frame())` now waits until frame appears
 * #271 Method `switchTo(window())` now waits until window/tab appears
 * Added methods `byName`, `byXpath`, `byLinkText`, `byPartialLinkText`,`byId` for Selectors duplicating Selenium `By.*` methods
-* Bugfix: `Condition.exactTextCaseSensitiv` now fails searchText is only a substring.
+* Bugfix: `Condition.exactTextCaseSensitive` now fails searchText is only a substring.
 * Deprecated `$(WebElement,...) $$(WebElement,..)` - use ``$(WebElement).$(...) instead
 * Added `getValue` method for SelenideElement (the same as `val()`)
 * Upgraded to selenium-java 2.49.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG

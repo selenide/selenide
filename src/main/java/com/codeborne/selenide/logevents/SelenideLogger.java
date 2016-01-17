@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAILED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 /**
  * Logs Selenide test steps and notifies all registered LogEventListener about it
@@ -46,7 +46,7 @@ public class SelenideLogger {
 
   public static void commitStep(SelenideLog log, Throwable error) {
     log.setError(error);
-    commitStep(log, FAILED);
+    commitStep(log, FAIL);
   }
   
   public static void commitStep(SelenideLog log, LogEvent.EventStatus status) {

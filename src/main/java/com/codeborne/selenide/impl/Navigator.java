@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASSED;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
@@ -44,7 +44,7 @@ public class Navigator {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
       collectJavascriptErrors((JavascriptExecutor) webdriver);
-      SelenideLogger.commitStep(log, PASSED);
+      SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
       e.addInfo("selenide.url", url);
