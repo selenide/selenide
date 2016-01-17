@@ -5,6 +5,8 @@ import com.google.common.base.Joiner;
 import java.util.Collections;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.*;
+
 /**
  * A simple text report of Selenide actions performed during test run
  */
@@ -19,7 +21,7 @@ public class SimpleReport {
 
   public void finish(String title) {
     SelenideLogger.removeListener(logEventListener);
-    
+
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
 
@@ -30,7 +32,7 @@ public class SimpleReport {
     sb.append(delimiter);
 
     for (LogEvent e : logEventListener.events()) {
-      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(), e.getStatus(), e.getDuration()));
+      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(), convertTestStatus(e.getStatus()), e.getDuration()));
     }
     sb.append(delimiter);
     log.info(sb.toString());
@@ -38,5 +40,12 @@ public class SimpleReport {
 
   private String line(int count) {
     return Joiner.on("").join(Collections.nCopies(count, "-"));
+  }
+
+  private String convertTestStatus(LogEvent.EventStatus status) {
+    if (status.equals(PASSED)) return "PASS";
+    if (status.equals(FAILED)) return "FAIL";
+    if (status.equals(IN_PROGRESS)) return "IN PROGRESS";
+    throw new IllegalStateException("Unknow Status=" + status);
   }
 }
