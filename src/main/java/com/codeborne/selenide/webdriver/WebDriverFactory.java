@@ -41,6 +41,11 @@ public class WebDriverFactory {
                                 isSafari() ? createSafariDriver(proxy) :
                                     createInstanceOf(browser, proxy);
     webdriver = maximize(webdriver);
+    if (!isHeadless()) {
+      Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
+      log.info("BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
+              + " Platfrom=" + capabilities.getPlatform());
+    }
     return webdriver;
   }
 
@@ -62,7 +67,7 @@ public class WebDriverFactory {
     }
     return browserCapabilities;
   }
-  
+
   protected WebDriver createChromeDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
@@ -143,7 +148,7 @@ public class WebDriverFactory {
       capabilities.setCapability(ACCEPT_SSL_CERTS, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
       if (isPhantomjs()) {
-        capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args" 
+        capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
             new String[] {"--web-security=no", "--ignore-ssl-errors=yes"});
       }
 

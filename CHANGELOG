@@ -1,6 +1,7 @@
 == Changelog
 === 3.2 (in progress)
-* Renamed FAILED->FAIL, PASSED->PASS in the print output of steps-reports to avoid confusion between failed steps and failed tests.
+* Renamed FAILED->FAIL, PASSED->PASS in the print/log output to avoid confusion with PASSED and FAILED of external tools
+* Added INFO about Browser/Version/Plattform for the started browser to the logs
 
 === 3.1 (Released 17.01.2016)
 * Update documentation
