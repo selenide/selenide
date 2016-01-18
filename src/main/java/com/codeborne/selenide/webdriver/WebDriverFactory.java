@@ -44,7 +44,7 @@ public class WebDriverFactory {
     if (!isHeadless()) {
       Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
       log.info("BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
-              + " Platfrom=" + capabilities.getPlatform());
+              + " Platform=" + capabilities.getPlatform());
     }
     return webdriver;
   }
