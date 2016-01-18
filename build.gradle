@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.2-SNAPSHOT'
+version='3.1.1'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.7
@@ -42,7 +42,10 @@ dependencies {
     exclude group: 'commons-codec', module: 'commons-codec'
     exclude group: 'cglib', module: 'cglib-nodep'
   }
-  compile group: 'com.codeborne', name: 'phantomjsdriver', version: '1.2.1', transitive: false
+  runtime('com.codeborne:phantomjsdriver:1.2.1') {
+    exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'  
+    exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'  
+  }
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.49.0', transitive: false
