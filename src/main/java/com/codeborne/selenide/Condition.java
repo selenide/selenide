@@ -158,9 +158,9 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * Assert that element has given "value" attribute.
+   * Assert that element has given "value" attribute as substring
    * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
-   * 
+   *
    * <p>Sample: <code>$("input").shouldHave(value("12345 666 77"));</code></p>
    *
    * @param expectedValue expected value of "value" attribute
@@ -169,7 +169,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("value") {
       @Override
       public boolean apply(WebElement element) {
-        return Html.text.equalsCaseSensitive(getAttributeValue(element, "value"), expectedValue);
+        return Html.text.contains(getAttributeValue(element, "value"), expectedValue);
       }
       @Override
       public String toString() {
@@ -177,7 +177,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
     };
   }
-  
+
   /**
    * <p>Sample: <code>$("#input").shouldHave(exactValue("John"));</code></p>
    * @param value expected value of input field
@@ -526,7 +526,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
     };
   }
-  
+
   public static Condition be(Condition delegate) {
     return wrap("be", delegate);
   }
@@ -553,7 +553,7 @@ public abstract class Condition implements Predicate<WebElement> {
       }
     };
   }
-  
+
   private static class ExplainedCondition extends Condition {
     private final Condition delegate;
     private final String message;
@@ -573,7 +573,7 @@ public abstract class Condition implements Predicate<WebElement> {
     public String actualValue(WebElement element) {
       return delegate.actualValue(element);
     }
-    
+
     @Override
     public String toString() {
       return delegate.toString() + " (because " + message + ")";
@@ -616,7 +616,7 @@ public abstract class Condition implements Predicate<WebElement> {
   public String actualValue(WebElement element) {
     return null;
   }
-  
+
   public Condition because(String message) {
     return new ExplainedCondition(this, message);
   }

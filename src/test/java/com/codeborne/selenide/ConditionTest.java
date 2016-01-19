@@ -64,4 +64,16 @@ public class ConditionTest {
     assertTrue(Condition.exactTextCaseSensitive("John Malkovich").apply(element));
     assertFalse(Condition.exactTextCaseSensitive("John").apply(element));
   }
+
+  @Test
+  public void value() {
+    WebElement element = mock(WebElement.class);
+    when(element.getAttribute("value")).thenReturn("John Malkovich");
+    assertFalse(Condition.value("Peter").apply(element));
+    assertTrue(Condition.value("john").apply(element));
+    assertTrue(Condition.value("john malkovich").apply(element));
+    assertTrue(Condition.value("John").apply(element));
+    assertTrue(Condition.value("John Malkovich").apply(element));
+  }
+
 }

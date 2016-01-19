@@ -1,9 +1,13 @@
 == Changelog
 === 3.2 (in progress)
+
+=== 3.1.2 (Released xx.01.2016)
+* value-Condition checked for substing again (in 3.1-3.1.1 - was exact match)
+
+=== 3.1.1 (Released 18.01.2016)
 * Renamed FAILED->FAIL, PASSED->PASS in the print/log output to avoid confusion with PASSED and FAILED of external tools
 * Added INFO about Browser/Version/Plattform for the started browser to the logs
 
-=== 3.1.1 (Released 18.01.2016)
 * exclude old selenium-remote-driver and selenium-java transitive dependencies (coming from phantomjsdriver 1.2.1)
 
 === 3.1 (Released 17.01.2016)
