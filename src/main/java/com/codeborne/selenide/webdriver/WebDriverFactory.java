@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.*;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -46,6 +46,8 @@ public class WebDriverFactory {
       log.info("BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
               + " Platform=" + capabilities.getPlatform());
     }
+    log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
+    log.info("Selenium WebDriver v. " + WebDriver.class.getPackage().getImplementationVersion());
     return webdriver;
   }
 
