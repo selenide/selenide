@@ -1,11 +1,12 @@
 == Changelog
 === 3.2 (in progress)
+* Added INFO about Selenide and Selenium WebDriver Versions in use
 
 === 3.1.3 (Released 22.01.2016)
 * Upgraded to selenium-java 2.49.1 (fixed timeout issue in Grid)
 
 === 3.1.2 (Released 19.01.2016)
-* value-Condition checked for substituting again (in 3.1-3.1.1 - was exact match)
+* value-Condition checked for substing containg again (in 3.1-3.1.1 - was exact match)
 
 === 3.1.1 (Released 18.01.2016)
 * Renamed FAILED->FAIL, PASSED->PASS in the print/log output to avoid confusion with PASSED and FAILED of external tools
