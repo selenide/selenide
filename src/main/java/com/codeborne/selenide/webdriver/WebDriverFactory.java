@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.internal.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -47,7 +48,8 @@ public class WebDriverFactory {
               + " Platform=" + capabilities.getPlatform());
     }
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
-    log.info("Selenium WebDriver v. " + WebDriver.class.getPackage().getImplementationVersion());
+    BuildInfo seleniumInfo = new BuildInfo();
+    log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
     return webdriver;
   }
 
