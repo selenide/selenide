@@ -13,6 +13,7 @@ import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.collections.ListSize.Operator.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -62,6 +63,16 @@ public class CollectionMethodsTest extends IntegrationTest {
     $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
     $$(By.name("non-existing-element")).shouldHaveSize(0);
     $$("#dynamic-content-container span").shouldHave(size(2));
+    $$("#dynamic-content-container span").shouldHave(size(EQUALS, 2));
+    $$("#dynamic-content-container span").shouldHave(size(NOT_EQUAL, 42));
+    $$("#dynamic-content-container span").shouldHave(size(GREATER, 1)).shouldHave(size(LESS, 3));
+    $$("#dynamic-content-container span").shouldHave(size(GREATER_OR_EQUALS, 1)).shouldHave(size(LESS_OR_EQUALS, 3));
+    $$("#dynamic-content-container span").shouldHave(size(GREATER_OR_EQUALS, 2)).shouldHave(size(LESS_OR_EQUALS, 2));
+    $$("#dynamic-content-container span").shouldHaveSize(EQUALS, 2);
+    $$("#dynamic-content-container span").shouldHaveSize(NOT_EQUAL, 42);
+    $$("#dynamic-content-container span").shouldHaveSize(GREATER, 1).shouldHaveSize(LESS, 3);
+    $$("#dynamic-content-container span").shouldHaveSize(GREATER_OR_EQUALS, 1).shouldHaveSize(LESS_OR_EQUALS, 3);
+    $$("#dynamic-content-container span").shouldHaveSize(GREATER_OR_EQUALS, 2).shouldHaveSize(LESS_OR_EQUALS, 2);
   }
 
   @Test
