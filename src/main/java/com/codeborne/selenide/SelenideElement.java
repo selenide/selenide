@@ -391,17 +391,21 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Upload file into file upload field. File is searched from classpath.</p>
-   * <p>Short form of <code>webElement.sendKeys("c:/files/my-file.txt");</code></p>
    *
    * <p>Multiple file upload is also supported. Just pass as many file names as you wish.</p>
+   * @param fileName name of the file or the relative path in classpath e.g. "files/1.pfd"
+   * @return the object of the first file uploaded
+   * @throws IllegalArgumentException if any of the files is not found
    */
   File uploadFromClasspath(String... fileName);
 
   /**
    * <p>Upload file into file upload field.</p>
-   * <p>Short form of <code>webElement.sendKeys("c:/files/my-file.txt");</code></p>
    *
    * <p>Multiple file upload is also supported. Just pass as many files as you wish.</p>
+   * @param file file object(s)
+   * @return the object of the first file uploaded
+   * @throws IllegalArgumentException if any of the files is not found, or other errors
    */
   File uploadFile(File... file);
 
