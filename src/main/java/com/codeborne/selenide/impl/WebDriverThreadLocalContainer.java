@@ -67,7 +67,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       log.log(FINE, "Browser is unreachable", e);
       return false;
     } catch (NoSuchWindowException e) {
-      log.log(FINE, "Browser window is now found", e);
+      log.log(FINE, "Browser window is not found", e);
       return false;
     } catch (SessionNotFoundException e) {
       log.log(FINE, "Browser session is not found", e);
