@@ -4,6 +4,8 @@
     "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+  <property name="charset" value="UTF-8"/>
+  
   <!--Add more checks from google style guide:-->
   <!--https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml-->
 
