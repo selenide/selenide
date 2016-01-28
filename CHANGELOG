@@ -1,6 +1,7 @@
 == Changelog
 === 3.2 (in progress)
 * #275 Added method for selecting option by index: `$("select").selectOption(3)`
+* #272 Add setting "selenide.browser-size" to configure browser window size 
 * Fixed Bug in showing Selenium WebDriver version
 * Upgraded to selenium-java 2.50.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
 
