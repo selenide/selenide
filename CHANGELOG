@@ -1,6 +1,8 @@
 == Changelog
 === 3.2 (in progress)
+* #275 Added method for selecting option by index: `$("select").selectOption(3)`
 * Fixed Bug in showing Selenium WebDriver version
+
 === 3.1.3 (Released 22.01.2016)
 * Upgraded to selenium-java 2.49.1 (fixed timeout issue in Grid)
 * Added INFO about Selenide and Selenium WebDriver Versions in use
