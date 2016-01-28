@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -140,14 +141,18 @@ public class WebDriverFactory {
 
   protected void maximizeChromeBrowser(WebDriver.Window window) {
     // Chrome driver does not yet support maximizing. Let' apply black magic!
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-    org.openqa.selenium.Dimension screenResolution = new org.openqa.selenium.Dimension(
-        (int) toolkit.getScreenSize().getWidth(),
-        (int) toolkit.getScreenSize().getHeight());
+    org.openqa.selenium.Dimension screenResolution = getScreenSize();
 
     window.setSize(screenResolution);
     window.setPosition(new org.openqa.selenium.Point(0, 0));
+  }
+
+  Dimension getScreenSize() {
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+    return new Dimension(
+        (int) toolkit.getScreenSize().getWidth(),
+        (int) toolkit.getScreenSize().getHeight());
   }
 
   protected WebDriver createInstanceOf(String className, Proxy proxy) {

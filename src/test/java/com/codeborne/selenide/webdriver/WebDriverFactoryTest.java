@@ -7,11 +7,10 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
-import java.awt.*;
-
 import static org.mockito.Mockito.*;
 
 public class WebDriverFactoryTest {
+  WebDriverFactory factory = spy(new WebDriverFactory());
   WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
 
   @Before
@@ -23,6 +22,7 @@ public class WebDriverFactoryTest {
 
   @Test
   public void doesNotChangeWindowSizeByDefault() {
+    factory.adjustBrowserSize(webdriver);
     verifyNoMoreInteractions(webdriver);
   }
 
@@ -30,7 +30,7 @@ public class WebDriverFactoryTest {
   public void canConfigureBrowserWindowSize() {
     Configuration.browserSize = "1600x800";
 
-    new WebDriverFactory().adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(webdriver);
     
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 800));
   }
@@ -39,7 +39,7 @@ public class WebDriverFactoryTest {
   public void canMaximizeBrowserWindow() {
     Configuration.startMaximized = true;
     
-    new WebDriverFactory().adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(webdriver);
     
     verify(webdriver.manage().window()).maximize();
   }
@@ -48,12 +48,11 @@ public class WebDriverFactoryTest {
   public void canMaximizeBrowserWindow_chrome() {
     Configuration.startMaximized = true;
     Configuration.browser = "chrome";
+    doReturn(new Dimension(1600, 1200)).when(factory).getScreenSize();
 
-    new WebDriverFactory().adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(webdriver);
 
-    int expectedBrowserWidth = Toolkit.getDefaultToolkit().getScreenSize().width;  
-    int expectedBrowserHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-    verify(webdriver.manage().window()).setSize(new Dimension(expectedBrowserWidth, expectedBrowserHeight));
+    verify(webdriver.manage().window()).setSize(new Dimension(1600, 1200));
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));
   }
 }
