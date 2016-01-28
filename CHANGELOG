@@ -1,5 +1,5 @@
 == Changelog
-=== 3.2 (in progress)
+=== 3.2 (Released 29.01.2016)
 * #275 Added method for selecting option by index: `$("select").selectOption(3)`
 * #272 Add setting "selenide.browser-size" to configure browser window size 
 * Fixed Bug in showing Selenium WebDriver version
