@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.collections.ListSize.Operator;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.*;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -28,6 +29,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return shouldHave(CollectionCondition.size(expectedSize));
   }
 
+  public ElementsCollection shouldHaveSize(Operator operator, int expectedSize) {
+    return shouldHave(CollectionCondition.size(operator, expectedSize));
+  }
+
   /**
    * $$(".error").shouldBe(empty)
    */
@@ -42,7 +47,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
     return should("have", conditions);
   }
-  
+
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
@@ -176,7 +181,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public SelenideElement first() {
     return get(0);
   }
-  
+
   public SelenideElement last() {
     return get(size() - 1);
   }

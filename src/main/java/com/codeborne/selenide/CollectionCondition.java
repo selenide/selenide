@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ListSize;
+import com.codeborne.selenide.collections.ListSize.Operator;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.google.common.base.Predicate;
@@ -16,6 +17,10 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   public static CollectionCondition size(final int expectedSize) {
     return new ListSize(expectedSize);
+  }
+
+  public static CollectionCondition size(final Operator operator, final int expectedSize) {
+    return new ListSize(operator, expectedSize);
   }
 
   /**
