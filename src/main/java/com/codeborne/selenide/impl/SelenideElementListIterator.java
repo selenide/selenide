@@ -1,36 +1,33 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.WebElement;
 
 import java.util.ListIterator;
 
 public class SelenideElementListIterator extends SelenideElementIterator implements ListIterator<SelenideElement> {
-  private final ListIterator<WebElement> webElementListIterator;
-
-  public SelenideElementListIterator(ListIterator<WebElement> webElementListIterator) {
-    super(webElementListIterator);
-    this.webElementListIterator = webElementListIterator;
+  public SelenideElementListIterator(WebElementsCollection collection, int index) {
+    super(collection);
+    this.index = index;
   }
 
   @Override
   public boolean hasPrevious() {
-    return webElementListIterator.hasPrevious();
+    return index > 0;
   }
 
   @Override
   public SelenideElement previous() {
-    return WebElementWrapper.wrap(webElementListIterator.previous());
+    return CollectionElement.wrap(collection, --index);
   }
 
   @Override
   public int nextIndex() {
-    return webElementListIterator.nextIndex();
+    return index + 1;
   }
 
   @Override
   public int previousIndex() {
-    return webElementListIterator.previousIndex();
+    return index - 1;
   }
 
   @Override

@@ -188,12 +188,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public Iterator<SelenideElement> iterator() {
-    return new SelenideElementIterator(getActualElements().iterator());
+    return new SelenideElementIterator(collection);
   }
 
   @Override
   public ListIterator<SelenideElement> listIterator(int index) {
-    return new SelenideElementListIterator(getActualElements().listIterator(index));
+    return new SelenideElementListIterator(collection, index);
   }
 
   @Override
