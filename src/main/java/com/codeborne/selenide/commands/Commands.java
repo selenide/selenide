@@ -97,7 +97,7 @@ public class Commands {
     commands.put("getSelectedOption", new GetSelectedOption());
     commands.put("getSelectedText", new GetSelectedText());
     commands.put("getSelectedValue", new GetSelectedValue());
-    commands.put("selectOption", new SelectOptionByText());
+    commands.put("selectOption", new SelectOptionByTextOrIndex());
     commands.put("selectOptionByValue", new SelectOptionByValue());
   }
 

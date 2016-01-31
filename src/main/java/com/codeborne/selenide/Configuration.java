@@ -68,6 +68,14 @@ public class Configuration {
   public static String remote = System.getProperty("remote");
 
   /**
+   * The browser window size.
+   * Can be configured either programmatically or by system property "-Dselenide.browser-size=1024x768".
+   *
+   * Default value: none (browser size will not be set explicitly)
+   */
+  public static String browserSize = System.getProperty("selenide.browser-size");
+
+  /**
    * The browser window is maximized when started.
    * Can be configured either programmatically or by system property "-Dselenide.start-maximized=true".
    *

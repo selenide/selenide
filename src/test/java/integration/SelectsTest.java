@@ -8,7 +8,9 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class SelectsTest extends IntegrationTest {
   @Before
@@ -24,6 +26,23 @@ public class SelectsTest extends IntegrationTest {
     select.getSelectedOption().shouldBe(selected);
     assertEquals("myrambler.ru", select.getSelectedValue());
     assertEquals("@myrambler.ru", select.getSelectedText());
+  }
+
+  @Test
+  public void userCanSelectOptionByIndex() {
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+
+    select.selectOption(0);
+    assertThat(select.getSelectedText(), equalTo("@livemail.ru"));
+
+    select.selectOption(1);
+    assertThat(select.getSelectedText(), equalTo("@myrambler.ru"));
+
+    select.selectOption(2);
+    assertThat(select.getSelectedText(), equalTo("@rusmail.ru"));
+    
+    select.selectOption(3);
+    assertThat(select.getSelectedText(), equalTo("@мыло.ру"));
   }
 
   @Test(expected = ElementNotFound.class)

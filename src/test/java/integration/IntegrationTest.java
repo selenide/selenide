@@ -65,7 +65,7 @@ public abstract class IntegrationTest {
     Configuration.baseUrl = "https://127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
-    startMaximized = false;
+    browserSize = "1024x768";
   }
 
   @AfterClass

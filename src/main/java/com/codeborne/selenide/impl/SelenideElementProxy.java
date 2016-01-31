@@ -10,6 +10,7 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,13 +82,16 @@ class SelenideElementProxy implements InvocationHandler {
 
         return method.invoke(webElementSource.getWebElement(), args);
       }
-      catch (Throwable e) {
-        if (Cleanup.of.isInvalidSelectorError(e)) {
-          throw Cleanup.of.wrap(e);
-        }
-        lastError = e;
-        sleep(pollingInterval);
+      catch (InvocationTargetException e) {
+        lastError = e.getTargetException();
       }
+      catch (Throwable e) {
+        lastError = e;
+      }
+      if (Cleanup.of.isInvalidSelectorError(lastError)) {
+        throw Cleanup.of.wrap(lastError);
+      }
+      sleep(pollingInterval);
     }
     while (currentTimeMillis() - startTime <= timeoutMs);
 

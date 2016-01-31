@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import org.junit.Before;
@@ -8,13 +9,15 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
+import java.util.Iterator;
+import java.util.ListIterator;
+
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CollectionMethodsTest extends IntegrationTest {
   @Before
@@ -169,5 +172,42 @@ public class CollectionMethodsTest extends IntegrationTest {
     $$(".first_row").shouldHave(size(1));
     $$(".second_row").shouldHave(size(1));
     $$(".first_row,.second_row").shouldHave(size(2));
+  }
+
+  @Test
+  public void canIterateCollection_withIterator() {
+    Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
+    assertTrue(it.hasNext()); 
+    it.next().shouldHave(text("@livemail.ru"));
+
+    assertTrue(it.hasNext()); 
+    it.next().shouldHave(text("@myrambler.ru"));
+    
+    assertTrue(it.hasNext()); 
+    it.next().shouldHave(text("@rusmail.ru"));
+    
+    assertTrue(it.hasNext()); 
+    it.next().shouldHave(text("@мыло.ру"));
+  
+    assertFalse(it.hasNext());
+  }
+
+  @Test
+  public void canIterateCollection_withListIterator() {
+    ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
+    assertTrue(it.hasNext()); 
+    assertTrue(it.hasPrevious()); 
+    it.previous().shouldHave(text("@rusmail.ru"));
+    
+    assertTrue(it.hasPrevious()); 
+    it.previous().shouldHave(text("@myrambler.ru"));
+    
+    assertTrue(it.hasPrevious()); 
+    it.previous().shouldHave(text("@livemail.ru"));
+  
+    assertFalse(it.hasPrevious());
+    
+    it.next().shouldHave(text("@livemail.ru"));
+    assertTrue(it.hasPrevious());
   }
 }

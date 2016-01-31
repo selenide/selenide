@@ -410,13 +410,19 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File uploadFile(File... file);
 
   /**
-   * Select an option from dropdown list
+   * Select an option from dropdown list (by index)
+   * @param index 0..N (0 means first option)
+   */
+  void selectOption(int index);
+
+  /**
+   * Select an option from dropdown list (by text)
    * @param text visible text of option
    */
   void selectOption(String text);
 
   /**
-   * Select an option by value from dropdown list
+   * Select an option from dropdown list (by value)
    * @param value "value" attribute of option
    */
   void selectOptionByValue(String value);

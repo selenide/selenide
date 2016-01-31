@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.2-SNAPSHOT'
+version='3.3-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -35,7 +35,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.49.1') {
+  compile('org.seleniumhq.selenium:selenium-java:2.50.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
@@ -50,7 +50,7 @@ dependencies {
   }
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.49.1', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.50.0', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19'
   provided 'junit:junit:4.12'
@@ -58,7 +58,7 @@ dependencies {
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.13'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.14'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
   testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.7.0'
 
@@ -137,7 +137,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.48/IEDriverServer_Win32_2.48.0.zip'
+  src 'http://selenium-release.storage.googleapis.com/2.50/IEDriverServer_Win32_2.50.0.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true
@@ -167,13 +167,13 @@ import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_mac32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.21/chromedriver_mac32.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.21/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.20/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.21/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
   quiet false
