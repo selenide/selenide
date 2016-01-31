@@ -10,6 +10,7 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,6 +91,13 @@ class SelenideElementProxy implements InvocationHandler {
       }
     }
     while (currentTimeMillis() - startTime <= timeoutMs);
+
+    if (lastError instanceof InvocationTargetException) {
+      Throwable cause = lastError.getCause();
+      if (cause != null) {
+        lastError = cause;
+      }
+    }
 
     if (lastError instanceof UIAssertionError) {
       throw lastError;
