@@ -95,13 +95,6 @@ class SelenideElementProxy implements InvocationHandler {
     }
     while (currentTimeMillis() - startTime <= timeoutMs);
 
-    if (lastError instanceof InvocationTargetException) {
-      Throwable cause = lastError.getCause();
-      if (cause != null) {
-        lastError = cause;
-      }
-    }
-
     if (lastError instanceof UIAssertionError) {
       throw lastError;
     }
