@@ -1,11 +1,11 @@
 == Changelog
-=== 3.3 (Planned to 02.2016)
 * #277 Ajax support for collections:
   Collection methods (operator $$) wait if collection elements get loaded asynchronously
+* added collectionsPollingInterval (defaults to 0,2 s) and collectionsTimeout (defaults to 6 s) to configuration params
 
 === 3.2 (Released 29.01.2016)
 * #275 Added method for selecting option by index: `$("select").selectOption(3)`
-* #272 Add setting "selenide.browser-size" to configure browser window size 
+* #272 Add setting "selenide.browser-size" to configure browser window size
 * Fixed Bug in showing Selenium WebDriver version
 * Upgraded to selenium-java 2.50.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
 

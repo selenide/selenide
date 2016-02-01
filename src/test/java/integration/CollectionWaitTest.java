@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class CollectionWaitTest extends IntegrationTest {
     $$("#collection li").first().shouldBe(visible).shouldHave(text("Element #0"));
     $$("#collection li").last().shouldBe(visible).shouldHave(text("Element #49"));
   }
-  
+
   @Test
   public void reproduceStaleElementException_priorToSelenide33() {
     List<SelenideElement> elements = new ArrayList<>();
@@ -35,7 +35,17 @@ public class CollectionWaitTest extends IntegrationTest {
       elements.add(selenideElement);
     }
     executeJavaScript("window.location.reload();");
-    
+
     elements.get(0).shouldBe(visible).shouldHave(text("Elements will appear soon"));
+  }
+
+
+  @Test(expected = AssertionError.class)
+  public void failsIfWrongSize() {
+    $$("#collection li").shouldHave(CollectionCondition.size(4));
+  }
+
+  public void canDetermineSize() {
+    $$("#collection li").shouldHave(CollectionCondition.size(50));
   }
 }

@@ -42,12 +42,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
     return should("have", conditions);
   }
-  
+
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
       for (CollectionCondition condition : conditions) {
-        waitUntil(condition, timeout);
+        waitUntil(condition, collectionsTimeout);
       }
       SelenideLogger.commitStep(log, PASS);
       return this;
@@ -58,7 +58,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         case SOFT:
           return this;
         default:
-          throw UIAssertionError.wrap(error, timeout);
+          throw UIAssertionError.wrap(error, collectionsTimeout);
       }
     }
     catch (RuntimeException e) {
@@ -70,11 +70,20 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     lastError = null;
     final long startTime = System.currentTimeMillis();
+    boolean conditionMatched = false;
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          return;
+          if (conditionMatched) {
+            return;
+          } else {
+            conditionMatched = true;
+            sleep(collectionsPollingInterval);
+            continue;
+          }
+        } else {
+          conditionMatched = false;
         }
       } catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
@@ -176,7 +185,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public SelenideElement first() {
     return get(0);
   }
-  
+
   public SelenideElement last() {
     return get(size() - 1);
   }
