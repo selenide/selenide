@@ -38,7 +38,8 @@ public class Configuration {
    * Interval in milliseconds, when checking if a new collection elements appeared
    * Default value: 200 (milliseconds)
    */
-  public static long collectionsPollingInterval = Long.parseLong(System.getProperty("selenide.collectionsPollingInterval", "200"));
+  public static long collectionsPollingInterval = Long.parseLong(
+          System.getProperty("selenide.collectionsPollingInterval", "200"));
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
