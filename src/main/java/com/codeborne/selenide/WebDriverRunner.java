@@ -101,10 +101,15 @@ public class WebDriverRunner {
     return webdriverContainer.getWebDriver();
   }
 
+  /**
+   * Sets Selenium Proxy instance
+   *
+   * @param webProxy
+   */
   public static void setProxy(Proxy webProxy) {
     webdriverContainer.setProxy(webProxy);
   }
-  
+
   /**
    * Get the underlying instance of Selenium WebDriver, and assert that it's still alive.
    * @return new instance of WebDriver if the previous one has been closed meanwhile.
@@ -119,7 +124,7 @@ public class WebDriverRunner {
   public static void closeWebDriver() {
     webdriverContainer.closeWebDriver();
   }
-  
+
   /**
    * @return true iff instance of Selenium WebDriver is started in current thread
    */
@@ -148,6 +153,9 @@ public class WebDriverRunner {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
   }
 
+  /**
+   * Is Selenide configured to user Safari browser
+   */
   public static boolean isSafari() {
     return SAFARI.equalsIgnoreCase(browser);
   }

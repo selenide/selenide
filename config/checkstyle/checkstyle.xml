@@ -3,15 +3,31 @@
     "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
     "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
+
 <module name="Checker">
   <property name="charset" value="UTF-8"/>
-  
+  <property name="localeLanguage" value=""/>
+  <property name="localeCountry" value=""/>
+
+  <module name="SuppressionFilter">
+    <property name="file" value="config/checkstyle/suppressions.xml"/>
+  </module>
   <!--Add more checks from google style guide:-->
   <!--https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml-->
 
   <module name="TreeWalker">
     <!--<module name="JavadocVariable"/>-->
     <!--<module name="JavadocStyle"/>-->
+    <module name="JavadocMethod">
+      <property name="scope" value="public"/>
+      <property name="allowMissingReturnTag" value="true"/>
+      <property name="allowMissingParamTags" value="true"/>
+      <property name="allowMissingThrowsTags" value="true"/>
+      <property name="allowUndeclaredRTE" value="true"/>
+      <property name="allowThrowsTagsForSubclasses" value="false"/>
+      <property name="logLoadErrors" value="true"/>
+      <property name="suppressLoadErrors" value="false"/>
+    </module>
     <module name="PackageName">
       <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
     </module>

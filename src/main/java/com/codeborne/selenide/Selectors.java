@@ -57,6 +57,9 @@ public class Selectors {
     return byAttribute("title", title);
   }
 
+  /**
+   * Find input element with given value ("value" attribute)
+   */
   public static By byValue(String value) {
     return byAttribute("value", value);
   }

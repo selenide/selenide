@@ -1,12 +1,9 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.internal.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -432,7 +429,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @return WebElement for selected &lt;option&gt; element
    * @throws NoSuchElementException if no options are selected
    */
-  SelenideElement getSelectedOption();
+  SelenideElement getSelectedOption() throws NoSuchElementException;
 
   /**
    * Get value of selected option in select field

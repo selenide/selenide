@@ -13,6 +13,11 @@ public class Screenshots {
     return screenshots.takeScreenShot(className, methodName);
   }
 
+  /**
+   * Take screenshot and give it filename
+   *
+   * @return absolute path of the screenshot taken
+   */
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(fileName);
   }
@@ -25,6 +30,10 @@ public class Screenshots {
     return screenshots.takeScreenShotAsFile();
   }
 
+  /**
+   * Take screenshot of the WebElement/SelenideElement
+   * @return a temporary file, not guaranteed to be stored after tests complete.
+   */
   public static File takeScreenShot(WebElement element) {
     return screenshots.takeScreenshot(element);
   }

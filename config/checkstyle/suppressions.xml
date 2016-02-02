@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress checks="JavadocMethod" files=".*\/impl\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/commands\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/ex\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/logevents\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/junit\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/testng\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/collections\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/conditions\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/webdriver\/.*.java"/>
+    <suppress checks="JavadocMethod" files=".*\/Command.java"/>
+    <suppress checks="JavadocMethod" files=".*\/ElementsContainer.java"/>
+    <suppress checks="JavadocMethod" files=".*\/Selectors.java"/>
+    <suppress checks="JavadocMethod" files=".*\/Screenshots.java"/>
+    <suppress checks="JavadocMethod" files=".*\/Selectors.java"/>
+    <suppress checks="JavadocMethod" files=".*\/Condition.java"/>
+    <suppress checks="JavadocMethod" files=".*\/ElementsCollection.java"/>
+    <suppress checks="JavadocMethod" files=".*\/CollectionCondition.java"/>
+</suppressions>

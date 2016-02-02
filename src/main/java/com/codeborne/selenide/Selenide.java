@@ -185,7 +185,6 @@ public class Selenide {
    * Find the first element matching given CSS selector
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector) {
     return getElement(By.cssSelector(cssSelector));
@@ -195,7 +194,6 @@ public class Selenide {
    * Find the first element matching given CSS selector
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(By seleniumSelector) {
     return getElement(seleniumSelector);
@@ -217,7 +215,6 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
@@ -229,7 +226,6 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement $(String cssSelector, int index) {
     return ElementFinder.wrap(null, By.cssSelector(cssSelector), index);
@@ -245,7 +241,6 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
@@ -261,7 +256,6 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
@@ -278,7 +272,6 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @param index 0..N
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
@@ -356,7 +349,6 @@ public class Selenide {
    * Find the first element matching given criteria
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria) {
     return ElementFinder.wrap(null, criteria, 0);
@@ -367,7 +359,6 @@ public class Selenide {
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
-   * @throws NoSuchElementException if element was no found
    */
   public static SelenideElement getElement(By criteria, int index) {
     return ElementFinder.wrap(null, criteria, index);
@@ -382,6 +373,9 @@ public class Selenide {
     return $$(criteria);
   }
 
+  /**
+   * Executes JavaScript
+   */
   @SuppressWarnings("unchecked")
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
