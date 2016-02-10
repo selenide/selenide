@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.3-SNAPSHOT'
+version='3.3'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -35,7 +35,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.50.1') {
+  compile('org.seleniumhq.selenium:selenium-java:2.51.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
@@ -50,7 +50,7 @@ dependencies {
   }
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.50.1', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.51.0', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19'
   provided 'junit:junit:4.12'
@@ -58,9 +58,9 @@ dependencies {
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.14'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.15'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
-  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.7.0'
+  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.7.1'
 
   testCompile 'org.mockito:mockito-core:1.10.19'
   testCompile 'org.eclipse.jetty:jetty-server:9.2.13.v20150730'
@@ -109,7 +109,7 @@ checkstyleMain.finalizedBy checkstyleHtmlMain
 checkstyleTest.finalizedBy checkstyleHtmlTest
 
 jacoco {
-  toolVersion = "0.7.4.201502262128"
+  toolVersion = "0.7.5.201505241946"
 }
 
 jacocoTestReport {
@@ -137,7 +137,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.50/IEDriverServer_Win32_2.50.0.zip'
+  src 'http://selenium-release.storage.googleapis.com/2.51/IEDriverServer_Win32_2.51.0.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true
@@ -259,7 +259,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.10'
+  gradleVersion = '2.11'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }
