@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test::collection with delays</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript">
+      var totalTime = new Date();
+      var size = 0;
+      function growCollection() {
+        document.getElementById('collection').innerHTML += '<li>Element #' + size + '</li>';
+        size++;
+
+        if (size < 50) {
+          setTimeout(growCollection, 50);
+        }
+        else {
+          document.getElementById('status').innerHTML += "Generated in " + (new Date() - totalTime) / 1000.0 + " seconds";
+        }
+      }
+    </script>
+  </head>
+  <body onload="growCollection();">
+    <h1>Elements will appear soon</h1>
+    <ul id="collection">
+    </ul>
+    <h2 id="status"></h2>
+  </body>
+</html>

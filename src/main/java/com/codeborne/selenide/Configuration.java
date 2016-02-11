@@ -9,11 +9,37 @@ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 public class Configuration {
   private static final Logger LOG = Logger.getLogger(Configuration.class.getName());
 
+  /**
+   * Base url for open() function calls
+   * Default value: http://localhost:8080
+   */
   public static String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
 
+  /**
+   * Timeout in milliseconds for a collection to get completely loaded
+   * Conditions will be checked at this point at latest, even if they are still loading
+   * Default value: 6000 (milliseconds)
+   */
+  public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectonsTimeout", "6000"));
+
+  /**
+   * Timeout in milliseconds to fail the test, if conditions still not met
+   * Default value: 4000 (milliseconds)
+   */
   public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
+  /**
+   * Interval in milliseconds, when checking if a single element is appeared
+   * Default value: 100 (milliseconds)
+   */
   public static long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
+
+  /**
+   * Interval in milliseconds, when checking if a new collection elements appeared
+   * Default value: 200 (milliseconds)
+   */
+  public static long collectionsPollingInterval = Long.parseLong(
+          System.getProperty("selenide.collectionsPollingInterval", "200"));
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
@@ -157,24 +183,24 @@ public class Configuration {
       Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
-   * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function 
+   * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * (that is quite slow because it sends every character separately).
-   * 
+   *
    * Tested on Codeborne projects - works well, speed up ~30%.
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
-   * 
+   *
    * https://github.com/codeborne/selenide/issues/135
-   * 
+   *
    * Default value: false
    */
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
-  
+
   /**
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
    */
   public static SelectorMode selectorMode = CSS;
-  
+
   public enum SelectorMode {
     /**
      * Default Selenium behavior
@@ -184,15 +210,32 @@ public class Configuration {
     /**
      * Use Sizzle for CSS selectors.
      * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
-     * 
+     *
      * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
      */
     Sizzle
   }
 
 
+  /**
+   * Assertion modes available
+   */
+  public enum AssertionMode {
+    /**
+     * Default mode - tests are failing immediatetly
+     */
+    STRICT,
+    /**
+     * Test are failing only at the end of the methods.
+     */
+    SOFT
+  }
 
-  public enum AssertionMode { STRICT, SOFT }
-
+  /**
+   * Assertion mode - STRICT or SOFT Asserts
+   * Default value: STRICT
+   *
+   * @see AssertionMode
+   */
   public static AssertionMode assertionMode = STRICT;
 }

@@ -14,6 +14,9 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   public static final CollectionCondition empty = size(0);
 
+  /**
+   * Checks that collection has the given size
+   */
   public static CollectionCondition size(final int expectedSize) {
     return new ListSize(expectedSize);
   }

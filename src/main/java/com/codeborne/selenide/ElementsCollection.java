@@ -24,6 +24,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this.collection = collection;
   }
 
+  /**
+   * Checks is the collection is of given size
+   *
+   * @param expectedSize
+   * @return ElementsCollection
+   */
   public ElementsCollection shouldHaveSize(int expectedSize) {
     return shouldHave(CollectionCondition.size(expectedSize));
   }
@@ -42,12 +48,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
     return should("have", conditions);
   }
-  
+
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
       for (CollectionCondition condition : conditions) {
-        waitUntil(condition, timeout);
+        waitUntil(condition, collectionsTimeout);
       }
       SelenideLogger.commitStep(log, PASS);
       return this;
@@ -58,7 +64,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         case SOFT:
           return this;
         default:
-          throw UIAssertionError.wrap(error, timeout);
+          throw UIAssertionError.wrap(error, collectionsTimeout);
       }
     }
     catch (RuntimeException e) {
@@ -70,11 +76,20 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     lastError = null;
     final long startTime = System.currentTimeMillis();
+    boolean conditionMatched = false;
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          return;
+          if (conditionMatched) {
+            return;
+          } else {
+            conditionMatched = true;
+            sleep(collectionsPollingInterval);
+            continue;
+          }
+        } else {
+          conditionMatched = false;
         }
       } catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
@@ -90,26 +105,59 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     condition.fail(collection, actualElements, lastError, timeoutMs);
   }
 
+  /**
+   * Filters collection elements based on the given condition
+   * @param condition
+   * @return ElementsCollection
+   */
   public ElementsCollection filter(Condition condition) {
     return new ElementsCollection(new FilteringCollection(collection, condition));
   }
 
+  /**
+   * Filters collection elements based on the given condition
+   * @see #filter(Condition)
+   * @param condition
+   * @return ElementsCollection
+   */
   public ElementsCollection filterBy(Condition condition) {
     return filter(condition);
   }
 
+  /**
+   * Filters elements excluding those which met the given condition
+   * @param condition
+   * @return ElementsCollection
+   */
   public ElementsCollection exclude(Condition condition) {
     return new ElementsCollection(new FilteringCollection(collection, not(condition)));
   }
 
+  /**
+   * Filters elements excluding those which met the given condition
+   * @see #exclude(Condition)
+   * @param condition
+   * @return ElementsCollection
+   */
   public ElementsCollection excludeWith(Condition condition) {
     return exclude(condition);
   }
 
+  /**
+   * Finde the first element which met the given condition
+   * @param condition
+   * @return SelenideElement
+   */
   public SelenideElement find(Condition condition) {
     return filter(condition).get(0);
   }
 
+  /**
+   * Finde the first element which met the given condition
+   * @see #find(Condition)
+   * @param condition
+   * @return SelenideElement
+   */
   public SelenideElement findBy(Condition condition) {
     return find(condition);
   }
@@ -121,6 +169,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return actualElements;
   }
 
+  /**
+   * Gets all the texts in elements collection
+   * @return array of texts
+   */
   public String[] getTexts() {
     return getTexts(getActualElements());
   }
@@ -147,6 +199,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
+  /**
+   * Outputs string presentation of the element's collection
+   * @param elements
+   * @return String
+   */
   public static String elementsToString(Collection<WebElement> elements) {
     if (elements == null) {
       return "[not loaded yet...]";
@@ -173,10 +230,18 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return CollectionElement.wrap(collection, index);
   }
 
+  /**
+   * return the first element of the collection
+   * @return
+   */
   public SelenideElement first() {
     return get(0);
   }
-  
+
+  /**
+   * return the last element of the collection
+   * @return
+   */
   public SelenideElement last() {
     return get(size() - 1);
   }
@@ -188,12 +253,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public Iterator<SelenideElement> iterator() {
-    return new SelenideElementIterator(getActualElements().iterator());
+    return new SelenideElementIterator(collection);
   }
 
   @Override
   public ListIterator<SelenideElement> listIterator(int index) {
-    return new SelenideElementListIterator(getActualElements().listIterator(index));
+    return new SelenideElementListIterator(collection, index);
   }
 
   @Override

@@ -342,6 +342,12 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
+  /**
+   * If element has one specific cssClass
+   *
+   * @param element
+   * @param cssClass
+   */
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
     return classes != null && contains(classes.split(" "), cssClass);
@@ -527,10 +533,22 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
+  /**
+   * Used to form human-readable condition expression
+   * Example element.should(be(visible),have(text("abc"))
+   * @param delegate next condition to wrapp
+   * @return Condition
+   */
   public static Condition be(Condition delegate) {
     return wrap("be", delegate);
   }
 
+  /**
+   * Used to form human-readable condition expression
+   * Example element.should(be(visible),have(text("abc"))
+   * @param delegate next condition to wrapp
+   * @return Condition
+   */
   public static Condition have(Condition delegate) {
     return wrap("have", delegate);
   }
@@ -617,6 +635,9 @@ public abstract class Condition implements Predicate<WebElement> {
     return null;
   }
 
+  /**
+   * Should be used for explaining the reason of condition
+   */
   public Condition because(String message) {
     return new ExplainedCondition(this, message);
   }

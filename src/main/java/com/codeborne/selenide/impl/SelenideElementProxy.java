@@ -82,22 +82,18 @@ class SelenideElementProxy implements InvocationHandler {
 
         return method.invoke(webElementSource.getWebElement(), args);
       }
-      catch (Throwable e) {
-        if (Cleanup.of.isInvalidSelectorError(e)) {
-          throw Cleanup.of.wrap(e);
-        }
-        lastError = e;
-        sleep(pollingInterval);
+      catch (InvocationTargetException e) {
+        lastError = e.getTargetException();
       }
+      catch (Throwable e) {
+        lastError = e;
+      }
+      if (Cleanup.of.isInvalidSelectorError(lastError)) {
+        throw Cleanup.of.wrap(lastError);
+      }
+      sleep(pollingInterval);
     }
     while (currentTimeMillis() - startTime <= timeoutMs);
-
-    if (lastError instanceof InvocationTargetException) {
-      Throwable cause = lastError.getCause();
-      if (cause != null) {
-        lastError = cause;
-      }
-    }
 
     if (lastError instanceof UIAssertionError) {
       throw lastError;
