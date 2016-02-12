@@ -1,5 +1,8 @@
 == Changelog
 
+=== 3.4 (Planned to 2x.02.2016)
+* Upgraded to selenium-java 2.52.0
+
 === 3.3 (Released 10.02.2016)
 * #277 Ajax support for collections:
   Collection methods (operator $$) wait if collection elements get loaded asynchronously
