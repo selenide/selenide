@@ -1,0 +1,20 @@
+---
+layout: page
+title: 404 
+header : 
+group: 
+cssClass: docs
+header-text: Page not found<br/><br/><a href="/faq.html">FAQ</a> | <a href="/blog.html">Blog</a>
+---
+{% include JB/setup %}
+
+<script language="JavaScript">
+  function endsWith(text, suffix) {
+    return text.indexOf(suffix, text.length - suffix.length) !== -1;
+  }
+
+  if (endsWith(window.location.href, '/')) {
+    window.location = window.location.href.substr(0, window.location.href.length - 1);
+  }
+</script> 
+
