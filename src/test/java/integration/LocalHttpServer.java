@@ -36,7 +36,7 @@ public class LocalHttpServer {
 
   private final Server server;
 
-  public LocalHttpServer(int port) throws IOException {
+  LocalHttpServer(int port) throws IOException {
     server = new Server();
 
     configureHttps(port);
@@ -53,9 +53,6 @@ public class LocalHttpServer {
   // Configure Jetty to listen both http and https port
   // as described here: http://java.dzone.com/articles/adding-ssl-support-embedded
   private void configureHttps(int port) {
-//    ServerConnector connector = new ServerConnector(server);
-//    connector.setPort(httpPort);
-
     HttpConfiguration https = new HttpConfiguration();
     https.addCustomizer(new SecureRequestCustomizer());
 
@@ -74,7 +71,7 @@ public class LocalHttpServer {
     server.setConnectors(new Connector[] {sslConnector});
   }
 
-  public LocalHttpServer start() throws Exception {
+  LocalHttpServer start() throws Exception {
     server.start();
     return this;
   }
@@ -204,6 +201,11 @@ public class LocalHttpServer {
     }
   }
 
+  /**
+   * Method may be used to locally run test server used by Selenide own tests
+   * 
+   * @param args not used
+   */
   public static void main(String[] args) throws Exception {
     LocalHttpServer server = new LocalHttpServer(8080).start();
     Thread.currentThread().join();

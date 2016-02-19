@@ -4,6 +4,8 @@
 
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
+[![Join the chat at https://gitter.im/codeborne/selenide](https://badges.gitter.im/codeborne/selenide.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## What is Selenide?
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
 It defines concise fluent API, natural language assertions and does some magic for ajax-bases applications to let you focus entirely on the business logic of your tests.

@@ -22,4 +22,5 @@
     <suppress checks="JavadocMethod" files=".*\/Condition.java"/>
     <suppress checks="JavadocMethod" files=".*\/ElementsCollection.java"/>
     <suppress checks="JavadocMethod" files=".*\/CollectionCondition.java"/>
+    <suppress checks="JavadocMethod" files="src/test/java/.*"/>
 </suppressions>

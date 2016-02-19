@@ -407,6 +407,10 @@ public class Selenide {
     return null;
   }
 
+  /**
+   * Mock confirm dialog that return given value
+   * @param confirmReturnValue true = OK, false = CANCEL
+   */
   public static void onConfirmReturn(boolean confirmReturnValue) {
     if (doDismissModalDialogs()) {
       executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ';');
@@ -475,6 +479,15 @@ public class Selenide {
     }
   }
 
+  /**
+   * Switch to window/tab/frame/parentFrame/innerFrame/alert.
+   * Allows switching to window by title, index, name etc.
+   * 
+   * Similar to org.openqa.selenium.WebDriver#switchTo(), but all methods wait until frame/window/alert
+   * appears if it's not visible yet (like other Selenide methods).
+   * 
+   * @return SelenideTargetLocator
+   */
   public static SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(getWebDriver().switchTo());
   }
@@ -508,6 +521,16 @@ public class Selenide {
     return pageObject;
   }
 
+  /**
+   * Create a org.openqa.selenium.support.ui.FluentWait instance with Selenide timeout/polling.
+   * 
+   * Sample usage: 
+   * {@code
+   *   Wait().until(invisibilityOfElementLocated(By.id("magic-id")));
+   * }
+   * 
+   * @return instance of org.openqa.selenium.support.ui.FluentWait
+   */
   public static FluentWait<WebDriver> Wait() {
     return new FluentWait<>(getWebDriver())
         .withTimeout(timeout, MILLISECONDS)
