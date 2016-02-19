@@ -20,7 +20,7 @@ public class Configuration {
    * Conditions will be checked at this point at latest, even if they are still loading
    * Default value: 6000 (milliseconds)
    */
-  public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectonsTimeout", "6000"));
+  public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectionsTimeout", "6000"));
 
   /**
    * Timeout in milliseconds to fail the test, if conditions still not met
