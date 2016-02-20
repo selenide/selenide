@@ -15,10 +15,9 @@ header-text: Page not found<br/><br/><a href="/faq.html">FAQ</a> | <a href="/blo
   
   function showPostContent(content) {
     var post = $(content);
-    var postHeader = post.find('.wrapper-color-content');
-    var postBody = post.find('.blog_post_content');
-    $('.wrapper-color-content').replaceWith(postHeader);
-    $('.wrapper-content section').prepend(postBody);
+    $('title').text(post.find('.wrapper-color-content h4').text());
+    $('.wrapper-color-content').replaceWith(post.find('.wrapper-color-content'));
+    $('.wrapper-content section').prepend(post.find('.blog_post_content'));
   }
 
   if (endsWith(window.location.pathname, '/')) {
