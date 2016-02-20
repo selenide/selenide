@@ -1,4 +1,4 @@
-<div class="short blog_post">
+<div class="short blog_post_header">
   <div class="wrapper-color-content">
     <h4>{{ page.title }}</h4>
     {{ page.header-text }}
@@ -7,7 +7,9 @@
 
 <div class="wrapper-content blog_post">
   <section>
-    {{ content }}
+    <div class="blog_post_content">
+      {{ content }}
+    </div>
     {% include JB/comments %}
   </section>
 </div>
