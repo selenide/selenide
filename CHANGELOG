@@ -1,7 +1,7 @@
 == Changelog
 
 === 3.4 (Planned to 2x.02.2016)
-* Upgraded to selenium-java 2.52.0
+* Upgraded to selenium-java 2.52.0, changelog: http://selenium2.ru/news/170-selenium-252.html
 * Typo in property name selenide.collectionsTimeout fixed
 
 === 3.3 (Released 10.02.2016)
