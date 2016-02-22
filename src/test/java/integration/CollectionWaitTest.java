@@ -45,6 +45,7 @@ public class CollectionWaitTest extends IntegrationTest {
     $$("#collection li").shouldHave(CollectionCondition.size(4));
   }
 
+  @Test
   public void canDetermineSize() {
     $$("#collection li").shouldHave(CollectionCondition.size(50));
   }
