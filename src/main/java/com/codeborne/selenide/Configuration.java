@@ -86,6 +86,14 @@ public class Configuration {
   public static String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
 
   /**
+   * Which browser version to use (for Internet Explorer).
+   * Can be configured either programmatically or by system property "-Dselenide.browser.version=8" or "-Dbrowser.version=8".
+   * <p/>
+   * Default value: none
+   */
+  public static String browserVersion = System.getProperty("selenide.browser.version", System.getProperty("browser.version"));
+
+  /**
    * URL of remote web driver (in case of using Selenium Grid).
    * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/hub".
    *
