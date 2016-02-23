@@ -70,8 +70,9 @@ public class WebDriverFactory {
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
     }
-    if(browserVersion != null && !browserVersion.isEmpty())
+    if (browserVersion != null && !browserVersion.isEmpty()) {
       browserCapabilities.setVersion(browserVersion);
+    }
     return browserCapabilities;
   }
 
