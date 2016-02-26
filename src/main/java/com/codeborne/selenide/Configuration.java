@@ -118,6 +118,15 @@ public class Configuration {
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
+   * Value of "chrome.switches" parameter (in case of using Chrome driver).
+   * Can be configured either programmatically or by system property, 
+   * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
+   * 
+   * Default value: none
+   */
+  public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+  
+  /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
    * This solution may be helpful for testing in Internet Explorer.

@@ -80,6 +80,9 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
+    if (chromeSwitches != null) {
+      options.addArguments("chrome.switches", chromeSwitches);
+    }
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     return new ChromeDriver(capabilities);
   }

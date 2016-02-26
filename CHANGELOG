@@ -1,6 +1,7 @@
 == Changelog
 
 === 3.4 (Planned to 2x.02.2016)
+* #297 Can set chrome switches with system property `-Dselenide.chrome.switches=--disable-popup-blocking`
 * #296 Can set browser version with system property `-Dselenide.browser.version=8`
 * Upgraded to selenium-java 2.52.0, changelog: http://selenium2.ru/news/170-selenium-252.html
 * Typo in property name selenide.collectionsTimeout fixed
