@@ -28,6 +28,7 @@ public class WebDriverFactory {
 
   public WebDriver createWebDriver(Proxy proxy) {
     log.config("Configuration.browser=" + browser);
+    log.config("Configuration.browser.version=" + browserVersion);
     log.config("Configuration.remote=" + remote);
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
@@ -69,6 +70,9 @@ public class WebDriverFactory {
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
     }
+    if (browserVersion != null && !browserVersion.isEmpty()) {
+      browserCapabilities.setVersion(browserVersion);
+    }
     return browserCapabilities;
   }
 
@@ -76,6 +80,9 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
+    if (chromeSwitches != null) {
+      options.addArguments("chrome.switches", chromeSwitches);
+    }
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     return new ChromeDriver(capabilities);
   }

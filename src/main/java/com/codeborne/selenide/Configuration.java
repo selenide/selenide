@@ -20,7 +20,7 @@ public class Configuration {
    * Conditions will be checked at this point at latest, even if they are still loading
    * Default value: 6000 (milliseconds)
    */
-  public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectonsTimeout", "6000"));
+  public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectionsTimeout", "6000"));
 
   /**
    * Timeout in milliseconds to fail the test, if conditions still not met
@@ -86,6 +86,14 @@ public class Configuration {
   public static String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
 
   /**
+   * Which browser version to use (for Internet Explorer).
+   * Can be configured either programmatically or by system property "-Dselenide.browser.version=8" or "-Dbrowser.version=8".
+   * <p/>
+   * Default value: none
+   */
+  public static String browserVersion = System.getProperty("selenide.browser.version", System.getProperty("browser.version"));
+
+  /**
    * URL of remote web driver (in case of using Selenium Grid).
    * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/hub".
    *
@@ -109,6 +117,15 @@ public class Configuration {
    */
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
+  /**
+   * Value of "chrome.switches" parameter (in case of using Chrome driver).
+   * Can be configured either programmatically or by system property, 
+   * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
+   * 
+   * Default value: none
+   */
+  public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+  
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
