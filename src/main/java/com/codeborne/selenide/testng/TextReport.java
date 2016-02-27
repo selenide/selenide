@@ -9,7 +9,7 @@ import org.testng.reporters.ExitCodeListener;
  * @since Selenide 2.25
  */
 public class TextReport extends ExitCodeListener {
-  protected SimpleReport report = new SimpleReport();
+  protected static SimpleReport report = new SimpleReport();//Changed to static
 
   @Override
   public void onTestStart(ITestResult result) {
@@ -29,5 +29,9 @@ public class TextReport extends ExitCodeListener {
   @Override
   public void onTestSuccess(ITestResult result) {
     report.finish(result.getName());
+  }
+
+  public static String getReportLog(){//added method
+    return report.getReportLog();
   }
 }

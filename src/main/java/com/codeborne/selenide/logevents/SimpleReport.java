@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class SimpleReport {
   private static final Logger log = Logger.getLogger(SimpleReport.class.getName());
-
+  private String reportLog = "";//added variable
   private EventsCollector logEventListener;
 
   public void start() {
@@ -35,6 +35,12 @@ public class SimpleReport {
     }
     sb.append(delimiter);
     log.info(sb.toString());
+    reportLog = sb.toString();//assign variable
+  }
+
+  public String getReportLog(){//added method
+
+    return reportLog;
   }
 
   private String line(int count) {
