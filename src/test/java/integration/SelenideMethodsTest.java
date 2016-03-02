@@ -65,6 +65,12 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanUseCustomPollingInterval() {
+    $("#theHiddenElement").waitUntil(disappears, 1000, 10);
+    $(".non-existing-element").waitWhile(present, 1000, 20);
+  }
+
+  @Test
   public void userCanCheckIfElementIsReadonly() {
     $(By.name("username")).shouldBe(readonly);
     $(By.name("password")).shouldNotBe(readonly);
