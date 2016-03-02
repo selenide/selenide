@@ -3,6 +3,7 @@
 === 3.4 (Released 03.03.2016)
 * #297 Can set chrome switches with system property `-Dselenide.chrome.switches=--disable-popup-blocking`
 * #296 Can set browser version with system property `-Dselenide.browser.version=8`
+* #287 add pollingIntervalMilliseconds parameter to #waitUntil #waitWhile
 * Typo in property name selenide.collectionsTimeout fixed
 * Upgraded to selenium-java 2.52.0, changelog: http://selenium2.ru/news/170-selenium-252.html
 * Upgraded to htmlunit 2.20, changelog: http://htmlunit.sourceforge.net/changes-report.html#a2.20
