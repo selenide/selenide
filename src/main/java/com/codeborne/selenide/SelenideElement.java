@@ -306,7 +306,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @param timeoutMilliseconds timeout in milliseconds.
    * @param pollingIntervalMilliseconds  interval in milliseconds, when checking condition
    */
-  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds,long pollingIntervalMilliseconds);
+  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
 
   /**
    * Displays WebElement in human-readable format.

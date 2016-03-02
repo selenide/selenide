@@ -55,7 +55,7 @@ class SelenideElementProxy implements InvocationHandler {
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
     try {
-      Object result = dispatchAndRetry(timeoutMs,pollingIntervalMs, proxy, method, args);
+      Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
       return result;
     }
@@ -72,7 +72,8 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
-  protected Object dispatchAndRetry(long timeoutMs,long pollingIntervalMs, Object proxy, Method method, Object[] args) throws Throwable {
+  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, 
+                                    Object proxy, Method method, Object[] args) throws Throwable {
     final long startTime = currentTimeMillis();
     Throwable lastError;
     do {
@@ -109,17 +110,13 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   private long getTimeoutMs(Method method, Object[] args) {
-    if (isWaitCommand(method)) {
-      return args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1];
-    }
-    else return timeout;
+    return isWaitCommand(method) ? 
+        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] : 
+        timeout;
   }
 
   private long getPollingIntervalMs(Method method, Object[] args) {
-    if (isWaitCommand(method)) {
-      return args.length == 3 ? (Long) args[args.length - 1] : pollingInterval;
-    }
-    else return pollingInterval;
+    return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : pollingInterval;
   }
 
   private boolean isWaitCommand(Method method) {
