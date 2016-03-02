@@ -52,16 +52,16 @@ uploadArchives {
                        name 'Andrei Solntsev'
                    }
                    developer {
-                       id 'angryziber'
-                       name 'Anton Keks'
-                   }
-                   developer {
-                       id 'maksim-sakki'
-                       name 'Maksim Säkki'
-                   }
-                   developer {
                        id 'vadger'
                        name 'Vadim Gerasimov'
+                   }
+                   developer {
+                       id 'vinogradoff'
+                       name 'Aleksei Vinogradov'
+                   }
+                   developer {
+                       id 'angryziber'
+                       name 'Anton Keks'
                    }
                }
            }
