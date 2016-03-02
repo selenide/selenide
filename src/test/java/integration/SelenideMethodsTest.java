@@ -150,9 +150,9 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Dropdown list", $("h2").innerHtml());
 
     if (isHtmlUnit()) {
-      assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
-      assertEquals("username: <span class=name>bob smith</span> last login: <span class=last-login>01.01.1970</span>",
-          $("#status").innerHtml().trim().toLowerCase());
+      assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
+      assertEquals("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>",
+          $("#status").innerHtml().trim());
     }
     else {
       assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
