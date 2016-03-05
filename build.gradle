@@ -3,11 +3,11 @@ apply plugin: 'maven'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='1.7.2'
+version='1.7.3-SNAPSHOT'
 
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-sourceCompatibility = 1.5
-targetCompatibility = 1.5
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 defaultTasks 'clean', 'libs', 'test', 'install'
 
@@ -16,10 +16,10 @@ repositories {
 }
 
 dependencies {
-  compile 'org.seleniumhq.selenium:selenium-java:2.25.0'
-  compile 'junit:junit:4.10'
+  compile 'org.seleniumhq.selenium:selenium-java:2.52.0'
+  compile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-all:1.3'
-  testCompile 'org.mockito:mockito-all:1.9.5-rc1'
+  testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 task libs(type: Sync) {

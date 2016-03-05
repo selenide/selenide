@@ -1,0 +1,10 @@
+== Changelog
+
+=== 1.7.3 (Released 05.03.2016)
+* upgraded to selenium-java 2.52.0
+
+=== 1.7.2 (Released 03.11.2014)
+* fixed closing webdriver with quite() instead of close()
+
+=== 1.7.1 (Released 31.10.2014)
+* Do not add "?timestamp" suffix to URL. It may break some applications.
