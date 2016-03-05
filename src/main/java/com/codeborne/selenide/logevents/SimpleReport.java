@@ -1,5 +1,6 @@
 package com.codeborne.selenide.logevents;
 
+import com.codeborne.selenide.testng.HistoryReportData;
 import com.google.common.base.Joiner;
 
 import java.util.Collections;
@@ -10,7 +11,9 @@ import java.util.logging.Logger;
  */
 public class SimpleReport {
   private static final Logger log = Logger.getLogger(SimpleReport.class.getName());
-  private String reportLog = "";//added variable
+  private String reportLog = "";
+  private String testName = "";
+  private String methodName = "";
   private EventsCollector logEventListener;
 
   public void start() {
@@ -35,15 +38,22 @@ public class SimpleReport {
     }
     sb.append(delimiter);
     log.info(sb.toString());
-    reportLog = sb.toString();//assign variable
-  }
-
-  public String getReportLog(){//added method
-
-    return reportLog;
+    reportLog = sb.toString();
+    setReportData();
   }
 
   private String line(int count) {
     return Joiner.on("").join(Collections.nCopies(count, "-"));
+  }
+  public void setTestName(String testName){
+    this.testName = testName;
+  }
+
+  public void setMethodName(String methodName){
+    this.methodName = methodName;
+  }
+
+  public void setReportData(){//Set report data in hashmap class
+    HistoryReportData.setDataHistory(testName+" "+methodName,reportLog);
   }
 }
