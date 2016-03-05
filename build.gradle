@@ -5,7 +5,9 @@ group='com.codeborne'
 archivesBaseName = 'selenide'
 version='1.7.3-SNAPSHOT'
 
-compileJava.options.debugOptions.debugLevel = "source,lines,vars"
+[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
+[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
+[compileJava, compileTestJava]*.options.collect {options -> options.debugOptions.debugLevel = "source,lines,vars"}
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -29,9 +31,15 @@ task libs(type: Sync) {
   into "$buildDir/lib"
 }
 
+compileJava.dependsOn libs
+
 test {
+  include 'com/codeborne/selenide/**/*'
   exclude 'com/codeborne/selenide/integrationtests/**'
-  testLogging.showStandardStreams = true
+}
+
+javadoc {
+  failOnError=false
 }
 
 task sourcesJar(type: Jar, dependsOn:classes) {
@@ -49,6 +57,39 @@ artifacts {
   archives sourcesJar
   archives javadocJar
 }
+
+task chrome(type: Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task htmlunit(type: Test) {
+  systemProperties['selenide.browser'] = 'htmlunit'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task phantomjs(type: Test) {
+  systemProperties['selenide.browser'] = 'phantomjs'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task firefox(type: Test) {
+  systemProperties['selenide.browser'] = 'firefox'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+tasks.withType(Test).all { testTask ->
+  testTask.systemProperties['file.encoding'] = 'UTF-8'
+  testTask.testLogging.showStandardStreams = true
+  testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
+  testTask.outputs.upToDateWhen { false }
+}
+
+task allTests(dependsOn: ['clean', 'test', 'chrome', 'firefox', 'htmlunit', 'phantomjs']) {}
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.11'
