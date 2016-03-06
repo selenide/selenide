@@ -16,6 +16,17 @@ header-text:
 <div class="wrapper-content">
   <section>
     
+    <a href="http://www.xsolve.pl/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/xsolve-logo.jpg" style="width: 150px;" alt="XSolve"/>
+    </a>
+    <br/>
+    
+    <div class="text-right">
+      Agile Software House focused on PHP/Symfony/Java/Mobile (iOS-Android-Windows)
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="https://www.sportradar.com/" target="_blank">
       <img src="{{ BASE_PATH }}/images/sportradar-logo.jpeg" style="width: 150px;" alt="Sportradar"/>
     </a>
