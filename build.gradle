@@ -259,7 +259,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.11'
+  gradleVersion = '2.12'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }
