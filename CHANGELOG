@@ -1,5 +1,8 @@
 == Changelog
 
+=== 3.5 (Planned to 2x.03.2016)
+* Upgraded to selenium-java 2.53.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
+
 === 3.4 (Released 03.03.2016)
 * #297 Can set chrome switches with system property `-Dselenide.chrome.switches=--disable-popup-blocking`
 * #296 Can set browser version with system property `-Dselenide.browser.version=8`
