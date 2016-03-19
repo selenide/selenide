@@ -15,12 +15,12 @@ public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
 
-  Describe(WebElement element) {
+  private Describe(WebElement element) {
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
 
-  Describe appendAttributes() {
+  private Describe appendAttributes() {
     return supportsJavascriptAttributes() ? appendAllAttributes() : appendPredefinedAttributes();
   }
 
@@ -63,7 +63,7 @@ public class Describe {
     return (getWebDriver() instanceof JavascriptExecutor) && !isHtmlUnit();
   }
 
-  Describe attr(String attributeName) {
+  private Describe attr(String attributeName) {
     String attributeValue = element.getAttribute(attributeName);
     return attr(attributeName, attributeValue);
   }
@@ -75,7 +75,7 @@ public class Describe {
     return this;
   }
 
-  public String serialize() {
+  private String serialize() {
     String text = element.getText();
     sb.append('>').append(text == null ? "" : text).append("</").append(element.getTagName()).append('>');
     return sb.toString();
@@ -86,7 +86,7 @@ public class Describe {
     return sb.toString();
   }
 
-  public String flush() {
+  private String flush() {
     return sb.append('>').toString();
   }
 
@@ -108,7 +108,7 @@ public class Describe {
     }
   }
 
-  public static String shortly(WebElement element) {
+  static String shortly(WebElement element) {
     try {
       if (element == null) {
         return "null";
@@ -149,7 +149,7 @@ public class Describe {
     return this;
   }
 
-  public static String shortly(By selector) {
+  static String shortly(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
           .replaceFirst("By\\.selector:\\s*(.*)", "$1")
