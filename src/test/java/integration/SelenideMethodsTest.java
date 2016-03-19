@@ -113,6 +113,13 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
+    $("#age").clear();
+    $("#age").sendKeys("21");
+    assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
+  }
+
+  @Test
   public void userCanFindElementByAttribute() {
     assertEquals("select", $(byAttribute("name", "domain")).getTagName());
     assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());

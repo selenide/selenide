@@ -40,9 +40,7 @@ public class Describe {
     if (map != null) {
       sortedByName.putAll(map);
     }
-    if (!sortedByName.containsKey("value")) {
-      sortedByName.put("value", element.getAttribute("value"));
-    }
+    sortedByName.put("value", element.getAttribute("value"));
     if (!sortedByName.containsKey("type")) {
       sortedByName.put("type", element.getAttribute("type"));
     }
