@@ -125,6 +125,22 @@ public class Configuration {
    * Default value: none
    */
   public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+
+  /**
+   * Should webdriver wait until page is completely loaded.
+   * Possible values: "none", "normal" and "eager".
+   * 
+   *  - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
+   *  - `eager`: return after DOMContentLoaded fires;
+   *  - `none`: return immediately (it's default in Selenide).
+   *  
+   *  It seems that `none` is the best option for Selenide because all its commands wait until
+   *  corresponding condition becomes true.
+   * 
+   * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy:
+   * @since 3.5
+   */
+  public static String pageLoadStrategy = System.getProperty("selenide.page-load-strategy", "none");
   
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
