@@ -1,6 +1,9 @@
 == Changelog
 
 === 3.5 (Planned to 2x.03.2016)
+* #274 added advanced checks for collection size: <, <=, >, >=, <>
+* #308 set page load strategy to "none" by default
+* #306 method $.toString() always includes latest value of "value" attribute
 * Upgraded to selenium-java 2.53.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
 
 === 3.4 (Released 03.03.2016)
