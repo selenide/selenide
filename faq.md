@@ -21,7 +21,32 @@ See answer [here](/documentation/selenide-vs-selenium.html)
 
 Yes! You can use Page Objects with Selenide.
 
-Moreover, your page objects get concise and readable with Selenide. See [more details here](/documentation/page-objects.html).
+Moreover, your page objects get **concise and readable** with Selenide. See [more details here](/documentation/page-objects.html).
+
+
+## Settings
+> Where can I find list of all Selenide settings?
+
+A detailed description of all Selenide settings and default values can be found in [javadoc](http://selenide.org/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Configuration.html).
+
+> How can I change Selenide settings?
+
+Selenide has very reasonable default settings. 
+They should be convenient for most "normal" projects. 
+
+If you still want to run tests with another settings, you can do it either using System property:
+
+```
+-Dselenide.timeout=6000
+```
+
+or programmatically, right from your tests:
+
+```java
+public void setUp() {
+  Configuration.timeout = 6000;
+}
+```
 
 ## Browsers
 >Can I run Selenide tests with Internet Explorer? Headless browser?
