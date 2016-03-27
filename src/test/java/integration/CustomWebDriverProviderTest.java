@@ -11,13 +11,17 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 public class CustomWebDriverProviderTest extends IntegrationTest {
   private String originalWebdriver;
   
   @Before
   public void setUp() {
+    assumeTrue(isFirefox());
+    
     close();
     originalWebdriver = Configuration.browser;
   }
