@@ -64,7 +64,9 @@ public class Navigator {
   protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
     try {
       webdriver.executeScript(
-          "window._selenide_jsErrors = [];\n" +
+          "if (!window._selenide_jsErrors) {\n" +
+              "  window._selenide_jsErrors = [];\n" +
+              "}\n" +
               "if (!window.onerror) {\n" +
               "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
               "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
