@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.impl.Describe.describe;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverFactory {
@@ -142,7 +143,7 @@ public class WebDriverFactory {
         }
       }
       catch (Exception cannotMaximize) {
-        log.warning("Cannot maximize " + browser + ": " + cannotMaximize);
+        log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
     }
     return driver;

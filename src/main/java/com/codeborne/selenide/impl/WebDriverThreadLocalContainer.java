@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
@@ -160,7 +161,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     @Override
     public void run() {
       try {
-        log.info("Trying to close the browser " + webdriver + " ...");
+        log.info("Trying to close the browser " + describe(webdriver) + " ...");
         webdriver.quit();
       }
       catch (UnreachableBrowserException e) {
@@ -212,7 +213,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   protected WebDriver createDriver() {
     WebDriver webdriver = factory.createWebDriver(proxy);
 
-    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
+    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + describe(webdriver) + " -> " + webdriver);
 
     return markForAutoClose(addListeners(webdriver));
   }

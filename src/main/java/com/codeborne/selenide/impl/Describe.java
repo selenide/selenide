@@ -35,7 +35,7 @@ public class Describe {
             "   }" +
             "}" +
             "return s;", element);
-
+    
     SortedMap<String, String> sortedByName = new TreeMap<>();
     if (map != null) {
       sortedByName.putAll(map);
@@ -160,5 +160,9 @@ public class Describe {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
+  }
+  
+  public static String describe(WebDriver webDriver) {
+    return webDriver.getClass().getSimpleName();
   }
 }
