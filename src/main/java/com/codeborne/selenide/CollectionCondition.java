@@ -12,12 +12,12 @@ import java.util.List;
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
   public abstract void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs);
 
-  public static final CollectionCondition empty = size(0);
+  public static CollectionCondition empty = size(0);
 
   /**
    * Checks that collection has the given size
    */
-  public static CollectionCondition size(final int expectedSize) {
+  public static CollectionCondition size(int expectedSize) {
     return new ListSize(expectedSize);
   }
 
@@ -26,7 +26,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  public static CollectionCondition texts(final String... expectedTexts) {
+  public static CollectionCondition texts(String... expectedTexts) {
     return new Texts(expectedTexts);
   }
 
@@ -35,7 +35,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
-  public static CollectionCondition exactTexts(final String... expectedTexts) {
+  public static CollectionCondition exactTexts(String... expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
 }
