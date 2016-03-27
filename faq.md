@@ -8,13 +8,6 @@ header-text: Frequently Asked Questions
 ---
 {% include JB/setup %}
 
-## Page Objects
-> Can I use Page Objects with Selenide?
-
-Yes! You can use Page Objects with Selenide.
-
-Moreover, your page objects get concise and readable with Selenide. See [more details here](/documentation/page-objects.html).
-
 ## Motivation
 
 > Why Selenium webdriver is not enough?
@@ -23,6 +16,12 @@ Moreover, your page objects get concise and readable with Selenide. See [more de
 
 See answer [here](/documentation/selenide-vs-selenium.html)
 
+## Page Objects
+> Can I use Page Objects with Selenide?
+
+Yes! You can use Page Objects with Selenide.
+
+Moreover, your page objects get concise and readable with Selenide. See [more details here](/documentation/page-objects.html).
 
 ## Browsers
 >Can I run Selenide tests with Internet Explorer? Headless browser?
