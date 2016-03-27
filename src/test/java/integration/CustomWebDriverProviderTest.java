@@ -20,10 +20,10 @@ public class CustomWebDriverProviderTest extends IntegrationTest {
   
   @Before
   public void setUp() {
-    assumeTrue(isFirefox());
-    
-    close();
     originalWebdriver = Configuration.browser;
+
+    assumeTrue(isFirefox());
+    close();
   }
 
   @After
