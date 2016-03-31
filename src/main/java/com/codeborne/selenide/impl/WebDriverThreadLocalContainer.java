@@ -213,7 +213,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   protected WebDriver createDriver() {
     WebDriver webdriver = factory.createWebDriver(proxy);
 
-    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + describe(webdriver) + " -> " + webdriver);
+    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + 
+        describe(webdriver) + " -> " + webdriver);
 
     return markForAutoClose(addListeners(webdriver));
   }
