@@ -1,6 +1,9 @@
 == Changelog
 
-=== 3.5 (Planned to 2x.03.2016)
+=== 3.6 (Planned to 12.04.2016)
+* (Planned) use BrowserMobProxy to download files
+
+=== 3.5 (Released 31.03.2016)
 * #274 added advanced checks for collection size: <, <=, >, >=, <>
 * #308 set page load strategy to "none" by default
 * #306 method $.toString() always includes latest value of "value" attribute
