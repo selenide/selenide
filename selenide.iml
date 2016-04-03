@@ -21,8 +21,6 @@
         <SOURCES>
           <root url="file://$MODULE_DIR$/build/lib" />
           <root url="jar://$USER_HOME$/.ideaLibSources/junit-4.12-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.ideaLibSources/selenium-support-2.48.2-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.ideaLibSources/selenium-api-2.49.1-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" type="SOURCES" />

@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.4-SNAPSHOT'
+version='3.6-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -35,8 +35,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.52.0') {
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-htmlunit-driver'
+  compile('org.seleniumhq.selenium:selenium-java:2.53.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -50,21 +49,21 @@ dependencies {
   }
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version: '2.52.0', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19'
+  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.20', transitive: false
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.20', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.20'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
   // For BrowserMob Proxy:
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-proxy', version: '2.0.0', transitive: false
-  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.16'
+  testRuntime group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.19'
   testRuntime group: 'net.sf.uadetector', name: 'uadetector-resources', version: '2014.10'
-  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.7.1-1'
+  testRuntime 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
 
   testCompile 'org.mockito:mockito-core:1.10.19'
-  testCompile 'org.eclipse.jetty:jetty-server:9.2.13.v20150730'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.13.v20150730'
+  testCompile 'org.eclipse.jetty:jetty-server:9.2.15.v20160210'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.15.v20160210'
   testCompile 'commons-fileupload:commons-fileupload:1.3.1'
 }
 
@@ -259,7 +258,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.11'
+  gradleVersion = '2.12'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }

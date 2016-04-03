@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.*;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.impl.Describe.describe;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
 public class WebDriverFactory {
@@ -28,6 +30,7 @@ public class WebDriverFactory {
 
   public WebDriver createWebDriver(Proxy proxy) {
     log.config("Configuration.browser=" + browser);
+    log.config("Configuration.browser.version=" + browserVersion);
     log.config("Configuration.remote=" + remote);
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
@@ -69,6 +72,10 @@ public class WebDriverFactory {
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
     }
+    if (browserVersion != null && !browserVersion.isEmpty()) {
+      browserCapabilities.setVersion(browserVersion);
+    }
+    browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
     return browserCapabilities;
   }
 
@@ -76,6 +83,9 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
+    if (chromeSwitches != null) {
+      options.addArguments("chrome.switches", chromeSwitches);
+    }
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     return new ChromeDriver(capabilities);
   }
@@ -133,7 +143,7 @@ public class WebDriverFactory {
         }
       }
       catch (Exception cannotMaximize) {
-        log.warning("Cannot maximize " + browser + ": " + cannotMaximize);
+        log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
     }
     return driver;

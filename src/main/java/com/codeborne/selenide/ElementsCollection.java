@@ -98,11 +98,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(pollingInterval);
+      sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    condition.fail(collection, actualElements, lastError, timeoutMs);
+    if (!conditionMatched) {
+      condition.fail(collection, actualElements, lastError, timeoutMs);
+    }
   }
 
   /**

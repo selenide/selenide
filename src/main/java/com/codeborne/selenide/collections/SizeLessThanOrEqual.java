@@ -7,25 +7,25 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class ListSize extends CollectionCondition {
+public class SizeLessThanOrEqual extends CollectionCondition {
   protected final int expectedSize;
 
-  public ListSize(int expectedSize) {
+  public SizeLessThanOrEqual(int expectedSize) {
     this.expectedSize = expectedSize;
   }
 
   @Override
   public boolean apply(List<WebElement> elements) {
-    return elements.size() == expectedSize;
+    return elements.size() <= expectedSize;
   }
 
   @Override
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
-    throw new ListSizeMismatch("=", expectedSize, collection, elements, lastError, timeoutMs);
+    throw new ListSizeMismatch("<=", expectedSize, collection, elements, lastError, timeoutMs);
   }
 
   @Override
   public String toString() {
-    return String.format("size(%s)", expectedSize);
+    return String.format("size <= %s", expectedSize);
   }
 }

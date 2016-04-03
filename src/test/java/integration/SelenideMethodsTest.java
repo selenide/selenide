@@ -65,6 +65,12 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanUseCustomPollingInterval() {
+    $("#theHiddenElement").waitUntil(disappears, 1000, 10);
+    $(".non-existing-element").waitWhile(present, 1000, 20);
+  }
+
+  @Test
   public void userCanCheckIfElementIsReadonly() {
     $(By.name("username")).shouldBe(readonly);
     $(By.name("password")).shouldNotBe(readonly);
@@ -107,6 +113,18 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
+    $("#age").clear();
+    $("#age").sendKeys("21");
+    if (isHtmlUnit()) {
+      assertEquals("<input id=\"age\" name=\"age\" value=\"21\"></input>", $("#age").toString());
+    }
+    else {
+      assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
+    }
+  }
+
+  @Test
   public void userCanFindElementByAttribute() {
     assertEquals("select", $(byAttribute("name", "domain")).getTagName());
     assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
@@ -144,9 +162,9 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Dropdown list", $("h2").innerHtml());
 
     if (isHtmlUnit()) {
-      assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
-      assertEquals("username: <span class=name>bob smith</span> last login: <span class=last-login>01.01.1970</span>",
-          $("#status").innerHtml().trim().toLowerCase());
+      assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
+      assertEquals("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>",
+          $("#status").innerHtml().trim());
     }
     else {
       assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());

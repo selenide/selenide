@@ -266,7 +266,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * <p>Wait until given element meets given conditions.</p>
    *
    * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
+   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
    *
    * @param condition e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
@@ -274,15 +274,39 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
 
   /**
+   * <p>Wait until given element meets given conditions.</p>
+   *
+   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
+   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
+   *
+   * @param condition e.g. enabled, visible, text() and so on
+   * @param timeoutMilliseconds timeout in milliseconds.
+   * @param pollingIntervalMilliseconds  interval in milliseconds, when checking condition
+   */
+  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
+
+  /**
    * <p>Wait until given element does not meet given conditions.</p>
    *
    * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitFor methods only if you need another timeout.</p>
+   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
    *
    * @param condition e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
    */
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
+
+  /**
+   * <p>Wait until given element does not meet given conditions.</p>
+   *
+   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
+   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
+   *
+   * @param condition e.g. enabled, visible, text() and so on
+   * @param timeoutMilliseconds timeout in milliseconds.
+   * @param pollingIntervalMilliseconds  interval in milliseconds, when checking condition
+   */
+  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
 
   /**
    * Displays WebElement in human-readable format.
