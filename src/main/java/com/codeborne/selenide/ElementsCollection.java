@@ -102,7 +102,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    if (!conditionMatched) {
+    if (!condition.apply(actualElements)) {
       condition.fail(collection, actualElements, lastError, timeoutMs);
     }
   }
