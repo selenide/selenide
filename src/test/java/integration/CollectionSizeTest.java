@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,5 +84,19 @@ public class CollectionSizeTest extends IntegrationTest {
     thrown.expect(ListSizeMismatch.class);
     thrown.expectMessage("expected: <> 4, actual: 4");
     $$("#radioButtons input").shouldHave(sizeNotEqual(4));
+  }
+
+  @Test
+  public void sizeCheck_forSpecialCornerCase_timeoutHappensAfterFirstCheck() {
+    Configuration.collectionsTimeout = 1000;
+    Configuration.collectionsPollingInterval = 1100;
+
+    try {
+      $$("#radioButtons input").shouldHave(size(4));
+    }
+    finally {
+      Configuration.collectionsTimeout = 6000;
+      Configuration.collectionsPollingInterval = 200;
+    }
   }
 }
