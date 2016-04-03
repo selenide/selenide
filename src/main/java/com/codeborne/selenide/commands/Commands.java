@@ -39,6 +39,7 @@ public class Commands {
     commands.put("toWebElement", new ToWebElement());
     commands.put("getWrappedElement", new GetWrappedElement());
     commands.put("screenshot", new TakeScreenshot());
+    commands.put("screenshotAsImage", new TakeScreenshotAsImage());
   }
 
   private void addActionsCommands() {

@@ -16,20 +16,29 @@ import static integration.SelenideMethodsTest.assertBetween;
 import static org.junit.Assume.assumeFalse;
 
 public class ScreenshotTest extends IntegrationTest {
-  @Before
-  public void openTestPage() {
-    assumeFalse(isHtmlUnit());
-    openFile("page_with_selects_without_jquery.html");
-  }
+	@Before
+	public void openTestPage() {
+		assumeFalse(isHtmlUnit());
+		openFile("page_with_selects_without_jquery.html");
+	}
 
-  @Test
-  public void canTakeScreenshotOfElement() throws IOException {
-    SelenideElement select = $(By.xpath("//select[@name='domain']"));
-    File screenshot = select.screenshot();
-    String info = "(Screenshot of element: " + screenshot.getAbsolutePath() + ") ";
-    
-    BufferedImage img = ImageIO.read(screenshot);
-    assertBetween("Screenshot doesn't fit width " + info, img.getWidth(), 50, 200);
-    assertBetween("Screenshot doesn't fit height " + info, img.getHeight(), 10, 30);
-  }
+	@Test
+	public void canTakeScreenshotOfElement() throws IOException {
+		SelenideElement select = $(By.xpath("//select[@name='domain']"));
+		File screenshot = select.screenshot();
+		String info = "(Screenshot of element: " + screenshot.getAbsolutePath() + ") ";
+
+		BufferedImage img = ImageIO.read(screenshot);
+		assertBetween("Screenshot doesn't fit width " + info, img.getWidth(), 50, 200);
+		assertBetween("Screenshot doesn't fit height " + info, img.getHeight(), 10, 30);
+	}
+
+	@Test
+	public void canTakeScreenshotOfElementAsImage() throws IOException {
+		SelenideElement select = $(By.xpath("//select[@name='domain']"));
+		BufferedImage img = select.screenshotAsImage();
+
+		assertBetween("Screenshot doesn't fit width", img.getWidth(), 50, 200);
+		assertBetween("Screenshot doesn't fit height", img.getHeight(), 10, 30);
+	}
 }

@@ -1,9 +1,13 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.*;
 
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -536,4 +540,10 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @return file with screenshot (*.png)
    */
   File screenshot();
+
+  /**
+   * Take screenshot of this element
+   * @return buffered image with screenshot
+   */
+  BufferedImage screenshotAsImage();
 }
