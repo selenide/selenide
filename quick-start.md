@@ -6,7 +6,7 @@ group: navigation
 cssClass: howto
 header-text: >
   <h4>It's extremely easy to start using Selenide. Definitely not a rocket science.</h4>
-  Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/3.5/selenide-3.5.jar">selenide.jar</a> to your project and you are done.<br/>
+  Just add <a href="http://search.maven.org/remotecontent?filepath=com/codeborne/selenide/3.5.1/selenide-3.5.1.jar">selenide.jar</a> to your project and you are done.<br/>
   Here is the quick start guide to get you started.
 
 ---
