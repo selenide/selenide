@@ -189,9 +189,11 @@ task downloadAndUnzipChromeDriver(dependsOn: downloadChromeDriverZip, type: Copy
 }
 
 task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
-  println 'Use Chrome driver: ' + buildDir + '/chromedriver'
+  String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
+  File chromeDriver = new File(buildDir, 'chromedriver' + extension);
+  println "Use Chrome driver: $chromeDriver"
   systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['webdriver.chrome.driver'] = new File(buildDir, 'chromedriver')
+  systemProperties['webdriver.chrome.driver'] = chromeDriver
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
