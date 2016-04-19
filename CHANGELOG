@@ -3,6 +3,9 @@
 === 3.6 (Planned to 12.04.2016)
 * (Planned) use BrowserMobProxy to download files
 
+=== 3.5.1 (Released 04.04.2016)
+* #309 method $$.shouldHave(size()) should not fail when timeout happens after the 1st check
+
 === 3.5 (Released 31.03.2016)
 * #274 added advanced checks for collection size: <, <=, >, >=, <>
 * #308 set page load strategy to "none" by default
