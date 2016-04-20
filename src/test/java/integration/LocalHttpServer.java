@@ -36,11 +36,11 @@ public class LocalHttpServer {
 
   private final Server server;
 
-  LocalHttpServer(int port) throws IOException {
+  public LocalHttpServer(int port) throws IOException {
     server = new Server();
 
     configureHttps(port);
-    
+
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
     server.setHandler(context);
@@ -57,7 +57,7 @@ public class LocalHttpServer {
     https.addCustomizer(new SecureRequestCustomizer());
 
     SslContextFactory sslContextFactory = new SslContextFactory();
-    
+
     // created with "keytool -genkey -alias test.selenide.org -keyalg RSA -keystore test-selenide.jks -keysize 2048"
     sslContextFactory.setKeyStorePath(getClass().getResource("/test-selenide.jks").toExternalForm());
     sslContextFactory.setKeyStorePassword("selenide.rulez");
@@ -71,7 +71,7 @@ public class LocalHttpServer {
     server.setConnectors(new Connector[] {sslConnector});
   }
 
-  LocalHttpServer start() throws Exception {
+  public LocalHttpServer start() throws Exception {
     server.start();
     return this;
   }
@@ -95,7 +95,7 @@ public class LocalHttpServer {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       long start = System.nanoTime();
-      
+
       byte[] fileContent = readFileContent(request);
       if (fileContent == null) {
         response.setStatus(SC_NOT_FOUND);
@@ -110,7 +110,7 @@ public class LocalHttpServer {
       printResponse(response, fileContent);
       logRequest(request, "ok", start);
     }
-    
+
     private void generateSessionId(HttpServletResponse http) {
       String sessionId = "" + System.currentTimeMillis();
       Cookie cookie = new Cookie("session_id", sessionId);
@@ -145,12 +145,12 @@ public class LocalHttpServer {
   }
 
   public final List<FileItem> uploadedFiles = new ArrayList<>(2);
-  
+
   private class FileUploadHandler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       long start = System.nanoTime();
-      
+
       DiskFileItemFactory factory = new DiskFileItemFactory();
       factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
       ServletFileUpload upload = new ServletFileUpload(factory);
@@ -161,7 +161,7 @@ public class LocalHttpServer {
             uploadedFiles.add(item);
           }
         }
-        
+
         String message = "<h3>Uploaded " + uploadedFiles.size() + " files</h3>" + items;
         printResponse(response, message.getBytes("UTF-8"));
         logRequest(request, message, start);
@@ -203,7 +203,7 @@ public class LocalHttpServer {
 
   /**
    * Method may be used to locally run test server used by Selenide own tests
-   * 
+   *
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
