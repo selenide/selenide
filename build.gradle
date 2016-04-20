@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.5.1'
+version='3.6-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -50,8 +50,8 @@ dependencies {
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.20', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.20', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.20'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.21', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.21'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
@@ -189,9 +189,11 @@ task downloadAndUnzipChromeDriver(dependsOn: downloadChromeDriverZip, type: Copy
 }
 
 task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
-  println 'Use Chrome driver: ' + buildDir + '/chromedriver'
+  String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
+  File chromeDriver = new File(buildDir, 'chromedriver' + extension);
+  println "Use Chrome driver: $chromeDriver"
   systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['webdriver.chrome.driver'] = new File(buildDir, 'chromedriver')
+  systemProperties['webdriver.chrome.driver'] = chromeDriver
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }

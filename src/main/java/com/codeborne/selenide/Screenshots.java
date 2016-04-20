@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebElement;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
@@ -36,6 +37,14 @@ public class Screenshots {
    */
   public static File takeScreenShot(WebElement element) {
     return screenshots.takeScreenshot(element);
+  }
+
+  /**
+   * Take screenshot of the WebElement/SelenideElement
+   * @return buffered image
+   */
+  public static BufferedImage takeScreenShotAsImage(WebElement element) {
+    return screenshots.takeScreenshotAsImage(element);
   }
 
   public static void startContext(String className, String methodName) {

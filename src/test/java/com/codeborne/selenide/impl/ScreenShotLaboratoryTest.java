@@ -50,9 +50,9 @@ public class ScreenShotLaboratoryTest {
 
     List<File> contextScreenshots = screenshots.finishContext();
     assertEquals(3, contextScreenshots.size());
-    assertEquals("ui/MyTest/test_some_method/12356789.0", contextScreenshots.get(0).toString());
-    assertEquals("ui/MyTest/test_some_method/12356789.1", contextScreenshots.get(1).toString());
-    assertEquals("ui/MyTest/test_some_method/12356789.2", contextScreenshots.get(2).toString());
+    assertEquals(new File("ui/MyTest/test_some_method/12356789.0"), contextScreenshots.get(0));
+    assertEquals(new File("ui/MyTest/test_some_method/12356789.1"), contextScreenshots.get(1));
+    assertEquals(new File("ui/MyTest/test_some_method/12356789.2"), contextScreenshots.get(2));
   }
 
   @Test
@@ -69,9 +69,9 @@ public class ScreenShotLaboratoryTest {
 
     List<File> allScreenshots = screenshots.getScreenshots();
     assertEquals(5, allScreenshots.size());
-    assertEquals("ui/MyTest/test_some_method/12356789.0", allScreenshots.get(0).toString());
-    assertEquals("ui/MyTest/test_some_method/12356789.1", allScreenshots.get(1).toString());
-    assertEquals("ui/YourTest/test_another_method/12356789.2", allScreenshots.get(2).toString());
+    assertEquals(new File("ui/MyTest/test_some_method/12356789.0"), allScreenshots.get(0));
+    assertEquals(new File("ui/MyTest/test_some_method/12356789.1"), allScreenshots.get(1));
+    assertEquals(new File("ui/YourTest/test_another_method/12356789.2"), allScreenshots.get(2));
     assertEquals("12356789.3", allScreenshots.get(3).toString());
     assertEquals("12356789.4", allScreenshots.get(4).toString());
   }

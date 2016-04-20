@@ -118,6 +118,34 @@ public class ScreenShotLaboratory {
     }
   }
 
+  public BufferedImage takeScreenshotAsImage(WebElement element) {
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
+      return null;
+    }
+
+    WebDriver webdriver = getWebDriver();
+    if (!(webdriver instanceof TakesScreenshot)) {
+      log.warning("Cannot take screenshot because browser does not support screenshots");
+      return null;
+    }
+
+    byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
+
+    Point p = element.getLocation();
+    Dimension elementSize = element.getSize();
+
+    try {
+      BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
+      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementSize.getWidth(), elementSize.getHeight());
+      return dest;
+    }
+    catch (IOException e) {
+      printOnce("takeScreenshotImage", e);
+      return null;
+    }
+  }
+
   public File takeScreenShotAsFile() {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
