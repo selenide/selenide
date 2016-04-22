@@ -43,7 +43,7 @@ dependencies {
     exclude group: 'commons-codec', module: 'commons-codec'
     exclude group: 'cglib', module: 'cglib-nodep'
   }
-  runtime('com.codeborne:phantomjsdriver:1.2.1') {
+  runtime('com.codeborne:phantomjsdriver:1.3.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'  
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'  
   }
