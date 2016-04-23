@@ -15,7 +15,20 @@ header-text:
 
 <div class="wrapper-content">
   <section>
+
+    <a href="http://qa3s.com/company/about" target="_blank">
+      <img src="{{ BASE_PATH }}/images/qa3s-logo.png" style="width: 150px;" alt="QA Service"/>
+    </a>
+    <br/>
     
+    <div class="text-right">
+      Softengi <a href="http://qa3s.com/company/about" target="_blank">QA Service</a> is a part of Intecracy Group which unites IT companies in USA, EU, India, Indonesia, Ukraine,
+      Moldova, Azerbaijan, Georgia, Kazakhstan and Belarus. Our team has implemented hundreds of large and small
+      projects for American and European customers.
+    </div>
+    
+    <hr class="divider"/>
+        
     <a href="http://www.xsolve.pl/" target="_blank">
       <img src="{{ BASE_PATH }}/images/xsolve-logo.jpg" style="width: 150px;" alt="XSolve"/>
     </a>
