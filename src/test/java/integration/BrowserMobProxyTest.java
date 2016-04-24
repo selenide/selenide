@@ -6,10 +6,11 @@ import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.ProxyServer;
 import net.lightbody.bmp.proxy.http.BrowserMobHttpRequest;
+import net.lightbody.bmp.proxy.http.BrowserMobHttpResponse;
 import net.lightbody.bmp.proxy.http.RequestInterceptor;
+import net.lightbody.bmp.proxy.http.ResponseInterceptor;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.UnknownHostException;
@@ -19,13 +20,13 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
-@Ignore // TODO Un-ignore test and upgrade browsermobproxy to version that uses latest jetty
 public class BrowserMobProxyTest extends IntegrationTest {
   private static final Logger log = Logger.getLogger(BrowserMobProxyTest.class.getName());
   
@@ -67,9 +68,18 @@ public class BrowserMobProxyTest extends IntegrationTest {
       public void process(BrowserMobHttpRequest httpRequest, Har har) {
         String requestUri = httpRequest.getProxyRequest().getURI().toString();
         log.info("request: " + requestUri);
-        if (!requestUri.endsWith("/favicon.ico") && !"http://ocsp.digicert.com/".equals(requestUri)) {
+        if (!requestUri.endsWith("/favicon.ico") && 
+            !requestUri.endsWith("/start_page.html") && 
+            !"http://ocsp.digicert.com/".equals(requestUri)) {
           requestCounter++;
         }
+      }
+    });
+    proxyServer.addResponseInterceptor(new ResponseInterceptor() {
+      @Override
+      public void process(BrowserMobHttpResponse response, Har har) {
+        log.info(">  " + response.getEntry().getRequest().getUrl());
+        log.info("< " + response.getRawResponse().getStatusLine().toString());
       }
     });
 
@@ -77,7 +87,7 @@ public class BrowserMobProxyTest extends IntegrationTest {
 
     WebDriverRunner.setProxy(proxyServer.seleniumProxy());
     
-    openFile("file_upload_form.html");
+    open("/file_upload_form.html");
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
