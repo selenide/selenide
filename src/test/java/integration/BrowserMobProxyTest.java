@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
@@ -93,6 +94,8 @@ public class BrowserMobProxyTest extends IntegrationTest {
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
+    $("h3").shouldHave(text("Uploaded 2 files"));
+
     assertEquals(2, server.uploadedFiles.size());
 
     assertEquals(2, requestCounter);
