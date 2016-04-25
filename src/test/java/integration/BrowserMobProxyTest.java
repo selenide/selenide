@@ -70,7 +70,9 @@ public class BrowserMobProxyTest extends IntegrationTest {
         log.info("request: " + requestUri);
         if (!requestUri.endsWith("/favicon.ico") && 
             !requestUri.endsWith("/start_page.html") && 
-            !"http://ocsp.digicert.com/".equals(requestUri)) {
+            !"http://ocsp.digicert.com/".equals(requestUri) &&
+            !requestUri.contains("cdn.mozilla.net") &&
+            !requestUri.contains("services.mozilla.net")) {
           requestCounter++;
         }
       }
