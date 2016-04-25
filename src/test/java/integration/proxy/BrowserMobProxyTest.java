@@ -1,7 +1,8 @@
-package integration;
+package integration.proxy;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import integration.IntegrationTest;
 import net.lightbody.bmp.core.har.Har;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.ProxyServer;
