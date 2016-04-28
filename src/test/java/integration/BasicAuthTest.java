@@ -17,8 +17,7 @@ import org.testng.annotations.BeforeTest;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Condition.name;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -98,7 +97,7 @@ public class BasicAuthTest extends IntegrationTest  {
                 "",
                 "user",
                 "passwd");
-        assertThat(isAlertPresent(), is(false));
+        assertThat(source(), containsString("WebDriver"));
     }
 
     public boolean isAlertPresent() {

@@ -57,13 +57,12 @@ public class Navigator {
       if (!domain.isEmpty()) domain += "%5C";
       if (!login.isEmpty()) login += ":";
       if (!password.isEmpty()) password += "@";
-      int idx1 = url.indexOf("//") + 2;
-      url = url.substring(0, idx1 - 2)
-              + "//"
+      int idx1 = url.indexOf("://") + 3;
+      url = (idx1 < 3 ? "" : (url.substring(0, idx1 - 3) + "://"))
               + domain
               + login
               + password
-              + url.substring(idx1);
+              + (idx1 < 3 ? url : url.substring(idx1));
     }
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
