@@ -211,6 +211,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
+    String waitValue = System.getProperty("webdriver.timeouts.implicitlyWait");
+    if (waitValue == null || !waitValue.equalsIgnoreCase("0")) {
+      log.warning("Recommended to set webdriver.timeouts.implicitlyWait=0 because Selenide provides its own mechanism for waiting");
+    }
+
     WebDriver webdriver = factory.createWebDriver(proxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " + 
