@@ -66,7 +66,6 @@ public class BasicAuthTest extends IntegrationTest  {
                 "",
                 "user",
                 "passwd");
-        System.out.println(getWebDriver().getPageSource());
         assertThat(source(), containsString("\"authenticated\": true,"));
     }
 
