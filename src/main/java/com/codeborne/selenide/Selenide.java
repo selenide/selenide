@@ -141,7 +141,8 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, String domain, String login, String password,
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, 
+                                                       String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl, domain, login, password);
     return page(pageObjectClassClass);

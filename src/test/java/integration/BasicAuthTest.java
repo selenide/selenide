@@ -10,31 +10,18 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.TimeoutException;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
-/**
- * Created by Fiatlux on 28.04.2016.
- */
 public class BasicAuthTest extends IntegrationTest  {
 
-    private String browserOriginalValue = "firefox";
+    private String browserOriginalValue;
 
     @Before
     public void setUp() {
