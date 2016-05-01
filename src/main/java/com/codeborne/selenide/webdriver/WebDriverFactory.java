@@ -6,6 +6,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.*;
@@ -91,7 +92,17 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
+    FirefoxProfile myProfile = new FirefoxProfile();
+    myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
+    myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
+    myProfile.setPreference("network.negotiate-auth.delegation-uris", "http://,https://");
+    myProfile.setPreference("network.negotiate-auth.trusted-uris", "http://,https://");
+    myProfile.setPreference("network.http.phishy-userpass-length", 255);
+    myProfile.setPreference("security.csp.enable", false);
+
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+    capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+
     return new FirefoxDriver(capabilities);
   }
 

@@ -35,6 +35,7 @@ public class Selenide {
 
   public static Navigator navigator = new Navigator();
 
+
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
@@ -48,15 +49,41 @@ public class Selenide {
    *   In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
-    navigator.open(relativeOrAbsoluteUrl);
-    mockModalDialogs();
+    open(relativeOrAbsoluteUrl, "", "" , "");
   }
 
   /**
    * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
-    navigator.open(absoluteUrl);
+    open(absoluteUrl, "", "" , "");
+  }
+
+  /**
+   * The main starting point in your tests.
+   * Open a browser window with given URL and credentials for basic authentication
+   *
+   * If browser window was already opened before, it will be reused.
+   *
+   * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
+   *
+   * @param relativeOrAbsoluteUrl
+   * @param domain
+   * @param login
+   * @param password
+   *   If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
+   *   In this case, it's prepended by baseUrl
+   */
+  public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
+    navigator.open(relativeOrAbsoluteUrl, domain, login, password);
+    mockModalDialogs();
+  }
+
+  /**
+   * @see Selenide#open(URL, String, String, String)
+   */
+  public static void open(URL absoluteUrl, String domain, String login, String password) {
+    navigator.open(absoluteUrl, domain, login, password);
     mockModalDialogs();
   }
 
@@ -98,8 +125,7 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    open(relativeOrAbsoluteUrl);
-    return page(pageObjectClassClass);
+    return open(relativeOrAbsoluteUrl, "", "", "", pageObjectClassClass);
   }
 
   /**
@@ -108,7 +134,26 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    open(absoluteUrl);
+    return open(absoluteUrl, "", "", "", pageObjectClassClass);
+  }
+
+  /**
+   * Open a web page using Basic Auth credentials and create PageObject for it.
+   * @return PageObject of given class
+   */
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, String domain, String login, String password,
+                                                       Class<PageObjectClass> pageObjectClassClass) {
+    open(relativeOrAbsoluteUrl, domain, login, password);
+    return page(pageObjectClassClass);
+  }
+
+  /**
+   * Open a web page using Basic Auth credentials and create PageObject for it.
+   * @return PageObject of given class
+   */
+  public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
+                                                       Class<PageObjectClass> pageObjectClassClass) {
+    open(absoluteUrl, domain, login, password);
     return page(pageObjectClassClass);
   }
 
@@ -579,10 +624,10 @@ public class Selenide {
         result.add(error.toString());
       }
       return result;
-    } catch (WebDriverException cannotExecuteJs) {
+    } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
       log.severe(cannotExecuteJs.toString());
       return emptyList();
-    }
+    } 
   }
 
   /**

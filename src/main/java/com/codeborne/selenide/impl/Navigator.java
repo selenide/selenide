@@ -1,10 +1,12 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.security.UserAndPassword;
 
 import java.net.URL;
 import java.util.logging.Logger;
@@ -17,16 +19,24 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    if (relativeOrAbsoluteUrl.startsWith("http:") ||
-        relativeOrAbsoluteUrl.startsWith("https:") ||
-        isLocalFile(relativeOrAbsoluteUrl)) {
-      navigateToAbsoluteUrl(relativeOrAbsoluteUrl);
-    } else {
-      navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl));
-    }
+    open(relativeOrAbsoluteUrl, "", "" ,"");
   }
 
   public void open(URL url) {
+    open(url, "", "" ,"");
+  }
+
+  public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
+    if (relativeOrAbsoluteUrl.startsWith("http:") ||
+            relativeOrAbsoluteUrl.startsWith("https:") ||
+            isLocalFile(relativeOrAbsoluteUrl)) {
+      navigateToAbsoluteUrl(relativeOrAbsoluteUrl, domain, login, password);
+    } else {
+      navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl), domain, login, password);
+    }
+  }
+
+  public void open(URL url, String domain, String login, String password) {
     navigateToAbsoluteUrl(url.toExternalForm());
   }
 
@@ -35,14 +45,31 @@ public class Navigator {
   }
 
   protected void navigateToAbsoluteUrl(String url) {
+    navigateToAbsoluteUrl(url, "", "", "");
+  }
+
+  protected void navigateToAbsoluteUrl(String url, String domain, String login, String password) {
     if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
+      if (!domain.isEmpty()) domain += "\\";
+    }
+    else {
+      if (!domain.isEmpty()) domain += "%5C";
+      if (!login.isEmpty()) login += ":";
+      if (!password.isEmpty()) password += "@";
+      int idx1 = url.indexOf("://") + 3;
+      url = (idx1 < 3 ? "" : (url.substring(0, idx1 - 3) + "://"))
+              + domain
+              + login
+              + password
+              + (idx1 < 3 ? url : url.substring(idx1));
     }
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
+      if (isIE()) Selenide.switchTo().alert().authenticateUsing(new UserAndPassword(domain + login, password));
       collectJavascriptErrors((JavascriptExecutor) webdriver);
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
