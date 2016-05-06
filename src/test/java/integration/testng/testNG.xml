@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="report data test" parallel="tests" thread-count="2">
+
+
+	<test name="testSanity">
+		<classes>
+			<class name="integration.testng.ReportLogPrintTest"/>
+		</classes>
+	</test> <!-- Test CAN YOU SEE THIS?-->
+
+	<test name="testSanity1">
+		<classes>
+			<class name="integration.testng.ReportLogPrintTest"/>
+		</classes>
+	</test> <!-- Test CAN YOU SEE THIS?-->
+
+	<test name="testSanity2">
+		<classes>
+			<class name="integration.testng.ReportLogPrintTest"/>
+		</classes>
+	</test> <!-- Test CAN YOU SEE THIS?-->
+
+</suite><!-- Suite end of suite -->

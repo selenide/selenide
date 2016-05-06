@@ -1,6 +1,8 @@
 package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.SimpleReport;
+import org.testng.ISuite;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
@@ -13,12 +15,15 @@ public class TextReport extends ExitCodeListener {
 
   @Override
   public void onTestStart(ITestResult result) {
+
     report.start();
+    report.setMethodName(result.getMethod().getMethodName());
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
     report.finish(result.getName());
+
   }
 
   @Override
@@ -30,4 +35,11 @@ public class TextReport extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     report.finish(result.getName());
   }
+
+  @Override
+  public void onStart(ITestContext context) {
+    report.setTestName(context.getCurrentXmlTest().getName());
+  }
+
+
 }
