@@ -1,33 +1,37 @@
 package com.codeborne.selenide.testng;
 
-import com.codeborne.selenide.logevents.SimpleReport;
-import org.testng.ITestResult;
-import org.testng.reporters.ExitCodeListener;
+import com.codeborne.selenide.logevents.*;
+import com.codeborne.selenide.testng.annotations.*;
+import org.testng.*;
+import org.testng.internal.*;
 
 /**
  * Annotate your test class with {@code @Listeners({ TextReport.class})}
  * @since Selenide 2.25
  */
-public class TextReport extends ExitCodeListener {
+public class TextReport implements IInvokedMethodListener {
   protected SimpleReport report = new SimpleReport();
 
   @Override
-  public void onTestStart(ITestResult result) {
-    report.start();
+  public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+    if (isClassAnnotatedWithReport(method)) {
+      report.start();
+    }
   }
 
+  private boolean isClassAnnotatedWithReport(IInvokedMethod method) {
+    ConstructorOrMethod consOrMethod = method.getTestMethod().getConstructorOrMethod();
+    Report annotation = consOrMethod.getDeclaringClass().getAnnotation(Report.class);
+    return annotation != null;
+  }
   @Override
-  public void onTestFailure(ITestResult result) {
-    report.finish(result.getName());
+  public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+    if (isClassAnnotatedWithReport(method)) {
+      report.finish(testResult.getName());
+    }
+
+
   }
 
-  @Override
-  public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-    report.finish(result.getName());
-  }
 
-  @Override
-  public void onTestSuccess(ITestResult result) {
-    report.finish(result.getName());
-  }
 }

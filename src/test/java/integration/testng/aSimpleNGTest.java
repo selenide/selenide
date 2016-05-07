@@ -1,5 +1,6 @@
 package integration.testng;
 
+import com.codeborne.selenide.testng.annotations.*;
 import integration.*;
 import org.testng.annotations.*;
 
@@ -10,8 +11,9 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.net.PortProber.*;
 
-public class SimpleNGTest {
-  private static final Logger log = Logger.getLogger(SimpleNGTest.class.getName());
+@Report
+public class aSimpleNGTest {
+  private static final Logger log = Logger.getLogger(aSimpleNGTest.class.getName());
   private static int port;
   protected static LocalHttpServer server;
 
@@ -21,7 +23,7 @@ public class SimpleNGTest {
       port = findFreePort();
       server = new LocalHttpServer(port).start();
       log.info("START " + browser + " TESTS");
-      com.codeborne.selenide.Configuration.baseUrl = "https://127.0.0.1:" + port;
+      baseUrl = "https://127.0.0.1:" + port;
     }
 
 

@@ -23,10 +23,8 @@ public class ReportsNGTest {
       port = findFreePort();
       server = new LocalHttpServer(port).start();
       log.info("START " + browser + " TESTS");
-      com.codeborne.selenide.Configuration.baseUrl = "https://127.0.0.1:" + port;
+      baseUrl = "https://127.0.0.1:" + port;
     }
-
-
     open("/start_page.html");
   }
 
