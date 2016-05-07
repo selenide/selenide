@@ -211,6 +211,11 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task testng(type: Test) {
+  useTestNG()
+  include '**/*'
+}
+
 tasks.withType(Test).all { testTask ->
   testTask.systemProperties['file.encoding'] = 'UTF-8'
   testTask.testLogging.showStandardStreams = true
