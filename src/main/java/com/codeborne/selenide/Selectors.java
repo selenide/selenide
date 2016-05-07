@@ -211,7 +211,7 @@ public abstract class Selectors {
 
     @Override
     public String toString() {
-      return description + " (by text: " + elementText + ")";
+      return description.isEmpty() ? "by text: " + elementText : description;
     }
 
     String getXPath() {
@@ -229,7 +229,7 @@ public abstract class Selectors {
 
     @Override
     public String toString() {
-      return description + " (with text: " + elementText + ")";
+      return description.isEmpty() ? "with text: " + elementText : description;
     }
 
     String getXPath() {

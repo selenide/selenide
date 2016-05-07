@@ -12,7 +12,7 @@ public class SelectorsTest {
   @Test
   public void withTextUsesXPath() {
     By selector = Selectors.withText("john");
-    assertTrue(selector instanceof By.ByXPath);
+    assertTrue(selector instanceof ExBy.ExByXPath);
     assertEquals("with text: john", selector.toString());
     assertEquals(".//*/text()[contains(normalize-space(.), \"john\")]/parent::*", ((WithText) selector).getXPath());
   }
@@ -21,7 +21,7 @@ public class SelectorsTest {
   public void withTextEscapesQuotes() {
     By selector = Selectors.withText("Ludvig'van\"Beethoven");
     assertEquals("with text: Ludvig'van\"Beethoven", selector.toString());
-    assertTrue(selector instanceof By.ByXPath);
+    assertTrue(selector instanceof ExBy.ExByXPath);
     assertEquals(".//*/text()[contains(normalize-space(.), concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*", 
         ((WithText) selector).getXPath());
   }
@@ -30,7 +30,7 @@ public class SelectorsTest {
   public void byTextUsesXPath() {
     By selector = Selectors.byText("john");
     assertEquals("by text: john", selector.toString());
-    assertTrue(selector instanceof By.ByXPath);
+    assertTrue(selector instanceof ExBy.ExByXPath);
     assertEquals(".//*/text()[normalize-space(.) = \"john\"]/parent::*", ((ByText) selector).getXPath());
   }
 
@@ -38,7 +38,7 @@ public class SelectorsTest {
   public void byTextEscapesQuotes() {
     By selector = Selectors.byText("Ludvig'van\"Beethoven");
     assertEquals("by text: Ludvig'van\"Beethoven", selector.toString());
-    assertTrue(selector instanceof By.ByXPath);
+    assertTrue(selector instanceof ExBy.ExByXPath);
     assertEquals(".//*/text()[normalize-space(.) = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*", 
         ((ByText) selector).getXPath());
   }
