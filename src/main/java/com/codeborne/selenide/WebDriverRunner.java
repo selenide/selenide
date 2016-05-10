@@ -206,7 +206,7 @@ public class WebDriverRunner {
   /**
    * Is Selenide configured to use JBrowser browser
    */
-  public static boolean isOpera() {
+  public static boolean isJBrowser() {
     return JBROWSER.equalsIgnoreCase(browser);
   }
 
