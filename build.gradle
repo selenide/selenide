@@ -54,6 +54,8 @@ dependencies {
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.21'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
+  
+  runtime 'com.machinepublishers:jbrowserdriver:0.13.0'
 
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-core-littleproxy', version: '2.1.0-beta-6'
   testCompile 'org.mockito:mockito-core:1.10.19'
