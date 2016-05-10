@@ -49,6 +49,14 @@ public class WebDriverRunner {
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
+  
+  /**
+   * To use JbrowserDriver, you need to include extra dependency to your project:
+   * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
+   * 
+   * Note: You need minimum of Java 8.
+   */
+  public static final String JBROWSER = "jbrowser";
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -193,6 +201,13 @@ public class WebDriverRunner {
    */
   public static boolean isOpera() {
     return OPERA.equalsIgnoreCase(browser);
+  }
+  
+  /**
+   * Is Selenide configured to use JBrowser browser
+   */
+  public static boolean isOpera() {
+    return JBROWSER.equalsIgnoreCase(browser);
   }
 
   /**
