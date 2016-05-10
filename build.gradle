@@ -213,6 +213,12 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task jbrowser(type: Test) {
+  systemProperties['selenide.browser'] = 'jbrowser'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task testng(type: Test) {
   useTestNG()
   include '**/*'
