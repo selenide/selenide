@@ -1,7 +1,9 @@
 package com.codeborne.selenide.testng;
 
-import com.codeborne.selenide.logevents.*;
-import org.testng.*;
+import com.codeborne.selenide.logevents.SimpleReport;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestResult;
 
 /**
  * Reports for every test method in the suite
@@ -12,17 +14,15 @@ import org.testng.*;
  * Use either {@link TextReport} or {@link GlobalTextReport}, never both
  */
 public class GlobalTextReport implements IInvokedMethodListener {
-	protected SimpleReport report = new SimpleReport();
+  protected SimpleReport report = new SimpleReport();
 
-	@Override
-	public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-		report.start();
-	}
+  @Override
+  public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+    report.start();
+  }
 
-	@Override
-	public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-		report.finish(testResult.getName());
-	}
-
-
+  @Override
+  public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+    report.finish(testResult.getName());
+  }
 }
