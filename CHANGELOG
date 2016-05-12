@@ -5,6 +5,8 @@
 * Add method `$.screenshotAsImage()`: `BufferedImage elementScreenshot = $(".logo").screenshotAsImage();`
 * #321 set default page load strategy back to "normal"
 * fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported
+* #335 Add support for non-public page objects
+
 === 3.5.1 (Released 04.04.2016)
 * #309 method $$.shouldHave(size()) should not fail when timeout happens after the 1st check
 
