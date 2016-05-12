@@ -1,15 +1,18 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.*;
-import org.openqa.selenium.*;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverProvider;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.internal.*;
+import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -44,6 +47,7 @@ public class WebDriverFactory {
                         isPhantomjs() ? createPhantomJsDriver(proxy) :
                             isOpera() ? createOperaDriver(proxy) :
                                 isSafari() ? createSafariDriver(proxy) :
+                                  isJBrowser() ? createJBrowserDriver(proxy) :
                                     createInstanceOf(browser, proxy);
     webdriver = adjustBrowserSize(webdriver);
     if (!isHeadless()) {
@@ -134,6 +138,10 @@ public class WebDriverFactory {
 
   protected WebDriver createSafariDriver(Proxy proxy) {
     return createInstanceOf("org.openqa.selenium.safari.SafariDriver", proxy);
+  }
+
+  protected WebDriver createJBrowserDriver(Proxy proxy) {
+    return createInstanceOf("com.machinepublishers.jbrowserdriver.JBrowserDriver", proxy);
   }
 
   protected WebDriver adjustBrowserSize(WebDriver driver) {

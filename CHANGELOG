@@ -6,6 +6,7 @@
 * #321 set default page load strategy back to "normal"
 * fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported
 * #335 Add support for non-public page objects
+* #329 Add support for JBrowser driver (but most of Selenide tests still fail with it :( )
 
 === 3.5.1 (Released 04.04.2016)
 * #309 method $$.shouldHave(size()) should not fail when timeout happens after the 1st check
