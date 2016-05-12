@@ -178,7 +178,8 @@ public class PageObjectTest extends IntegrationTest {
   }
 
   static class MissingSelectsPage {
-    private MissingSelectsPage() {}
+    private MissingSelectsPage() {
+    }
     
     @FindBy(xpath = "//select[@name='wrong-select-name']")
     public WebElement domainSelect;
