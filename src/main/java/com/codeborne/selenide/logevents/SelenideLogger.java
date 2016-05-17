@@ -68,12 +68,11 @@ public class SelenideLogger {
   public static void removeListener(LogEventListener listener) {
     try {
       listeners.get().remove(listener);
-    } catch(NullPointerException npe) {
-      // Prevent NPE throwing
-    } finally {
       if (listeners.get().isEmpty()) {
         listeners.remove();
       }
+    } catch(NullPointerException npe) {
+      // Prevent NPE throwing
     }
   }
 }
