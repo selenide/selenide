@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.Describe.describe;
+import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class FileDownloader {
@@ -161,13 +161,7 @@ public class FileDownloader {
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
-    try {
-      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-    }
-    finally {
-      response.getEntity().getContent().close();
-    }
-
+    copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
     return downloadedFile;
   }
 }
