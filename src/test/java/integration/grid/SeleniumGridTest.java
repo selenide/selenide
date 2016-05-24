@@ -18,7 +18,7 @@ public class SeleniumGridTest extends IntegrationTest {
     close();
     
     int hubPort = findFreePort();
-    GridLauncher.main(new String[]{"-port", "" + hubPort, "-host", "localhost", "-role", "hub"});
+    GridLauncher.main(new String[]{"-port", "" + hubPort, "-host", "localhost"});
 
     GridLauncher.main(new String[]{"-port", "" + findFreePort(),
         "-host", "localhost",
