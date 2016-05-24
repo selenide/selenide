@@ -55,8 +55,6 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  runtime 'com.machinepublishers:jbrowserdriver:0.13.0'
-
   testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.0'
   
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-core-littleproxy', version: '2.1.0-beta-6'
