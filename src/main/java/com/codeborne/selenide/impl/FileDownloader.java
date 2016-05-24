@@ -4,6 +4,8 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -70,8 +72,20 @@ public class FileDownloader {
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
-    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();;
+    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
+
+    httpGet.setConfig(RequestConfig.custom()
+        .setConnectTimeout((int) Configuration.timeout)
+        .setSocketTimeout((int) Configuration.timeout)
+        .setConnectionRequestTimeout((int) Configuration.timeout)
+        .setRedirectsEnabled(true)
+        .setCircularRedirectsAllowed(true)
+        .setMaxRedirects(20)
+        .setCookieSpec(CookieSpecs.STANDARD)
+        .build()
+    );
+    
     HttpContext localContext = new BasicHttpContext();
     localContext.setAttribute(COOKIE_STORE, mimicCookieState());
 
