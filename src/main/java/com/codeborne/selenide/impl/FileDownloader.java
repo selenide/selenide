@@ -57,16 +57,16 @@ public class FileDownloader {
 
     HttpResponse response = executeHttpRequest(fileToDownloadLocation);
 
-    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
-
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
-          downloadedFile.getName() + ": " + response.getStatusLine());
+          fileToDownloadLocation + ": " + response.getStatusLine());
     }
     if (response.getStatusLine().getStatusCode() >= 400) {
       throw new FileNotFoundException("Failed to download file " +
-          downloadedFile.getName() + ": " + response.getStatusLine());
+          fileToDownloadLocation + ": " + response.getStatusLine());
     }
+
+    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
 
     return saveFileContent(response, downloadedFile);
   }
@@ -138,7 +138,7 @@ public class FileDownloader {
       }
     }
 
-    log.info("DOWNLOAD HEADERS:");
+    log.info("Cannot extract file name from http headers. Found headers: ");
     for (Header header : response.getAllHeaders()) {
       log.info(header.getName() + '=' + header.getValue());
     }
