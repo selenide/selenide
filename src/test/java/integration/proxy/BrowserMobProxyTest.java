@@ -70,11 +70,9 @@ public class BrowserMobProxyTest extends IntegrationTest {
       public void process(BrowserMobHttpRequest httpRequest, Har har) {
         String requestUri = httpRequest.getProxyRequest().getURI().toString();
         log.info("request: " + requestUri);
-        if (!requestUri.endsWith("/favicon.ico") && 
-            !requestUri.endsWith("/start_page.html") && 
-            !"http://ocsp.digicert.com/".equals(requestUri) &&
-            !requestUri.contains("cdn.mozilla.net") &&
-            !requestUri.contains("services.mozilla.net")) {
+        if (requestUri.startsWith(Configuration.baseUrl) &&
+            !requestUri.endsWith("/favicon.ico") && 
+            !requestUri.endsWith("/start_page.html")) {
           requestCounter++;
         }
       }
