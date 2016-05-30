@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.6-SNAPSHOT'
+version='3.6'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -133,7 +133,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.52/IEDriverServer_Win32_2.52.0.zip'
+  src 'http://selenium-release.storage.googleapis.com/2.53/IEDriverServer_Win32_2.53.0.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true
