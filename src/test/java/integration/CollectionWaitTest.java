@@ -1,12 +1,13 @@
 package integration;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
@@ -42,11 +43,11 @@ public class CollectionWaitTest extends IntegrationTest {
 
   @Test(expected = AssertionError.class)
   public void failsIfWrongSize() {
-    $$("#collection li").shouldHave(CollectionCondition.size(4));
+    $$("#collection li").shouldHave(size(4));
   }
 
   @Test
   public void canDetermineSize() {
-    $$("#collection li").shouldHave(CollectionCondition.size(50));
+    $$("#collection li").shouldHave(size(50));
   }
 }
