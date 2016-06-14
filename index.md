@@ -98,6 +98,7 @@ tagline:
 <a name="thanks"></a>
 <div class="short thanks">
   <h4>Many thanks to:</h4>
-  <img src="http://resources.jetbrains.com/assets/media/open-graph/jetbrains_250x250.png">
+  <img src="http://resources.jetbrains.com/assets/media/open-graph/jetbrains_250x250.png"/>
   <img src="{{BASE_PATH}}/images/yourkit.png" target="_blank" alt="YourKit" style="width: 150px;"/>
+  <img src="https://www.browserstack.com/images/mail/browserstack-logo-footer.png"/>
 </div>
