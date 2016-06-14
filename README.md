@@ -63,6 +63,7 @@ Selenide was originally designed and developed by [Andrei Solntsev](http://asoln
 Many thanks to these incredible tools that help us creating open-source software:
 
 [![Intellij IDEA](http://www.jetbrains.com/idea/docs/logo_intellij_idea.png)](http://www.jetbrains.com/idea) [![YourKit Java profiler](http://selenide.org/images/yourkit.png)](https://www.yourkit.com/features/)
+ [![BrowserStack](https://www.browserstack.com/images/mail/browserstack-logo-footer.png)](https://www.browserstack.com)
 
 ## License
 Selenide is open-source project, and distributed under the [MIT](http://choosealicense.com/licenses/mit/) license
