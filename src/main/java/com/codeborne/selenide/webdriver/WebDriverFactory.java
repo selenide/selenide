@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.BuildInfo;
@@ -41,6 +42,7 @@ public class WebDriverFactory {
 
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
         CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
+            isMarionette() ? createMarionetteDriver(proxy) :
             isFirefox() ? createFirefoxDriver(proxy) :
                 isHtmlUnit() ? createHtmlUnitDriver(proxy) :
                     isIE() ? createInternetExplorerDriver(proxy) :
@@ -96,6 +98,12 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
+    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
+
+    return new FirefoxDriver(capabilities);
+  }
+
+  private DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
     FirefoxProfile myProfile = new FirefoxProfile();
     myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -106,8 +114,13 @@ public class WebDriverFactory {
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    return capabilities;
+  }
 
-    return new FirefoxDriver(capabilities);
+  protected WebDriver createMarionetteDriver(Proxy proxy) {
+    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
+
+    return new MarionetteDriver(capabilities);
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
