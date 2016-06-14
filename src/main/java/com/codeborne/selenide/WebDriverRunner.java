@@ -14,6 +14,7 @@ public class WebDriverRunner {
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
   public static final String FIREFOX = "firefox";
+  public static final String MARIONETTE = "marionette";
 
   /**
    * To use Safari webdriver, you need to include extra dependency to your project:
@@ -145,6 +146,13 @@ public class WebDriverRunner {
    */
   public static boolean isFirefox() {
     return FIREFOX.equalsIgnoreCase(browser);
+  }
+
+  /**
+   * Is Selenide configured to use Marionette driver
+   */
+  public static boolean isMarionette() {
+    return MARIONETTE.equalsIgnoreCase(browser);
   }
 
   /**
