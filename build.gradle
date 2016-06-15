@@ -195,6 +195,12 @@ task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task safari(type: Test) {
+  systemProperties['selenide.browser'] = 'safari'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task htmlunit(type: Test) {
   systemProperties['selenide.browser'] = 'htmlunit'
   include 'integration/**/*'
