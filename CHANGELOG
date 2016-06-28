@@ -1,6 +1,7 @@
 == Changelog
 
 === 3.7 (Planned to xx.06.2016)
+* Added Marionette browser support
 * (Planned) use BrowserMobProxy to download files
 
 === 3.6 (29.05.2016)
