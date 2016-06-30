@@ -35,7 +35,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.53.0') {
+  compile('org.seleniumhq.selenium:selenium-java:2.53.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -55,7 +55,7 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.0'
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.1'
   
   testCompile group: 'net.lightbody.bmp', name: 'browsermob-core-littleproxy', version: '2.1.0-beta-6'
   testCompile 'org.mockito:mockito-core:1.10.19'
@@ -133,7 +133,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.53/IEDriverServer_Win32_2.53.0.zip'
+  src 'http://selenium-release.storage.googleapis.com/2.53/IEDriverServer_Win32_2.53.1.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true

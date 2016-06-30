@@ -2,6 +2,7 @@
 
 === 3.7 (Planned to xx.06.2016)
 * Added Marionette browser support
+* Upgrade to Selenium 2.53.1
 * (Planned) use BrowserMobProxy to download files
 
 === 3.6 (29.05.2016)
