@@ -125,36 +125,6 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  public void userCanFindElementByAttribute() {
-    assertEquals("select", $(byAttribute("name", "domain")).getTagName());
-    assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
-    assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
-    assertEquals(4, $$(byAttribute("type", "radio")).size());
-    assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
-    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
-  }
-
-  @Test
-  public void userCanGetAttr() {
-    assertEquals("username", $(by("readonly", "readonly")).attr("name"));
-  }
-
-  @Test
-  public void userCanGetNameAttribute() {
-    assertEquals("username", $(by("readonly", "readonly")).name());
-  }
-
-  @Test
-  public void userCanGetDataAttributes() {
-    assertEquals("111", $(byValue("livemail.ru")).getAttribute("data-mailServerId"));
-    assertEquals("111", $(byValue("livemail.ru")).data("mailServerId"));
-
-    assertEquals("222A", $(byText("@myrambler.ru")).data("mailServerId"));
-    assertEquals("33333B", $(byValue("rusmail.ru")).data("mailServerId"));
-    assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
-  }
-
-  @Test
   public void userCanGetInnerHtmlOfElement() {
     assertEquals("@livemail.ru", $(byValue("livemail.ru")).innerHtml());
     assertEquals("@myrambler.ru", $(byText("@myrambler.ru")).innerHtml());
@@ -182,21 +152,6 @@ public class SelenideMethodsTest extends IntegrationTest {
 
     assertEquals("Видишь суслика? И я не вижу. А он есть!",
         $("#theHiddenElement").innerText().trim());
-  }
-
-  @Test
-  public void userCanSearchElementByDataAttribute() {
-    assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
-
-    assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
-    assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
-    assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
-    assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
-  }
-
-  @Test
-  public void userCanSearchElementByTitleAttribute() {
-    assertEquals("fieldset", $(byTitle("Login form")).getTagName());
   }
 
   @Test
