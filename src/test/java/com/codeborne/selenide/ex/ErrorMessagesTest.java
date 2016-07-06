@@ -12,9 +12,7 @@ import java.util.Locale;
 import static com.codeborne.selenide.Screenshots.screenshots;
 import static java.io.File.separatorChar;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 public class ErrorMessagesTest {
 
@@ -27,6 +25,7 @@ public class ErrorMessagesTest {
 
   @AfterClass
   public static void restoreOldValues() {
+    Configuration.screenshots = true;
     Configuration.reportsUrl = reportsUrl;
     screenshots = new ScreenShotLaboratory();
   }
@@ -34,6 +33,8 @@ public class ErrorMessagesTest {
   @Before
   public void setUp() {
     Configuration.screenshots = true;
+    screenshots = mock(ScreenShotLaboratory.class);
+    doCallRealMethod().when(screenshots).formatScreenShotPath();
   }
 
   @Test
@@ -52,8 +53,6 @@ public class ErrorMessagesTest {
   public void convertsScreenshotFileNameToCIUrl() {
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     String currentDir = System.getProperty("user.dir");
-    screenshots = mock(ScreenShotLaboratory.class);
-    doCallRealMethod().when(screenshots).formatScreenShotPath();
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
@@ -68,11 +67,18 @@ public class ErrorMessagesTest {
       currentDir = '/' + currentDir.replace('\\', '/');
     }
 
-    screenshots = mock(ScreenShotLaboratory.class);
-    doCallRealMethod().when(screenshots).formatScreenShotPath();
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
     assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png", screenshot);
+  }
+
+  @Test
+  public void doesNotAddScreenshot_if_screenshotsAreDisabled() {
+    Configuration.screenshots = false;
+
+    String screenshot = ErrorMessages.screenshot();
+    assertEquals("", screenshot);
+    verify(screenshots, never()).takeScreenShot();
   }
 }
