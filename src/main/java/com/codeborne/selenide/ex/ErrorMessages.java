@@ -36,7 +36,7 @@ public class ErrorMessages {
   }
   
   public static String screenshot(String screenshotPath) {
-    if(!Configuration.screenshots) {
+    if (!Configuration.screenshots) {
       return "";
     }
     return "\nScreenshot: " + screenshotPath;
