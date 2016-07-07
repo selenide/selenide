@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.7-SNAPSHOT'
+version='3.7'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}

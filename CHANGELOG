@@ -1,11 +1,13 @@
 == Changelog
 
-=== 3.7 (Planned to xx.06.2016)
-* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
-* #349 Added Marionette browser support - thanks to ridiekel for PR!
-* #345 Prevent Javascript in non-browser WD
-* #357 Don't show "Screenshots: " in the error log when screenshots are disabled
+=== 3.8 (Planned to xx.07.2016)
 * (Planned) use BrowserMobProxy to download files
+
+=== 3.7 (07.07.2016)
+* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
+* #349 Added Marionette browser support - thanks to Geroen Dierckx @ridiekel for PR!
+* #345 Selenide should not fail if browser doesn't support JavaScript
+* #357 Don't show "Screenshots: " in the error log when screenshots are disabled - thanks to @BorisOsipov for PR!
 
 === 3.6 (29.05.2016)
 * upgrade to phantomjsdriver 1.3.0 (compatible with selenium-java 2.53.0)
