@@ -1,8 +1,10 @@
 == Changelog
 
 === 3.7 (Planned to xx.06.2016)
-* Added Marionette browser support
-* Upgrade to Selenium 2.53.1
+* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
+* #349 Added Marionette browser support - thanks to ridiekel for PR!
+* #345 Prevent Javascript in non-browser WD
+* #357 Don't show "Screenshots: " in the error log when screenshots are disabled
 * (Planned) use BrowserMobProxy to download files
 
 === 3.6 (29.05.2016)

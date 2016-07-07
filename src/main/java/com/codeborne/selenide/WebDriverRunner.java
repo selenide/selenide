@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -188,6 +189,13 @@ public class WebDriverRunner {
    */
   public static boolean supportsModalDialogs() {
     return !isHeadless() && !isSafari();
+  }
+
+  /**
+   * Does this browser support javascript
+   */
+  public static boolean supportsJavascript() {
+    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
   }
 
   /**

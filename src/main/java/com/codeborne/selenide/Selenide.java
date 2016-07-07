@@ -615,7 +615,10 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
+    if (!hasWebDriverStarted()) {
+      return emptyList();
+    }
+    else if (!supportsJavascript()) {
       return emptyList();
     }
     try {
