@@ -14,9 +14,7 @@ import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.BuildInfo;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.*;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -58,8 +56,14 @@ public class WebDriverFactory {
               + " Platform=" + capabilities.getPlatform());
     }
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
-    BuildInfo seleniumInfo = new BuildInfo();
-    log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+	  if (remote == null) {
+		  BuildInfo seleniumInfo = new BuildInfo();
+		  log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+	  }
+	  if (remote != null) {
+		  ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
+	  }
+
     return webdriver;
   }
 
