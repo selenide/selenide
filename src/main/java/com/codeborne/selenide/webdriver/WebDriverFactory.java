@@ -1,15 +1,19 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.*;
-import org.openqa.selenium.*;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverProvider;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.internal.*;
+import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -38,12 +42,14 @@ public class WebDriverFactory {
 
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
         CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
+            isMarionette() ? createMarionetteDriver(proxy) :
             isFirefox() ? createFirefoxDriver(proxy) :
                 isHtmlUnit() ? createHtmlUnitDriver(proxy) :
                     isIE() ? createInternetExplorerDriver(proxy) :
                         isPhantomjs() ? createPhantomJsDriver(proxy) :
                             isOpera() ? createOperaDriver(proxy) :
                                 isSafari() ? createSafariDriver(proxy) :
+                                  isJBrowser() ? createJBrowserDriver(proxy) :
                                     createInstanceOf(browser, proxy);
     webdriver = adjustBrowserSize(webdriver);
     if (!isHeadless()) {
@@ -92,6 +98,12 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
+    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
+
+    return new FirefoxDriver(capabilities);
+  }
+
+  private DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
     FirefoxProfile myProfile = new FirefoxProfile();
     myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -102,8 +114,13 @@ public class WebDriverFactory {
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    return capabilities;
+  }
 
-    return new FirefoxDriver(capabilities);
+  protected WebDriver createMarionetteDriver(Proxy proxy) {
+    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
+
+    return new MarionetteDriver(capabilities);
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
@@ -134,6 +151,10 @@ public class WebDriverFactory {
 
   protected WebDriver createSafariDriver(Proxy proxy) {
     return createInstanceOf("org.openqa.selenium.safari.SafariDriver", proxy);
+  }
+
+  protected WebDriver createJBrowserDriver(Proxy proxy) {
+    return createInstanceOf("com.machinepublishers.jbrowserdriver.JBrowserDriver", proxy);
   }
 
   protected WebDriver adjustBrowserSize(WebDriver driver) {

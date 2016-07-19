@@ -1,10 +1,24 @@
 == Changelog
 
-=== 3.6 (Planned to 12.04.2016)
+=== 3.8 (Planned to xx.07.2016)
 * (Planned) use BrowserMobProxy to download files
-* Add method `$.screenshotAsImage()`: `BufferedImage elementScreenshot = $(".logo").screenshotAsImage();`
+
+=== 3.7 (07.07.2016)
+* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
+* #349 Added Marionette browser support - thanks to Geroen Dierckx @ridiekel for PR!
+* #345 Selenide should not fail if browser doesn't support JavaScript
+* #357 Don't show "Screenshots: " in the error log when screenshots are disabled - thanks to @BorisOsipov for PR!
+
+=== 3.6 (29.05.2016)
+* upgrade to phantomjsdriver 1.3.0 (compatible with selenium-java 2.53.0)
+* Add method `$.screenshotAsImage()`: `BufferedImage elementScreenshot = $(".logo").screenshotAsImage();` - thanks to @Akkuzin!
 * #321 set default page load strategy back to "normal"
-* fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported
+* fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported - thanks to Alexei Vinogradov!
+* #335 Add support for non-public page objects
+* #329 Add support for JBrowser driver (but most of Selenide tests still fail with it :( )  - thanks to Anil Kumar Reddy Gaddam for pull request!
+* #341 Use Selenide timeout when downloading files
+* #320 Implementation of basic auth. for many browsers - thanks to @dimand58
+
 === 3.5.1 (Released 04.04.2016)
 * #309 method $$.shouldHave(size()) should not fail when timeout happens after the 1st check
 

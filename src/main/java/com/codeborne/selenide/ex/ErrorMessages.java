@@ -1,6 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.impl.Cleanup;
 import org.openqa.selenium.WebDriverException;
@@ -35,6 +36,9 @@ public class ErrorMessages {
   }
   
   public static String screenshot(String screenshotPath) {
+    if (!Configuration.screenshots) {
+      return "";
+    }
     return "\nScreenshot: " + screenshotPath;
   }
 

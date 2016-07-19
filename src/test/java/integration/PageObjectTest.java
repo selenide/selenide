@@ -15,9 +15,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.*;
 
 public class PageObjectTest extends IntegrationTest {
@@ -127,7 +125,7 @@ public class PageObjectTest extends IntegrationTest {
     page.status.lastLogin.click();
   }
 
-  public static class SelectsPage {
+  private static class SelectsPage {
     @FindBy(xpath = "//select[@name='domain']")
     public WebElement domainSelect;
 
@@ -162,7 +160,7 @@ public class PageObjectTest extends IntegrationTest {
     }
   }
 
-  public static class StatusBlock extends ElementsContainer {
+  protected static class StatusBlock extends ElementsContainer {
     @FindBy(className = "name")
     SelenideElement name;
 
@@ -170,7 +168,7 @@ public class PageObjectTest extends IntegrationTest {
     SelenideElement lastLogin;
   }
 
-  public static class UserInfo extends ElementsContainer {
+  static class UserInfo extends ElementsContainer {
     @FindBy(className = "firstname")
     SelenideElement firstName;
     @FindBy(className = "lastname")
@@ -179,7 +177,10 @@ public class PageObjectTest extends IntegrationTest {
     SelenideElement age;
   }
 
-  public static class MissingSelectsPage {
+  static class MissingSelectsPage {
+    private MissingSelectsPage() {
+    }
+    
     @FindBy(xpath = "//select[@name='wrong-select-name']")
     public WebElement domainSelect;
 

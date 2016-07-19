@@ -2,9 +2,10 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -38,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.Describe.describe;
+import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class FileDownloader {
@@ -55,23 +57,35 @@ public class FileDownloader {
 
     HttpResponse response = executeHttpRequest(fileToDownloadLocation);
 
-    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
-
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
-          downloadedFile.getName() + ": " + response.getStatusLine());
+          fileToDownloadLocation + ": " + response.getStatusLine());
     }
     if (response.getStatusLine().getStatusCode() >= 400) {
       throw new FileNotFoundException("Failed to download file " +
-          downloadedFile.getName() + ": " + response.getStatusLine());
+          fileToDownloadLocation + ": " + response.getStatusLine());
     }
+
+    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
 
     return saveFileContent(response, downloadedFile);
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
-    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();;
+    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
+
+    httpGet.setConfig(RequestConfig.custom()
+        .setConnectTimeout((int) Configuration.timeout)
+        .setSocketTimeout((int) Configuration.timeout)
+        .setConnectionRequestTimeout((int) Configuration.timeout)
+        .setRedirectsEnabled(true)
+        .setCircularRedirectsAllowed(true)
+        .setMaxRedirects(20)
+        .setCookieSpec(CookieSpecs.STANDARD)
+        .build()
+    );
+    
     HttpContext localContext = new BasicHttpContext();
     localContext.setAttribute(COOKIE_STORE, mimicCookieState());
 
@@ -124,7 +138,7 @@ public class FileDownloader {
       }
     }
 
-    log.info("DOWNLOAD HEADERS:");
+    log.info("Cannot extract file name from http headers. Found headers: ");
     for (Header header : response.getAllHeaders()) {
       log.info(header.getName() + '=' + header.getValue());
     }
@@ -161,13 +175,7 @@ public class FileDownloader {
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
-    try {
-      FileUtils.copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-    }
-    finally {
-      response.getEntity().getContent().close();
-    }
-
+    copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
     return downloadedFile;
   }
 }

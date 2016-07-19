@@ -79,7 +79,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
-   * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera"
+   * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera", "marionette"
    * <p/>
    * Default value: "firefox"
    */
@@ -95,7 +95,7 @@ public class Configuration {
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
-   * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/hub".
+   * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/wd/hub".
    *
    * Default value: null (Grid is not used).
    */

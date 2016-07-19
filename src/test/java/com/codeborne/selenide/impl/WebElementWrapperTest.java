@@ -9,9 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.WebDriverRunner.CHROME;
-import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -41,6 +39,7 @@ public class WebElementWrapperTest {
   @Test
   public void toStringPrintsTagNameWithAllAttributes() {
     browser = CHROME;
+    when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
     when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
     when(((JavascriptExecutor) webdriverContainer.getWebDriver())
         .executeScript(anyString(), any(WebElement.class)))

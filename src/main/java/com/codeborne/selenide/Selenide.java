@@ -9,6 +9,7 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -552,7 +553,9 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     try {
-      return page(pageObjectClass.getConstructor().newInstance());
+      Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      return page(constructor.newInstance());
     } catch (Exception e) {
       throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
     }
@@ -612,7 +615,10 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    if (!WebDriverRunner.webdriverContainer.hasWebDriverStarted()) {
+    if (!hasWebDriverStarted()) {
+      return emptyList();
+    }
+    else if (!supportsJavascript()) {
       return emptyList();
     }
     try {
