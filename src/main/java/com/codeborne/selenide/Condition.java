@@ -363,8 +363,13 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * @deprecated please use cssClass() instead of this method, which is exactly the same
+   *
+   * @see #cssClass(String)
+   *
    * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
    */
+  @Deprecated
   public static Condition hasClass(String cssClass) {
     return cssClass(cssClass);
   }
