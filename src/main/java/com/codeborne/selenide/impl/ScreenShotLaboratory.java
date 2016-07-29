@@ -86,34 +86,18 @@ public class ScreenShotLaboratory {
 
     return addToHistory(firstNonNull(imageFile, pageSource)).getAbsolutePath();
   }
-  
+
   public File takeScreenshot(WebElement element) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
-
-    WebDriver webdriver = getWebDriver();
-    if (!(webdriver instanceof TakesScreenshot)) {
-      log.warning("Cannot take screenshot because browser does not support screenshots");
-      return null;
-    }
-    
-    File screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
-
-    Point p = element.getLocation();
-    Dimension elementSize = element.getSize();
-
     try {
-      BufferedImage img = ImageIO.read(screen);
-      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementSize.getWidth(), elementSize.getHeight());
-      ImageIO.write(dest, "png", screen);
+      BufferedImage dest = takeScreenshotAsImage(element);
+      File tempFile = File.createTempFile("temp", "png");
+      ImageIO.write(dest, "png", tempFile);
       File screenshotOfElement = new File(generateScreenshotFileName());
-      FileUtils.copyFile(screen, screenshotOfElement);
+      FileUtils.copyFile(tempFile, screenshotOfElement);
       return screenshotOfElement;
     }
     catch (IOException e) {
-      printOnce("takeScreenshotImage", e);
+      printOnce("takeScreenshot", e);
       return null;
     }
   }
