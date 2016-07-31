@@ -161,6 +161,13 @@ public class Configuration {
   public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   /**
+   * Does Selenide need to save page source on failing tests.
+   *
+   * Default value: true
+   */
+  public static boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
+
+  /**
    * Folder to store screenshots to.
    * Can be configured either programmatically or by system property "-Dselenide.reports=test-result/reports".
    *
