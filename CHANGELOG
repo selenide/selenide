@@ -1,8 +1,8 @@
 == Changelog
 
 === 3.8 (Planned to xx.07.2016)
-* (Planned) use BrowserMobProxy to download files
-* fixed - upload-methods work on the remote browsers & grid now.
+* #359 user can disable creating *.html files - thanks to @BorisOsipov for this PR!
+* fixed file uploading methods on remote browsers & grid - thanks to Alexei Vinogradov!
 
 === 3.7 (07.07.2016)
 * Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
