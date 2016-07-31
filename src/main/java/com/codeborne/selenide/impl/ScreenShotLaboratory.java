@@ -69,7 +69,8 @@ public class ScreenShotLaboratory {
 
   /**
    * Takes screenshot of current browser window.
-   * Stores 2 files: html of page(if savePageSource option is enabled), and (if possible) image in PNG format.
+   * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
+   * 
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
    */
@@ -81,7 +82,7 @@ public class ScreenShotLaboratory {
 
     WebDriver webdriver = getWebDriver();
 
-    if(Configuration.savePageSource) {
+    if (Configuration.savePageSource) {
       savePageSourceToFile(fileName, webdriver);
     }
 
