@@ -11,7 +11,7 @@ public class SoftAsserts extends ExternalResource {
   private final ErrorsCollector errorsCollector = new ErrorsCollector();
 
   public SoftAsserts() {
-    SelenideLogger.addListener(errorsCollector);
+    SelenideLogger.addListener("softAssert", errorsCollector);
   }
 
   @Override

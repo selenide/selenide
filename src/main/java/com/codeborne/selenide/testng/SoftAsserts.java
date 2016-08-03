@@ -6,13 +6,13 @@ import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
 /**
- * Annotate your test class with <code>@Listeners({ SoftAsserts.class})</code>
+ * Annotate your test class with {@code @Listeners({ SoftAsserts.class})}
  */
 public class SoftAsserts extends ExitCodeListener {
   private final ErrorsCollector errorsCollector = new ErrorsCollector();
 
   public SoftAsserts() {
-    SelenideLogger.addListener(errorsCollector);
+    SelenideLogger.addListener("softAssert", errorsCollector);
   }
 
   @Override
