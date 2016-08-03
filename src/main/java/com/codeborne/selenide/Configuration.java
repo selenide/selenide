@@ -264,7 +264,7 @@ public class Configuration {
    */
   public enum AssertionMode {
     /**
-     * Default mode - tests are failing immediatetly
+     * Default mode - tests are failing immediately
      */
     STRICT,
     /**

@@ -146,7 +146,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Finde the first element which met the given condition
+   * Find the first element which met the given condition
    * @param condition
    * @return SelenideElement
    */
@@ -155,7 +155,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Finde the first element which met the given condition
+   * Find the first element which met the given condition
    * @see #find(Condition)
    * @param condition
    * @return SelenideElement

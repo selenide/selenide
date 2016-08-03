@@ -541,7 +541,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Used to form human-readable condition expression
    * Example element.should(be(visible),have(text("abc"))
-   * @param delegate next condition to wrapp
+   * @param delegate next condition to wrap
    * @return Condition
    */
   public static Condition be(Condition delegate) {
@@ -551,7 +551,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Used to form human-readable condition expression
    * Example element.should(be(visible),have(text("abc"))
-   * @param delegate next condition to wrapp
+   * @param delegate next condition to wrap
    * @return Condition
    */
   public static Condition have(Condition delegate) {
