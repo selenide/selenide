@@ -521,11 +521,24 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement hover();
 
   /**
-   * Drag and drop this element to the target.
-   * @param targetCssSelector CSS selector defining target element.
+   * Drag and drop this element to the target
+   *
+   * Before dropping, waits until target element gets visible.
+   * 
+   * @param targetCssSelector CSS selector defining target element
    * @return this element
    */
   SelenideElement dragAndDropTo(String targetCssSelector);
+
+  /**
+   * Drag and drop this element to the target
+   * 
+   * Before dropping, waits until target element gets visible.
+   * 
+   * @param target target element
+   * @return this element
+   */
+  SelenideElement dragAndDropTo(WebElement target);
 
   /**
    * Check if image is properly loaded.
