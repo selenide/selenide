@@ -96,6 +96,7 @@ public class ScreenShotLaboratory {
     try {
       BufferedImage dest = takeScreenshotAsImage(element);
       File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      ensureFolderExists(screenshotOfElement);
       ImageIO.write(dest, "png", screenshotOfElement);
       return screenshotOfElement;
     }
