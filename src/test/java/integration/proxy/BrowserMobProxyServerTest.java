@@ -49,11 +49,11 @@ public class BrowserMobProxyServerTest extends IntegrationTest {
 
   @AfterClass
   public static void tearDown() {
+    WebDriverRunner.setProxy(null);
+    close();
     if (proxy != null) {
       proxy.stop();
-      WebDriverRunner.setProxy(null);
     }
-    close();
   }
 
   @Test
