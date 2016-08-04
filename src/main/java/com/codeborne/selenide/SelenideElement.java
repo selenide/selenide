@@ -197,9 +197,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *
    * <p>Timeout is configurable via Configuration#timeout</p>
    *
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").should(appear);
-   * </code></p>
+   * }</p>
    *
    * @return Given element, useful for chaining:
    * {@code $("#errorMessage").should(appear).shouldBe(enabled);}
@@ -210,9 +210,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Synonym for #should. Useful for better readability.</p>
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").shouldHave(text("Hello"), text("World"));
-   * </code></p>
+   * }</p>
 
    * @see SelenideElement#should(com.codeborne.selenide.Condition...)
    */
@@ -220,9 +220,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Synonym for #should. Useful for better readability.</p>
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").shouldBe(visible, enabled);
-   * </code></p>
+   * }</p>
    *
    * @see SelenideElement#should(com.codeborne.selenide.Condition...)
    */
@@ -238,9 +238,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *
    * <p>Timeout is configurable via Configuration#timeout</p>
    *
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").should(exist);
-   * </code></p>
+   * }</p>
    *
    * @see Configuration#timeout
    */
@@ -248,9 +248,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Synonym for #shouldNot. Useful for better readability.</p>
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
-   * </code></p>
+   * }</p>
    *
    * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
    */
@@ -258,9 +258,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Synonym for #shouldNot. Useful for better readability.</p>
-   * <p>For example: <code>
+   * <p>For example: {@code
    *   $("#errorMessage").shouldNotBe(visible, enabled);
-   * </code></p>
+   * }</p>
    *
    * @see SelenideElement#shouldNot(com.codeborne.selenide.Condition...)
    */
@@ -339,7 +339,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>Find the first matching element inside given element</p>
-   * <p>Short form of <code>webElement.findElement(By.cssSelector(cssSelector))</code></p>
+   * <p>Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}</p>
    */
   SelenideElement find(String cssSelector);
 
@@ -380,11 +380,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>
-   * Short form of <code>webDriver.findElements(thisElement, By.cssSelector(cssSelector))</code>
+   * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
    * </p>
    *
    * <p>
-   * For example, <code>$("#multirowTable").findAll("tr.active").shouldHave(size(2));</code>
+   * For example, {@code $("#multirowTable").findAll("tr.active").shouldHave(size(2));}
    * </p>
    *
    * @return list of elements inside given element matching given CSS selector
@@ -393,11 +393,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * <p>
-   * Short form of <code>webDriver.findElements(thisElement, selector)</code>
+   * Short form of {@code webDriver.findElements(thisElement, selector)}
    * </p>
    *
    * <p>
-   * For example, <code>$("#multirowTable").findAll(By.className("active")).shouldHave(size(2));</code>
+   * For example, {@code $("#multirowTable").findAll(By.className("active")).shouldHave(size(2));}
    * </p>
 
    * @return list of elements inside given element matching given criteria
