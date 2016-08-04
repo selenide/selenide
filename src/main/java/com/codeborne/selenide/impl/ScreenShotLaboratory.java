@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -96,10 +95,8 @@ public class ScreenShotLaboratory {
   public File takeScreenshot(WebElement element) {
     try {
       BufferedImage dest = takeScreenshotAsImage(element);
-      File tempFile = File.createTempFile("temp", "png");
-      ImageIO.write(dest, "png", tempFile);
-      File screenshotOfElement = new File(generateScreenshotFileName());
-      FileUtils.copyFile(tempFile, screenshotOfElement);
+      File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      ImageIO.write(dest, "png", screenshotOfElement);
       return screenshotOfElement;
     }
     catch (IOException e) {
