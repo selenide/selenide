@@ -6,12 +6,14 @@ import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+
 public class SoftAsserts extends ExternalResource {
   private Description currentTest;
   private final ErrorsCollector errorsCollector = new ErrorsCollector();
 
   public SoftAsserts() {
-    SelenideLogger.addListener("softAssert", errorsCollector);
+    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
   }
 
   @Override

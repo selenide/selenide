@@ -82,4 +82,14 @@ public class SelenideLogger {
   public static <T extends LogEventListener> T removeListener(String name) {
     return (T) listeners.get().remove(name);
   }
+
+  /**
+   * If listener with given name is bound (added) to the current thread.
+   *
+   * @param name unique name of listener added by method {@link #addListener(String, LogEventListener)}
+   * @return true iff method {@link #addListener(String, LogEventListener)} with corresponding name has been called in current thread. 
+   */
+  public static boolean hasListener(String name) {
+    return listeners.get().containsKey(name);
+  }
 }
