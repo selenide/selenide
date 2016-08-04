@@ -10,11 +10,6 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASS
 
 public class SoftAsserts extends ExternalResource {
   private Description currentTest;
-  private final ErrorsCollector errorsCollector = new ErrorsCollector();
-
-  public SoftAsserts() {
-    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
-  }
 
   @Override
   public Statement apply(Statement base, Description description) {
@@ -24,11 +19,12 @@ public class SoftAsserts extends ExternalResource {
 
   @Override
   protected void before() throws Throwable {
-    errorsCollector.clear();
+    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
   }
 
   @Override
   protected void after() {
+    ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
     errorsCollector.failIfErrors(currentTest.getDisplayName());
   }
 }
