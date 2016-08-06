@@ -1,6 +1,8 @@
 == Changelog
 
-=== 3.8 (Released 05.08.2016)
+=== 3.9 (Planned to 2x.08.2016)
+
+=== 3.8 (Released 06.08.2016)
 * #359 user can disable creating *.html files - thanks to @BorisOsipov for this PR!
 * fixed file uploading methods on remote browsers & grid - thanks to Alexei Vinogradov!
 * #364, #303 TestNG: SimpleReport is now thread-safe
