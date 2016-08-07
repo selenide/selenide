@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elements disappear</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+    <script type="text/javascript" language="JavaScript">
+        function removeButton() {
+            $("#remove").remove();
+        }
+        function hideButton() {
+            $("#hide").css("display", "none");
+        }
+    </script>
+</head>
+<body>
+<h1>Element removed from DOM</h1>
+<button id="remove" onclick="setTimeout(removeButton, 100)">Remove me</button>
+<h1>Element hidden</h1>
+<button id="hide" onclick="setTimeout(hideButton, 100)">Hide me</button>
+</body>
+</html>
