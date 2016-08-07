@@ -12,43 +12,43 @@ import static com.codeborne.selenide.Selenide.$;
 public class ElementRemovedTest extends IntegrationTest {
   @Before
   public void clickRemovesElement() {
-	  openFile("elements_disappear_on_click.html");
-	  $("#remove").click();
+    openFile("elements_disappear_on_click.html");
+    $("#remove").click();
   }
 
   @Test
   public void shouldBeHidden() {
-	  $("#remove").shouldBe(hidden);
+    $("#remove").shouldBe(hidden);
   }
 
   @Test
   public void shouldDisappear() {
-	  $("#remove").should(disappear);
+    $("#remove").should(disappear);
   }
 
   @Test
   public void waitUntilDisappears() {
-	  $("#remove").waitUntil(disappears, 2000);
+    $("#remove").waitUntil(disappears, 2000);
   }
 
   @Test
   public void shouldNotBeVisible() {
-	  $("#remove").shouldNotBe(visible);
+    $("#remove").shouldNotBe(visible);
   }
 
   @Test
   public void shouldNotBePresent() {
-	  $("#remove").shouldNotBe(present);
+    $("#remove").shouldNotBe(present);
   }
 
   @Test
   public void shouldNotExist() {
-	  $("#remove").shouldNot(exist);
+    $("#remove").shouldNot(exist);
   }
 
   @Test
   public void shouldNotAppear() {
-	  $("#remove").shouldNot(appear);
+    $("#remove").shouldNot(appear);
   }
 
 }
