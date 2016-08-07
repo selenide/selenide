@@ -56,13 +56,13 @@ public class WebDriverFactory {
               + " Platform=" + capabilities.getPlatform());
     }
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
-	  if (remote == null) {
-		  BuildInfo seleniumInfo = new BuildInfo();
-		  log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
-	  }
-	  if (remote != null) {
-		  ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
-	  }
+    if (remote == null) {
+      BuildInfo seleniumInfo = new BuildInfo();
+      log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+    }
+    else {
+      ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
+    }
 
     return webdriver;
   }

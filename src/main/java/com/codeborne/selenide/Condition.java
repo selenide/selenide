@@ -363,8 +363,13 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * @deprecated please use cssClass() instead of this method, which is exactly the same
+   *
+   * @see #cssClass(String)
+   *
    * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
    */
+  @Deprecated
   public static Condition hasClass(String cssClass) {
     return cssClass(cssClass);
   }
@@ -536,7 +541,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Used to form human-readable condition expression
    * Example element.should(be(visible),have(text("abc"))
-   * @param delegate next condition to wrapp
+   * @param delegate next condition to wrap
    * @return Condition
    */
   public static Condition be(Condition delegate) {
@@ -546,7 +551,7 @@ public abstract class Condition implements Predicate<WebElement> {
   /**
    * Used to form human-readable condition expression
    * Example element.should(be(visible),have(text("abc"))
-   * @param delegate next condition to wrapp
+   * @param delegate next condition to wrap
    * @return Condition
    */
   public static Condition have(Condition delegate) {

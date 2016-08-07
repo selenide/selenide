@@ -1,8 +1,9 @@
 package com.codeborne.selenide.logevents;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
@@ -10,16 +11,22 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
  * Logs Selenide test steps and notifies all registered LogEventListener about it
  */
 public class SelenideLogger {
-  protected static ThreadLocal<List<LogEventListener>> listeners = new ThreadLocal<>();
+  protected static ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
 
-  public static void addListener(LogEventListener listener) {
-    List<LogEventListener> list = listeners.get();
-    if (list == null) {
-      list = new ArrayList<>();
+  /**
+   * Add a listener (to the current thread).
+   * @param name unique name of this listener (per thread). 
+   *             Can be used later to remove listener using method {@link #removeListener(String)}
+   * @param listener event listener
+   */
+  public static void addListener(String name, LogEventListener listener) {
+    Map<String, LogEventListener> threadListeners = listeners.get();
+    if (threadListeners == null) {
+      threadListeners = new HashMap<>();
     }
 
-    list.add(listener);
-    listeners.set(list);
+    threadListeners.put(name, listener);
+    listeners.set(threadListeners);
   }
 
   public static SelenideLog beginStep(String source, String methodName, Object... args) {
@@ -52,23 +59,38 @@ public class SelenideLogger {
   public static void commitStep(SelenideLog log, LogEvent.EventStatus status) {
     log.setStatus(status);
 
-    List<LogEventListener> listeners = getEventLoggerListeners();
+    Collection<LogEventListener> listeners = getEventLoggerListeners();
     for (LogEventListener listener : listeners) {
       listener.onEvent(log);
     }
   }
 
-  private static List<LogEventListener> getEventLoggerListeners() {
+  private static Collection<LogEventListener> getEventLoggerListeners() {
     if (listeners.get() == null) {
-      listeners.set(new ArrayList<LogEventListener>());
+      listeners.set(new HashMap<String, LogEventListener>());
     }
-    return listeners.get();
+    return listeners.get().values();
   }
-  
-  public static void removeListener(LogEventListener listener) {
-    listeners.get().remove(listener);
-    if (listeners.get().isEmpty()) {
-      listeners.remove();
-    }
+
+  /**
+   * Remove listener (from the current thread).
+   * @param name unique name of listener added by method {@link #addListener(String, LogEventListener)}
+   * @param <T> class of listener to be returned
+   * @return the listener being removed
+   */
+  @SuppressWarnings("unchecked")
+  public static <T extends LogEventListener> T removeListener(String name) {
+    return (T) listeners.get().remove(name);
+  }
+
+  /**
+   * If listener with given name is bound (added) to the current thread.
+   *
+   * @param name unique name of listener added by method {@link #addListener(String, LogEventListener)}
+   * @return true iff method {@link #addListener(String, LogEventListener)} with 
+   *              corresponding name has been called in current thread. 
+   */
+  public static boolean hasListener(String name) {
+    return listeners.get().containsKey(name);
   }
 }

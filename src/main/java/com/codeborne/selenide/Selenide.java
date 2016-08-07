@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,7 @@ import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
@@ -622,19 +624,45 @@ public class Selenide {
       return emptyList();
     }
     try {
-      List<Object> errors = executeJavaScript("return window._selenide_jsErrors");
-      if (errors == null || errors.isEmpty()) {
+      Object errors = executeJavaScript("return window._selenide_jsErrors");
+      if (errors == null) {
         return emptyList();
       }
-      List<String> result = new ArrayList<>(errors.size());
-      for (Object error : errors) {
-        result.add(error.toString());
+      else if (errors instanceof List) {
+        return errorsFromList((List<Object>) errors);
       }
-      return result;
+      else if (errors instanceof Map) {
+        return errorsFromMap((Map<Object, Object>) errors);
+      }
+      else {
+        return asList(errors.toString());
+      }
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
       log.severe(cannotExecuteJs.toString());
       return emptyList();
     } 
+  }
+
+  private static List<String> errorsFromList(List<Object> errors) {
+    if (errors.isEmpty()) {
+      return emptyList();
+    }
+    List<String> result = new ArrayList<>(errors.size());
+    for (Object error : errors) {
+      result.add(error.toString());
+    }
+    return result;
+  }
+
+  private static List<String> errorsFromMap(Map<Object, Object> errors) {
+    if (errors.isEmpty()) {
+      return emptyList();
+    }
+    List<String> result = new ArrayList<>(errors.size());
+    for (Map.Entry error : errors.entrySet()) {
+      result.add(error.getKey() + ": " + error.getValue());
+    }
+    return result;
   }
 
   /**

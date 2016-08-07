@@ -2,7 +2,7 @@ buildscript {
   repositories { jcenter() }
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.9'
-    classpath 'de.undercouch:gradle-download-task:2.1.0'
+    classpath 'de.undercouch:gradle-download-task:3.1.1'
   }
 }
 
@@ -15,7 +15,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.8-SNAPSHOT'
+version='3.9-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -50,8 +50,8 @@ dependencies {
   compile 'com.google.guava:guava:19.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.21', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.22', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.22'
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23'
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
@@ -274,7 +274,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.14'
+  gradleVersion = '2.14.1'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }

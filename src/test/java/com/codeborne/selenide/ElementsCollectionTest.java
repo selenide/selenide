@@ -1,28 +1,30 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.rules.MockWebdriverContainer;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ElementsCollectionTest {
+  @Rule
+  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
+  
   WebElement element1 = element("h1");
   WebElement element2 = element("h2");
 
   @Before
   public final void mockWebDriver() {
     browser = null;
-    webdriverContainer = mock(WebDriverThreadLocalContainer.class);
   }
   
   @Test

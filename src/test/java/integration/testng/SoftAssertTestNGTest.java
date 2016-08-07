@@ -29,8 +29,30 @@ public class SoftAssertTestNGTest {
     Configuration.timeout = 4000;
   }
 
-  @Test(enabled = false)
+  @Test//(enabled = false)
   public void userCanUseSoftAssertWithTestNG() {
+    $("#radioButtons input").shouldHave(value("777"));
+    $("#xxx").shouldBe(visible);
+    $$("#radioButtons input").shouldHave(size(888));
+    $("#radioButtons").$$("input").shouldHave(size(999));
+    $("#radioButtons select").click();
+  }
+
+  @Test
+  public void successfulTest() {
+  }
+
+  @Test//(enabled = false)
+  public void userCanUseSoftAssert2() {
+    $("#radioButtons input").shouldHave(value("777"));
+    $("#xxx").shouldBe(visible);
+    $$("#radioButtons input").shouldHave(size(888));
+    $("#radioButtons").$$("input").shouldHave(size(999));
+    $("#radioButtons select").click();
+  }
+
+  @Test//(enabled = false)
+  public void userCanUseSoftAssert3() {
     $("#radioButtons input").shouldHave(value("777"));
     $("#xxx").shouldBe(visible);
     $$("#radioButtons input").shouldHave(size(888));
