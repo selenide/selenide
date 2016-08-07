@@ -10,6 +10,7 @@ public class InvisibleElementTest extends IntegrationTest {
   public void clickHidesElement() {
     openFile("elements_disappear_on_click.html");
     $("#hide").click();
+    $("#hide").waitUntil(hidden, 2000);
   }
 
   @Test
@@ -23,13 +24,22 @@ public class InvisibleElementTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldHaveTextHide() {
-    $("#hide").shouldHave(text("Hide me"));
+  public void shouldNotHaveTextHide() {
+    $("#hide").shouldNotHave(text("Hide me").because("Text should disappear"));
   }
 
   @Test
+  public void shouldHaveAttribute() {
+    $("#hide").shouldHave(attribute("id", "hide").because("Attributes don't disappear"));
+  }
+
+  @Test
+  public void shouldHaveCssClasses() {
+    $("#hide").shouldHave(cssClass("someclass").because("Attributes don't disappear"));
+  }
+  @Test
   public void shouldNotHaveTextRemove() {
-    $("#hide").shouldNotHave(text("Remove me"));
+    $("#hide").shouldNotHave(text("Remove me").because("Text never existed."));
   }
 
 }
