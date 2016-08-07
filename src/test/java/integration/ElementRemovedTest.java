@@ -37,8 +37,8 @@ public class ElementRemovedTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldNotPresent() {
-	  $("#remove").shouldNot(present);
+  public void shouldNotBePresent() {
+	  $("#remove").shouldNotBe(present);
   }
 
   @Test
