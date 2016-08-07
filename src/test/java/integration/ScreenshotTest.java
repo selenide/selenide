@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.SelenideMethodsTest.assertBetween;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 
 public class ScreenshotTest extends IntegrationTest {
@@ -31,6 +33,9 @@ public class ScreenshotTest extends IntegrationTest {
     BufferedImage img = ImageIO.read(screenshot);
     assertBetween("Screenshot doesn't fit width " + info, img.getWidth(), 50, 200);
     assertBetween("Screenshot doesn't fit height " + info, img.getHeight(), 10, 30);
+    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder + 
+        ", but was: " + screenshot.getPath(), 
+        screenshot.getPath().startsWith(Configuration.reportsFolder));
   }
 
   @Test

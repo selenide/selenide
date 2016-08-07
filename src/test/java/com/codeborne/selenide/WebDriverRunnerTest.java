@@ -1,8 +1,10 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import com.codeborne.selenide.rules.MockWebdriverContainer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -24,7 +26,10 @@ import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
   static WebDriver driver;
-  
+
+  @Rule
+  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
+
   URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
 
   @Before 
@@ -39,8 +44,8 @@ public class WebDriverRunnerTest {
   @After
   public void resetSettings() {
     WebDriverRunner.closeWebDriver();
+    driver = null;
     Configuration.browser = System.getProperty("browser", FIREFOX);
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
   }
 
   @Test

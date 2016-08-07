@@ -20,3 +20,6 @@ before_script:
 
 jdk:
   - openjdk7
+
+addons:
+  firefox: "47.0.1"

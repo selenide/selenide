@@ -27,7 +27,7 @@ public class FileDownloadTest extends IntegrationTest {
     File downloadedFile = $(byText("Download me")).download();
 
     assertEquals("hello_world.txt", downloadedFile.getName());
-    assertEquals("Hello, WinRar!", FileUtils.readFileToString(downloadedFile));
+    assertEquals("Hello, WinRar!", FileUtils.readFileToString(downloadedFile, "UTF-8"));
     assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
   }
 

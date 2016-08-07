@@ -3,9 +3,13 @@ package com.codeborne.selenide.logevents;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
+import static com.codeborne.selenide.Configuration.assertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {
+  public static final String LISTENER_SOFT_ASSERT = "softAssert";
+  
   private final List<Throwable> errors = new ArrayList<>();
 
   @Override
@@ -34,6 +38,14 @@ public class ErrorsCollector implements LogEventListener {
         sb.append(error).append('\n');
       }
       throw new AssertionError(sb.toString());
+    }
+  }
+
+  public static void validateAssertionMode() {
+    if (assertionMode == SOFT) {
+      if (!SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)) {
+        throw new IllegalStateException("Using soft asserts, but without @SoftAsserts annotation");
+      }
     }
   }
 }

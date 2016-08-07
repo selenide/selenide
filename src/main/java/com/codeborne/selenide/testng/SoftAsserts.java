@@ -5,14 +5,16 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
 
+import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+
 /**
- * Annotate your test class with <code>@Listeners({ SoftAsserts.class})</code>
+ * Annotate your test class with {@code @Listeners({ SoftAsserts.class})}
  */
 public class SoftAsserts extends ExitCodeListener {
-  private final ErrorsCollector errorsCollector = new ErrorsCollector();
-
-  public SoftAsserts() {
-    SelenideLogger.addListener(errorsCollector);
+  @Override
+  public void onTestStart(ITestResult result) {
+    super.onTestStart(result);
+    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
   }
 
   @Override
@@ -40,6 +42,7 @@ public class SoftAsserts extends ExitCodeListener {
   }
 
   private void failIfErrors(ITestResult result) {
+    ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
     errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName());
   }
 }

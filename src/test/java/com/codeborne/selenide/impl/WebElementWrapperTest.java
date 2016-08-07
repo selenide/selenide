@@ -1,7 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.rules.MockWebdriverContainer;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -17,6 +19,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class WebElementWrapperTest {
+  @Rule
+  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
+
   WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -33,7 +38,6 @@ public class WebElementWrapperTest {
   @Before
   public final void mockWebDriver() {
     browser = null;
-    webdriverContainer = mock(WebDriverThreadLocalContainer.class);
   }
 
   @Test

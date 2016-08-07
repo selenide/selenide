@@ -35,7 +35,6 @@ public class SelenideElementProxyTest {
   
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);
-  LogEventListener listener; 
 
   @Before
   public void mockWebDriver() {
@@ -43,7 +42,6 @@ public class SelenideElementProxyTest {
     Configuration.pollingInterval = 1;
     Configuration.screenshots = false;
 
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
     WebDriverRunner.setWebDriver(webdriver);
     when(webdriver
         .executeScript(anyString(), any(WebElement.class)))
@@ -59,9 +57,7 @@ public class SelenideElementProxyTest {
   
   @After
   public void after() {
-    if (listener != null) {
-      SelenideLogger.removeListener(listener);
-    }
+    SelenideLogger.removeListener("test");
   }
 
   @Test
@@ -161,7 +157,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "set value", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "set value", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
@@ -171,7 +167,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "should have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -182,7 +178,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should not have", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "should not have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -193,7 +189,7 @@ public class SelenideElementProxyTest {
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", FAIL));
+    SelenideLogger.addListener("test", createListener(selector, "should have", FAIL));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
