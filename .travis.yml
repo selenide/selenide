@@ -13,7 +13,7 @@ cache:
   directories:
   - $HOME/.gradle
 
-script: "gradle clean test chrome testng"
+script: "gradle clean test chrome"
 before_script:
   - "export CHROME_BIN=chromium-browser"
   - "export DISPLAY=:99.0"
