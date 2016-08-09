@@ -228,6 +228,7 @@ task jbrowser(type: Test) {
 task testng(type: Test) {
   useTestNG()
   include '**/*'
+  systemProperties['selenide.browser'] = 'htmlunit'
 }
 
 tasks.withType(Test).all { testTask ->
