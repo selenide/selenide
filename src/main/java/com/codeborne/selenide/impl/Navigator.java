@@ -69,7 +69,7 @@ public class Navigator {
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
-      if (isIE()) Selenide.switchTo().alert().authenticateUsing(new UserAndPassword(domain + login, password));
+      if (isIE() && !"".equals(login)) Selenide.switchTo().alert().authenticateUsing(new UserAndPassword(domain + login, password));
       collectJavascriptErrors((JavascriptExecutor) webdriver);
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
