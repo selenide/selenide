@@ -11,7 +11,6 @@ import net.lightbody.bmp.util.HttpMessageContents;
 import net.lightbody.bmp.util.HttpMessageInfo;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
@@ -68,7 +67,7 @@ public class BrowserMobProxyServerTest extends IntegrationTest {
     $(By.name("q")).shouldBe(visible, enabled);
   }
 
-  @Test @Ignore
+  @Test
   public void local_https() {
     openFile("file_upload_form.html");
     $("#cv").uploadFromClasspath("hello_world.txt");
