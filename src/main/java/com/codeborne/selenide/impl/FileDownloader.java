@@ -42,6 +42,7 @@ import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
+@Deprecated
 public class FileDownloader {
   private static final Logger log = Logger.getLogger(FileDownloader.class.getName());
   
