@@ -12,21 +12,17 @@ import net.lightbody.bmp.util.HttpMessageInfo;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.junit.Assert.*;
 
 /**
  * Selenide runs its own proxy server.
@@ -58,6 +54,7 @@ public class ChainedProxyTest extends IntegrationTest {
       Proxy seleniumProxy = ClientUtil.createSeleniumProxy(chainedProxy);
       WebDriverRunner.setProxy(seleniumProxy);
     }
+    visitedUrls.clear();
   }
 
   @AfterClass
@@ -70,35 +67,19 @@ public class ChainedProxyTest extends IntegrationTest {
   }
 
   @Test
-  public void remote_http() {
-    open("http://google.com");
-    $(By.name("q")).shouldBe(visible, enabled);
-    assertThat(visitedUrls.size(), is(1));
-  }
-
-  @Test
-  public void remote_https() {
-    open("https://google.com");
-    $(By.name("q")).shouldBe(visible, enabled);
-    assertThat(visitedUrls.size(), is(1));
-  }
-
-  @Test
-  public void local_https() {
+  public void selenideProxyCanWorkWithUserProvidedChainedProxy() {
     openFile("file_upload_form.html");
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
+    
+    // Assert that files are actually uploaded via 2 proxies
+    $("h3").shouldHave(text("Uploaded 2 files"));
     assertEquals(2, server.uploadedFiles.size());
-    assertThat(visitedUrls.size(), is(1));
-  }
-
-  @Test
-  public void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download();
-    assertEquals("some-file.txt", video.getName());
-    assertThat(visitedUrls.size(), is(1));
-    assertThat(visitedUrls.get(0), is("http://the-internet.herokuapp.com/download/some-file.txt"));
+    
+    // Assert that "chained" proxy has intercepted requests
+    assertTrue(visitedUrls.size() > 3);
+    assertThat(visitedUrls.get(0), endsWith("/start_page.html"));
+    assertThat(visitedUrls.get(visitedUrls.size() - 1), endsWith("/upload"));
   }
 }

@@ -44,9 +44,4 @@ public class FileDownloadTest extends IntegrationTest {
   public void downloadMissingFile() throws IOException {
     $(byText("Download missing file")).download();
   }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void throwsIllegalArgumentException_ifElementHasNoHrefAttribute() throws FileNotFoundException {
-    $("h1").download();
-  }
 }
