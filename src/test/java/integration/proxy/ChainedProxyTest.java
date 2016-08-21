@@ -21,7 +21,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
-import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 /**
@@ -79,7 +79,7 @@ public class ChainedProxyTest extends IntegrationTest {
     
     // Assert that "chained" proxy has intercepted requests
     assertTrue("Expected at least 2 urls, but got: " + visitedUrls, visitedUrls.size() >= 3);
-    assertThat(visitedUrls.get(0), endsWith("/start_page.html"));
-    assertThat(visitedUrls.get(visitedUrls.size() - 1), endsWith("/upload"));
+    assertThat(visitedUrls.get(0), containsString("/file_upload_form.html"));
+    assertThat(visitedUrls.get(visitedUrls.size() - 1), containsString("/upload"));
   }
 }
