@@ -1,6 +1,6 @@
 == Changelog
 
-=== 3.9 (Planned to 2x.08.2016)
+=== 3.9 (Released 22.08.2016)
 * #196 #267 Selenide uses its own proxy server to download files (thanks to @dimand58 for pull request)
 
 === 3.8.1 (Released 10.08.2016)
