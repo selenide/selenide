@@ -1,8 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.junit.TextReport;
 import com.codeborne.selenide.junit.ScreenShooter;
+import com.codeborne.selenide.junit.TextReport;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
@@ -10,7 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
-import java.util.*;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -66,6 +66,7 @@ public abstract class IntegrationTest {
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     browserSize = "1024x768";
+    server.uploadedFiles.clear();
   }
 
   @AfterClass

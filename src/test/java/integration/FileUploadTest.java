@@ -21,7 +21,6 @@ public class FileUploadTest extends IntegrationTest {
       closeWebDriver();
     }
     openFile("file_upload_form.html");
-    server.uploadedFiles.clear();
   }
 
   @Test
