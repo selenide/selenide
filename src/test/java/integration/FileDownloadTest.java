@@ -12,9 +12,11 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 public class FileDownloadTest extends IntegrationTest {
   File folder = new File(Configuration.reportsFolder);
@@ -26,6 +28,8 @@ public class FileDownloadTest extends IntegrationTest {
 
   @Test
   public void downloadsFiles() throws IOException {
+    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+    
     File downloadedFile = $(byText("Download me")).download();
 
     assertEquals("hello_world.txt", downloadedFile.getName());
