@@ -78,7 +78,7 @@ public class ChainedProxyTest extends IntegrationTest {
     assertEquals(2, server.uploadedFiles.size());
     
     // Assert that "chained" proxy has intercepted requests
-    assertTrue(visitedUrls.size() > 3);
+    assertTrue("Expected at least 2 urls, but got: " + visitedUrls, visitedUrls.size() >= 3);
     assertThat(visitedUrls.get(0), endsWith("/start_page.html"));
     assertThat(visitedUrls.get(visitedUrls.size() - 1), endsWith("/upload"));
   }
