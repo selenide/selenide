@@ -1,7 +1,7 @@
 buildscript {
   repositories { jcenter() }
   dependencies {
-    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.9'
+    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     classpath 'de.undercouch:gradle-download-task:3.1.1'
   }
 }
