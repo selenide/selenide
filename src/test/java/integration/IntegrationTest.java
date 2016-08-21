@@ -77,12 +77,10 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    measureSeleniumCommandDuration();
     open("/" + fileName + "?" + averageSeleniumCommandDuration);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    measureSeleniumCommandDuration();
     return open("/" + fileName + "?" + averageSeleniumCommandDuration, pageObjectClass);
   }
 
@@ -97,7 +95,8 @@ public abstract class IntegrationTest {
     clickViaJs = false;
   }
 
-  private void measureSeleniumCommandDuration() {
+  @BeforeClass
+  public static void measureSeleniumCommandDuration() {
     if (averageSeleniumCommandDuration < 0) {
       open("/start_page.html");
       long start = System.currentTimeMillis();
