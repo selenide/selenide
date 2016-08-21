@@ -49,6 +49,8 @@ public abstract class IntegrationTest {
         port = findFreePort();
         server = new LocalHttpServer(port).start();
         log.info("START " + browser + " TESTS");
+
+        measureSeleniumCommandDuration();
       }
     }
   }
@@ -95,26 +97,23 @@ public abstract class IntegrationTest {
     clickViaJs = false;
   }
 
-  @BeforeClass
-  public static void measureSeleniumCommandDuration() {
-    if (averageSeleniumCommandDuration < 0) {
-      open("/start_page.html");
-      long start = System.currentTimeMillis();
-      try {
-        WebDriver driver = getWebDriver();
-        driver.findElement(By.tagName("h1")).isDisplayed();
-        driver.findElement(By.tagName("h1")).isEnabled();
-        driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
-        driver.findElement(By.tagName("h1")).getText();
-        averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
+  private static void measureSeleniumCommandDuration() {
+    open("/start_page.html");
+    long start = System.currentTimeMillis();
+    try {
+      WebDriver driver = getWebDriver();
+      driver.findElement(By.tagName("h1")).isDisplayed();
+      driver.findElement(By.tagName("h1")).isEnabled();
+      driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
+      driver.findElement(By.tagName("h1")).getText();
+      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
 
-        log.info("Average selenium command duration for " + browser + ": " +
-            averageSeleniumCommandDuration + " ms.");
-      }
-      catch (WebDriverException e) {
-        log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
-        averageSeleniumCommandDuration = 100;
-      }
+      log.info("Average selenium command duration for " + browser + ": " +
+          averageSeleniumCommandDuration + " ms.");
+    }
+    catch (WebDriverException e) {
+      log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
+      averageSeleniumCommandDuration = 100;
     }
   }
 }
