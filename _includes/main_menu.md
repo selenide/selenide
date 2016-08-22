@@ -9,7 +9,8 @@
 </ul>
 
 <div class="news">
-  <div class="news-line"><a href="/2016/08/06/selenide-3.8/">Released Selenide 3.8!</a></div>
+  <div class="news-line">Released Selenide 3.9!</div>
+  <!--<div class="news-line"><a href="/2016/08/06/selenide-3.8/">Released Selenide 3.8!</a></div>-->
 </div>
 
 <h3 style="display:none">Blog</h3>
