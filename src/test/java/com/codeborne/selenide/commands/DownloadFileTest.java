@@ -4,12 +4,15 @@ import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.rules.MockWebdriverContainer;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -30,6 +33,7 @@ public class DownloadFileTest {
   public ExpectedException thrown = ExpectedException.none();
 
   DownloadFile command = new DownloadFile();
+  WebDriver webdriver = mock(WebDriver.class);
   SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   WebElementSource linkWithHref = mock(WebElementSource.class);
   WebElement link = mock(WebElement.class);
@@ -40,7 +44,10 @@ public class DownloadFileTest {
   public void setUp() {
     command.waiter = spy(new DownloadFile.Waiter());
     doNothing().when(command.waiter).sleep(anyLong());
+    when(webdriverContainer.getWebDriver()).thenReturn(webdriver);
     when(webdriverContainer.getProxyServer()).thenReturn(proxy);
+    when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
+    
     when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
@@ -56,6 +63,23 @@ public class DownloadFileTest {
     verify(filter).activate();
     verify(link).click();
     verify(filter).deactivate();
+  }
+  
+  @Test
+  public void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
+    emulateServerResponseWithFiles(new File("report.pdf"));
+    when(webdriver.getWindowHandle()).thenReturn("tab1");
+    when(webdriver.getWindowHandles())
+        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
+        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+
+    File file = command.execute(null, linkWithHref, null);
+    assertThat(file.getName(), is("report.pdf"));
+
+    verify(webdriver.switchTo()).window("tab-with-pdf");
+    verify(webdriver).close();
+    verify(webdriver.switchTo()).window("tab1");
+    verifyNoMoreInteractions(webdriver.switchTo());
   }
 
   @Test

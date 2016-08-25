@@ -13,12 +13,18 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.lang.System.currentTimeMillis;
 
 public class DownloadFile implements Command<File> {
+  private static final Logger log = Logger.getLogger(DownloadFile.class.getName());
+  
   Waiter waiter = new Waiter();
   
   @Override
@@ -34,8 +40,10 @@ public class DownloadFile implements Command<File> {
 
   File clickAndInterceptFileByProxyServer(WebElementSource linkWithHref, WebElement link, 
                                                   SelenideProxyServer proxyServer) throws FileNotFoundException {
+    String currentWindowHandle = getWebDriver().getWindowHandle();
+    Set<String> currentWindows = getWebDriver().getWindowHandles();
+    
     FileDownloadFilter filter = proxyServer.responseFilter("download");
-
     filter.activate();
     try {
       link.click();
@@ -45,6 +53,22 @@ public class DownloadFile implements Command<File> {
     }
     finally {
       filter.deactivate();
+      closeNewWindows(currentWindowHandle, currentWindows);
+    }
+  }
+
+  private void closeNewWindows(String currentWindowHandle, Set<String> currentWindows) {
+    if (getWebDriver().getWindowHandles().size() != currentWindows.size()) {
+      Set<String> newWindows = new HashSet<>(getWebDriver().getWindowHandles());
+      newWindows.removeAll(currentWindows);
+
+      log.info("File has been opened in a new window, let's close " + newWindows.size() + " new windows");
+      for (String newWindow : newWindows) {
+        log.info("  Let's close " + newWindow);
+        getWebDriver().switchTo().window(newWindow);
+        getWebDriver().close();
+      }
+      getWebDriver().switchTo().window(currentWindowHandle);
     }
   }
 
