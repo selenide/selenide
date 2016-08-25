@@ -3,7 +3,10 @@ package com.codeborne.selenide.proxy;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.filters.RequestFilter;
+import net.lightbody.bmp.filters.RequestFilterAdapter;
 import net.lightbody.bmp.filters.ResponseFilter;
+import net.lightbody.bmp.filters.ResponseFilterAdapter;
 import org.openqa.selenium.Proxy;
 
 import java.net.InetSocketAddress;
@@ -15,18 +18,30 @@ import static java.lang.Integer.parseInt;
 /**
  * Selenide own proxy server to intercept server responses
  * 
- * It holds map of response filters by name.
+ * It holds map of request and response filters by name.
  */
 public class SelenideProxyServer {
   protected final Proxy outsideProxy;
-  protected BrowserMobProxy proxy = new BrowserMobProxyServer();
+  protected BrowserMobProxy proxy = new BrowserMobProxyServer() {
+    int maxSize = 64 * 1024 * 1024; // 64 MB
+    @Override
+    public void addRequestFilter(RequestFilter filter) {
+      addFirstHttpFilterFactory(new RequestFilterAdapter.FilterSource(filter, maxSize));
+    }
+
+    @Override public void addResponseFilter(ResponseFilter filter) {
+      addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, maxSize));
+    }
+  };
+  
   protected int port;
-  protected Map<String, ResponseFilter> filters = new HashMap<>();
+  protected Map<String, RequestFilter> requestFilters = new HashMap<>();
+  protected Map<String, ResponseFilter> responseFilters = new HashMap<>();
 
   /**
    * Create server
    * Note that server is not started nor activated yet.
-   * 
+   *
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
   public SelenideProxyServer(Proxy outsideProxy) {
@@ -43,16 +58,23 @@ public class SelenideProxyServer {
     if (outsideProxy != null) {
       proxy.setChainedProxy(getProxyAddress(outsideProxy));
     }
+
+    addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
+    addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
+    addResponseFilter("download", new FileDownloadFilter());
+
     proxy.start();
     port = proxy.getPort();
-
-    FileDownloadFilter fileDownloadFilter = new FileDownloadFilter();
-    addResponseFilter(fileDownloadFilter);
   }
 
-  private void addResponseFilter(FileDownloadFilter fileDownloadFilter) {
+  private void addRequestFilter(String name, RequestFilter requestFilter) {
+    proxy.addRequestFilter(requestFilter);
+    requestFilters.put(name, requestFilter);
+  }
+
+  private void addResponseFilter(String name, ResponseFilter fileDownloadFilter) {
     proxy.addResponseFilter(fileDownloadFilter);
-    filters.put("download", fileDownloadFilter);
+    responseFilters.put(name, fileDownloadFilter);
   }
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
@@ -82,12 +104,20 @@ public class SelenideProxyServer {
   }
 
   /**
+   * Get request filter by name
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends RequestFilter> T requestFilter(String name) {
+    return (T) requestFilters.get(name);
+  }
+
+  /**
    * Get response filter by name
    * 
    * By default, the only one filter "download" is available.
    */
   @SuppressWarnings("unchecked")
-  public <T extends ResponseFilter> T filter(String name) {
-    return (T) filters.get(name);
+  public <T extends ResponseFilter> T responseFilter(String name) {
+    return (T) responseFilters.get(name);
   }
 }

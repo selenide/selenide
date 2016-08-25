@@ -34,7 +34,7 @@ public class DownloadFile implements Command<File> {
 
   File clickAndInterceptFileByProxyServer(WebElementSource linkWithHref, WebElement link, 
                                                   SelenideProxyServer proxyServer) throws FileNotFoundException {
-    FileDownloadFilter filter = proxyServer.filter("download");
+    FileDownloadFilter filter = proxyServer.responseFilter("download");
 
     filter.activate();
     try {

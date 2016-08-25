@@ -34,7 +34,7 @@ public class SelenideProxyServerTest {
     }
     verify(bmp).stop();
 
-    FileDownloadFilter filter = proxyServer.filter("download");
+    FileDownloadFilter filter = proxyServer.responseFilter("download");
     assertThat(filter.getDownloadedFiles().size(), is(0));
   }
 

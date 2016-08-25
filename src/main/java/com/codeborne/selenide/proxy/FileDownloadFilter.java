@@ -25,7 +25,7 @@ public class FileDownloadFilter implements ResponseFilter {
   private final Pattern patternContentDisposition = Pattern.compile(".*filename=\"?([^\"]*)\"?.*");
 
   /**
-   * Activate this filter. 
+   * Activate this filter.
    * Starting from this moment, it will record all responses that contain header "Content-Disposition".
    * These responses are supposed to contain a file being downloaded.
    */
@@ -41,22 +41,22 @@ public class FileDownloadFilter implements ResponseFilter {
   public void deactivate() {
     active = false;
   }
-  
+
   @Override
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (!active) return;
     if (response.getStatus().code() < 200 || response.getStatus().code() >= 300) return;
-    
+
     String fileName = getFileName(response);
     if (fileName == null) return;
-    
+
     File file = prepareTargetFile(fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
       downloadedFiles.add(file);
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Failed to save downloaded file to " + file.getAbsolutePath() + 
+      log.log(Level.SEVERE, "Failed to save downloaded file to " + file.getAbsolutePath() +
           " for url " + messageInfo.getUrl(), e);
     }
   }
@@ -79,7 +79,7 @@ public class FileDownloadFilter implements ResponseFilter {
         return fileName;
       }
     }
-    
+
     return null;
   }
 

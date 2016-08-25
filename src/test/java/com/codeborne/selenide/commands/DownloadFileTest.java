@@ -41,7 +41,7 @@ public class DownloadFileTest {
     command.waiter = spy(new DownloadFile.Waiter());
     doNothing().when(command.waiter).sleep(anyLong());
     when(webdriverContainer.getProxyServer()).thenReturn(proxy);
-    when(proxy.filter("download")).thenReturn(filter);
+    when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }
