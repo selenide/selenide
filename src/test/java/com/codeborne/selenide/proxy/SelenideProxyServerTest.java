@@ -32,7 +32,7 @@ public class SelenideProxyServerTest {
     finally {
       proxyServer.shutdown();
     }
-    verify(bmp).stop();
+    verify(bmp).abort();
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     assertThat(filter.getDownloadedFiles().size(), is(0));

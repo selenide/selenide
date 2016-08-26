@@ -95,7 +95,7 @@ public class SelenideProxyServer {
    * Stop the server
    */
   public void shutdown() {
-    proxy.stop();
+    proxy.abort();
   }
 
   @Override
