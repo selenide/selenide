@@ -2,6 +2,7 @@
 
 === 3.9.1 (Released 26.08.2016)
 * #383 Selenide proxy server now allows requests and responses bigger than 2MB (but writes warning) 
+* #384 fixed SoftAssert listener for TestNG: it only applies for classes with @Listeners(SoftAssert.class} annotation
 * upgrade to gson:2.7 
 
 === 3.9 (Released 22.08.2016)
@@ -14,7 +15,7 @@
 * #359 user can disable creating *.html files - thanks to @BorisOsipov for this PR!
 * fixed file uploading methods on remote browsers & grid - thanks to Alexei Vinogradov!
 * #364, #303 TestNG: SimpleReport is now thread-safe
-* #364, #303 TestNG: SoftAsserts is now thread-safe
+* #364, #303 TestNG: SoftAssertsReportsNGTest is now thread-safe
 * #360 added methods to Selectors; byCssSelector(), byClassName()
 * #355 added method $.dragAndDropTo(WebElement)
 * #339 fixed JS error in Edge browser

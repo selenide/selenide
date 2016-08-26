@@ -2,6 +2,7 @@ package integration.testng;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.testng.TextReport;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -11,11 +12,15 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @Listeners(TextReport.class)
-//@Listeners(SoftAsserts.class)
 public class ReportsNGTest extends BaseTestNGTest {
+  @BeforeClass
+  public void setUp() throws Exception {
+    startServer();
+  }
+
   @Test(expectedExceptions = ElementNotFound.class)
   public void failingMethod() {
-    $("h2").shouldBe(visible).shouldHave(text("Selenide"));
+    $("h22").shouldBe(visible).shouldHave(text("Selenide"));
   }
 
   @Test

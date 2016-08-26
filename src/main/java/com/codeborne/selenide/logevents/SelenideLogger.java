@@ -80,7 +80,12 @@ public class SelenideLogger {
    */
   @SuppressWarnings("unchecked")
   public static <T extends LogEventListener> T removeListener(String name) {
-    return (T) listeners.get().remove(name);
+    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
+    return listeners == null ? null : (T) listeners.remove(name);
+  }
+  
+  public static void removeAllListeners() {
+    SelenideLogger.listeners.remove();
   }
 
   /**
@@ -91,6 +96,7 @@ public class SelenideLogger {
    *              corresponding name has been called in current thread. 
    */
   public static boolean hasListener(String name) {
-    return listeners.get().containsKey(name);
+    Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
+    return listeners != null && listeners.containsKey(name);
   }
 }
