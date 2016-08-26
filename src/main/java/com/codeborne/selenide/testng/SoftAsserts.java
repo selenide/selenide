@@ -3,9 +3,13 @@ package com.codeborne.selenide.testng;
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.testng.ITestResult;
+import org.testng.annotations.Listeners;
 import org.testng.reporters.ExitCodeListener;
 
+import java.lang.annotation.Annotation;
+
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+import static java.util.Arrays.asList;
 
 /**
  * Annotate your test class with {@code @Listeners({ SoftAsserts.class})}
@@ -13,36 +17,57 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASS
 public class SoftAsserts extends ExitCodeListener {
   @Override
   public void onTestStart(ITestResult result) {
-    super.onTestStart(result);
-    SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+    addSelenideErrorListener(result);
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
-    super.onTestFailure(result);
     failIfErrors(result);
   }
 
   @Override
   public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-    super.onTestFailedButWithinSuccessPercentage(result);
     failIfErrors(result);
   }
 
   @Override
   public void onTestSuccess(ITestResult result) {
-    super.onTestSuccess(result);
+    failIfErrors(result);
+  }
+  
+  @Override
+  public void onConfigurationFailure(ITestResult result) {
     failIfErrors(result);
   }
 
-  @Override
-  public void onConfigurationFailure(ITestResult result) {
-    super.onConfigurationFailure(result);
-    failIfErrors(result);
+  void addSelenideErrorListener(ITestResult result) {
+    if (shouldIntercept(result.getTestClass().getRealClass())) {
+      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+    }
+  }
+
+  boolean shouldIntercept(Class testClass) {
+    Listeners listenersAnnotation = getListenersAnnotation(testClass);
+    return listenersAnnotation != null && asList(listenersAnnotation.value()).contains(SoftAsserts.class);
+
+  }
+
+  Listeners getListenersAnnotation(Class testClass) {
+    Annotation annotation = testClass.getAnnotation(Listeners.class);
+    return annotation != null ? (Listeners) annotation :
+        testClass.getSuperclass() != null ? getListenersAnnotation(testClass.getSuperclass()) : null;
   }
 
   private void failIfErrors(ITestResult result) {
     ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
-    errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName());
+    if (errorsCollector != null) {
+      try {
+        errorsCollector.failIfErrors(result.getTestClass().getName() + '.' + result.getName());
+      }
+      catch (AssertionError e) {
+        result.setStatus(ITestResult.FAILURE);
+        result.setThrowable(e);
+      }
+    }
   }
 }
