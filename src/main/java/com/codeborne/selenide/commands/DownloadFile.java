@@ -66,7 +66,12 @@ public class DownloadFile implements Command<File> {
       for (String newWindow : newWindows) {
         log.info("  Let's close " + newWindow);
         getWebDriver().switchTo().window(newWindow);
-        getWebDriver().close();
+        try {
+          getWebDriver().close();
+        }
+        catch (Exception e) {
+          log.warning("  Failed to close " + newWindow + ": " + e);
+        }
       }
       getWebDriver().switchTo().window(currentWindowHandle);
     }
