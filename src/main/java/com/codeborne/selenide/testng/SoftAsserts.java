@@ -4,9 +4,11 @@ import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.testng.ITestResult;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 import static java.util.Arrays.asList;
@@ -41,7 +43,8 @@ public class SoftAsserts extends ExitCodeListener {
   }
 
   void addSelenideErrorListener(ITestResult result) {
-    if (shouldIntercept(result.getTestClass().getRealClass())) {
+    if (shouldIntercept(result.getTestClass().getRealClass()) &&
+        shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod())) {
       SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
     }
   }
@@ -49,7 +52,13 @@ public class SoftAsserts extends ExitCodeListener {
   boolean shouldIntercept(Class testClass) {
     Listeners listenersAnnotation = getListenersAnnotation(testClass);
     return listenersAnnotation != null && asList(listenersAnnotation.value()).contains(SoftAsserts.class);
+  }
 
+  boolean shouldIntercept(Method testMethod) {
+    if (testMethod == null) return false;
+    
+    Test annotation = testMethod.getAnnotation(Test.class);
+    return annotation != null && asList(annotation.expectedExceptions()).isEmpty();
   }
 
   Listeners getListenersAnnotation(Class testClass) {

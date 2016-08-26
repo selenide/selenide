@@ -35,15 +35,21 @@ public class SoftAssertsTest {
   @Test
   public void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
     assertTrue(listener.shouldIntercept(SoftAssertTestNGTest1.class));
-    assertNotNull(listener.shouldIntercept(SoftAssertTestNGTest2.class));
+    assertTrue(listener.shouldIntercept(SoftAssertTestNGTest2.class));
     
     assertFalse(listener.shouldIntercept(ReportsNGTest.class));
     assertFalse(listener.shouldIntercept(AttributeTest.class));
   }
 
   @Test
-  public void addsSelenideErrorListener_forMethodsThatNeedSoftAsserts() {
-    ITestResult result = mockTestResult(SoftAssertTestNGTest1.class, null);
+  public void shouldNotInterceptTestMethod_withDeclaredExceptedExceptions() throws NoSuchMethodException {
+    assertTrue(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("successfulTest1")));
+    assertFalse(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("testWithExpectedExceptions")));
+  }
+
+  @Test
+  public void addsSelenideErrorListener_forMethodsThatNeedSoftAsserts() throws Exception {
+    ITestResult result = mockTestResult(SoftAssertTestNGTest1.class, "successfulTest1");
     
     listener.addSelenideErrorListener(result);
 
@@ -51,8 +57,8 @@ public class SoftAssertsTest {
   }
 
   @Test
-  public void shouldNotAddSelenideErrorListener_forMethodsThatDoNotNeedSoftAsserts() {
-    ITestResult result = mockTestResult(ReportsNGTest.class, null);
+  public void shouldNotAddSelenideErrorListener_forMethodsThatDoNotNeedSoftAsserts() throws Exception {
+    ITestResult result = mockTestResult(ReportsNGTest.class, "successfulMethod");
     
     listener.addSelenideErrorListener(result);
 
@@ -60,7 +66,7 @@ public class SoftAssertsTest {
   }
 
   @Test
-  public void marksTestAsFailed_withAssertionError_containingAllErrors() {
+  public void marksTestAsFailed_withAssertionError_containingAllErrors() throws Exception {
     ITestResult result = mockTestResult(SoftAssertTestNGTest2.class, "userCanUseSoftAssertWithTestNG2");
 
     ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
@@ -87,7 +93,7 @@ public class SoftAssertsTest {
   }
 
   @Test
-  public void shouldNotMarkTestAsFailed_ifThereWereNoErrorsDuringMethodExecution() {
+  public void shouldNotMarkTestAsFailed_ifThereWereNoErrorsDuringMethodExecution() throws Exception {
     ITestResult result = mockTestResult(SoftAssertTestNGTest2.class, "userCanUseSoftAssertWithTestNG2");
 
     ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
@@ -101,11 +107,12 @@ public class SoftAssertsTest {
     verify(result, never()).setThrowable(any(Throwable.class));
   }
 
-  private ITestResult mockTestResult(Class<?> testClass, String methodName) {
+  private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
     ITestResult result = mock(ITestResult.class, RETURNS_DEEP_STUBS);
     when(result.getTestClass().getName()).thenReturn(testClass.getName());
     when(result.getTestClass().getRealClass()).thenReturn(testClass);
     when(result.getName()).thenReturn(methodName);
+    when(result.getMethod().getConstructorOrMethod().getMethod()).thenReturn(testClass.getMethod(methodName));
     return result;
   }
 }
