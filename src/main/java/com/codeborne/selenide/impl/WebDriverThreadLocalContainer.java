@@ -130,18 +130,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     ALL_WEB_DRIVERS_THREADS.remove(thread);
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
     SelenideProxyServer proxy = THREAD_PROXY_SERVER.remove(thread.getId());
-
-    if (proxy != null) {
-      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
-      proxy.shutdown();
-    }
-
+    
     if (webdriver != null && !holdBrowserOpen) {
       log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
+      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
 
       long start = System.currentTimeMillis();
 
-      Thread t = new Thread(new CloseBrowser(webdriver));
+      Thread t = new Thread(new CloseBrowser(webdriver, proxy));
       t.setDaemon(true);
       t.start();
 
@@ -162,13 +158,19 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
         log.fine("Closed webdriver in " + duration + " ms");
       }
     }
+    else if (proxy != null && !holdBrowserOpen) {
+      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
+      proxy.shutdown();
+    }
   }
 
   private static class CloseBrowser implements Runnable {
     private final WebDriver webdriver;
+    private final SelenideProxyServer proxy;
 
-    private CloseBrowser(WebDriver webdriver) {
+    private CloseBrowser(WebDriver webdriver, SelenideProxyServer proxy) {
       this.webdriver = webdriver;
+      this.proxy = proxy;
     }
 
     @Override
@@ -186,6 +188,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       }
       finally {
         killBrowser(webdriver);
+      }
+      
+      if (proxy != null) {
+        log.info("Trying to shutdown " + proxy + " ...");
+        proxy.shutdown();
       }
     }
 
