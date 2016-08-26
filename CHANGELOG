@@ -3,6 +3,7 @@
 === 3.9.1 (Released 26.08.2016)
 * #383 Selenide proxy server now allows requests and responses bigger than 2MB (but writes warning) 
 * #384 fixed SoftAssert listener for TestNG: it only applies for classes with @Listeners(SoftAssert.class} annotation
+* #372 fixed SoftAssert listener for TestNG: it ignores tests with "expectedExceptions" attribute
 * upgrade to gson:2.7 
 
 === 3.9 (Released 22.08.2016)
