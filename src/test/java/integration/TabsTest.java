@@ -1,5 +1,6 @@
 package integration;
 
+import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.After;
 import org.junit.Before;
@@ -11,9 +12,7 @@ import java.util.Set;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -23,7 +22,7 @@ public class TabsTest extends IntegrationTest {
     openFile("page_with_tabs.html");
   }
 
-  @Test
+  @Test @Video
   public void userCanBrowseTabs_webdriver_api() {
     openFile("page_with_tabs.html");
 
@@ -44,7 +43,7 @@ public class TabsTest extends IntegrationTest {
     $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchToWindowByTitle() {
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
@@ -57,7 +56,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchToWindowByIndex_chrome() {
     assumeTrue(isChrome());
     $(byText("Page2: alerts")).click();
@@ -72,7 +71,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
     assumeFalse(isChrome() || isHtmlUnit());
     $(byText("Page2: alerts")).click();
@@ -87,7 +86,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchBetweenWindowsWithSameTitles() {
     assumeFalse(isHtmlUnit());
     $(byText("Page4: same title")).click();

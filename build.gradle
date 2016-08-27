@@ -54,16 +54,19 @@ dependencies {
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.21', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23'
+  compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.2'
+
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.1'
-  
-  compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.2'
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.1'  
   testCompile 'org.mockito:mockito-core:1.10.19'
   testCompile 'org.eclipse.jetty:jetty-server:9.2.17.v20160517'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.2.17.v20160517'
   testCompile 'commons-fileupload:commons-fileupload:1.3.2'
+  
+  testCompile 'com.automation-remarks:video-recorder-core:1.0.8'
+  testCompile 'com.automation-remarks:video-recorder-junit:1.0.8'
 }
 
 task libs(type: Sync) {
