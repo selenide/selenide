@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriverException;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -69,6 +70,7 @@ public abstract class IntegrationTest {
     fastSetValue = false;
     browserSize = "1024x768";
     server.uploadedFiles.clear();
+    Configuration.fileDownload = PROXY;
   }
 
   @AfterClass
