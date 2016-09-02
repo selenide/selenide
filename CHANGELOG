@@ -1,6 +1,6 @@
 == Changelog
 
-=== 3.9.2 (Released 01.09.2016)
+=== 3.9.2 (Released 03.09.2016)
 * #386 Selenide should download files "old way" if tests uses its own "custom" webdriver
 * #387 User can choose how to download files via Configuration.fileDownload
 
