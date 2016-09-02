@@ -1,6 +1,5 @@
-package com.codeborne.selenide.commands;
+package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.rules.MockWebdriverContainer;
@@ -25,14 +24,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-public class DownloadFileTest {
+public class DownloadFileWithProxyServerTest {
   @Rule
   public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  DownloadFile command = new DownloadFile();
+  DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
   WebDriver webdriver = mock(WebDriver.class);
   SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   WebElementSource linkWithHref = mock(WebElementSource.class);
@@ -42,10 +41,9 @@ public class DownloadFileTest {
 
   @Before
   public void setUp() {
-    command.waiter = spy(new DownloadFile.Waiter());
+    command.waiter = spy(new Waiter());
     doNothing().when(command.waiter).sleep(anyLong());
     when(webdriverContainer.getWebDriver()).thenReturn(webdriver);
-    when(webdriverContainer.getProxyServer()).thenReturn(proxy);
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
     
     when(proxy.responseFilter("download")).thenReturn(filter);
@@ -57,7 +55,7 @@ public class DownloadFileTest {
   public void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.execute(null, linkWithHref, null);
+    File file = command.download(linkWithHref, link, proxy);
     assertThat(file.getName(), is("report.pdf"));
 
     verify(filter).activate();
@@ -73,7 +71,7 @@ public class DownloadFileTest {
         .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
         .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.execute(null, linkWithHref, null);
+    File file = command.download(linkWithHref, link, proxy);
     assertThat(file.getName(), is("report.pdf"));
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
@@ -88,7 +86,7 @@ public class DownloadFileTest {
 
     thrown.expect(FileNotFoundException.class);
     thrown.expectMessage("Failed to download file <a href='report.pdf'>report</a>");
-    command.execute(null, linkWithHref, null);
+    command.download(linkWithHref, link, proxy);
   }
 
   private void emulateServerResponseWithFiles(final File... files) {

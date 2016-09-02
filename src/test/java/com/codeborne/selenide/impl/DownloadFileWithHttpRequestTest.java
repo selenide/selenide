@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class FileDownloaderTest {
-  FileDownloader d = new FileDownloader();
+public class DownloadFileWithHttpRequestTest {
+  DownloadFileWithHttpRequest d = new DownloadFileWithHttpRequest();
 
   @Test
   public void extractsFileNameFromHttpHeader() {

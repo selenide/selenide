@@ -1,9 +1,11 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +15,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,10 +23,18 @@ import static org.junit.Assume.assumeFalse;
 
 public class FileDownloadTest extends IntegrationTest {
   File folder = new File(Configuration.reportsFolder);
+  private ChromeDriver webDriver;
 
   @Before
   public void setUp() {
+    webDriver = new ChromeDriver();
+    setWebDriver(webDriver);
     openFile("page_with_uploads.html");
+  }
+
+  @After
+  public void tearDown() {
+    webDriver.quit();
   }
 
   @Test

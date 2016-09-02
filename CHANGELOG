@@ -1,5 +1,8 @@
 == Changelog
 
+=== 3.9.2 (Released 01.09.2016)
+* #386 Selenide should download files "old way" if tests uses its own "custom" webdriver
+
 === 3.9.1 (Released 27.08.2016)
 * #383 Selenide proxy server now allows requests and responses bigger than 2MB (but writes warning) 
 * #384 fixed SoftAssert listener for TestNG: it only applies for classes with @Listeners(SoftAssert.class} annotation
