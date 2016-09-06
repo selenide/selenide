@@ -239,6 +239,13 @@ public class Configuration {
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
 
   /**
+   *  Slow test execution and flash every element before action.
+   *  For debug only.
+   *
+   */
+  public static boolean slowAndFlashMode = Boolean.parseBoolean(System.getProperty("selenide.slowAndFlashMode", "false"));
+
+  /**
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
    */
   public static SelectorMode selectorMode = CSS;

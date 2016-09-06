@@ -672,4 +672,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
   BufferedImage screenshotAsImage();
+
+  /**
+   * Highlight the element
+   *
+   * @see com.codeborne.selenide.commands.Flash
+   */
+  void flash();
 }
