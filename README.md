@@ -22,7 +22,7 @@ public void testLogin() {
 }
 ```
 
-Look for for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/codeborne/selenide/wiki/Selenide-vs-Selenium).
+Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/codeborne/selenide/wiki/Selenide-vs-Selenium).
 
 ## Changelog
 Here is [CHANGELOG](https://github.com/codeborne/selenide/blob/master/CHANGELOG)
