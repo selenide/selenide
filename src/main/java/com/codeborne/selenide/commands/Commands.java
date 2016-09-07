@@ -144,8 +144,7 @@ public class Commands {
         element.flash();
         Thread.sleep(200);
       } catch (UIAssertionError | InterruptedException e) {}
-
     }
-    return (T) command.execute((SelenideElement) proxy, webElementSource, args);
+    return (T) command.execute(element, webElementSource, args);
   }
 }

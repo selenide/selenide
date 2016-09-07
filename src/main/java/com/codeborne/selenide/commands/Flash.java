@@ -51,9 +51,4 @@ public class Flash implements Command<Void> {
         executeJavaScript("if (document.contains(document.getElementById('" + FLASHER_ID + "'))) {" +
                 "document.getElementById('" + FLASHER_ID + "').remove()}");
     }
-
 }
-
-
-
-
