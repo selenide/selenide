@@ -38,6 +38,7 @@ public class Flash implements Command<Void> {
                         "flasher.style.width = parentOffsets.width + 10 + 'px';" +
                         "flasher.style.zIndex = 666;" +
                         "flasher.style.backgroundColor = '" + FLASHER_COLOR + "';" +
+                        "flasher.style.borderRadius = '5px';" +
                         "flasher.style.opacity = '0.5';" +
                         "document.body.appendChild(flasher);",
                         element);
