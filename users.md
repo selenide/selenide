@@ -189,6 +189,7 @@ header-text:
     <hr class="divider"/>
     
     
+    
     <a href="http://codeborne.com" target="_blank">
       <img src="{{ BASE_PATH }}/images/codeborne-logo-small.png" alt="Codeborne" width="240"/>
     </a>
@@ -204,6 +205,7 @@ header-text:
 <div class="vspace"></div>
 
 <a name="thanks"></a>
+
 <div class="short feedback">
   <div class="wrapper-color-content">
     <h3>We say THANKS:</h3>
@@ -212,6 +214,7 @@ header-text:
 
 <div class="wrapper-content">
   <section>
+
     <h3>JetBrains</h3>
     
     <div>
@@ -243,7 +246,7 @@ header-text:
       Take a look at YourKit's leading software products:
       <a href="http://www.yourkit.com/java/profiler/index.jsp" target="_blank">YourKit Java Profiler</a> and 
       <a href="http://www.yourkit.com/.net/profiler/index.jsp" target="_blank">YourKit .NET Profiler</a>.
-    </a>
+    </div>
     
     <div class="center">
       <br/>
@@ -287,19 +290,29 @@ header-text:
 <div class="quicklinks">
   <div class="wrapper-color-content">
     <ul class="gray-boxes">
-      <li><a href="mailto:selenide@googlegroups.com" target="_blank">
-        <span class="ql"><h3>Ask</h3> <strong><h4>people</h4></strong></span></a>
+      <li>
+        <a href="mailto:selenide@googlegroups.com" target="_blank">
+          <span class="ql"><h3>Ask</h3> <strong><h4>people</h4></strong></span>
+        </a>
       </li>
-      <li><a href="mailto:andrei.solntsev@gmail.com" target="_blank">
-        <span class="ql"><h3>Email</h3> <strong><h4>me</h4></strong></span></a>
+      <li>
+        <a href="https://groups.google.com/forum/?fromgroups#!forum/selenide" target="_blank" title="Selenide googlegroup archive">
+          <span class="ql"><h3>Read</h3> <strong><h4>GGroup</h4></strong></span>
+        </a>
       </li>
-      <li><a href="https://groups.google.com/forum/?fromgroups#!forum/selenide" target="_blank" title="Selenide googlegroup archive">
-        <span class="ql"><h3>Read</h3> <strong><h4>GGroup</h4></strong></span></a>
+      <li>
+        <a href="mailto:andrei.solntsev@gmail.com" target="_blank">
+          <span class="ql"><h3>Email</h3> <strong><h4>me</h4></strong></span>
+        </a>
       </li>
-      <li><a href="https://twitter.com/jselenide" target="_blank" title="Twitter #jselenide">
-        <span class="ql"><h3>Write to</h3> <h4>twitter</h4></a>
+      <li>
+        <a href="https://twitter.com/jselenide" target="_blank" title="Twitter #jselenide">
+          <span class="ql"><h3>Write to</h3> <h4>twitter</h4></span>
+        </a>
       </li>
     </ul>
   </div>
 </div>
 
+
+{% include JB/comments %}
