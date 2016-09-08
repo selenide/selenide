@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
@@ -231,10 +233,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
-    SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
-    selenideProxyServer.start();
-    THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);
-    WebDriver webdriver = factory.createWebDriver(selenideProxyServer.createSeleniumProxy());
+    Proxy userProvidedProxy = proxy;
+    
+    if (Configuration.fileDownload == PROXY) {
+      SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
+      selenideProxyServer.start();
+      THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);
+      userProvidedProxy = selenideProxyServer.createSeleniumProxy();
+    }
+
+    WebDriver webdriver = factory.createWebDriver(userProvidedProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
         describe(webdriver) + " -> " + webdriver);
