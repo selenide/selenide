@@ -2,14 +2,11 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.WebElementSource;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.codeborne.selenide.Configuration.slowAndFlashMode;
 
 public class Commands {
   public static Commands collection = new Commands();
@@ -34,6 +31,7 @@ public class Commands {
       addShouldNotCommands();
       addFileCommands();
       addTechnicalCommands();
+      addHighlightCommands();
     }
   }
 
@@ -43,7 +41,6 @@ public class Commands {
     commands.put("getWrappedElement", new GetWrappedElement());
     commands.put("screenshot", new TakeScreenshot());
     commands.put("screenshotAsImage", new TakeScreenshotAsImage());
-    commands.put("flash", new Flash());
   }
 
   private void addActionsCommands() {
@@ -126,6 +123,11 @@ public class Commands {
     commands.put("waitUntil", new ShouldBe());
   }
 
+  private void addHighlightCommands(){
+    commands.put("mark", new Mark());
+    commands.put("flash", new Flash());
+  }
+
   public void add(String method, Command command) {
     synchronized (this) {
       commands.put(method, command);
@@ -138,13 +140,6 @@ public class Commands {
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
-    SelenideElement element = (SelenideElement) proxy;
-    if (slowAndFlashMode && !methodName.equals("flash")){
-      try {
-        element.flash();
-        Thread.sleep(200);
-      } catch (UIAssertionError | InterruptedException e) {}
-    }
-    return (T) command.execute(element, webElementSource, args);
+    return (T) command.execute((SelenideElement) proxy, webElementSource, args);
   }
 }
