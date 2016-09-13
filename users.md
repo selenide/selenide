@@ -15,7 +15,19 @@ header-text:
 
 <div class="wrapper-content">
   <section>
-
+    
+    <a href="http://infotech.group/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/logo-infotech-group.svg" style="width: 150px;" alt="Infotech Group"/>
+    </a>
+    <br/>
+    
+    <div class="text-right">
+      <a href="http://infotech.group/" target="_blank">Infotech Group</a> 
+      Russian software developer company engaged in the development and construction of city management and automation systems.
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="https://rencredit.ru/" target="_blank">
       <img src="{{ BASE_PATH }}/images/rencredit-logo.png" style="width: 150px;" alt='LLC "CB "Renaissance Capital"'/>
     </a>
