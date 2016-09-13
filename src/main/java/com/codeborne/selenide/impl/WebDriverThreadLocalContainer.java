@@ -5,7 +5,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -74,7 +73,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     } catch (NoSuchWindowException e) {
       log.log(FINE, "Browser window is not found", e);
       return false;
-    } catch (SessionNotFoundException e) {
+    } catch (NoSuchSessionException e) {
       log.log(FINE, "Browser session is not found", e);
       return false;
     }
