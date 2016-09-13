@@ -7,11 +7,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -22,7 +22,7 @@ public class CustomWebDriverProviderTest extends IntegrationTest {
   public void setUp() {
     originalWebdriver = Configuration.browser;
 
-    assumeTrue(isFirefox());
+    assumeTrue(isChrome());
     close();
   }
 
@@ -38,16 +38,16 @@ public class CustomWebDriverProviderTest extends IntegrationTest {
     
     openFile("autocomplete.html");
     
-    assertTrue(WebDriverRunner.getWebDriver() instanceof CustomFirefoxDriver);
+    assertTrue(WebDriverRunner.getWebDriver() instanceof CustomChromeDriver);
   }
 
-  private static class CustomFirefoxDriver extends FirefoxDriver {
+  private static class CustomChromeDriver extends ChromeDriver {
   }
   
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-      return new CustomFirefoxDriver();
+      return new CustomChromeDriver();
     }
   }
 }
