@@ -299,4 +299,23 @@ public class Configuration {
 
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
       System.getProperty("selenide.fileDownload", "PROXY"));
+
+
+  public enum ElementDescriptionRule {
+    /**
+     * Show both selector value and user-friendly description of element(provided in ExBy#as)
+     */
+    ALL,
+    /**
+     * Show only selector value
+     */
+    SELECTOR,
+    /**
+     * Show only user-friendly description of element (provided in ExBy#as)
+     */
+    DESCRIPTION
+  }
+
+  public static ElementDescriptionRule elementDescriptionRule = ElementDescriptionRule.valueOf(
+          System.getProperty("selenide.elementDescriptionRule", "ALL"));
 }
