@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
@@ -32,6 +33,11 @@ public class CollectionElement extends WebElementSource {
   @Override
   public String getSearchCriteria() {
     return collection.description() + '[' + index  + ']';
+  }
+
+  @Override
+  public By getSearchCriteriaAsBy() {
+    return collection.getSearchCriteria();
   }
 
   @Override

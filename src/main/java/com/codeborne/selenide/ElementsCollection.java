@@ -4,6 +4,7 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.*;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -23,6 +24,20 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   public ElementsCollection(WebElementsCollection collection) {
     this.collection = collection;
+  }
+
+  /**
+   * @return self with provided user-friedly selector description
+   *
+   * @see com.codeborne.selenide.ExBy#as(String)
+   */
+  public ElementsCollection as(String description) {
+    By criteria = collection.getSearchCriteria();
+    if (criteria instanceof ExBy) {
+      ((ExBy) criteria).as(description);
+    }
+
+    return this;
   }
 
   /**

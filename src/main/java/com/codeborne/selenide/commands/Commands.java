@@ -40,6 +40,7 @@ public class Commands {
     commands.put("getWrappedElement", new GetWrappedElement());
     commands.put("screenshot", new TakeScreenshot());
     commands.put("screenshotAsImage", new TakeScreenshotAsImage());
+    commands.put("as", new As());
   }
 
   private void addActionsCommands() {

@@ -93,4 +93,10 @@ public class ElementFinder extends WebElementSource {
   public String toString() {
     return "{" + getSearchCriteria() + '}';
   }
+
+  @Override
+  public By getSearchCriteriaAsBy() {
+    return criteria;
+  }
+
 }

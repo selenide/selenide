@@ -5,9 +5,11 @@ import com.codeborne.selenide.Selectors.WithText;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.title;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -91,4 +93,31 @@ public class SelectorsTest {
     selector = Selectors.byText("john");
     assertEquals("by text: john", selector.toString());
   }
+
+  @Test
+  public void elementDescriptionIsDisplayed() {
+    try {
+      $("somecss").as("Some description").click();
+    }
+    catch (Throwable ex) {
+      if (ex instanceof ElementNotFound)
+        assertThat(ex.getMessage(), containsString("Some description (somecss)"));
+      else
+        throw ex;
+    }
+  }
+
+  @Test
+  public void collectionDescriptionIsDisplayed() {
+    try {
+      $$("somecss").as("Some description").get(0);
+    }
+    catch (Throwable ex) {
+      if (ex instanceof ElementNotFound)
+        assertThat(ex.getMessage(), containsString("Some description (somecss)"));
+      else
+        throw ex;
+    }
+  }
+
 }

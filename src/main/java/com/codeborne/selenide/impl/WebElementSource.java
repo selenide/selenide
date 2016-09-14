@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ExBy;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -12,12 +13,15 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static java.util.Collections.singletonList;
 
 public abstract class WebElementSource {
   public abstract WebElement getWebElement();
 
   public abstract String getSearchCriteria();
+
+  public abstract By getSearchCriteriaAsBy();
 
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return ElementFinder.wrap(proxy, getSelector(arg), index);
