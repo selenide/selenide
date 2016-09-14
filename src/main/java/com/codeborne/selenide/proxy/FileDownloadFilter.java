@@ -24,7 +24,8 @@ public class FileDownloadFilter implements ResponseFilter {
 
   private boolean active;
   private final List<File> downloadedFiles = new ArrayList<>();
-  private final Pattern patternContentDisposition = Pattern.compile(".*filename\\*?=\"?([^\";]*)\"?(;charset=.*)?.*", CASE_INSENSITIVE);
+  private final Pattern patternContentDisposition = 
+      Pattern.compile(".*filename\\*?=\"?([^\";]*)\"?(;charset=.*)?.*", CASE_INSENSITIVE);
 
   /**
    * Activate this filter.
