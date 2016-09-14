@@ -1,5 +1,8 @@
 == Changelog
 
+=== 3.10 (Released ?.09.2016)
+* #398 Support "Content-Disposition" header with encoding
+
 === 3.9.3 (Released 09.09.2016)
 * #393 Selenide should NOT add proxy server to browser if `Configuration.fileDownload = HTTPGET`
 
