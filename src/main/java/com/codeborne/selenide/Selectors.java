@@ -178,7 +178,7 @@ public abstract class Selectors {
     }
 
     String getXPath() {
-      return xpathExpression.replace("By.xpath: ", "");
+      return xpathExpression.replace("ExBy.xpath: ", "");
     }
   }
 
@@ -196,7 +196,7 @@ public abstract class Selectors {
     }
 
     String getXPath() {
-      return xpathExpression.replace("By.xpath: ", "");
+      return xpathExpression.replace("ExBy.xpath: ", "");
     }
   }
 }

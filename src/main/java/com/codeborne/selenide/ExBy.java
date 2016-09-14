@@ -69,7 +69,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.id", description, id);
+            return createDescription("ExBy.id", description, id);
         }
     }
 
@@ -95,7 +95,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.linkText", description, linkText);
+            return createDescription("ExBy.linkText", description, linkText);
         }
     }
 
@@ -122,7 +122,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.partialLinkText", description, linkText);
+            return createDescription("ExBy.partialLinkText", description, linkText);
         }
     }
 
@@ -154,7 +154,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.name", description, name);
+            return createDescription("ExBy.name", description, name);
         }
     }
 
@@ -184,7 +184,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.tagName", description, name);
+            return createDescription("ExBy.tagName", description, name);
         }
     }
 
@@ -210,7 +210,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.xpath", description, xpathExpression);
+            return createDescription("ExBy.xpath", description, xpathExpression);
         }
     }
 
@@ -256,7 +256,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.className", description, className);
+            return createDescription("ExBy.className", description, className);
         }
     }
 
@@ -294,7 +294,7 @@ public abstract class ExBy extends By {
 
         @Override
         public String toString() {
-            return createDescription("By.cssSelector", description, selector);
+            return createDescription("ExBy.cssSelector", description, selector);
         }
     }
 

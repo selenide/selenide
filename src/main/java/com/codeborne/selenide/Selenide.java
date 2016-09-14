@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
@@ -236,7 +237,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector) {
-    return getElement(By.cssSelector(cssSelector));
+    return getElement(byCssSelector(cssSelector));
   }
 
   /**
@@ -267,7 +268,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), 0);
+    return ElementFinder.wrap($(parent), byCssSelector(cssSelector), 0);
   }
 
   /**
@@ -277,7 +278,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return ElementFinder.wrap(null, By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap(null, byCssSelector(cssSelector), index);
   }
 
   /**
@@ -293,7 +294,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap($(parent), byCssSelector(cssSelector), index);
   }
 
   /**
@@ -346,7 +347,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(new BySelectorCollection(By.cssSelector(cssSelector)));
+    return new ElementsCollection(new BySelectorCollection(byCssSelector(cssSelector)));
   }
 
   /**
@@ -378,7 +379,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(new BySelectorCollection(parent, By.cssSelector(cssSelector)));
+    return new ElementsCollection(new BySelectorCollection(parent, byCssSelector(cssSelector)));
   }
 
   /**

@@ -20,6 +20,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -63,40 +64,40 @@ public class SelenideElementProxyTest {
   @Test
   public void elementShouldBeVisible() {
     when(element.isDisplayed()).thenReturn(true);
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     $("#firstName").shouldBe(visible);
   }
 
   @Test(expected = ElementNotFound.class)
   public void elementNotFound() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(null);
     $("#firstName").shouldBe(visible);
   }
 
   @Test(expected = ElementShould.class)
   public void elementFoundButNotMatched() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenReturn(false);
     $("#firstName").shouldBe(visible);
   }
 
   @Test(expected = ElementShould.class)
   public void elementFoundButInvisible() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenThrow(new WebDriverException("failed to call isDisplayed"));
     $("#firstName").shouldBe(visible);
   }
 
   @Test(expected = ElementShould.class)
   public void elementFoundButConditionCheckFailed() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenReturn(true);
     $("#firstName").shouldHave(text("goodbye"));
   }
 
   @Test
   public void elementNotFoundAsExpected() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(null);
     $("#firstName").shouldNotBe(exist);
     $("#firstName").shouldNotBe(present);
     $("#firstName").should(disappear);
@@ -107,7 +108,7 @@ public class SelenideElementProxyTest {
   
   @Test
   public void elementNotFoundAsExpected2() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
+    when(webdriver.findElement(byCssSelector("#firstName")))
         .thenThrow(new WebDriverException("element is not found and this is expected"));
     $("#firstName").shouldNot(exist);
     $("#firstName").shouldNotBe(present);
@@ -119,21 +120,21 @@ public class SelenideElementProxyTest {
 
   @Test(expected = InvalidSelectorException.class)
   public void webdriverReportsInvalidXpath_using_should() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
+    when(webdriver.findElement(byCssSelector("#firstName")))
         .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     $("#firstName").should(disappear);
   }
 
   @Test(expected = InvalidSelectorException.class)
   public void webdriverReportsInvalidXpath_using_shouldNot() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
+    when(webdriver.findElement(byCssSelector("#firstName")))
         .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     $("#firstName").shouldNot(exist);
   }
 
   @Test
   public void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(webdriver.executeScript(anyString(), anyVararg()))
         .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
     $("#firstName").setValue("john");
@@ -159,7 +160,7 @@ public class SelenideElementProxyTest {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "set value", PASS));
     
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
     selEl.setValue("ABC");
   }
@@ -169,7 +170,7 @@ public class SelenideElementProxyTest {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should have", PASS));
     
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
     SelenideElement selEl = $("#firstName");
     selEl.shouldHave(value("ABC"));
@@ -180,7 +181,7 @@ public class SelenideElementProxyTest {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should not have", PASS));
     
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
     SelenideElement selEl = $("#firstName");
     selEl.shouldNotHave(value("ABC"));
@@ -191,7 +192,7 @@ public class SelenideElementProxyTest {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should have", FAIL));
     
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(byCssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
     
     $("#firstName").shouldHave(value("ABC"));

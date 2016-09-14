@@ -36,7 +36,7 @@ public abstract class WebElementSource {
   }
 
   public static By getSelector(Object arg) {
-    return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+    return arg instanceof By ? (By) arg : byCssSelector((String) arg);
   }
 
   public WebElement checkCondition(String prefix, String message, Condition condition, boolean invert) {
