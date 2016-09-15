@@ -23,7 +23,7 @@ header-text:
     
     <div class="text-right">
       <a href="http://infotech.group/" target="_blank">Infotech Group</a> 
-      Russian software developer company engaged in the development and construction of city management and automation systems.
+      is a Russian software developing company which develops and creates automation and management systems for cities and enterprises.
     </div>
     
     <hr class="divider"/>
