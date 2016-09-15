@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.ex.UIAssertionError.wrapThrowable;
@@ -67,7 +68,7 @@ public class SelenideTargetLocator implements TargetLocator {
     for (String frame : frames) {
       try {
         String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
-        Wait().until(frameToBeAvailableAndSwitchToIt_fixed(By.cssSelector(selector)));
+        Wait().until(frameToBeAvailableAndSwitchToIt_fixed(byCssSelector(selector)));
       }
       catch (NoSuchElementException | TimeoutException e) {
         throw new NoSuchFrameException("No frame found with id/name = " + frame, e);

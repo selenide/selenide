@@ -8,6 +8,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -17,10 +18,10 @@ public class DescribeTest {
 
   @Test
   public void selectorIsReportedAsIs() {
-    assertEquals("#firstName", Describe.selector(By.cssSelector("#firstName")));
-    assertEquals("By.id: firstName", Describe.selector(By.id("firstName")));
-    assertEquals("By.className: firstName", Describe.selector(By.className("firstName")));
-    assertEquals("By.name: firstName", Describe.selector(By.name("firstName")));
+    assertEquals("#firstName", Describe.selector(byCssSelector("#firstName")));
+    assertEquals("ExBy.id: firstName", Describe.selector(byId("firstName")));
+    assertEquals("ExBy.className: firstName", Describe.selector(byClassName("firstName")));
+    assertEquals("ExBy.name: firstName", Describe.selector(byName("firstName")));
   }
 
   @Test

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
@@ -28,6 +29,11 @@ public class WebElementWrapper extends WebElementSource {
   @Override
   public String getSearchCriteria() {
     return Describe.shortly(delegate);
+  }
+
+  @Override
+  public By getSearchCriteriaAsBy() {
+    return null;
   }
 
   @Override

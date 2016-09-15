@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -62,7 +63,7 @@ public class SelenideLoggerTest {
     SelenideLogger.addListener("userProvided", listener3);
 
     WebElement webElement = mock(WebElement.class);
-    when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
+    when(webdriver.findElement(byCssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
     
     $("div").click();

@@ -34,4 +34,10 @@ public class BySelectorCollection implements WebElementsCollection {
         (parent instanceof WebElement) ? Describe.shortly((WebElement) parent) + "/" + Describe.shortly(selector) :
             Describe.shortly(selector);
   }
+
+  @Override
+  public By getSearchCriteria() {
+    return selector;
+  }
+
 }

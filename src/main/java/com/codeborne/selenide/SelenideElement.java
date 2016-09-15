@@ -571,6 +571,14 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File download() throws FileNotFoundException;
 
   /**
+   * @return self with provided user-friedly selector description
+   *
+   * @see com.codeborne.selenide.commands.As
+   * @see com.codeborne.selenide.ExBy#as(String)
+   */
+  SelenideElement as(String elementDescription);
+
+  /**
    * @return the original Selenium WebElement wrapped by this object
    * 
    * @see com.codeborne.selenide.commands.ToWebElement

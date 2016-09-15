@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -22,5 +23,10 @@ public class WebElementsCollectionWrapper implements WebElementsCollection {
   @Override
   public String description() {
     return "$$(" + elements.size() + " elements)";
+  }
+
+  @Override
+  public By getSearchCriteria() {
+    return null;
   }
 }

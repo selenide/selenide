@@ -150,16 +150,16 @@ public class Describe {
   static String shortly(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
-          .replaceFirst("By\\.selector:\\s*(.*)", "$1")
-          .replaceFirst("By\\.cssSelector:\\s*(.*)", "$1");
+          .replaceFirst("ExBy\\.selector:\\s*(.*)", "$1")
+          .replaceFirst("ExBy\\.cssSelector:\\s*(.*)", "$1");
     }
     return selector.toString();
   }
 
   public static String selector(By selector) {
     return selector.toString()
-        .replaceFirst("By\\.selector:\\s*", "")
-        .replaceFirst("By\\.cssSelector:\\s*", "");
+        .replaceFirst("ExBy\\.selector:\\s*", "")
+        .replaceFirst("ExBy\\.cssSelector:\\s*", "");
   }
   
   public static String describe(WebDriver webDriver) {

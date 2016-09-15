@@ -44,8 +44,8 @@ public class WebElementSelector {
     injectSizzleIfNeeded();
 
     String sizzleSelector = sizzleCssSelector.toString()
-        .replace("By.selector: ", "")
-        .replace("By.cssSelector: ", "");
+        .replace("ExBy.selector: ", "")
+        .replace("ExBy.cssSelector: ", "");
     
     if (context instanceof WebElement)
       return executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
