@@ -9,15 +9,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Commands {
-  public static Commands collection = new Commands();
+  private static Commands collection;
 
   private final Map<String, Command> commands = new ConcurrentHashMap<>(128);
 
-  public Commands() {
-    resetDefaults();
+  public static synchronized Commands getInstance() {
+    if (collection == null) {
+      collection = new Commands();
+      collection.resetDefaults();
+    }
+    return collection;
   }
 
-  public synchronized final void resetDefaults() {
+  public final synchronized void resetDefaults() {
     commands.clear();
     addFindCommands();
     addClickCommands();
@@ -125,7 +129,8 @@ public class Commands {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) throws IOException {
+  public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
+      throws IOException {
     Command command = commands.get(methodName);
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);

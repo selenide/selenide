@@ -9,6 +9,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -50,7 +51,7 @@ class SelenideElementProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
-      return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+      return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
     validateAssertionMode();
 
@@ -82,7 +83,7 @@ class SelenideElementProxy implements InvocationHandler {
     do {
       try {
         if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
-          return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+          return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
         return method.invoke(webElementSource.getWebElement(), args);

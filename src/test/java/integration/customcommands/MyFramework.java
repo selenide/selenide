@@ -11,8 +11,8 @@ public class MyFramework {
   static AtomicInteger quadrupleClickCounter = new AtomicInteger();
 
   public static void setUp() {
-    Commands.collection.add("tripleClick", new TripleClick());
-    Commands.collection.add("quadrupleClick", new QuadrupleClick());
+    Commands.getInstance().add("tripleClick", new TripleClick());
+    Commands.getInstance().add("quadrupleClick", new QuadrupleClick());
   }
 
   /**
