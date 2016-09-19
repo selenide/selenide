@@ -77,7 +77,7 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, 
-                                    Object proxy, Method method, Object[] args) throws Throwable {
+                                    Object proxy, Method method, Object[] args) throws Throwable, Error {
     final long startTime = currentTimeMillis();
     Throwable lastError;
     do {
@@ -94,8 +94,12 @@ class SelenideElementProxy implements InvocationHandler {
       catch (Throwable e) {
         lastError = e;
       }
+      
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         throw Cleanup.of.wrap(lastError);
+      }
+      else if (!shouldRetryAfterError(lastError)) {
+        throw lastError;
       }
       sleep(pollingIntervalMs);
     }
@@ -111,6 +115,14 @@ class SelenideElementProxy implements InvocationHandler {
       throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
+  }
+
+  static boolean shouldRetryAfterError(Throwable e) {
+    if (e instanceof FileNotFoundException) return false;
+    if (e instanceof IllegalArgumentException) return false;
+    if (e instanceof ReflectiveOperationException) return false;
+    
+    return e instanceof Exception || e instanceof AssertionError;
   }
 
   private long getTimeoutMs(Method method, Object[] args) {
