@@ -1,8 +1,8 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.junit.TextReport;
 import com.codeborne.selenide.junit.ScreenShooter;
+import com.codeborne.selenide.junit.TextReport;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
@@ -10,9 +10,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
-import java.util.*;
+import java.util.Locale;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -49,6 +50,8 @@ public abstract class IntegrationTest {
         port = findFreePort();
         server = new LocalHttpServer(port).start();
         log.info("START " + browser + " TESTS");
+
+        measureSeleniumCommandDuration();
       }
     }
   }
@@ -66,6 +69,8 @@ public abstract class IntegrationTest {
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     browserSize = "1024x768";
+    server.uploadedFiles.clear();
+    Configuration.fileDownload = PROXY;
   }
 
   @AfterClass
@@ -76,12 +81,10 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    measureSeleniumCommandDuration();
     open("/" + fileName + "?" + averageSeleniumCommandDuration);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    measureSeleniumCommandDuration();
     return open("/" + fileName + "?" + averageSeleniumCommandDuration, pageObjectClass);
   }
 
@@ -96,25 +99,23 @@ public abstract class IntegrationTest {
     clickViaJs = false;
   }
 
-  private void measureSeleniumCommandDuration() {
-    if (averageSeleniumCommandDuration < 0) {
-      open("/start_page.html");
-      long start = System.currentTimeMillis();
-      try {
-        WebDriver driver = getWebDriver();
-        driver.findElement(By.tagName("h1")).isDisplayed();
-        driver.findElement(By.tagName("h1")).isEnabled();
-        driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
-        driver.findElement(By.tagName("h1")).getText();
-        averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
+  private static void measureSeleniumCommandDuration() {
+    open("/start_page.html");
+    long start = System.currentTimeMillis();
+    try {
+      WebDriver driver = getWebDriver();
+      driver.findElement(By.tagName("h1")).isDisplayed();
+      driver.findElement(By.tagName("h1")).isEnabled();
+      driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
+      driver.findElement(By.tagName("h1")).getText();
+      averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
 
-        log.info("Average selenium command duration for " + browser + ": " +
-            averageSeleniumCommandDuration + " ms.");
-      }
-      catch (WebDriverException e) {
-        log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
-        averageSeleniumCommandDuration = 100;
-      }
+      log.info("Average selenium command duration for " + browser + ": " +
+          averageSeleniumCommandDuration + " ms.");
+    }
+    catch (WebDriverException e) {
+      log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
+      averageSeleniumCommandDuration = 100;
     }
   }
 }

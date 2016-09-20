@@ -13,10 +13,7 @@ cache:
   directories:
   - $HOME/.gradle
 
-script: "gradle clean test firefox testng"
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+script: "gradle clean test htmlunit"
 
 jdk:
   - openjdk7

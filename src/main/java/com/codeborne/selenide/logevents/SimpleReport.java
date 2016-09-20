@@ -6,19 +6,19 @@ import java.util.Collections;
 import java.util.logging.Logger;
 
 /**
- * A simple text report of Selenide actions performed during test run
+ * A simple text report of Selenide actions performed during test run.
+ * 
+ * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
 public class SimpleReport {
   private static final Logger log = Logger.getLogger(SimpleReport.class.getName());
 
-  private EventsCollector logEventListener;
-
   public void start() {
-    SelenideLogger.addListener(logEventListener = new EventsCollector());
+    SelenideLogger.addListener("simpleReport", new EventsCollector());
   }
 
   public void finish(String title) {
-    SelenideLogger.removeListener(logEventListener);
+    EventsCollector logEventListener = SelenideLogger.removeListener("simpleReport");
 
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');

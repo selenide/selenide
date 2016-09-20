@@ -1,39 +1,22 @@
 package integration.testng;
 
-import com.codeborne.selenide.testng.annotations.*;
-import integration.*;
-import org.testng.annotations.*;
+import com.codeborne.selenide.testng.annotations.Report;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.util.logging.*;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.*;
-import static org.openqa.selenium.net.PortProber.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 @Report
-public class aSimpleNGTest {
-  private static final Logger log = Logger.getLogger(aSimpleNGTest.class.getName());
-  private static int port;
-  protected static LocalHttpServer server;
-
+public class aSimpleNGTest extends BaseTestNGTest {
   @BeforeClass
   public void setUp() throws Exception {
-    if (server == null) {
-      port = findFreePort();
-      server = new LocalHttpServer(port).start();
-      log.info("START " + browser + " TESTS");
-      baseUrl = "https://127.0.0.1:" + port;
-    }
-
-
-    open("/start_page.html");
+    startServer();
   }
-
 
   @Test
   public void successfulMethod() {
-    $("h1").shouldBe(visible, text("Selenide"));
+    $("h1").shouldBe(visible).shouldHave(text("Selenide"));
   }
-
 }

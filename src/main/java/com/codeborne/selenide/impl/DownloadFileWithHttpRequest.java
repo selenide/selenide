@@ -42,11 +42,9 @@ import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
-public class FileDownloader {
-  private static final Logger log = Logger.getLogger(FileDownloader.class.getName());
+public class DownloadFileWithHttpRequest {
+  private static final Logger log = Logger.getLogger(DownloadFileWithHttpRequest.class.getName());
   
-  public static FileDownloader instance = new FileDownloader();
-
   public static boolean ignoreSelfSignedCerts = true;
   
   public File download(WebElement element) throws IOException {

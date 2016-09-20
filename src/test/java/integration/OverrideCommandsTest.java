@@ -23,12 +23,12 @@ public class OverrideCommandsTest extends IntegrationTest {
   
   @After
   public void tearDown() {
-    Commands.collection.resetDefaults();
+    Commands.getInstance().resetDefaults();
   }
 
   @Test
   public void userCanOverrideAnyCommand() {
-    Commands.collection.add("click", new MyClick());
+    Commands.getInstance().add("click", new MyClick());
     $("#valid-image").click();
     $("#invalid-image").click();
     assertEquals(2, clickCounter.get());

@@ -138,4 +138,20 @@ public class Selectors {
   public static By byId(String id) {
     return By.id(id);
   }
+
+  /**
+   * @see By#cssSelector(java.lang.String)
+   * @since 3.8
+   */
+  public static By byCssSelector(String css) {
+    return By.cssSelector(css);
+  }
+
+  /**
+   * @see By#className(java.lang.String)
+   * @since 3.8
+   */
+  public static By byClassName(String className) {
+    return By.className(className);
+  }
 }

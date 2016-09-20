@@ -161,6 +161,13 @@ public class Configuration {
   public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   /**
+   * Does Selenide need to save page source on failing tests.
+   *
+   * Default value: true
+   */
+  public static boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
+
+  /**
    * Folder to store screenshots to.
    * Can be configured either programmatically or by system property "-Dselenide.reports=test-result/reports".
    *
@@ -257,7 +264,7 @@ public class Configuration {
    */
   public enum AssertionMode {
     /**
-     * Default mode - tests are failing immediatetly
+     * Default mode - tests are failing immediately
      */
     STRICT,
     /**
@@ -273,4 +280,23 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
+  
+  public enum FileDownloadMode {
+    /**
+     * Download files via direct http request.
+     * Works only for <a href></a> elements. 
+     * Sends GET request to "href" with all cookies from current browser session. 
+     */
+    HTTPGET,
+
+    /**
+     * Download files via selenide embedded proxy server.
+     * Works for any elements (e.g. form submission).
+     * Doesn't work if you are using custom webdriver without selenide proxy server.
+     */
+    PROXY
+  }
+
+  public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
+      System.getProperty("selenide.fileDownload", "PROXY"));
 }

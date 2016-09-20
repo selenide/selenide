@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -22,7 +21,6 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.io.File.separatorChar;
 import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.OutputType.FILE;
@@ -70,9 +68,10 @@ public class ScreenShotLaboratory {
 
   /**
    * Takes screenshot of current browser window.
-   * Stores 2 files: html of page, and (if possible) image in PNG format.
+   * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
+   * 
    * @param fileName name of file (without extension) to store screenshot to.
-   * @return the name of last saved file, it's either my_screenshot.png or my_screenshot.html (if failed to create png)
+   * @return the name of last saved screenshot or null if failed to create screenshot
    */
   public String takeScreenShot(String fileName) {
     if (!WebDriverRunner.hasWebDriverStarted()) {
@@ -81,39 +80,28 @@ public class ScreenShotLaboratory {
     }
 
     WebDriver webdriver = getWebDriver();
-    File pageSource = savePageSourceToFile(fileName, webdriver);
+
+    if (Configuration.savePageSource) {
+      savePageSourceToFile(fileName, webdriver);
+    }
+
     File imageFile = savePageImageToFile(fileName, webdriver);
-
-    return addToHistory(firstNonNull(imageFile, pageSource)).getAbsolutePath();
+    if (imageFile == null) {
+      return null;
+    }
+    return addToHistory(imageFile).getAbsolutePath();
   }
-  
+
   public File takeScreenshot(WebElement element) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
-
-    WebDriver webdriver = getWebDriver();
-    if (!(webdriver instanceof TakesScreenshot)) {
-      log.warning("Cannot take screenshot because browser does not support screenshots");
-      return null;
-    }
-    
-    File screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.FILE);
-
-    Point p = element.getLocation();
-    Dimension elementSize = element.getSize();
-
     try {
-      BufferedImage img = ImageIO.read(screen);
-      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementSize.getWidth(), elementSize.getHeight());
-      ImageIO.write(dest, "png", screen);
-      File screenshotOfElement = new File(generateScreenshotFileName());
-      FileUtils.copyFile(screen, screenshotOfElement);
+      BufferedImage dest = takeScreenshotAsImage(element);
+      File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      ensureFolderExists(screenshotOfElement);
+      ImageIO.write(dest, "png", screenshotOfElement);
       return screenshotOfElement;
     }
     catch (IOException e) {
-      printOnce("takeScreenshotImage", e);
+      printOnce("takeScreenshot", e);
       return null;
     }
   }

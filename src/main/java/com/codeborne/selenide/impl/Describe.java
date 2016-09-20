@@ -8,8 +8,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 
 public class Describe {
   private WebElement element;
@@ -58,7 +58,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return (getWebDriver() instanceof JavascriptExecutor) && !isHtmlUnit();
+    return supportsJavascript() && !isHtmlUnit();
   }
 
   private Describe attr(String attributeName) {

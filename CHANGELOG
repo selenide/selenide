@@ -1,7 +1,47 @@
 == Changelog
 
-=== 3.7 (Planned to xx.06.2016)
-* (Planned) use BrowserMobProxy to download files
+=== 3.10 (Released ?.09.2016)
+* #398 Support "Content-Disposition" header with encoding
+* #401 Selenide swallows exception in some cases
+* #379 Turn on temporary disabled test for firefox (thanks to @BorisOsipov)
+
+=== 3.9.3 (Released 09.09.2016)
+* #393 Selenide should NOT add proxy server to browser if `Configuration.fileDownload = HTTPGET`
+
+=== 3.9.2 (Released 03.09.2016)
+* #386 Selenide should download files "old way" if tests uses its own "custom" webdriver
+* #387 User can choose how to download files via Configuration.fileDownload
+
+=== 3.9.1 (Released 27.08.2016)
+* #383 Selenide proxy server now allows requests and responses bigger than 2MB (but writes warning) 
+* #384 fixed SoftAssert listener for TestNG: it only applies for classes with @Listeners(SoftAssert.class} annotation
+* #372 fixed SoftAssert listener for TestNG: it ignores tests with "expectedExceptions" attribute
+* upgrade to gson:2.7 
+
+=== 3.9 (Released 22.08.2016)
+* #196 #267 Selenide uses its own proxy server to download files (thanks to @dimand58 for pull request)
+
+=== 3.8.1 (Released 10.08.2016)
+* #369, #366 Fixed bug with IE and basic auth - thanks to Anton Aftakhov @simple-elf for the pull request!
+
+=== 3.8 (Released 06.08.2016)
+* #359 user can disable creating *.html files - thanks to @BorisOsipov for this PR!
+* fixed file uploading methods on remote browsers & grid - thanks to Alexei Vinogradov!
+* #364, #303 TestNG: SimpleReport is now thread-safe
+* #364, #303 TestNG: SoftAssertsReportsNGTest is now thread-safe
+* #360 added methods to Selectors; byCssSelector(), byClassName()
+* #355 added method $.dragAndDropTo(WebElement)
+* #339 fixed JS error in Edge browser
+* #290 fixed location of element screenshot - it's not put to "build/reports" folder, not to project root
+* #302 Selenide now throws an error if soft assert is used without annotation
+* #367 added link to implementation to javadoc of all public methods in SelenideElement
+* upgrade to htmlunit 2.23
+
+=== 3.7 (07.07.2016)
+* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
+* #349 Added Marionette browser support - thanks to Geroen Dierckx @ridiekel for PR!
+* #345 Selenide should not fail if browser doesn't support JavaScript
+* #357 Don't show "Screenshots: " in the error log when screenshots are disabled - thanks to @BorisOsipov for PR!
 
 === 3.6 (29.05.2016)
 * upgrade to phantomjsdriver 1.3.0 (compatible with selenium-java 2.53.0)

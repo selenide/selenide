@@ -17,12 +17,16 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -35,7 +39,6 @@ public class SelenideElementProxyTest {
   
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);
-  LogEventListener listener; 
 
   @Before
   public void mockWebDriver() {
@@ -43,7 +46,6 @@ public class SelenideElementProxyTest {
     Configuration.pollingInterval = 1;
     Configuration.screenshots = false;
 
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
     WebDriverRunner.setWebDriver(webdriver);
     when(webdriver
         .executeScript(anyString(), any(WebElement.class)))
@@ -59,9 +61,7 @@ public class SelenideElementProxyTest {
   
   @After
   public void after() {
-    if (listener != null) {
-      SelenideLogger.removeListener(listener);
-    }
+    SelenideLogger.removeListener("test");
   }
 
   @Test
@@ -161,7 +161,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "set value", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "set value", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
@@ -171,7 +171,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "should have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -182,7 +182,7 @@ public class SelenideElementProxyTest {
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should not have", PASS));
+    SelenideLogger.addListener("test", createListener(selector, "should not have", PASS));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -193,11 +193,41 @@ public class SelenideElementProxyTest {
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener(listener = createListener(selector, "should have", FAIL));
+    SelenideLogger.addListener("test", createListener(selector, "should have", FAIL));
     
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
     
     $("#firstName").shouldHave(value("ABC"));
+  }
+
+  @Test
+  public void shouldNotRetry_onIllegalArgumentException() throws IOException {
+    assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")), is(false));
+  }
+
+  @Test
+  public void shouldNotRetry_onFileNotFoundException() {
+    assertThat(shouldRetryAfterError(new FileNotFoundException("bla")), is(false));
+  }
+
+  @Test
+  public void shouldNotRetry_onClassLoadingException() {
+    assertThat(shouldRetryAfterError(new ClassNotFoundException("bla")), is(false));
+  }
+
+  @Test
+  public void shouldNotRetry_onClassDefLoadingException() {
+    assertThat(shouldRetryAfterError(new NoClassDefFoundError("bla")), is(false));
+  }
+
+  @Test
+  public void shouldRetry_onAssertionError() {
+    assertThat(shouldRetryAfterError(new AssertionError("bla")), is(true));
+  }
+
+  @Test
+  public void shouldRetry_onAnyOtherException() {
+    assertThat(shouldRetryAfterError(new Exception("bla")), is(true));
   }
 }

@@ -1,7 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.rules.MockWebdriverContainer;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -9,9 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.WebDriverRunner.CHROME;
-import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -19,6 +19,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class WebElementWrapperTest {
+  @Rule
+  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
+
   WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -35,12 +38,12 @@ public class WebElementWrapperTest {
   @Before
   public final void mockWebDriver() {
     browser = null;
-    webdriverContainer = mock(WebDriverThreadLocalContainer.class);
   }
 
   @Test
   public void toStringPrintsTagNameWithAllAttributes() {
     browser = CHROME;
+    when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
     when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
     when(((JavascriptExecutor) webdriverContainer.getWebDriver())
         .executeScript(anyString(), any(WebElement.class)))
