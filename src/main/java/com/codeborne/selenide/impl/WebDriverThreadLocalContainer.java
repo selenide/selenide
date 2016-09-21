@@ -1,10 +1,10 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
@@ -72,7 +73,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     } catch (NoSuchWindowException e) {
       log.log(FINE, "Browser window is not found", e);
       return false;
-    } catch (SessionNotFoundException e) {
+    } catch (NoSuchSessionException e) {
       log.log(FINE, "Browser session is not found", e);
       return false;
     }
@@ -231,10 +232,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
-    SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
-    selenideProxyServer.start();
-    THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);
-    WebDriver webdriver = factory.createWebDriver(selenideProxyServer.createSeleniumProxy());
+    Proxy userProvidedProxy = proxy;
+    
+    if (Configuration.fileDownload == PROXY) {
+      SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
+      selenideProxyServer.start();
+      THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);
+      userProvidedProxy = selenideProxyServer.createSeleniumProxy();
+    }
+
+    WebDriver webdriver = factory.createWebDriver(userProvidedProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
         describe(webdriver) + " -> " + webdriver);

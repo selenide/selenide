@@ -32,6 +32,15 @@ public class FileDownloadFilterTest {
 
     assertEquals("selenide-2.6.1.jar", filter.getFileNameFromContentDisposition(
         "content-disposition", "attachement; filename=selenide-2.6.1.jar"));
+
+    assertEquals("Prices.csv", filter.getFileNameFromContentDisposition(
+        "Content-Disposition", "attachment; filename=Prices.csv;charset=UTF-8"));
+
+    assertEquals("Naïve file.txt", filter.getFileNameFromContentDisposition(
+        "Content-Disposition", "Content-Disposition: attachment; filename=Naïve file.txt"));
+
+    assertEquals("Naïve file.txt", filter.getFileNameFromContentDisposition(
+        "Content-Disposition", "Content-Disposition: ATTACHMENT; FILENAME=Naïve file.txt"));
   }
 
   @Test

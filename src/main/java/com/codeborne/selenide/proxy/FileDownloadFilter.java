@@ -17,12 +17,15 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
 
   private boolean active;
   private final List<File> downloadedFiles = new ArrayList<>();
-  private final Pattern patternContentDisposition = Pattern.compile(".*filename=\"?([^\"]*)\"?.*");
+  private final Pattern patternContentDisposition = 
+      Pattern.compile(".*filename\\*?=\"?([^\";]*)\"?(;charset=.*)?.*", CASE_INSENSITIVE);
 
   /**
    * Activate this filter.
