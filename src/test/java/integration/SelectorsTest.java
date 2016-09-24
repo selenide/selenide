@@ -20,7 +20,7 @@ public class SelectorsTest extends IntegrationTest {
 
   @Test
   public void canFindElementByXPath() {
-    $(byXpath("//h1")).shouldHave(text("Page without JQuery"));
+    $(byXpath("//h1")).shouldHave(text("Page with selects"));
     $(byXpath("//*[@name='domain']")).shouldBe(visible);
   }
 
