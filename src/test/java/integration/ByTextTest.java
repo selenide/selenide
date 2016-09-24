@@ -21,7 +21,7 @@ public class ByTextTest extends IntegrationTest {
 
   @Test
   public void userCanFindElementByText() {
-    $(byText("Page without JQuery")).shouldHave(text("Page without JQuery"));
+    $(byText("Page with selects")).shouldHave(text("Page with selects"));
     $(byText("Dropdown list")).shouldHave(text("Dropdown list"));
     $(byText("@livemail.ru")).shouldHave(text("@livemail.ru"));
   }
@@ -42,7 +42,7 @@ public class ByTextTest extends IntegrationTest {
 
   @Test
   public void canFindElementContainingText() {
-    $(withText("without")).shouldHave(text("Page without JQuery"));
+    $(withText("age with s")).shouldHave(text("Page with selects"));
     $(withText("Dropdown")).shouldHave(text("Dropdown list"));
     $(withText("@livemail.r")).shouldHave(text("@livemail.ru"));
   }

@@ -78,7 +78,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void toStringMethodShowsElementDetails() {
-    assertEquals("<h1>Page without JQuery</h1>", $("h1").toString());
+    assertEquals("<h1>Page with selects</h1>", $("h1").toString());
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
     assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>",
         $(By.name("rememberMe")).toString());
@@ -224,7 +224,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanCheckIfElementContainsText() {
-    assertEquals("Page without JQuery", $("h1").text());
+    assertEquals("Page with selects", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
     assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
@@ -237,7 +237,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanCheckIfElementHasExactText() {
-    $("h1").shouldHave(exactText("Page without JQuery"));
+    $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
     $("#radioButtons").shouldHave(text("Radio buttons\n" +
@@ -332,7 +332,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanGetPageTitle() {
-    assertEquals("long ajax request", title());
+    assertEquals("Test page :: with selects, but withour JQuery", title());
   }
 
   @Test
@@ -487,10 +487,10 @@ public class SelenideMethodsTest extends IntegrationTest {
     timeout = 100L;
     thrown.expect(ElementShouldNot.class);
     thrown.expectMessage(contains("because it's wrong text"));
-    $("h1").shouldNot(text("Page without JQuery").because("it's wrong text"));
+    $("h1").shouldNot(text("Page with selects").because("it's wrong text"));
 
     try {
-      $("h1").shouldNotHave(text("Page without JQuery").because("it's wrong text"));
+      $("h1").shouldNotHave(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -498,7 +498,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     }
 
     try {
-      $("h1").shouldNotBe(text("Page without JQuery").because("it's wrong text"));
+      $("h1").shouldNotBe(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
