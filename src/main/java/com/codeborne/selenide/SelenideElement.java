@@ -538,12 +538,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * 
    * @see com.codeborne.selenide.commands.GetSelectedOption
    */
-  SelenideElement getSelectedOption();
+  SelenideElement getSelectedOption() throws NoSuchElementException;
 
   /**
    * Find all selected options from this select field
    * 
-   * @return ElementsCollection for selected &lt;option&gt; elements
+   * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
    * @see com.codeborne.selenide.commands.GetSelectedOptions
    */
   ElementsCollection getSelectedOptions();
