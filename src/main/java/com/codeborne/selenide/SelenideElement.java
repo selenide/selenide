@@ -513,7 +513,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *              
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
-  void selectOption(int index);
+  void selectOption(int... index);
 
   /**
    * Select an option from dropdown list (by text)
@@ -521,7 +521,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *             
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
-  void selectOption(String text);
+  void selectOption(String... text);
 
   /**
    * Select an option from dropdown list (by value)
@@ -529,7 +529,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *              
    * @see com.codeborne.selenide.commands.SelectOptionByValue
    */
-  void selectOptionByValue(String value);
+  void selectOptionByValue(String... value);
 
   /**
    * Find (first) selected option from this select field
