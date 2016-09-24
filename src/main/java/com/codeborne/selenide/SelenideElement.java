@@ -532,13 +532,21 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   void selectOptionByValue(String value);
 
   /**
-   * Find selected option from this select field
+   * Find (first) selected option from this select field
    * @return WebElement for selected &lt;option&gt; element
    * @throws NoSuchElementException if no options are selected
    * 
    * @see com.codeborne.selenide.commands.GetSelectedOption
    */
-  SelenideElement getSelectedOption() throws NoSuchElementException;
+  SelenideElement getSelectedOption();
+
+  /**
+   * Find all selected options from this select field
+   * 
+   * @return ElementsCollection for selected &lt;option&gt; elements
+   * @see com.codeborne.selenide.commands.GetSelectedOptions
+   */
+  ElementsCollection getSelectedOptions();
 
   /**
    * Get value of selected option in select field

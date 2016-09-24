@@ -2,6 +2,7 @@
 
 === 3.10 (Released ?.09.2016)
 * #402 Disable built-in proxy server by default
+* #400 Support multiple select
 * #398 Support "Content-Disposition" header with encoding
 * #401 Selenide swallows exception in some cases
 * #379 Turn on temporary disabled test for firefox (thanks to @BorisOsipov)
