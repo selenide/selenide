@@ -72,9 +72,9 @@ public class SelenideProxyServer {
     requestFilters.put(name, requestFilter);
   }
 
-  private void addResponseFilter(String name, ResponseFilter fileDownloadFilter) {
-    proxy.addResponseFilter(fileDownloadFilter);
-    responseFilters.put(name, fileDownloadFilter);
+  private void addResponseFilter(String name, ResponseFilter responseFilter) {
+    proxy.addResponseFilter(responseFilter);
+    responseFilters.put(name, responseFilter);
   }
 
   static InetSocketAddress getProxyAddress(Proxy proxy) {
