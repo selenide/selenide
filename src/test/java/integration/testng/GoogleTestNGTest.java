@@ -15,6 +15,8 @@ import static com.codeborne.selenide.Selenide.*;
 public class GoogleTestNGTest {
   @BeforeMethod
   public void setUp() {
+    TextReport.onSucceededTest = false;
+    TextReport.onFailedTest = true;
     open("http://google.com/ncr");
   }
 
@@ -24,7 +26,7 @@ public class GoogleTestNGTest {
     $("#missing-button").click();
   }
 
-  @Test(enabled = false)
+  @Test
   public void successfulMethod() {
     $(By.name("q")).setValue("selenide").pressEnter();
     $$("#ires .g").shouldHave(size(10));

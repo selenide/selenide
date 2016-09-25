@@ -36,6 +36,10 @@ public class SimpleReport {
     sb.append(delimiter);
     log.info(sb.toString());
   }
+  
+  public void clean() {
+    SelenideLogger.removeListener("simpleReport");
+  }
 
   private String line(int count) {
     return Joiner.on("").join(Collections.nCopies(count, "-"));

@@ -33,7 +33,7 @@ public abstract class IntegrationTest {
   public ScreenShooter img = ScreenShooter.failedTests();
 
   @Rule
-  public TestRule report = new TextReport();
+  public TestRule report = new TextReport().onFailedTest(true).onSucceededTest(true);
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
