@@ -9,6 +9,10 @@ header-text:
 ---
 {% include JB/setup %}
 
+<blockquote><p>"<a href="http://ru.selenide.org/quotes.html#comment-1949629758">It's cool! It's a pity that I haven't tried Selenide. This is what is needed in any project!</a>"</p><a href="https://disqus.com/by/ilyaslabiy/">Ilya Slabiy</a></blockquote>
+
+<hr class="divider"/>
+
 <blockquote><p>"<a href="http://qiita.com/kazuki-ma/items/d6432fc41c82538a61bd">Wrapper of magic to increase the productivity</a>"</p><a href="http://qiita.com/kazuki-ma">kazuki-ma</a></blockquote>
 
 <hr class="divider"/>
