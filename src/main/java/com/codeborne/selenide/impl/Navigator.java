@@ -27,9 +27,7 @@ public class Navigator {
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    if (relativeOrAbsoluteUrl.startsWith("http:") ||
-            relativeOrAbsoluteUrl.startsWith("https:") ||
-            isLocalFile(relativeOrAbsoluteUrl)) {
+    if (isAbsoluteUrl(relativeOrAbsoluteUrl)) {
       navigateToAbsoluteUrl(relativeOrAbsoluteUrl, domain, login, password);
     } else {
       navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl), domain, login, password);
@@ -122,8 +120,14 @@ public class Navigator {
     }
   }
 
+  boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
+    return relativeOrAbsoluteUrl.toLowerCase().startsWith("http:") ||
+        relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
+        isLocalFile(relativeOrAbsoluteUrl);
+  }
+  
   protected boolean isLocalFile(String url) {
-    return url.startsWith("file:");
+    return url.toLowerCase().startsWith("file:");
   }
 
   public void back() {

@@ -6,6 +6,7 @@
 * #398 Support "Content-Disposition" header with encoding
 * #401 Selenide swallows exception in some cases
 * #379 Turn on temporary disabled test for firefox (thanks to @BorisOsipov)
+* #407 Method `open` cannot open url in upper case
 
 === 3.9.3 (Released 09.09.2016)
 * #393 Selenide should NOT add proxy server to browser if `Configuration.fileDownload = HTTPGET`
