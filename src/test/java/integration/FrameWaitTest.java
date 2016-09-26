@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeFalse;
@@ -33,10 +33,10 @@ public class FrameWaitTest extends IntegrationTest {
 
   @Test @Video
   public void waitsUntilFrameAppears_byIndex() {
-    assumeFalse(isChrome() || isHtmlUnit());
+    assumeFalse(isHtmlUnit());
 
     switchTo().frame(2);
-//    assertThat(source(), containsString(isFirefox() || isChrome() ? "Hello, WinRar!" : "This is last frame!"));
+    sleep(100);
     assertThat(source(), containsString("Page with JQuery"));
   }
 }
