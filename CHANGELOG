@@ -1,6 +1,6 @@
 == Changelog
 
-=== 3.10 (Released ?.09.2016)
+=== 3.10 (Released 26.09.2016)
 * #402 Disable built-in proxy server by default
 * #400 Support multiple select
 * #408 TextReport can be printed only for failed tests 
