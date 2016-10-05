@@ -20,8 +20,8 @@ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
@@ -38,7 +38,7 @@ public class WebDriverRunnerTest {
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
     WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
-    doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), anyVararg());
+    doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
   }
 
   @After
