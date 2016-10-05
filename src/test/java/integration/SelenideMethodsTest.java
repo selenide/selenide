@@ -18,11 +18,10 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
-import static org.mockito.Matchers.contains;
-import static org.mockito.Matchers.startsWith;
 
 public class SelenideMethodsTest extends IntegrationTest {
   @Before
@@ -459,7 +458,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").should(text("Some wrong test").because("it's wrong text"));
   }
@@ -468,7 +467,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").shouldHave(text("Some wrong test").because("it's wrong text"));
   }
@@ -477,7 +476,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").shouldBe(text("Some wrong test").because("it's wrong text"));
   }
@@ -486,7 +485,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
     timeout = 100L;
     thrown.expect(ElementShouldNot.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
     $("h1").shouldNot(text("Page with selects").because("it's wrong text"));
 
     try {
