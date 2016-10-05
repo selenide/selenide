@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.close;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class WebDriverThreadLocalContainerTest {
@@ -26,6 +26,7 @@ public class WebDriverThreadLocalContainerTest {
   public void setUp() {
     container.factory = mock(WebDriverFactory.class);
     doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(any(Proxy.class));
+    doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(null);
     WebDriverRunner.setProxy(null);
   }
 
