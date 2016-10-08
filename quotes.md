@@ -11,6 +11,16 @@ header-text:
 
 <blockquote>
     <p>
+        "I have managed to do pretty good UI test automation with Selenide even with limited Java knowledge."
+    </p>
+    Jari Heikkilä<br/>
+    Finland
+</blockquote>
+
+<hr class="divider"/>
+
+<blockquote>
+    <p>
         "Selenide is like a birthday gift from your close mindful friend: reliable, useful and easy to use. 
         It was created by real professionals familiar with trends and challenges of today's IT industry. 
         We have TONS of automation and Selenide helps us to keep the pace at all stages - from design to maintenance."
