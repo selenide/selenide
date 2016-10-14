@@ -16,6 +16,7 @@ public class FileUploadTest extends IntegrationTest {
   @Before
   public void openFileUploadForm() {
     assumeFalse(isPhantomjs());
+    assumeFalse(isHtmlUnit());
 
     if (isIE()) {
       closeWebDriver();

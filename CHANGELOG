@@ -1,5 +1,9 @@
 == Changelog
 
+=== 4.0 (Released 15.10.2016)
+* #388 Upgrade to selenium-java 3.0.0
+* #388 Upgrade to java 8
+
 === 3.11 (Released 14.10.2016)
 * #415 Selenide calls SeleniumException.getMessage() multiple times
 * #416 Added condition `checked` for verifying checkboxes
