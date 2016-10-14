@@ -94,7 +94,8 @@ public class FileDownloadFilterTest {
     mockStatusCode(199, "below 200");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses(), is("Intercepted 1 responses.\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
+    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
+        "\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
   }
 
   private void mockStatusCode(int code, String reason) {
@@ -107,7 +108,8 @@ public class FileDownloadFilterTest {
     mockStatusCode(300, "300 or above");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses(), is("Intercepted 1 responses.\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
+    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
+        "\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
   }
 
   @Test
