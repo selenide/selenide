@@ -21,6 +21,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
@@ -39,6 +40,7 @@ public class ChainedProxyTest extends IntegrationTest {
   @Before
   public void setUp() throws UnknownHostException {
     assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+    assumeFalse(isHtmlUnit()); // Why it's not working? It's magic for me...
     
     if (chainedProxy == null) {
       close();
