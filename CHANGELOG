@@ -1,5 +1,8 @@
 == Changelog
 
+=== 3.11 (Released 14.10.2016)
+* #415 Selenide calls SeleniumException.getMessage() multiple times
+
 === 3.10 (Released 26.09.2016)
 * #402 Disable built-in proxy server by default
 * #400 Support multiple select
