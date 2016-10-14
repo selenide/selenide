@@ -2,6 +2,7 @@
 
 === 3.11 (Released 14.10.2016)
 * #415 Selenide calls SeleniumException.getMessage() multiple times
+* #416 Added condition `checked` for verifying checkboxes
 
 === 3.10 (Released 26.09.2016)
 * #402 Disable built-in proxy server by default

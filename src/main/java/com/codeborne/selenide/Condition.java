@@ -459,6 +459,20 @@ public abstract class Condition implements Predicate<WebElement> {
   };
 
   /**
+   * Checks that checkbox is checked
+   * @see WebElement#isSelected()
+   */
+  public static final Condition checked = new Condition("checked") {
+    @Override public boolean apply(WebElement element) {
+      return element.isSelected();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return String.valueOf(element.isSelected());
+    }
+  };
+
+  /**
    * Negate given condition.
    *
    * Used for methods like $.shouldNot(exist), $.shouldNotBe(visible)

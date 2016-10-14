@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.Assert.assertEquals;
@@ -17,10 +18,12 @@ public class CheckboxTest extends IntegrationTest {
   @Test
   public void userCanSelectCheckbox() {
     $(By.name("rememberMe")).shouldNotBe(selected);
+    $(By.name("rememberMe")).shouldNotBe(checked);
 
     $(By.name("rememberMe")).click();
 
     $(By.name("rememberMe")).shouldBe(selected);
+    $(By.name("rememberMe")).shouldBe(checked);
     assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>",
         $(By.name("rememberMe")).toString());
   }
@@ -29,9 +32,11 @@ public class CheckboxTest extends IntegrationTest {
   public void userCanCheckCheckbox() {
     $(By.name("rememberMe")).setSelected(true);
     $(By.name("rememberMe")).shouldBe(selected);
+    $(By.name("rememberMe")).shouldBe(checked);
 
     $(By.name("rememberMe")).setSelected(true);
     $(By.name("rememberMe")).shouldBe(selected);
+    $(By.name("rememberMe")).shouldBe(checked);
   }
 
   @Test
