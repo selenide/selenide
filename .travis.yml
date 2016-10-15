@@ -16,4 +16,4 @@ cache:
 script: "gradle clean test htmlunit"
 
 jdk:
-  - openjdk8
+  - oraclejdk8
