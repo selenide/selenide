@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.1
+* Improve support for gecko (marionette) driver
+
 === 4.0 (Released 15.10.2016)
 * #388 Upgrade to selenium-java 3.0.0
 * #388 Upgrade to java 8

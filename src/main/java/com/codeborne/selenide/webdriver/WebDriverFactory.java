@@ -10,11 +10,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.BuildInfo;
-import org.openqa.selenium.remote.*;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -123,8 +125,8 @@ public class WebDriverFactory {
 
   protected WebDriver createMarionetteDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-
-    return new MarionetteDriver(capabilities);
+    capabilities.setCapability("marionette", true);
+    return new FirefoxDriver(capabilities);
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
