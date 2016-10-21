@@ -11,6 +11,16 @@ header-text:
 
 <blockquote>
     <p>
+        "Andrei, thanks for Selenide, it's just a bomb!!"
+    </p>
+    Aleksey Bobrutskov<br/> 
+    QA engineer
+</blockquote>
+
+<hr class="divider"/>
+
+<blockquote>
+    <p>
         "I have managed to do pretty good UI test automation with Selenide even with limited Java knowledge."
     </p>
     Jari Heikkilä<br/>
