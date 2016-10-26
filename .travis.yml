@@ -13,7 +13,7 @@ cache:
   directories:
   - $HOME/.gradle
 
-script: "./gradle clean test htmlunit"
+script: "./gradle clean check test htmlunit"
 
 jdk:
   - oraclejdk8
