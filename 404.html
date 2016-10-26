@@ -1,28 +1,9 @@
 ---
 layout: page
-title: 404 
+title:  
 header : 
 group: 
 cssClass: docs
 header-text: Page not found<br/><br/><a href="/faq.html">FAQ</a> | <a href="/blog.html">Blog</a>
 ---
 {% include JB/setup %}
-
-<script language="JavaScript">
-  function endsWith(text, suffix) {
-    return text.indexOf(suffix, text.length - suffix.length) !== -1;
-  }
-  
-  function showPostContent(content) {
-    var post = $(content);
-    $('title').text(post.find('.wrapper-color-content h4').text());
-    $('.wrapper-color-content').replaceWith(post.find('.wrapper-color-content'));
-    $('.wrapper-content section').prepend(post.find('.blog_post_content'));
-  }
-
-  if (endsWith(window.location.pathname, '/')) {
-    var urlWithoutEndingSlash = window.location.pathname.substr(0, window.location.pathname.length - 1);
-    $.get( urlWithoutEndingSlash, showPostContent);
-  }
-</script> 
-
