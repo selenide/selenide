@@ -1,5 +1,8 @@
 buildscript {
-  repositories { jcenter() }
+  repositories {
+    jcenter()
+    maven { url 'https://plugins.gradle.org/m2' }
+  }
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     classpath 'de.undercouch:gradle-download-task:3.1.1'
