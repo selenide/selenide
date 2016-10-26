@@ -131,3 +131,5 @@ defaults:
       type: "pages"
     values:
       permalink: /:path/:basename.html
+
+SELENIUM_CHANGELOG: "https://raw.githubusercontent.com/SeleniumHQ/selenium/master/java/CHANGELOG"
