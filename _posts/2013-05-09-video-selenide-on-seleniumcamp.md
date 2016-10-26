@@ -13,7 +13,8 @@ The talk is in Russian.
 
 
 First part - introduction to Selenide:
-<div class="video"><iframe width="800" height="490" frameborder="0" src="https://youtu.be/4TegXkNWbqw"></iframe></div>
+<iframe src="//www.youtube.com/embed/4TegXkNWbqw" width="800" height="490" frameborder="0"></iframe>
+
 
 Second part - live demonstration of Selenide:
 
@@ -21,4 +22,4 @@ Second part - live demonstration of Selenide:
 *   ping-pong programming
 *   programming a real internet bank
 
-<div class="video"><iframe width="800" height="490" frameborder="0" src="https://youtu.be/x3osTlsU82g"></iframe></div>
+<iframe src="//www.youtube.com/embed/x3osTlsU82g" width="800" height="490" frameborder="0"></iframe>
