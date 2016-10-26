@@ -3,17 +3,14 @@ buildscript {
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     classpath 'de.undercouch:gradle-download-task:3.1.1'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
   }
-}
-
-plugins {
-  id 'jacoco'
-  id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'de.undercouch.download'
@@ -122,8 +119,13 @@ jacocoTestReport {
   reports {
     xml.enabled true
     csv.enabled false
+    html.enabled true
     html.destination "${buildDir}/reports/jacocoHtml"
   }
+}
+
+coveralls {
+  jacocoReportPath = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
 }
 
 apply plugin: 'info.solidsoft.pitest'
