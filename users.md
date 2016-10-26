@@ -167,7 +167,7 @@ header-text:
       <img src="{{ BASE_PATH }}/images/bspb_logo.jpg" alt="Bank Saint Petersburg"/>
     </a>
     
-    <div>In <a href="http://markswebb.ru/rating/internet-banking-rank/" target="_blank">TOP-3</a> of best internet-banks in Russia</div>
+    <div>In <a href="http://markswebb.ru/e-finance/mobile-banking-rank-2012/" target="_blank">TOP-3</a> of best internet-banks in Russia</div>
     
     <hr class="divider"/>
     
