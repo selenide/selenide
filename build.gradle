@@ -6,9 +6,14 @@ buildscript {
   }
 }
 
+plugins {
+  id 'jacoco'
+  id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: "jacoco"
+apply plugin: 'jacoco'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'de.undercouch.download'
@@ -115,7 +120,7 @@ jacoco {
 
 jacocoTestReport {
   reports {
-    xml.enabled false
+    xml.enabled true
     csv.enabled false
     html.destination "${buildDir}/reports/jacocoHtml"
   }

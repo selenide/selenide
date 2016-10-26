@@ -17,3 +17,6 @@ script: "gradle clean test htmlunit"
 
 jdk:
   - oraclejdk8
+
+after_success:
+- ./gradle jacocoTestReport coveralls
