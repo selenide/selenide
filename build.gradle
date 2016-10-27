@@ -125,10 +125,19 @@ jacocoTestReport {
     html.enabled true
     html.destination "${buildDir}/reports/jacocoHtml"
   }
+  executionData = files(
+    file("$project.buildDir/jacoco/test.exec"), 
+    file("$project.buildDir/jacoco/htmlunit.exec")
+  )
 }
 
 coveralls {
   jacocoReportPath = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+}
+
+tasks.coveralls {
+    dependsOn 'htmlunit'
+    onlyIf { System.env.'CI' }
 }
 
 apply plugin: 'info.solidsoft.pitest'
