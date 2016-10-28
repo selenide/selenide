@@ -96,6 +96,7 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
+    options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments("chrome.switches", chromeSwitches);
     }
