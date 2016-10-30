@@ -113,6 +113,11 @@ public class CollectionMethodsTest extends IntegrationTest {
     $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void failsFast_ifNoExpectedTextsAreGiven() {
+    $$("#dynamic-content-container span").shouldHave(texts());
+  }
+
   @Test
   public void userCanFilterOutMatchingElements() {
     $$("#multirowTable tr").shouldHaveSize(2);
