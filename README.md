@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
-
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
-
 [![Coverage Status](https://coveralls.io/repos/codeborne/selenide/badge.svg?branch=master&service=github)](https://coveralls.io/github/codeborne/selenide?branch=master)
 
 # Selenide = UI Testing Framework powered by Selenium WebDriver
