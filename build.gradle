@@ -127,7 +127,7 @@ jacocoTestReport {
   }
   executionData = files(
     file("$project.buildDir/jacoco/test.exec"), 
-    file("$project.buildDir/jacoco/htmlunit.exec")
+    file("$project.buildDir/jacoco/htmlunit.exec"),
     file("$project.buildDir/jacoco/chrome.exec")
   )
 }
