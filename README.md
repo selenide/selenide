@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 [![Coverage Status](https://coveralls.io/repos/codeborne/selenide/badge.svg?branch=master&service=github)](https://coveralls.io/github/codeborne/selenide?branch=master)
-[![Chat](https://badges.gitter.im/codeborne/selenide.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Чат](https://badges.gitter.im/codeborne/selenide-ru.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
-[![Join the chat at https://gitter.im/codeborne/selenide](https://badges.gitter.im/codeborne/selenide.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+ENG: [![Join the chat at https://gitter.im/codeborne/selenide](https://badges.gitter.im/codeborne/selenide.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+RUS: [![Присоединяйся к чату https://gitter.im/codeborne/selenide-ru](https://badges.gitter.im/codeborne/selenide-ru.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## What is Selenide?
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
