@@ -9,8 +9,8 @@
 
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Присоединяйся к чату https://gitter.im/codeborne/selenide-ru](https://img.shields.io/badge/%D0%B7%D0%B0%D1%85%D0%BE%D0%B4%D0%B8%20%D0%B2-%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![Tweet](https://img.shields.io/twitter/url/http/selenide.org.svg?style=social)
-![Follow](https://img.shields.io/twitter/follow/jselenide.svg?style=social&label=Follow)
+[![Tweet](https://img.shields.io/twitter/url/http/selenide.org.svg?style=social)]()
+[![Follow](https://img.shields.io/twitter/follow/jselenide.svg?style=social&label=Follow)]()
 
 ## What is Selenide?
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
