@@ -9,9 +9,12 @@
 </ul>
 
 <div class="news">
+  <div class="news-line"><a href="https://www.surveymonkey.com/r/RXX6KCQ">Please fill the Survey!</a></div>
+
+  <!--
   <div class="news-line"><a href="/2016/10/15/selenide-4.0/">Released Selenide 4.0</a></div>
   <div class="news-line"><small>✓ Selenium 3.0.0</small> <small>✓ Java 8</small></div>
-  <!--<div class="news-line"><a href="/2016/09/26/selenide-3.10/">Released Selenide 3.10!</a></div>-->
+  -->
 </div>
 
 <h3 style="display:none">Blog</h3>
