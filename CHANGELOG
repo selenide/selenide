@@ -2,6 +2,10 @@
 
 === 4.1
 * Improve support for gecko (marionette) driver
+* Upgrade to selenium-java 3.0.1
+* Upgrade to htmlunit-driver 2.23.2
+* Upgrade to gson 2.8.0
+* Upgrade to guava 20.0
 
 === 4.0 (Released 15.10.2016)
 * #388 Upgrade to selenium-java 3.0.0
