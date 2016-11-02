@@ -56,8 +56,11 @@ See [Frequently asked questions](http://selenide.org/faq.html)
 ```bash
 git clone https://github.com/codeborne/selenide.git
 cd selenide
-./gradle test
+./gradle jar
 ```
+After build you'll find Selenide's .jar file under `build/libs/` directory.
+
+To build Selenide on Windows use `gradle.bat jar` command.
 
 Feel free to fork, clone, build, run tests and contribute pull requests for Selenide!
 
