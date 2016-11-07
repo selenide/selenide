@@ -21,6 +21,13 @@ public class ExactTexts extends CollectionCondition {
     this.expectedTexts = expectedTexts;
   }
 
+  public ExactTexts(final List<String> expectedTexts) {
+    if (expectedTexts.size() == 0) {
+      throw new IllegalArgumentException("The list of expected texts is empty");
+    }
+    this.expectedTexts = expectedTexts.toArray(new String[expectedTexts.size()]);
+  }
+
   @Override
   public boolean apply(List<WebElement> elements) {
     if (elements.size() != expectedTexts.length) {
