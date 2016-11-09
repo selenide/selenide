@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
@@ -34,8 +35,8 @@ public class ScreenshotTest extends IntegrationTest {
     assertBetween("Screenshot doesn't fit width " + info, img.getWidth(), 50, 200);
     assertBetween("Screenshot doesn't fit height " + info, img.getHeight(), 10, 30);
     assertTrue("Screenshot file should be located in " + Configuration.reportsFolder + 
-        ", but was: " + screenshot.getPath(), 
-        screenshot.getPath().startsWith(Configuration.reportsFolder));
+        ", but was: " + screenshot.getPath(),
+        screenshot.getPath().startsWith(Paths.get(Configuration.reportsFolder).toString()));
   }
 
   @Test
