@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
 import integration.helpers.HTMLBuilderForTestPreconditions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.InvalidSelectorException;
 
@@ -18,6 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
+@Ignore
 public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest {
 
     @Before
