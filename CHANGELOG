@@ -6,6 +6,7 @@
 * Upgrade to htmlunit-driver 2.23.2
 * Upgrade to gson 2.8.0
 * Upgrade to guava 20.0
+* Explicitly declare dependency on newest httpcore:4.4.5 to avoid using old version (that Maven inherits from allure plugin or something like that)
 
 === 4.0 (Released 15.10.2016)
 * #388 Upgrade to selenium-java 3.0.0
