@@ -6,7 +6,7 @@ group: navigation
 cssClass: docs
 header-text: <h4>Selenide and Selenium comparison</h4>
   
-  Why is not Selenium webdriver enough?
+  Why is not Selenium WebDriver enough?
   
 ---
 {% include JB/setup %}
@@ -21,7 +21,7 @@ And Selenide is a tool for automated testing (build on top of Selenium WebDriver
 
 ### Why yet another Selenium wrapper?
 
-There are several testing libraries around Selenium webdriver. But it seems that they do not resolve the main problems of UI tests. 
+There are several testing libraries around Selenium WebDriver. But it seems that they do not resolve the main problems of UI tests.
 Namely, instability of tests caused by dynamic content, JavaScript, Ajax, timeouts etc. Selenide was created to resolve these problems.
 
 
@@ -79,7 +79,7 @@ Any of the following methods waits until the described event happens. Default ti
 
 When your test fail, Selenide will automatically take screenshot. You do not need to do anything for it. 
 
-## More benefitcs
+## More benefits
 
 Look at this presentation to find out more Selenide benefits:
 
