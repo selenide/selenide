@@ -55,7 +55,7 @@ public class Selectors {
    *
    * @param attributeName name of attribute, should not be empty or null
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
-   * @return standard selenium By criteria
+   * @return standard selenium By cssSelector criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
     return By.cssSelector(String.format("[%s='%s']", attributeName, attributeValue));
