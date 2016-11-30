@@ -2,6 +2,7 @@
 
 === 4.1
 * #428 Improve byAttribute method for search via css selectors
+* #419 #425 Added methods `texts(List)` and `exactTexts(List)` to `CollectionCondition`
 * Improve support for gecko (marionette) driver
 * Upgrade to selenium-java 3.0.1
 * Upgrade to htmlunit-driver 2.23.2
