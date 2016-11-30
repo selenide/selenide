@@ -201,7 +201,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection) that returns List instead of array
+   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection) 
+   *              that returns List instead of array
    */
   @Deprecated
   public static String[] getTexts(Collection<WebElement> elements) {
