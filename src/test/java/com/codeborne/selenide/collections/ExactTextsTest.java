@@ -10,24 +10,24 @@ import static org.junit.Assert.fail;
 
 public class ExactTextsTest {
   @Test
-  public void testEmptyArrayArgument() {
+  public void emptyArrayIsNotAllowed() {
     try {
       new ExactTexts();
       fail("expected IllegalArgumentException");
     }
     catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage(), is("Array of expected texts is empty"));
+      assertThat(expected.getMessage(), is("No expected texts given"));
     }
   }
 
   @Test
-  public void testEmptyListArgument() {
+  public void emptyListIsNotAllowed() {
     try {
       new ExactTexts(new ArrayList<>());
       fail("expected IllegalArgumentException");
     }
     catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage(), is("The list of expected texts is empty"));
+      assertThat(expected.getMessage(), is("No expected texts given"));
     }
   }
 }

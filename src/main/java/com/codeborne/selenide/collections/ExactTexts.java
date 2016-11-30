@@ -8,35 +8,34 @@ import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class ExactTexts extends CollectionCondition {
-  protected final String[] expectedTexts;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
-  public ExactTexts(final String... expectedTexts) {
-    if (expectedTexts.length == 0) {
-      throw new IllegalArgumentException("Array of expected texts is empty");
-    }
-    this.expectedTexts = expectedTexts;
+public class ExactTexts extends CollectionCondition {
+  protected final List<String> expectedTexts;
+
+  public ExactTexts(String... expectedTexts) {
+    this(asList(expectedTexts));
   }
 
-  public ExactTexts(final List<String> expectedTexts) {
-    if (expectedTexts.size() == 0) {
-      throw new IllegalArgumentException("The list of expected texts is empty");
+  public ExactTexts(List<String> expectedTexts) {
+    if (expectedTexts.isEmpty()) {
+      throw new IllegalArgumentException("No expected texts given");
     }
-    this.expectedTexts = expectedTexts.toArray(new String[expectedTexts.size()]);
+    this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
   @Override
   public boolean apply(List<WebElement> elements) {
-    if (elements.size() != expectedTexts.length) {
+    if (elements.size() != expectedTexts.size()) {
       return false;
     }
 
-    for (int i = 0; i < expectedTexts.length; i++) {
+    for (int i = 0; i < expectedTexts.size(); i++) {
       WebElement element = elements.get(i);
-      String expectedText = expectedTexts[i];
+      String expectedText = expectedTexts.get(i);
       if (!Html.text.equals(element.getText(), expectedText)) {
         return false;
       }
@@ -51,12 +50,12 @@ public class ExactTexts extends CollectionCondition {
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
     } else {
-      throw new TextsMismatch(collection, ElementsCollection.getTexts(elements), expectedTexts, timeoutMs);
+      throw new TextsMismatch(collection, ElementsCollection.texts(elements), expectedTexts, timeoutMs);
     }
   }
 
   @Override
   public String toString() {
-    return "Exact texts " + Arrays.toString(expectedTexts);
+    return "Exact texts " + expectedTexts;
   }
 }

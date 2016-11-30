@@ -48,6 +48,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new Texts(expectedTexts);
   }
 
+  /**
+   * Checks that given collection has given texts (each collection element CONTAINS corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
   public static CollectionCondition texts(List<String> expectedTexts) {
     return new Texts(expectedTexts);
   }
@@ -61,6 +66,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new ExactTexts(expectedTexts);
   }
 
+  /**
+   * Checks that given collection has given texts (each collection element EQUALS TO corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
