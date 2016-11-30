@@ -11,6 +11,10 @@ public class Texts extends ExactTexts {
     super(expectedTexts);
   }
 
+  public Texts(List<String> expectedTexts) {
+    super(expectedTexts);
+  }
+
   @Override
   public boolean apply(List<WebElement> elements) {
     if (elements.size() != expectedTexts.length) {
