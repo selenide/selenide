@@ -107,7 +107,8 @@ public class WebDriverFactory {
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-    log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. Use browser=marionette with geckodriver, when using it.");
+    log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
+            "Use browser=marionette with geckodriver, when using it.");
     return new FirefoxDriver(capabilities);
   }
 

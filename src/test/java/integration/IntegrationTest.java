@@ -28,9 +28,9 @@ public abstract class IntegrationTest {
   }
 
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
-    // http or https
-    private static final boolean SSL = false;
-    private static String protocol;
+  // http or https
+  private static final boolean SSL = false;
+  private static String protocol;
 
   @Rule
   public ScreenShooter img = ScreenShooter.failedTests();
@@ -51,14 +51,14 @@ public abstract class IntegrationTest {
     if (server == null) {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
-          server = new LocalHttpServer(port, SSL).start();
-          if (SSL) {
-              protocol = "https://";
-          } else {
-              protocol = "http://";
-          }
+        server = new LocalHttpServer(port, SSL).start();
+        if (SSL) {
+          protocol = "https://";
+        } else {
+          protocol = "http://";
+        }
         log.info("START " + browser + " TESTS");
-          Configuration.baseUrl = protocol + "127.0.0.1:" + port;
+        Configuration.baseUrl = protocol + "127.0.0.1:" + port;
         measureSeleniumCommandDuration();
       }
     }
@@ -73,7 +73,7 @@ public abstract class IntegrationTest {
 
   @Before
   public void resetSettings() {
-      Configuration.baseUrl = protocol + "127.0.0.1:" + port;
+    Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     browserSize = "1024x768";
@@ -108,20 +108,19 @@ public abstract class IntegrationTest {
   }
 
   private static void measureSeleniumCommandDuration() {
-      try {
-          open("/start_page.html");
-          long start = System.currentTimeMillis();
+    try {
+      open("/start_page.html");
+      long start = System.currentTimeMillis();
       WebDriver driver = getWebDriver();
       driver.findElement(By.tagName("h1")).isDisplayed();
-          driver.findElement(By.cssSelector("#start-selenide"));
+      driver.findElement(By.cssSelector("#start-selenide"));
       driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
       driver.findElement(By.tagName("h1")).getText();
       averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
 
       log.info("Average selenium command duration for " + browser + ": " +
-          averageSeleniumCommandDuration + " ms.");
-    }
-    catch (WebDriverException e) {
+              averageSeleniumCommandDuration + " ms.");
+    } catch (WebDriverException e) {
       log.log(WARNING, "Failed to calculate average selenium command duration. Using 100 by default.", e);
       averageSeleniumCommandDuration = 100;
     }

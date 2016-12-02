@@ -160,7 +160,7 @@ public class WebDriverRunner {
    * Is Selenide configured to use Marionette (Gecko) driver
    */
   public static boolean isMarionette() {
-    return (MARIONETTE.equalsIgnoreCase(browser) || GECKO.equalsIgnoreCase(browser));
+    return MARIONETTE.equalsIgnoreCase(browser) || GECKO.equalsIgnoreCase(browser);
   }
 
   /**
