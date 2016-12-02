@@ -28,6 +28,9 @@ public abstract class IntegrationTest {
   }
 
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
+    // http or https
+    private static final boolean SSL = false;
+    private static String protocol;
 
   @Rule
   public ScreenShooter img = ScreenShooter.failedTests();
@@ -48,10 +51,14 @@ public abstract class IntegrationTest {
     if (server == null) {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
-        server = new LocalHttpServer(port).start();
+          server = new LocalHttpServer(port, SSL).start();
+          if (SSL) {
+              protocol = "https://";
+          } else {
+              protocol = "http://";
+          }
         log.info("START " + browser + " TESTS");
-
-          Configuration.baseUrl = "https://127.0.0.1:" + port;
+          Configuration.baseUrl = protocol + "127.0.0.1:" + port;
         measureSeleniumCommandDuration();
       }
     }
@@ -66,7 +73,7 @@ public abstract class IntegrationTest {
 
   @Before
   public void resetSettings() {
-    Configuration.baseUrl = "https://127.0.0.1:" + port;
+      Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     browserSize = "1024x768";
