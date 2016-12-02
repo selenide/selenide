@@ -245,6 +245,48 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task downloadGeckoDriverZip(type: Download) {
+  if (OperatingSystem.current().isMacOsX()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-macos.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else if (OperatingSystem.current().isLinux()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-win64.zip'
+    dest new File(buildDir, 'geckodriver.zip')
+  }
+
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Gecko driver: " + src + " to " + dest
+}
+
+task downloadAndUnzipGeckoDriver(dependsOn: downloadGeckoDriverZip, type: Copy) {
+  println "Unzip Gecko driver: " + downloadGeckoDriverZip.dest
+  if (OperatingSystem.current().isWindows()) {
+    from zipTree(downloadGeckoDriverZip.dest)
+  }else{
+    from tarTree(resources.gzip(downloadGeckoDriverZip.dest))
+  }
+
+  into buildDir
+}
+
+task marionette(type: Test, dependsOn: downloadAndUnzipGeckoDriver) {
+  String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
+  File geckoDriver = new File(buildDir, 'geckodriver' + extension);
+  println "Use Gecko driver: $geckoDriver"
+  systemProperties['webdriver.gecko.driver'] = geckoDriver
+  systemProperties['selenide.browser'] = 'marionette'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task jbrowser(type: Test) {
   systemProperties['selenide.browser'] = 'jbrowser'
   include 'integration/**/*'
@@ -261,6 +303,7 @@ tasks.withType(Test).all { testTask ->
   testTask.systemProperties['file.encoding'] = 'UTF-8'
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 2
+  testTask.systemProperties += System.properties
   testTask.jacoco {
     enabled = true
     includes = ['com/codeborne/selenide/**/*']

@@ -89,6 +89,7 @@ public class WebDriverFactory {
       browserCapabilities.setVersion(browserVersion);
     }
     browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
+    browserCapabilities.setCapability("acceptSslCerts", true);
     return browserCapabilities;
   }
 
@@ -106,7 +107,7 @@ public class WebDriverFactory {
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-
+    log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. Use browser=marionette with geckodriver, when using it.");
     return new FirefoxDriver(capabilities);
   }
 
@@ -121,6 +122,7 @@ public class WebDriverFactory {
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    capabilities.setCapability("marionette", false);
     return capabilities;
   }
 
