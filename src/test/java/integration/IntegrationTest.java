@@ -51,6 +51,7 @@ public abstract class IntegrationTest {
         server = new LocalHttpServer(port).start();
         log.info("START " + browser + " TESTS");
 
+          Configuration.baseUrl = "https://127.0.0.1:" + port;
         measureSeleniumCommandDuration();
       }
     }
@@ -100,12 +101,12 @@ public abstract class IntegrationTest {
   }
 
   private static void measureSeleniumCommandDuration() {
-    open("/start_page.html");
-    long start = System.currentTimeMillis();
-    try {
+      try {
+          open("/start_page.html");
+          long start = System.currentTimeMillis();
       WebDriver driver = getWebDriver();
       driver.findElement(By.tagName("h1")).isDisplayed();
-      driver.findElement(By.tagName("h1")).isEnabled();
+          driver.findElement(By.cssSelector("#start-selenide"));
       driver.findElement(By.tagName("body")).findElement(By.tagName("h1"));
       driver.findElement(By.tagName("h1")).getText();
       averageSeleniumCommandDuration = max(30, (System.currentTimeMillis() - start) / 4);
