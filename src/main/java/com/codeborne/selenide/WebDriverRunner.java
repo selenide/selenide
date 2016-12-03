@@ -14,6 +14,7 @@ public class WebDriverRunner {
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
+  public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
   /**
    * Marinonette Driver for Firefox is the same as Gecko Driver
@@ -175,6 +176,13 @@ public class WebDriverRunner {
    */
   public static boolean isIE() {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+  }
+
+  /**
+   * Is Selenide configured to use Microsoft EDGE browser
+   */
+  public static boolean isEdge() {
+    return EDGE.equalsIgnoreCase(browser);
   }
 
   /**

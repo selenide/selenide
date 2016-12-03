@@ -185,6 +185,28 @@ task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+
+task downloadEdgeDriver(type: Download) {
+  // Release 14393
+  src 'https://download.microsoft.com/download/3/2/D/32D3E464-F2EF-490F-841B-05D53C848D15/MicrosoftWebDriver.exe'
+  dest new File(buildDir, 'EdgeWebDriver.exe')
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Edge driver: " + src
+}
+
+
+
+task edge(type: Test, dependsOn: downloadEdgeDriver) {
+  println 'Use Edge driver: ' + buildDir + '/EdgeWebDriver.exe'
+  systemProperties['selenide.browser'] = 'edge'
+  systemProperties['webdriver.edge.driver'] = new File(buildDir, 'EdgeWebDriver.exe')
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
