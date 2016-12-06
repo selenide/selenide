@@ -28,7 +28,7 @@ public class SimpleReport {
             .mapToInt(Integer::intValue)
             .max();
 
-    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt() + 1): 20;
+    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt() + 1) : 20;
 
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
