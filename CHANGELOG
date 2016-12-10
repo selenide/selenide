@@ -5,7 +5,7 @@
 * Added experimental support of Edge (browser=edge, set webdriver.edge.driver to path to MicrosoftWebDriver.exe)
 * #433 bypass spawning local browser
 
-=== 4.1
+=== 4.1 (Released 01.12.2016)
 * #428 Improve byAttribute method for search via css selectors
 * #419 #425 Added methods `texts(List)` and `exactTexts(List)` to `CollectionCondition`
 * Improve support for gecko (marionette) driver
