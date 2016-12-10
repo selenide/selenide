@@ -102,6 +102,7 @@ public class Commands {
     add("getSelectedText", new GetSelectedText());
     add("getSelectedValue", new GetSelectedValue());
     add("selectOption", new SelectOptionByTextOrIndex());
+    add("selectOptionContainingText", new SelectOptionContainingText());
     add("selectOptionByValue", new SelectOptionByValue());
   }
 
