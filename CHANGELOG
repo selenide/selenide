@@ -3,6 +3,7 @@
 === 4.2
 * browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
 * Added experimental support of Edge (browser=edge, set webdriver.edge.driver to path to MicrosoftWebDriver.exe)
+* #433 bypass spawning local browser
 
 === 4.1
 * #428 Improve byAttribute method for search via css selectors
