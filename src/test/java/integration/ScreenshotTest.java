@@ -5,15 +5,22 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 
@@ -40,24 +47,32 @@ public class ScreenshotTest extends IntegrationTest {
   }
 
   @Test
-  public void testResizeBigImageWidth() {
+  public void resizeBigImageWidth() {
     SelenideElement element = $("#wide_div");
     BufferedImage img = element.screenshotAsImage();
-    assertTrue("Screenshot doesn't fit width", img.getWidth() < element.getSize().getWidth());
+    assertThat("Screenshot doesn't fit width", img.getWidth(), is(lessThan(element.getSize().getWidth())));
   }
 
   @Test
-  public void testResizeBigImageHeight() {
+  public void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
     BufferedImage img =  new ScreenShotLaboratory().takeScreenshotAsImage(element);
-    assertTrue("Screenshot doesn't fit height", img.getHeight() < element.getSize().getHeight());
+    assertThat("Screenshot doesn't fit height", img.getHeight(), is(lessThan(element.getSize().getHeight())));
   }
 
   @Test
-  public void testResizeBigImage() {
+  public void resizeBigImage() throws IOException {
     SelenideElement element = $("#huge_div");
     BufferedImage img = $("#huge_div").screenshotAsImage();
-    assertTrue("Screenshot doesn't fit width", img.getWidth() < element.getSize().getWidth());
-    assertTrue("Screenshot doesn't fit height", img.getHeight() < element.getSize().getHeight());
+
+    byte[] screen = ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
+    BufferedImage tmp = ImageIO.read(new ByteArrayInputStream(screen));
+    String errorDetails = String.format("element.location: %s, element.size: %s, screen.size: (%s,%s)",
+        element.getLocation(), element.getSize(), tmp.getWidth(), tmp.getHeight());
+    
+    assertThat("Screenshot doesn't fit width - " + errorDetails, 
+        img.getWidth(), is(lessThan(element.getSize().getWidth())));
+    assertThat("Screenshot doesn't fit height - " + errorDetails, 
+        img.getHeight(), is(lessThan(element.getSize().getHeight())));
   }
 }
