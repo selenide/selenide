@@ -18,7 +18,8 @@ public class SelectOptionContainingText implements Command<Void> {
     WebElement element = selectField.getWebElement();
     Select select = new Select(element);
 
-    List<WebElement> options = element.findElements(By.xpath(".//option[contains(normalize-space(.), " + Quotes.escape(text) + ")]"));
+    List<WebElement> options = element.findElements(By.xpath(
+        ".//option[contains(normalize-space(.), " + Quotes.escape(text) + ")]"));
 
     if (options.isEmpty()) {
       throw new NoSuchElementException("Cannot locate option containing text: " + text);
