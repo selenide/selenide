@@ -30,7 +30,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -138,7 +139,7 @@ public class SelenideElementProxyTest {
   @Test
   public void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    when(webdriver.executeScript(anyString(), anyVararg()))
+    when(webdriver.executeScript(anyString(), any()))
         .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
     $("#firstName").setValue("john");
   }

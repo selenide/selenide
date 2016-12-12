@@ -6,7 +6,7 @@ import integration.IntegrationTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.grid.selenium.GridLauncher;
+import org.openqa.grid.selenium.GridLauncherV3;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
@@ -22,10 +22,9 @@ public class SeleniumGridTest extends IntegrationTest {
     close();
     
     int hubPort = findFreePort();
-    GridLauncher.main(new String[]{"-port", "" + hubPort, "-host", "localhost"});
+    GridLauncherV3.main(new String[]{"-port", "" + hubPort});
 
-    GridLauncher.main(new String[]{"-port", "" + findFreePort(),
-        "-host", "localhost",
+    GridLauncherV3.main(new String[]{"-port", "" + findFreePort(),
         "-role", "node",
         "-hub", "http://localhost:" + hubPort + "/grid/register"
     });

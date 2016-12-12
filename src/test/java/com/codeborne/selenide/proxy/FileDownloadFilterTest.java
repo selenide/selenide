@@ -6,6 +6,7 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import net.lightbody.bmp.util.HttpMessageContents;
 import net.lightbody.bmp.util.HttpMessageInfo;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,6 +22,16 @@ public class FileDownloadFilterTest {
   HttpResponse response = mock(HttpResponse.class);
   HttpMessageContents contents = mock(HttpMessageContents.class);
   HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
+
+  @Before
+  public void setUp() {
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
+    headers.add("hkey-01", "hvalue-01");
+    when(response.headers()).thenReturn(headers);
+
+    when(contents.getContentType()).thenReturn("app/json");
+    when(contents.getTextContents()).thenReturn("my-text");
+  }
 
   @Test
   public void extractsFileNameFromHttpHeader() {
@@ -83,9 +94,8 @@ public class FileDownloadFilterTest {
     mockStatusCode(199, "below 200");
     filter.filterResponse(response, contents, messageInfo);
 
-    verify(response, never()).headers();
-    verifyNoMoreInteractions(contents);
-    verifyNoMoreInteractions(messageInfo);
+    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
+        "\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
   }
 
   private void mockStatusCode(int code, String reason) {
@@ -98,9 +108,8 @@ public class FileDownloadFilterTest {
     mockStatusCode(300, "300 or above");
     filter.filterResponse(response, contents, messageInfo);
 
-    verify(response, never()).headers();
-    verifyNoMoreInteractions(contents);
-    verifyNoMoreInteractions(messageInfo);
+    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
+        "\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
   }
 
   @Test
@@ -110,8 +119,7 @@ public class FileDownloadFilterTest {
     mockHeaders();
     filter.filterResponse(response, contents, messageInfo);
 
-    verifyNoMoreInteractions(contents);
-    verifyNoMoreInteractions(messageInfo);
+    assertThat(filter.getResponses(), is("Intercepted 1 responses.\n  null -> 200 \"200=success\" {} app/json  (7 bytes)\n"));
   }
 
   @Test

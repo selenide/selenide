@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
@@ -312,5 +313,5 @@ public class Configuration {
   }
 
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
-      System.getProperty("selenide.fileDownload", "PROXY"));
+      System.getProperty("selenide.fileDownload", HTTPGET.name()));
 }

@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.contains;
 
 public class RadioTest extends IntegrationTest {
   @Before
@@ -44,8 +43,8 @@ public class RadioTest extends IntegrationTest {
   @Test
   public void selenideElement_selectRadio_elementNotFound() {
     thrown.expect(ElementNotFound.class);
-    thrown.expectMessage(contains("Element not found {By.name: me}\n" +
-        "Expected: value 'unknown-value'"));
+    thrown.expectMessage("Element not found {By.id: unknownId}\n" +
+        "Expected: value 'margarita'");
 
     $(By.id("unknownId")).selectRadio("margarita");
   }
@@ -53,8 +52,8 @@ public class RadioTest extends IntegrationTest {
   @Test
   public void selenideElement_selectRadio_valueNotFound() {
     thrown.expect(ElementNotFound.class);
-    thrown.expectMessage(contains("Element not found {By.name: me}\n" +
-        "Expected: value 'unknown-value'"));
+    thrown.expectMessage("Element not found {By.name: me}\n" +
+        "Expected: value 'unknown-value'");
 
     $(By.name("me")).selectRadio("unknown-value");
   }

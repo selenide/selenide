@@ -1,27 +1,32 @@
 buildscript {
-  repositories { jcenter() }
+  repositories {
+    jcenter()
+    maven { url 'https://plugins.gradle.org/m2' }
+  }
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
-    classpath 'de.undercouch:gradle-download-task:3.1.1'
+    classpath 'de.undercouch:gradle-download-task:3.1.2'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.7.1'
   }
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: "jacoco"
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='3.10-SNAPSHOT'
+version='4.2-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 defaultTasks 'check', 'test', 'install'
 
@@ -35,7 +40,8 @@ configurations {
 }
 
 dependencies {
-  compile('org.seleniumhq.selenium:selenium-java:2.53.1') {
+  compile('org.apache.httpcomponents:httpcore:4.4.5')
+  compile('org.seleniumhq.selenium:selenium-java:3.0.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -43,15 +49,16 @@ dependencies {
     exclude group: 'commons-codec', module: 'commons-codec'
     exclude group: 'cglib', module: 'cglib-nodep'
     exclude group: 'com.google.code.gson', module: 'gson'
+    exclude group: 'org.apache.httpcomponents', module: 'httpcore'
   }
   runtime('com.codeborne:phantomjsdriver:1.3.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
   }
-  compile 'com.google.code.gson:gson:2.7'
-  compile 'com.google.guava:guava:19.0'
+  compile 'com.google.code.gson:gson:2.8.0'
+  compile 'com.google.guava:guava:20.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.21', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.23.2', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23'
   compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.2'
@@ -59,14 +66,14 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '2.53.1'  
-  testCompile 'org.mockito:mockito-core:1.10.19'
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.0.1'  
+  testCompile 'org.mockito:mockito-core:2.2.26'
   testCompile 'org.eclipse.jetty:jetty-server:9.2.17.v20160517'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.2.17.v20160517'
   testCompile 'commons-fileupload:commons-fileupload:1.3.2'
   
-  testCompile 'com.automation-remarks:video-recorder-core:1.0.8'
-  testCompile 'com.automation-remarks:video-recorder-junit:1.0.8'
+  testCompile 'com.automation-remarks:video-recorder-core:1.1.2'
+  testCompile 'com.automation-remarks:video-recorder-junit:1.1.2'
 }
 
 task libs(type: Sync) {
@@ -89,8 +96,8 @@ findbugs {
 
 tasks.withType(FindBugs) {
   reports {
-    xml.enabled = false
-    html.enabled = true
+    xml.enabled = true
+    html.enabled = false
   }
 }
 
@@ -115,10 +122,24 @@ jacoco {
 
 jacocoTestReport {
   reports {
-    xml.enabled false
+    xml.enabled true
     csv.enabled false
+    html.enabled true
     html.destination "${buildDir}/reports/jacocoHtml"
   }
+  executionData = files(
+    file("$project.buildDir/jacoco/test.exec"), 
+    file("$project.buildDir/jacoco/htmlunit.exec"),
+    file("$project.buildDir/jacoco/chrome.exec")
+  )
+}
+
+coveralls {
+  jacocoReportPath = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+}
+
+tasks.coveralls {
+  onlyIf { System.env.'CI' }
 }
 
 apply plugin: 'info.solidsoft.pitest'
@@ -138,7 +159,7 @@ test {
 import de.undercouch.gradle.tasks.download.Download
 
 task downloadIEDriverZip(type: Download) {
-  src 'http://selenium-release.storage.googleapis.com/2.53/IEDriverServer_Win32_2.53.1.zip'
+  src 'http://selenium-release.storage.googleapis.com/3.0/IEDriverServer_Win32_3.0.0.zip'
   dest new File(buildDir, 'IEDriverServer.zip')
   quiet false
   overwrite true
@@ -164,17 +185,39 @@ task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+
+task downloadEdgeDriver(type: Download) {
+  // Release 14393
+  src 'https://download.microsoft.com/download/3/2/D/32D3E464-F2EF-490F-841B-05D53C848D15/MicrosoftWebDriver.exe'
+  dest new File(buildDir, 'EdgeWebDriver.exe')
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Edge driver: " + src
+}
+
+
+
+task edge(type: Test, dependsOn: downloadEdgeDriver) {
+  println 'Use Edge driver: ' + buildDir + '/EdgeWebDriver.exe'
+  systemProperties['selenide.browser'] = 'edge'
+  systemProperties['webdriver.edge.driver'] = new File(buildDir, 'EdgeWebDriver.exe')
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.23/chromedriver_mac64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_mac64.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.23/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
   quiet false
@@ -224,6 +267,48 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task downloadGeckoDriverZip(type: Download) {
+  if (OperatingSystem.current().isMacOsX()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-macos.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else if (OperatingSystem.current().isLinux()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-win64.zip'
+    dest new File(buildDir, 'geckodriver.zip')
+  }
+
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Gecko driver: " + src + " to " + dest
+}
+
+task downloadAndUnzipGeckoDriver(dependsOn: downloadGeckoDriverZip, type: Copy) {
+  println "Unzip Gecko driver: " + downloadGeckoDriverZip.dest
+  if (OperatingSystem.current().isWindows()) {
+    from zipTree(downloadGeckoDriverZip.dest)
+  }else{
+    from tarTree(resources.gzip(downloadGeckoDriverZip.dest))
+  }
+
+  into buildDir
+}
+
+task marionette(type: Test, dependsOn: downloadAndUnzipGeckoDriver) {
+  String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
+  File geckoDriver = new File(buildDir, 'geckodriver' + extension);
+  println "Use Gecko driver: $geckoDriver"
+  systemProperties['webdriver.gecko.driver'] = geckoDriver
+  systemProperties['selenide.browser'] = 'marionette'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task jbrowser(type: Test) {
   systemProperties['selenide.browser'] = 'jbrowser'
   include 'integration/**/*'
@@ -238,9 +323,9 @@ task testng(type: Test) {
 
 tasks.withType(Test).all { testTask ->
   testTask.systemProperties['file.encoding'] = 'UTF-8'
-  testTask.testLogging.showStandardStreams = true
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 2
+  testTask.systemProperties += System.properties
   testTask.jacoco {
     enabled = true
     includes = ['com/codeborne/selenide/**/*']
@@ -280,7 +365,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.0'
+  gradleVersion = '3.2.1'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }

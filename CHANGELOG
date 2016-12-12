@@ -1,9 +1,40 @@
 == Changelog
 
-=== 3.10 (Released ?.09.2016)
+=== 4.2
+* browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
+* Added experimental support of Edge (browser=edge, set webdriver.edge.driver to path to MicrosoftWebDriver.exe)
+* #433 bypass spawning local browser
+* #391 add method $.selectOptionContainingText()
+* #378 Cut off WebElement screenshot size when it doesn't fit in full page screenshot
+* added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
+
+=== 4.1
+* #428 Improve byAttribute method for search via css selectors
+* #419 #425 Added methods `texts(List)` and `exactTexts(List)` to `CollectionCondition`
+* Improve support for gecko (marionette) driver
+* Upgrade to selenium-java 3.0.1
+* Upgrade to htmlunit-driver 2.23.2
+* Upgrade to gson 2.8.0
+* Upgrade to guava 20.0
+* Explicitly declare dependency on newest httpcore:4.4.5 to avoid using old version (that Maven inherits from allure plugin or something like that)
+
+=== 4.0 (Released 15.10.2016)
+* #388 Upgrade to selenium-java 3.0.0
+* #388 Upgrade to java 8
+* log all intercepted http responses if proxy server failed to download file
+
+=== 3.11 (Released 14.10.2016)
+* #415 Selenide calls SeleniumException.getMessage() multiple times
+* #416 Added condition `checked` for verifying checkboxes
+
+=== 3.10 (Released 26.09.2016)
+* #402 Disable built-in proxy server by default
+* #400 Support multiple select
+* #408 TextReport can be printed only for failed tests 
 * #398 Support "Content-Disposition" header with encoding
 * #401 Selenide swallows exception in some cases
 * #379 Turn on temporary disabled test for firefox (thanks to @BorisOsipov)
+* #407 Method `open` cannot open url in upper case
 
 === 3.9.3 (Released 09.09.2016)
 * #393 Selenide should NOT add proxy server to browser if `Configuration.fileDownload = HTTPGET`

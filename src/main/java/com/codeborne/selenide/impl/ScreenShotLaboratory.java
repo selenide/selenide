@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -69,7 +70,7 @@ public class ScreenShotLaboratory {
   /**
    * Takes screenshot of current browser window.
    * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
-   * 
+   *
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
    */
@@ -122,14 +123,25 @@ public class ScreenShotLaboratory {
 
     Point p = element.getLocation();
     Dimension elementSize = element.getSize();
-
     try {
       BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
-      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementSize.getWidth(), elementSize.getHeight());
+      int elementWidth = elementSize.getWidth();
+      int elementHeight = elementSize.getHeight();
+      if (elementWidth > img.getWidth()) {
+        elementWidth = img.getWidth() - p.getX();
+      }
+      if (elementHeight > img.getHeight()) {
+        elementHeight = img.getHeight() - p.getY();
+      }
+      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementWidth, elementHeight);
       return dest;
     }
     catch (IOException e) {
       printOnce("takeScreenshotImage", e);
+      return null;
+    }
+    catch (RasterFormatException e) {
+      log.warning("Cannot take screenshot because element is not displayed on current screen position");
       return null;
     }
   }
@@ -296,7 +308,7 @@ public class ScreenShotLaboratory {
   public List<File> getScreenshots() {
     return allScreenshots;
   }
-  
+
   public File getLastScreenshot() {
     return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
   }

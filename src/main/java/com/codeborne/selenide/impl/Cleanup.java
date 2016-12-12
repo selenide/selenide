@@ -20,13 +20,17 @@ public class Cleanup {
   }
 
   public boolean isInvalidSelectorError(Throwable error) {
-    if (error == null || error.getMessage() == null) return false;
-    return (error instanceof InvalidSelectorException && !error.getMessage().contains("\"Element is not selectable\"")) ||
-        error.getMessage().contains("invalid or illegal string was specified") ||
-        error.getMessage().contains("nvalid selector") ||
-        error.getMessage().contains("is not a valid selector") ||
-        error.getMessage().contains("SYNTAX_ERR") ||
-        error.getMessage().contains("INVALID_EXPRESSION_ERR") ||
+    if (error == null) return false;
+    
+    String message = error.getMessage();
+    if (message == null) return false;
+    
+    return (error instanceof InvalidSelectorException && !message.contains("\"Element is not selectable\"")) ||
+        message.contains("invalid or illegal string was specified") ||
+        message.contains("nvalid selector") ||
+        message.contains("is not a valid selector") ||
+        message.contains("SYNTAX_ERR") ||
+        message.contains("INVALID_EXPRESSION_ERR") ||
         error.getCause() != null && error.getCause() != error && isInvalidSelectorError(error.getCause());
   }
 

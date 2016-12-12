@@ -56,13 +56,13 @@ public class PageObjectTest extends IntegrationTest {
 
   @Test
   public void canInjectSelenideElement() {
-    pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
+    pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
     pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
   }
 
   @Test
   public void canInjectListOfSelenideElements() {
-    pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
+    pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
     assertEquals(3, pageWithSelects.h2s.size());
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
@@ -72,7 +72,7 @@ public class PageObjectTest extends IntegrationTest {
 
   @Test
   public void canInjectElementsCollection() {
-    pageWithSelects.h1.shouldHave(Condition.text("Page without JQuery"));
+    pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
     assertEquals(3, pageWithSelects.h2sElementsCollection.size());
     pageWithSelects.h2sElementsCollection.get(0)

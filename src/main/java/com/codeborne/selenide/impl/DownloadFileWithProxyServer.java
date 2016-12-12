@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
@@ -73,9 +74,13 @@ public class DownloadFileWithProxyServer {
                                    FileDownloadFilter filter) throws FileNotFoundException {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
-      throw new FileNotFoundException("Failed to download file " + anyClickableElement);
+      throw new FileNotFoundException("Failed to download file " + anyClickableElement +
+          " in " + Configuration.timeout + " ms." + filter.getResponses());
 
     }
+    
+    log.info("Downloaded file: " + files.get(0).getAbsolutePath());
+    log.info("Just in case, all intercepted responses: " + filter.getResponses());
     return files.get(0);
   }
 }
