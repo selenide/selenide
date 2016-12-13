@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
@@ -8,7 +9,8 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class WebDriverFactoryTest {
@@ -60,10 +62,14 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void transfersCapabilitesFromSystemPropsToDriver() {
+  public void transfersCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "true");
-    assertEquals(factory.createCommonCapabilities(proxy)
-            .getCapability("some.cap"), "true");
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is("true"));
 
+  }
+
+  @After
+  public void tearDown() {
+    System.clearProperty("capabilities.some.cap");
   }
 }

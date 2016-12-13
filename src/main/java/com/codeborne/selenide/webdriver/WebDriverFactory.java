@@ -93,21 +93,17 @@ public class WebDriverFactory {
     browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
     browserCapabilities.setCapability("acceptSslCerts", true);
 
-    for (Object key : System.getProperties().keySet()) {
-      if (!(key instanceof String)) {
-        log.warning("key:" + key + "is not a String");
-        continue;
-      }
-      if (((String) key).startsWith("capabilities.")) {
-        String capability = ((String) key).substring("capabilities.".length());
-        System.out.println(System.getProperties().get(key));
-        browserCapabilities.setCapability(capability, System.getProperties().get(key));
+    for (String key : System.getProperties().stringPropertyNames()) {
+      if (key.startsWith("capabilities.")) {
+        String capability = key.substring("capabilities.".length());
+        String value = System.getProperties().getProperty(key);
+        log.config("Use " + key + "=" + value);
+        browserCapabilities.setCapability(capability, value);
       }
     }
     return browserCapabilities;
   }
-
-
+  
   protected WebDriver createChromeDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
