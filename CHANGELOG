@@ -1,12 +1,13 @@
 == Changelog
 
 === 4.2
-* browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
+* #431 browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
 * Added experimental support of Edge (browser=edge, set webdriver.edge.driver to path to MicrosoftWebDriver.exe)
 * #433 bypass spawning local browser
 * #391 add method $.selectOptionContainingText()
 * #378 Cut off WebElement screenshot size when it doesn't fit in full page screenshot
-* added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
+* #379 added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
+* support for cloud services like BrowserStack, SauceLabs etc through supporting of  arbitary cablilites.
 
 === 4.1
 * #428 Improve byAttribute method for search via css selectors
