@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ex.ExplainedUIAssertionError;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,14 @@ public class CollectionSizeTest extends IntegrationTest {
     thrown.expect(ListSizeMismatch.class);
     thrown.expectMessage("expected: > 4, actual: 4");
     $$("#radioButtons input").shouldHave(sizeGreaterThan(4));
+  }
+
+  @Test
+  public void size_greaterThanWithReason_failure() {
+    String reason = "the page should have more than 4 radio buttons";
+    thrown.expect(ExplainedUIAssertionError.class);
+    thrown.expectMessage("expected: > 4, actual: 4 (because " + reason + ")");
+    $$("#radioButtons input").shouldHave(sizeGreaterThan(4).because(reason));
   }
 
   @Test
