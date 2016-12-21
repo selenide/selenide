@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Field;
@@ -9,40 +10,46 @@ import java.lang.reflect.Field;
  *
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
-public class SelenidePageFactory {
-
-    public static void initElements(FieldDecorator decorator, Object page) {
-        Class<?> proxyIn = page.getClass();
-        while (proxyIn != Object.class) {
-            proxyFields(decorator, page, proxyIn);
-            proxyIn = proxyIn.getSuperclass();
-        }
+public class SelenidePageFactory extends PageFactory {
+  /**
+   * Similar to the other "initElements" methods, but takes an {@link FieldDecorator} which is used
+   * for decorating each of the fields.
+   *
+   * @param decorator the decorator to use
+   * @param page      The object to decorate the fields of
+   */
+  public static void initElements(FieldDecorator decorator, Object page) {
+    Class<?> proxyIn = page.getClass();
+    while (proxyIn != Object.class) {
+      proxyFields(decorator, page, proxyIn);
+      proxyIn = proxyIn.getSuperclass();
     }
+  }
 
-    private static void proxyFields(FieldDecorator decorator, Object page, Class<?> proxyIn) {
-        Field[] fields = proxyIn.getDeclaredFields();
-        for (Field field : fields) {
-            if(isInitialized(page, field)){
-                continue;
-            }
-            Object value = decorator.decorate(page.getClass().getClassLoader(), field);
-            if (value != null) {
-                try {
-                    field.setAccessible(true);
-                    field.set(page, value);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    private static boolean isInitialized(Object page, Field field){
+  private static void proxyFields(FieldDecorator decorator, Object page, Class<?> proxyIn) {
+    Field[] fields = proxyIn.getDeclaredFields();
+    for (Field field : fields) {
+      if (isInitialized(page, field)) {
+        continue;
+      }
+      Object value = decorator.decorate(page.getClass().getClassLoader(), field);
+      if (value != null) {
         try {
-            field.setAccessible(true);
-            return field.get(page) != null;
+          field.setAccessible(true);
+          field.set(page, value);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+          throw new RuntimeException(e);
         }
+      }
     }
+  }
+
+  private static boolean isInitialized(Object page, Field field) {
+    try {
+      field.setAccessible(true);
+      return field.get(page) != null;
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
