@@ -568,7 +568,7 @@ public class Selenide {
    * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    PageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
+    SelenidePageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
     return pageObject;
   }
 
