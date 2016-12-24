@@ -9,11 +9,10 @@
 </ul>
 
 <div class="news">
-  <div class="news-line"><a href="/2016/12/01/selenide-4.1/">Released Selenide 4.1</a></div>
+  <div class="news-line">Released Selenide 4.2</div>
   <!--
+  <div class="news-line"><a href="/2016/12/01/selenide-4.1/">Released Selenide 4.1</a></div>
   <div class="news-line"><a href="https://www.surveymonkey.com/r/RXX6KCQ">Please fill the Survey!</a></div>
-  <div class="news-line"><a href="/2016/10/15/selenide-4.0/">Released Selenide 4.0</a></div>
-  <div class="news-line"><small>✓ Selenium 3.0.0</small> <small>✓ Java 8</small></div>
   -->
 </div>
 
