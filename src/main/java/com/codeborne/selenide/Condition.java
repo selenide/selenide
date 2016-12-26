@@ -14,6 +14,8 @@ import static com.codeborne.selenide.Selenide.getFocusedElement;
  */
 public abstract class Condition implements Predicate<WebElement> {
   /**
+   * Checks if element is visible
+   *
    * <p>Sample: {@code $("input").shouldBe(visible);}</p>
    */
   public static final Condition visible = new Condition("visible") {
@@ -37,12 +39,13 @@ public abstract class Condition implements Predicate<WebElement> {
   };
 
   /**
-   * Check that element is present on the page.
+   * @deprecated please use {@link #exist} instead, "present" is ambiguous
    *
    * Synonym for {@link #exist}.
    *
    * <p>Sample: {@code $("input").shouldBe(present);}</p>
    */
+  @Deprecated
   public static final Condition present = exist;
 
   /**
@@ -94,6 +97,7 @@ public abstract class Condition implements Predicate<WebElement> {
   public static final Condition disappear = hidden;
 
   /**
+   * @deprecated please use {@link #attribute(String, String)} instead
    * <p>
    *   Sample:
    *   <code>$("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);</code>
@@ -101,6 +105,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param attributeName name of attribute
    * @param attributeValue expected value of attribute
    */
+  @Deprecated
   public static Condition hasAttribute(String attributeName, String attributeValue) {
     return attribute(attributeName, attributeValue);
   }
@@ -187,9 +192,11 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * @deprecated please use {@link #value(String)} instead
    * <p>Sample: <code>$("#myInput").waitUntil(hasValue("John"), 5000)</p>
    * @param value expected value of input field
    */
+  @Deprecated
   public static Condition hasValue(String value) {
     return value(value);
   }
@@ -257,6 +264,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * @deprecated please use {@link #text(String)} instead
    * <p>Sample: <code>$("h1").waitUntil(hasText("Hello"), 10000)</code></p>
    *
    * <p>Case insensitive</p>
@@ -264,6 +272,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * NB! Ignores multiple whitespaces between words
    * @param text expected text of HTML element
    */
+  @Deprecated
   public static Condition hasText(String text) {
     return text(text);
   }
@@ -343,11 +352,11 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * If element has one specific cssClass
+   * @deprecated don't use this method, it is public by accident, and will be turned to private soon
    *
-   * @param element
-   * @param cssClass
+   * @see {@link #cssClass(String)} instead of using it
    */
+  @Deprecated
   public static boolean hasClass(WebElement element, String cssClass) {
     String classes = element.getAttribute("class");
     return classes != null && contains(classes.split(" "), cssClass);
@@ -363,7 +372,7 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * @deprecated please use cssClass() instead of this method, which is exactly the same
+   * @deprecated please use {@link #cssClass(String)} instead of this method, which is exactly the same
    *
    * @see #cssClass(String)
    *
@@ -440,6 +449,20 @@ public abstract class Condition implements Predicate<WebElement> {
    * @see WebElement#isSelected()
    */
   public static final Condition selected = new Condition("selected") {
+    @Override public boolean apply(WebElement element) {
+      return element.isSelected();
+    }
+
+    @Override public String actualValue(WebElement element) {
+      return String.valueOf(element.isSelected());
+    }
+  };
+
+  /**
+   * Checks that checkbox is checked
+   * @see WebElement#isSelected()
+   */
+  public static final Condition checked = new Condition("checked") {
     @Override public boolean apply(WebElement element) {
       return element.isSelected();
     }

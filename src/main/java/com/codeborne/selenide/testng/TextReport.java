@@ -1,9 +1,11 @@
 package com.codeborne.selenide.testng;
 
-import com.codeborne.selenide.logevents.*;
-import com.codeborne.selenide.testng.annotations.*;
-import org.testng.*;
-import org.testng.internal.*;
+import com.codeborne.selenide.logevents.SimpleReport;
+import com.codeborne.selenide.testng.annotations.Report;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestResult;
+import org.testng.internal.ConstructorOrMethod;
 
 /**
  * Reports for all method of annotated class in the suite.
@@ -16,18 +18,26 @@ import org.testng.internal.*;
 public class TextReport implements IInvokedMethodListener {
   protected SimpleReport report = new SimpleReport();
 
+  public static boolean onFailedTest = true;
+  public static boolean onSucceededTest = true;
+  
   @Override
   public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-    if (isClassAnnotatedWithReport(method)) {
-      report.start();
+    if (onFailedTest || onSucceededTest) {
+      if (isClassAnnotatedWithReport(method)) {
+        report.start();
+      }
     }
   }
 
   @Override
   public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-    if (isClassAnnotatedWithReport(method)) {
-      report.finish(testResult.getName());
+    if (testResult.isSuccess() && onSucceededTest || !testResult.isSuccess() && onFailedTest) {
+      if (isClassAnnotatedWithReport(method)) {
+        report.finish(testResult.getName());
+      }
     }
+    report.clean();
   }
 
   private boolean isClassAnnotatedWithReport(IInvokedMethod method) {

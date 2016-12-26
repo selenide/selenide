@@ -3,6 +3,7 @@ package com.codeborne.selenide.logevents;
 import com.google.common.base.Joiner;
 
 import java.util.Collections;
+import java.util.OptionalInt;
 import java.util.logging.Logger;
 
 /**
@@ -20,21 +21,34 @@ public class SimpleReport {
   public void finish(String title) {
     EventsCollector logEventListener = SelenideLogger.removeListener("simpleReport");
 
+    OptionalInt maxLineLength = logEventListener.events()
+            .stream()
+            .map(LogEvent::getElement)
+            .map(String::length)
+            .mapToInt(Integer::intValue)
+            .max();
+
+    int count = maxLineLength.orElse(0) >= 20 ? (maxLineLength.getAsInt() + 1) : 20;
+
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
 
-    String delimiter = '+' + Joiner.on('+').join(line(20), line(70), line(10), line(10)) + "+\n";
+    String delimiter = '+' + Joiner.on('+').join(line(count), line(70), line(10), line(10)) + "+\n";
 
     sb.append(delimiter);
-    sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
+    sb.append(String.format("|%-" + count + "s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
     sb.append(delimiter);
 
     for (LogEvent e : logEventListener.events()) {
-      sb.append(String.format("|%-20s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(),
+      sb.append(String.format("|%-" + count + "s|%-70s|%-10s|%-10s|%n", e.getElement(), e.getSubject(),
               e.getStatus(), e.getDuration()));
     }
     sb.append(delimiter);
     log.info(sb.toString());
+  }
+  
+  public void clean() {
+    SelenideLogger.removeListener("simpleReport");
   }
 
   private String line(int count) {

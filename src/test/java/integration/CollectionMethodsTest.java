@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -82,7 +83,7 @@ public class CollectionMethodsTest extends IntegrationTest {
     $$("#dynamic-content-container span").shouldHave(
         texts("dynamic content", "dynamic content2"),
         texts("mic cont", "content2"),
-        exactTexts("dynamic content", "dynamic content2"));
+        exactTexts(Arrays.asList("dynamic content", "dynamic content2")));
   }
 
   @Test
@@ -111,6 +112,11 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test(expected = TextsMismatch.class)
   public void textsCheckThrowsTextsMismatch() {
     $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3"));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void failsFast_ifNoExpectedTextsAreGiven() {
+    $$("#dynamic-content-container span").shouldHave(texts());
   }
 
   @Test
@@ -146,7 +152,7 @@ public class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   public void shouldMethodsCanCheckMultipleConditions() {
-    $$("#multirowTable tr td").shouldHave(size(4), texts("Chack", "Norris", "Chack", "L'a Baskerville"));
+    $$("#multirowTable tr td").shouldHave(size(4), texts(Arrays.asList("Chack", "Norris", "Chack", "L'a Baskerville")));
   }
 
   @Test

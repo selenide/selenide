@@ -14,8 +14,16 @@ public class WebDriverRunner {
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
+  public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
+  /**
+   * Marinonette Driver for Firefox is the same as Gecko Driver
+   */
   public static final String MARIONETTE = "marionette";
+  /**
+   * Marinonette Driver for Firefox is the same as Gecko Driver
+   */
+  public static final String GECKO = "gecko";
 
   /**
    * To use Safari webdriver, you need to include extra dependency to your project:
@@ -150,10 +158,10 @@ public class WebDriverRunner {
   }
 
   /**
-   * Is Selenide configured to use Marionette driver
+   * Is Selenide configured to use Marionette (Gecko) driver
    */
   public static boolean isMarionette() {
-    return MARIONETTE.equalsIgnoreCase(browser);
+    return MARIONETTE.equalsIgnoreCase(browser) || GECKO.equalsIgnoreCase(browser);
   }
 
   /**
@@ -168,6 +176,13 @@ public class WebDriverRunner {
    */
   public static boolean isIE() {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+  }
+
+  /**
+   * Is Selenide configured to use Microsoft EDGE browser
+   */
+  public static boolean isEdge() {
+    return EDGE.equalsIgnoreCase(browser);
   }
 
   /**

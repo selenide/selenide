@@ -9,6 +9,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -50,7 +51,7 @@ class SelenideElementProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
-      return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+      return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
     validateAssertionMode();
 
@@ -76,13 +77,13 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, 
-                                    Object proxy, Method method, Object[] args) throws Throwable {
+                                    Object proxy, Method method, Object[] args) throws Throwable, Error {
     final long startTime = currentTimeMillis();
     Throwable lastError;
     do {
       try {
         if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
-          return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+          return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
         return method.invoke(webElementSource.getWebElement(), args);
@@ -93,8 +94,12 @@ class SelenideElementProxy implements InvocationHandler {
       catch (Throwable e) {
         lastError = e;
       }
+      
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         throw Cleanup.of.wrap(lastError);
+      }
+      else if (!shouldRetryAfterError(lastError)) {
+        throw lastError;
       }
       sleep(pollingIntervalMs);
     }
@@ -110,6 +115,14 @@ class SelenideElementProxy implements InvocationHandler {
       throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
+  }
+
+  static boolean shouldRetryAfterError(Throwable e) {
+    if (e instanceof FileNotFoundException) return false;
+    if (e instanceof IllegalArgumentException) return false;
+    if (e instanceof ReflectiveOperationException) return false;
+    
+    return e instanceof Exception || e instanceof AssertionError;
   }
 
   private long getTimeoutMs(Method method, Object[] args) {

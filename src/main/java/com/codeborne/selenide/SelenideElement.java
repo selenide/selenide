@@ -513,7 +513,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *              
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
-  void selectOption(int index);
+  void selectOption(int... index);
 
   /**
    * Select an option from dropdown list (by text)
@@ -521,7 +521,16 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *             
    * @see com.codeborne.selenide.commands.SelectOptionByTextOrIndex
    */
-  void selectOption(String text);
+  void selectOption(String... text);
+
+
+  /**
+   * Select an option from dropdown list that contains given text
+   * @param text substring of visible text of option
+   *             
+   * @see com.codeborne.selenide.commands.SelectOptionContainingText
+   */
+  void selectOptionContainingText(String text);
 
   /**
    * Select an option from dropdown list (by value)
@@ -529,16 +538,24 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *              
    * @see com.codeborne.selenide.commands.SelectOptionByValue
    */
-  void selectOptionByValue(String value);
+  void selectOptionByValue(String... value);
 
   /**
-   * Find selected option from this select field
+   * Find (first) selected option from this select field
    * @return WebElement for selected &lt;option&gt; element
    * @throws NoSuchElementException if no options are selected
    * 
    * @see com.codeborne.selenide.commands.GetSelectedOption
    */
   SelenideElement getSelectedOption() throws NoSuchElementException;
+
+  /**
+   * Find all selected options from this select field
+   * 
+   * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
+   * @see com.codeborne.selenide.commands.GetSelectedOptions
+   */
+  ElementsCollection getSelectedOptions();
 
   /**
    * Get value of selected option in select field

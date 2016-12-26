@@ -8,13 +8,16 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.BuildInfo;
-import org.openqa.selenium.remote.*;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -41,14 +44,15 @@ public class WebDriverFactory {
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
         CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
             isMarionette() ? createMarionetteDriver(proxy) :
-            isFirefox() ? createFirefoxDriver(proxy) :
+                    isFirefox() ? createFirefoxDriver(proxy) :
                 isHtmlUnit() ? createHtmlUnitDriver(proxy) :
-                    isIE() ? createInternetExplorerDriver(proxy) :
-                        isPhantomjs() ? createPhantomJsDriver(proxy) :
-                            isOpera() ? createOperaDriver(proxy) :
-                                isSafari() ? createSafariDriver(proxy) :
-                                  isJBrowser() ? createJBrowserDriver(proxy) :
-                                    createInstanceOf(browser, proxy);
+                        isEdge() ? createEdgeDriver(proxy) :
+                                isIE() ? createInternetExplorerDriver(proxy) :
+                                        isPhantomjs() ? createPhantomJsDriver(proxy) :
+                                                isOpera() ? createOperaDriver(proxy) :
+                                                        isSafari() ? createSafariDriver(proxy) :
+                                                                isJBrowser() ? createJBrowserDriver(proxy) :
+                                                                        createInstanceOf(browser, proxy);
     webdriver = adjustBrowserSize(webdriver);
     if (!isHeadless()) {
       Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
@@ -87,13 +91,24 @@ public class WebDriverFactory {
       browserCapabilities.setVersion(browserVersion);
     }
     browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
+    browserCapabilities.setCapability("acceptSslCerts", true);
+
+    for (String key : System.getProperties().stringPropertyNames()) {
+      if (key.startsWith("capabilities.")) {
+        String capability = key.substring("capabilities.".length());
+        String value = System.getProperties().getProperty(key);
+        log.config("Use " + key + "=" + value);
+        browserCapabilities.setCapability(capability, value);
+      }
+    }
     return browserCapabilities;
   }
-
+  
   protected WebDriver createChromeDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = new ChromeOptions();
     options.addArguments("test-type");
+    options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments("chrome.switches", chromeSwitches);
     }
@@ -103,7 +118,8 @@ public class WebDriverFactory {
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-
+    log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
+            "Use browser=marionette with geckodriver, when using it.");
     return new FirefoxDriver(capabilities);
   }
 
@@ -118,13 +134,14 @@ public class WebDriverFactory {
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    capabilities.setCapability("marionette", false);
     return capabilities;
   }
 
   protected WebDriver createMarionetteDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-
-    return new MarionetteDriver(capabilities);
+    capabilities.setCapability("marionette", true);
+    return new FirefoxDriver(capabilities);
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
@@ -143,6 +160,11 @@ public class WebDriverFactory {
   protected WebDriver createInternetExplorerDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     return new InternetExplorerDriver(capabilities);
+  }
+
+  protected WebDriver createEdgeDriver(Proxy proxy) {
+    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+    return new EdgeDriver(capabilities);
   }
 
   protected WebDriver createPhantomJsDriver(Proxy proxy) {

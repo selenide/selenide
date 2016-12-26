@@ -36,10 +36,21 @@ public class LocalHttpServer {
 
   private final Server server;
 
-  public LocalHttpServer(int port) throws IOException {
+  /**
+   * @param port
+   * @param ssl
+   * @throws IOException
+   */
+  public LocalHttpServer(int port, boolean ssl) throws IOException {
     server = new Server();
 
-    configureHttps(port);
+    if (ssl) {
+      configureHttps(port);
+    } else {
+      ServerConnector connector = new ServerConnector(server);
+      connector.setPort(port);
+      server.setConnectors(new Connector[]{connector});
+    }
 
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
@@ -207,7 +218,7 @@ public class LocalHttpServer {
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
-    LocalHttpServer server = new LocalHttpServer(8080).start();
+    LocalHttpServer server = new LocalHttpServer(8080, false).start();
     Thread.currentThread().join();
   }
 }

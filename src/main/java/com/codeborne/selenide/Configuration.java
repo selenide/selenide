@@ -3,6 +3,7 @@ package com.codeborne.selenide;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
@@ -280,4 +281,23 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
+  
+  public enum FileDownloadMode {
+    /**
+     * Download files via direct http request.
+     * Works only for <a href></a> elements. 
+     * Sends GET request to "href" with all cookies from current browser session. 
+     */
+    HTTPGET,
+
+    /**
+     * Download files via selenide embedded proxy server.
+     * Works for any elements (e.g. form submission).
+     * Doesn't work if you are using custom webdriver without selenide proxy server.
+     */
+    PROXY
+  }
+
+  public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
+      System.getProperty("selenide.fileDownload", HTTPGET.name()));
 }

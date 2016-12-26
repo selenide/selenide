@@ -16,12 +16,12 @@ public class FileUploadTest extends IntegrationTest {
   @Before
   public void openFileUploadForm() {
     assumeFalse(isPhantomjs());
+    assumeFalse(isHtmlUnit());
 
     if (isIE()) {
       closeWebDriver();
     }
     openFile("file_upload_form.html");
-    server.uploadedFiles.clear();
   }
 
   @Test

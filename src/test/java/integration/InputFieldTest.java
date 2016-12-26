@@ -1,17 +1,18 @@
 package integration;
 
-import com.codeborne.selenide.*;
-import org.junit.*;
+import com.codeborne.selenide.SelenideElement;
+import org.junit.Before;
+import org.junit.Test;
 
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.junit.Assume.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assume.assumeFalse;
 
-/**
- * Created by vinogradov on 11.01.16.
- */
 public class InputFieldTest extends IntegrationTest {
 
   @Before
@@ -21,8 +22,9 @@ public class InputFieldTest extends IntegrationTest {
 
   @Test
   public void selenideClearTest() {
-    assumeTrue("Bug in Selenium should be fixed in 2.49+, see http://bit.ly/1JKT4AE", isFirefox());
-
+    assumeFalse("Fails with StringIndexOutOfBoundsException: start > length()", isHtmlUnit());
+    assumeFalse("Fails with Expected: '456', but: was ''", isPhantomjs());
+    
     SelenideElement input = $("#id1");
     assertThat(input.getValue(), is(equalTo("")));
 

@@ -1,36 +1,26 @@
 package integration.testng;
 
-import com.codeborne.selenide.testng.*;
-import integration.*;
-import org.testng.annotations.*;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.testng.TextReport;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
-import java.util.logging.*;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.*;
-import static org.openqa.selenium.net.PortProber.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 @Listeners(TextReport.class)
-public class ReportsNGTest {
-  private static final Logger log = Logger.getLogger(ReportsNGTest.class.getName());
-  private static int port;
-  protected static LocalHttpServer server;
-
+public class ReportsNGTest extends BaseTestNGTest {
   @BeforeClass
   public void setUp() throws Exception {
-    if (server == null) {
-      port = findFreePort();
-      server = new LocalHttpServer(port).start();
-      log.info("START " + browser + " TESTS");
-      baseUrl = "https://127.0.0.1:" + port;
-    }
-    open("/start_page.html");
+    startServer();
   }
 
-  @Test(expectedExceptions = Error.class)
+  @Test(expectedExceptions = ElementNotFound.class)
   public void failingMethod() {
-    $("h2").shouldBe(visible, text("Selenide"));
+    $("h22").shouldBe(visible).shouldHave(text("Selenide"));
   }
 
   @Test

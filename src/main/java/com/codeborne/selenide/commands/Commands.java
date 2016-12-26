@@ -9,127 +9,130 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Commands {
-  public static Commands collection = new Commands();
+  private static Commands collection;
 
   private final Map<String, Command> commands = new ConcurrentHashMap<>(128);
 
-  public Commands() {
-    resetDefaults();
+  public static synchronized Commands getInstance() {
+    if (collection == null) {
+      collection = new Commands();
+      collection.resetDefaults();
+    }
+    return collection;
   }
 
-  public final void resetDefaults() {
-    synchronized (this) {
-      commands.clear();
-      addFindCommands();
-      addClickCommands();
-      addModifyCommands();
-      addInfoCommands();
-      addSelectCommands();
-      addKeyboardCommands();
-      addActionsCommands();
-      addShouldCommands();
-      addShouldNotCommands();
-      addFileCommands();
-      addTechnicalCommands();
-    }
+  public final synchronized void resetDefaults() {
+    commands.clear();
+    addFindCommands();
+    addClickCommands();
+    addModifyCommands();
+    addInfoCommands();
+    addSelectCommands();
+    addKeyboardCommands();
+    addActionsCommands();
+    addShouldCommands();
+    addShouldNotCommands();
+    addFileCommands();
+    addTechnicalCommands();
   }
 
   private void addTechnicalCommands() {
-    commands.put("toString", new ToString());
-    commands.put("toWebElement", new ToWebElement());
-    commands.put("getWrappedElement", new GetWrappedElement());
-    commands.put("screenshot", new TakeScreenshot());
-    commands.put("screenshotAsImage", new TakeScreenshotAsImage());
+    add("toString", new ToString());
+    add("toWebElement", new ToWebElement());
+    add("getWrappedElement", new GetWrappedElement());
+    add("screenshot", new TakeScreenshot());
+    add("screenshotAsImage", new TakeScreenshotAsImage());
   }
 
   private void addActionsCommands() {
-    commands.put("dragAndDropTo", new DragAndDropTo());
-    commands.put("hover", new Hover());
-    commands.put("scrollTo", new ScrollTo());
+    add("dragAndDropTo", new DragAndDropTo());
+    add("hover", new Hover());
+    add("scrollTo", new ScrollTo());
   }
 
   private void addInfoCommands() {
-    commands.put("attr", new GetAttribute());
-    commands.put("data", new GetDataAttribute());
-    commands.put("exists", new Exists());
-    commands.put("innerText", new GetInnerText());
-    commands.put("innerHtml", new GetInnerHtml());
-    commands.put("has", new Matches());
-    commands.put("is", new Matches());
-    commands.put("isDisplayed", new IsDisplayed());
-    commands.put("isImage", new IsImage());
-    commands.put("getText", new GetText());
-    commands.put("name", new GetName());
-    commands.put("text", new GetText());
-    commands.put("getValue", new GetValue());
+    add("attr", new GetAttribute());
+    add("data", new GetDataAttribute());
+    add("exists", new Exists());
+    add("innerText", new GetInnerText());
+    add("innerHtml", new GetInnerHtml());
+    add("has", new Matches());
+    add("is", new Matches());
+    add("isDisplayed", new IsDisplayed());
+    add("isImage", new IsImage());
+    add("getText", new GetText());
+    add("name", new GetName());
+    add("text", new GetText());
+    add("getValue", new GetValue());
   }
 
   private void addClickCommands() {
-    commands.put("click", new Click());
-    commands.put("contextClick", new ContextClick());
-    commands.put("doubleClick", new DoubleClick());
-    commands.put("followLink", new FollowLink());
+    add("click", new Click());
+    add("contextClick", new ContextClick());
+    add("doubleClick", new DoubleClick());
+    add("followLink", new FollowLink());
   }
 
   private void addModifyCommands() {
-    commands.put("selectRadio", new SelectRadio());
-    commands.put("setSelected", new SetSelected());
-    commands.put("setValue", new SetValue());
-    commands.put("val", new Val());
-    commands.put("append", new Append());
+    add("selectRadio", new SelectRadio());
+    add("setSelected", new SetSelected());
+    add("setValue", new SetValue());
+    add("val", new Val());
+    add("append", new Append());
   }
 
   private void addFindCommands() {
-    commands.put("find", new Find());
-    commands.put("$", new Find());
-    commands.put("findAll", new FindAll());
-    commands.put("$$", new FindAll());
-    commands.put("closest", new GetClosest());
-    commands.put("parent", new GetParent());
+    add("find", new Find());
+    add("$", new Find());
+    add("findAll", new FindAll());
+    add("$$", new FindAll());
+    add("closest", new GetClosest());
+    add("parent", new GetParent());
   }
 
   private void addKeyboardCommands() {
-    commands.put("pressEnter", new PressEnter());
-    commands.put("pressEscape", new PressEscape());
-    commands.put("pressTab", new PressTab());
+    add("pressEnter", new PressEnter());
+    add("pressEscape", new PressEscape());
+    add("pressTab", new PressTab());
   }
 
   private void addSelectCommands() {
-    commands.put("getSelectedOption", new GetSelectedOption());
-    commands.put("getSelectedText", new GetSelectedText());
-    commands.put("getSelectedValue", new GetSelectedValue());
-    commands.put("selectOption", new SelectOptionByTextOrIndex());
-    commands.put("selectOptionByValue", new SelectOptionByValue());
+    add("getSelectedOption", new GetSelectedOption());
+    add("getSelectedOptions", new GetSelectedOptions());
+    add("getSelectedText", new GetSelectedText());
+    add("getSelectedValue", new GetSelectedValue());
+    add("selectOption", new SelectOptionByTextOrIndex());
+    add("selectOptionContainingText", new SelectOptionContainingText());
+    add("selectOptionByValue", new SelectOptionByValue());
   }
 
   private void addFileCommands() {
-    commands.put("download", new DownloadFile());
-    commands.put("uploadFile", new UploadFile());
-    commands.put("uploadFromClasspath", new UploadFileFromClasspath());
+    add("download", new DownloadFile());
+    add("uploadFile", new UploadFile());
+    add("uploadFromClasspath", new UploadFileFromClasspath());
   }
 
   private void addShouldNotCommands() {
-    commands.put("shouldNot", new ShouldNot());
-    commands.put("shouldNotHave", new ShouldNotHave());
-    commands.put("shouldNotBe", new ShouldNotBe());
-    commands.put("waitWhile", new ShouldNotBe());
+    add("shouldNot", new ShouldNot());
+    add("shouldNotHave", new ShouldNotHave());
+    add("shouldNotBe", new ShouldNotBe());
+    add("waitWhile", new ShouldNotBe());
   }
 
   private void addShouldCommands() {
-    commands.put("should", new Should());
-    commands.put("shouldHave", new ShouldHave());
-    commands.put("shouldBe", new ShouldBe());
-    commands.put("waitUntil", new ShouldBe());
+    add("should", new Should());
+    add("shouldHave", new ShouldHave());
+    add("shouldBe", new ShouldBe());
+    add("waitUntil", new ShouldBe());
   }
 
-  public void add(String method, Command command) {
-    synchronized (this) {
-      commands.put(method, command);
-    }
+  public synchronized void add(String method, Command command) {
+    commands.put(method, command);
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) throws IOException {
+  public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
+      throws IOException {
     Command command = commands.get(methodName);
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
