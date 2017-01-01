@@ -127,9 +127,9 @@ Look for more documentation in Wiki (soon).
 
 Conditions are used in should/waitUntil/waitWhile constructions. We recommend to static import com.codeborne.selenide.Condition.* to get full advantage of readible test code.
 
-*   visible | appear   // e.g. $("input").shouldBe(visible)
-*   present | exist
-*   hidden | disappear | not(visible)
+*   visible / appear   // e.g. $("input").shouldBe(visible)
+*   present / exist
+*   hidden / disappear | not(visible)
 *   readonly           // e.g. $("input").shouldBe(readonly)
 *   attribute(String)
 *   name               // e.g. $("input").shouldHave(name("fname"))
