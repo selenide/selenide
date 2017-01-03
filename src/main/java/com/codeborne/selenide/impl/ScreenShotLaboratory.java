@@ -121,20 +121,18 @@ public class ScreenShotLaboratory {
 
     byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
 
-    Point p = element.getLocation();
-    Dimension elementSize = element.getSize();
+    Point elementLocation = element.getLocation();
     try {
       BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
-      int elementWidth = elementSize.getWidth();
-      int elementHeight = elementSize.getHeight();
+      int elementWidth = element.getSize().getWidth();
+      int elementHeight = element.getSize().getHeight();
       if (elementWidth > img.getWidth()) {
-        elementWidth = img.getWidth() - p.getX();
+        elementWidth = img.getWidth() - elementLocation.getX();
       }
       if (elementHeight > img.getHeight()) {
-        elementHeight = img.getHeight() - p.getY();
+        elementHeight = img.getHeight() - elementLocation.getY();
       }
-      BufferedImage dest = img.getSubimage(p.getX(), p.getY(), elementWidth, elementHeight);
-      return dest;
+      return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
     }
     catch (IOException e) {
       printOnce("takeScreenshotImage", e);

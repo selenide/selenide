@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -46,21 +47,21 @@ public class ScreenshotTest extends IntegrationTest {
         screenshot.getPath().startsWith(Configuration.reportsFolder));
   }
 
-  @Test
+  @Test @Ignore
   public void resizeBigImageWidth() {
     SelenideElement element = $("#wide_div");
     BufferedImage img = element.screenshotAsImage();
     assertThat("Screenshot doesn't fit width", img.getWidth(), is(lessThan(element.getSize().getWidth())));
   }
 
-  @Test
+  @Test @Ignore
   public void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
     BufferedImage img =  new ScreenShotLaboratory().takeScreenshotAsImage(element);
     assertThat("Screenshot doesn't fit height", img.getHeight(), is(lessThan(element.getSize().getHeight())));
   }
 
-  @Test
+  @Test @Ignore
   public void resizeBigImage() throws IOException {
     SelenideElement element = $("#huge_div");
     BufferedImage img = $("#huge_div").screenshotAsImage();
