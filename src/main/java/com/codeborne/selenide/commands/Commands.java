@@ -21,8 +21,7 @@ public class Commands {
     return collection;
   }
 
-  public final void resetDefaults() {
-    synchronized (this) {
+  public final synchronized void resetDefaults() {
       commands.clear();
       addFindCommands();
       addClickCommands();
@@ -36,7 +35,6 @@ public class Commands {
       addFileCommands();
       addTechnicalCommands();
       addHighlightCommands();
-    }
   }
 
   private void addTechnicalCommands() {
@@ -134,10 +132,8 @@ public class Commands {
     commands.put("flash", new Flash());
   }
 
-  public void add(String method, Command command) {
-    synchronized (this) {
+  public synchronized void add(String method, Command command) {
       commands.put(method, command);
-    }
   }
 
   @SuppressWarnings("unchecked")

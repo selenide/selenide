@@ -8,7 +8,6 @@ import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
@@ -59,22 +58,15 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
-    String methodName = method.getName();
-    WebElement element = webElementSource.getWebElement();
-    if (slowAndFlashMode && !methodName.equals("flash")){
-        ElementMarker.flashElement(element,"#00FF00");
-        Thread.sleep(200);
-    }
+    ElementMarker.flashElementIfNeeded(webElementSource.getWebElement(), method.getName());
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
-      if (markElementsMode && !methodName.equals("mark")){
-          ElementMarker.markElement(element,"#00FF00");
-      }
+      ElementMarker.markGreenElementIfNeeded(webElementSource.getWebElement(), method.getName());
       return result;
     }
     catch (Error error) {
-      ElementMarker.markElement(element, "#FF0000");
+      ElementMarker.markElementRedIfNeeded(webElementSource.getWebElement(), method.getName());
       SelenideLogger.commitStep(log, error);
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
