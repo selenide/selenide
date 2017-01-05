@@ -38,7 +38,7 @@ public abstract class WebElementSource {
   public WebElement checkCondition(String prefix, String message, Condition condition, boolean invert) {
     Condition check = invert ? not(condition) : condition;
 
-    RuntimeException lastError = null;
+    Throwable lastError = null;
     WebElement element = null;
     try {
       element = getWebElement();
@@ -46,7 +46,7 @@ public abstract class WebElementSource {
         return element;
       }
     }
-    catch (RuntimeException e) {
+    catch (Throwable e) {
       lastError = e;
     }
 

@@ -155,7 +155,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @return SelenideElement
    */
   public SelenideElement find(Condition condition) {
-    return filter(condition).get(0);
+    return CollectionElementByCondition.wrap(collection, condition);
   }
 
   /**
