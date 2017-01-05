@@ -309,7 +309,7 @@ public class Configuration {
    * <b>Usage:</b><p>
    * DesiredCapabilities myCapabilities = new DesiredCapabilities();<p>
    * myCapabilities.setCapability("someCapability", "value");<p>
-   * Configuration.capabilities.set(myCapabilities)
+   * Configuration.capabilities.set(myCapabilities);
    */
   public static ThreadLocal<DesiredCapabilities> capabilities = new ThreadLocal<>();
 }
