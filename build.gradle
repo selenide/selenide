@@ -6,7 +6,7 @@ buildscript {
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     classpath 'de.undercouch:gradle-download-task:3.1.2'
-    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.7.1'
   }
 }
 
@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.1-SNAPSHOT'
+version='4.3-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -40,6 +40,7 @@ configurations {
 }
 
 dependencies {
+  compile('org.apache.httpcomponents:httpcore:4.4.5')
   compile('org.seleniumhq.selenium:selenium-java:3.0.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
@@ -48,6 +49,7 @@ dependencies {
     exclude group: 'commons-codec', module: 'commons-codec'
     exclude group: 'cglib', module: 'cglib-nodep'
     exclude group: 'com.google.code.gson', module: 'gson'
+    exclude group: 'org.apache.httpcomponents', module: 'httpcore'
   }
   runtime('com.codeborne:phantomjsdriver:1.3.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
@@ -65,9 +67,9 @@ dependencies {
   provided 'org.testng:testng:6.9.10'
   
   testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.0.1'  
-  testCompile 'org.mockito:mockito-core:2.2.9'
-  testCompile 'org.eclipse.jetty:jetty-server:9.3.13.v20161014'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.3.13.v20161014'
+  testCompile 'org.mockito:mockito-core:2.2.26'
+  testCompile 'org.eclipse.jetty:jetty-server:9.2.17.v20160517'
+  testCompile 'org.eclipse.jetty:jetty-servlet:9.2.17.v20160517'
   testCompile 'commons-fileupload:commons-fileupload:1.3.2'
   
   testCompile 'com.automation-remarks:video-recorder-core:1.1.2'
@@ -183,6 +185,28 @@ task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+
+task downloadEdgeDriver(type: Download) {
+  // Release 14393
+  src 'https://download.microsoft.com/download/3/2/D/32D3E464-F2EF-490F-841B-05D53C848D15/MicrosoftWebDriver.exe'
+  dest new File(buildDir, 'EdgeWebDriver.exe')
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Edge driver: " + src
+}
+
+
+
+task edge(type: Test, dependsOn: downloadEdgeDriver) {
+  println 'Use Edge driver: ' + buildDir + '/EdgeWebDriver.exe'
+  systemProperties['selenide.browser'] = 'edge'
+  systemProperties['webdriver.edge.driver'] = new File(buildDir, 'EdgeWebDriver.exe')
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
@@ -243,6 +267,48 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task downloadGeckoDriverZip(type: Download) {
+  if (OperatingSystem.current().isMacOsX()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-macos.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else if (OperatingSystem.current().isLinux()) {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz'
+    dest new File(buildDir, 'geckodriver.tar.gz')
+  }
+  else {
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-win64.zip'
+    dest new File(buildDir, 'geckodriver.zip')
+  }
+
+  quiet false
+  overwrite true
+  onlyIfNewer true
+  compress false
+  println "Download Gecko driver: " + src + " to " + dest
+}
+
+task downloadAndUnzipGeckoDriver(dependsOn: downloadGeckoDriverZip, type: Copy) {
+  println "Unzip Gecko driver: " + downloadGeckoDriverZip.dest
+  if (OperatingSystem.current().isWindows()) {
+    from zipTree(downloadGeckoDriverZip.dest)
+  }else{
+    from tarTree(resources.gzip(downloadGeckoDriverZip.dest))
+  }
+
+  into buildDir
+}
+
+task marionette(type: Test, dependsOn: downloadAndUnzipGeckoDriver) {
+  String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
+  File geckoDriver = new File(buildDir, 'geckodriver' + extension);
+  println "Use Gecko driver: $geckoDriver"
+  systemProperties['webdriver.gecko.driver'] = geckoDriver
+  systemProperties['selenide.browser'] = 'marionette'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task jbrowser(type: Test) {
   systemProperties['selenide.browser'] = 'jbrowser'
   include 'integration/**/*'
@@ -259,6 +325,7 @@ tasks.withType(Test).all { testTask ->
   testTask.systemProperties['file.encoding'] = 'UTF-8'
   testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
   testTask.maxParallelForks = 2
+  testTask.systemProperties += System.properties
   testTask.jacoco {
     enabled = true
     includes = ['com/codeborne/selenide/**/*']
@@ -298,7 +365,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.1'
+  gradleVersion = '3.2.1'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }

@@ -31,3 +31,5 @@ before_install:
 after_success:
 - ./gradle jacocoTestReport coveralls
 - bash <(curl -s https://codecov.io/bash)
+
+after_script: "./.upload_reports.sh"

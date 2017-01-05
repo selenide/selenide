@@ -71,6 +71,14 @@ public class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanSelectOptionByPartialText() {
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+    select.selectOptionContainingText("ыло.р");
+
+    assertEquals("@мыло.ру", select.getSelectedText());
+  }
+
+  @Test
   public void getTextReturnsTextsOfSelectedOptions() {
     assertEquals("-- Select your hero --", $("#hero").getText());
 

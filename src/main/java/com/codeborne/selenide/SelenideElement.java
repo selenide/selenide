@@ -523,6 +523,15 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    */
   void selectOption(String... text);
 
+
+  /**
+   * Select an option from dropdown list that contains given text
+   * @param text substring of visible text of option
+   *             
+   * @see com.codeborne.selenide.commands.SelectOptionContainingText
+   */
+  void selectOptionContainingText(String text);
+
   /**
    * Select an option from dropdown list (by value)
    * @param value "value" attribute of option

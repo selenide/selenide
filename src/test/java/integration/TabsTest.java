@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Set;
 
@@ -27,20 +28,27 @@ public class TabsTest extends IntegrationTest {
     openFile("page_with_tabs.html");
 
     WebDriver driver = WebDriverRunner.getWebDriver();
-    String windowHandle = driver.getWindowHandle();
 
     $(byText("Page1: uploads")).click();
+    Wait().until(ExpectedConditions.numberOfWindowsToBe(2));
 
     $("h1").shouldHave(text("Tabs"));
 
-    Set<String> windowHandles = driver.getWindowHandles();
-    windowHandles.remove(windowHandle);
-
-    driver.switchTo().window(windowHandles.iterator().next());
+    String windowHandle = driver.getWindowHandle();
+    
+    driver.switchTo().window(nextWindowHandle(driver));
     $("h1").shouldHave(text("File uploads"));
 
     driver.switchTo().window(windowHandle);
     $("h1").shouldHave(text("Tabs"));
+  }
+
+  private String nextWindowHandle(WebDriver driver) {
+    String windowHandle = driver.getWindowHandle();
+    Set<String> windowHandles = driver.getWindowHandles();
+    windowHandles.remove(windowHandle);
+
+    return windowHandles.iterator().next();
   }
 
   @Test @Video

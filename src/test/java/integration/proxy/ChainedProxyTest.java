@@ -1,5 +1,6 @@
 package integration.proxy;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
 import io.netty.handler.codec.http.HttpResponse;
@@ -52,8 +53,9 @@ public class ChainedProxyTest extends IntegrationTest {
       chainedProxy.addResponseFilter(new ResponseFilter() {
         @Override
         public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-          System.out.println(response.getStatus().code());
-          visitedUrls.add(messageInfo.getUrl());
+          if (messageInfo.getUrl().startsWith(Configuration.baseUrl)) {
+            visitedUrls.add(messageInfo.getUrl());
+          }
         }
       });
 

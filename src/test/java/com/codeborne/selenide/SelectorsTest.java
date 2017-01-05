@@ -46,30 +46,30 @@ public class SelectorsTest {
   @Test
   public void byAttributeUsesXPath() {
     By selector = Selectors.byAttribute("value", "катя");
-    assertEquals("By.xpath: .//*[@value=\"катя\"]", selector.toString());
+    assertEquals("By.cssSelector: [value='катя']", selector.toString());
   }
 
   @Test
   public void byAttributeEscapesQuotes() {
     By selector = Selectors.byAttribute("value", "Ludvig'van\"Beethoven");
-    assertEquals("By.xpath: .//*[@value=concat(\"Ludvig'van\", '\"', \"Beethoven\")]", selector.toString());
+    assertEquals("By.cssSelector: [value='Ludvig'van\"Beethoven']", selector.toString());
   }
 
   @Test
   public void userCanFindElementByAnyAttribute() {
     By selector = Selectors.by("data-account-id", "666");
-    assertEquals("By.xpath: .//*[@data-account-id=\"666\"]", selector.toString());
+    assertEquals("By.cssSelector: [data-account-id='666']", selector.toString());
   }
 
   @Test
   public void byTitleUsesXPath() {
     By selector = Selectors.byTitle("PDF report");
-    assertEquals("By.xpath: .//*[@title=\"PDF report\"]", selector.toString());
+    assertEquals("By.cssSelector: [title='PDF report']", selector.toString());
   }
 
   @Test
   public void byValueUsesXPath() {
     By selector = Selectors.byValue("водокачка");
-    assertEquals("By.xpath: .//*[@value=\"водокачка\"]", selector.toString());
+    assertEquals("By.cssSelector: [value='водокачка']", selector.toString());
   }
 }

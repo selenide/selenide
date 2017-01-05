@@ -4,7 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class ElementNotFound extends UIAssertionError {
   public ElementNotFound(By searchCriteria, Condition expectedCondition) {
@@ -21,9 +21,9 @@ public class ElementNotFound extends UIAssertionError {
         "\nExpected: " + expectedCondition, lastError);
   }
 
-  public ElementNotFound(WebElementsCollection collection, String[] expectedTexts, Throwable lastError) {
+  public ElementNotFound(WebElementsCollection collection, List<String> expectedTexts, Throwable lastError) {
     super("Element not found {" + collection.description() + '}' +
-        "\nExpected: " + Arrays.toString(expectedTexts), lastError);
+        "\nExpected: " + expectedTexts, lastError);
   }
 
   @Override
