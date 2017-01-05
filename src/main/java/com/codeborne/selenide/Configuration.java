@@ -304,6 +304,12 @@ public class Configuration {
       System.getProperty("selenide.fileDownload", HTTPGET.name()));
 
 
-
+  /**
+   * Sets additional WebDriver capabilities.<p>
+   * <b>Usage:</b><p>
+   * DesiredCapabilities myCapabilities = new DesiredCapabilities();<p>
+   * myCapabilities.setCapability("someCapability", "value");<p>
+   * Configuration.capabilities.set(myCapabilities)
+   */
   public static ThreadLocal<DesiredCapabilities> capabilities = new ThreadLocal<>();
 }
