@@ -139,7 +139,16 @@ public class WebDriverFactory {
     myProfile.setPreference("security.csp.enable", false);
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+
+    boolean hasCustomProfile = false;
+    if (Configuration.capabilities.get() != null) {
+      hasCustomProfile = Configuration.capabilities.get().getCapability("firefox_profile") != null;
+    }
+
+    if (!hasCustomProfile) {
+      capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    }
+
     capabilities.setCapability("marionette", false);
     return capabilities;
   }
