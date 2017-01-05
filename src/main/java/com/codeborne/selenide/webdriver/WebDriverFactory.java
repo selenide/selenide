@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
@@ -101,6 +102,11 @@ public class WebDriverFactory {
         browserCapabilities.setCapability(capability, value);
       }
     }
+
+    if (Configuration.capabilities.get() != null) {
+      browserCapabilities.merge(Configuration.capabilities.get());
+    }
+
     return browserCapabilities;
   }
   

@@ -8,6 +8,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -66,6 +67,20 @@ public class WebDriverFactoryTest {
     System.setProperty("capabilities.some.cap", "true");
     assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is("true"));
 
+  }
+
+  @Test
+  public void transfersCapabilitiesFromConfigurationToDriver() {
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability("testCapability1", true);
+    capabilities.setCapability("testCapability2", "false");
+    capabilities.setCapability("testCapability3", 1);
+
+    Configuration.capabilities.set(capabilities);
+
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("testCapability1"), is(true));
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("testCapability2"), is("false"));
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("testCapability3"), is(1));
   }
 
   @After
