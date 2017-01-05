@@ -14,102 +14,102 @@ import static org.junit.Assert.*;
 
 public class MethodCalledOnElementPassesOnTest extends IntegrationTest {
 
-    @Before
-    public void openPage() {
-        Given.openedPageWithBody(
-                "<ul>Hello to:",
-                "<li class='the-expanse detective'>Miller <label>detective</label></li>",
-                "<li class='the-expanse missing'>Julie Mao</li>",
-                "</ul>"
-        );
-        Configuration.timeout = 0;
-    }
+  @Before
+  public void openPage() {
+    Given.openedPageWithBody(
+        "<ul>Hello to:",
+        "<li class='the-expanse detective'>Miller <label>detective</label></li>",
+        "<li class='the-expanse missing'>Julie Mao</li>",
+        "</ul>"
+    );
+    Configuration.timeout = 0;
+  }
 
-    @Test
-    public void shouldCondition_When$Element() {
-        SelenideElement element = $("ul li");
+  @Test
+  public void shouldCondition_When$Element() {
+    SelenideElement element = $("ul li");
 
-        element.shouldHave(text("Miller"));
-    }
+    element.shouldHave(text("Miller"));
+  }
 
-    @Test
-    public void actionWithoutWaiting__When$Element() {
-        SelenideElement element = $("ul li");
+  @Test
+  public void actionWithoutWaiting__When$Element() {
+    SelenideElement element = $("ul li");
 
-        assertTrue(element.isDisplayed());
-    }
+    assertTrue(element.isDisplayed());
+  }
 
-    @Test
-    public void actionWithoutWaiting_When$Element_WithNonExistentWebElement() {
-        SelenideElement element = $("ul .nonexistent");
+  @Test
+  public void actionWithoutWaiting_When$Element_WithNonExistentWebElement() {
+    SelenideElement element = $("ul .nonexistent");
 
-        assertFalse(element.exists());
-    }
+    assertFalse(element.exists());
+  }
 
-    @Test
-    public void shouldCondition_WhenCollectionElementByIndex() {
-        SelenideElement element = $$("ul li").get(0);
+  @Test
+  public void shouldCondition_WhenCollectionElementByIndex() {
+    SelenideElement element = $$("ul li").get(0);
 
-        element.shouldHave(text("Miller"));
-    }
+    element.shouldHave(text("Miller"));
+  }
 
-    @Test
-    public void actionWithVisibilityWaiting_WhenCollectionElementByIndex() {
-        SelenideElement element = $$("ul li").get(0);
+  @Test
+  public void actionWithVisibilityWaiting_WhenCollectionElementByIndex() {
+    SelenideElement element = $$("ul li").get(0);
 
-        element.click();
-    }
+    element.click();
+  }
 
-    @Test
-    public void shouldCondition_WhenCollectionElementByCondition() {
-        SelenideElement element = $$("li").findBy(cssClass("the-expanse"));
+  @Test
+  public void shouldCondition_WhenCollectionElementByCondition() {
+    SelenideElement element = $$("li").findBy(cssClass("the-expanse"));
 
-        element.shouldBe(visible);
-    }
+    element.shouldBe(visible);
+  }
 
-    @Test
-    public void actionWithExistenceWaiting_WhenCollectionElementByCondition() {
-        SelenideElement element = $$("li").findBy(cssClass("the-expanse"));
+  @Test
+  public void actionWithExistenceWaiting_WhenCollectionElementByCondition() {
+    SelenideElement element = $$("li").findBy(cssClass("the-expanse"));
 
-        assertEquals("Miller detective", element.text());
-    }
+    assertEquals("Miller detective", element.text());
+  }
 
-    @Test
-    public void shouldCondition_WhenInnerElement() {
-        SelenideElement element = $("ul").find(".the-expanse");
+  @Test
+  public void shouldCondition_WhenInnerElement() {
+    SelenideElement element = $("ul").find(".the-expanse");
 
-        element.shouldBe(visible);
-    }
+    element.shouldBe(visible);
+  }
 
-    @Test
-    public void actionWithVisibilityWaiting_WhenInnerElement() {
-        SelenideElement element = $("ul").find(".the-expanse");
+  @Test
+  public void actionWithVisibilityWaiting_WhenInnerElement() {
+    SelenideElement element = $("ul").find(".the-expanse");
 
-        element.doubleClick();
-    }
+    element.doubleClick();
+  }
 
-    /******************************************************
-     * More complicated useful options
-     * $$.filterBy(condition).findBy(condition).find
-     ******************************************************/
+  /******************************************************
+   * More complicated useful options
+   * $$.filterBy(condition).findBy(condition).find
+   ******************************************************/
 
-    @Test
-    public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection() {
-        SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).findBy(cssClass("detective")).find("label");
+  @Test
+  public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection() {
+    SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).findBy(cssClass("detective")).find("label");
 
-        element.shouldHave(exactText("detective"));
-    }
+    element.shouldHave(exactText("detective"));
+  }
 
-    /******************************************************
-     * More complicated useful options
-     * $$.filterBy(condition).get(index).find
-     ******************************************************/
-    @Test
-    public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection() {
-        SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(0).find("label");
+  /******************************************************
+   * More complicated useful options
+   * $$.filterBy(condition).get(index).find
+   ******************************************************/
+  @Test
+  public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection() {
+    SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(0).find("label");
 
-        element.shouldHave(exactText("detective"));
-    }
+    element.shouldHave(exactText("detective"));
+  }
 
 
 }

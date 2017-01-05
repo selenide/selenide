@@ -14,16 +14,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
 public class ScreenshotTest extends IntegrationTest {
@@ -42,27 +39,30 @@ public class ScreenshotTest extends IntegrationTest {
 
     BufferedImage img = ImageIO.read(screenshot);
     assertEquals("Screenshot doesn't fit width " + info, img.getWidth(), element.getSize().getWidth());
-    assertEquals("Screenshot doesn't fit height " + info, img.getHeight(),  element.getSize().getHeight());
+    assertEquals("Screenshot doesn't fit height " + info, img.getHeight(), element.getSize().getHeight());
     assertTrue("Screenshot file should be located in " + Configuration.reportsFolder +
-        ", but was: " + screenshot.getPath(),
+            ", but was: " + screenshot.getPath(),
         screenshot.getPath().startsWith(Configuration.reportsFolder));
   }
 
-  @Test @Ignore
+  @Test
+  @Ignore
   public void resizeBigImageWidth() {
     SelenideElement element = $("#wide_div");
     BufferedImage img = element.screenshotAsImage();
     assertThat("Screenshot doesn't fit width", img.getWidth(), is(lessThan(element.getSize().getWidth())));
   }
 
-  @Test @Ignore
+  @Test
+  @Ignore
   public void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
-    BufferedImage img =  new ScreenShotLaboratory().takeScreenshotAsImage(element);
+    BufferedImage img = new ScreenShotLaboratory().takeScreenshotAsImage(element);
     assertThat("Screenshot doesn't fit height", img.getHeight(), is(lessThan(element.getSize().getHeight())));
   }
 
-  @Test @Ignore
+  @Test
+  @Ignore
   public void resizeBigImage() throws IOException {
     SelenideElement element = $("#huge_div");
     BufferedImage img = $("#huge_div").screenshotAsImage();
@@ -71,10 +71,10 @@ public class ScreenshotTest extends IntegrationTest {
     BufferedImage tmp = ImageIO.read(new ByteArrayInputStream(screen));
     String errorDetails = String.format("element.location: %s, element.size: %s, screen.size: (%s,%s)",
         element.getLocation(), element.getSize(), tmp.getWidth(), tmp.getHeight());
-    
-    assertThat("Screenshot doesn't fit width - " + errorDetails, 
+
+    assertThat("Screenshot doesn't fit width - " + errorDetails,
         img.getWidth(), is(lessThan(element.getSize().getWidth())));
-    assertThat("Screenshot doesn't fit height - " + errorDetails, 
+    assertThat("Screenshot doesn't fit height - " + errorDetails,
         img.getHeight(), is(lessThan(element.getSize().getHeight())));
   }
 }

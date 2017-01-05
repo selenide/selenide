@@ -49,7 +49,8 @@
 *             not satisfied condition
 *
 * fail on should (todo - after a decision about correct error & caused by error - asserts fix needed)
-*                (comment at MethodCalledOnCollectionFailsOnTest: todo - hypothesis - error should be according to condition plus caused by ElementNotFound )
+*                (comment at MethodCalledOnCollectionFailsOnTest:
+ *               todo - hypothesis - error should be according to condition plus caused by ElementNotFound )
 *
 * additional tests (todo - one test per each option with condition usage)
 * conditions rendering
