@@ -2,12 +2,15 @@ package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
+import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TakesScreenshot;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -43,7 +46,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -76,7 +79,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -99,7 +102,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -122,10 +125,15 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); // todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(), 
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+      if (WebDriverRunner.isHtmlUnit()) {
+        assertThat(expected.getCause().getMessage(), containsString("Returned node was not a DOM element"));
+      }
+      else {
+        assertThat(expected.getCause().getMessage(),
+            containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+      }
     }
         /*
             Element not found {.nonexistent}
@@ -149,7 +157,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {<ul>/.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -186,7 +194,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     }
     catch (ListSizeMismatch expected) {
       assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 2, collection: ul li"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -211,7 +219,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     }
     catch (ListSizeMismatch expected) {
       assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 0, collection: ul .nonexistent"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -221,5 +229,11 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
             Screenshot: file:/..._WithNonExistentCollection/1471357025434.0.png
             Timeout: 6 s.
         */
+  }
+
+  private void assertScreenshot(UIAssertionError expected) {
+    if (WebDriverRunner.getWebDriver() instanceof TakesScreenshot) {
+      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+    }
   }
 }
