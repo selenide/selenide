@@ -10,7 +10,6 @@ import integration.IntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TakesScreenshot;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
