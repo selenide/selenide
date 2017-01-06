@@ -2,7 +2,9 @@ package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,10 +43,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"ul .nonexistent\"}"));
+      assertCauseMessage(expected);
     }
         /*
             caused by - different expression for chrome & ff
@@ -80,7 +82,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 1, Size: 0"));
     }
@@ -107,7 +109,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
       assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
     }
@@ -132,7 +134,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
     }
@@ -157,7 +159,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(), startsWith("Element not found {.nonexistent.findBy(css class 'the-expanse')}"));
     }
@@ -185,7 +187,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
     }
@@ -213,7 +215,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: css class 'nonexistent'")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
     }
         /*
@@ -236,10 +238,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\""));
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -262,10 +263,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\""));
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -290,10 +290,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\""));
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -322,7 +321,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
           startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}"));
@@ -351,7 +350,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
           startsWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}"));
@@ -381,7 +380,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), 
           startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
           startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
@@ -410,10 +409,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -441,7 +439,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
     }
@@ -466,7 +464,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
     }
@@ -491,7 +489,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'the-expanse')[2]}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
       assertThat(expected.getCause().getMessage(), startsWith("Index: 2, Size: 2"));
     }
@@ -517,10 +515,9 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -531,5 +528,12 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
             Caused by: 
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
+  }
+
+  private void assertCauseMessage(UIAssertionError expected) {
+    if (!WebDriverRunner.isHtmlUnit()) {
+      assertThat(expected.getCause().getMessage(),
+          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+    }
   }
 }

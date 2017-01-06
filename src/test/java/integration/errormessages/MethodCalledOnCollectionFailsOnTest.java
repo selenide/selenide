@@ -17,6 +17,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -127,13 +128,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: exist")); // todo - is it correct?
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      if (WebDriverRunner.isHtmlUnit()) {
-        assertThat(expected.getCause().getMessage(), containsString("Returned node was not a DOM element"));
-      }
-      else {
-        assertThat(expected.getCause().getMessage(),
-            containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
-      }
+      assertCauseMessage(expected);
     }
         /*
             Element not found {.nonexistent}
@@ -231,9 +226,13 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
         */
   }
 
-  private void assertScreenshot(UIAssertionError expected) {
-    if (WebDriverRunner.getWebDriver() instanceof TakesScreenshot) {
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+  private void assertCauseMessage(UIAssertionError expected) {
+    if (WebDriverRunner.isHtmlUnit()) {
+      assertThat(expected.getCause().getMessage(), containsString("Returned node was not a DOM element"));
+    }
+    else {
+      assertThat(expected.getCause().getMessage(),
+          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
     }
   }
 }
