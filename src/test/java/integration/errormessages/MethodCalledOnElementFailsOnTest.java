@@ -45,7 +45,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, "ul .nonexistent");
     }
         /*
             caused by - different expression for chrome & ff
@@ -240,7 +240,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, ".nonexistent");
     }
         /*
             Element not found {.nonexistent}
@@ -265,7 +265,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, ".nonexistent");
     }
         /*
             Element not found {.nonexistent}
@@ -292,7 +292,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, ".nonexistent");
     }
         /*
             Element not found {.nonexistent}
@@ -411,7 +411,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, ".nonexistent");
     }
         /*
             Element not found {.nonexistent}
@@ -517,7 +517,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
-      assertCauseMessage(expected);
+      assertCauseMessage(expected, ".nonexistent");
     }
         /*
             Element not found {.nonexistent}
@@ -530,10 +530,10 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         */
   }
 
-  private void assertCauseMessage(UIAssertionError expected) {
+  private void assertCauseMessage(UIAssertionError expected, String selector) {
     if (!WebDriverRunner.isHtmlUnit()) {
       assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}"));
     }
   }
 }
