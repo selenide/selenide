@@ -98,7 +98,13 @@ public class WebDriverFactory {
         String capability = key.substring("capabilities.".length());
         String value = System.getProperties().getProperty(key);
         log.config("Use " + key + "=" + value);
-        browserCapabilities.setCapability(capability, value);
+        if (value.equals("true") || value.equals("false")) {
+          browserCapabilities.setCapability(capability, Boolean.valueOf(value));
+        } else if (value.matches("^-?\\d+$")) { //if integer
+          browserCapabilities.setCapability(capability, Integer.valueOf(value));
+        } else {
+          browserCapabilities.setCapability(capability, value);
+        }
       }
     }
     return browserCapabilities;

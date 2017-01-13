@@ -62,9 +62,21 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void transfersCapabilitiesFromSystemPropsToDriver() {
+  public void transfersStringCapabilitiesFromSystemPropsToDriver() {
+    System.setProperty("capabilities.some.cap", "abcd");
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is("abcd"));
+  }
+
+  @Test
+  public void transfersBooleanCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "true");
-    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is("true"));
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is(true));
+  }
+
+  @Test
+  public void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
+    System.setProperty("capabilities.some.cap", "25");
+    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is(25));
 
   }
 
