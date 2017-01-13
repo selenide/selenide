@@ -3,11 +3,13 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ExplainedUIAssertionError;
 import com.codeborne.selenide.ex.ListSizeMismatch;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.junit.Assert.fail;
 
 public class CollectionSizeTest extends IntegrationTest {
   @Before
@@ -37,8 +39,13 @@ public class CollectionSizeTest extends IntegrationTest {
   @Test
   public void size_greaterThanWithReason_failure() {
     String reason = "the page should have more than 4 radio buttons";
-    thrown.expect(ExplainedUIAssertionError.class);
-    thrown.expectMessage("expected: > 4, actual: 4 (because " + reason + ")");
+    try {
+      $$("#radioButtons input").shouldHave(sizeGreaterThan(4));
+      fail("Should have thrown exception");
+    } catch (UIAssertionError e) {
+      thrown.expect(ExplainedUIAssertionError.class);
+      thrown.expectMessage(e.getMessage() + " (because " + reason + ")");
+    }
     $$("#radioButtons input").shouldHave(sizeGreaterThan(4).because(reason));
   }
 
