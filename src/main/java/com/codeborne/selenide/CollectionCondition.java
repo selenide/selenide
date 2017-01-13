@@ -95,7 +95,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
       try {
         delegate.fail(collection, elements, lastError, timeoutMs);
-      } catch(UIAssertionError expected) {
+      } catch (UIAssertionError expected) {
         throw new ExplainedUIAssertionError(message, expected);
       }
     }
