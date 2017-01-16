@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
@@ -107,6 +108,11 @@ public class WebDriverFactory {
         }
       }
     }
+
+    if (Configuration.capabilities.get() != null) {
+      browserCapabilities.merge(Configuration.capabilities.get());
+    }
+
     return browserCapabilities;
   }
   
@@ -139,7 +145,16 @@ public class WebDriverFactory {
     myProfile.setPreference("security.csp.enable", false);
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+
+    boolean hasCustomProfile = false;
+    if (Configuration.capabilities.get() != null) {
+      hasCustomProfile = Configuration.capabilities.get().getCapability("firefox_profile") != null;
+    }
+
+    if (!hasCustomProfile) {
+      capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
+    }
+
     capabilities.setCapability("marionette", false);
     return capabilities;
   }

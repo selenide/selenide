@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
@@ -300,4 +302,14 @@ public class Configuration {
 
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
       System.getProperty("selenide.fileDownload", HTTPGET.name()));
+
+
+  /**
+   * Sets additional WebDriver capabilities.<p>
+   * <b>Usage:</b><p>
+   * DesiredCapabilities myCapabilities = new DesiredCapabilities();<p>
+   * myCapabilities.setCapability("someCapability", "value");<p>
+   * Configuration.capabilities.set(myCapabilities);
+   */
+  public static ThreadLocal<DesiredCapabilities> capabilities = new ThreadLocal<>();
 }
