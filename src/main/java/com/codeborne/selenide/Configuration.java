@@ -315,7 +315,7 @@ public class Configuration {
      * Flash element before click
      * Default: true
      */
-    public boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.flashElements", "true"));
+    public static boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.flashElements", "true"));
 
     /**
      * Mark element before click

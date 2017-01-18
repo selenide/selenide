@@ -4,10 +4,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.hookPreformers.HookPerformer;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
@@ -58,9 +60,11 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
+    HookPerformer.getInstance().beforePreform((WebElement) proxy, method.getName());
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
+      HookPerformer.getInstance().afterPreform((WebElement) proxy, method.getName());
       return result;
     }
     catch (Error error) {

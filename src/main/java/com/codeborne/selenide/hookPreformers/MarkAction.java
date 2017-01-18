@@ -1,58 +1,34 @@
-package com.codeborne.selenide.hookPrefomers;
+package com.codeborne.selenide.hookPreformers;
 
 import org.openqa.selenium.WebElement;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.PresentationMode;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.util.Arrays.asList;
 
-public class PresentationAction implements HookAction{
-    private static final Set<String> presentationMethods = new HashSet<>(asList(
+public class MarkAction implements HookAction{
+    protected static final Set<String> presentationMethods = new HashSet<>(asList(
     "click",
     "contextClick",
     "doubleClick",
     "followLink"
     ));
 
-    private int flashPause = 200;
-
     @Override
-    public boolean isActive(WebElement element, String methodName) {
-        return (presentationMethods.contains(methodName) && PresentationMode.active);
+    public boolean conditionForAction(WebElement element, String methodName) {
+        return (presentationMethods.contains(methodName) && PresentationMode.active && PresentationMode.markElements);
     }
 
     @Override
     public void action(WebElement element, String methodName) {
-
         wait(PresentationMode.delayBeforeCommand);
-
-        String flasherId = "selenideFlasher";
-        switch (methodName){
-            case "doubleClick":
-                for(int i=0; i < 2; i++){
-                    markElement(element, PresentationMode.flashColor, flasherId);
-                    wait(flashPause);
-                    removeMarker(flasherId);
-                    wait(flashPause);
-                }
-                break;
-
-            default:
-                markElement(element, PresentationMode.flashColor, flasherId);
-                wait(flashPause);
-                removeMarker(flasherId);
-                break;
-        }
-
-        if (PresentationMode.markElements) markElement(element, PresentationMode.markColor, "selenideMarker");
+        markElement(element, PresentationMode.markColor, "selenideMarker");
     }
 
-
-
-    private static void markElement(WebElement element, String elementColor, String elementId){
+    protected static void markElement(WebElement element, String elementColor, String elementId){
         executeJavaScript("var flasher = document.createElement('div');" +
                         "var parentOffsets = arguments[0].getBoundingClientRect();"+
                         "flasher.id = '" + elementId + "';" +
@@ -69,12 +45,7 @@ public class PresentationAction implements HookAction{
                 element);
     }
 
-    private static void removeMarker(String elementId){
-        executeJavaScript("if (document.contains(document.getElementById('" + elementId + "'))) {" +
-                "document.getElementById('" + elementId + "').remove()}");
-    }
-
-    private static void wait(int ms){
+    protected static void wait(int ms){
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
