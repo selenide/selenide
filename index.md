@@ -28,7 +28,7 @@ tagline:
       <a href="/documentation.html">Concise fluent API for tests</a>
       <span>Ajax support for stable tests</span>
       <span>Powerful selectors</span>
-      <a href="/documentation/page-objects.html">True Page Objects</a>
+      <span>Simple configuration</span>
     </div>
     You don't need to think how to shutdown browser, handle timeouts and StaleElement Exceptions or search for relevant log lines, debugging your tests.<br>
     Just focus on your business logic and let Selenide do the rest!<br>
