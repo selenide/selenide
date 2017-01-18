@@ -2,7 +2,9 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.hookPrefomers.BeforeHookPrefomer;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.util.Map;
@@ -137,6 +139,7 @@ public class Commands {
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
+    BeforeHookPrefomer.getInstance().prefom((WebElement) proxy, methodName);
     return (T) command.execute((SelenideElement) proxy, webElementSource, args);
   }
 }

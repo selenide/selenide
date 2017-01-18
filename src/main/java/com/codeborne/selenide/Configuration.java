@@ -300,4 +300,47 @@ public class Configuration {
 
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
       System.getProperty("selenide.fileDownload", HTTPGET.name()));
+
+  /**
+   * Presentation Mode Config
+   */
+  public static class PresentationMode{
+    /**
+     * Activate Presentation Mode
+     * Default: false
+     */
+    public static boolean active = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.active", "false"));
+
+    /**
+     * Flash element before click
+     * Default: true
+     */
+    public boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.flashElements", "true"));
+
+    /**
+     * Mark element before click
+     * Default: false
+     */
+    public static boolean markElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.markElements", "false"));
+
+    /**
+     * Delay before click in ms.
+     * Default: 200
+     */
+    public static Integer delayBeforeCommand = Integer.parseInt(System.getProperty("selenide.PresentationMode.delayBeforeCommand", "200"));
+
+    /**
+     * Element flasher color
+     * Default: #00ff00
+     */
+    public static String flashColor = System.getProperty("selenide.PresentationMode.flashColor", "#00ff00");
+
+    /**
+     * Element marker color
+     * Default: #00ff00
+     */
+    public static String markColor = System.getProperty("selenide.PresentationMode.markColor", "#00ff00");
+  }
+
+
 }
