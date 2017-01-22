@@ -59,7 +59,7 @@ public class Configuration {
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
   public static boolean reopenBrowserOnFail = Boolean.parseBoolean(
-      System.getProperty("selenide.reopenBrowserOnFail", "true"));
+          System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
@@ -97,7 +97,7 @@ public class Configuration {
   /**
    * URL of remote web driver (in case of using Selenium Grid).
    * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/wd/hub".
-   *
+   * <p>
    * Default value: null (Grid is not used).
    */
   public static String remote = System.getProperty("remote");
@@ -105,7 +105,7 @@ public class Configuration {
   /**
    * The browser window size.
    * Can be configured either programmatically or by system property "-Dselenide.browser-size=1024x768".
-   *
+   * <p>
    * Default value: none (browser size will not be set explicitly)
    */
   public static String browserSize = System.getProperty("selenide.browser-size");
@@ -113,16 +113,16 @@ public class Configuration {
   /**
    * The browser window is maximized when started.
    * Can be configured either programmatically or by system property "-Dselenide.start-maximized=true".
-   *
+   * <p>
    * Default value: true
    */
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property, 
+   * Can be configured either programmatically or by system property,
    * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
-   * 
+   * <p>
    * Default value: none
    */
   public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
@@ -131,39 +131,40 @@ public class Configuration {
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".
    * Default value: "normal".
-   * 
-   *  - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
-   *  - `eager`: return after DOMContentLoaded fires;
-   *  - `none`: return immediately (it's default in Selenide).
-   *  
-   *  It seems that `none` is the best option for Selenide because all its commands wait until
-   *  corresponding condition becomes true. 
-   *  Thought, we left default value `normal` because we afraid to break users' existing tests. 
-   * 
+   * <p>
+   * - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
+   * - `eager`: return after DOMContentLoaded fires;
+   * - `none`: return immediately (it's default in Selenide).
+   * <p>
+   * It seems that `none` is the best option for Selenide because all its commands wait until
+   * corresponding condition becomes true.
+   * Thought, we left default value `normal` because we afraid to break users' existing tests.
+   * <p>
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
+   *
    * @since 3.5
    */
   public static String pageLoadStrategy = System.getProperty("selenide.page-load-strategy", "normal");
-  
+
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
    * This solution may be helpful for testing in Internet Explorer.
-   *
+   * <p>
    * Default value: false
    */
   public static boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.click-via-js", "false"));
 
   /**
    * Does Selenide need to take screenshots on failing tests.
-   *
+   * <p>
    * Default value: true
    */
   public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   /**
    * Does Selenide need to save page source on failing tests.
-   *
+   * <p>
    * Default value: true
    */
   public static boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
@@ -171,7 +172,7 @@ public class Configuration {
   /**
    * Folder to store screenshots to.
    * Can be configured either programmatically or by system property "-Dselenide.reports=test-result/reports".
-   *
+   * <p>
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
   public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
@@ -179,7 +180,7 @@ public class Configuration {
   /**
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
-   *
+   * <p>
    * If it's given, names of screenshots are printed as
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
    * failures in CI server.
@@ -208,8 +209,7 @@ public class Configuration {
     if (!isEmpty(build_url)) {
       LOG.config("Using Jenkins BUILD_URL: " + build_url);
       return build_url + "artifact/";
-    }
-    else {
+    } else {
       LOG.config("No BUILD_URL variable found. It's not Jenkins.");
       return null;
     }
@@ -218,23 +218,23 @@ public class Configuration {
   /**
    * Mock "alert" and "confirm" javascript dialogs.
    * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
-   *
+   * <p>
    * Default value: false
-   *        (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
+   * (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
   public static boolean dismissModalDialogs =
-      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+          Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * (that is quite slow because it sends every character separately).
-   *
+   * <p>
    * Tested on Codeborne projects - works well, speed up ~30%.
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
-   *
+   * <p>
    * https://github.com/codeborne/selenide/issues/135
-   *
+   * <p>
    * Default value: false
    */
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
@@ -253,7 +253,7 @@ public class Configuration {
     /**
      * Use Sizzle for CSS selectors.
      * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
-     *
+     * <p>
      * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
      */
     Sizzle
@@ -281,12 +281,12 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
-  
+
   public enum FileDownloadMode {
     /**
      * Download files via direct http request.
-     * Works only for <a href></a> elements. 
-     * Sends GET request to "href" with all cookies from current browser session. 
+     * Works only for <a href></a> elements.
+     * Sends GET request to "href" with all cookies from current browser session.
      */
     HTTPGET,
 
@@ -299,47 +299,48 @@ public class Configuration {
   }
 
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
-      System.getProperty("selenide.fileDownload", HTTPGET.name()));
+          System.getProperty("selenide.fileDownload", HTTPGET.name()));
 
   /**
-   * Presentation Mode Config
+   * presentation Mode Config
    */
-  public static class PresentationMode{
+  public static class presentationMode {
     /**
-     * Activate Presentation Mode
+     * Activate presentation Mode
      * Default: false
      */
-    public static boolean active = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.active", "false"));
+    public static boolean active = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.active", "false"));
 
     /**
      * Flash element before click
      * Default: true
      */
-    public static boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.flashElements", "true"));
+    public static boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.flashElements", "true"));
 
     /**
      * Mark element before click
      * Default: false
      */
-    public static boolean markElements = Boolean.parseBoolean(System.getProperty("selenide.PresentationMode.markElements", "false"));
+    public static boolean markElements = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.markElements", "false"));
 
     /**
      * Delay before click in ms.
-     * Default: 200
+     * Default: 500
      */
-    public static Integer delayBeforeCommand = Integer.parseInt(System.getProperty("selenide.PresentationMode.delayBeforeCommand", "200"));
+    public static Integer delayBeforeCommand = Integer.parseInt(System.getProperty("selenide.presentationMode.delayBeforeCommand",
+            "500"));
 
     /**
      * Element flasher color
      * Default: #00ff00
      */
-    public static String flashColor = System.getProperty("selenide.PresentationMode.flashColor", "#00ff00");
+    public static String flashColor = System.getProperty("selenide.presentationMode.flashColor", "#00ff00");
 
     /**
      * Element marker color
      * Default: #00ff00
      */
-    public static String markColor = System.getProperty("selenide.PresentationMode.markColor", "#00ff00");
+    public static String markColor = System.getProperty("selenide.presentationMode.markColor", "#00ff00");
   }
 
 
