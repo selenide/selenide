@@ -170,10 +170,9 @@ public class WebDriverFactory {
 
   protected ChromeOptions createChromeOptions() {
     ChromeOptions options = new ChromeOptions();
-    options.addArguments("test-type");
     options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
-      options.addArguments("chrome.switches", chromeSwitches);
+      options.addArguments(chromeSwitches);
     }
     options = transferChromeOptionsFromSystemProperties(options, "chromeoptions.");
     try {
