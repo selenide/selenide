@@ -1,4 +1,8 @@
 == Changelog
+=== 4.2.1 (Release in January 2017)
+* fixed problems with int and boolean capability values, now converting automatically
+* added support for FirefoxProfile over commandline (-Dfirefoxprofile.<option>=<value>,
+* added support for ChromeOptions (args only) over commandline (-Dchromeoptions.args=<value1>,<value2>...)
 
 === 4.2 (Released 13.12.2016)
 * #431 browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
