@@ -119,12 +119,16 @@ public class Configuration {
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
 
   /**
+   * @deprecated this options allowed only a single switch.
+   *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
+   *
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
    * Can be configured either programmatically or by system property, 
    * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
-   * 
+   *
    * Default value: none
    */
+  @Deprecated
   public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
 
   /**
