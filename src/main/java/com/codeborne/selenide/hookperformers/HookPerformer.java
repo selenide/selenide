@@ -14,57 +14,75 @@ public class HookPerformer {
   }
 
   /**
-   * @return
+   *  Return instance of HookPerformer for current thread.
+   *
+   * @return HookPerformer
    */
   public static HookPerformer getInstance() {
-    if (instance.get() == null) {
+    if (instance() == null) {
       instance.set(new HookPerformer());
-      instance.get().beforeActions.put("flashAction", new FlashAction());
-      instance.get().afterActions.put("markAction", new MarkAction());
+      instance().addBeforeAction("delayAction", new DelayAction());
+      instance().addBeforeAction("flashAction", new FlashAction());
+      instance().addAfterAction("markAction", new MarkAction());
     }
-    return instance.get();
+    return instance();
   }
 
   /**
-   * @param element
-   * @param methodName
+   * Run before actions
+   *
+   * @param element     WebElement
+   * @param methodName  Name of method, who called hook
    */
   public void beforePreform(WebElement element, String methodName) {
     preform(element, methodName, beforeActions.values());
   }
 
   /**
-   * @param element
-   * @param methodName
+   * Run after actions
+   *
+   * @param element     WebElement
+   * @param methodName  Name of method, who called hook
    */
   public void afterPreform(WebElement element, String methodName) {
     preform(element, methodName, afterActions.values());
   }
 
   /**
-   * @param name
-   * @param action
+   * Register new before action
+   *
+   * @param name    Name of registered hook
+   * @param action  HookAction implementation
    */
   public void addBeforeAction(String name, HookAction action) {
     instance.get().beforeActions.put(name, action);
   }
 
   /**
-   * @param name
-   * @param action
+   * Register new after action
+   *
+   * @param name    Name of registered hook
+   * @param action  HookAction implementation
    */
   public void addAfterAction(String name, HookAction action) {
     instance.get().afterActions.put(name, action);
   }
 
   /**
-   * @param name
+   * Remove action from HookPerformer
+   * Try to remove from before and after actions lists.
+   *
+   * @param name    Name of hook to remove
    */
   public void removeAction(String name) {
     if (instance.get().beforeActions.containsKey(name))
       instance.get().beforeActions.remove(name);
     if (instance.get().afterActions.containsKey(name))
       instance.get().afterActions.remove(name);
+  }
+
+  private static HookPerformer instance(){
+      return instance.get();
   }
 
   private void preform(WebElement element, String methodName, Collection<HookAction> actions) {

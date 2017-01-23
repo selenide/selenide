@@ -5,10 +5,9 @@ import org.openqa.selenium.WebElement;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Configuration.presentationMode;
+import static com.codeborne.selenide.Configuration.presentationMode.BoxStyle.FILL;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.Selenide.sleep;
 import static java.util.Arrays.asList;
 
 public class MarkAction implements HookAction {
@@ -26,11 +25,14 @@ public class MarkAction implements HookAction {
 
   @Override
   public void action(WebElement element, String methodName) {
-    sleep(presentationMode.delayBeforeCommand);
-    markElement(element, presentationMode.markColor, "selenideMarker");
+    markElement(element, presentationMode.markColor, "selenideMarker", presentationMode.markStyle);
   }
 
-  protected static void markElement(WebElement element, String elementColor, String elementId) {
+  protected static void markElement(WebElement element, String elementColor, String elementId, presentationMode.BoxStyle style) {
+
+    String styleString = (style == FILL) ? "flasher.style.backgroundColor = '" + elementColor + "';"
+                                         : "flasher.style.border = 'solid'; flasher.style.borderColor = '" + elementColor + "';";
+
     executeJavaScript("var flasher = document.createElement('div');" +
                     "var parentOffsets = arguments[0].getBoundingClientRect();" +
                     "flasher.id = '" + elementId + "';" +
@@ -40,7 +42,7 @@ public class MarkAction implements HookAction {
                     "flasher.style.height = parentOffsets.height + 2 + 'px';" +
                     "flasher.style.width = parentOffsets.width + 2 + 'px';" +
                     "flasher.style.zIndex = 666;" +
-                    "flasher.style.backgroundColor = '" + elementColor + "';" +
+                    styleString +
                     "flasher.style.borderRadius = '5px';" +
                     "flasher.style.opacity = '0.5';" +
                     "document.body.appendChild(flasher);",

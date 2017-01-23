@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
+import static com.codeborne.selenide.Configuration.presentationMode.BoxStyle.*;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
 public class Configuration {
@@ -341,6 +342,35 @@ public class Configuration {
      * Default: #00ff00
      */
     public static String markColor = System.getProperty("selenide.presentationMode.markColor", "#00ff00");
+
+    public enum BoxStyle {
+      /**
+       * Show marker element as a transparent rectangular, filed with color.
+       *
+       */
+      BORDER,
+
+      /**
+       * Show marker element as a frame without any filling.
+       *
+       */
+      FILL
+    }
+
+    /**
+     * Element flasher style
+     * Default: FILL
+     */
+    public static BoxStyle flashStyle = BoxStyle.valueOf(
+            System.getProperty("selenide.presentationMode.flashStyle", FILL.name()));
+
+    /**
+     * Element marker style
+     * Default: BORDER
+     */
+    public static BoxStyle markStyle = BoxStyle.valueOf(
+            System.getProperty("selenide.presentationMode.markStyle", BORDER.name()));
+
   }
 
 

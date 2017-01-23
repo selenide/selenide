@@ -18,20 +18,18 @@ public class FlashAction extends MarkAction {
   @Override
   public void action(WebElement element, String methodName) {
 
-    sleep(presentationMode.delayBeforeCommand);
-
     String flasherId = "selenideFlasher";
     switch (methodName) {
       case "doubleClick":
         for (int i = 0; i < 2; i++) {
-          markElement(element, presentationMode.flashColor, flasherId);
+          markElement(element, presentationMode.flashColor, flasherId, presentationMode.flashStyle);
           sleep(flashPause);
           removeMarker(flasherId);
           sleep(flashPause);
         }
         break;
       default:
-        markElement(element, presentationMode.flashColor, flasherId);
+        markElement(element, presentationMode.flashColor, flasherId, presentationMode.flashStyle);
         sleep(flashPause);
         removeMarker(flasherId);
         break;
