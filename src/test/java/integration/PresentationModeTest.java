@@ -1,59 +1,50 @@
 package integration;
 
-import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
 
-import static com.codeborne.selenide.Condition.empty;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.Selenide.confirm;
-import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
-import static org.junit.Assert.fail;
-
-public class AlertTest extends IntegrationTest {
+public class PresentationModeTest extends IntegrationTest {
   @Before
   public void openTestPage() {
-    openFile("page_with_alerts.html");
+    Configuration.presentationMode.active = true;
+    openFile("page_for_presentation_mode.html");
   }
 
   @Test
-  public void canSubmitAlertDialog() {
-    $(By.name("username")).val("Greg");
-    $(byValue("Alert button")).click();
-    confirm("Are you sure, Greg?");
-    $("#message").shouldHave(text("Hello, Greg!"));
-    $("#container").shouldBe(empty);
-  }
+  public void markTest() {
+    Configuration.presentationMode.flashElements = false;
+    Configuration.presentationMode.markElements = true;
+    ElementsCollection divs = $$("div.rect");
+    for (SelenideElement div: divs){
+      div.click();
+    }
 
-  @Test
-  public void selenideChecksDialogText() {
-    $(By.name("username")).val("Gregg");
-    $(byValue("Alert button")).click();
-    try {
-      confirm("Good bye, Greg!");
-    }
-    catch (DialogTextMismatch expected) {
-      return;
-    }
-    if (supportsModalDialogs()) {
-      fail("Should throw DialogTextMismatch for mismatching text");
+    ElementsCollection markers = $$("div#selenideMarker");
+    markers.shouldHaveSize(5);
+    for (SelenideElement marker: markers){
+      marker.shouldBe(visible);
     }
   }
 
   @Test
-  public void waitsUntilAlertDialogAppears() {
-    $(By.name("username")).val("Быстрый Гарри");
-    $(byValue("Slow alert")).click();
-    confirm("Are you sure, Быстрый Гарри?");
-    $("#message").shouldHave(text("Hello, Быстрый Гарри!"));
-    $("#container").shouldBe(empty);
+  public void flashTest() {
+    Configuration.presentationMode.flashElements = true;
+    Configuration.presentationMode.markElements = false;
+    ElementsCollection divs = $$("div.rect");
+    for (SelenideElement div: divs){
+      div.click();
+    }
+
+    ElementsCollection markers = $$("div#selenideFlasher");
+    markers.shouldHaveSize(0);
   }
-  
+
   @AfterClass
   public static void tearDown() {
     close();

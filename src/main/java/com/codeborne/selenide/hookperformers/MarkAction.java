@@ -30,19 +30,18 @@ public class MarkAction implements HookAction {
 
   protected static void markElement(WebElement element, String elementColor, String elementId, presentationMode.BoxStyle style) {
 
-    String styleString = (style == FILL) ? "flasher.style.backgroundColor = '" + elementColor + "';"
-                                         : "flasher.style.border = 'solid'; flasher.style.borderColor = '" + elementColor + "';";
-
     executeJavaScript("var flasher = document.createElement('div');" +
                     "var parentOffsets = arguments[0].getBoundingClientRect();" +
                     "flasher.id = '" + elementId + "';" +
                     "flasher.style.position = 'absolute';" +
-                    "flasher.style.top = parentOffsets.top - 1 + 'px';" +
-                    "flasher.style.left = parentOffsets.left - 1 + 'px';" +
-                    "flasher.style.height = parentOffsets.height + 2 + 'px';" +
-                    "flasher.style.width = parentOffsets.width + 2 + 'px';" +
+                    "flasher.style.top = parentOffsets.top - 3 + 'px';" +
+                    "flasher.style.left = parentOffsets.left - 3 + 'px';" +
+                    "flasher.style.height = parentOffsets.height + 'px';" +
+                    "flasher.style.width = parentOffsets.width  + 'px';" +
                     "flasher.style.zIndex = 666;" +
-                    styleString +
+                    "flasher.style.border = 'solid';" +
+                    "flasher.style.borderColor = '" + elementColor + "';" +
+                    ((style == FILL) ? "flasher.style.backgroundColor = '" + elementColor + "';" : "") +
                     "flasher.style.borderRadius = '5px';" +
                     "flasher.style.opacity = '0.5';" +
                     "document.body.appendChild(flasher);",
