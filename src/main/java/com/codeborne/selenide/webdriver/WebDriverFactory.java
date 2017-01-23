@@ -20,10 +20,13 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -42,17 +45,17 @@ public class WebDriverFactory {
     log.config("Configuration.startMaximized=" + startMaximized);
 
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
-        CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
-            isMarionette() ? createMarionetteDriver(proxy) :
-                    isFirefox() ? createFirefoxDriver(proxy) :
-                isHtmlUnit() ? createHtmlUnitDriver(proxy) :
-                        isEdge() ? createEdgeDriver(proxy) :
-                                isIE() ? createInternetExplorerDriver(proxy) :
-                                        isPhantomjs() ? createPhantomJsDriver(proxy) :
-                                                isOpera() ? createOperaDriver(proxy) :
-                                                        isSafari() ? createSafariDriver(proxy) :
-                                                                isJBrowser() ? createJBrowserDriver(proxy) :
-                                                                        createInstanceOf(browser, proxy);
+            CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
+                    isMarionette() ? createMarionetteDriver(proxy) :
+                            isFirefox() ? createFirefoxDriver(proxy) :
+                                    isHtmlUnit() ? createHtmlUnitDriver(proxy) :
+                                            isEdge() ? createEdgeDriver(proxy) :
+                                                    isIE() ? createInternetExplorerDriver(proxy) :
+                                                            isPhantomjs() ? createPhantomJsDriver(proxy) :
+                                                                    isOpera() ? createOperaDriver(proxy) :
+                                                                            isSafari() ? createSafariDriver(proxy) :
+                                                                                    isJBrowser() ? createJBrowserDriver(proxy) :
+                                                                                            createInstanceOf(browser, proxy);
     webdriver = adjustBrowserSize(webdriver);
     if (!isHeadless()) {
       Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
@@ -63,8 +66,7 @@ public class WebDriverFactory {
     if (remote == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
-    }
-    else {
+    } else {
       ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
     }
 
@@ -93,33 +95,93 @@ public class WebDriverFactory {
     browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
     browserCapabilities.setCapability("acceptSslCerts", true);
 
+    browserCapabilities = transferCapabilitiesFromSystemProperties(browserCapabilities, "capabilities.");
+    return browserCapabilities;
+  }
+
+  private DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
     for (String key : System.getProperties().stringPropertyNames()) {
-      if (key.startsWith("capabilities.")) {
-        String capability = key.substring("capabilities.".length());
+      if (key.startsWith(prefix)) {
+        String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         log.config("Use " + key + "=" + value);
         if (value.equals("true") || value.equals("false")) {
-          browserCapabilities.setCapability(capability, Boolean.valueOf(value));
+          currentBrowserCapabilities.setCapability(capability, Boolean.valueOf(value));
         } else if (value.matches("^-?\\d+$")) { //if integer
-          browserCapabilities.setCapability(capability, Integer.valueOf(value));
+          currentBrowserCapabilities.setCapability(capability, Integer.parseInt(value));
         } else {
-          browserCapabilities.setCapability(capability, value);
+          currentBrowserCapabilities.setCapability(capability, value);
         }
       }
     }
-    return browserCapabilities;
+    return currentBrowserCapabilities;
   }
-  
+
+  private FirefoxProfile transferFirefoxProfileFromSystemProperties(FirefoxProfile currentFirefoxProfile, String prefix) {
+    for (String key : System.getProperties().stringPropertyNames()) {
+      if (key.startsWith(prefix)) {
+        String capability = key.substring(prefix.length());
+        String value = System.getProperties().getProperty(key);
+        log.config("Use " + key + "=" + value);
+        if (value.equals("true") || value.equals("false")) {
+          currentFirefoxProfile.setPreference(capability, Boolean.valueOf(value));
+        } else if (value.matches("^-?\\d+$")) { //if integer
+          currentFirefoxProfile.setPreference(capability, Integer.parseInt(value));
+        } else {
+          currentFirefoxProfile.setPreference(capability, value);
+        }
+      }
+    }
+    return currentFirefoxProfile;
+  }
+
+  /**
+   * This method only handles so-called "arguments" for ChromeOptions (there is also "ExperimentalOptions", "Extensions" etc.)
+   *
+   * @param currentChromeOptions
+   * @param prefix
+   * @return
+   */
+  private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions, String prefix) {
+    for (String key : System.getProperties().stringPropertyNames()) {
+      if (key.startsWith(prefix)) {
+        String capability = key.substring(prefix.length());
+        String value = System.getProperties().getProperty(key);
+        if (capability.equals("args")) {
+          List<String> args = Arrays.asList(value.split(","));
+          currentChromeOptions.addArguments(args);
+        } else {
+          log.warning(capability + "is ignored." +
+                  "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
+                  "are supported for the chromeoptions at the moment");
+        }
+      }
+    }
+    return currentChromeOptions;
+  }
+
+
   protected WebDriver createChromeDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("test-type");
-    options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
-    if (chromeSwitches != null) {
-      options.addArguments("chrome.switches", chromeSwitches);
-    }
+    ChromeOptions options = createChromeOptions();
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     return new ChromeDriver(capabilities);
+  }
+
+  protected ChromeOptions createChromeOptions() {
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
+    if (chromeSwitches != null) {
+      options.addArguments(chromeSwitches);
+    }
+    options = transferChromeOptionsFromSystemProperties(options, "chromeoptions.");
+    try {
+      log.config("Chrome options:" + options.toJson().toString());
+    } catch (IOException e) {
+      log.warning("Error while reading from file:" + e.getMessage() + ". Ignoring it.");
+      e.printStackTrace(System.err);
+    }
+    return options;
   }
 
   protected WebDriver createFirefoxDriver(Proxy proxy) {
@@ -129,7 +191,7 @@ public class WebDriverFactory {
     return new FirefoxDriver(capabilities);
   }
 
-  private DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
+  protected DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
     FirefoxProfile myProfile = new FirefoxProfile();
     myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -139,6 +201,7 @@ public class WebDriverFactory {
     myProfile.setPreference("security.csp.enable", false);
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+    myProfile = transferFirefoxProfileFromSystemProperties(myProfile, "firefoxprofile.");
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
     capabilities.setCapability("marionette", false);
     return capabilities;
@@ -196,17 +259,14 @@ public class WebDriverFactory {
       int width = Integer.parseInt(dimension[0]);
       int height = Integer.parseInt(dimension[1]);
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
-    }
-    else if (startMaximized) {
+    } else if (startMaximized) {
       try {
         if (isChrome()) {
           maximizeChromeBrowser(driver.manage().window());
-        }
-        else {
+        } else {
           driver.manage().window().maximize();
         }
-      }
-      catch (Exception cannotMaximize) {
+      } catch (Exception cannotMaximize) {
         log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
     }
@@ -225,8 +285,8 @@ public class WebDriverFactory {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     return new Dimension(
-        (int) toolkit.getScreenSize().getWidth(),
-        (int) toolkit.getScreenSize().getHeight());
+            (int) toolkit.getScreenSize().getWidth(),
+            (int) toolkit.getScreenSize().getHeight());
   }
 
   protected WebDriver createInstanceOf(String className, Proxy proxy) {
@@ -238,7 +298,7 @@ public class WebDriverFactory {
       capabilities.setCapability(SUPPORTS_ALERTS, true);
       if (isPhantomjs()) {
         capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
-            new String[] {"--web-security=no", "--ignore-ssl-errors=yes"});
+                new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
       }
 
       Class<?> clazz = Class.forName(className);
@@ -250,11 +310,9 @@ public class WebDriverFactory {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
         return (WebDriver) constructor.newInstance(capabilities);
       }
-    }
-    catch (InvocationTargetException e) {
+    } catch (InvocationTargetException e) {
       throw runtime(e.getTargetException());
-    }
-    catch (Exception invalidClassName) {
+    } catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
     }
   }
