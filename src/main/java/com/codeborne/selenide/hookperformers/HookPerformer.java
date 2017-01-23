@@ -81,8 +81,8 @@ public class HookPerformer {
       instance.get().afterActions.remove(name);
   }
 
-  private static HookPerformer instance(){
-      return instance.get();
+  private static HookPerformer instance() {
+    return instance.get();
   }
 
   private void preform(WebElement element, String methodName, Collection<HookAction> actions) {
