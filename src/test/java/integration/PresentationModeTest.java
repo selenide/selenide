@@ -21,13 +21,13 @@ public class PresentationModeTest extends IntegrationTest {
     Configuration.presentationMode.flashElements = false;
     Configuration.presentationMode.markElements = true;
     ElementsCollection divs = $$("div.rect");
-    for (SelenideElement div: divs){
+    for (SelenideElement div: divs) {
       div.click();
     }
 
     ElementsCollection markers = $$("div#selenideMarker");
     markers.shouldHaveSize(5);
-    for (SelenideElement marker: markers){
+    for (SelenideElement marker: markers) {
       marker.shouldBe(visible);
     }
   }
@@ -37,7 +37,7 @@ public class PresentationModeTest extends IntegrationTest {
     Configuration.presentationMode.flashElements = true;
     Configuration.presentationMode.markElements = false;
     ElementsCollection divs = $$("div.rect");
-    for (SelenideElement div: divs){
+    for (SelenideElement div: divs) {
       div.click();
     }
 

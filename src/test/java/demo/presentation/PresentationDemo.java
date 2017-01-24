@@ -29,7 +29,7 @@ public class PresentationDemo {
     Configuration.presentationMode.markColor = "#ff0000";
 
     for (SelenideElement e : collection) {
-        e.click();
+      e.click();
     }
     Thread.sleep(5000);
   }
