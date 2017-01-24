@@ -33,9 +33,10 @@ public class HookPerformer {
    *
    * @param element     WebElement
    * @param methodName  Name of method, who called hook
+   * @param args        Called command arguments
    */
-  public void beforePreform(WebElement element, String methodName) {
-    preform(element, methodName, beforeActions.values());
+  public void beforePreform(WebElement element, String methodName, Object... args) {
+    preform(element, methodName, beforeActions.values(), args);
   }
 
   /**
@@ -43,9 +44,10 @@ public class HookPerformer {
    *
    * @param element     WebElement
    * @param methodName  Name of method, who called hook
+   * @param args        Called command arguments
    */
-  public void afterPreform(WebElement element, String methodName) {
-    preform(element, methodName, afterActions.values());
+  public void afterPreform(WebElement element, String methodName, Object... args) {
+    preform(element, methodName, afterActions.values(), args);
   }
 
   /**
@@ -85,9 +87,9 @@ public class HookPerformer {
     return instance.get();
   }
 
-  private void preform(WebElement element, String methodName, Collection<HookAction> actions) {
+  private void preform(WebElement element, String methodName, Collection<HookAction> actions, Object... args) {
     for (HookAction action : actions) {
-      if (action.conditionForAction(element, methodName)) action.action(element, methodName);
+      if (action.conditionForAction(element, methodName, args)) action.action(element, methodName, args);
     }
   }
 }

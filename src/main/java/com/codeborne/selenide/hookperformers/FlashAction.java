@@ -11,12 +11,12 @@ public class FlashAction extends MarkAction {
   private int flashPause = 200;
 
   @Override
-  public boolean conditionForAction(WebElement element, String methodName) {
+  public boolean conditionForAction(WebElement element, String methodName, Object... args) {
     return presentationMode.active && presentationMethods.contains(methodName) && presentationMode.flashElements;
   }
 
   @Override
-  public void action(WebElement element, String methodName) {
+  public void action(WebElement element, String methodName, Object... args) {
 
     String flasherId = "selenideFlasher";
     switch (methodName) {

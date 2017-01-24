@@ -18,12 +18,12 @@ public class DelayAction implements HookAction {
   ));
 
   @Override
-  public boolean conditionForAction(WebElement element, String methodName) {
+  public boolean conditionForAction(WebElement element, String methodName, Object... args) {
     return presentationMode.active && presentationMethods.contains(methodName) && (presentationMode.delayBeforeCommand > 0);
   }
 
   @Override
-  public void action(WebElement element, String methodName) {
+  public void action(WebElement element, String methodName, Object... args) {
     sleep(presentationMode.delayBeforeCommand);
   }
 }

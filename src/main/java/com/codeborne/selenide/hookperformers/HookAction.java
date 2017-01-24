@@ -6,18 +6,20 @@ public interface HookAction {
   /**
    * Condition for activation
    *
-   * @param element WebElement
+   * @param element     WebElement
    * @param methodName  Name of method, who called hook
+   * @param args        Called command arguments
    * @return boolean
    *
    */
-  boolean conditionForAction(WebElement element, String methodName);
+  boolean conditionForAction(WebElement element, String methodName, Object... args);
 
   /**
    * Action when activated
    *
-   * @param element WebElement
-   * @param methodName  name of method, who called hook
+   * @param element     WebElement
+   * @param methodName  Name of method, who called hook
+   * @param args        Called command arguments
    */
-  void action(WebElement element, String methodName);
+  void action(WebElement element, String methodName, Object... args);
 }

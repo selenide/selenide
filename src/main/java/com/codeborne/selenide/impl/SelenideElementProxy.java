@@ -60,11 +60,11 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
-    HookPerformer.getInstance().beforePreform((WebElement) proxy, method.getName());
+    HookPerformer.getInstance().beforePreform((WebElement) proxy, method.getName(), args);
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
-      HookPerformer.getInstance().afterPreform((WebElement) proxy, method.getName());
+      HookPerformer.getInstance().afterPreform((WebElement) proxy, method.getName(), args);
       return result;
     }
     catch (Error error) {

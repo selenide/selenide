@@ -63,6 +63,13 @@ public class HookPerformerTest {
     HookPerformer.getInstance().removeAction("testHook1");
   }
 
+  @Test
+  public void preformHookWithCommandArgs() {
+    HookPerformer.getInstance().addBeforeAction("testHook", new TestActionWithCommandArgs("testHook", true));
+    HookPerformer.getInstance().beforePreform(null, "command", "one", "two", "three");
+    assertThat("Hook with command args usage", catchAction.equals("onetwothree"), is(true));
+  }
+
   class TestAction implements HookAction {
     private String testString;
     private boolean isActive;
@@ -73,13 +80,27 @@ public class HookPerformerTest {
     }
 
     @Override
-    public boolean conditionForAction(WebElement element, String methodName) {
+    public boolean conditionForAction(WebElement element, String methodName, Object... args) {
       return isActive;
     }
 
     @Override
-    public void action(WebElement element, String methodName) {
+    public void action(WebElement element, String methodName, Object... args) {
       catchAction += testString;
+    }
+  }
+
+  class TestActionWithCommandArgs extends TestAction {
+
+    public TestActionWithCommandArgs(String testString, boolean isActive) {
+      super(testString, isActive);
+    }
+
+    @Override
+    public void action(WebElement element, String methodName, Object... args) {
+      for (Object arg: args) {
+        catchAction += (String) arg;
+      }
     }
   }
 }

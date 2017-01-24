@@ -19,12 +19,12 @@ public class MarkAction implements HookAction {
   ));
 
   @Override
-  public boolean conditionForAction(WebElement element, String methodName) {
+  public boolean conditionForAction(WebElement element, String methodName, Object... args) {
     return presentationMode.active && presentationMethods.contains(methodName) && presentationMode.markElements;
   }
 
   @Override
-  public void action(WebElement element, String methodName) {
+  public void action(WebElement element, String methodName, Object... args) {
     markElement(element, presentationMode.markColor, "selenideMarker", presentationMode.markStyle);
   }
 
