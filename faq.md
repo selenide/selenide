@@ -57,7 +57,7 @@ Selenide can run tests with any browsers that has webdriver binding. The most po
 
 <br/>
 E.g. to run tests with PhantomJS browser:
-```-Dbrowser=phantomjs```
+```-Dselenide.browser=phantomjs```
 
 <br/>
 
