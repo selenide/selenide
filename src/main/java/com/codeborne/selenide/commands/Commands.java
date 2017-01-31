@@ -8,10 +8,16 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Arrays.copyOfRange;
+
 public class Commands {
+
+  private static final String CUSTOM_COMMAND = "customCommand";
+
   private static Commands collection;
 
   private final Map<String, Command> commands = new ConcurrentHashMap<>(128);
+  private final Map<String, Command> customCommands = new ConcurrentHashMap<>(128);
 
   public static synchronized Commands getInstance() {
     if (collection == null) {
@@ -23,6 +29,7 @@ public class Commands {
 
   public final synchronized void resetDefaults() {
     commands.clear();
+    customCommands.clear();
     addFindCommands();
     addClickCommands();
     addModifyCommands();
@@ -130,13 +137,21 @@ public class Commands {
     commands.put(method, command);
   }
 
+  public synchronized void addCustomCommand(String method, Command command) {
+    customCommands.put(method, command);
+  }
+
   @SuppressWarnings("unchecked")
-  public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
+  public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args)
       throws IOException {
-    Command command = commands.get(methodName);
+
+    Command command = (CUSTOM_COMMAND.equals(methodName)) ? customCommands.get(args[0]) : commands.get(methodName);
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
-    return (T) command.execute((SelenideElement) proxy, webElementSource, args);
+
+    Object[] argsToForward = (CUSTOM_COMMAND.equals(methodName)) ? copyOfRange(args, 1, args.length) : args;
+
+    return (T) command.execute((SelenideElement) proxy, webElementSource, argsToForward);
   }
 }

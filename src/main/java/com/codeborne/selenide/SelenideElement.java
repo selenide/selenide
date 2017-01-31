@@ -689,4 +689,15 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
   BufferedImage screenshotAsImage();
+
+  /**
+   * Execute registered custom command
+   *
+   * @param command name of registered custom command
+   * @param params parameters to pass to the registered custom command
+   * @return this element
+   *
+   * @see com.codeborne.selenide.commands.Commands
+   */
+  SelenideElement customCommand(String command, Object... params);
 }
