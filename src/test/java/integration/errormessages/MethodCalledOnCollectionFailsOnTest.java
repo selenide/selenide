@@ -2,7 +2,6 @@ package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
@@ -16,6 +15,8 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 import static org.hamcrest.CoreMatchers.*;
@@ -226,8 +227,11 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   }
 
   private void assertCauseMessage(UIAssertionError expected) {
-    if (WebDriverRunner.isHtmlUnit()) {
+    if (isHtmlUnit()) {
       assertThat(expected.getCause().getMessage(), containsString("Returned node was not a DOM element"));
+    }
+    else if (isPhantomjs()) {
+      assertThat(expected.getCause().getMessage(), containsString("Unable to find element with css selector '.nonexistent'"));
     }
     else {
       assertThat(expected.getCause().getMessage(),

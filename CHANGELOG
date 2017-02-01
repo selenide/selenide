@@ -3,6 +3,8 @@
 * fixed problems with int and boolean capability values, now converting automatically
 * added support for FirefoxProfile over commandline (-Dfirefoxprofile.<option>=<value>,
 * added support for ChromeOptions (args only) over commandline (-Dchromeoptions.args=<value1>,<value2>...)
+* #426 fix error reporting in method `$$().find()`    - see https://github.com/codeborne/selenide/pull/426
+* #443 SelenidePageFactory added to support page object initialization without @FindBy annotation   - see https://github.com/codeborne/selenide/pull/443
 
 === 4.2 (Released 13.12.2016)
 * #431 browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
@@ -11,7 +13,7 @@
 * #391 add method $.selectOptionContainingText()
 * #378 Cut off WebElement screenshot size when it doesn't fit in full page screenshot
 * #379 added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
-* support for cloud services like BrowserStack, SauceLabs etc through supporting of  arbitary cablilites.
+* support for cloud services like BrowserStack, SauceLabs etc through supporting of  arbitrary capabilities.
 
 === 4.1 (Released 01.12.2016)
 * #428 Improve byAttribute method for search via css selectors
