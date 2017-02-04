@@ -54,6 +54,62 @@ public class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   }
 
   @Test
+  public void actionWithoutWaiting_Exists_WhenCollectionElement_WithNonExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
+
+    assertFalse(element.exists());
+  }
+
+  @Test
+  public void actionWithoutWaiting_Exists_WhenCollectionElement_WithExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("detective"));
+
+    assertTrue(element.exists());
+  }
+
+  @Test
+  public void actionWithoutWaiting_IsDisplayed_WhenCollectionElement_WithNonExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
+
+    assertFalse(element.isDisplayed());
+  }
+
+  @Test
+  public void actionWithoutWaiting_IsDisplayed_WhenCollectionElement_WithExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("detective"));
+
+    assertTrue(element.isDisplayed());
+  }
+
+  @Test
+  public void actionWithoutWaiting_Is_WhenCollectionElement_WithNonExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
+
+    assertFalse(element.is(visible));
+  }
+
+  @Test
+  public void actionWithoutWaiting_Is_WhenCollectionElement_WithExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("detective"));
+
+    assertTrue(element.is(visible));
+  }
+
+  @Test
+  public void actionWithoutWaiting_ToString_WhenCollectionElement_WithNonExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
+
+    assertEquals("Element not found {ul li.findBy(css class 'nonexistent')}", element.toString());
+  }
+
+  @Test
+  public void actionWithoutWaiting_ToString_WhenCollectionElement_WithExistentWebElement() {
+    SelenideElement element = $$("ul li").findBy(cssClass("detective"));
+
+    assertTrue(element.toString().contains("Miller"));
+  }
+
+  @Test
   public void actionWithVisibilityWaiting_WhenCollectionElementByIndex() {
     SelenideElement element = $$("ul li").get(0);
 
