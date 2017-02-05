@@ -1,4 +1,7 @@
 == Changelog
+=== 4.3 (to be released)
+*  System properties names aligned with Configuration fields. e.g. Configuration.someProp always has selenide.someProp equivalent (old names still supported for backward compability)
+
 === 4.2.1 (Release in January 2017)
 * fixed problems with int and boolean capability values, now converting automatically
 * added support for FirefoxProfile over commandline (-Dfirefoxprofile.<option>=<value>,
