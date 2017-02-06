@@ -148,6 +148,7 @@ public class Commands {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
 
-    return (T) command.execute((SelenideElement) proxy, webElementSource, CUSTOM_COMMAND.equals(methodName) ? (Object[]) args[1] : args);
+    Object[] argsToForward = CUSTOM_COMMAND.equals(methodName) ? (Object[]) args[1] : args;
+    return (T) command.execute((SelenideElement) proxy, webElementSource, argsToForward);
   }
 }
