@@ -142,7 +142,6 @@ public class Commands {
   @SuppressWarnings("unchecked")
   public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args)
       throws IOException {
-
     Command command = (CUSTOM_COMMAND.equals(methodName)) ? customCommands.get(args[0]) : commands.get(methodName);
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
