@@ -374,6 +374,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * Get parent element of this element
+   * ATTENTION! This method doesn't start any search yet!
    * For example, $("td").parent() could give some "tr".
    * @return Parent element
    * 
@@ -382,7 +383,8 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement parent();
 
   /**
-   * Find closes ancestor element matching given criteria.
+   * Locates closes ancestor element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * For example, $("td").closest("table") could give some "table".
    *
    * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
@@ -393,7 +395,8 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement closest(String tagOrClass);
 
   /**
-   * <p>Find the first matching element inside given element</p>
+   * <p>Locates the first matching element inside given element</p>
+   * ATTENTION! This method doesn't start any search yet!
    * <p>Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}</p>
    * 
    * @see com.codeborne.selenide.commands.Find
@@ -401,43 +404,50 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement find(String cssSelector);
 
   /**
-   * <p>Find the Nth matching element inside given element</p>
+   * <p>Locates the Nth matching element inside given element</p>
+   * ATTENTION! This method doesn't start any search yet!
    * 
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement find(String cssSelector, int index);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement find(By selector);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement find(By selector, int index);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement $(String cssSelector);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement $(String cssSelector, int index);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
   SelenideElement $(By selector);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
@@ -447,7 +457,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
    * </p>
-   *
+   * ATTENTION! This method doesn't start any search yet!
    * <p>
    * For example, {@code $("#multirowTable").findAll("tr.active").shouldHave(size(2));}
    * </p>
@@ -462,7 +472,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, selector)}
    * </p>
-   *
+   * ATTENTION! This method doesn't start any search yet!
    * <p>
    * For example, {@code $("#multirowTable").findAll(By.className("active")).shouldHave(size(2));}
    * </p>
@@ -474,6 +484,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   ElementsCollection findAll(By selector);
 
   /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #findAll(String)}
    */
   ElementsCollection $$(String cssSelector);
