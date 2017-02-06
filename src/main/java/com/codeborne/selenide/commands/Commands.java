@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Arrays.copyOfRange;
-
 public class Commands {
 
   private static final String CUSTOM_COMMAND = "customCommand";
@@ -150,8 +148,6 @@ public class Commands {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
 
-    Object[] argsToForward = (CUSTOM_COMMAND.equals(methodName)) ? copyOfRange(args, 1, args.length) : args;
-
-    return (T) command.execute((SelenideElement) proxy, webElementSource, argsToForward);
+    return (T) command.execute((SelenideElement) proxy, webElementSource, CUSTOM_COMMAND.equals(methodName) ? (Object[]) args[1] : args);
   }
 }
