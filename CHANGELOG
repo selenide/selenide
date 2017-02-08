@@ -4,6 +4,7 @@
 * JavaDocs are fixed - now it is more clear that $,$$,find,etc. methods don't start the search
 * deprecated Selenide.selectRadio (for SelenideElement.selectRadio)
 * upgrade to org.apache.httpcomponents:httpcore:4.4.6
+* upgrade to guava:21.0
 
 === 4.2.1 (Released in January 2017)
 * fixed problems with int and boolean capability values, now converting automatically
