@@ -37,7 +37,7 @@
       <property name="processJavadoc" value="true"/>
     </module>
     <module name="LineLength">
-      <property name="max" value="126"/>
+      <property name="max" value="136"/>
     </module>
 
     <module name="ParenPad"/>
@@ -66,7 +66,7 @@
     <module name="UnnecessaryParentheses"/>
     <!--<module name="MutableException"/>-->
     <module name="ClassFanOutComplexity">
-      <property name="max" value="25"/>
+        <property name="max" value="26"/>
     </module>
     <module name="CyclomaticComplexity">
       <property name="max" value="20"/>
