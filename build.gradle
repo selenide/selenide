@@ -61,7 +61,7 @@ dependencies {
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.23.2', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23'
-  compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.2'
+  compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.4'
 
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
