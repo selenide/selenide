@@ -211,13 +211,13 @@ import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_mac64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_mac64.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.25/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
   quiet false
