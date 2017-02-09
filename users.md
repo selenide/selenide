@@ -16,6 +16,20 @@ header-text:
 <div class="wrapper-content">
   <section>
     
+    <a href="http://pragmaticcoders.com/" target="_blank">
+      <img src="{{ BASE_PATH }}/images/pragmatic-coders.png" style="width: 150px;" alt="Pragmatic Coders"/>
+    </a>
+    <br/>
+    
+    <div class="text-right">
+      <a href="http://pragmaticcoders.com/" target="_blank">Pragmatic Coders</a> 
+      is a leading software house in the e-commerce and fintech sector. 
+      Dedicated teams of highly qualified developers provide full spectrum of Python and Java development services. 
+      Agile way of thinking at Pragmatic Coders continuously helps startups to grow and corporates to implement innovations.
+    </div>
+    
+    <hr class="divider"/>
+    
     <a href="http://sportstg.com/" target="_blank">
       <img src="{{ BASE_PATH }}/images/sportstg-logo.png" style="width: 150px;" alt="SportsTG"/>
     </a>
