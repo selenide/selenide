@@ -27,7 +27,7 @@ Moreover, your page objects get **concise and readable** with Selenide. See [mor
 ## Settings
 > Where can I find list of all Selenide settings?
 
-A detailed description of all Selenide settings and default values can be found in [javadoc](http://selenide.org/javadoc/{{site.SELENIDE_VERSION}}/com/codeborne/selenide/Configuration.html).
+A detailed description of all Selenide settings and default values can be found in [javadoc](http://selenide.org/javadoc/current//com/codeborne/selenide/Configuration.html).
 
 > How can I change Selenide settings?
 
