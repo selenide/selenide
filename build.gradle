@@ -117,7 +117,7 @@ checkstyleMain.finalizedBy checkstyleHtmlMain
 checkstyleTest.finalizedBy checkstyleHtmlTest
 
 jacoco {
-  toolVersion = "0.7.7.201606060606"
+  toolVersion = "0.7.9"
 }
 
 jacocoTestReport {
