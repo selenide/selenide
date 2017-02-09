@@ -9,9 +9,10 @@
 </ul>
 
 <div class="news">
-<div class="news-line"><a href="/2017/01/26/selenide-4.2.1/">Selenide 4.2.1 released</a></div>
-  <div class="news-line"><a href="/2016/12/30/selenide-4.2/">Selenide 4.2 released</a></div>
+  <div class="news-line">Selenide 4.3 released</div>
   <!--
+  <div class="news-line"><a href="/2017/01/26/selenide-4.2.1/">Selenide 4.2.1 released</a></div>
+  <div class="news-line"><a href="/2016/12/30/selenide-4.2/">Selenide 4.2 released</a></div>
   <div class="news-line"><a href="/2016/12/01/selenide-4.1/">Released Selenide 4.1</a></div>
   <div class="news-line"><a href="https://www.surveymonkey.com/r/RXX6KCQ">Please fill the Survey!</a></div>
   -->
