@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -292,7 +291,6 @@ public class SelenideMethodsTest extends IntegrationTest {
   @Test
   public void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).followLink();
-//    $(By.linkText("Want to see ajax in action?")).click();
     assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
@@ -442,17 +440,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     $(By.xpath("//input[:attr='al]")).is(visible);
   }
 
-  @Test
-  public void userCanUseOrCondition() {
-    Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
-    $("#baskerville").shouldBe(one_of_conditions);
 
-    Condition all_of_conditions = or("baskerville", text("Basker"), text("rville"));
-    $("#baskerville").shouldBe(all_of_conditions);
-
-    Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
-    $("#baskerville").shouldNotBe(none_of_conditions);
-  }
 
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
