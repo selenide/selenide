@@ -73,7 +73,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *  $("query").val("Aikido techniques").pressEnter();</pre>
    *
    * Implementation details:
-   * This is the same as <pre>
+   * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.ENTER)</pre>
    *  
    * @see com.codeborne.selenide.commands.PressEnter
@@ -85,7 +85,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *  $("#to").val("stiven@seagal.com").pressTab();</pre>
    *
    * Implementation details:
-   * This is the same as <pre>
+   * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.TAB)</pre>
    *  
    * @see com.codeborne.selenide.commands.PressTab
@@ -97,7 +97,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *  $(".edit").click().pressEscape();</pre>
    *
    * Implementation details:
-   * This is the same as <pre>
+   * Check that element is displayed and execute <pre>
    *  WebElement.sendKeys(Keys.ESCAPE)</pre>
    * 
    * @see com.codeborne.selenide.commands.PressEscape
