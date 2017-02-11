@@ -7,8 +7,6 @@ public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring)
    *
-   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
-   *
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
    */
@@ -18,8 +16,6 @@ public class Selectors {
 
   /**
    * Find element that has EXACTLY this text
-   *
-   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
    *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
