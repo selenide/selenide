@@ -24,21 +24,21 @@ public class WebDriverBinaryManager {
   static void setupBinaryPath() {
     try {
       if (isChrome() &&
-          isEmtyProperty(CHROME_PROPERTY)) {
+          isEmptyProperty(CHROME_PROPERTY)) {
         ChromeDriverManager.getInstance().setup();
       } else if (isEdge() &&
-          isEmtyProperty(EDGE_PROPERTY)) {
+          isEmptyProperty(EDGE_PROPERTY)) {
         EdgeDriverManager.getInstance().setup();
-      } else if (isIE() && isEmtyProperty(IE_PROPERTY)) {
+      } else if (isIE() && isEmptyProperty(IE_PROPERTY)) {
         InternetExplorerDriverManager.getInstance().setup();
       } else if (isOpera() &&
-          isEmtyProperty(OPERA_PROPERTY)) {
+          isEmptyProperty(OPERA_PROPERTY)) {
         OperaDriverManager.getInstance().setup();
       } else if (isPhantomjs() &&
-          isEmtyProperty(PHANTOM_PROPERTY)) {
+          isEmptyProperty(PHANTOM_PROPERTY)) {
         PhantomJsDriverManager.getInstance().setup();
       } else if (isMarionette() &&
-          isEmtyProperty(MARIONETTE_PROPERTY)) {
+          isEmptyProperty(MARIONETTE_PROPERTY)) {
         FirefoxDriverManager.getInstance().setup();
       }
     } catch (final Exception ex) {
@@ -46,7 +46,7 @@ public class WebDriverBinaryManager {
     }
   }
 
-  private static boolean isEmtyProperty(String property) {
+  private static boolean isEmptyProperty(String property) {
     return StringUtils.isBlank(System.getProperty(property));
   }
 }
