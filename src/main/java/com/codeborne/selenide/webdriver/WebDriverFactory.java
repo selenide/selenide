@@ -72,8 +72,6 @@ public class WebDriverFactory {
       ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
     }
 
-
-
     return webdriver;
   }
 
