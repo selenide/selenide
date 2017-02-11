@@ -29,7 +29,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
 /**
  * The main starting point of Selenide.
- *
+ * <p>
  * You start with methods {@link #open(String)} for opening the tested application page and
  * {@link #$(String)} for searching web elements.
  */
@@ -42,40 +42,38 @@ public class Selenide {
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
-   *
+   * <p>
    * If browser window was already opened before, it will be reused.
-   *
+   * <p>
    * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
    *
-   * @param relativeOrAbsoluteUrl
-   *   If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
-   *   In this case, it's prepended by baseUrl
+   * @param relativeOrAbsoluteUrl If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
+   *                              In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "" , "");
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   /**
    * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
-    open(absoluteUrl, "", "" , "");
+    open(absoluteUrl, "", "", "");
   }
 
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL and credentials for basic authentication
-   *
+   * <p>
    * If browser window was already opened before, it will be reused.
-   *
+   * <p>
    * Don't bother about closing the browser - it will be closed automatically when all your tests are done.
    *
    * @param relativeOrAbsoluteUrl
    * @param domain
    * @param login
-   * @param password
-   *   If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
-   *   In this case, it's prepended by baseUrl
+   * @param password              If not starting with "http://" or "https://" or "file://", it's considered to be relative URL.
+   *                              In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     navigator.open(relativeOrAbsoluteUrl, domain, login, password);
@@ -109,14 +107,13 @@ public class Selenide {
     if (doDismissModalDialogs()) {
       String jsCode =
           "  window._selenide_modalDialogReturnValue = true;\n" +
-          "  window.alert = function(message) {};\n" +
-          "  window.confirm = function(message) {\n" +
-          "    return window._selenide_modalDialogReturnValue;\n" +
-          "  };";
+              "  window.alert = function(message) {};\n" +
+              "  window.confirm = function(message) {\n" +
+              "    return window._selenide_modalDialogReturnValue;\n" +
+              "  };";
       try {
         executeJavaScript(jsCode);
-      }
-      catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
+      } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
         log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
       }
     }
@@ -124,6 +121,7 @@ public class Selenide {
 
   /**
    * Open a web page and create PageObject for it.
+   *
    * @return PageObject of given class
    */
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
@@ -133,6 +131,7 @@ public class Selenide {
 
   /**
    * Open a web page and create PageObject for it.
+   *
    * @return PageObject of given class
    */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
@@ -142,9 +141,10 @@ public class Selenide {
 
   /**
    * Open a web page using Basic Auth credentials and create PageObject for it.
+   *
    * @return PageObject of given class
    */
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, 
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl, domain, login, password);
@@ -153,6 +153,7 @@ public class Selenide {
 
   /**
    * Open a web page using Basic Auth credentials and create PageObject for it.
+   *
    * @return PageObject of given class
    */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
@@ -190,7 +191,6 @@ public class Selenide {
   }
 
   /**
-   *
    * @return title of the page
    */
   public static String title() {
@@ -199,6 +199,7 @@ public class Selenide {
 
   /**
    * Not recommended. Test should not sleep, but should wait for some condition instead.
+   *
    * @param milliseconds Time to sleep in milliseconds
    */
   public static void sleep(long milliseconds) {
@@ -212,6 +213,7 @@ public class Selenide {
 
   /**
    * Take the screenshot of current page and save to file fileName.html and fileName.png
+   *
    * @param fileName Name of file (without extension) to save HTML and PNG to
    * @return The name of resulting file
    */
@@ -233,6 +235,7 @@ public class Selenide {
   /**
    * Locates the first element matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
    */
@@ -243,6 +246,7 @@ public class Selenide {
   /**
    * Locates the first element matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
    */
@@ -258,15 +262,15 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$(String) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$(String)
-   *
-   * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
-   * @param parent the WebElement to search elements in
+   * @param parent      the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
+   * @see #$(String)
+   * <p>
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
+   * @deprecated please use $(parent).$(String) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
@@ -276,8 +280,9 @@ public class Selenide {
   /**
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 0..N
+   * @param index       0..N
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector, int index) {
@@ -285,16 +290,16 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$(String, int) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$(String, int)
-   *
+   * @param parent      the WebElement to search elements in
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index       0..N
+   * @return SelenideElement
+   * @see #$(String, int)
+   * <p>
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
-   * @param parent the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index 0..N
-   * @return SelenideElement
+   * @deprecated please use $(parent).$(String, int) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
@@ -302,15 +307,15 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$(By) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$(By)
-   *
-   * Locates the first element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
-   * @param parent the WebElement to search elements in
+   * @param parent           the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
+   * @see #$(By)
+   * <p>
+   * Locates the first element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
+   * @deprecated please use $(parent).$(By) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
@@ -318,16 +323,16 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$(By, int) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$(By, int)
-   *
+   * @param parent           the WebElement to search elements in
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param index            0..N
+   * @return SelenideElement
+   * @see #$(By, int)
+   * <p>
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
-   * @param parent the WebElement to search elements in
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @param index 0..N
-   * @return SelenideElement
+   * @deprecated please use $(parent).$(By, int) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
@@ -336,6 +341,7 @@ public class Selenide {
 
   /**
    * Initialize collection with Elements
+   *
    * @param elements
    * @return
    */
@@ -372,19 +378,18 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$$(String) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$$(String)
-   *
+   * @param parent      the WebElement to search elements in
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return empty list if element was no found
+   * @see #$$(String)
+   * <p>
    * Locates all elements matching given CSS selector inside given parent element
    * ATTENTION! This method doesn't start any search yet!
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
-   *
-   * @param parent the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return empty list if element was no found
+   * @deprecated please use $(parent).$$(String) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
@@ -392,13 +397,13 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use $(parent).$$(By) which is the same
-   * (method will not be removed until 4.x or later)
-   * @see  #$$(By)
-   *
+   * @see #$$(By)
+   * <p>
    * Locates all elements matching given criteria inside given parent element
    * ATTENTION! This method doesn't start any search yet!
    * @see Selenide#$$(WebElement, String)
+   * @deprecated please use $(parent).$$(By) which is the same
+   * (method will not be removed until 4.x or later)
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
@@ -408,6 +413,7 @@ public class Selenide {
   /**
    * Locates the first element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
    */
@@ -418,8 +424,9 @@ public class Selenide {
   /**
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
-   * @param index 0..N
+   * @param index    0..N
    * @return SelenideElement
    */
   public static SelenideElement getElement(By criteria, int index) {
@@ -429,6 +436,7 @@ public class Selenide {
   /**
    * Locates all elements matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return empty list if element was no found
    */
@@ -445,12 +453,12 @@ public class Selenide {
   }
 
   /**
-   * @deprecated Not recommended. Use method {@code $(radioField).selectRadio(value);} instead
-   *
-   * Select radio field by value
    * @param radioField any By selector for finding radio field
-   * @param value value to select (should match an attribute "value")
+   * @param value      value to select (should match an attribute "value")
    * @return the selected radio field
+   * @deprecated Not recommended. Use method {@code $(radioField).selectRadio(value);} instead
+   * <p>
+   * Select radio field by value
    */
   @Deprecated
   public static SelenideElement selectRadio(By radioField, String value) {
@@ -459,6 +467,7 @@ public class Selenide {
 
   /**
    * Returns selected element in radio group
+   *
    * @param radioField
    * @return null, if nothing selected
    */
@@ -473,6 +482,7 @@ public class Selenide {
 
   /**
    * Mock confirm dialog that return given value
+   *
    * @param confirmReturnValue true = OK, false = CANCEL
    */
   public static void onConfirmReturn(boolean confirmReturnValue) {
@@ -483,6 +493,7 @@ public class Selenide {
 
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
+   *
    * @return actual dialog text
    */
   public static String confirm() {
@@ -494,8 +505,8 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws DialogTextMismatch if confirmation message differs from expected message
    * @return actual dialog text
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
   public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
@@ -511,6 +522,7 @@ public class Selenide {
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
+   *
    * @return actual dialog text
    */
   public static String dismiss() {
@@ -522,8 +534,8 @@ public class Selenide {
    * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
-   * @throws DialogTextMismatch if confirmation message differs from expected message
    * @return actual dialog text
+   * @throws DialogTextMismatch if confirmation message differs from expected message
    */
   public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
@@ -546,10 +558,10 @@ public class Selenide {
   /**
    * Switch to window/tab/frame/parentFrame/innerFrame/alert.
    * Allows switching to window by title, index, name etc.
-   * 
+   * <p>
    * Similar to org.openqa.selenium.WebDriver#switchTo(), but all methods wait until frame/window/alert
    * appears if it's not visible yet (like other Selenide methods).
-   * 
+   *
    * @return SelenideTargetLocator
    */
   public static SelenideTargetLocator switchTo() {
@@ -557,7 +569,6 @@ public class Selenide {
   }
 
   /**
-   *
    * @return WebElement, not SelenideElement! which has focus on it
    */
   public static WebElement getFocusedElement() {
@@ -566,6 +577,7 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
+   *
    * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
@@ -580,6 +592,7 @@ public class Selenide {
 
   /**
    * Create a Page Object instance.
+   *
    * @see PageFactory#initElements(WebDriver, Class)
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
@@ -589,12 +602,12 @@ public class Selenide {
 
   /**
    * Create a org.openqa.selenium.support.ui.FluentWait instance with Selenide timeout/polling.
-   * 
-   * Sample usage: 
+   * <p>
+   * Sample usage:
    * {@code
-   *   Wait().until(invisibilityOfElementLocated(By.id("magic-id")));
+   * Wait().until(invisibilityOfElementLocated(By.id("magic-id")));
    * }
-   * 
+   *
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
   public static FluentWait<WebDriver> Wait() {
@@ -606,7 +619,7 @@ public class Selenide {
   /**
    * With this method you can use Selenium Actions like described in the
    * <a href="http://code.google.com/p/selenium/wiki/AdvancedUserInteractions">AdvancedUserInteractions</a> page.
-   *
+   * <p>
    * <pre>
    *   actions()
    *    .sendKeys($(By.name("rememberMe")), "John")
@@ -622,11 +635,11 @@ public class Selenide {
 
   /**
    * Get JavaScript errors that happened on this page.
-   *
+   * <p>
    * Format can differ from browser to browser:
-   *  - Uncaught ReferenceError: $ is not defined at http://localhost:35070/page_with_js_errors.html:8
-   *  - ReferenceError: Can't find variable: $ at http://localhost:8815/page_with_js_errors.html:8
-   *
+   * - Uncaught ReferenceError: $ is not defined at http://localhost:35070/page_with_js_errors.html:8
+   * - ReferenceError: Can't find variable: $ at http://localhost:8815/page_with_js_errors.html:8
+   * <p>
    * Function returns nothing if the page has its own "window.onerror" handler.
    *
    * @return list of error messages. Returns empty list if webdriver is not started properly.
@@ -634,28 +647,24 @@ public class Selenide {
   public static List<String> getJavascriptErrors() {
     if (!hasWebDriverStarted()) {
       return emptyList();
-    }
-    else if (!supportsJavascript()) {
+    } else if (!supportsJavascript()) {
       return emptyList();
     }
     try {
       Object errors = executeJavaScript("return window._selenide_jsErrors");
       if (errors == null) {
         return emptyList();
-      }
-      else if (errors instanceof List) {
+      } else if (errors instanceof List) {
         return errorsFromList((List<Object>) errors);
-      }
-      else if (errors instanceof Map) {
+      } else if (errors instanceof Map) {
         return errorsFromMap((Map<Object, Object>) errors);
-      }
-      else {
+      } else {
         return asList(errors.toString());
       }
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
       log.severe(cannotExecuteJs.toString());
       return emptyList();
-    } 
+    }
   }
 
   private static List<String> errorsFromList(List<Object> errors) {
@@ -682,6 +691,7 @@ public class Selenide {
 
   /**
    * Check if there is not JS errors on the page
+   *
    * @throws JavaScriptErrorsFound
    */
   public static void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
@@ -693,12 +703,13 @@ public class Selenide {
 
   /**
    * Zoom current page (in or out).
+   *
    * @param factor e.g. 1.1 or 2.0 or 0.5
    */
   public static void zoom(double factor) {
     executeJavaScript(
         "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
-        "document.body.style.transformOrigin = '0 0';",
+            "document.body.style.transformOrigin = '0 0';",
         factor
     );
   }
@@ -733,7 +744,7 @@ public class Selenide {
    * http://bit.ly/1nZTaqu
    * <br />
    *
-   * @param logType WebDriver supported log types
+   * @param logType  WebDriver supported log types
    * @param logLevel logging level that will be used to control logging output
    * @return list of log entries
    * @see org.openqa.selenium.logging.LogType,
@@ -746,8 +757,7 @@ public class Selenide {
   private static List<LogEntry> getLogEntries(String logType, Level logLevel) {
     try {
       return getWebDriver().manage().logs().get(logType).filter(logLevel);
-    }
-    catch (UnsupportedOperationException ignore) {
+    } catch (UnsupportedOperationException ignore) {
       return emptyList();
     }
   }

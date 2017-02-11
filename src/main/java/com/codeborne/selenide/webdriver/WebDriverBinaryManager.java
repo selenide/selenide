@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.logging.Logger;
 
@@ -46,6 +47,6 @@ public class WebDriverBinaryManager {
   }
 
   private static boolean isEmtyProperty(String property) {
-    return System.getProperty(property) == null;
+    return StringUtils.isBlank(System.getProperty(property));
   }
 }

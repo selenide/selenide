@@ -19,11 +19,11 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "" , "");
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   public void open(URL url) {
-    open(url, "", "" , "");
+    open(url, "", "", "");
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
@@ -50,17 +50,16 @@ public class Navigator {
     if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
       if (!domain.isEmpty()) domain += "\\";
-    }
-    else {
+    } else {
       if (!domain.isEmpty()) domain += "%5C";
       if (!login.isEmpty()) login += ":";
       if (!password.isEmpty()) password += "@";
       int idx1 = url.indexOf("://") + 3;
       url = (idx1 < 3 ? "" : (url.substring(0, idx1 - 3) + "://"))
-              + domain
-              + login
-              + password
-              + (idx1 < 3 ? url : url.substring(idx1));
+          + domain
+          + login
+          + password
+          + (idx1 < 3 ? url : url.substring(idx1));
     }
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
@@ -77,12 +76,10 @@ public class Navigator {
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
-    }
-    catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       SelenideLogger.commitStep(log, e);
       throw e;
-    }
-    catch (Error e) {
+    } catch (Error e) {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
@@ -125,7 +122,7 @@ public class Navigator {
         relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
         isLocalFile(relativeOrAbsoluteUrl);
   }
-  
+
   protected boolean isLocalFile(String url) {
     return url.toLowerCase().startsWith("file:");
   }
