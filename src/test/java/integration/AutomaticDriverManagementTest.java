@@ -1,28 +1,25 @@
 package integration;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.*;
 import org.junit.Test;
 
 /**
  * Created by sergey on 11.02.17.
  */
-public class AutomaticDriverManagementTest {
+public class AutomaticDriverManagementTest extends IntegrationTest{
 
   @Test
   public void canStartChromeWithAutomaticDriver() throws Exception {
     Configuration.browser = WebDriverRunner.CHROME;
-    Selenide.open("http://automation-remarks.com");
-    Selenide.$$(".post").shouldHave(CollectionCondition.size(9));
+    Selenide.open("/start_page.html");
+    Selenide.$("#start-selenide").shouldHave(Condition.text("Start page"));
   }
 
   @Test
   public void canStartMarionetteWithAutomaticDriver() throws Exception {
     System.setProperty("webdriver.gecko.driver", "");
     Configuration.browser = WebDriverRunner.MARIONETTE;
-    Selenide.open("http://automation-remarks.com");
-    Selenide.$$(".post").shouldHave(CollectionCondition.size(9));
+    Selenide.open("/start_page.html");
+    Selenide.$("#start-selenide").shouldHave(Condition.text("Start page"));
   }
 }
