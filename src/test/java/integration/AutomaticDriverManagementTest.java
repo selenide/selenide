@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by sergey on 11.02.17.
  */
-public class AutomaticDriverManagementTest extends IntegrationTest{
+public class AutomaticDriverManagementTest extends IntegrationTest {
 
   @Test
   public void canStartChromeWithAutomaticDriver() throws Exception {
