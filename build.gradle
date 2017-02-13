@@ -240,6 +240,7 @@ task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
   println "Use Chrome driver: $chromeDriver"
   systemProperties['selenide.browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = chromeDriver
+  systemProperties['wdm.targetPath'] = buildDir
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
