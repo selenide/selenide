@@ -31,7 +31,7 @@ public class WebDriverBinaryManager {
         log.warning(Configuration.browser + "doesn't require binary driver");
       }
     } catch (final Exception ex) {
-      log.warning("Problem to load driver binary for " + Configuration.browser);
+      log.warning("Problem to load driver binary for " + Configuration.browser + ": " + ex);
     }
   }
 }
