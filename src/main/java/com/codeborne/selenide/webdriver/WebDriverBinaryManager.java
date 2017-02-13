@@ -27,6 +27,8 @@ public class WebDriverBinaryManager {
         PhantomJsDriverManager.getInstance().setup();
       } else if (isMarionette()) {
         FirefoxDriverManager.getInstance().setup();
+      }else {
+        log.warning(Configuration.browser+ "doesn't require binary driver");
       }
     } catch (final Exception ex) {
       log.warning("Problem to load driver binary for " + Configuration.browser);
