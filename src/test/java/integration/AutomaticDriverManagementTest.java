@@ -22,7 +22,6 @@ public class AutomaticDriverManagementTest extends IntegrationTest {
   @Test
   public void canStartMarionetteWithAutomaticDriver() throws Exception {
     assumeTrue(isMarionette());
-    System.setProperty("webdriver.gecko.driver", "");
     Selenide.open("/start_page.html");
     Selenide.$("#start-selenide").shouldHave(Condition.text("Start page"));
   }
