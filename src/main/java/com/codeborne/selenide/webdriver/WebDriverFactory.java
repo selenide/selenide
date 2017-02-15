@@ -42,6 +42,7 @@ public class WebDriverFactory {
     log.config("Configuration.remote=" + remote);
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
+    WebDriverBinaryManager.setupBinaryPath();
 
     WebDriver webdriver = factories.stream()
         .filter(AbstractDriverFactory::supports)
