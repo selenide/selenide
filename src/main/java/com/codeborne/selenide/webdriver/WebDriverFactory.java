@@ -44,6 +44,8 @@ public class WebDriverFactory {
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
 
+    WebDriverBinaryManager.setupBinaryPath();
+
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
             CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
                     isMarionette() ? createMarionetteDriver(proxy) :
