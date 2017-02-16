@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Condition;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,4 +36,15 @@ public class ConditionsTest extends IntegrationTest {
     $("#multirowTable").should(not(be(hidden)));
   }
 
+  @Test
+  public void userCanUseOrCondition() {
+    Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
+    $("#baskerville").shouldBe(one_of_conditions);
+
+    Condition all_of_conditions = or("baskerville", text("Basker"), text("rville"));
+    $("#baskerville").shouldBe(all_of_conditions);
+
+    Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
+    $("#baskerville").shouldNotBe(none_of_conditions);
+  }
 }

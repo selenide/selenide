@@ -188,7 +188,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param value expected value of input field
    */
   public static Condition exactValue(String value) {
-    return hasAttribute("value", value);
+    return attribute("value", value);
   }
 
   /**
@@ -206,7 +206,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param name expected name of input field
    */
   public static Condition name(String name) {
-    return hasAttribute("name", name);
+    return attribute("name", name);
   }
 
   /**
@@ -214,7 +214,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param type expected type of input field
    */
   public static Condition type(String type) {
-    return hasAttribute("type", type);
+    return attribute("type", type);
   }
 
   /**
@@ -222,7 +222,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param id expected id of input field
    */
   public static Condition id(String id) {
-    return hasAttribute("id", id);
+    return attribute("id", id);
   }
 
   /**
