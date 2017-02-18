@@ -743,6 +743,25 @@ public class Selenide {
     return listToString(getLogEntries(logType, logLevel));
   }
 
+  /**
+   * Clear browser cookies.
+   *
+   * In case if you are trying to avoid restarting browser
+   *
+   */
+  public static void clearBrowserCookies() {
+    getWebDriver().manage().deleteAllCookies();
+  }
+
+  /**
+   *  Clear browser local storage.
+   *
+   *  In case if you need to be sure that browser's localStorage is empty
+   */
+  public static void clearBrowserLocalStorage() {
+    executeJavaScript("localStorage.clear();");
+  }
+
   private static List<LogEntry> getLogEntries(String logType, Level logLevel) {
     try {
       return getWebDriver().manage().logs().get(logType).filter(logLevel);
