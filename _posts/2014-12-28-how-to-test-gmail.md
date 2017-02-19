@@ -195,7 +195,7 @@ Wish you simple tests!
 
 <div class="author">
   Andrei Solntsev<br/> 
-  <a href="https://selenide.org">selenide.org</a>
+  <a href="http://selenide.org">selenide.org</a>
 </div>
 
 <br/>
