@@ -2,6 +2,7 @@
 
 === 4.4 (preliminary release date is March 2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
+* upgrade to selenium-java 3.1.0
 
 === 4.3 (Released 09.02.2017)
 * System properties names aligned with Configuration fields. e.g. Configuration.someProp always has selenide.someProp equivalent (old names still supported for backward compatibility)
