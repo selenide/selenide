@@ -5,23 +5,27 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import static com.codeborne.selenide.Selenide.open;
+import static org.junit.Assert.assertEquals;
 
 public class ClearLocalStorageTest extends IntegrationTest {
   @Before
   public void addDataToLocalStorage() {
-    executeJavaScript("localStorage.setItem('item1', 'item1');");
-    executeJavaScript("localStorage.setItem('item2', 'item2');");
-    Long storageLength = executeJavaScript("return localStorage.length;");
-    assumeTrue(storageLength > 0);
+    open("/start_page.html");
+    executeJavaScript("localStorage.setItem('key1', 'item1');");
+    executeJavaScript("localStorage.setItem('key2', 'item2');");
   }
 
   @Test
   public void clearLocalStorageTest() {
+    assertEquals(2L, getLocalStorageLength());
+
     clearBrowserLocalStorage();
-    Long storageLength = executeJavaScript("return localStorage.length;");
-    assertTrue(storageLength == 0);
+    
+    assertEquals(0L, getLocalStorageLength());
   }
 
+  private long getLocalStorageLength() {
+    return (Long) executeJavaScript("return localStorage.length;");
+  }
 }
