@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Set;
 
 import static com.codeborne.selenide.Selenide.clearBrowserCookies;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
@@ -16,6 +17,8 @@ import static org.junit.Assume.assumeFalse;
 public class ClearCookiesTest extends IntegrationTest {
   @Before
   public void addCookiesBeforeTest() throws MalformedURLException {
+    open("/start_page.html");
+
     String domain = new URL(getWebDriver().getCurrentUrl()).getHost();
     getWebDriver().manage().addCookie(new Cookie("username", "John Doe", domain, "/", null));
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
