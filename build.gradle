@@ -52,7 +52,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'com.codeborne', module: 'phantomjsdriver'
   }
-  runtime('com.codeborne:phantomjsdriver:1.4.0') {
+  runtime('com.codeborne:phantomjsdriver:1.4.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
   }
