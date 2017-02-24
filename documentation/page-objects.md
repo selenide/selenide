@@ -15,7 +15,7 @@ header-text: >
 
 ## Page Objects - it's simple!
 
-In the QA world, there is a very popular pattern [Page Objects](https://code.google.com/p/selenium/wiki/PageFactory).
+In the QA world, there is a very popular pattern [Page Objects](https://github.com/SeleniumHQ/selenium/wiki/PageFactory).
 It means that for every page you create a separate class - _Page Object_. This class should implement
 logic of working with different page elements.
 It's thought that Page Object helps to avoid duplication of locators in tests. 
