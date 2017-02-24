@@ -116,3 +116,10 @@ Sure! It's open-source. You can either create Pull Request or [Feature Request](
 
 Selenide - __free__ __open-source__ product distributed with [MIT license](https://github.com/codeborne/selenide/blob/master/LICENSE).
 Shortly said, it means that you can do anything with it.
+
+> Wouldn't you make Selenide paid at some moment?
+
+No. For sure. Selenide will always be free. 
+
+* Firstly, because we believe at Open Source. 
+* Secondly, because we don't believe we can earn lot of money this way. :)
