@@ -50,6 +50,7 @@ dependencies {
     exclude group: 'cglib', module: 'cglib-nodep'
     exclude group: 'com.google.code.gson', module: 'gson'
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+    exclude group: 'com.codeborne', module: 'phantomjsdriver'
   }
   runtime('com.codeborne:phantomjsdriver:1.4.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
@@ -79,7 +80,6 @@ dependencies {
 task libs(type: Sync) {
   from configurations.compile
   from configurations.runtime
-  from configurations.testCompile
   from configurations.testRuntime
   into "$buildDir/lib"
 }
