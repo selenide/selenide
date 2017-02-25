@@ -8,7 +8,7 @@ header-text: Workshops, trainings, enterprise support
 ---
 {% include JB/setup %}
 
-{% include themes/ingmar/_title.html %}
+
 
 <div class="wrapper-content">
   <section>
