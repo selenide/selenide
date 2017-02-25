@@ -1,10 +1,10 @@
 ---
 layout: default
-title : Support
-header : Support
+title : Enterprise Support
+header : Enterprise Support
 group: navigation
 cssClass: testimonials
-header-text: Workshops, trainings, commercial support
+header-text: Workshops, trainings, enterprise support
 ---
 {% include JB/setup %}
 
@@ -18,13 +18,15 @@ header-text: Workshops, trainings, commercial support
     
    <h2>Selenide training</h2>
    
-   If you need a training, send as an email to info@selenide.org 
+   We offer on-site workshops and online courses starting from April 2017. 
+   Send as an email to mailto:info@selenide.org, if you are interested.
    
-   <h2>Commercial support</h2>
+   <h2>Enterprise support</h2>
    
-   Selenide is free for everyone. But if your company needs a commercial support, we can provide it.
+   Selenide is open-source and free for everyone.
+   But if your company is interested in enterpise level support, we will provide it, starting from March 2017.
    
-   Drop as email to info@selenide.org 
+   Drop as email to mailto:info@selenide.org and we will get in touch with you.
    
   </section>
 </div>
