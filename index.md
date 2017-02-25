@@ -73,7 +73,7 @@ tagline:
   <div>Where You can ask question or discuss any topic about Selenide in English:</div>
   <div class="highlights">
     <a href="mailto:selenide@googlegroups.com">Google group</a>
-    <a href="mailto:andrei dot solntsev at gmail dot com">My email</a>
+    <a href="mailto:info@selenide.org">Email</a>
   </div>
 
 </div></div>
