@@ -18,15 +18,16 @@ header-text: Workshops, trainings, enterprise support
     
    <h2>Selenide training</h2>
    
-   We offer on-site workshops and online courses starting from April 2017. 
-   Send as an email to mailto:info@selenide.org, if you are interested.
+   We offer on-site workshops and online courses in English, German and Russian starting from April 2017. 
+   <br/>Send us an email to [info@selenide.org](mailto:info@selenide.org), if you are interested.
    
    <h2>Enterprise support</h2>
    
    Selenide is open-source and free for everyone.
-   But if your company is interested in enterpise level support, we will provide it, starting from March 2017.
+   <br/>But if your company is interested in enterpise level support, we will provide it, starting from March 2017.
    
-   Drop as email to mailto:info@selenide.org and we will get in touch with you.
+   
+  <br/>Drop us an email to [info@selenide.org](mailto:info@selenide.org) and we will get in touch with you.
    
   </section>
 </div>
