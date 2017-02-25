@@ -19,7 +19,7 @@ header-text: Workshops, trainings, enterprise support
    <h2>Selenide training</h2>
    
    We offer on-site workshops and online courses in English, German and Russian starting from April 2017. 
-   <br/>Send us an email to <a href=mailto:info@selenide.org>info@selenide.org</a>, if you are interested.
+   <br/>Send us an email to <a href=mailto:info@selenide.org>info@selenide.org</a>, [mailto:info@selenide.org] if you are interested.
    
    <h2>Enterprise support</h2>
    
