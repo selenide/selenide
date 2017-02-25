@@ -3,7 +3,7 @@ layout: default
 title : Enterprise Support
 header : Enterprise Support
 group: navigation
-cssClass: testimonials
+
 header-text: Workshops, trainings, enterprise support
 ---
 {% include JB/setup %}
@@ -15,7 +15,7 @@ header-text: Workshops, trainings, enterprise support
 
 <div class="wrapper-content">
   <section>
-    
+    cssClass: testimonials
    <h2>Selenide training</h2>
   
 <p> We offer on-site workshops and online courses in English, German and Russian starting from April 2017. 
