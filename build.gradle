@@ -63,6 +63,7 @@ dependencies {
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.23'
   compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.4'
+  testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.24', transitive: false
 
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
