@@ -635,6 +635,9 @@ public class Selenide {
     if (!hasWebDriverStarted()) {
       return emptyList();
     }
+    if (WebDriverRunner.getWebDriver() instanceof AndroidDriver) {
+      return emptyList();
+    }
     else if (!supportsJavascript()) {
       return emptyList();
     }
