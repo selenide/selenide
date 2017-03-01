@@ -13,6 +13,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 import static org.hamcrest.CoreMatchers.*;
@@ -531,7 +532,11 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   private void assertCauseMessage(UIAssertionError expected, String selector) {
-    if (!WebDriverRunner.isHtmlUnit()) {
+    if (WebDriverRunner.isPhantomjs()) {
+      assertThat(expected.getCause().getMessage(),
+          containsString("Unable to find element with css selector '" + selector + "'"));
+    }
+    else if (!isHtmlUnit()) {
       assertThat(expected.getCause().getMessage(),
           containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}"));
     }

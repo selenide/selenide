@@ -231,7 +231,8 @@ public class Selenide {
   }
 
   /**
-   * Find the first element matching given CSS selector
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
    */
@@ -240,7 +241,8 @@ public class Selenide {
   }
 
   /**
-   * Find the first element matching given CSS selector
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
    */
@@ -260,7 +262,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$(String)
    *
-   * Find the first element matching given CSS selector
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
@@ -271,7 +274,8 @@ public class Selenide {
   }
 
   /**
-   * Find the Nth element matching given criteria
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
@@ -285,7 +289,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$(String, int)
    *
-   * Find the Nth element matching given criteria
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
@@ -301,7 +306,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$(By)
    *
-   * Find the first element matching given criteria
+   * Locates the first element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
@@ -316,7 +322,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$(By, int)
    *
-   * Find the Nth element matching given criteria
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @param index 0..N
@@ -337,7 +344,8 @@ public class Selenide {
   }
 
   /**
-   * Find all elements matching given CSS selector.
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
@@ -350,7 +358,8 @@ public class Selenide {
   }
 
   /**
-   * Find all elements matching given CSS selector.
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
@@ -367,7 +376,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$$(String)
    *
-   * Find all elements matching given CSS selector inside given parent element
+   * Locates all elements matching given CSS selector inside given parent element
+   * ATTENTION! This method doesn't start any search yet!
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
@@ -386,7 +396,8 @@ public class Selenide {
    * (method will not be removed until 4.x or later)
    * @see  #$$(By)
    *
-   * Find all elements matching given criteria inside given parent element
+   * Locates all elements matching given criteria inside given parent element
+   * ATTENTION! This method doesn't start any search yet!
    * @see Selenide#$$(WebElement, String)
    */
   @Deprecated
@@ -395,7 +406,8 @@ public class Selenide {
   }
 
   /**
-   * Find the first element matching given criteria
+   * Locates the first element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
    */
@@ -404,7 +416,8 @@ public class Selenide {
   }
 
   /**
-   * Find the Nth element matching given criteria
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
@@ -414,7 +427,8 @@ public class Selenide {
   }
 
   /**
-   * Find all elements matching given CSS selector
+   * Locates all elements matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return empty list if element was no found
    */
@@ -431,13 +445,14 @@ public class Selenide {
   }
 
   /**
-   * Not recommended. It's better to use method {@code $(radioField).selectRadio(value);}
+   * @deprecated Not recommended. Use method {@code $(radioField).selectRadio(value);} instead
    *
    * Select radio field by value
    * @param radioField any By selector for finding radio field
    * @param value value to select (should match an attribute "value")
    * @return the selected radio field
    */
+  @Deprecated
   public static SelenideElement selectRadio(By radioField, String value) {
     return $(radioField).selectRadio(value);
   }
@@ -726,6 +741,25 @@ public class Selenide {
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
     return listToString(getLogEntries(logType, logLevel));
+  }
+
+  /**
+   * Clear browser cookies.
+   *
+   * In case if you are trying to avoid restarting browser
+   *
+   */
+  public static void clearBrowserCookies() {
+    getWebDriver().manage().deleteAllCookies();
+  }
+
+  /**
+   *  Clear browser local storage.
+   *
+   *  In case if you need to be sure that browser's localStorage is empty
+   */
+  public static void clearBrowserLocalStorage() {
+    executeJavaScript("localStorage.clear();");
   }
 
   private static List<LogEntry> getLogEntries(String logType, Level logLevel) {

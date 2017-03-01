@@ -13,6 +13,7 @@ public class Configuration {
 
   /**
    * Base url for open() function calls
+   * Can be configured either programmatically or by system property "-Dselenide.baseUrl=http://myhost".
    * Default value: http://localhost:8080
    */
   public static String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
@@ -20,24 +21,28 @@ public class Configuration {
   /**
    * Timeout in milliseconds for a collection to get completely loaded
    * Conditions will be checked at this point at latest, even if they are still loading
+   * Can be configured either programmatically or by system property "-Dselenide.collectionsTimeout=10000"
    * Default value: 6000 (milliseconds)
    */
   public static long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectionsTimeout", "6000"));
 
   /**
    * Timeout in milliseconds to fail the test, if conditions still not met
+   * Can be configured either programmatically or by system property "-Dselenide.timeout=10000"
    * Default value: 4000 (milliseconds)
    */
   public static long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
   /**
    * Interval in milliseconds, when checking if a single element is appeared
+   * Can be configured either programmatically or by system property "-Dselenide.pollingInterval=50"
    * Default value: 100 (milliseconds)
    */
   public static long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
 
   /**
    * Interval in milliseconds, when checking if a new collection elements appeared
+   * Can be configured either programmatically or by system property "-Dselenide.collectionsPollingInterval=150"
    * Default value: 200 (milliseconds)
    */
   public static long collectionsPollingInterval = Long.parseLong(
@@ -65,6 +70,7 @@ public class Configuration {
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
    * <p/>
+   * Can be configured either programmatically or by system property "-Dselenide.openBrowserTimeout=10000"
    * Default value: 15000 (milliseconds)
    */
   public static long openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "15000"));
@@ -74,6 +80,7 @@ public class Configuration {
    * <p/>
    * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long.
    * <p/>
+   * Can be configured either programmatically or by system property "-Dselenide.closeBrowserTimeout=10000"
    * Default value: 5000 (milliseconds)
    */
   public static long closeBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.closeBrowserTimeout", "5000"));
@@ -89,11 +96,12 @@ public class Configuration {
 
   /**
    * Which browser version to use (for Internet Explorer).
-   * Can be configured either programmatically or by system property "-Dselenide.browser.version=8" or "-Dbrowser.version=8".
+   * Can be configured either programmatically or by system property "-Dselenide.browserVersion=8" or "-Dbrowser.version=8".
    * <p/>
    * Default value: none
    */
-  public static String browserVersion = System.getProperty("selenide.browser.version", System.getProperty("browser.version"));
+  public static String browserVersion = System.getProperty("selenide.browserVersion",
+          System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
@@ -105,19 +113,21 @@ public class Configuration {
 
   /**
    * The browser window size.
-   * Can be configured either programmatically or by system property "-Dselenide.browser-size=1024x768".
-   * <p>
+   * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
+   *
    * Default value: none (browser size will not be set explicitly)
    */
-  public static String browserSize = System.getProperty("selenide.browser-size");
+  public static String browserSize = System.getProperty("selenide.browserSize",
+          System.getProperty("selenide.browser-size"));
 
   /**
    * The browser window is maximized when started.
-   * Can be configured either programmatically or by system property "-Dselenide.start-maximized=true".
+   * Can be configured either programmatically or by system property "-Dselenide.startMaximized=true".
    * <p>
    * Default value: true
    */
-  public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.start-maximized", "true"));
+  public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized",
+          System.getProperty("selenide.start-maximized", "true")));
 
   /**
    * @deprecated this options allowed only a single switch.
@@ -135,57 +145,65 @@ public class Configuration {
   /**
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".
+   *
+   * Can be configured either programmatically or by system property "-Dselenide.pageLoadStrategy=eager".
    * Default value: "normal".
-   * <p>
-   * - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
-   * - `eager`: return after DOMContentLoaded fires;
-   * - `none`: return immediately (it's default in Selenide).
-   * <p>
-   * It seems that `none` is the best option for Selenide because all its commands wait until
-   * corresponding condition becomes true.
-   * Thought, we left default value `normal` because we afraid to break users' existing tests.
-   * <p>
+   * 
+   *  - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
+   *  - `eager`: return after DOMContentLoaded fires;
+   *  - `none`: return immediately
+   *
+   *  In some cases `eager` can bring performance boosts for the slow tests.
+   *  Though, we left default value `normal` because we afraid to break users' existing tests.
+   * 
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
    *
    * @since 3.5
    */
-  public static String pageLoadStrategy = System.getProperty("selenide.page-load-strategy", "normal");
 
+  public static String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
+          System.getProperty("selenide.page-load-strategy", "normal"));
+  
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
    * This solution may be helpful for testing in Internet Explorer.
-   * <p>
+   * Can be configured either programmatically or by system property "-Dselenide.clickViaJs=true".
    * Default value: false
    */
-  public static boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.click-via-js", "false"));
+  public static boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs",
+          System.getProperty("selenide.click-via-js", "false")));
 
   /**
-   * Does Selenide need to take screenshots on failing tests.
-   * <p>
+   * Defines if Selenide takes screenshots on failing tests.
+   * Can be configured either programmatically or by system property "-Dselenide.screenshots=false".
+   *
    * Default value: true
    */
   public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   /**
-   * Does Selenide need to save page source on failing tests.
-   * <p>
+   * Defines if Selenide saves page source on failing tests.
+   * Can be configured either programmatically or by system property "-Dselenide.savePageSource=false".
    * Default value: true
    */
   public static boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
 
   /**
    * Folder to store screenshots to.
-   * Can be configured either programmatically or by system property "-Dselenide.reports=test-result/reports".
-   * <p>
+   * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
+   *
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
-  public static String reportsFolder = System.getProperty("selenide.reports", "build/reports/tests");
+  public static String reportsFolder = System.getProperty("selenide.reportsFolder",
+          System.getProperty("selenide.reports", "build/reports/tests"));
 
   /**
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
-   * <p>
+   *
+   * Can be configured either programmatically or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
+   *
    * If it's given, names of screenshots are printed as
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
    * failures in CI server.
@@ -239,7 +257,7 @@ public class Configuration {
    * slow via network to Selenium Grid on cloud).
    * <p>
    * https://github.com/codeborne/selenide/issues/135
-   * <p>
+   * Can be configured either programmatically or by system property "-Dselenide.fastSetValue=true".
    * Default value: false
    */
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
@@ -303,6 +321,11 @@ public class Configuration {
     PROXY
   }
 
+  /**
+   * Defines if files are downloaded via direct HTTP or vie selenide emebedded proxy server
+   * Can be configured either programmatically or by system property "-Dselenide.fileDownload=PROXY"
+   * Default: HTTPGET
+   */
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
           System.getProperty("selenide.fileDownload", HTTPGET.name()));
 
