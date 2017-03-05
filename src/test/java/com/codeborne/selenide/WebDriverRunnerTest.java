@@ -30,7 +30,7 @@ public class WebDriverRunnerTest {
   @Rule
   public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
 
-  URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
+  URL url = currentThread().getContextClassLoader().getResource("start_page.html");
 
   @Before 
   public void resetWebDriverContainer() {

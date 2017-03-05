@@ -40,8 +40,8 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @Test(expected = InvalidStateException.class)
-  public void cannotSetValueToReadonlyTextarea() {
-    $("#text-area").val("textarea value");
+  public void cannotSetValueToReadonlyTextArea() {
+    $("#text-area").val("textArea value");
   }
 
   @Test(expected = InvalidStateException.class)
@@ -73,10 +73,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @Test
-  public void waitsUntilTextareaGetsEditable() {
+  public void waitsUntilTextAreaGetsEditable() {
     $("#enable-inputs").click();
-    $("#text-area").val("textarea value");
-    $("#text-area").shouldHave(exactValue("textarea value"));
+    $("#text-area").val("TextArea value");
+    $("#text-area").shouldHave(exactValue("TextArea value"));
   }
 
   @Test
