@@ -226,7 +226,11 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
     if (isHtmlUnit()) {
-      assertEquals("Radio buttons\nuncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland", $("#radioButtons").text());
+      assertEquals("Radio buttons\n" +
+          "uncheckedМастер " +
+          "uncheckedМаргарита " +
+          "uncheckedКот \"Бегемот\" " +
+          "uncheckedTheodor Woland", $("#radioButtons").text());
     }
     else {
       assertEquals("Radio buttons\nМастер dМаргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
@@ -446,7 +450,6 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
 
-
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
@@ -517,7 +520,7 @@ public class SelenideMethodsTest extends IntegrationTest {
       fail("exception expected");
     }
     catch (ElementShould expected) {
-      assertTrue("Actual error: " + expected.getMessage(), 
+      assertTrue("Actual error: " + expected.getMessage(),
           expected.getMessage().contains("because it's sensitive information"));
     }
   }
