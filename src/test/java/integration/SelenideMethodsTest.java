@@ -225,12 +225,17 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Page with selects", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
-    assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    if (isHtmlUnit()) {
+      assertEquals("Radio buttons\nuncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland", $("#radioButtons").text());
+    }
+    else {
+      assertEquals("Radio buttons\nМастер dМаргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    }
 
     $("h1").shouldHave(text("Page "));
     $("h2").shouldHave(text("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("vemail.r"));
-    $("#radioButtons").shouldHave(text("buttons\nМастер Маргарита"));
+    $("#radioButtons").shouldHave(text("buttons"), text("Мастер"), text("Маргарита"));
   }
 
   @Test
