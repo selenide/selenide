@@ -157,7 +157,7 @@
     <a href="long_ajax_request.html">Want to see ajax in action?</a>
 
     <script type="text/javascript">
-      var commandDuration = window.location.search.substring(1);
+      var commandDuration = new URLSearchParams(window.location.search).get("speed");
 
       setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, commandDuration*3);
       setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, commandDuration*4);

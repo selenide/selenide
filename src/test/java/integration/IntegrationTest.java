@@ -89,11 +89,13 @@ public abstract class IntegrationTest {
   }
 
   protected void openFile(String fileName) {
-    open("/" + fileName + "?" + averageSeleniumCommandDuration);
+    open("/" + fileName + "?speed=" + averageSeleniumCommandDuration + "&browser=" + Configuration.browser +
+        "&timeout=" + Configuration.timeout);
   }
 
   protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
-    return open("/" + fileName + "?" + averageSeleniumCommandDuration, pageObjectClass);
+    return open("/" + fileName + "?speed=" + averageSeleniumCommandDuration + "&browser=" + Configuration.browser +
+        "&timeout=" + Configuration.timeout, pageObjectClass);
   }
 
   @Before
