@@ -233,7 +233,7 @@ public class SelenideMethodsTest extends IntegrationTest {
           "uncheckedTheodor Woland", $("#radioButtons").text());
     }
     else {
-      assertEquals("Radio buttons\nМастер dМаргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+      assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
     }
 
     $("h1").shouldHave(text("Page "));
