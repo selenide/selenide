@@ -247,8 +247,14 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
-    $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    if (isHtmlUnit()) {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "uncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland"));
+    }
+    else {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    }
   }
 
   @Test
