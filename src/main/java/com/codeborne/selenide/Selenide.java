@@ -657,7 +657,7 @@ public class Selenide {
         return asList(errors.toString());
       }
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
-      log.severe(cannotExecuteJs.toString());
+      log.warning(cannotExecuteJs.toString());
       return emptyList();
     } 
   }
