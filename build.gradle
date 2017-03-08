@@ -41,7 +41,7 @@ configurations {
 
 dependencies {
   compile('org.apache.httpcomponents:httpcore:4.4.6')
-  compile('org.seleniumhq.selenium:selenium-java:3.2.0') {
+  compile('org.seleniumhq.selenium:selenium-java:3.3.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -68,7 +68,7 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.2.0'  
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.3.0'  
   testCompile 'org.mockito:mockito-core:2.7.12'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.2.v20170220'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.4.2.v20170220'
