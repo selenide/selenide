@@ -2,7 +2,7 @@
 
 === 4.4 (preliminary release date is March 2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
-* upgrade to selenium-java 3.3.0
+* upgrade to selenium-java 3.3.1
 * upgrade to phantomjsdriver 1.4.1
 * Upgrade to htmlunit 2.24
 
