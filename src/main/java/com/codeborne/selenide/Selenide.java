@@ -246,7 +246,7 @@ public class Selenide {
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return SelenideElement which locates elements via XPath
    */
-  public static SelenideElement $x(String xpathExpression){
+  public static SelenideElement $x(String xpathExpression) {
     return getElement(By.xpath(xpathExpression));
   }
 
@@ -376,7 +376,7 @@ public class Selenide {
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return ElementsCollection which locates elements via XPath
    */
-  public static ElementsCollection $$x(String xpathExpression){
+  public static ElementsCollection $$x(String xpathExpression) {
     return new ElementsCollection(new BySelectorCollection(By.xpath(xpathExpression)));
   }
 
