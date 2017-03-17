@@ -6,6 +6,8 @@ import org.junit.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class SelectorsTest extends IntegrationTest {
   @Before
@@ -38,5 +40,19 @@ public class SelectorsTest extends IntegrationTest {
   @Test
   public void canFindElementById() {
     $(byId("status")).shouldHave(text("Username:"));
+  }
+
+  @Test
+  public void canFindSelenideElementByXpath(){
+    $x("//h1").shouldHave(text("Page with selects"));
+    $x("//*[id='status']").shouldHave(text("Username:"));
+    $x("//*[@name='domain']").shouldBe(visible);
+  }
+
+  @Test
+  public void canFindElementsCollectionByXpath(){
+    $$x("//h1").get(0).shouldHave(text("Page with selects"));
+    $$x("//*[id='status']").get(0).shouldHave(text("Username:"));
+    $$x("//*[@name='domain']").get(0).shouldBe(visible);
   }
 }
