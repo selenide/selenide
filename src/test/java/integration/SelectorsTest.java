@@ -45,14 +45,14 @@ public class SelectorsTest extends IntegrationTest {
   @Test
   public void canFindSelenideElementByXpath() {
     $x("//h1").shouldHave(text("Page with selects"));
-    $x("//*[id='status']").shouldHave(text("Username:"));
+    $x("//*[@id='status']").shouldHave(text("Username:"));
     $x("//*[@name='domain']").shouldBe(visible);
   }
 
   @Test
   public void canFindElementsCollectionByXpath() {
     $$x("//h1").get(0).shouldHave(text("Page with selects"));
-    $$x("//*[id='status']").get(0).shouldHave(text("Username:"));
+    $$x("//*[@id='status']").get(0).shouldHave(text("Username:"));
     $$x("//*[@name='domain']").get(0).shouldBe(visible);
   }
 }
