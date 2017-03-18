@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -655,7 +656,10 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    if (!hasWebDriverStarted()) {
+    if (!captureJavascriptErrors) {
+      return emptyList();
+    }
+    else if (!hasWebDriverStarted()) {
       return emptyList();
     }
     else if (!supportsJavascript()) {
@@ -676,7 +680,7 @@ public class Selenide {
         return asList(errors.toString());
       }
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
-      log.severe(cannotExecuteJs.toString());
+      log.warning(cannotExecuteJs.toString());
       return emptyList();
     } 
   }
