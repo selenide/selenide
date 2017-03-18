@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 public class ElementFinderTest {
   @Test
-  public void testToString() {
+  public void testToStringForFinderByCssSelectors() {
     SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
@@ -19,5 +19,17 @@ public class ElementFinderTest {
     assertEquals("{By.id: app[3]}", new ElementFinder(null, By.id("app"), 3).toString());
     assertEquals("{By.id: app}", new ElementFinder(parent, By.id("app"), 0).toString());
     assertEquals("{By.id: app[3]}", new ElementFinder(parent, By.id("app"), 3).toString());
+  }
+
+  @Test
+  public void testToStringForFinderByXpathExpration() {
+    SelenideElement parent = mock(SelenideElement.class);
+    when(parent.toString()).thenReturn("table");
+    when(parent.getTagName()).thenReturn("table");
+
+    assertEquals("{By.xpath: //*[@id='app']}", new ElementFinder(null, By.xpath("//*[@id='app']"), 0).toString());
+    assertEquals("{By.xpath: //*[@id='app'][3]}", new ElementFinder(null, By.xpath("//*[@id='app']"), 3).toString());
+    assertEquals("{By.xpath: //*[@id='app']}", new ElementFinder(parent, By.xpath("//*[@id='app']"), 0).toString());
+    assertEquals("{By.xpath: //*[@id='app'][3]}", new ElementFinder(parent, By.xpath("//*[@id='app']"), 3).toString());
   }
 }
