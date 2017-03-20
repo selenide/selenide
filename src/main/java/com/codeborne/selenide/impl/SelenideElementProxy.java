@@ -58,12 +58,15 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
+    ElementMarker.flashElementIfNeeded(webElementSource.getWebElement(), method.getName());
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
+      ElementMarker.markGreenElementIfNeeded(webElementSource.getWebElement(), method.getName());
       return result;
     }
     catch (Error error) {
+      ElementMarker.markElementRedIfNeeded(webElementSource.getWebElement(), method.getName());
       SelenideLogger.commitStep(log, error);
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;

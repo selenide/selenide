@@ -22,18 +22,19 @@ public class Commands {
   }
 
   public final synchronized void resetDefaults() {
-    commands.clear();
-    addFindCommands();
-    addClickCommands();
-    addModifyCommands();
-    addInfoCommands();
-    addSelectCommands();
-    addKeyboardCommands();
-    addActionsCommands();
-    addShouldCommands();
-    addShouldNotCommands();
-    addFileCommands();
-    addTechnicalCommands();
+      commands.clear();
+      addFindCommands();
+      addClickCommands();
+      addModifyCommands();
+      addInfoCommands();
+      addSelectCommands();
+      addKeyboardCommands();
+      addActionsCommands();
+      addShouldCommands();
+      addShouldNotCommands();
+      addFileCommands();
+      addTechnicalCommands();
+      addHighlightCommands();
   }
 
   private void addTechnicalCommands() {
@@ -126,8 +127,13 @@ public class Commands {
     add("waitUntil", new ShouldBe());
   }
 
+  private void addHighlightCommands(){
+    commands.put("mark", new Mark());
+    commands.put("flash", new Flash());
+  }
+
   public synchronized void add(String method, Command command) {
-    commands.put(method, command);
+      commands.put(method, command);
   }
 
   @SuppressWarnings("unchecked")

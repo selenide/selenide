@@ -700,4 +700,36 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
   BufferedImage screenshotAsImage();
+
+  /**
+   * Highlight the element
+   *
+   * @see com.codeborne.selenide.commands.Flash
+   */
+  void flash();
+
+  /**
+   * Highlight the element with color
+   *
+   * @param color marker color
+   *
+   * @see com.codeborne.selenide.commands.Flash
+   */
+  void flash(String color);
+
+  /**
+   * Mark the element
+   *
+   * @see com.codeborne.selenide.commands.Mark
+   */
+  void mark();
+
+  /**
+   * Mark the element with color
+   *
+   * @param color marker color
+   *
+   * @see com.codeborne.selenide.commands.Mark
+   */
+  void mark(String color);
 }
