@@ -261,7 +261,7 @@ public class WebDriverFactory {
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
     } else if (startMaximized) {
       try {
-          driver.manage().window().maximize();
+        driver.manage().window().maximize();
       } catch (Exception cannotMaximize) {
         log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
