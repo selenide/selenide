@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -62,8 +61,7 @@ public class WebDriverFactoryTest {
 
     factory.adjustBrowserSize(webdriver);
 
-    verify(webdriver.manage().window()).setSize(new Dimension(1600, 1200));
-    verify(webdriver.manage().window()).setPosition(new Point(0, 0));
+    verify(webdriver.manage().window()).maximize();
   }
 
   @Test
