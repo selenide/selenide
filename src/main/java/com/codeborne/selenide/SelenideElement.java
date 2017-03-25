@@ -434,6 +434,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
 
   /**
    * ATTENTION! This method doesn't start any search yet!
+   * @see com.codeborne.selenide.commands.Find
+   */
+  SelenideElement $x(String xpathSelector);
+
+  /**
+   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
@@ -488,6 +494,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * Same as {@link #findAll(String)}
    */
   ElementsCollection $$(String cssSelector);
+
+  /**
+   * ATTENTION! This method doesn't start any search yet!
+   */
+  ElementsCollection $$x(String xpathSelector);
 
   /**
    * Same as {@link #findAll(By)}

@@ -15,12 +15,22 @@ import static com.codeborne.selenide.Condition.visible;
 import static java.util.Collections.singletonList;
 
 public abstract class WebElementSource {
+  private boolean isXpath;
+
   public abstract WebElement getWebElement();
 
   public abstract String getSearchCriteria();
 
+  public void setXpath(boolean isXpath) {
+    this.isXpath = isXpath;
+  }
+
+  public boolean isXpath() {
+    return this.isXpath;
+  }
+
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
-    return ElementFinder.wrap(proxy, getSelector(arg), index);
+    return ElementFinder.wrap(proxy, getSelector(arg, this.isXpath), index);
   }
 
   public List<WebElement> findAll() throws IndexOutOfBoundsException {
@@ -32,7 +42,11 @@ public abstract class WebElementSource {
   }
 
   public static By getSelector(Object arg) {
-    return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
+    return getSelector(arg, false);
+  }
+
+  public static By getSelector(Object arg, boolean isXpath) {
+    return arg instanceof By ? (By) arg : (isXpath ? By.xpath((String) arg) : By.cssSelector((String) arg));
   }
 
   public WebElement checkCondition(String prefix, String message, Condition condition, boolean invert) {

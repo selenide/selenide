@@ -47,7 +47,7 @@ public class ElementFinder extends WebElementSource {
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return arg instanceof By ?
         wrap(proxy, (By) arg, index) :
-        wrap(proxy, By.cssSelector((String) arg), index);
+        (isXpath() ? wrap(proxy, By.xpath((String) arg), index) : wrap(proxy, By.cssSelector((String) arg), index));
   }
 
   @Override

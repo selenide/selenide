@@ -7,8 +7,18 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.WebElementSource;
 
 public class FindAll implements Command<ElementsCollection> {
+  private boolean isXpath;
+
+  FindAll() {
+    this(false);
+  }
+
+  FindAll(boolean isXpath) {
+    this.isXpath = isXpath;
+  }
+
   @Override
   public ElementsCollection execute(SelenideElement parent, WebElementSource locator, Object[] args) {
-    return new ElementsCollection(new BySelectorCollection(parent, WebElementSource.getSelector(args[0])));
+    return new ElementsCollection(new BySelectorCollection(parent, WebElementSource.getSelector(args[0], this.isXpath)));
   }
 }
