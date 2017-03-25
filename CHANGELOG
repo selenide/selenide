@@ -3,6 +3,7 @@
 === 4.4 (preliminary release date is March 2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
 * #497 Added methods `$x("//div")`, `$$x("//div")` for finding elements by xpath 
+* #457 fix performance degradation in parallel tests
 * #494 fix $.toString() on Android driver
 * upgrade to selenium-java 3.3.1
 * upgrade to phantomjsdriver 1.4.1
