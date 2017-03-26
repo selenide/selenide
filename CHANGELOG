@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.4 (preliminary release date is March 2017)
+=== 4.4 (released 27.03.2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
 * #497 Added methods `$x("//div")`, `$$x("//div")` for finding elements by xpath 
 * #457 fix performance degradation in parallel tests
