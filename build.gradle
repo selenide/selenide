@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.4-SNAPSHOT'
+version='4.4'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -63,13 +63,13 @@ dependencies {
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24', transitive: false
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24'
   compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.4'
-  testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.24', transitive: false
+  testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25', transitive: false
 
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
   testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.3.1'  
-  testCompile 'org.mockito:mockito-core:2.7.12'
+  testCompile 'org.mockito:mockito-core:2.7.17'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.2.v20170220'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.4.2.v20170220'
   testCompile 'commons-fileupload:commons-fileupload:1.3.2'
