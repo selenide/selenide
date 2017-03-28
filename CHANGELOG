@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.4.1 (released 28.03.2017)
+* Add workaround for invalid resolving of `selenium-api` dependency by Maven
+
 === 4.4 (released 27.03.2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
 * #497 Added methods `$x("//div")`, `$$x("//div")` for finding elements by xpath 

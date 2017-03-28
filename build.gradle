@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.4'
+version='4.4.1'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -52,10 +52,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'com.codeborne', module: 'phantomjsdriver'
   }
-  runtime('com.codeborne:phantomjsdriver:1.4.1') {
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-java'
-    exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
-  }
+  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.1', transitive: false
   compile 'com.google.code.gson:gson:2.8.0'
   compile 'com.google.guava:guava:21.0'
   runtime 'commons-codec:commons-codec:1.10'
