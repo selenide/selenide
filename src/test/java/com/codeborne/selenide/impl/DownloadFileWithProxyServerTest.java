@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
@@ -76,6 +77,27 @@ public class DownloadFileWithProxyServerTest {
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
     verify(webdriver).close();
+    verify(webdriver.switchTo()).window("tab1");
+    verifyNoMoreInteractions(webdriver.switchTo());
+  }
+  
+  @Test
+  public void ignoresErrorIfWindowHasAlreadyBeenClosedMeanwhile() throws IOException {
+    TargetLocator targetLocator = mock(TargetLocator.class);
+    doReturn(targetLocator).when(webdriver).switchTo();
+    doThrow(new NoSuchWindowException("no window: tab-with-pdf")).when(targetLocator).window("tab-with-pdf");
+
+    emulateServerResponseWithFiles(new File("report.pdf"));
+    when(webdriver.getWindowHandle()).thenReturn("tab1");
+    when(webdriver.getWindowHandles())
+        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
+        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+
+    File file = command.download(linkWithHref, link, proxy);
+    assertThat(file.getName(), is("report.pdf"));
+
+    verify(webdriver.switchTo()).window("tab-with-pdf");
+    verify(webdriver, never()).close();
     verify(webdriver.switchTo()).window("tab1");
     verifyNoMoreInteractions(webdriver.switchTo());
   }

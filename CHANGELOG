@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.4.2 (released 30.03.2017)
+* #510 fix closing windows in `$.download()`
+
 === 4.4.1 (released 28.03.2017)
 * Add workaround for invalid resolving of `selenium-api` dependency by Maven
 

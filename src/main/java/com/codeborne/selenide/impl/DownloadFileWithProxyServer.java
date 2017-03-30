@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -44,16 +45,21 @@ public class DownloadFileWithProxyServer {
   }
 
   private void closeNewWindows(String currentWindowHandle, Set<String> currentWindows) {
-    if (getWebDriver().getWindowHandles().size() != currentWindows.size()) {
-      Set<String> newWindows = new HashSet<>(getWebDriver().getWindowHandles());
+    Set<String> windowHandles = getWebDriver().getWindowHandles();
+    if (windowHandles.size() != currentWindows.size()) {
+      Set<String> newWindows = new HashSet<>(windowHandles);
       newWindows.removeAll(currentWindows);
-
+      
       log.info("File has been opened in a new window, let's close " + newWindows.size() + " new windows");
+
       for (String newWindow : newWindows) {
         log.info("  Let's close " + newWindow);
-        getWebDriver().switchTo().window(newWindow);
         try {
+          getWebDriver().switchTo().window(newWindow);
           getWebDriver().close();
+        }
+        catch (NoSuchWindowException windowHasBeenClosedMeanwhile) {
+          log.info("  Failed to close " + newWindow + ": " + Cleanup.of.webdriverExceptionMessage(windowHasBeenClosedMeanwhile));
         }
         catch (Exception e) {
           log.warning("  Failed to close " + newWindow + ": " + e);
