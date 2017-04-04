@@ -12,7 +12,7 @@ public class FlashAction extends MarkAction {
 
   @Override
   public boolean conditionForAction(WebElement element, String methodName, Object... args) {
-    return presentationMode.active && presentationMethods.contains(methodName) && presentationMode.flashElements;
+    return (presentationMode.active && presentationMode.flashElements) && presentationMethods.contains(methodName);
   }
 
   @Override

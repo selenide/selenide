@@ -20,7 +20,7 @@ public class MarkAction implements HookAction {
 
   @Override
   public boolean conditionForAction(WebElement element, String methodName, Object... args) {
-    return presentationMode.active && presentationMethods.contains(methodName) && presentationMode.markElements;
+    return (presentationMode.active && presentationMode.markElements) && presentationMethods.contains(methodName);
   }
 
   @Override
