@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -241,6 +242,16 @@ public class Selenide {
   }
 
   /**
+   * Locates the first element matching given XPATH expression
+   * ATTENTION! This method doesn't start any search yet!
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @return SelenideElement which locates elements via XPath
+   */
+  public static SelenideElement $x(String xpathExpression) {
+    return getElement(By.xpath(xpathExpression));
+  }
+
+  /**
    * Locates the first element matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
@@ -355,6 +366,19 @@ public class Selenide {
    */
   public static ElementsCollection $$(String cssSelector) {
     return new ElementsCollection(new BySelectorCollection(By.cssSelector(cssSelector)));
+  }
+
+  /**
+   * Locates all elements matching given XPATH expression.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @return ElementsCollection which locates elements via XPath
+   */
+  public static ElementsCollection $$x(String xpathExpression) {
+    return new ElementsCollection(new BySelectorCollection(By.xpath(xpathExpression)));
   }
 
   /**
@@ -632,7 +656,10 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    if (!hasWebDriverStarted()) {
+    if (!captureJavascriptErrors) {
+      return emptyList();
+    }
+    else if (!hasWebDriverStarted()) {
       return emptyList();
     }
     else if (!supportsJavascript()) {
@@ -653,7 +680,7 @@ public class Selenide {
         return asList(errors.toString());
       }
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
-      log.severe(cannotExecuteJs.toString());
+      log.warning(cannotExecuteJs.toString());
       return emptyList();
     } 
   }

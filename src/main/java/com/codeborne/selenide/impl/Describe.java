@@ -21,7 +21,14 @@ public class Describe {
   }
 
   private Describe appendAttributes() {
-    return supportsJavascriptAttributes() ? appendAllAttributes() : appendPredefinedAttributes();
+    try {
+      if (supportsJavascriptAttributes()) {
+        return appendAllAttributes();
+      }
+    }
+    catch (UnsupportedOperationException browserDoesNotSupportJavaScript) {
+    }
+    return appendPredefinedAttributes();
   }
 
   private Describe appendAllAttributes() {

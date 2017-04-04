@@ -225,12 +225,21 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Page with selects", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
-    assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    if (isHtmlUnit()) {
+      assertEquals("Radio buttons\n" +
+          "uncheckedМастер " +
+          "uncheckedМаргарита " +
+          "uncheckedКот \"Бегемот\" " +
+          "uncheckedTheodor Woland", $("#radioButtons").text());
+    }
+    else {
+      assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    }
 
     $("h1").shouldHave(text("Page "));
     $("h2").shouldHave(text("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("vemail.r"));
-    $("#radioButtons").shouldHave(text("buttons\nМастер Маргарита"));
+    $("#radioButtons").shouldHave(text("buttons"), text("Мастер"), text("Маргарита"));
   }
 
   @Test
@@ -238,8 +247,14 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
-    $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    if (isHtmlUnit()) {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "uncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland"));
+    }
+    else {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    }
   }
 
   @Test
@@ -441,7 +456,6 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
 
-
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
@@ -512,7 +526,7 @@ public class SelenideMethodsTest extends IntegrationTest {
       fail("exception expected");
     }
     catch (ElementShould expected) {
-      assertTrue("Actual error: " + expected.getMessage(), 
+      assertTrue("Actual error: " + expected.getMessage(),
           expected.getMessage().contains("because it's sensitive information"));
     }
   }

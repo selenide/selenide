@@ -126,12 +126,12 @@ public class Commands {
     add("waitUntil", new ShouldBe());
   }
 
-  public synchronized void add(String method, Command command) {
+  public void add(String method, Command command) {
     commands.put(method, command);
   }
 
   @SuppressWarnings("unchecked")
-  public synchronized <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
+  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
       throws IOException {
     Command command = commands.get(methodName);
     if (command == null) {

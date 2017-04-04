@@ -46,7 +46,7 @@ public class WebElementWrapperTest {
     when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
     when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
     when(((JavascriptExecutor) webdriverContainer.getWebDriver())
-        .executeScript(anyString(), any(WebElement.class)))
+        .executeScript(anyString(), any()))
         .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
     assertEquals("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>",
@@ -57,6 +57,19 @@ public class WebElementWrapperTest {
   public void toStringPrintsTagNameWithSomeAttributes() {
     browser = HTMLUNIT;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
+    
+    assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
+  }
+  
+  @Test
+  public void toStringFallbacksToMinimalImplementation_ifFailedToCallJavaScript() {
+    browser = CHROME;
+    when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
+    when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
+    when(((JavascriptExecutor) webdriverContainer.getWebDriver())
+        .executeScript(anyString(), any()))
+        .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
+    
     assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
   }
 }

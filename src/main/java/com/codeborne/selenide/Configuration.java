@@ -175,6 +175,14 @@ public class Configuration {
           System.getProperty("selenide.click-via-js", "false")));
 
   /**
+   * Defines if Selenide tries to capture JS errors
+   * Can be configured either programmatically or by system property "-Dselenide.captureJavascriptErrors=false".
+   *
+   * Default value: true
+   */
+  public static boolean captureJavascriptErrors = Boolean.parseBoolean(System.getProperty("selenide.captureJavascriptErrors", "true"));
+
+  /**
    * Defines if Selenide takes screenshots on failing tests.
    * Can be configured either programmatically or by system property "-Dselenide.screenshots=false".
    *

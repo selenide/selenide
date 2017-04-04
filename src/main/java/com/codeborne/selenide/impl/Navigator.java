@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
@@ -89,6 +90,8 @@ public class Navigator {
   }
 
   protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
+    if (!captureJavascriptErrors) return;
+    
     try {
       webdriver.executeScript(
           "if (!window._selenide_jsErrors) {\n" +

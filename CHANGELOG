@@ -1,9 +1,19 @@
 == Changelog
 
-=== 4.4 (preliminary release date is March 2017)
+=== 4.4.2 (released 30.03.2017)
+* #510 fix closing windows in `$.download()`
+
+=== 4.4.1 (released 28.03.2017)
+* Add workaround for invalid resolving of `selenium-api` dependency by Maven
+
+=== 4.4 (released 27.03.2017)
 * #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
-* upgrade to selenium-java 3.2.0
+* #497 Added methods `$x("//div")`, `$$x("//div")` for finding elements by xpath 
+* #457 fix performance degradation in parallel tests
+* #494 fix $.toString() on Android driver
+* upgrade to selenium-java 3.3.1
 * upgrade to phantomjsdriver 1.4.1
+* Upgrade to htmlunit 2.24
 
 === 4.3 (Released 09.02.2017)
 * System properties names aligned with Configuration fields. e.g. Configuration.someProp always has selenide.someProp equivalent (old names still supported for backward compatibility)
