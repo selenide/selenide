@@ -35,9 +35,11 @@ node {
     }
   }
   finally {
-    junit 'build/test-results/**/*.xml'
+    stage("Test Report") {
+      junit 'build/test-results/**/*.xml'
+    }
   
-    stage("Archive Artifacts / Test Results") {
+    stage("Archive Artifacts") {
       archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
     }
   }
