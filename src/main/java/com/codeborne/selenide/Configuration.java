@@ -269,6 +269,20 @@ public class Configuration {
   public static boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
 
   /**
+   * If set to true, 'setValue' and 'val' methods of SelenideElement can work as 'selectOptionByValue', 'selectRadio'
+   * depending on the real control type, defined by element's tag.
+   *
+   * Will decrease performance of setValue, make it slower, but will also make tests implementation more "business oriented".
+   * With this property being set to true, tests may no longer be dependent on actual control implementation in html and
+   * be more abstract.
+   *
+   * https://github.com/codeborne/selenide/issues/508
+   * Can be configured either programmatically or by system property "-Dselenide.versatileSetValue=true".
+   * Default value: false
+   */
+  public static boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
+
+  /**
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
    */
   public static SelectorMode selectorMode = CSS;

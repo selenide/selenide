@@ -32,15 +32,22 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   void followLink();
 
   /**
-   * <p>Clear the text field, enter given text and trigger "change" event.</p>
-   * <p>
-   * Implementation details: this is the same as <pre>
-   *   1. WebElement.clear()
-   *   2. WebElement.sendKeys(text)
-   *   3. Trigger change event</pre>
-   * </p>
    *
-   * @param text Any text to enter into the text field.
+   * <b>Implementation details:</b>
+   *
+   * <p>If Configuration.versatileSetValue is true, can work as 'selectOptionByValue', 'selectRadio'</p>
+   *
+   * <p>If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
+   * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.
+   *
+   * <p>In other case behavior will be:
+   * <pre>
+   * 1. WebElement.clear()
+   * 2. WebElement.sendKeys(text)
+   * 3. Trigger change event
+   * </pre>
+   *
+   * @param text Any text to enter into the text field or set by value for select/radio.
    *
    * @see com.codeborne.selenide.commands.SetValue
    */
