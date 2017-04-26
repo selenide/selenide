@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.4.3 (released 25.04.2017)
+* upgrade to selenium-java 3.4.0
+
 === 4.4.2 (released 30.03.2017)
 * #510 fix closing windows in `$.download()`
 

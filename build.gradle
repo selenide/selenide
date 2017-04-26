@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.4.2'
+version='4.5-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -41,7 +41,7 @@ configurations {
 
 dependencies {
   compile('org.apache.httpcomponents:httpcore:4.4.6')
-  compile('org.seleniumhq.selenium:selenium-java:3.3.1') {
+  compile('org.seleniumhq.selenium:selenium-java:3.4.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -52,20 +52,20 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'com.codeborne', module: 'phantomjsdriver'
   }
-  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.1', transitive: false
+  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.2', transitive: false
   compile 'com.google.code.gson:gson:2.8.0'
   compile 'com.google.guava:guava:21.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.24', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24'
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24', transitive: false
   compile group: 'net.lightbody.bmp', name: 'browsermob-core', version: '2.1.4'
   testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25', transitive: false
 
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.3.1'  
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.4.0'  
   testCompile 'org.mockito:mockito-core:2.7.17'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.2.v20170220'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.4.2.v20170220'
@@ -99,16 +99,20 @@ tasks.withType(FindBugs) {
   }
 }
 
-task checkstyleHtmlMain << {
-  ant.xslt(in: checkstyleMain.reports.xml.destination,
-    style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
-    out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+task checkstyleHtmlMain {
+  doLast {
+    ant.xslt(in: checkstyleMain.reports.xml.destination,
+      style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+      out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+  }
 }
 
-task checkstyleHtmlTest << {
-  ant.xslt(in: checkstyleTest.reports.xml.destination,
-    style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
-    out: new File(checkstyleTest.reports.xml.destination.parent, 'test.html'))
+task checkstyleHtmlTest {
+  doLast {
+    ant.xslt(in: checkstyleTest.reports.xml.destination,
+      style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+      out: new File(checkstyleTest.reports.xml.destination.parent, 'test.html'))
+  }
 }
 
 checkstyleMain.finalizedBy checkstyleHtmlMain
@@ -163,17 +167,20 @@ task downloadIEDriverZip(type: Download) {
   overwrite true
   onlyIfNewer true
   compress false
-  println "Download IE driver: " + src
+  doFirst {
+    println "Download IE driver: " + src
+  }
 }
 
 task downloadAndUnzipIEDriver(dependsOn: downloadIEDriverZip, type: Copy) {
-  println "Unzip IE driver: " + downloadIEDriverZip.dest
   from zipTree(downloadIEDriverZip.dest)
   into buildDir
+  doFirst {
+    println "Unzip IE driver: " + downloadIEDriverZip.dest
+  }
 }
 
 task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
-  println 'Use IE driver: ' + buildDir + '/IEDriverServer.exe'
   systemProperties['selenide.browser'] = 'ie'
   systemProperties['webdriver.ie.driver'] = new File(buildDir, 'IEDriverServer.exe')
   systemProperties['selenide.timeout'] = '8000'
@@ -181,6 +188,9 @@ task ie(type: Test, dependsOn: downloadAndUnzipIEDriver) {
   exclude '**/AlertText.*'
   exclude '**/ConfirmTest.*'
   exclude 'com/codeborne/selenide/**/*'
+  doFirst {
+    println 'Use IE driver: ' + buildDir + '/IEDriverServer.exe'
+  }
 }
 
 
@@ -192,53 +202,63 @@ task downloadEdgeDriver(type: Download) {
   overwrite true
   onlyIfNewer true
   compress false
-  println "Download Edge driver: " + src
+  doFirst {
+    println "Download Edge driver: " + src
+  }
 }
 
 
 
 task edge(type: Test, dependsOn: downloadEdgeDriver) {
-  println 'Use Edge driver: ' + buildDir + '/EdgeWebDriver.exe'
   systemProperties['selenide.browser'] = 'edge'
   systemProperties['webdriver.edge.driver'] = new File(buildDir, 'EdgeWebDriver.exe')
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
+  doFirst {
+    println 'Use Edge driver: ' + buildDir + '/EdgeWebDriver.exe'
+  }
 }
 
 import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_mac64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_mac64.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.27/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
-  quiet false
+  quiet true
   overwrite true
   onlyIfNewer true
   compress false
-  println "Download Chrome driver: " + src + " to " + dest
+  doFirst {
+    println "Download Chrome driver: " + src + " to " + dest
+  }
 }
 
 task downloadAndUnzipChromeDriver(dependsOn: downloadChromeDriverZip, type: Copy) {
-  println "Unzip Chrome driver: " + downloadChromeDriverZip.dest
   from zipTree(downloadChromeDriverZip.dest)
   into buildDir
+  doFirst {
+    println "Unzip Chrome driver: " + downloadChromeDriverZip.dest
+  }
 }
 
 task chrome(type: Test, dependsOn: downloadAndUnzipChromeDriver) {
   String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
   File chromeDriver = new File(buildDir, 'chromedriver' + extension);
-  println "Use Chrome driver: $chromeDriver"
   systemProperties['selenide.browser'] = 'chrome'
   systemProperties['webdriver.chrome.driver'] = chromeDriver
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
+  doFirst {
+    println "Use Chrome driver: $chromeDriver"
+  }
 }
 
 task safari(type: Test) {
@@ -283,14 +303,18 @@ task downloadGeckoDriverZip(type: Download) {
   overwrite true
   onlyIfNewer true
   compress false
-  println "Download Gecko driver: " + src + " to " + dest
+  doFirst {
+    println "Download Gecko driver: " + src + " to " + dest
+  }
 }
 
 task downloadAndUnzipGeckoDriver(dependsOn: downloadGeckoDriverZip, type: Copy) {
-  println "Unzip Gecko driver: " + downloadGeckoDriverZip.dest
+  doFirst {
+    println "Unzip Gecko driver: " + downloadGeckoDriverZip.dest
+  }
   if (OperatingSystem.current().isWindows()) {
     from zipTree(downloadGeckoDriverZip.dest)
-  }else{
+  } else{
     from tarTree(resources.gzip(downloadGeckoDriverZip.dest))
   }
 
@@ -300,11 +324,13 @@ task downloadAndUnzipGeckoDriver(dependsOn: downloadGeckoDriverZip, type: Copy) 
 task marionette(type: Test, dependsOn: downloadAndUnzipGeckoDriver) {
   String extension = OperatingSystem.current().isWindows() ? '.exe' : ''
   File geckoDriver = new File(buildDir, 'geckodriver' + extension);
-  println "Use Gecko driver: $geckoDriver"
   systemProperties['webdriver.gecko.driver'] = geckoDriver
   systemProperties['selenide.browser'] = 'marionette'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
+  doFirst {
+    println "Use Gecko driver: $geckoDriver"
+  }
 }
 
 task jbrowser(type: Test) {
