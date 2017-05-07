@@ -5,8 +5,8 @@ import com.codeborne.selenide.Selectors.WithText;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.*;
 
 public class SelectorsTest {
   @Test
@@ -71,5 +71,61 @@ public class SelectorsTest {
   public void byValueUsesXPath() {
     By selector = Selectors.byValue("водокачка");
     assertEquals("By.cssSelector: [value='водокачка']", selector.toString());
+  }
+
+  @Test
+  public void byName() {
+    String name = "selenide";
+    By nameSelector = Selectors.byName(name);
+    assertThat(nameSelector, instanceOf(By.ByName.class));
+    assertEquals("By.name: " + name, nameSelector.toString());
+  }
+
+  @Test
+  public void byXpath() {
+    String xpath = "html/body/div[2]/section/div[2]/div/ul/li[2]/a/span/strong/h4";
+    By nameSelector = Selectors.byXpath(xpath);
+    assertThat(nameSelector, instanceOf(By.ByXPath.class));
+    assertEquals("By.xpath: " + xpath, nameSelector.toString());
+  }
+
+  @Test
+  public void byLinkText() {
+    String linkText = "click me";
+    By linkTextSelector = Selectors.byLinkText(linkText);
+    assertThat(linkTextSelector, instanceOf(By.ByLinkText.class));
+    assertEquals("By.linkText: " + linkText, linkTextSelector.toString());
+  }
+
+  @Test
+  public void byPartialLinkText() {
+    String partialLinkText = "click me";
+    By linkPartialTextSelector = Selectors.byPartialLinkText(partialLinkText);
+    assertThat(linkPartialTextSelector, instanceOf(By.ByPartialLinkText.class));
+    assertEquals("By.partialLinkText: " + partialLinkText, linkPartialTextSelector.toString());
+  }
+
+  @Test
+  public void byId() {
+    String id = "clickMe";
+    By idSelector = Selectors.byId(id);
+    assertThat(idSelector, instanceOf(By.ById.class));
+    assertEquals("By.id: " + id, idSelector.toString());
+  }
+
+  @Test
+  public void byCssSelector() {
+    String css = ".ql>h3";
+    By cssSelector = Selectors.byCssSelector(css);
+    assertThat(cssSelector, instanceOf(By.ByCssSelector.class));
+    assertEquals("By.cssSelector: " + css, cssSelector.toString());
+  }
+
+  @Test
+  public void byClassName() {
+    String className = "selenide";
+    By classNameSelector = Selectors.byClassName(className);
+    assertThat(classNameSelector, instanceOf(By.ByClassName.class));
+    assertEquals("By.className: " + className, classNameSelector.toString());
   }
 }
