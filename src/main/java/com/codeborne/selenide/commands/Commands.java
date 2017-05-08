@@ -84,8 +84,10 @@ public class Commands {
   private void addFindCommands() {
     add("find", new Find());
     add("$", new Find());
+    add("$x", new FindByXpath());
     add("findAll", new FindAll());
     add("$$", new FindAll());
+    add("$$x", new FindAllByXpath());
     add("closest", new GetClosest());
     add("parent", new GetParent());
   }

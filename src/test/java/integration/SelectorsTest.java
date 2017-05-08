@@ -1,13 +1,12 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.*;
 
 public class SelectorsTest extends IntegrationTest {
   @Before
@@ -54,5 +53,19 @@ public class SelectorsTest extends IntegrationTest {
     $$x("//h1").get(0).shouldHave(text("Page with selects"));
     $$x("//*[@id='status']").get(0).shouldHave(text("Username:"));
     $$x("//*[@name='domain']").get(0).shouldBe(visible);
+  }
+
+  @Test
+  public void canFindChildSelenideElementByXpath() {
+    SelenideElement parent = $x("//div[@id='radioButtons']");
+    parent.shouldBe(visible);
+    parent.$x("./h2").shouldHave(text("Radio buttons"));
+  }
+
+  @Test
+  public void canFindChildElementsCollectionByXpath() {
+    SelenideElement parent = $x("//table[@id='multirowTable']");
+    parent.shouldBe(visible);
+    parent.$$x(".//tr").shouldHaveSize(2);
   }
 }

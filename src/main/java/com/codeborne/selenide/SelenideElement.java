@@ -461,6 +461,15 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement $(By selector, int index);
 
   /**
+   * <p>Locates the first matching element inside given element using xpath locator</p>
+   * ATTENTION! This method doesn't start any search yet!
+   * <p>Short form of {@code webElement.findElement(By.xpath(xpathLocator))}</p>
+   *
+   * @see com.codeborne.selenide.commands.FindByXpath
+   */
+  SelenideElement $x(String s);
+
+  /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
    * </p>
@@ -500,6 +509,21 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * Same as {@link #findAll(By)}
    */
   ElementsCollection $$(By selector);
+
+  /**
+   * <p>
+   * Short form of {@code webDriver.findElements(thisElement, By.xpath(xpath))}
+   * </p>
+   * ATTENTION! This method doesn't start any search yet!
+   * <p>
+   * For example, {@code $("#multirowTable").$$x("./input").shouldHave(size(2));}
+   * </p>
+   *
+   * @return list of elements inside given element matching given xpath locator
+   *
+   * @see com.codeborne.selenide.commands.FindAllByXpath
+   */
+  ElementsCollection $$x(String xpath);
 
   /**
    * <p>Upload file into file upload field. File is searched from classpath.</p>
