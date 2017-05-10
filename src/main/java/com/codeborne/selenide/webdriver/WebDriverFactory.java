@@ -150,9 +150,6 @@ public class WebDriverFactory {
         if (capability.equals("args")) {
           List<String> args = Arrays.asList(value.split(","));
           currentChromeOptions.addArguments(args);
-        } else if(capability.equals("prefs")){
-          List<String> prefs = Arrays.asList(value.split(","));
-          currentChromeOptions.setExperimentalOption("prefs", prefs);
         } else {
           log.warning(capability + "is ignored." +
                   "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
