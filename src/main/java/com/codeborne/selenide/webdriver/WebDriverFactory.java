@@ -150,6 +150,9 @@ public class WebDriverFactory {
         if (capability.equals("args")) {
           List<String> args = Arrays.asList(value.split(","));
           currentChromeOptions.addArguments(args);
+        } else if(capability.equals("prefs")){
+          List<String> prefs = Arrays.asList(value.split(","));
+          currentChromeOptions.setExperimentalOption("prefs", prefs);
         } else {
           log.warning(capability + "is ignored." +
                   "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
@@ -241,7 +244,7 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createOperaDriver(Proxy proxy) {
-    return createInstanceOf("com.opera.core.systems.OperaDriver", proxy);
+    return createInstanceOf("org.openqa.selenium.opera.OperaDriver", proxy);
   }
 
   protected WebDriver createSafariDriver(Proxy proxy) {
