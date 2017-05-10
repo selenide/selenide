@@ -467,8 +467,15 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *
    * @see com.codeborne.selenide.commands.FindByXpath
    */
-  SelenideElement $x(String s);
+  SelenideElement $x(String xpath);
 
+  /**
+   * <p>Locates the Nth matching element inside given element using xpath locator</p>
+   * ATTENTION! This method doesn't start any search yet!
+   *
+   * @see com.codeborne.selenide.commands.FindByXpath
+   */
+  SelenideElement $x(String xpath, int index);
   /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}

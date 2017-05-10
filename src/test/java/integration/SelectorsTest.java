@@ -58,14 +58,18 @@ public class SelectorsTest extends IntegrationTest {
   @Test
   public void canFindChildSelenideElementByXpath() {
     SelenideElement parent = $x("//div[@id='radioButtons']");
-    parent.shouldBe(visible);
     parent.$x("./h2").shouldHave(text("Radio buttons"));
   }
 
   @Test
   public void canFindChildElementsCollectionByXpath() {
     SelenideElement parent = $x("//table[@id='multirowTable']");
-    parent.shouldBe(visible);
     parent.$$x(".//tr").shouldHaveSize(2);
+  }
+
+  @Test
+  public void canFindNthChildSelenideElementByXpath() {
+    SelenideElement parent = $x("//table[@id='multirowTable']");
+    parent.$x(".//tr", 0).shouldHave(text("Chack Norris"));
   }
 }
