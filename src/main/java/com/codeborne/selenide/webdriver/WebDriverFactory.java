@@ -214,7 +214,7 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
-    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnitWithJs();
+    DesiredCapabilities capabilities = DesiredCapabilities.htmlUnit();
     capabilities.merge(createCommonCapabilities(proxy));
     capabilities.setCapability(HtmlUnitDriver.INVALIDSELECTIONERROR, true);
     capabilities.setCapability(HtmlUnitDriver.INVALIDXPATHERROR, false);
