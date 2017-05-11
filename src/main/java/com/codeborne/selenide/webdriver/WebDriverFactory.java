@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Proxy;
@@ -76,7 +77,7 @@ public class WebDriverFactory {
   protected WebDriver createRemoteDriver(String remote, String browser, Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-      capabilities.setBrowserName(browser);
+      capabilities.setBrowserName(isIE() ? WebDriverRunner.IE_FULL_NAME : browser);
       return new RemoteWebDriver(new URL(remote), capabilities);
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
