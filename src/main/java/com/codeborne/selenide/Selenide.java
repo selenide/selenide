@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.lang.reflect.Constructor;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,14 +54,21 @@ public class Selenide {
    *   In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "" , "");
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   /**
    * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
-    open(absoluteUrl, "", "" , "");
+    open(absoluteUrl, "", "", "");
+  }
+
+  /**
+   * @see Selenide#open(String)
+   */
+  public static void open(URI relativeOrAbsoluteUrl) {
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   /**
@@ -84,9 +92,17 @@ public class Selenide {
   }
 
   /**
-   * @see Selenide#open(URL, String, String, String)
+   * @see Selenide#open(String, String, String, String)
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
+    navigator.open(absoluteUrl, domain, login, password);
+    mockModalDialogs();
+  }
+
+  /**
+   * @see Selenide#open(String, String, String, String)
+   */
+  public static void open(URI absoluteUrl, String domain, String login, String password) {
     navigator.open(absoluteUrl, domain, login, password);
     mockModalDialogs();
   }

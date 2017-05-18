@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.security.UserAndPassword;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -20,11 +21,15 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "" , "");
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   public void open(URL url) {
-    open(url, "", "" , "");
+    open(url, "", "", "");
+  }
+
+  public void open(URI url) {
+    open(url, "", "", "");
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
@@ -37,6 +42,10 @@ public class Navigator {
 
   public void open(URL url, String domain, String login, String password) {
     navigateToAbsoluteUrl(url.toExternalForm());
+  }
+
+  public void open(URI url, String domain, String login, String password) {
+    navigateToAbsoluteUrl(URI.create(baseUrl).resolve(url).toString());
   }
 
   protected String absoluteUrl(String relativeUrl) {
