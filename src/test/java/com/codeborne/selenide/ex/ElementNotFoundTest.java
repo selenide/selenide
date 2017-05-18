@@ -51,7 +51,9 @@ public class ElementNotFoundTest {
     when(webElementCollectionMock.description()).thenReturn("mock collection description");
     List<String> expectedStrings = Arrays.asList("One", "Two", "Three");
 
-    ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock, expectedStrings, new Throwable("Error message"));
+    ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
+                                                              expectedStrings,
+                                                              new Throwable("Error message"));
     String expectedMessage = "Element not found {mock collection description}\n" +
         "Expected: [One, Two, Three]\n" +
         "Screenshot: null\n" +

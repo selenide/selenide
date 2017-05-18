@@ -22,7 +22,12 @@ public class ListSizeMismatchTest {
                                                         Mockito.mock(WebElement.class));
     Exception exception = new Exception("Exception message");
     long timeoutMs = 1000L;
-    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator, expectedSize, webElementsCollection, actualElementsList, exception, timeoutMs);
+    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator,
+                                                             expectedSize,
+                                                             webElementsCollection,
+                                                             actualElementsList,
+                                                             exception,
+                                                             timeoutMs);
     String expectedString = "ListSizeMismatch : expected: Operator 10, actual: 3, collection: null\n" +
         "Elements: [\n" +
         "\t<null displayed:false></null>,\n" +
