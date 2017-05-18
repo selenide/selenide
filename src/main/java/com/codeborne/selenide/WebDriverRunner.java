@@ -186,9 +186,9 @@ public class WebDriverRunner {
   }
 
   private static boolean remoteDriverIsIE() {
-      Capabilities capabilities = ((RemoteWebDriver) getWebDriver()).getCapabilities();
-      String browserName = capabilities == null ? null : capabilities.getBrowserName();
-      return !StringUtils.isEmpty(browserName) && browserName.equals("internet explorer");
+    Capabilities capabilities = ((RemoteWebDriver) getWebDriver()).getCapabilities();
+    String browserName = capabilities == null ? null : capabilities.getBrowserName();
+    return !StringUtils.isEmpty(browserName) && browserName.equals("internet explorer");
   }
 
   /**
