@@ -62,7 +62,7 @@ dependencies {
   compile('net.lightbody.bmp:browsermob-core:2.1.4') {
     exclude group: 'net.lightbody.bmp', module: 'littleproxy'
   }
-  runtime group: 'org.littleshoot', name: 'littleproxy', version: '1.1.2'
+  compile group: 'org.littleshoot', name: 'littleproxy', version: '1.1.2'
   testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25', transitive: false
 
   provided 'junit:junit:4.12'

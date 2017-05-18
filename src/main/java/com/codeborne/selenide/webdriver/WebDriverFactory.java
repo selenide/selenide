@@ -241,7 +241,7 @@ public class WebDriverFactory {
   }
 
   protected WebDriver createOperaDriver(Proxy proxy) {
-    return createInstanceOf("com.opera.core.systems.OperaDriver", proxy);
+    return createInstanceOf("org.openqa.selenium.opera.OperaDriver", proxy);
   }
 
   protected WebDriver createSafariDriver(Proxy proxy) {
