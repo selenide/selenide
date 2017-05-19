@@ -20,11 +20,11 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "" , "");
+    open(relativeOrAbsoluteUrl, "", "", "");
   }
 
   public void open(URL url) {
-    open(url, "", "" , "");
+    open(url, "", "", "");
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
