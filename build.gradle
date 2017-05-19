@@ -52,7 +52,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'com.codeborne', module: 'phantomjsdriver'
   }
-  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.2', transitive: false
+  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.3', transitive: false
   compile 'com.google.code.gson:gson:2.8.0'
   compile 'com.google.guava:guava:21.0'
   runtime 'commons-codec:commons-codec:1.10'
