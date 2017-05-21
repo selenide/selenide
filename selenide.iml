@@ -15,15 +15,25 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/build/lib" />
+          <root url="file://$MODULE_DIR$/build/lib-prod" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/build/lib" />
+          <root url="file://$MODULE_DIR$/build/lib-prod" />
           <root url="jar://$USER_HOME$/.ideaLibSources/junit-4.12-sources.jar!/" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/build/lib-prod" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/build/lib-prod" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/build/lib-test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/build/lib-test" recursive="false" />
       </library>
     </orderEntry>
   </component>

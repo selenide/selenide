@@ -78,14 +78,18 @@ dependencies {
   testCompile 'com.automation-remarks:video-recorder-junit:1.4.1'
 }
 
-task libs(type: Sync) {
+task libsProd(type: Sync) {
   from configurations.compile
   from configurations.runtime
-  from configurations.testRuntime
-  into "$buildDir/lib"
+  into "$buildDir/lib-prod"
 }
 
-compileJava.dependsOn libs
+task libsTest(type: Sync) {
+  from configurations.testRuntime
+  into "$buildDir/lib-test"
+}
+
+compileJava.dependsOn libsProd, libsTest
 
 findbugs {
   toolVersion = "3.0.1"
