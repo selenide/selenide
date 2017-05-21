@@ -59,7 +59,12 @@ public class SelenideElementProxyTest {
     when(element.getText()).thenReturn("Hello world");
     when(element.isDisplayed()).thenReturn(true);
   }
-  
+
+  @After
+  public void tearDown() {
+    WebDriverRunner.closeWebDriver();
+  }
+
   @After
   public void after() {
     SelenideLogger.removeListener("test");
