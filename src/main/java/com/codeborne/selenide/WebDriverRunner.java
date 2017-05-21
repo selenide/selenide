@@ -2,9 +2,13 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import static com.codeborne.selenide.Configuration.browser;
@@ -59,11 +63,11 @@ public class WebDriverRunner {
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
-  
+
   /**
    * To use JbrowserDriver, you need to include extra dependency to your project:
    * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
-   * 
+   *
    * Note: You need minimum of Java 8.
    */
   public static final String JBROWSER = "jbrowser";
@@ -175,7 +179,16 @@ public class WebDriverRunner {
    * Is Selenide configured to use Internet Explorer browser
    */
   public static boolean isIE() {
-    return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+    return INTERNET_EXPLORER.equalsIgnoreCase(browser) ||
+              (hasWebDriverStarted() &&
+                     (getWebDriver() instanceof InternetExplorerDriver ||
+                             (getWebDriver() instanceof RemoteWebDriver && remoteDriverIsIE())));
+  }
+
+  private static boolean remoteDriverIsIE() {
+    Capabilities capabilities = ((RemoteWebDriver) getWebDriver()).getCapabilities();
+    String browserName = capabilities == null ? null : capabilities.getBrowserName();
+    return !StringUtils.isEmpty(browserName) && browserName.equals("internet explorer");
   }
 
   /**
@@ -233,7 +246,7 @@ public class WebDriverRunner {
   public static boolean isOpera() {
     return OPERA.equalsIgnoreCase(browser);
   }
-  
+
   /**
    * Is Selenide configured to use JBrowser browser
    */
