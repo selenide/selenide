@@ -130,7 +130,9 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     
     if (webdriver != null && !holdBrowserOpen) {
       log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
-      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
+      if (proxy != null) {
+        log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
+      }
 
       long start = System.currentTimeMillis();
 
