@@ -261,11 +261,7 @@ public class WebDriverFactory {
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
     } else if (startMaximized) {
       try {
-        if (isChrome()) {
-          maximizeChromeBrowser(driver.manage().window());
-        } else {
-          driver.manage().window().maximize();
-        }
+        driver.manage().window().maximize();
       } catch (Exception cannotMaximize) {
         log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
@@ -273,6 +269,7 @@ public class WebDriverFactory {
     return driver;
   }
 
+  @Deprecated //because vintage way for maximize
   protected void maximizeChromeBrowser(WebDriver.Window window) {
     // Chrome driver does not yet support maximizing. Let' apply black magic!
     org.openqa.selenium.Dimension screenResolution = getScreenSize();
