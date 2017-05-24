@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
   compile('com.codeborne:selenide:4.4.3')
-  testCompile 'io.appium:java-client:4.1.2'
+  testCompile 'io.appium:java-client:5.0.0-BETA8'
 }
 
 task libs(type: Sync) {
