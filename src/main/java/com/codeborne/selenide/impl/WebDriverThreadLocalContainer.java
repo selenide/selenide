@@ -54,6 +54,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public WebDriver setWebDriver(WebDriver webDriver) {
+    String waitValue = System.getProperty("webdriver.timeouts.implicitlyWait");
+    if (waitValue == null || !waitValue.equalsIgnoreCase("0")) {
+      log.warning("Recommended to set webdriver.timeouts.implicitlyWait=0 because Selenide provides its own mechanism for waiting");
+    }
+
     THREAD_WEB_DRIVER.put(currentThread().getId(), webDriver);
     return webDriver;
   }
