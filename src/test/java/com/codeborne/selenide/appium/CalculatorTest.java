@@ -2,12 +2,13 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class CalculatorTest {
 
@@ -26,9 +27,13 @@ public class CalculatorTest {
         $(By.className("android.widget.EditText")).shouldHave(text("6"));
     }
 
-    @Test @Ignore("not implemented yet")
+    @Test
     public void pageObject(){
         CalculatorPage page = new CalculatorPage();
+        PageFactory.initElements(new SelenideAppiumFieldDecorator(getWebDriver()),
+            page
+        );
+
         page.number2.click();
         page.plus.click();
         page.number4.click();
