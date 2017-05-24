@@ -1,0 +1,60 @@
+apply plugin: 'java'
+
+group='com.codeborne'
+archivesBaseName = 'selenide-appium'
+version='1.0-SNAPSHOT'
+
+[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
+[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
+compileJava.options.debugOptions.debugLevel = "source,lines,vars"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+defaultTasks 'check', 'test', 'install'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile('com.codeborne:selenide:4.4.3')
+  testCompile 'io.appium:java-client:4.1.2'
+}
+
+task libs(type: Sync) {
+  from configurations.compile
+  from configurations.runtime
+  from configurations.testRuntime
+  into "$buildDir/lib"
+}
+
+compileJava.dependsOn libs
+
+jar {
+  manifest {
+    attributes(
+      "Implementation-Title": project.group + '.' + project.name,
+      "Implementation-Version": version,
+      "Implementation-Vendor": "Codeborne")
+  }
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+javadoc {
+  failOnError=false
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives jar
+  archives sourcesJar
+  archives javadocJar
+}
