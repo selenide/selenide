@@ -1,5 +1,4 @@
 apply from: 'build.gradle'
-apply plugin: 'maven'
 apply plugin: 'signing'
 
 defaultTasks 'clean', 'uploadArchives'
