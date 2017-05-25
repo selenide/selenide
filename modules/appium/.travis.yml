@@ -1,0 +1,15 @@
+branches:
+  only:
+    - master
+  
+language: java
+sudo: false
+dist: trusty
+cache:
+  directories:
+  - $HOME/.gradle
+
+script: "gradle clean check test --info"
+
+jdk:
+  - oraclejdk8
