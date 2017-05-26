@@ -1,7 +1,7 @@
 branches:
   only:
     - master
-  
+
 language: java
 sudo: false
 dist: trusty
@@ -9,7 +9,15 @@ cache:
   directories:
   - $HOME/.gradle
 
-script: "gradle clean check --info"
+script: "./gradlew clean check --info"
 
 jdk:
   - oraclejdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
