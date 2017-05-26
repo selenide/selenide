@@ -37,8 +37,8 @@ repositories {
 }
 
 dependencies {
-    api('com.codeborne:selenide:4.4.3')
-    api('io.appium:java-client:5.0.0-BETA8')
+    implementation('com.codeborne:selenide:4.4.3')
+    implementation('io.appium:java-client:5.0.0-BETA8')
 }
 
 jar {
