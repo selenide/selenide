@@ -17,7 +17,8 @@ public class AndroidDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities capabilities) {
         Configuration.startMaximized = false;
-        
+        Configuration.captureJavascriptErrors = false;
+
         capabilities.setCapability(MobileCapabilityType.VERSION, "4.4.2");
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("platformName", "Android");

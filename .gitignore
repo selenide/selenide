@@ -1,3 +1,6 @@
 build
 hs_err_pid*
 .gradle
+.idea
+!gradle-wrapper.jar
+*.iml
