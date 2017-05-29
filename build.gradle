@@ -1,6 +1,7 @@
 plugins {
-    id 'java-library'
-    id 'maven'
+  id 'java'
+  id 'java-library'
+  id 'maven'
 }
 
 defaultTasks 'check', 'test', 'install'
@@ -13,57 +14,57 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 ext {
-    encoding = 'UTF-8'
-    log4jVersion = '2.8.2'
+  encoding = 'UTF-8'
+  log4jVersion = '2.8.2'
 }
 
 compileJava {
-    options.incremental = true
-    options.encoding = encoding
+  options.incremental = true
+  options.encoding = encoding
 }
 
 compileTestJava {
-    options.encoding = encoding
+  options.encoding = encoding
 }
 
 javadoc {
-    options.encoding = encoding
-    failOnError = false
+  options.encoding = encoding
+  failOnError = false
 }
 
 repositories {
-    jcenter()
-    mavenCentral()
+  jcenter()
+  mavenCentral()
 }
 
 dependencies {
-    implementation('com.codeborne:selenide:4.4.3')
-    implementation('io.appium:java-client:5.0.0-BETA8')
+  implementation('com.codeborne:selenide:4.4.3')
+  implementation('io.appium:java-client:5.0.0-BETA8')
 }
 
 jar {
-    manifest {
-        attributes(
-                "Implementation-Title": project.group + '.' + project.name,
-                "Implementation-Version": version,
-                "Implementation-Vendor": "Codeborne")
-    }
+  manifest {
+    attributes(
+      "Implementation-Title": project.group + '.' + project.name,
+      "Implementation-Version": version,
+      "Implementation-Vendor": "Codeborne")
+  }
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allJava
+  classifier = 'sources'
+  from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+  classifier = 'javadoc'
+  from javadoc.destinationDir
 }
 
 artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
+  archives jar
+  archives sourcesJar
+  archives javadocJar
 }
 
 wrapper.gradleVersion = '3.5'
