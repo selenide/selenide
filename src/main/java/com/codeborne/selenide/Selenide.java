@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
-import static com.codeborne.selenide.Configuration.dismissModalDialogs;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
@@ -343,6 +342,11 @@ public class Selenide {
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
     return ElementFinder.wrap($(parent), seleniumSelector, index);
+  }
+
+
+  public static SelenideElement $(Supplier<WebElement> howToGetElement) {
+    return ElementSupplier.wrap(howToGetElement);
   }
 
   /**
