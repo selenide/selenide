@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
@@ -88,7 +89,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     Class<?> listType = getListGenericType(field);
 
     return listType != null && type.isAssignableFrom(listType)
-        && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
+        && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null || field.getAnnotation(FindAll.class) != null);
   }
 
   private Class<?> getListGenericType(Field field) {
