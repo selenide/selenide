@@ -1,7 +1,6 @@
 package integration;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -21,7 +20,7 @@ public class ByTextTest extends IntegrationTest {
 
   @Test
   public void userCanFindElementByText() {
-    $(byText("Page without JQuery")).shouldHave(text("Page without JQuery"));
+    $(byText("Page with selects")).shouldHave(text("Page with selects"));
     $(byText("Dropdown list")).shouldHave(text("Dropdown list"));
     $(byText("@livemail.ru")).shouldHave(text("@livemail.ru"));
   }
@@ -42,7 +41,7 @@ public class ByTextTest extends IntegrationTest {
 
   @Test
   public void canFindElementContainingText() {
-    $(withText("without")).shouldHave(text("Page without JQuery"));
+    $(withText("age with s")).shouldHave(text("Page with selects"));
     $(withText("Dropdown")).shouldHave(text("Dropdown list"));
     $(withText("@livemail.r")).shouldHave(text("@livemail.ru"));
   }
@@ -55,16 +54,11 @@ public class ByTextTest extends IntegrationTest {
     assertEquals("second_row", $("#multirowTable tr", 1).find(withText("hac")).getAttribute("class"));
   }
 
-  @Test @Ignore
+  @Test
   public void canFindElementsByI18nText() {
     $(byText("Маргарита")).shouldHave(text("Маргарита"));
     $(withText("Марг")).shouldHave(text("Маргарита"));
-    $("#radioButtons").find(byText("Кот \"Бегемот\"")).click();
-
-    assertEquals(1, $$($("#radioButtons"), withText("Theodor Woland")).size());
-
-    assertEquals(3, $$($("#radioButtons"), withText("Я")).size());
-    assertEquals(1, $$($("#radioButtons input"), withText("Я ")).size());
+    $(byText("Кот \"Бегемот\"")).click();
   }
 
   @Test

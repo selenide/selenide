@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -12,7 +13,7 @@ public class ToString implements Command<String> {
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     try {
       return Describe.describe(locator.getWebElement());
-    } catch (WebDriverException elementDoesNotExist) {
+    } catch (WebDriverException | ElementNotFound elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     } catch (IndexOutOfBoundsException invalidElementIndex) {
       return invalidElementIndex.toString();

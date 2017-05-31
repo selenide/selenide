@@ -3,7 +3,6 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Texts extends ExactTexts {
@@ -11,15 +10,19 @@ public class Texts extends ExactTexts {
     super(expectedTexts);
   }
 
+  public Texts(List<String> expectedTexts) {
+    super(expectedTexts);
+  }
+
   @Override
   public boolean apply(List<WebElement> elements) {
-    if (elements.size() != expectedTexts.length) {
+    if (elements.size() != expectedTexts.size()) {
       return false;
     }
 
-    for (int i = 0; i < expectedTexts.length; i++) {
+    for (int i = 0; i < expectedTexts.size(); i++) {
       WebElement element = elements.get(i);
-      String expectedText = expectedTexts[i];
+      String expectedText = expectedTexts.get(i);
       if (!Html.text.contains(element.getText(), expectedText)) {
         return false;
       }
@@ -29,6 +32,6 @@ public class Texts extends ExactTexts {
 
   @Override
   public String toString() {
-    return "Texts " + Arrays.toString(expectedTexts);
+    return "Texts " + expectedTexts;
   }
 }

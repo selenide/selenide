@@ -9,6 +9,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriverException;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +20,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
@@ -49,13 +51,15 @@ class SelenideElementProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
-      return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+      return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
+
+    validateAssertionMode();
 
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
     try {
-      Object result = dispatchAndRetry(timeoutMs,pollingIntervalMs, proxy, method, args);
+      Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
       return result;
     }
@@ -72,13 +76,14 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
-  protected Object dispatchAndRetry(long timeoutMs,long pollingIntervalMs, Object proxy, Method method, Object[] args) throws Throwable {
+  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, 
+                                    Object proxy, Method method, Object[] args) throws Throwable, Error {
     final long startTime = currentTimeMillis();
     Throwable lastError;
     do {
       try {
         if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
-          return Commands.collection.execute(proxy, webElementSource, method.getName(), args);
+          return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
         return method.invoke(webElementSource.getWebElement(), args);
@@ -89,8 +94,12 @@ class SelenideElementProxy implements InvocationHandler {
       catch (Throwable e) {
         lastError = e;
       }
+      
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         throw Cleanup.of.wrap(lastError);
+      }
+      else if (!shouldRetryAfterError(lastError)) {
+        throw lastError;
       }
       sleep(pollingIntervalMs);
     }
@@ -108,18 +117,22 @@ class SelenideElementProxy implements InvocationHandler {
     throw lastError;
   }
 
+  static boolean shouldRetryAfterError(Throwable e) {
+    if (e instanceof FileNotFoundException) return false;
+    if (e instanceof IllegalArgumentException) return false;
+    if (e instanceof ReflectiveOperationException) return false;
+    
+    return e instanceof Exception || e instanceof AssertionError;
+  }
+
   private long getTimeoutMs(Method method, Object[] args) {
-    if (isWaitCommand(method)) {
-      return args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1];
-    }
-    else return timeout;
+    return isWaitCommand(method) ? 
+        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] : 
+        timeout;
   }
 
   private long getPollingIntervalMs(Method method, Object[] args) {
-    if (isWaitCommand(method)) {
-      return args.length == 3 ? (Long) args[args.length - 1] : pollingInterval;
-    }
-    else return pollingInterval;
+    return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : pollingInterval;
   }
 
   private boolean isWaitCommand(Method method) {

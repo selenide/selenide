@@ -7,8 +7,6 @@ public class Selectors {
   /**
    * Find element CONTAINING given text (as a substring)
    *
-   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
-   *
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
    */
@@ -18,8 +16,6 @@ public class Selectors {
 
   /**
    * Find element that has EXACTLY this text
-   *
-   * NB! It seems that Selenium WebDriver does not support i18n characters in XPath :(
    *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
@@ -31,14 +27,34 @@ public class Selectors {
   /**
    * Find elements having attribute with given value.
    *
+   * Examples:
+   * <div binding="fieldValue"></div>
+   * Find element with attribute 'binding' EXACTLY containing text 'fieldValue' , use:
+   * byAttribute("binding", "fieldValue")
+   *
+   * For finding difficult/generated data attribute which contains some value:
+   * <div binding="userName17fk5n6kc2Ds45F40d0fieldValue_promoLanding word"></div>
+   *
+   * Find element with attribute 'binding' CONTAINING text 'fieldValue', use symbol '*' with attribute name:
+   * byAttribute("binding*", "fieldValue") it same as By.cssSelector("[binding*='fieldValue']")
+   *
+   * Find element whose attribute 'binding' BEGINS with 'userName', use symbol '^' with attribute name:
+   * byAttribute("binding^", "fieldValue")
+   *
+   * Find element whose attribute 'binding' ENDS with 'promoLanding', use symbol '$' with attribute name:
+   * byAttribute("binding$", "promoLanding")
+   *
+   * Find element whose attribute 'binding' CONTAINING WORD 'word':
+   * byAttribute("binding~", "word")
+   *
    * Seems to work incorrectly if attribute name contains dash, for example: <option data-mailServerId="123"></option>
    *
    * @param attributeName name of attribute, should not be empty or null
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
-   * @return standard selenium By criteria
+   * @return standard selenium By cssSelector criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
-    return By.xpath(".//*[@" + attributeName + '=' + Quotes.escape(attributeValue) + ']');
+    return By.cssSelector(String.format("[%s='%s']", attributeName, attributeValue));
   }
 
   /**
@@ -137,5 +153,21 @@ public class Selectors {
    */
   public static By byId(String id) {
     return By.id(id);
+  }
+
+  /**
+   * @see By#cssSelector(java.lang.String)
+   * @since 3.8
+   */
+  public static By byCssSelector(String css) {
+    return By.cssSelector(css);
+  }
+
+  /**
+   * @see By#className(java.lang.String)
+   * @since 3.8
+   */
+  public static By byClassName(String className) {
+    return By.className(className);
   }
 }

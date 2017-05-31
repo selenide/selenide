@@ -5,17 +5,13 @@ import com.codeborne.selenide.testng.SoftAsserts;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.value;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 
 @Listeners(SoftAsserts.class)
-public class SoftAssertTestNGTest {
+public abstract class AbstractSoftAssertTestNGTest {
   @BeforeMethod
   public void switchToSoftAssertionsMode() {
     open("http://google.com/ncr");
@@ -27,14 +23,5 @@ public class SoftAssertTestNGTest {
   public void resetDefaultProperties() {
     Configuration.assertionMode = STRICT;
     Configuration.timeout = 4000;
-  }
-
-  @Test(enabled = false)
-  public void userCanUseSoftAssertWithTestNG() {
-    $("#radioButtons input").shouldHave(value("777"));
-    $("#xxx").shouldBe(visible);
-    $$("#radioButtons input").shouldHave(size(888));
-    $("#radioButtons").$$("input").shouldHave(size(999));
-    $("#radioButtons select").click();
   }
 }

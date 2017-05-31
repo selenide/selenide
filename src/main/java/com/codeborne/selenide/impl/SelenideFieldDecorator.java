@@ -13,9 +13,7 @@ import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,8 +71,10 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   }
 
   private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
-      throws InstantiationException, IllegalAccessException {
-    ElementsContainer result = (ElementsContainer) type.newInstance();
+      throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    Constructor<?> constructor = type.getDeclaredConstructor();
+    constructor.setAccessible(true);
+    ElementsContainer result = (ElementsContainer) constructor.newInstance();
     PageFactory.initElements(new SelenideFieldDecorator(self), result);
     result.setSelf(self);
     return result;

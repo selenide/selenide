@@ -1,10 +1,139 @@
 == Changelog
 
-=== 3.4 (Planned to 2x.02.2016)
+=== 4.4.3 (released 25.04.2017)
+* upgrade to selenium-java 3.4.0
+
+=== 4.4.2 (released 30.03.2017)
+* #510 fix closing windows in `$.download()`
+
+=== 4.4.1 (released 28.03.2017)
+* Add workaround for invalid resolving of `selenium-api` dependency by Maven
+
+=== 4.4 (released 27.03.2017)
+* #479 Added methods `clearBrowserCookies()` and `clearBrowserLocalStorage()`
+* #497 Added methods `$x("//div")`, `$$x("//div")` for finding elements by xpath 
+* #457 fix performance degradation in parallel tests
+* #494 fix $.toString() on Android driver
+* upgrade to selenium-java 3.3.1
+* upgrade to phantomjsdriver 1.4.1
+* Upgrade to htmlunit 2.24
+
+=== 4.3 (Released 09.02.2017)
+* System properties names aligned with Configuration fields. e.g. Configuration.someProp always has selenide.someProp equivalent (old names still supported for backward compatibility)
+* JavaDocs are fixed - now it is more clear that $,$$,find,etc. methods don't start the search
+* deprecated Selenide.selectRadio (for SelenideElement.selectRadio)
+* upgrade to browsermob-core:2.1.4
+* upgrade to org.apache.httpcomponents:httpcore:4.4.6
+* upgrade to guava:21.0
+
+=== 4.2.1 (Released in January 2017)
+* fixed problems with int and boolean capability values, now converting automatically
+* added support for FirefoxProfile over commandline (-Dfirefoxprofile.<option>=<value>,
+* added support for ChromeOptions (args only) over commandline (-Dchromeoptions.args=<value1>,<value2>...)
+* #426 fix error reporting in method `$$().find()`    - see https://github.com/codeborne/selenide/pull/426
+* #443 SelenidePageFactory added to support page object initialization without @FindBy annotation   - see https://github.com/codeborne/selenide/pull/443
+
+=== 4.2 (Released 13.12.2016)
+* #431 browser=firefox uses legacy driver (works for <=47), browser=marionette - gecko driver (any Firefox)
+* Added experimental support of Edge (browser=edge, set webdriver.edge.driver to path to MicrosoftWebDriver.exe)
+* #433 bypass spawning local browser
+* #391 add method $.selectOptionContainingText()
+* #378 Cut off WebElement screenshot size when it doesn't fit in full page screenshot
+* #379 added support for transferring any capability via System Property (-Dcapabilities.xxx=yyy)
+* support for cloud services like BrowserStack, SauceLabs etc through supporting of  arbitrary capabilities.
+
+=== 4.1 (Released 01.12.2016)
+* #428 Improve byAttribute method for search via css selectors
+* #419 #425 Added methods `texts(List)` and `exactTexts(List)` to `CollectionCondition`
+* Improve support for gecko (marionette) driver
+* Upgrade to selenium-java 3.0.1
+* Upgrade to htmlunit-driver 2.23.2
+* Upgrade to gson 2.8.0
+* Upgrade to guava 20.0
+* Explicitly declare dependency on newest httpcore:4.4.5 to avoid using old version (that Maven inherits from allure plugin or something like that)
+
+=== 4.0 (Released 15.10.2016)
+* #388 Upgrade to selenium-java 3.0.0
+* #388 Upgrade to java 8
+* log all intercepted http responses if proxy server failed to download file
+
+=== 3.11 (Released 14.10.2016)
+* #415 Selenide calls SeleniumException.getMessage() multiple times
+* #416 Added condition `checked` for verifying checkboxes
+
+=== 3.10 (Released 26.09.2016)
+* #402 Disable built-in proxy server by default
+* #400 Support multiple select
+* #408 TextReport can be printed only for failed tests 
+* #398 Support "Content-Disposition" header with encoding
+* #401 Selenide swallows exception in some cases
+* #379 Turn on temporary disabled test for firefox (thanks to @BorisOsipov)
+* #407 Method `open` cannot open url in upper case
+
+=== 3.9.3 (Released 09.09.2016)
+* #393 Selenide should NOT add proxy server to browser if `Configuration.fileDownload = HTTPGET`
+
+=== 3.9.2 (Released 03.09.2016)
+* #386 Selenide should download files "old way" if tests uses its own "custom" webdriver
+* #387 User can choose how to download files via Configuration.fileDownload
+
+=== 3.9.1 (Released 27.08.2016)
+* #383 Selenide proxy server now allows requests and responses bigger than 2MB (but writes warning) 
+* #384 fixed SoftAssert listener for TestNG: it only applies for classes with @Listeners(SoftAssert.class} annotation
+* #372 fixed SoftAssert listener for TestNG: it ignores tests with "expectedExceptions" attribute
+* upgrade to gson:2.7 
+
+=== 3.9 (Released 22.08.2016)
+* #196 #267 Selenide uses its own proxy server to download files (thanks to @dimand58 for pull request)
+
+=== 3.8.1 (Released 10.08.2016)
+* #369, #366 Fixed bug with IE and basic auth - thanks to Anton Aftakhov @simple-elf for the pull request!
+
+=== 3.8 (Released 06.08.2016)
+* #359 user can disable creating *.html files - thanks to @BorisOsipov for this PR!
+* fixed file uploading methods on remote browsers & grid - thanks to Alexei Vinogradov!
+* #364, #303 TestNG: SimpleReport is now thread-safe
+* #364, #303 TestNG: SoftAssertsReportsNGTest is now thread-safe
+* #360 added methods to Selectors; byCssSelector(), byClassName()
+* #355 added method $.dragAndDropTo(WebElement)
+* #339 fixed JS error in Edge browser
+* #290 fixed location of element screenshot - it's not put to "build/reports" folder, not to project root
+* #302 Selenide now throws an error if soft assert is used without annotation
+* #367 added link to implementation to javadoc of all public methods in SelenideElement
+* upgrade to htmlunit 2.23
+
+=== 3.7 (07.07.2016)
+* Upgrade to Selenium 2.53.1 - now it should work with Firefox 47
+* #349 Added Marionette browser support - thanks to Geroen Dierckx @ridiekel for PR!
+* #345 Selenide should not fail if browser doesn't support JavaScript
+* #357 Don't show "Screenshots: " in the error log when screenshots are disabled - thanks to @BorisOsipov for PR!
+
+=== 3.6 (29.05.2016)
+* upgrade to phantomjsdriver 1.3.0 (compatible with selenium-java 2.53.0)
+* Add method `$.screenshotAsImage()`: `BufferedImage elementScreenshot = $(".logo").screenshotAsImage();` - thanks to @Akkuzin!
+* #321 set default page load strategy back to "normal"
+* fixed TestNG TextReport Listener, now only classes annotated with @Report will get reported - thanks to Alexei Vinogradov!
+* #335 Add support for non-public page objects
+* #329 Add support for JBrowser driver (but most of Selenide tests still fail with it :( )  - thanks to Anil Kumar Reddy Gaddam for pull request!
+* #341 Use Selenide timeout when downloading files
+* #320 Implementation of basic auth. for many browsers - thanks to @dimand58
+
+=== 3.5.1 (Released 04.04.2016)
+* #309 method $$.shouldHave(size()) should not fail when timeout happens after the 1st check
+
+=== 3.5 (Released 31.03.2016)
+* #274 added advanced checks for collection size: <, <=, >, >=, <>
+* #308 set page load strategy to "none" by default
+* #306 method $.toString() always includes latest value of "value" attribute
+* Upgraded to selenium-java 2.53.0, changelog: https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG
+
+=== 3.4 (Released 03.03.2016)
 * #297 Can set chrome switches with system property `-Dselenide.chrome.switches=--disable-popup-blocking`
 * #296 Can set browser version with system property `-Dselenide.browser.version=8`
-* Upgraded to selenium-java 2.52.0, changelog: http://selenium2.ru/news/170-selenium-252.html
+* #287 add pollingIntervalMilliseconds parameter to #waitUntil #waitWhile
 * Typo in property name selenide.collectionsTimeout fixed
+* Upgraded to selenium-java 2.52.0, changelog: http://selenium2.ru/news/170-selenium-252.html
+* Upgraded to htmlunit 2.20, changelog: http://htmlunit.sourceforge.net/changes-report.html#a2.20
 
 === 3.3 (Released 10.02.2016)
 * #277 Ajax support for collections:

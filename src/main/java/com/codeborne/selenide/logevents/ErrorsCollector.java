@@ -1,11 +1,17 @@
 package com.codeborne.selenide.logevents;
 
+import com.codeborne.selenide.ex.SoftAssertionError;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
+import static com.codeborne.selenide.Configuration.assertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {
+  public static final String LISTENER_SOFT_ASSERT = "softAssert";
+  
   private final List<Throwable> errors = new ArrayList<>();
 
   @Override
@@ -21,7 +27,7 @@ public class ErrorsCollector implements LogEventListener {
 
   public void failIfErrors(String testName) {
     if (errors.size() == 1) {
-      throw new AssertionError(errors.get(0).toString());
+      throw new SoftAssertionError(errors.get(0).toString());
     }
     if (!errors.isEmpty()) {
       StringBuilder sb = new StringBuilder();
@@ -33,7 +39,15 @@ public class ErrorsCollector implements LogEventListener {
         sb.append("\nFAIL #").append(++i).append(": ");
         sb.append(error).append('\n');
       }
-      throw new AssertionError(sb.toString());
+      throw new SoftAssertionError(sb.toString());
+    }
+  }
+
+  public static void validateAssertionMode() {
+    if (assertionMode == SOFT) {
+      if (!SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)) {
+        throw new IllegalStateException("Using soft asserts, but without @SoftAsserts annotation");
+      }
     }
   }
 }

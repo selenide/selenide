@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -13,7 +14,16 @@ public class WebDriverRunner {
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
+  public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
+  /**
+   * Marinonette Driver for Firefox is the same as Gecko Driver
+   */
+  public static final String MARIONETTE = "marionette";
+  /**
+   * Marinonette Driver for Firefox is the same as Gecko Driver
+   */
+  public static final String GECKO = "gecko";
 
   /**
    * To use Safari webdriver, you need to include extra dependency to your project:
@@ -49,6 +59,14 @@ public class WebDriverRunner {
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
+  
+  /**
+   * To use JbrowserDriver, you need to include extra dependency to your project:
+   * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
+   * 
+   * Note: You need minimum of Java 8.
+   */
+  public static final String JBROWSER = "jbrowser";
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -140,6 +158,13 @@ public class WebDriverRunner {
   }
 
   /**
+   * Is Selenide configured to use Marionette (Gecko) driver
+   */
+  public static boolean isMarionette() {
+    return MARIONETTE.equalsIgnoreCase(browser) || GECKO.equalsIgnoreCase(browser);
+  }
+
+  /**
    * Is Selenide configured to use Chrome browser
    */
   public static boolean isChrome() {
@@ -151,6 +176,13 @@ public class WebDriverRunner {
    */
   public static boolean isIE() {
     return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+  }
+
+  /**
+   * Is Selenide configured to use Microsoft EDGE browser
+   */
+  public static boolean isEdge() {
+    return EDGE.equalsIgnoreCase(browser);
   }
 
   /**
@@ -175,6 +207,13 @@ public class WebDriverRunner {
   }
 
   /**
+   * Does this browser support javascript
+   */
+  public static boolean supportsJavascript() {
+    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
+  }
+
+  /**
    * Is Selenide configured to use HtmlUnit browser
    */
   public static boolean isHtmlUnit() {
@@ -193,6 +232,13 @@ public class WebDriverRunner {
    */
   public static boolean isOpera() {
     return OPERA.equalsIgnoreCase(browser);
+  }
+  
+  /**
+   * Is Selenide configured to use JBrowser browser
+   */
+  public static boolean isJBrowser() {
+    return JBROWSER.equalsIgnoreCase(browser);
   }
 
   /**

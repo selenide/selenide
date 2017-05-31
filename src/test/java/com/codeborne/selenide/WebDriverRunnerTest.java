@@ -1,8 +1,10 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import com.codeborne.selenide.rules.MockWebdriverContainer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -18,14 +20,17 @@ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
   static WebDriver driver;
-  
-  URL url = currentThread().getContextClassLoader().getResource("page_with_selects_without_jquery.html");
+
+  @Rule
+  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
+
+  URL url = currentThread().getContextClassLoader().getResource("start_page.html");
 
   @Before 
   public void resetWebDriverContainer() {
@@ -33,14 +38,14 @@ public class WebDriverRunnerTest {
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
     WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
-    doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), anyVararg());
+    doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
   }
 
   @After
   public void resetSettings() {
     WebDriverRunner.closeWebDriver();
+    driver = null;
     Configuration.browser = System.getProperty("browser", FIREFOX);
-    WebDriverRunner.webdriverContainer = new WebDriverThreadLocalContainer();
   }
 
   @Test

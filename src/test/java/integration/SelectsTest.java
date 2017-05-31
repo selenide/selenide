@@ -1,12 +1,15 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -18,12 +21,27 @@ public class SelectsTest extends IntegrationTest {
     openFile("page_with_selects_without_jquery.html");
   }
 
+  @After
+  public void resetProperties() {
+    Configuration.versatileSetValue = false;
+  }
+
   @Test
   public void userCanSelectOptionByValue() {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOptionByValue("myrambler.ru");
 
     select.getSelectedOption().shouldBe(selected);
+    assertEquals("myrambler.ru", select.getSelectedValue());
+    assertEquals("@myrambler.ru", select.getSelectedText());
+  }
+
+  @Test
+  public void userCanSelectValueUsingSetValue() {
+    Configuration.versatileSetValue = true;
+    SelenideElement select = $(byName("domain"));
+    select.setValue("myrambler.ru");
+
     assertEquals("myrambler.ru", select.getSelectedValue());
     assertEquals("@myrambler.ru", select.getSelectedText());
   }
@@ -52,6 +70,7 @@ public class SelectsTest extends IntegrationTest {
 
   @Test
   public void valMethodSelectsOptionInCaseOfSelectBox() {
+    Configuration.versatileSetValue = true;
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.val("myrambler.ru");
 
@@ -67,6 +86,14 @@ public class SelectsTest extends IntegrationTest {
 
     select.getSelectedOption().shouldBe(selected);
     assertEquals("мыло.ру", select.getSelectedValue());
+    assertEquals("@мыло.ру", select.getSelectedText());
+  }
+
+  @Test
+  public void userCanSelectOptionByPartialText() {
+    SelenideElement select = $(By.xpath("//select[@name='domain']"));
+    select.selectOptionContainingText("ыло.р");
+
     assertEquals("@мыло.ру", select.getSelectedText());
   }
 

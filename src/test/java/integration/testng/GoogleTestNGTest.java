@@ -9,14 +9,14 @@ import org.testng.annotations.Test;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 @Listeners(TextReport.class)
 public class GoogleTestNGTest {
   @BeforeMethod
   public void setUp() {
+    TextReport.onSucceededTest = false;
+    TextReport.onFailedTest = true;
     open("http://google.com/ncr");
   }
 
@@ -26,7 +26,7 @@ public class GoogleTestNGTest {
     $("#missing-button").click();
   }
 
-  @Test(enabled = false)
+  @Test
   public void successfulMethod() {
     $(By.name("q")).setValue("selenide").pressEnter();
     $$("#ires .g").shouldHave(size(10));

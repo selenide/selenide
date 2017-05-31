@@ -9,45 +9,46 @@ import static com.codeborne.selenide.Selenide.$;
 /**
  * All checks in this class are equivalent
  */
-public class ElementDisappearsTest extends IntegrationTest {
+public class ElementRemovedTest extends IntegrationTest {
   @Before
-  public void clickHidesElement() {
-    openFile("element_disappears_on_click.html");
-    $("button").click();
+  public void clickRemovesElement() {
+    openFile("elements_disappear_on_click.html");
+    $("#remove").click();
   }
 
   @Test
   public void shouldBeHidden() {
-    $("button").shouldBe(hidden);
+    $("#remove").shouldBe(hidden);
   }
 
   @Test
   public void shouldDisappear() {
-    $("button").should(disappear);
+    $("#remove").should(disappear);
   }
 
   @Test
   public void waitUntilDisappears() {
-    $("button").waitUntil(disappears, 2000);
+    $("#remove").waitUntil(disappears, 2000);
   }
 
   @Test
   public void shouldNotBeVisible() {
-    $("button").shouldNotBe(visible);
+    $("#remove").shouldNotBe(visible);
   }
 
   @Test
-  public void shouldNotPresent() {
-    $("button").shouldNot(present);
+  public void shouldNotBePresent() {
+    $("#remove").shouldNotBe(present);
   }
 
   @Test
   public void shouldNotExist() {
-    $("button").shouldNot(exist);
+    $("#remove").shouldNot(exist);
   }
 
   @Test
   public void shouldNotAppear() {
-    $("button").shouldNot(appear);
+    $("#remove").shouldNot(appear);
   }
+
 }

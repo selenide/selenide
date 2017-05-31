@@ -1,19 +1,19 @@
 package integration;
 
+import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -23,28 +23,35 @@ public class TabsTest extends IntegrationTest {
     openFile("page_with_tabs.html");
   }
 
-  @Test
+  @Test @Video
   public void userCanBrowseTabs_webdriver_api() {
     openFile("page_with_tabs.html");
 
     WebDriver driver = WebDriverRunner.getWebDriver();
-    String windowHandle = driver.getWindowHandle();
 
     $(byText("Page1: uploads")).click();
+    Wait().until(ExpectedConditions.numberOfWindowsToBe(2));
 
     $("h1").shouldHave(text("Tabs"));
 
-    Set<String> windowHandles = driver.getWindowHandles();
-    windowHandles.remove(windowHandle);
-
-    driver.switchTo().window(windowHandles.iterator().next());
+    String windowHandle = driver.getWindowHandle();
+    
+    driver.switchTo().window(nextWindowHandle(driver));
     $("h1").shouldHave(text("File uploads"));
 
     driver.switchTo().window(windowHandle);
     $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  private String nextWindowHandle(WebDriver driver) {
+    String windowHandle = driver.getWindowHandle();
+    Set<String> windowHandles = driver.getWindowHandles();
+    windowHandles.remove(windowHandle);
+
+    return windowHandles.iterator().next();
+  }
+
+  @Test @Video
   public void canSwitchToWindowByTitle() {
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
@@ -57,7 +64,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchToWindowByIndex_chrome() {
     assumeTrue(isChrome());
     $(byText("Page2: alerts")).click();
@@ -72,7 +79,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
     assumeFalse(isChrome() || isHtmlUnit());
     $(byText("Page2: alerts")).click();
@@ -87,7 +94,7 @@ public class TabsTest extends IntegrationTest {
     switchTo().window(0); $("h1").shouldHave(text("Tabs"));
   }
 
-  @Test
+  @Test @Video
   public void canSwitchBetweenWindowsWithSameTitles() {
     assumeFalse(isHtmlUnit());
     $(byText("Page4: same title")).click();

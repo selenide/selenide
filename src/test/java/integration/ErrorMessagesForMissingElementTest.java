@@ -204,7 +204,7 @@ public class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("#non-clickable-element a").shouldBe(visible).click();
       fail("Expected WebDriverException");
     } catch (UIAssertionError e) {
-      assertContains(e, "Element is not clickable at point",
+      assertContains(e, "is not clickable at point",
           "Other element would receive the click",
           "Screenshot: http://ci.org/build/reports/tests/" + browser + "/1.jpg");
     }

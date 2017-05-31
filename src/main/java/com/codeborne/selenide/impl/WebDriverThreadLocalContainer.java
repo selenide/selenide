@@ -1,9 +1,10 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.internal.Killable;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -17,7 +18,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
@@ -26,10 +29,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
 
   protected WebDriverFactory factory = new WebDriverFactory();
-  
+
   protected List<WebDriverEventListener> listeners = new ArrayList<>();
   protected Collection<Thread> ALL_WEB_DRIVERS_THREADS = new ConcurrentLinkedQueue<>();
   protected Map<Long, WebDriver> THREAD_WEB_DRIVER = new ConcurrentHashMap<>(4);
+  protected Map<Long, SelenideProxyServer> THREAD_PROXY_SERVER = new ConcurrentHashMap<>(4);
   protected Proxy proxy;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
@@ -69,14 +73,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     } catch (NoSuchWindowException e) {
       log.log(FINE, "Browser window is not found", e);
       return false;
-    } catch (SessionNotFoundException e) {
+    } catch (NoSuchSessionException e) {
       log.log(FINE, "Browser session is not found", e);
       return false;
     }
   }
 
   /**
-   * @return true iff webdriver is started in current thread 
+   * @return true iff webdriver is started in current thread
    */
   @Override
   public boolean hasWebDriverStarted() {
@@ -96,13 +100,9 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public WebDriver getAndCheckWebDriver() {
-    if (!reopenBrowserOnFail) {
-      return getWebDriver();
-    }
-    
     WebDriver webDriver = THREAD_WEB_DRIVER.get(currentThread().getId());
     if (webDriver != null) {
-      if (isBrowserStillOpen(webDriver)) {
+      if (!reopenBrowserOnFail || isBrowserStillOpen(webDriver)) {
         return webDriver;
       }
       else {
@@ -114,6 +114,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  public SelenideProxyServer getProxyServer() {
+    return THREAD_PROXY_SERVER.get(currentThread().getId());
+  }
+
+  @Override
   public void closeWebDriver() {
     closeWebDriver(currentThread());
   }
@@ -121,13 +126,15 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   protected void closeWebDriver(Thread thread) {
     ALL_WEB_DRIVERS_THREADS.remove(thread);
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
-
+    SelenideProxyServer proxy = THREAD_PROXY_SERVER.remove(thread.getId());
+    
     if (webdriver != null && !holdBrowserOpen) {
       log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
+      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
 
       long start = System.currentTimeMillis();
 
-      Thread t = new Thread(new CloseBrowser(webdriver));
+      Thread t = new Thread(new CloseBrowser(webdriver, proxy));
       t.setDaemon(true);
       t.start();
 
@@ -148,19 +155,25 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
         log.fine("Closed webdriver in " + duration + " ms");
       }
     }
+    else if (proxy != null && !holdBrowserOpen) {
+      log.info("Close proxy server: " + thread.getId() + " -> " + proxy);
+      proxy.shutdown();
+    }
   }
 
   private static class CloseBrowser implements Runnable {
     private final WebDriver webdriver;
+    private final SelenideProxyServer proxy;
 
-    private CloseBrowser(WebDriver webdriver) {
+    private CloseBrowser(WebDriver webdriver, SelenideProxyServer proxy) {
       this.webdriver = webdriver;
+      this.proxy = proxy;
     }
 
     @Override
     public void run() {
       try {
-        log.info("Trying to close the browser " + webdriver + " ...");
+        log.info("Trying to close the browser " + describe(webdriver) + " ...");
         webdriver.quit();
       }
       catch (UnreachableBrowserException e) {
@@ -172,6 +185,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       }
       finally {
         killBrowser(webdriver);
+      }
+      
+      if (proxy != null) {
+        log.info("Trying to shutdown " + proxy + " ...");
+        proxy.shutdown();
       }
     }
 
@@ -210,9 +228,19 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
-    WebDriver webdriver = factory.createWebDriver(proxy);
+    Proxy userProvidedProxy = proxy;
+    
+    if (Configuration.fileDownload == PROXY) {
+      SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
+      selenideProxyServer.start();
+      THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);
+      userProvidedProxy = selenideProxyServer.createSeleniumProxy();
+    }
 
-    log.info("Create webdriver in current thread " + currentThread().getId() + ": " + browser + " -> " + webdriver);
+    WebDriver webdriver = factory.createWebDriver(userProvidedProxy);
+
+    log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
+        describe(webdriver) + " -> " + webdriver);
 
     return markForAutoClose(addListeners(webdriver));
   }
@@ -244,7 +272,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
     return webDriver;
   }
-  
+
   protected class WebdriversFinalCleanupThread extends Thread {
     private final Thread thread;
 

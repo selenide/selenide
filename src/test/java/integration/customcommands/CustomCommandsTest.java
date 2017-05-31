@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.visible;
 import static integration.customcommands.MyFramework.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomCommandsTest extends IntegrationTest {
   @Before
@@ -37,6 +38,6 @@ public class CustomCommandsTest extends IntegrationTest {
 
   @After
   public void resetSelenideDefaultCommands() {
-    Commands.collection.resetDefaults();
+    Commands.getInstance().resetDefaults();
   }
 }

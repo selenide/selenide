@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>long ajax request</title>
+    <title>Test page :: with selects, but withour JQuery</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript">
       function scheduleFillTextArea() {
@@ -43,7 +43,7 @@
       <a href="http://www.yandex.ru/">clickable element</a>
     </div>
     
-    <h1>Page without JQuery</h1>
+    <h1>Page with selects</h1>
 
     <div class="container">
       <div class="container">
@@ -124,6 +124,7 @@
 
           <textarea id="text-area" rows="1" cols="60"></textarea>
           <textarea id="empty-text-area" rows="1" cols="1"></textarea>
+          <input id="age" name="age" value="18"/>
           <input id="login" type="submit" value="Log in"/>
         </fieldset>
       </form>
@@ -156,7 +157,7 @@
     <a href="long_ajax_request.html">Want to see ajax in action?</a>
 
     <script type="text/javascript">
-      var commandDuration = window.location.search.substring(1);
+      var commandDuration = 100;
 
       setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, commandDuration*3);
       setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, commandDuration*4);

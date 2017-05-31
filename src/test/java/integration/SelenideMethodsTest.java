@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -18,11 +17,10 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
-import static org.mockito.Matchers.contains;
-import static org.mockito.Matchers.startsWith;
 
 public class SelenideMethodsTest extends IntegrationTest {
   @Before
@@ -65,6 +63,12 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanUseCustomPollingInterval() {
+    $("#theHiddenElement").waitUntil(disappears, 1000, 10);
+    $(".non-existing-element").waitWhile(present, 1000, 20);
+  }
+
+  @Test
   public void userCanCheckIfElementIsReadonly() {
     $(By.name("username")).shouldBe(readonly);
     $(By.name("password")).shouldNotBe(readonly);
@@ -72,7 +76,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void toStringMethodShowsElementDetails() {
-    assertEquals("<h1>Page without JQuery</h1>", $("h1").toString());
+    assertEquals("<h1>Page with selects</h1>", $("h1").toString());
     assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
     assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>",
         $(By.name("rememberMe")).toString());
@@ -107,33 +111,15 @@ public class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  public void userCanFindElementByAttribute() {
-    assertEquals("select", $(byAttribute("name", "domain")).getTagName());
-    assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
-    assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
-    assertEquals(4, $$(byAttribute("type", "radio")).size());
-    assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
-    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
-  }
-
-  @Test
-  public void userCanGetAttr() {
-    assertEquals("username", $(by("readonly", "readonly")).attr("name"));
-  }
-
-  @Test
-  public void userCanGetNameAttribute() {
-    assertEquals("username", $(by("readonly", "readonly")).name());
-  }
-
-  @Test
-  public void userCanGetDataAttributes() {
-    assertEquals("111", $(byValue("livemail.ru")).getAttribute("data-mailServerId"));
-    assertEquals("111", $(byValue("livemail.ru")).data("mailServerId"));
-
-    assertEquals("222A", $(byText("@myrambler.ru")).data("mailServerId"));
-    assertEquals("33333B", $(byValue("rusmail.ru")).data("mailServerId"));
-    assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
+  public void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
+    $("#age").clear();
+    $("#age").sendKeys("21");
+    if (isHtmlUnit()) {
+      assertEquals("<input id=\"age\" name=\"age\" value=\"21\"></input>", $("#age").toString());
+    }
+    else {
+      assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
+    }
   }
 
   @Test
@@ -144,9 +130,9 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertEquals("Dropdown list", $("h2").innerHtml());
 
     if (isHtmlUnit()) {
-      assertEquals("<span></span> l'a\n      baskerville", $("#baskerville").innerHtml().trim().toLowerCase());
-      assertEquals("username: <span class=name>bob smith</span> last login: <span class=last-login>01.01.1970</span>",
-          $("#status").innerHtml().trim().toLowerCase());
+      assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
+      assertEquals("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>",
+          $("#status").innerHtml().trim());
     }
     else {
       assertEquals("<span></span> L'a\n            Baskerville", $("#baskerville").innerHtml().trim());
@@ -164,21 +150,6 @@ public class SelenideMethodsTest extends IntegrationTest {
 
     assertEquals("Видишь суслика? И я не вижу. А он есть!",
         $("#theHiddenElement").innerText().trim());
-  }
-
-  @Test
-  public void userCanSearchElementByDataAttribute() {
-    assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
-
-    assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
-    assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
-    assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
-    assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
-  }
-
-  @Test
-  public void userCanSearchElementByTitleAttribute() {
-    assertEquals("fieldset", $(byTitle("Login form")).getTagName());
   }
 
   @Test
@@ -241,8 +212,8 @@ public class SelenideMethodsTest extends IntegrationTest {
     $("#username").sendKeys(" x ");
     $("#username").pressTab();
 
-    if (!isHtmlUnit() && !isChrome()) {
-      // fails in HtmlUnit and Chrome for unknown reason
+    if (!isHtmlUnit() && !isChrome() && !isFirefox()) {
+      // fails in HtmlUnit and Chrome for unknown reason. In Firefox, it's just unstable.
       $("#password").shouldBe(focused);
       $("#username-mirror").shouldHave(text(" x "));
       $("#username-blur-counter").shouldHave(text("blur: "));
@@ -251,24 +222,39 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanCheckIfElementContainsText() {
-    assertEquals("Page without JQuery", $("h1").text());
+    assertEquals("Page with selects", $("h1").text());
     assertEquals("Dropdown list", $("h2").text());
     assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
-    assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    if (isHtmlUnit()) {
+      assertEquals("Radio buttons\n" +
+          "uncheckedМастер " +
+          "uncheckedМаргарита " +
+          "uncheckedКот \"Бегемот\" " +
+          "uncheckedTheodor Woland", $("#radioButtons").text());
+    }
+    else {
+      assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+    }
 
     $("h1").shouldHave(text("Page "));
     $("h2").shouldHave(text("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("vemail.r"));
-    $("#radioButtons").shouldHave(text("buttons\nМастер Маргарита"));
+    $("#radioButtons").shouldHave(text("buttons"), text("Мастер"), text("Маргарита"));
   }
 
   @Test
   public void userCanCheckIfElementHasExactText() {
-    $("h1").shouldHave(exactText("Page without JQuery"));
+    $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
-    $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    if (isHtmlUnit()) {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "uncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland"));
+    }
+    else {
+      $("#radioButtons").shouldHave(text("Radio buttons\n" +
+          "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
+    }
   }
 
   @Test
@@ -320,7 +306,6 @@ public class SelenideMethodsTest extends IntegrationTest {
   @Test
   public void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).followLink();
-//    $(By.linkText("Want to see ajax in action?")).click();
     assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
@@ -359,7 +344,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanGetPageTitle() {
-    assertEquals("long ajax request", title());
+    assertEquals("Test page :: with selects, but withour JQuery", title());
   }
 
   @Test
@@ -470,23 +455,12 @@ public class SelenideMethodsTest extends IntegrationTest {
     $(By.xpath("//input[:attr='al]")).is(visible);
   }
 
-  @Test
-  public void userCanUseOrCondition() {
-    Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
-    $("#baskerville").shouldBe(one_of_conditions);
-
-    Condition all_of_conditions = or("baskerville", text("Basker"), text("rville"));
-    $("#baskerville").shouldBe(all_of_conditions);
-
-    Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
-    $("#baskerville").shouldNotBe(none_of_conditions);
-  }
 
   @Test
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").should(text("Some wrong test").because("it's wrong text"));
   }
@@ -495,7 +469,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").shouldHave(text("Some wrong test").because("it's wrong text"));
   }
@@ -504,7 +478,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
     timeout = 100L;
     thrown.expect(ElementShould.class);
-    thrown.expectMessage(contains("because it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
 
     $("h1").shouldBe(text("Some wrong test").because("it's wrong text"));
   }
@@ -513,11 +487,11 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
     timeout = 100L;
     thrown.expect(ElementShouldNot.class);
-    thrown.expectMessage(contains("because it's wrong text"));
-    $("h1").shouldNot(text("Page without JQuery").because("it's wrong text"));
+    thrown.expectMessage("because it's wrong text");
+    $("h1").shouldNot(text("Page with selects").because("it's wrong text"));
 
     try {
-      $("h1").shouldNotHave(text("Page without JQuery").because("it's wrong text"));
+      $("h1").shouldNotHave(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -525,7 +499,7 @@ public class SelenideMethodsTest extends IntegrationTest {
     }
 
     try {
-      $("h1").shouldNotBe(text("Page without JQuery").because("it's wrong text"));
+      $("h1").shouldNotBe(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -552,7 +526,7 @@ public class SelenideMethodsTest extends IntegrationTest {
       fail("exception expected");
     }
     catch (ElementShould expected) {
-      assertTrue("Actual error: " + expected.getMessage(), 
+      assertTrue("Actual error: " + expected.getMessage(),
           expected.getMessage().contains("because it's sensitive information"));
     }
   }

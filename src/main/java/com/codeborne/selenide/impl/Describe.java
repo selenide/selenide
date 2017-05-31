@@ -8,20 +8,27 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 
 public class Describe {
   private WebElement element;
   private StringBuilder sb = new StringBuilder();
 
-  Describe(WebElement element) {
+  private Describe(WebElement element) {
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
 
-  Describe appendAttributes() {
-    return supportsJavascriptAttributes() ? appendAllAttributes() : appendPredefinedAttributes();
+  private Describe appendAttributes() {
+    try {
+      if (supportsJavascriptAttributes()) {
+        return appendAllAttributes();
+      }
+    }
+    catch (UnsupportedOperationException browserDoesNotSupportJavaScript) {
+    }
+    return appendPredefinedAttributes();
   }
 
   private Describe appendAllAttributes() {
@@ -35,14 +42,12 @@ public class Describe {
             "   }" +
             "}" +
             "return s;", element);
-
+    
     SortedMap<String, String> sortedByName = new TreeMap<>();
     if (map != null) {
       sortedByName.putAll(map);
     }
-    if (!sortedByName.containsKey("value")) {
-      sortedByName.put("value", element.getAttribute("value"));
-    }
+    sortedByName.put("value", element.getAttribute("value"));
     if (!sortedByName.containsKey("type")) {
       sortedByName.put("type", element.getAttribute("type"));
     }
@@ -60,10 +65,10 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return (getWebDriver() instanceof JavascriptExecutor) && !isHtmlUnit();
+    return supportsJavascript() && !isHtmlUnit();
   }
 
-  Describe attr(String attributeName) {
+  private Describe attr(String attributeName) {
     String attributeValue = element.getAttribute(attributeName);
     return attr(attributeName, attributeValue);
   }
@@ -75,7 +80,7 @@ public class Describe {
     return this;
   }
 
-  public String serialize() {
+  private String serialize() {
     String text = element.getText();
     sb.append('>').append(text == null ? "" : text).append("</").append(element.getTagName()).append('>');
     return sb.toString();
@@ -86,7 +91,7 @@ public class Describe {
     return sb.toString();
   }
 
-  public String flush() {
+  private String flush() {
     return sb.append('>').toString();
   }
 
@@ -108,7 +113,7 @@ public class Describe {
     }
   }
 
-  public static String shortly(WebElement element) {
+  static String shortly(WebElement element) {
     try {
       if (element == null) {
         return "null";
@@ -149,7 +154,7 @@ public class Describe {
     return this;
   }
 
-  public static String shortly(By selector) {
+  static String shortly(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
           .replaceFirst("By\\.selector:\\s*(.*)", "$1")
@@ -162,5 +167,9 @@ public class Describe {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
+  }
+  
+  public static String describe(WebDriver webDriver) {
+    return webDriver.getClass().getSimpleName();
   }
 }

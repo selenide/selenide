@@ -13,7 +13,9 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.util.stream.Collectors.toList;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
@@ -50,6 +52,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
+    validateAssertionMode();
+
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
     try {
       for (CollectionCondition condition : conditions) {
@@ -98,11 +102,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(pollingInterval);
+      sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
 
-    condition.fail(collection, actualElements, lastError, timeoutMs);
+    if (!condition.apply(actualElements)) {
+      condition.fail(collection, actualElements, lastError, timeoutMs);
+    }
   }
 
   /**
@@ -144,16 +150,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Finde the first element which met the given condition
+   * Find the first element which met the given condition
    * @param condition
    * @return SelenideElement
    */
   public SelenideElement find(Condition condition) {
-    return filter(condition).get(0);
+    return CollectionElementByCondition.wrap(collection, condition);
   }
 
   /**
-   * Finde the first element which met the given condition
+   * Find the first element which met the given condition
    * @see #find(Condition)
    * @param condition
    * @return SelenideElement
@@ -173,6 +179,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Gets all the texts in elements collection
    * @return array of texts
    */
+  public List<String> texts() {
+    return texts(getActualElements());
+  }
+
+  /**
+   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts() that returns List instead of array
+   */
+  @Deprecated
   public String[] getTexts() {
     return getTexts(getActualElements());
   }
@@ -182,6 +196,15 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @param elements Any collection of WebElements
    * @return Array of texts (or exceptions in case of any WebDriverExceptions)
    */
+  public static List<String> texts(Collection<WebElement> elements) {
+    return elements.stream().map(e -> getText(e)).collect(toList());
+  }
+
+  /**
+   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection) 
+   *              that returns List instead of array
+   */
+  @Deprecated
   public static String[] getTexts(Collection<WebElement> elements) {
     String[] texts = new String[elements.size()];
     int i = 0;
