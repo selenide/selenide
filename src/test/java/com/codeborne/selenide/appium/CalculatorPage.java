@@ -4,19 +4,19 @@ import com.codeborne.selenide.SelenideElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.support.FindBy;
 
-public class CalculatorPage {
-  @FindBy(id = "com.android.calculator2:id/plus")
+class CalculatorPage {
+  @FindBy(id = "op_add")
   SelenideElement plus;
 
-  @FindBy(id = "com.android.calculator2:id/equal")
+  @FindBy(id = "eq")
   SelenideElement equal;
 
-  @FindBy(id = "com.android.calculator2:id/digit2")
+  @FindBy(id = "digit_2")
   SelenideElement number2;
 
-  @FindBy(id = "com.android.calculator2:id/digit4")
+  @FindBy(id = "digit_4")
   SelenideElement number4;
 
-  @AndroidFindBy(className = "android.widget.EditText")
+  @AndroidFindBy(id = "formula")
   SelenideElement result;
 }
