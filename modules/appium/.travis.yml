@@ -1,6 +1,6 @@
 branches:
   only:
-    - travis
+    - master
 
 language: android
 sudo: false
