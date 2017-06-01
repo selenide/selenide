@@ -1,5 +1,7 @@
+plugins {
+  id 'signing'
+}
 apply from: 'build.gradle'
-apply plugin: 'signing'
 
 defaultTasks 'clean', 'uploadArchives'
 
@@ -8,58 +10,58 @@ signing {
 }
 
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: project.version.endsWith("-SNAPSHOT") ?
-                            'https://oss.sonatype.org/content/repositories/snapshots/' :
-                            'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-              authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
-            }
+      repository(url: project.version.endsWith("-SNAPSHOT") ?
+        'https://oss.sonatype.org/content/repositories/snapshots/' :
+        'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+        authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
+      }
 
-            pom.project {
-              name archivesBaseName
-              packaging 'jar'
-              description 'Selenide adaptor for Appium framework'
-              url 'https://github.com/codeborne/selenide-appium'
+      pom.project {
+        name archivesBaseName
+        packaging 'jar'
+        description 'Selenide adaptor for Appium framework'
+        url 'https://github.com/codeborne/selenide-appium'
 
-               scm {
-                   url 'scm:git@github.com:codeborne/selenide-appium.git'
-                   connection 'scm:git@github.com:codeborne/selenide-appium.git'
-                   developerConnection 'scm:git@github.com:codeborne/selenide-appium.git'
-               }
-
-               licenses {
-                   license {
-                       name 'MIT'
-                       url 'https://opensource.org/licenses/MIT'
-                       distribution 'repo'
-                   }
-               }
-
-               developers {
-                   developer {
-                       id 'asolntsev'
-                       name 'Andrei Solntsev'
-                   }
-               }
-           }
-
-           //mess with the generated pom to set the 'packaging' tag
-           pom.withXml { XmlProvider xmlProvider ->
-               def xml = xmlProvider.asString()
-               def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
-
-               pomXml.version[0] + { packaging('jar') }
-
-               def newXml = new StringWriter()
-               def printer = new XmlNodePrinter(new PrintWriter(newXml))
-               printer.preserveWhitespace = true
-               printer.print(pomXml)
-               xml.setLength(0)
-               xml.append(newXml.toString())
-           }
+        scm {
+          url 'scm:git@github.com:codeborne/selenide-appium.git'
+          connection 'scm:git@github.com:codeborne/selenide-appium.git'
+          developerConnection 'scm:git@github.com:codeborne/selenide-appium.git'
         }
+
+        licenses {
+          license {
+            name 'MIT'
+            url 'https://opensource.org/licenses/MIT'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'asolntsev'
+            name 'Andrei Solntsev'
+          }
+        }
+      }
+
+      //mess with the generated pom to set the 'packaging' tag
+      pom.withXml { XmlProvider xmlProvider ->
+        def xml = xmlProvider.asString()
+        def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
+
+        pomXml.version[0] + { packaging('jar') }
+
+        def newXml = new StringWriter()
+        def printer = new XmlNodePrinter(new PrintWriter(newXml))
+        printer.preserveWhitespace = true
+        printer.print(pomXml)
+        xml.setLength(0)
+        xml.append(newXml.toString())
+      }
     }
+  }
 }

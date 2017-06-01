@@ -1,35 +1,46 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-
-group='com.codeborne'
-archivesBaseName = 'selenide-appium'
-version='1.0-SNAPSHOT'
-
-[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
-[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
-compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+plugins {
+  id 'java'
+  id 'java-library'
+  id 'maven'
+}
 
 defaultTasks 'check', 'test', 'install'
 
+group = 'com.codeborne'
+description = 'Selenide adaptor for Appium framework'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+ext {
+  encoding = 'UTF-8'
+  log4jVersion = '2.8.2'
+}
+
+compileJava {
+  options.incremental = true
+  options.encoding = encoding
+}
+
+compileTestJava {
+  options.encoding = encoding
+}
+
+javadoc {
+  options.encoding = encoding
+  failOnError = false
+}
+
 repositories {
+  jcenter()
   mavenCentral()
 }
 
 dependencies {
-  compile('com.codeborne:selenide:4.4.3')
-  compile('io.appium:java-client:5.0.0-BETA8')
+  implementation('com.codeborne:selenide:4.4.3')
+  implementation('io.appium:java-client:5.0.0-BETA8')
 }
-
-task libs(type: Sync) {
-  from configurations.compile
-  from configurations.runtime
-  from configurations.testRuntime
-  into "$buildDir/lib"
-}
-
-compileJava.dependsOn libs
 
 jar {
   manifest {
@@ -40,16 +51,12 @@ jar {
   }
 }
 
-task sourcesJar(type: Jar, dependsOn:classes) {
+task sourcesJar(type: Jar) {
   classifier = 'sources'
-  from sourceSets.main.allSource
+  from sourceSets.main.allJava
 }
 
-javadoc {
-  failOnError=false
-}
-
-task javadocJar(type: Jar, dependsOn:javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
@@ -59,3 +66,5 @@ artifacts {
   archives sourcesJar
   archives javadocJar
 }
+
+wrapper.gradleVersion = '3.5'

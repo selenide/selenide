@@ -1,5 +1,13 @@
 package com.codeborne.selenide.appium;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.Selenide;
@@ -21,10 +29,6 @@ import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 
-import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   private final SearchContext searchContext;
   private final ElementLocatorFactory factory;
@@ -41,20 +45,15 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     if (selector instanceof ByIdOrName) {
       // throw new IllegalArgumentException("Please define locator for " + field);
       return decorateWithAppium(loader, field);
-    }
-    else if (WebElement.class.isAssignableFrom(field.getType())) {
+    } else if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(searchContext, selector, 0);
-    }
-    else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+    } else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return new ElementsCollection(new BySelectorCollection(searchContext, selector));
-    }
-    else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+    } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
-    }
-    else if (isDecoratableList(field, ElementsContainer.class)) {
+    } else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
-    }
-    else if (isDecoratableList(field, SelenideElement.class)) {
+    } else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
 
@@ -67,6 +66,26 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return Selenide.$((WebElement) appiumElement);
     }
     return appiumElement;
+  }
+
+  private ElementsContainer createElementsContainer(By selector, Field field) {
+    try {
+      SelenideElement self = ElementFinder.wrap(searchContext, selector, 0);
+      return initElementsContainer(field.getType(), self);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
+    }
+  }
+
+  private boolean isDecoratableList(Field field, Class<?> type) {
+    if (!List.class.isAssignableFrom(field.getType())) {
+      return false;
+    }
+
+    Class<?> listType = getListGenericType(field);
+
+    return listType != null && type.isAssignableFrom(listType)
+      && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
   }
 
   private List<ElementsContainer> createElementsContainerList(Field field) {
@@ -83,34 +102,14 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     }
   }
 
-  private ElementsContainer createElementsContainer(By selector, Field field) {
-    try {
-      SelenideElement self = ElementFinder.wrap(searchContext, selector, 0);
-      return initElementsContainer(field.getType(), self);
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
-    }
-  }
-
   private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
-      throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
     PageFactory.initElements(new SelenideFieldDecorator(self), result);
     result.setSelf(self);
     return result;
-  }
-
-  private boolean isDecoratableList(Field field, Class<?> type) {
-    if (!List.class.isAssignableFrom(field.getType())) {
-      return false;
-    }
-
-    Class<?> listType = getListGenericType(field);
-
-    return listType != null && type.isAssignableFrom(listType)
-        && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
   }
 
   private Class<?> getListGenericType(Field field) {
