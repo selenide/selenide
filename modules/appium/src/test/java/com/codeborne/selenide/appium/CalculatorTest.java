@@ -11,34 +11,28 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class CalculatorTest {
+  @Before
+  public void setUp() {
+    Configuration.browser = AndroidDriverProvider.class.getName();
+  }
 
-    @Before
-    public void setUp() {
-        Configuration.browser = AndroidDriverProvider.class.getName();
-    }
+  @Test
+  public void plain() {
+    $(By.id("digit_2")).click();
+    $(By.id("op_add")).click();
+    $(By.id("digit_4")).click();
+    $(By.id("eq")).click();
+    $(By.id("formula")).shouldHave(text("6"));
+  }
 
-    @Test
-    public void plain(){
-        $(By.id("com.android.calculator2:id/digit2")).click();
-        $(By.id("com.android.calculator2:id/plus")).click();
-        $(By.id("com.android.calculator2:id/digit4")).click();
-        $(By.id("com.android.calculator2:id/equal")).click();
-
-        $(By.className("android.widget.EditText")).shouldHave(text("6"));
-    }
-
-    @Test
-    public void pageObject(){
-        CalculatorPage page = new CalculatorPage();
-        PageFactory.initElements(new SelenideAppiumFieldDecorator(getWebDriver()),
-            page
-        );
-
-        page.number2.click();
-        page.plus.click();
-        page.number4.click();
-        page.equal.click();
-        
-        page.result.shouldHave(text("6"));
-    }
+  @Test
+  public void pageObject() {
+    CalculatorPage page = new CalculatorPage();
+    PageFactory.initElements(new SelenideAppiumFieldDecorator(getWebDriver()), page);
+    page.number2.click();
+    page.plus.click();
+    page.number4.click();
+    page.equal.click();
+    page.result.shouldHave(text("6"));
+  }
 }
