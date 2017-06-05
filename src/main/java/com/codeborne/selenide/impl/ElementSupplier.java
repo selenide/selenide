@@ -8,23 +8,20 @@ import java.util.function.Supplier;
 
 import static java.lang.Thread.currentThread;
 
-/**
- * Created by Cok on 31.05.2017.
- */
 public class ElementSupplier extends WebElementSource {
 
-    private final Supplier<WebElement> howToGetElement;
+    private final Supplier<? extends WebElement> howToGetElement;
 
-    ElementSupplier(Supplier<WebElement> howToGetElement) {
+    ElementSupplier(Supplier<? extends WebElement> howToGetElement) {
        this.howToGetElement = howToGetElement;
     }
 
-    public static SelenideElement wrap(Supplier<WebElement> howToGetElement) {
+    public static SelenideElement wrap(Supplier<? extends WebElement> howToGetElement) {
         return wrap(SelenideElement.class, howToGetElement);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends SelenideElement> T wrap(Class<T> clazz, Supplier<WebElement> howToGetElement) {
+    public static <T extends SelenideElement> T wrap(Class<T> clazz, Supplier<? extends WebElement> howToGetElement) {
         return (T) Proxy.newProxyInstance(
                 currentThread().getContextClassLoader(),
                 new Class<?>[]{clazz},
@@ -38,6 +35,16 @@ public class ElementSupplier extends WebElementSource {
 
     @Override
     public String getSearchCriteria() {
-        return howToGetElement.toString();
+        try {
+            return Describe.describe(howToGetElement.get());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+    }
+
+    @Override
+    public String toString() {
+        return "{" + getSearchCriteria() + '}';
     }
 }

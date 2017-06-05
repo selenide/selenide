@@ -344,8 +344,13 @@ public class Selenide {
     return ElementFinder.wrap($(parent), seleniumSelector, index);
   }
 
-
-  public static SelenideElement $(Supplier<WebElement> howToGetElement) {
+  /**
+   * Initialize SelenideElement from supplier
+   * ATTENTION! This method doesn't invoke supplier's get yet!
+   * @param howToGetElement supplier that help us get element
+   * @return SelenideElement
+   */
+  public static SelenideElement $(Supplier<? extends WebElement> howToGetElement) {
     return ElementSupplier.wrap(howToGetElement);
   }
 
