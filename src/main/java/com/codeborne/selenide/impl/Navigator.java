@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
@@ -65,6 +66,7 @@ public class Navigator {
     }
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
+    SelenideLogger.commitStep(log, IN_PROGRESS);
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
