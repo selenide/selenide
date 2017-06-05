@@ -24,8 +24,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
-import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.*;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
@@ -149,8 +148,8 @@ public class SelenideElementProxyTest {
     $("#firstName").setValue("john");
   }
 
-  protected LogEventListener createListener(final String selector, final String subject, 
-                                            final EventStatus status) {
+  protected LogEventListener createListener(final String selector, final String expectedSubject,
+                                            final EventStatus expectedStatus) {
     return new LogEventListener() {
       @Override
       public void onEvent(LogEvent currentLog) {
@@ -158,8 +157,10 @@ public class SelenideElementProxyTest {
                 currentLog.getSubject() + ": " + currentLog.getStatus()
             );
         assertThat(currentLog.getElement(), containsString(selector));
-        assertThat(currentLog.getSubject(), containsString(subject));
-        assertEquals(currentLog.getStatus(), status);
+        assertThat(currentLog.getSubject(), containsString(expectedSubject));
+        if (currentLog.getStatus() != IN_PROGRESS) {
+          assertEquals(currentLog.getStatus(), expectedStatus);
+        }
       }
     };
   }
@@ -173,7 +174,7 @@ public class SelenideElementProxyTest {
     SelenideElement selEl = $("#firstName");
     selEl.setValue("ABC");
   }
-  
+
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
