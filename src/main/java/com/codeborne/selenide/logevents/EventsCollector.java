@@ -9,7 +9,9 @@ public class EventsCollector implements LogEventListener {
 
   @Override
   public void onEvent(LogEvent currentLog) {
-    logEvents.add(currentLog);
+    if (currentLog.getStatus().equals(LogEvent.EventStatus.IN_PROGRESS)) {
+      logEvents.add(currentLog);
+    }
   }
   
   public List<LogEvent> events() {
