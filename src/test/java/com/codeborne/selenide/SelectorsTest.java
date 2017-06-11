@@ -5,7 +5,7 @@ import com.codeborne.selenide.Selectors.WithText;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.*;
 
 public class SelectorsTest {

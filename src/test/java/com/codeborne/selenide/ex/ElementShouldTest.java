@@ -2,10 +2,10 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class ElementShouldTest {
 
@@ -13,7 +13,7 @@ public class ElementShouldTest {
   public void testToString() {
     String searchCriteria = "by.name: selenide";
     String prefix = "be ";
-    WebElement webElementMock = Mockito.mock(WebElement.class);
+    WebElement webElementMock = mock(WebElement.class);
     Exception exception = new Exception("Error message");
     ElementShould elementShould = new ElementShould(searchCriteria, prefix, Condition.appear, webElementMock, exception);
     String expectedString = "Element should be visible {by.name: selenide}\n" +

@@ -4,33 +4,30 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ExactTextsTest {
 
   @Test
-  public void varArgsConstructor() throws NoSuchFieldException, IllegalAccessException {
+  public void varArgsConstructor() throws Exception {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    Field expectedTextsFIeld = exactTexts.getClass().getDeclaredField("expectedTexts");
-    assertEquals("Expected texts list", Arrays.asList("One", "Two", "Three"), expectedTextsFIeld.get(exactTexts));
+    assertEquals("Expected texts list", asList("One", "Two", "Three"), exactTexts.expectedTexts);
   }
 
   @Test
   public void testApplyOnWrongSizeList() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertFalse(exactTexts.apply(singletonList(Mockito.mock(WebElement.class))));
+    assertFalse(exactTexts.apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
@@ -47,11 +44,11 @@ public class ExactTextsTest {
     String exactText1 = "One";
     String exactText2 = "Two";
     ExactTexts exactTexts = new ExactTexts(exactText1, exactText2);
-    WebElement mockedWebElement1 = Mockito.mock(WebElement.class);
-    WebElement mockedWebElement2 = Mockito.mock(WebElement.class);
+    WebElement mockedWebElement1 = mock(WebElement.class);
+    WebElement mockedWebElement2 = mock(WebElement.class);
     when(mockedWebElement1.getText()).thenReturn(exactText1);
     when(mockedWebElement2.getText()).thenReturn(shouldMatch ? exactText2 : exactText1);
-    assertEquals(shouldMatch, exactTexts.apply(Arrays.asList(mockedWebElement1, mockedWebElement2)));
+    assertEquals(shouldMatch, exactTexts.apply(asList(mockedWebElement1, mockedWebElement2)));
   }
 
   @Test
@@ -61,14 +58,14 @@ public class ExactTextsTest {
 
   @Test
   public void testFailWithEmptyElementsLIst() {
-    failOnEmptyOrNullElementsList(Collections.emptyList());
+    failOnEmptyOrNullElementsList(emptyList());
   }
 
   private void failOnEmptyOrNullElementsList(List<WebElement> elements) {
     ExactTexts exactTexts = new ExactTexts("One");
     Exception exception = new Exception("Exception method");
     try {
-      exactTexts.fail(Mockito.mock(WebElementsCollection.class), elements, exception, 10000);
+      exactTexts.fail(mock(WebElementsCollection.class), elements, exception, 10000);
     } catch (ElementNotFound ex) {
       assertEquals("Element not found {null}\nExpected: [One]", ex.getMessage());
     }
@@ -79,15 +76,15 @@ public class ExactTextsTest {
     ExactTexts exactTexts = new ExactTexts("One");
     Exception exception = new Exception("Exception method");
 
-    WebElement mockedWebElement = Mockito.mock(WebElement.class);
+    WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.getText()).thenReturn("Hello");
 
-    WebElementsCollection mockedElementsCollection = Mockito.mock(WebElementsCollection.class);
+    WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
     when(mockedElementsCollection.description()).thenReturn("Collection description");
 
     try {
       exactTexts.fail(mockedElementsCollection,
-                      Collections.singletonList(mockedWebElement),
+                      singletonList(mockedWebElement),
                       exception,
                       10000);
     } catch (TextsMismatch ex) {
@@ -117,7 +114,7 @@ public class ExactTextsTest {
   @Test
   public void emptyListIsNotAllowed() {
     try {
-      new ExactTexts(new ArrayList<>());
+      new ExactTexts(emptyList());
       fail("expected IllegalArgumentException");
     }
     catch (IllegalArgumentException expected) {

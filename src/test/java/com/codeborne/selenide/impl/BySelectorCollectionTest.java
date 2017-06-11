@@ -2,14 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,12 +45,12 @@ public class BySelectorCollectionTest {
 
     @Override
     public List<WebElement> findElements(By by) {
-      return Collections.singletonList(Mockito.mock(WebElement.class));
+      return singletonList(mock(WebElement.class));
     }
 
     @Override
     public WebElement findElement(By by) {
-      return Mockito.mock(WebElement.class);
+      return mock(WebElement.class);
     }
   }
 }

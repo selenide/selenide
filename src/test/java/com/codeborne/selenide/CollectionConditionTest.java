@@ -3,8 +3,7 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.collections.*;
 import org.junit.Test;
 
-import java.util.Arrays;
-
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -56,7 +55,7 @@ public class CollectionConditionTest {
 
   @Test
   public void testTextsWithListOfStrings() {
-    CollectionCondition collectionCondition = CollectionCondition.texts(Arrays.asList("One", "Two", "Three"));
+    CollectionCondition collectionCondition = CollectionCondition.texts(asList("One", "Two", "Three"));
     assertThat(collectionCondition, instanceOf(Texts.class));
     assertEquals("Texts content", "Texts [One, Two, Three]", collectionCondition.toString());
   }
@@ -70,7 +69,7 @@ public class CollectionConditionTest {
 
   @Test
   public void testExactTextsWithListOfStrings() {
-    CollectionCondition collectionCondition = CollectionCondition.exactTexts(Arrays.asList("One", "Two", "Three"));
+    CollectionCondition collectionCondition = CollectionCondition.exactTexts(asList("One", "Two", "Three"));
     assertThat(collectionCondition, instanceOf(ExactTexts.class));
     assertEquals("Exact texts content", "Exact texts [One, Two, Three]", collectionCondition.toString());
   }

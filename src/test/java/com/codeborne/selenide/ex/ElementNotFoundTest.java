@@ -3,13 +3,13 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ElementNotFoundTest {
@@ -47,9 +47,9 @@ public class ElementNotFoundTest {
 
   @Test
   public void testElementNotFoundWithWebElementCollectionAndThrowableError() {
-    WebElementsCollection webElementCollectionMock = Mockito.mock(WebElementsCollection.class);
+    WebElementsCollection webElementCollectionMock = mock(WebElementsCollection.class);
     when(webElementCollectionMock.description()).thenReturn("mock collection description");
-    List<String> expectedStrings = Arrays.asList("One", "Two", "Three");
+    List<String> expectedStrings = asList("One", "Two", "Three");
 
     ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
                                                               expectedStrings,

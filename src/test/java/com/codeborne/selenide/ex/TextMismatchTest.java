@@ -2,20 +2,20 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class TextMismatchTest {
 
   @Test
   public void testToString() {
-    WebElementsCollection webElementsCollection = Mockito.mock(WebElementsCollection.class);
-    List<String> actualTexts = Arrays.asList("One", "Two", "Three");
-    List<String> expectedTexts = Arrays.asList("Four", "Five", "Six");
+    WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
+    List<String> actualTexts = asList("One", "Two", "Three");
+    List<String> expectedTexts = asList("Four", "Five", "Six");
     long timeoutMs = 1000L;
     TextsMismatch textsMismatch = new TextsMismatch(webElementsCollection, actualTexts, expectedTexts, timeoutMs);
     String expectedString = "TextsMismatch \n" +

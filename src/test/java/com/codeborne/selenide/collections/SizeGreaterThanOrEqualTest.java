@@ -3,65 +3,44 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
-
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class SizeGreaterThanOrEqualTest {
-
-  @Test
-  public void testConstructor() throws NoSuchFieldException, IllegalAccessException {
-    int expectedSize = 10;
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(expectedSize);
-    Field expectedSizeField = listSize.getClass().getDeclaredField("expectedSize");
-    assertEquals("List expected size", expectedSize, expectedSizeField.get(listSize));
-  }
-
   @Test
   public void testApplyWithEmptyList() {
-    int expectedSize = 10;
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(expectedSize);
-    assertFalse(listSize.apply(Collections.emptyList()));
+    assertFalse(new SizeGreaterThanOrEqual(10).apply(emptyList()));
   }
 
   @Test
   public void testApplyWithWrongSizeList() {
-    int expectedSize = 10;
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(expectedSize);
-    assertFalse(listSize.apply(Collections.singletonList(Mockito.mock(WebElement.class))));
+    assertFalse(new SizeGreaterThanOrEqual(10).apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
   public void testApplyWithSameSize() {
-    int expectedSize = 1;
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(expectedSize);
-    WebElement mockedWebElement = Mockito.mock(WebElement.class);
-    assertTrue(listSize.apply(Collections.singletonList(mockedWebElement)));
+    assertTrue(new SizeGreaterThanOrEqual(1).apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
   public void testApplyWithGreaterSize() {
-    int expectedSize = 1;
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(expectedSize);
-    WebElement mockedWebElement = Mockito.mock(WebElement.class);
-    assertTrue(listSize.apply(Arrays.asList(mockedWebElement, mockedWebElement)));
+    assertTrue(new SizeGreaterThanOrEqual(1).apply(asList(mock(WebElement.class), mock(WebElement.class))));
   }
 
   @Test
   public void testFailMethod() {
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(10);
-    WebElementsCollection mockedWebElementCollection = Mockito.mock(WebElementsCollection.class);
+    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.description()).thenReturn("Collection description");
 
     try {
-      listSize.fail(mockedWebElementCollection,
-          Collections.emptyList(),
+      new SizeGreaterThanOrEqual(10).fail(mockedWebElementCollection,
+          emptyList(),
           new Exception("Exception message"),
           10000);
     } catch (ListSizeMismatch ex) {
@@ -72,7 +51,6 @@ public class SizeGreaterThanOrEqualTest {
 
   @Test
   public void testToString() {
-    SizeGreaterThanOrEqual listSize = new SizeGreaterThanOrEqual(10);
-    assertEquals("size >= 10", listSize.toString());
+    assertEquals("size >= 10", new SizeGreaterThanOrEqual(10).toString());
   }
 }
