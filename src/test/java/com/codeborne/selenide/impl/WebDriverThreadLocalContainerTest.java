@@ -46,7 +46,7 @@ public class WebDriverThreadLocalContainerTest {
   @Before
   public void setUp() {
     container.factory = mock(WebDriverFactory.class);
-    doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(any(Proxy.class));
+    doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(any());
     doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(null);
     WebDriverRunner.setProxy(null);
     logCapturingStream = new ByteArrayOutputStream();
@@ -90,7 +90,7 @@ public class WebDriverThreadLocalContainerTest {
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
     
     assertSame(webdriver, container.getAndCheckWebDriver());
-    verify(container).isBrowserStillOpen(any(WebDriver.class));
+    verify(container).isBrowserStillOpen(any());
   }
 
   @Test
@@ -100,7 +100,7 @@ public class WebDriverThreadLocalContainerTest {
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
     
     assertSame(webdriver, container.getAndCheckWebDriver());
-    verify(container, never()).isBrowserStillOpen(any(WebDriver.class));
+    verify(container, never()).isBrowserStillOpen(any());
   }
 
   @Test
