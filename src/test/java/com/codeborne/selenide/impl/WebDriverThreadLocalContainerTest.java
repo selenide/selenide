@@ -29,7 +29,6 @@ import static java.lang.Thread.currentThread;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class WebDriverThreadLocalContainerTest {
