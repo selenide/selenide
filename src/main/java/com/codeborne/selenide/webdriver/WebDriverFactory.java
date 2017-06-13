@@ -150,7 +150,7 @@ public class WebDriverFactory {
           continue;
         }
         String value = System.getProperties().getProperty(key);
-        switch(capability) {
+        switch (capability) {
           case "args":
             List<String> args = Arrays.asList(value.split(","));
             currentChromeOptions.addArguments(args);
