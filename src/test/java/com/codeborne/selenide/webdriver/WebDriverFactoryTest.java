@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
@@ -119,6 +120,13 @@ public class WebDriverFactoryTest {
     System.setProperty("chromeoptions.binary", "/tmp/chrome");
     String binary = factory.createChromeOptions().toJson().getAsJsonObject().getAsJsonPrimitive("binary").getAsString();
     assertThat(binary, is("/tmp/chrome"));
+  }
+
+  @Test
+  public void ignoreIllegalChromeOptionsFromSystemPropsToDriver() throws IOException {
+    System.setProperty("chromeoptions.", "illegal chrome options");
+    String options  = factory.createChromeOptions().toJson().toString();
+    assertThat(options, not(containsString("illegal chrome options")));
   }
 
   @After
