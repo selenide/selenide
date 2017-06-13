@@ -114,6 +114,13 @@ public class WebDriverFactoryTest {
     assertThat(arrayOfArguments, containsString("xcvcd=123"));
   }
 
+  @Test
+  public void transferChromeOptionBinaryFromSystemPropsToDriver() throws IOException {
+    System.setProperty("chromeoptions.binary", "/tmp/chrome");
+    String binary = factory.createChromeOptions().toJson().getAsJsonObject().getAsJsonPrimitive("binary").getAsString();
+    assertThat(binary, is("/tmp/chrome"));
+  }
+
   @After
   public void tearDown() {
     System.clearProperty("capabilities.some.cap");
