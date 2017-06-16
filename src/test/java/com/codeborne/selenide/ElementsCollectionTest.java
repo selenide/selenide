@@ -12,8 +12,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Configuration.browser;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ElementsCollectionTest {
   @Rule
@@ -26,7 +25,33 @@ public class ElementsCollectionTest {
   public final void mockWebDriver() {
     browser = null;
   }
-  
+
+  @Test
+  public void doesNotWait_ifConditionAlreadyMatches() {
+    WebElementsCollection source = mock(WebElementsCollection.class);
+    ElementsCollection collection = spy(new ElementsCollection(source));
+    when(source.getActualElements()).thenReturn(asList(element1, element2));
+
+    collection.shouldHave(size(2));
+    
+    verify(collection, never()).sleep(anyLong());
+  }
+
+  @Test
+  public void sleepsAsLessAsPossible_untilConditionGetsMatched() {
+    WebElementsCollection source = mock(WebElementsCollection.class);
+    ElementsCollection collection = spy(new ElementsCollection(source));
+    when(source.getActualElements()).thenReturn(
+        asList(element1),
+        asList(element1, element2),
+        asList(element1, element2, element2)
+    );
+
+    collection.shouldHave(size(3));
+    
+    verify(collection, times(2)).sleep(anyLong());
+  }
+
   @Test
   public void toStringPrintsOutLastFetchedElements() {
     WebElementsCollection source = mock(WebElementsCollection.class);
