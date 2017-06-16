@@ -17,8 +17,8 @@ abstract class BaseTestNGTest {
     if (server == null) {
       int port = findFreePort();
       log.info("START " + browser + " Test NG tests");
-      baseUrl = "https://127.0.0.1:" + port;
-      server = new LocalHttpServer(port, true).start();
+      server = new LocalHttpServer(port, false).start();
+      baseUrl = "http://127.0.0.1:" + port;
     }
 
     open("/start_page.html");

@@ -46,13 +46,13 @@ public abstract class IntegrationTest {
     if (server == null) {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
+        log.info("START " + browser + " TESTS");
         server = new LocalHttpServer(port, SSL).start();
         if (SSL) {
           protocol = "https://";
         } else {
           protocol = "http://";
         }
-        log.info("START " + browser + " TESTS");
         Configuration.baseUrl = protocol + "127.0.0.1:" + port;
       }
     }
