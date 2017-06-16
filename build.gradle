@@ -294,15 +294,15 @@ task firefox(type: Test) {
 
 task downloadGeckoDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-macos.tar.gz'
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-macos.tar.gz'
     dest new File(buildDir, 'geckodriver.tar.gz')
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz'
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz'
     dest new File(buildDir, 'geckodriver.tar.gz')
   }
   else {
-    src 'https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-win64.zip'
+    src 'https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-win64.zip'
     dest new File(buildDir, 'geckodriver.zip')
   }
 
