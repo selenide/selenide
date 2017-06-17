@@ -346,6 +346,12 @@ task jbrowser(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task grid(type: Test) {
+  systemProperties['selenide.browser'] = 'htmlunit'
+  include 'grid/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task testng(type: Test) {
   useTestNG()
   include '**/*'

@@ -1,4 +1,4 @@
-package integration.grid;
+package grid;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
@@ -17,8 +17,6 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public class SeleniumGridTest extends IntegrationTest {
   @Before
   public void setUp() throws Exception {
-    assumeFalse(WebDriverRunner.isPhantomjs()); // for unknown reason, node registration doesn't work with PhantomJS yet.
-    
     close();
     
     int hubPort = findFreePort();
