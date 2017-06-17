@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.5 (planned to 18.06.2017)
+* #549 Selenide waits too much for collections
+
 === 4.4.3 (released 25.04.2017)
 * upgrade to selenium-java 3.4.0
 

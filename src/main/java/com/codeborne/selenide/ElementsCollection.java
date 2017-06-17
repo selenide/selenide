@@ -12,7 +12,6 @@ import java.util.*;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.toList;
@@ -80,20 +79,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     lastError = null;
     final long startTime = System.currentTimeMillis();
-    boolean conditionMatched = false;
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          if (conditionMatched) {
-            return;
-          } else {
-            conditionMatched = true;
-            sleep(collectionsPollingInterval);
-            continue;
-          }
-        } else {
-          conditionMatched = false;
+          return;
         }
       } catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
@@ -105,10 +95,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
-
-    if (!condition.apply(actualElements)) {
-      condition.fail(collection, actualElements, lastError, timeoutMs);
-    }
+    
+    condition.fail(collection, actualElements, lastError, timeoutMs);
+  }
+  
+  void sleep(long ms) {
+    Selenide.sleep(ms);
   }
 
   /**
