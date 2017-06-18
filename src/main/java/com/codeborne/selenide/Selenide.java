@@ -18,15 +18,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
-import static com.codeborne.selenide.Configuration.dismissModalDialogs;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
 /**
  * The main starting point of Selenide.
@@ -523,7 +520,7 @@ public class Selenide {
    */
   public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = Wait().until(alertIsPresent());
+      Alert alert = switchTo().alert();
       String actualDialogText = alert.getText();
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
@@ -551,7 +548,7 @@ public class Selenide {
    */
   public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = Wait().until(alertIsPresent());
+      Alert alert = switchTo().alert();
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
