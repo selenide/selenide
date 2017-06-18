@@ -1,5 +1,7 @@
 package integration;
 
+import com.automation.remarks.junit.VideoRule;
+import com.automation.remarks.video.recorder.VideoRecorder;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.junit.TextReport;
@@ -7,9 +9,11 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -36,6 +40,8 @@ public abstract class IntegrationTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  @Rule public VideoRule video = new VideoRule();
+  
   private static int port;
   protected static LocalHttpServer server;
   private long defaultTimeout;
@@ -73,6 +79,17 @@ public abstract class IntegrationTest {
     browserSize = "1024x768";
     server.uploadedFiles.clear();
     Configuration.fileDownload = PROXY;
+  }
+
+  @BeforeClass
+  public static void setUpVideoRecorder() {
+    File videoFolder = new File("build/reports/tests/" + Configuration.browser);
+    videoFolder.mkdirs();
+    System.setProperty("video.folder", videoFolder.getAbsolutePath());
+    VideoRecorder.conf()
+        .withVideoFolder(videoFolder.getAbsolutePath())
+        .videoEnabled(true)
+        .withRecordMode(ANNOTATED);
   }
 
   @AfterClass
