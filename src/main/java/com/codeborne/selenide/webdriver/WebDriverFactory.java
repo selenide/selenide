@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
@@ -96,7 +97,7 @@ public class WebDriverFactory {
     browserCapabilities.setCapability("acceptSslCerts", true);
 
     browserCapabilities = transferCapabilitiesFromSystemProperties(browserCapabilities, "capabilities.");
-    return browserCapabilities;
+    return browserCapabilities.merge(Configuration.browserCapabilities);
   }
 
   private DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
