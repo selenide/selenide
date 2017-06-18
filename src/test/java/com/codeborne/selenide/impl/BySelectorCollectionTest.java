@@ -25,13 +25,11 @@ public class BySelectorCollectionTest {
   @Test
   public void testWithWebElementParentConstructor() {
     SelenideElement mockedWebElement = mock(SelenideElement.class);
-    WebElement selenide_element = mock(WebElement.class);
-    when(mockedWebElement.toWebElement()).thenReturn(selenide_element);
-    when(selenide_element.getTagName()).thenReturn("<a href='http://selenide.com'>Click Me!</a>");
+    when(mockedWebElement.getSearchCriteria()).thenReturn("By.tagName: a");
 
     BySelectorCollection bySelectorCollection = new BySelectorCollection(mockedWebElement, By.name("selenide"));
     String description = bySelectorCollection.description();
-    assertEquals("<<a href='http://selenide.com'>Click Me!</a>>/By.name: selenide", description);
+    assertEquals("By.tagName: a/By.name: selenide", description);
   }
 
   @Test
