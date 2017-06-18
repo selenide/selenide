@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -78,7 +79,10 @@ public abstract class IntegrationTest {
     fastSetValue = false;
     browserSize = "1024x768";
     server.uploadedFiles.clear();
-    Configuration.fileDownload = PROXY;
+    
+    // proxy breaks Firefox/Marionette because of this error: 
+    // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
+    Configuration.fileDownload = isFirefox() || isMarionette() ? HTTPGET : PROXY; 
   }
 
   @BeforeClass
