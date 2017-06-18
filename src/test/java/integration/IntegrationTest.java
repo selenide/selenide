@@ -92,7 +92,7 @@ public abstract class IntegrationTest {
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
     VideoRecorder.conf()
         .withVideoFolder(videoFolder.getAbsolutePath())
-        .videoEnabled(true)
+        .videoEnabled(!isHeadless())
         .withRecordMode(ANNOTATED);
   }
 
