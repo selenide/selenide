@@ -44,23 +44,24 @@ public class WebDriverFactory {
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
 
+
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
-            CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
-                    isMarionette() ? createMarionetteDriver(proxy) :
-                            isFirefox() ? createFirefoxDriver(proxy) :
-                                    isHtmlUnit() ? createHtmlUnitDriver(proxy) :
-                                            isEdge() ? createEdgeDriver(proxy) :
-                                                    isIE() ? createInternetExplorerDriver(proxy) :
-                                                            isPhantomjs() ? createPhantomJsDriver(proxy) :
-                                                                    isOpera() ? createOperaDriver(proxy) :
-                                                                            isSafari() ? createSafariDriver(proxy) :
-                                                                                    isJBrowser() ? createJBrowserDriver(proxy) :
-                                                                                            createInstanceOf(browser, proxy);
+        CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
+            isMarionette() ? createMarionetteDriver(proxy) :
+                isFirefox() ? createFirefoxDriver(proxy) :
+                    isHtmlUnit() ? createHtmlUnitDriver(proxy) :
+                        isEdge() ? createEdgeDriver(proxy) :
+                            isIE() ? createInternetExplorerDriver(proxy) :
+                                isPhantomjs() ? createPhantomJsDriver(proxy) :
+                                    isOpera() ? createOperaDriver(proxy) :
+                                        isSafari() ? createSafariDriver(proxy) :
+                                            isJBrowser() ? createJBrowserDriver(proxy) :
+                                                createInstanceOf(browser, proxy);
     webdriver = adjustBrowserSize(webdriver);
     if (!isHeadless()) {
       Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
       log.info("BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
-              + " Platform=" + capabilities.getPlatform());
+          + " Platform=" + capabilities.getPlatform());
     }
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
     if (remote == null) {
@@ -152,8 +153,8 @@ public class WebDriverFactory {
           currentChromeOptions.addArguments(args);
         } else {
           log.warning(capability + "is ignored." +
-                  "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                  "are supported for the chromeoptions at the moment");
+              "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
+              "are supported for the chromeoptions at the moment");
         }
       }
     }
@@ -187,7 +188,7 @@ public class WebDriverFactory {
   protected WebDriver createFirefoxDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
     log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
-            "Use browser=marionette with geckodriver, when using it.");
+        "Use browser=marionette with geckodriver, when using it.");
     return new FirefoxDriver(capabilities.merge(browserCapabilities));
   }
 
@@ -285,8 +286,8 @@ public class WebDriverFactory {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     return new Dimension(
-            (int) toolkit.getScreenSize().getWidth(),
-            (int) toolkit.getScreenSize().getHeight());
+        (int) toolkit.getScreenSize().getWidth(),
+        (int) toolkit.getScreenSize().getHeight());
   }
 
   protected WebDriver createInstanceOf(String className, Proxy proxy) {
@@ -298,17 +299,17 @@ public class WebDriverFactory {
       capabilities.setCapability(SUPPORTS_ALERTS, true);
       if (isPhantomjs()) {
         capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
-                new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
+            new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
       }
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
         Constructor<?> constructor = clazz.getDeclaredConstructor();
         constructor.setAccessible(true);
-        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities);
+        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities.merge(browserCapabilities));
       } else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
-        return (WebDriver) constructor.newInstance(capabilities);
+        return (WebDriver) constructor.newInstance(capabilities.merge(browserCapabilities));
       }
     } catch (InvocationTargetException e) {
       throw runtime(e.getTargetException());
