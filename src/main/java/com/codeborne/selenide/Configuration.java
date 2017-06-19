@@ -47,7 +47,7 @@ public class Configuration {
    * Default value: 200 (milliseconds)
    */
   public static long collectionsPollingInterval = Long.parseLong(
-      System.getProperty("selenide.collectionsPollingInterval", "200"));
+          System.getProperty("selenide.collectionsPollingInterval", "200"));
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
@@ -66,7 +66,7 @@ public class Configuration {
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
   public static boolean reopenBrowserOnFail = Boolean.parseBoolean(
-      System.getProperty("selenide.reopenBrowserOnFail", "true"));
+          System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
@@ -102,7 +102,7 @@ public class Configuration {
    * Default value: none
    */
   public static String browserVersion = System.getProperty("selenide.browserVersion",
-      System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
+          System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
 
 
   /**
@@ -127,7 +127,7 @@ public class Configuration {
    * Default value: none (browser size will not be set explicitly)
    */
   public static String browserSize = System.getProperty("selenide.browserSize",
-      System.getProperty("selenide.browser-size"));
+          System.getProperty("selenide.browser-size"));
 
   /**
    * The browser window is maximized when started.
@@ -136,7 +136,7 @@ public class Configuration {
    * Default value: true
    */
   public static boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized",
-      System.getProperty("selenide.start-maximized", "true")));
+          System.getProperty("selenide.start-maximized", "true")));
 
   /**
    * @deprecated this options allowed only a single switch.
@@ -170,7 +170,7 @@ public class Configuration {
    * @since 3.5
    */
   public static String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
-      System.getProperty("selenide.page-load-strategy", "normal"));
+          System.getProperty("selenide.page-load-strategy", "normal"));
 
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
@@ -180,7 +180,7 @@ public class Configuration {
    * Default value: false
    */
   public static boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs",
-      System.getProperty("selenide.click-via-js", "false")));
+          System.getProperty("selenide.click-via-js", "false")));
 
   /**
    * Defines if Selenide tries to capture JS errors
@@ -212,7 +212,7 @@ public class Configuration {
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
   public static String reportsFolder = System.getProperty("selenide.reportsFolder",
-      System.getProperty("selenide.reports", "build/reports/tests"));
+          System.getProperty("selenide.reports", "build/reports/tests"));
 
   /**
    * Optional: URL of CI server where reports are published to.
@@ -262,7 +262,7 @@ public class Configuration {
    * (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
   public static boolean dismissModalDialogs =
-      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+          Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
@@ -357,5 +357,5 @@ public class Configuration {
    * Default: HTTPGET
    */
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
-      System.getProperty("selenide.fileDownload", HTTPGET.name()));
+          System.getProperty("selenide.fileDownload", HTTPGET.name()));
 }
