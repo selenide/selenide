@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
   implementation('com.codeborne:selenide:4.4.3')
-  implementation('io.appium:java-client:5.0.0-BETA8')
+  implementation('io.appium:java-client:5.0.0-BETA9')
 }
 
 jar {
@@ -67,4 +67,4 @@ artifacts {
   archives javadocJar
 }
 
-wrapper.gradleVersion = '3.5'
+wrapper.gradleVersion = '4.0'
