@@ -22,7 +22,7 @@ public class ConfirmTest extends IntegrationTest {
 
   @Before
   public void openTestPage() {
-    assumeFalse(isFirefox());
+    assumeFalse(isFirefox() || isChrome());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
