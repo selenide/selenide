@@ -202,6 +202,7 @@ public class WebDriverFactory {
 
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     myProfile = transferFirefoxProfileFromSystemProperties(myProfile, "firefoxprofile.");
+    capabilities.setCapability("marionette", false);
     capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
     return capabilities;
   }
