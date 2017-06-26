@@ -476,6 +476,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.FindByXpath
    */
   SelenideElement $x(String xpath, int index);
+
   /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
