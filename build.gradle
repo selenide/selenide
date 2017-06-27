@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-  implementation('com.codeborne:selenide:4.4.3')
+  implementation('com.codeborne:selenide:4.5')
   implementation('io.appium:java-client:5.0.0-BETA9')
 }
 
