@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.5'
+version='4.5.1'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
