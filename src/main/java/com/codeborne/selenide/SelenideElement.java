@@ -638,6 +638,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File download() throws FileNotFoundException;
 
   /**
+   * Return criteria by which this element is located
+   * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
+   */
+  String getSearchCriteria();
+
+  /**
    * @return the original Selenium WebElement wrapped by this object
    * 
    * @see com.codeborne.selenide.commands.ToWebElement

@@ -134,6 +134,14 @@ public class CollectionMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void errorMessageShouldShow_whichElementInChainWasNotFound() {
+    thrown.expect(ElementNotFound.class);
+    thrown.expectMessage("Element not found {#multirowTable.findBy(text 'INVALID-TEXT')}");
+    
+    $$("#multirowTable").findBy(text("INVALID-TEXT")).findAll("valid-selector").shouldHave(texts("foo bar"));
+  }
+
+  @Test
   public void userCanFindMatchingElementFromList() {
     $$("#multirowTable tr").findBy(text("Norris")).shouldHave(text("Norris"));
   }

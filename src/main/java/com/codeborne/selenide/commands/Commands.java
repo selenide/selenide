@@ -42,6 +42,7 @@ public class Commands {
     add("getWrappedElement", new GetWrappedElement());
     add("screenshot", new TakeScreenshot());
     add("screenshotAsImage", new TakeScreenshotAsImage());
+    add("getSearchCriteria", new GetSearchCriteria());
   }
 
   private void addActionsCommands() {
