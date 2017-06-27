@@ -2,9 +2,13 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import static com.codeborne.selenide.Configuration.browser;
@@ -14,6 +18,7 @@ public class WebDriverRunner {
 
   public static final String CHROME = "chrome";
   public static final String INTERNET_EXPLORER = "ie";
+  public static final String INTERNET_EXPLORER_FULL_NAME = "internet explorer";
   public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
   /**
@@ -175,7 +180,9 @@ public class WebDriverRunner {
    * Is Selenide configured to use Internet Explorer browser
    */
   public static boolean isIE() {
-    return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+    return INTERNET_EXPLORER.equalsIgnoreCase(browser) ||
+        isRunningWebDriverAnInstanceOf(InternetExplorerDriver.class) ||
+        isRemoteDriverAnIE();
   }
 
   /**
@@ -267,5 +274,18 @@ public class WebDriverRunner {
    */
   public static String currentFrameUrl() {
     return webdriverContainer.getCurrentFrameUrl();
+  }
+
+  private static boolean isRunningWebDriverAnInstanceOf(Class<? extends WebDriver> driverClass) {
+    return hasWebDriverStarted() && driverClass.isInstance(getWebDriver());
+  }
+
+  private static boolean isRemoteDriverAnIE() {
+    if (!isRunningWebDriverAnInstanceOf(RemoteWebDriver.class)) {
+      return false;
+    }
+    Capabilities capabilities = ((RemoteWebDriver) getWebDriver()).getCapabilities();
+    String browserName = (capabilities != null) ? capabilities.getBrowserName() : null;
+    return !StringUtils.isEmpty(browserName) && INTERNET_EXPLORER_FULL_NAME.equalsIgnoreCase(browserName);
   }
 }
