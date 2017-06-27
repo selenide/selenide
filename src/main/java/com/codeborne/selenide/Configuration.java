@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
@@ -64,7 +66,7 @@ public class Configuration {
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
   public static boolean reopenBrowserOnFail = Boolean.parseBoolean(
-      System.getProperty("selenide.reopenBrowserOnFail", "true"));
+          System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
@@ -102,10 +104,18 @@ public class Configuration {
   public static String browserVersion = System.getProperty("selenide.browserVersion",
           System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
 
+
+  /**
+   * Browser capabilities.
+   * <p/>
+   * Default value: null
+   */
+  public static DesiredCapabilities browserCapabilities;
+
   /**
    * URL of remote web driver (in case of using Selenium Grid).
    * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/wd/hub".
-   *
+   * <p>
    * Default value: null (Grid is not used).
    */
   public static String remote = System.getProperty("remote");
@@ -113,7 +123,7 @@ public class Configuration {
   /**
    * The browser window size.
    * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
-   *
+   * <p>
    * Default value: none (browser size will not be set explicitly)
    */
   public static String browserSize = System.getProperty("selenide.browserSize",
@@ -130,12 +140,12 @@ public class Configuration {
 
   /**
    * @deprecated this options allowed only a single switch.
-   *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
-   *
+   * Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
+   * <p>
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property, 
+   * Can be configured either programmatically or by system property,
    * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
-   *
+   * <p>
    * Default value: none
    */
   @Deprecated
@@ -144,23 +154,24 @@ public class Configuration {
   /**
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".
-   *
+   * <p>
    * Can be configured either programmatically or by system property "-Dselenide.pageLoadStrategy=eager".
    * Default value: "normal".
-   * 
-   *  - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
-   *  - `eager`: return after DOMContentLoaded fires;
-   *  - `none`: return immediately
-   *
-   *  In some cases `eager` can bring performance boosts for the slow tests.
-   *  Though, we left default value `normal` because we afraid to break users' existing tests.
-   * 
+   * <p>
+   * - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
+   * - `eager`: return after DOMContentLoaded fires;
+   * - `none`: return immediately
+   * <p>
+   * In some cases `eager` can bring performance boosts for the slow tests.
+   * Though, we left default value `normal` because we afraid to break users' existing tests.
+   * <p>
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
+   *
    * @since 3.5
    */
   public static String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
           System.getProperty("selenide.page-load-strategy", "normal"));
-  
+
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
@@ -174,7 +185,7 @@ public class Configuration {
   /**
    * Defines if Selenide tries to capture JS errors
    * Can be configured either programmatically or by system property "-Dselenide.captureJavascriptErrors=false".
-   *
+   * <p>
    * Default value: true
    */
   public static boolean captureJavascriptErrors = Boolean.parseBoolean(System.getProperty("selenide.captureJavascriptErrors", "true"));
@@ -182,7 +193,7 @@ public class Configuration {
   /**
    * Defines if Selenide takes screenshots on failing tests.
    * Can be configured either programmatically or by system property "-Dselenide.screenshots=false".
-   *
+   * <p>
    * Default value: true
    */
   public static boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
@@ -197,7 +208,7 @@ public class Configuration {
   /**
    * Folder to store screenshots to.
    * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
-   *
+   * <p>
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
   public static String reportsFolder = System.getProperty("selenide.reportsFolder",
@@ -206,9 +217,9 @@ public class Configuration {
   /**
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
-   *
+   * <p>
    * Can be configured either programmatically or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
-   *
+   * <p>
    * If it's given, names of screenshots are printed as
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
    * failures in CI server.
@@ -237,8 +248,7 @@ public class Configuration {
     if (!isEmpty(build_url)) {
       LOG.config("Using Jenkins BUILD_URL: " + build_url);
       return build_url + "artifact/";
-    }
-    else {
+    } else {
       LOG.config("No BUILD_URL variable found. It's not Jenkins.");
       return null;
     }
@@ -247,21 +257,21 @@ public class Configuration {
   /**
    * Mock "alert" and "confirm" javascript dialogs.
    * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
-   *
+   * <p>
    * Default value: false
-   *        (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
+   * (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
   public static boolean dismissModalDialogs =
-      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+          Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * (that is quite slow because it sends every character separately).
-   *
+   * <p>
    * Tested on Codeborne projects - works well, speed up ~30%.
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
-   *
+   * <p>
    * https://github.com/codeborne/selenide/issues/135
    * Can be configured either programmatically or by system property "-Dselenide.fastSetValue=true".
    * Default value: false
@@ -271,11 +281,11 @@ public class Configuration {
   /**
    * If set to true, 'setValue' and 'val' methods of SelenideElement can work as 'selectOptionByValue', 'selectRadio'
    * depending on the real control type, defined by element's tag.
-   *
+   * <p>
    * Will decrease performance of setValue, make it slower, but will also make tests implementation more "business oriented".
    * With this property being set to true, tests may no longer be dependent on actual control implementation in html and
    * be more abstract.
-   *
+   * <p>
    * https://github.com/codeborne/selenide/issues/508
    * Can be configured either programmatically or by system property "-Dselenide.versatileSetValue=true".
    * Default value: false
@@ -296,7 +306,7 @@ public class Configuration {
     /**
      * Use Sizzle for CSS selectors.
      * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
-     *
+     * <p>
      * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
      */
     Sizzle
@@ -324,12 +334,12 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
-  
+
   public enum FileDownloadMode {
     /**
      * Download files via direct http request.
-     * Works only for <a href></a> elements. 
-     * Sends GET request to "href" with all cookies from current browser session. 
+     * Works only for <a href></a> elements.
+     * Sends GET request to "href" with all cookies from current browser session.
      */
     HTTPGET,
 

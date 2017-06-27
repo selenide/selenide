@@ -44,6 +44,7 @@ public class WebDriverFactory {
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
 
+
     WebDriver webdriver = remote != null ? createRemoteDriver(remote, browser, proxy) :
             CHROME.equalsIgnoreCase(browser) ? createChromeDriver(proxy) :
                     isMarionette() ? createMarionetteDriver(proxy) :
@@ -77,7 +78,7 @@ public class WebDriverFactory {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
       capabilities.setBrowserName(browser);
-      return new RemoteWebDriver(new URL(remote), capabilities);
+      return new RemoteWebDriver(new URL(remote), capabilities.merge(browserCapabilities));
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
     }
@@ -165,7 +166,7 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = createChromeOptions();
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-    return new ChromeDriver(capabilities);
+    return new ChromeDriver(capabilities.merge(browserCapabilities));
   }
 
   protected ChromeOptions createChromeOptions() {
@@ -188,7 +189,7 @@ public class WebDriverFactory {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
     log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
             "Use browser=marionette with geckodriver, when using it.");
-    return new FirefoxDriver(capabilities);
+    return new FirefoxDriver(capabilities.merge(browserCapabilities));
   }
 
   protected DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
@@ -210,7 +211,7 @@ public class WebDriverFactory {
   protected WebDriver createMarionetteDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
     capabilities.setCapability("marionette", true);
-    return new FirefoxDriver(capabilities);
+    return new FirefoxDriver(capabilities.merge(browserCapabilities));
   }
 
   protected WebDriver createHtmlUnitDriver(Proxy proxy) {
@@ -223,17 +224,17 @@ public class WebDriverFactory {
       String emulatedBrowser = browser.replaceFirst("htmlunit:(.*)", "$1");
       capabilities.setVersion(emulatedBrowser);
     }
-    return new HtmlUnitDriver(capabilities);
+    return new HtmlUnitDriver(capabilities.merge(browserCapabilities));
   }
 
   protected WebDriver createInternetExplorerDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    return new InternetExplorerDriver(capabilities);
+    return new InternetExplorerDriver(capabilities.merge(browserCapabilities));
   }
 
   protected WebDriver createEdgeDriver(Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    return new EdgeDriver(capabilities);
+    return new EdgeDriver(capabilities.merge(browserCapabilities));
   }
 
   protected WebDriver createPhantomJsDriver(Proxy proxy) {
@@ -305,10 +306,10 @@ public class WebDriverFactory {
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
         Constructor<?> constructor = clazz.getDeclaredConstructor();
         constructor.setAccessible(true);
-        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities);
+        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities.merge(browserCapabilities));
       } else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
-        return (WebDriver) constructor.newInstance(capabilities);
+        return (WebDriver) constructor.newInstance(capabilities.merge(browserCapabilities));
       }
     } catch (InvocationTargetException e) {
       throw runtime(e.getTargetException());
