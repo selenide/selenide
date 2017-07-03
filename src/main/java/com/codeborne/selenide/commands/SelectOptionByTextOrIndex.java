@@ -11,32 +11,33 @@ import org.openqa.selenium.support.ui.Select;
 public class SelectOptionByTextOrIndex implements Command<Void> {
   @Override
   public Void execute(SelenideElement proxy, WebElementSource selectField, Object[] args) {
-    Select select = new Select(selectField.getWebElement());
     if (args[0] instanceof String[]) {
-      selectOptionsByTexts(select, (String[]) args[0]);
+      selectOptionsByTexts(selectField, (String[]) args[0]);
     }
     else {
-      selectOptionsByIndexes(select, (int[]) args[0]);
+      selectOptionsByIndexes(selectField, (int[]) args[0]);
     }
     return null;
   }
 
-  private void selectOptionsByTexts(Select select, String[] texts) {
+  private void selectOptionsByTexts(WebElementSource selectField, String[] texts) {
+    Select select = new Select(selectField.getWebElement());
     for (String text : texts) {
       try {
         select.selectByVisibleText(text);
       } catch (NoSuchElementException e) {
-        throw new ElementNotFound(text, Condition.exist, e);
+        throw new ElementNotFound(selectField.getSearchCriteria() + "/option[text:" + text + ']', Condition.exist, e);
       }
     }
   }
 
-  private void selectOptionsByIndexes(Select select, int[] indexes) {
+  private void selectOptionsByIndexes(WebElementSource selectField, int[] indexes) {
+    Select select = new Select(selectField.getWebElement());
     for (Integer index : indexes) {
       try {
         select.selectByIndex(index);
       } catch (NoSuchElementException e) {
-        throw new ElementNotFound(String.valueOf(index), Condition.exist, e);
+        throw new ElementNotFound(selectField.getSearchCriteria() + "/option[index:" + index + ']', Condition.exist, e);
       }
     }
   }

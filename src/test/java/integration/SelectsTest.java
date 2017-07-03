@@ -73,7 +73,7 @@ public class SelectsTest extends IntegrationTest {
   @Test()
   public void throwsElementNotFoundWithOptionsText() {
     thrown.expect(ElementNotFound.class);
-    thrown.expectMessage("Element not found {unexisting-option}\n"
+    thrown.expectMessage("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\n"
         + "Expected: exist");
     $x("//select[@name='domain']").selectOption("unexisting-option");
   }
@@ -81,7 +81,7 @@ public class SelectsTest extends IntegrationTest {
   @Test()
   public void throwsElementNotFoundWithOptionsIndex() {
     thrown.expect(ElementNotFound.class);
-    thrown.expectMessage("Element not found {999}\n"
+    thrown.expectMessage("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\n"
         + "Expected: exist");
     $x("//select[@name='domain']").selectOption(999);
   }
