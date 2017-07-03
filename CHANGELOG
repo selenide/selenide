@@ -2,6 +2,7 @@
 
 === 4.6 (planned to 07.07.2017)
 * #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote
+* #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
 
 === 4.5.1 (released 27.06.2017)
 * #484 added method $.getSearchCriteria()
@@ -16,7 +17,6 @@
 * upgrade to org.littleshoot:littleproxy:1.1.2
 * upgrade to phantomjsdriver 1.4.3
 * added many unit tests for Selenide itself -- thanks to Andrew Zakordonets
-* #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
 
 === 4.4.3 (released 25.04.2017)
 * upgrade to selenium-java 3.4.0
