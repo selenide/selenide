@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.6 (planned to 07.07.2017)
+* #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote
+
 === 4.5.1 (released 27.06.2017)
 * #484 added method $.getSearchCriteria()
 * #484 fixed performance issue: Selenide tried to log collections' parent WebElement without waiting for it
