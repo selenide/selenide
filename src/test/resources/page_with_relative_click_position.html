@@ -28,7 +28,7 @@
     }
 	</style>
   <script type="text/javascript">
-    fnord = () => {
+    clickRel = () => {
       coords = document.getElementById("coords")
       coords.innerText = `(${event.offsetX}, ${event.offsetY})`;
       coords.style.left = `${event.offsetX}px`;
@@ -37,7 +37,7 @@
   </script>
 </head>
 <body>
-<div id="page" onclick="fnord(this)">THIS IS A TEST</div>
+<div id="page" onclick="clickRel(this)">THIS IS A TEST</div>
 <span id="coords">(0, 0)</span>
 </body>
 </html>

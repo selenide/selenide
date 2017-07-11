@@ -16,7 +16,7 @@ public class Click implements Command<Void> {
       click(locator.findAndAssertElementIsVisible());
     }
     else if (args.length == 2) {
-      click(locator.findAndAssertElementIsVisible(), (int)args[0], (int)args[1]);
+      click(locator.findAndAssertElementIsVisible(), (int) args[0], (int) args[1]);
     }
     return null;
   }
@@ -30,7 +30,10 @@ public class Click implements Command<Void> {
   }
 
   protected void click(WebElement element, int offsetX, int offsetY) {
-      System.out.println(String.format("SENDING RELATIVE CLICK TO ELEMENT %s @(%s, %s)", element.getTagName(), offsetX, offsetY));
+    if (clickViaJs) {
+      executeJavaScript("arguments[0].dispatchEvent(new MouseEvent('click', { 'view': window, 'bubbles': true, 'cancelable': true, 'offsetX': this.target.left + arguments[1], 'offsetY': this.target.top + arguments[2] }))", element, offsetX, offsetY);
+    } else {
       actions().moveToElement(element, offsetX, offsetY).click().build().perform();
+    }
   }
 }
