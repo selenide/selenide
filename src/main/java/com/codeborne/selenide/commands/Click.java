@@ -6,12 +6,18 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Configuration.clickViaJs;
+import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 public class Click implements Command<Void> {
   @Override
   public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    click(locator.findAndAssertElementIsVisible());
+    if (args == null || args.length == 0) {
+      click(locator.findAndAssertElementIsVisible());
+    }
+    else if (args.length == 2) {
+      click(locator.findAndAssertElementIsVisible(), (int)args[0], (int)args[1]);
+    }
     return null;
   }
   
@@ -21,5 +27,10 @@ public class Click implements Command<Void> {
     } else {
       element.click();
     }
+  }
+
+  protected void click(WebElement element, int offsetX, int offsetY) {
+      System.out.println(String.format("SENDING RELATIVE CLICK TO ELEMENT %s @(%s, %s)", element.getTagName(), offsetX, offsetY));
+      actions().moveToElement(element, offsetX, offsetY).click().build().perform();
   }
 }
