@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Position click test</title>
+	<style type="text/css">
+    body {
+       margin: 0px;
+    }
+
+	.fillpage {
+       position: absolute;
+       text-align: center;
+       line-height: 100%;
+       top: 0px;
+       bottom: 0px;
+       width: 100%;
+       margin: 0px;
+       padding: 0px;
+       background-color: #FFF;
+       vertical-align: middle;
+    }
+
+    #coords {
+      position: absolute;
+      margin: 0px;
+      padding: 10px;
+      border: 1px dotted black;
+    }
+	</style>
+  <script type="text/javascript">
+    fnord = () => {
+      coords = document.getElementById("coords")
+      coords.innerText = `(${event.offsetX}, ${event.offsetY})`;
+      coords.style.left = `${event.offsetX}px`;
+      coords.style.top = `${event.offsetY}px`;
+    }
+  </script>
+</head>
+<body>
+<div class="fillpage" onclick="fnord(this)">THIS IS A TEST</div>
+<span id="coords">(0, 0)</span>
+</body>
+</html>
