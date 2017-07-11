@@ -30,6 +30,23 @@ public class Click implements Command<Void> {
   }
 
   protected void click(WebElement element, int offsetX, int offsetY) {
-    actions().moveToElement(element, offsetX, offsetY).click().build().perform();
+    if (clickViaJs) {
+      executeJavaScript("arguments[0].dispatchEvent(new MouseEvent('click', {" +
+              "'view': window," +
+              "'bubbles': true," +
+              "'cancelable': true," +
+              "'clientX': arguments[0].getClientRects()[0].left + arguments[1]," +
+              "'clientY': arguments[0].getClientRects()[0].top + arguments[2]" +
+              "}))",
+              element,
+              offsetX,
+              offsetY);
+    } else {
+      actions()
+              .moveToElement(element, offsetX, offsetY)
+              .click()
+              .build()
+              .perform();
+    }
   }
 }
