@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 public class ScrollTo implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    Point location = locator.getWebElement().getLocation();
+    Point location = locator.findAndAssertElementIsVisible().getLocation();
     executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
     return proxy;
   }
