@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
 import static java.util.Collections.singletonList;
@@ -70,5 +71,9 @@ public abstract class WebElementSource {
 
   public WebElement findAndAssertElementIsVisible() {
     return checkCondition("be ", null, visible, false);
+  }
+
+  public WebElement findAndAssertElementExists() {
+    return checkCondition("be ", null, exist, false);
   }
 }
