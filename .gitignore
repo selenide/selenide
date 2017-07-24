@@ -4,3 +4,8 @@ hs_err_pid*
 .idea
 !gradle-wrapper.jar
 *.iml
+/.classpath
+/.project
+/.gradletasknamecache
+/bin/
+/.settings/
