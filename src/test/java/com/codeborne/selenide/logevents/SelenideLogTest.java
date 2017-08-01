@@ -26,13 +26,6 @@ public class SelenideLogTest {
   }
 
   @Test
-  public void testGetDuration() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    long duration = (0 - System.nanoTime()) / 1000000;
-    assertEquals(0, duration - log.getDuration());
-  }
-
-  @Test
   public void testError() {
     SelenideLog log = new SelenideLog("Element", "Subject");
     Throwable error = new Throwable("Error message");
