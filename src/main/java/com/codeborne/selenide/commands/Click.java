@@ -20,11 +20,12 @@ public class Click implements Command<Void> {
     }
     return null;
   }
-  
+
   protected void click(WebElement element) {
     if (clickViaJs) {
       executeJavaScript("arguments[0].click()", element);
-    } else {
+    }
+    else {
       element.click();
     }
   }
@@ -38,15 +39,16 @@ public class Click implements Command<Void> {
               "'clientX': arguments[0].getClientRects()[0].left + arguments[1]," +
               "'clientY': arguments[0].getClientRects()[0].top + arguments[2]" +
               "}))",
-              element,
-              offsetX,
-              offsetY);
-    } else {
+          element,
+          offsetX,
+          offsetY);
+    }
+    else {
       actions()
-              .moveToElement(element, offsetX, offsetY)
-              .click()
-              .build()
-              .perform();
+          .moveToElement(element, offsetX, offsetY)
+          .click()
+          .build()
+          .perform();
     }
   }
 }

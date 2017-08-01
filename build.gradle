@@ -134,7 +134,7 @@ jacocoTestReport {
     xml.enabled true
     csv.enabled false
     html.enabled true
-    html.destination "${buildDir}/reports/jacocoHtml"
+    html.destination file("${buildDir}/reports/jacocoHtml")
   }
   executionData = files(
     file("$project.buildDir/jacoco/test.exec"), 

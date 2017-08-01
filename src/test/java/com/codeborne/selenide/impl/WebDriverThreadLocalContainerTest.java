@@ -153,7 +153,7 @@ public class WebDriverThreadLocalContainerTest {
     String capturedLog = getTestCapturedLog();
     String currentThreadId = String.valueOf(currentThread().getId());
     assertThat(capturedLog, containsString(String.format("Close webdriver: %s -> %s", currentThreadId, mockedWebDriver.toString())));
-    assertThat(capturedLog, containsString(String.format("INFO: Close proxy server: %s ->", currentThreadId)));
+    assertThat(capturedLog, containsString(String.format("Close proxy server: %s ->", currentThreadId)));
   }
 
 }
