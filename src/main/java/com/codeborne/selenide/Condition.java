@@ -153,7 +153,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return attribute(attributeName, expectedAttributeValue, true);
   }
 
-  private static Condition attribute(final String attributeName, final String expectedAttributeValue, boolean trim) {
+  private static Condition attribute(final String attributeName, final String expectedAttributeValue, final boolean trim) {
     return new Condition("attribute") {
       @Override
       public boolean apply(WebElement element) {
