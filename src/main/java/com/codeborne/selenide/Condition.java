@@ -150,10 +150,14 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param expectedAttributeValue expected value of attribute
    */
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
+    return attribute(attributeName, expectedAttributeValue, true);
+  }
+
+  private static Condition attribute(final String attributeName, final String expectedAttributeValue, boolean trim) {
     return new Condition("attribute") {
       @Override
       public boolean apply(WebElement element) {
-        return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
+        return expectedAttributeValue.equals(getAttributeValue(element, attributeName, trim));
       }
       @Override
       public String toString() {
@@ -162,9 +166,9 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  private static String getAttributeValue(WebElement element, String attributeName) {
+  private static String getAttributeValue(WebElement element, String attributeName, boolean trim) {
     String attr = element.getAttribute(attributeName);
-    return attr == null ? "" : attr.trim();
+    return attr == null ? "" : (trim ? attr.trim() : attr);
   }
 
   /**
@@ -193,7 +197,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param value expected value of input field
    */
   public static Condition exactValue(String value) {
-    return attribute("value", value);
+    return attribute("value", value, false);
   }
 
   /**
