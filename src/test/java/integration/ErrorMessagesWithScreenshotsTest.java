@@ -11,14 +11,10 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.reportsFolder;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
@@ -88,7 +84,7 @@ public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       fail();
     } catch (ElementNotFound e) {
       assertTrue("Actual error message: " + e.getMessage(),
-          e.getMessage().contains("Element not found {<table id=\"multirowTable\">/thead"));
+          e.getMessage().contains("Element not found {#multirowTable/thead"));
       assertEquals("http://ci.org/build/reports/tests/" + browser + "/1.jpg", e.getScreenshot());
     }
   }

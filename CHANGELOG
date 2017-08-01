@@ -1,6 +1,15 @@
 == Changelog
 
-=== 4.5 (planned to 18.06.2017)
+=== 4.6 (planned to 07.07.2017)
+* #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote    -- thanks to @BorisOsipov
+* #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
+* #528 - Wrong ElementNotFound exception message  -- thanks to @BorisOsipov
+
+=== 4.5.1 (released 27.06.2017)
+* #484 added method $.getSearchCriteria()
+* #484 fixed performance issue: Selenide tried to log collections' parent WebElement without waiting for it
+
+=== 4.5 (released 26.06.2017)
 * Performance improvement of method `$.setValue()` -- thanks to Alexander Popov
 * #549 Selenide waits too much for collections
 * Add methods $().$x and $().$$x -- thanks to Oleksii Cherevatyi 

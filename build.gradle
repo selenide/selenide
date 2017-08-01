@@ -20,7 +20,7 @@ apply plugin: 'de.undercouch.download'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.5-SNAPSHOT'
+version='4.6-SNAPSHOT'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
@@ -134,7 +134,7 @@ jacocoTestReport {
     xml.enabled true
     csv.enabled false
     html.enabled true
-    html.destination "${buildDir}/reports/jacocoHtml"
+    html.destination file("${buildDir}/reports/jacocoHtml")
   }
   executionData = files(
     file("$project.buildDir/jacoco/test.exec"), 
@@ -230,13 +230,13 @@ import org.gradle.internal.os.OperatingSystem;
 
 task downloadChromeDriverZip(type: Download) {
   if (OperatingSystem.current().isMacOsX()) {
-    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_mac64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.30/chromedriver_mac64.zip'
   }
   else if (OperatingSystem.current().isLinux()) {
-    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip'
   }
   else {
-    src 'http://chromedriver.storage.googleapis.com/2.29/chromedriver_win32.zip'
+    src 'http://chromedriver.storage.googleapis.com/2.30/chromedriver_win32.zip'
   }
   dest new File(buildDir, 'chromedriver.zip')
   quiet true

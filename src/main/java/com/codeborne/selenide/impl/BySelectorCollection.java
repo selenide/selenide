@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,8 @@ public class BySelectorCollection implements WebElementsCollection {
   @Override
   public String description() {
     return parent == null ? Describe.selector(selector) :
-        (parent instanceof WebElement) ? Describe.shortly((WebElement) parent) + "/" + Describe.shortly(selector) :
+        (parent instanceof SelenideElement) ?
+            ((SelenideElement) parent).getSearchCriteria() + "/" + Describe.shortly(selector) :
             Describe.shortly(selector);
   }
 }

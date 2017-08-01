@@ -13,7 +13,13 @@ public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
 
   public static final String CHROME = "chrome";
-  public static final String INTERNET_EXPLORER = "ie";
+
+  /**
+   * @deprecated use {@link #INTERNET_EXPLORER}
+   */
+  @Deprecated
+  public static final String IE = "ie";
+  public static final String INTERNET_EXPLORER = "internet explorer";
   public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
   /**
@@ -175,7 +181,7 @@ public class WebDriverRunner {
    * Is Selenide configured to use Internet Explorer browser
    */
   public static boolean isIE() {
-    return INTERNET_EXPLORER.equalsIgnoreCase(browser);
+    return INTERNET_EXPLORER.equalsIgnoreCase(browser) || IE.equalsIgnoreCase(browser);
   }
 
   /**

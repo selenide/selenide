@@ -476,6 +476,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.FindByXpath
    */
   SelenideElement $x(String xpath, int index);
+
   /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
@@ -635,6 +636,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download() throws FileNotFoundException;
+
+  /**
+   * Return criteria by which this element is located
+   * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
+   */
+  String getSearchCriteria();
 
   /**
    * @return the original Selenium WebElement wrapped by this object
