@@ -1,11 +1,10 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class ClickRelativeTest extends IntegrationTest {
@@ -16,16 +15,17 @@ public class ClickRelativeTest extends IntegrationTest {
 
 
   @Test
-  public void userCanClickElementWithOffsetPosition() {
-    $(By.id("page")).click(123, 321);
-    $(By.id("coords")).shouldHave(Condition.matchText("(123, 321)"));
+  public void userCanClickElementWithOffsetPosition_withActions() {
+    Configuration.clickViaJs = false;
+
+    $("#page").click(123, 321);
+    $("#coords").should(matchText("(123, 321)"));
   }
 
-
   @Test
-  public void userCanClickElementWithOffsetPositionWithJavascript() {
+  public void userCanClickElementWithOffsetPosition_withJavascript() {
     Configuration.clickViaJs = true;
-    $(By.id("page")).click(321, 123);
-    $(By.id("coords")).shouldHave(Condition.matchText("(321, 123)"));
+    $("#page").click(321, 123);
+    $("#coords").should(matchText("(321, 123)"));
   }
 }
