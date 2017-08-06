@@ -673,6 +673,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   @Override void click();
 
   /**
+   * Click the element with a relative offset from the upper left corner of the element
+   */
+  void click(int offsetX, int offsetY);
+
+  /**
    * Click with right mouse button on this element
    * @return this element
    * 
