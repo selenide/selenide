@@ -13,13 +13,12 @@ import static org.junit.Assume.assumeFalse;
 public class ClickRelativeTest extends IntegrationTest {
   @Before
   public void openTestPage() {
+    assumeFalse(isHtmlUnit());
     openFile("page_with_relative_click_position.html");
   }
 
-
   @Test
   public void userCanClickElementWithOffsetPosition_withActions() {
-    assumeFalse(isHtmlUnit());
     Configuration.clickViaJs = false;
 
     $("#page").click(123, 321);
@@ -30,7 +29,6 @@ public class ClickRelativeTest extends IntegrationTest {
   @Test
   public void userCanClickElementWithOffsetPosition_withJavascript() {
     assumeFalse(isPhantomjs());
-    assumeFalse(isHtmlUnit());
     Configuration.clickViaJs = true;
     
     $("#page").click(321, 123);

@@ -28,11 +28,11 @@
     }
   </style>
   <script type="text/javascript">
-    clickRel = () => {
-      coords = document.getElementById("coords")
-      coords.innerText = `(${event.offsetX}, ${event.offsetY})`;
-      coords.style.left = `${event.offsetX}px`;
-      coords.style.top = `${event.offsetY}px`;
+    function clickRel() {
+      var coords = document.getElementById("coords");
+      coords.innerText = '(' + event.offsetX + ', ' + event.offsetY + ')';
+      coords.style.left = event.offsetX + 'px';
+      coords.style.top = event.offsetY + 'px';
     }
   </script>
 </head>
