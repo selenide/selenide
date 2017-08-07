@@ -183,7 +183,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("value") {
       @Override
       public boolean apply(WebElement element) {
-        return Html.text.contains(getAttributeValue(element, "value"), expectedValue);
+        return Html.text.contains(getAttributeValue(element, "value", true), expectedValue);
       }
       @Override
       public String toString() {
