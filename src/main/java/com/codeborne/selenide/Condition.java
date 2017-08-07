@@ -150,14 +150,10 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param expectedAttributeValue expected value of attribute
    */
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
-    return attribute(attributeName, expectedAttributeValue, true);
-  }
-
-  private static Condition attribute(final String attributeName, final String expectedAttributeValue, final boolean trim) {
     return new Condition("attribute") {
       @Override
       public boolean apply(WebElement element) {
-        return expectedAttributeValue.equals(getAttributeValue(element, attributeName, trim));
+        return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
       }
       @Override
       public String toString() {
@@ -166,9 +162,9 @@ public abstract class Condition implements Predicate<WebElement> {
     };
   }
 
-  private static String getAttributeValue(WebElement element, String attributeName, boolean trim) {
+  private static String getAttributeValue(WebElement element, String attributeName) {
     String attr = element.getAttribute(attributeName);
-    return attr == null ? "" : (trim ? attr.trim() : attr);
+    return attr == null ? "" : attr;
   }
 
   /**
@@ -183,7 +179,7 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("value") {
       @Override
       public boolean apply(WebElement element) {
-        return Html.text.contains(getAttributeValue(element, "value", true), expectedValue);
+        return Html.text.contains(getAttributeValue(element, "value"), expectedValue);
       }
       @Override
       public String toString() {
@@ -197,7 +193,7 @@ public abstract class Condition implements Predicate<WebElement> {
    * @param value expected value of input field
    */
   public static Condition exactValue(String value) {
-    return attribute("value", value, false);
+    return attribute("value", value);
   }
 
   /**
