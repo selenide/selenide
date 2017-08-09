@@ -25,7 +25,7 @@ public class CustomCommandsTest extends IntegrationTest {
     $_("#invalid-image").tripleClick().quadrupleClick();
     
     assertTrue("Can also use standard Selenium methods", $_("#valid-image img").isDisplayed());
-    assertTrue("Can also use standard Selenide methods", $_("#invalid-image img").is(visible));
+    $_("#valid-image img").shouldBe(visible);
     
     assertEquals(4, tripleClickCounter.get());
     assertEquals(1, quadrupleClickCounter.get());

@@ -164,7 +164,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
   private static String getAttributeValue(WebElement element, String attributeName) {
     String attr = element.getAttribute(attributeName);
-    return attr == null ? "" : attr.trim();
+    return attr == null ? "" : attr;
   }
 
   /**
