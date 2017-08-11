@@ -37,7 +37,7 @@ abstract class DriverProcessor {
     return browserCapabilities;
   }
 
-  private DesiredCapabilities transferCapabilitiesFromSystemProperties(final DesiredCapabilities currentBrowserCapabilities, final String prefix) {
+  private DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
