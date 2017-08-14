@@ -9,35 +9,26 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.chromeSwitches;
 import static com.codeborne.selenide.WebDriverRunner.CHROME;
 
-class ChromeDriverProcessor extends DriverProcessor {
+class ChromeDriverFactory extends AbstractDriverFactory {
 
-  private static final Logger log = Logger.getLogger(ChromeDriverProcessor.class.getName());
+  private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
 
-  private final Supplier<Boolean> condition = () -> CHROME.equalsIgnoreCase(browser);
-  private final DriverProcessor nextDriverProcessor;
-
-  ChromeDriverProcessor() {
-    this.nextDriverProcessor = new MarionetteDriverProcessor();
-  }
-
-  @Override
-  public WebDriver process(final Proxy proxy) {
-    return condition.get() ?
-            createChromeDriver(proxy) : nextDriverProcessor.process(proxy);
-  }
-
-  private WebDriver createChromeDriver(final Proxy proxy) {
+  WebDriver create(final Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     ChromeOptions options = createChromeOptions();
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
     return new ChromeDriver(capabilities);
+  }
+
+  @Override
+  boolean supports() {
+    return CHROME.equalsIgnoreCase(browser);
   }
 
   private ChromeOptions createChromeOptions() {
@@ -80,5 +71,4 @@ class ChromeDriverProcessor extends DriverProcessor {
     }
     return currentChromeOptions;
   }
-
 }

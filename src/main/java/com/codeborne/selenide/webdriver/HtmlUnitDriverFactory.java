@@ -6,22 +6,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.function.Supplier;
-
 import static com.codeborne.selenide.Configuration.browser;
 
-class HtmlUnitDriverProcessor extends DriverProcessor {
+class HtmlUnitDriverFactory extends AbstractDriverFactory {
 
-  private final Supplier<Boolean> condition = WebDriverRunner::isHtmlUnit;
-  private final DriverProcessor nextProcessor;
-
-  HtmlUnitDriverProcessor() {
-    this.nextProcessor = new EdgeDriverProcessor();
+  @Override
+  boolean supports() {
+    return WebDriverRunner.isHtmlUnit();
   }
 
   @Override
-  WebDriver process(final Proxy proxy) {
-    return condition.get() ? createHtmlUnitDriver(proxy) : nextProcessor.process(proxy);
+  WebDriver create(final Proxy proxy) {
+    return createHtmlUnitDriver(proxy);
   }
 
   private WebDriver createHtmlUnitDriver(final Proxy proxy) {

@@ -6,20 +6,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.function.Supplier;
+class EdgeDriverFactory extends AbstractDriverFactory {
 
-class InternetExplorerDriverProcessor extends DriverProcessor {
-
-  private final Supplier<Boolean> condition = WebDriverRunner::isIE;
-  private final DriverProcessor nextProcessor;
-
-  InternetExplorerDriverProcessor() {
-    this.nextProcessor = new PhantomJsDriverProcessor();
+  @Override
+  WebDriver create(final Proxy proxy) {
+    return createInternetExplorerDriver(proxy);
   }
 
   @Override
-  WebDriver process(final Proxy proxy) {
-    return condition.get() ? createInternetExplorerDriver(proxy) : nextProcessor.process(proxy);
+  boolean supports() {
+    return WebDriverRunner.isEdge();
   }
 
   private WebDriver createInternetExplorerDriver(final Proxy proxy) {

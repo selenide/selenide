@@ -7,27 +7,22 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.function.Supplier;
 
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.remote;
 import static com.codeborne.selenide.WebDriverRunner.INTERNET_EXPLORER;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 
-class RemoteDriverProcessor extends DriverProcessor {
+class RemoteDriverFactory extends AbstractDriverFactory {
 
-  private final Supplier<Boolean> condition = () -> remote != null;
-  private final DriverProcessor nextProcessor;
-
-  RemoteDriverProcessor() {
-    this.nextProcessor = new ChromeDriverProcessor();
+  @Override
+  boolean supports() {
+    return remote != null;
   }
 
   @Override
-  WebDriver process(final Proxy proxy) {
-    return condition.get() ?
-            createRemoteDriver(remote, browser, proxy)
-            : nextProcessor.process(proxy);
+  WebDriver create(Proxy proxy) {
+    return createRemoteDriver(remote, browser, proxy);
   }
 
   private WebDriver createRemoteDriver(final String remote, final String browser, final Proxy proxy) {
