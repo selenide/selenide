@@ -31,7 +31,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return CHROME.equalsIgnoreCase(browser);
   }
 
-  private ChromeOptions createChromeOptions() {
+  ChromeOptions createChromeOptions() {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
