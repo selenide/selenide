@@ -27,11 +27,7 @@ abstract class AbstractDriverFactory {
 
   abstract WebDriver create(Proxy proxy);
 
-  static WebDriver createDefault(final Proxy proxy) {
-    return createInstanceOf(browser, proxy);
-  }
-
-  static WebDriver createInstanceOf(final String className, final Proxy proxy) {
+  WebDriver createInstanceOf(final String className, final Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
       capabilities.setJavascriptEnabled(true);
@@ -59,11 +55,11 @@ abstract class AbstractDriverFactory {
     }
   }
 
-  protected static RuntimeException runtime(Throwable exception) {
+  private RuntimeException runtime(Throwable exception) {
     return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
   }
 
-  static DesiredCapabilities createCommonCapabilities(final Proxy proxy) {
+  DesiredCapabilities createCommonCapabilities(final Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
@@ -78,7 +74,7 @@ abstract class AbstractDriverFactory {
     return browserCapabilities;
   }
 
-  private static DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
+  private DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
@@ -96,7 +92,7 @@ abstract class AbstractDriverFactory {
     return currentBrowserCapabilities;
   }
 
-  static DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
+  DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
     FirefoxProfile myProfile = new FirefoxProfile();
     myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -112,7 +108,7 @@ abstract class AbstractDriverFactory {
     return capabilities;
   }
 
-  private static FirefoxProfile transferFirefoxProfileFromSystemProperties(FirefoxProfile currentFirefoxProfile, String prefix) {
+  private FirefoxProfile transferFirefoxProfileFromSystemProperties(FirefoxProfile currentFirefoxProfile, String prefix) {
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());

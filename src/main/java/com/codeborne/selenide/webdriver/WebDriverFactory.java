@@ -47,7 +47,7 @@ public class WebDriverFactory {
                 .filter(AbstractDriverFactory::supports)
                 .findAny()
                 .map(driverFactory -> driverFactory.create(proxy))
-                .orElseGet(() -> AbstractDriverFactory.createDefault(proxy));
+                .orElseGet(() -> new DefaultDriverFactory().create(proxy));
 
         webdriver = adjustBrowserSize(webdriver);
 
