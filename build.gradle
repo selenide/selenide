@@ -58,9 +58,9 @@ dependencies {
   compile 'com.google.code.gson:gson:2.8.0'
   compile 'com.google.guava:guava:21.0'
   runtime 'commons-codec:commons-codec:1.10'
-  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.24', transitive: false
-  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24', transitive: false
-  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.24', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.27', transitive: false
+  provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.27', transitive: false
+  testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.27', transitive: false
   compile('net.lightbody.bmp:browsermob-core:2.1.4') {
     exclude group: 'net.lightbody.bmp', module: 'littleproxy'
   }
