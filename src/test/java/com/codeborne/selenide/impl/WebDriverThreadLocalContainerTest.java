@@ -12,7 +12,7 @@ import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +29,7 @@ import static java.lang.Thread.currentThread;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 public class WebDriverThreadLocalContainerTest {
@@ -145,7 +146,7 @@ public class WebDriverThreadLocalContainerTest {
     container.setProxy(mockedProxy);
     container.createDriver();
 
-    PhantomJSDriver mockedWebDriver = Mockito.mock(PhantomJSDriver.class);
+    ChromeDriver mockedWebDriver = Mockito.mock(ChromeDriver.class);
     container.setWebDriver(mockedWebDriver);
 
     container.closeWebDriver();
