@@ -21,11 +21,13 @@ public class ErrorMessagesTest {
   @BeforeClass
   public static void rememberOldValues() {
     reportsUrl = Configuration.reportsUrl;
+    Configuration.savePageSource = false;
   }
 
   @AfterClass
   public static void restoreOldValues() {
     Configuration.screenshots = true;
+    Configuration.savePageSource = true;
     Configuration.reportsUrl = reportsUrl;
     screenshots = new ScreenShotLaboratory();
   }
@@ -80,5 +82,17 @@ public class ErrorMessagesTest {
     String screenshot = ErrorMessages.screenshot();
     assertEquals("", screenshot);
     verify(screenshots, never()).takeScreenShot();
+  }
+  
+  @Test
+  public void printHtmlPath_if_savePageSourceIsEnabled() {
+    Configuration.savePageSource = true;
+    Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
+    String currentDir = System.getProperty("user.dir");
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+
+    String screenshot = ErrorMessages.screenshot();
+    assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
+                 + "\nHtml: http://ci.mycompany.com/job/666/artifact/test-result/12345.html", screenshot);
   }
 }

@@ -39,7 +39,15 @@ public class ErrorMessages {
     if (!Configuration.screenshots) {
       return "";
     }
-    return "\nScreenshot: " + screenshotPath;
+    if(Configuration.savePageSource) {
+       if(screenshotPath == null || screenshotPath.isEmpty()) {
+          return "\nScreenshot: " + screenshotPath;
+       }
+       return "\nScreenshot: " + screenshotPath
+              + "\nHtml: " + screenshotPath.substring(0, screenshotPath.lastIndexOf('.')) + ".html";
+    }else {
+       return "\nScreenshot: " + screenshotPath;
+    }
   }
 
   public static String causedBy(Throwable cause) {
