@@ -39,8 +39,15 @@ repositories {
 
 dependencies {
   implementation('com.codeborne:selenide:4.5.1')
-  implementation('io.appium:java-client:5.0.0-BETA9')
+  implementation('io.appium:java-client:5.0.0')
 }
+
+task libs(type: Sync) {
+  from configurations.compileClasspath
+  into "$buildDir/lib"
+}
+
+compileJava.dependsOn libs
 
 jar {
   manifest {
