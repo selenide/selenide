@@ -9,9 +9,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.Selenide.confirm;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.fail;
 
@@ -27,6 +25,14 @@ public class AlertTest extends IntegrationTest {
     $(byValue("Alert button")).click();
     confirm("Are you sure, Greg?");
     $("#message").shouldHave(text("Hello, Greg!"));
+    $("#container").shouldBe(empty);
+  }
+
+  @Test
+  public void canSubmitPromtDialog() {
+    $(byValue("Promt button")).click();
+    promt("Please input your username", "Aegon Targaryen");
+    $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
     $("#container").shouldBe(empty);
   }
 
