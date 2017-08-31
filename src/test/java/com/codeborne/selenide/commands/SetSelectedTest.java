@@ -24,10 +24,8 @@ public class SetSelectedTest {
     WebElement checkbox = mock(WebElement.class);
     WebElement radio = mock(WebElement.class);
     WebElement option = mock(WebElement.class);
-
     SelenideElement proxy = mock(SelenideElement.class);
     WebElementSource locator = mock(WebElementSource.class);
-
     SetSelected command = new SetSelected();
 
     @Before
@@ -41,7 +39,6 @@ public class SetSelectedTest {
                 return null;
             }
         }).when(command.click).execute(any(SelenideElement.class), any(WebElementSource.class), any());
-
         doReturn("input").when(textbox).getTagName();
         doReturn("button").when(button).getTagName();
         doReturn("input").when(checkbox).getTagName();
@@ -54,26 +51,20 @@ public class SetSelectedTest {
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_textbox() {
         doReturn(textbox).when(locator).getWebElement();
-
         command.execute(proxy, locator, new Object[]{true});
-
         verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_button() {
-        // TODO: add code
         doReturn(button).when(locator).getWebElement();
-
         command.execute(proxy, locator, new Object[]{true});
-
         verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test
     public void selects_checkbox() {
         doReturn(checkbox).when(locator).getWebElement();
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
         command.execute(proxy, locator, new Object[]{true});
@@ -89,16 +80,13 @@ public class SetSelectedTest {
     public void fails_to_select_checkbox() {
         doReturn(checkbox).when(locator).getWebElement();
         doReturn("true").when(checkbox).getAttribute("readonly");
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test
     public void selects_radio() {
-        // TODO: add code
         doReturn(radio).when(locator).getWebElement();
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
         command.execute(proxy, locator, new Object[]{true});
@@ -112,19 +100,15 @@ public class SetSelectedTest {
 
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_radio() {
-        // TODO: add code
         doReturn(radio).when(locator).getWebElement();
         doReturn("true").when(radio).getAttribute("readonly");
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test
     public void selects_option() {
-        // TODO: add code
         doReturn(option).when(locator).getWebElement();
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
         command.execute(proxy, locator, new Object[]{true});
@@ -138,10 +122,8 @@ public class SetSelectedTest {
 
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_option() {
-        // TODO: add code
         doReturn(option).when(locator).getWebElement();
         doReturn("true").when(option).getAttribute("readonly");
-
         command.execute(proxy, locator, new Object[]{true});
         verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
