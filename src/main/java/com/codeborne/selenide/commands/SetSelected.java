@@ -16,8 +16,23 @@ public class SetSelected implements Command<WebElement> {
     if (element.isSelected() ^ selected) {
       if (element.getAttribute("readonly") != null)
         throw new InvalidStateException("Cannot change value of readonly element");
+      if (!isSelectable(element)) {
+        throw new InvalidStateException("Can select option element or input of type checkbox or radio element only.");
+      }
       click.execute(proxy, locator, NO_ARGS);
     }
     return proxy;
+  }
+
+  private boolean isSelectable(WebElement element) {
+    String tagName = element.getTagName();
+    if ("option".equals(tagName)) {
+      return true;
+    }
+    if ("input".equals(tagName)) {
+      String type = element.getAttribute("type");
+      return "radio".equals(type) || "checkbox".equals(type);
+    }
+    return false;
   }
 }
