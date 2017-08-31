@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>page with multiple select (checkbox, radio)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Page with multiple select (checkbox, radio)</h1>
+
+<div class="container">
+    <div class="container">
+        <div id="textBox">
+            <h2>TextBox</h2>
+            <input type="text" />
+        </div>
+        <div id="Button">
+            <h2>Button</h2>
+            <input type="button" value="Submit"/>
+        </div>
+        <div id="checkBox">
+            <h2>CheckBox</h2>
+            <input type="checkbox" name="favorite1" value="master">Мастер</input>
+            <input type="checkbox" name="favorite2" value="margarita" readonly>Маргарита</input>
+            <input type="checkbox" name="favorite3" value="cat">Кот "Бегемот"</input>
+            <input type="checkbox" name="favorite14" value="woland">Theodor Woland</input>
+        </div>
+        <div id="radioButtons">
+            <h2>Radio buttons</h2>
+            <input type="radio" name="me" value="master">Мастер</input>
+            <input type="radio" name="me" value="margarita">Маргарита</input>
+            <input type="radio" name="me" value="cat">Кот "Бегемот"</input>
+            <input type="radio" name="me" value="woland">Theodor Woland</input>
+        </div>
+        <div id="domain-container">
+            <h2>Favorite characters</h2>
+            <div class="container">
+                <select id="character" multiple="multiple">
+                    <option value="master">Мастер</option>
+                    <option value="margarita">Маргарита</option>
+                    <option value="cat">Кот "Бегемот"</option>
+                    <option value="woland">Theodor Woland</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
