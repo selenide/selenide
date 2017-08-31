@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class SetSelectedTest extends IntegrationTest {
     @Before
     public void openTestPage() {
-        openFile("page_with_multiple_select.html");
+        openFile("page_with_multiple_select(checkbox_radio).html");
     }
 
     @Test

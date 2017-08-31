@@ -63,6 +63,11 @@ public class SetSelectedTest {
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_button() {
         // TODO: add code
+        doReturn(button).when(locator).getWebElement();
+
+        command.execute(proxy, locator, new Object[]{true});
+
+        verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test
@@ -92,20 +97,52 @@ public class SetSelectedTest {
     @Test
     public void selects_radio() {
         // TODO: add code
+        doReturn(radio).when(locator).getWebElement();
+
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
+
+        command.execute(proxy, locator, new Object[]{false});
+        verify(command.click, times(2)).execute(proxy, locator, NO_ARGS);
+        command.execute(proxy, locator, new Object[]{false});
+        verify(command.click, times(2)).execute(proxy, locator, NO_ARGS);
     }
 
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_radio() {
         // TODO: add code
+        doReturn(radio).when(locator).getWebElement();
+        doReturn("true").when(radio).getAttribute("readonly");
+
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 
     @Test
     public void selects_option() {
         // TODO: add code
+        doReturn(option).when(locator).getWebElement();
+
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, times(1)).execute(proxy, locator, NO_ARGS);
+
+        command.execute(proxy, locator, new Object[]{false});
+        verify(command.click, times(2)).execute(proxy, locator, NO_ARGS);
+        command.execute(proxy, locator, new Object[]{false});
+        verify(command.click, times(2)).execute(proxy, locator, NO_ARGS);
     }
 
     @Test(expected = InvalidStateException.class)
     public void fails_to_select_option() {
         // TODO: add code
+        doReturn(option).when(locator).getWebElement();
+        doReturn("true").when(option).getAttribute("readonly");
+
+        command.execute(proxy, locator, new Object[]{true});
+        verify(command.click, never()).execute(proxy, locator, NO_ARGS);
     }
 }
