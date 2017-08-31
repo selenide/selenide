@@ -12,9 +12,8 @@ import static org.junit.Assert.assertTrue;
 public class SetSelectedTest extends IntegrationTest {
     @Before
     public void openTestPage() {
-        openFile("page_with_multiple_select(checkbox_radio).html");
+        openFile("page_with_multiple_selectable_elements.html");
     }
-
     @Test
     public void testSelectOption() {
         SelenideElement element = $(By.xpath("//option[@value='master']"));
