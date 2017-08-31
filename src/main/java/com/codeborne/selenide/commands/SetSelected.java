@@ -14,8 +14,9 @@ public class SetSelected implements Command<WebElement> {
     boolean selected = (Boolean) args[0];
     WebElement element = locator.getWebElement();
     if (element.isSelected() ^ selected) {
-      if (element.getAttribute("readonly") != null)
+      if (element.getAttribute("readonly") != null) {
         throw new InvalidStateException("Cannot change value of readonly element");
+      }
       if (!isSelectable(element)) {
         throw new InvalidStateException("Can select option element or input of type checkbox or radio element only.");
       }
