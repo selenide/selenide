@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.6 (planned to 07.07.2017)
+=== 4.6 (released 31.08.2017)
 * #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote    -- thanks to @BorisOsipov
 * #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
 * #528 - Wrong ElementNotFound exception message  -- thanks to @BorisOsipov
