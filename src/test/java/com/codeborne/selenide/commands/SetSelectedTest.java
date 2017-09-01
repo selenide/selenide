@@ -102,7 +102,6 @@ public class SetSelectedTest {
   @Test(expected = InvalidStateException.class)
   public void failsToDeselectRadio() {
     doReturn(radio).when(locator).getWebElement();
-    command.execute(proxy, locator, new Object[]{true});
     command.execute(proxy, locator, new Object[]{false});
   }
 
@@ -118,7 +117,6 @@ public class SetSelectedTest {
   @Test(expected = InvalidStateException.class)
   public void failsToDeselectOption() {
     doReturn(option).when(locator).getWebElement();
-    command.execute(proxy, locator, new Object[]{true});
     command.execute(proxy, locator, new Object[]{false});
   }
 }
