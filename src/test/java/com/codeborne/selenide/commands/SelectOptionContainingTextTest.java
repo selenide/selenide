@@ -23,7 +23,7 @@ public class SelectOptionContainingTextTest {
   @Before
   public void setUp() {
     doReturn(element).when(select).getWebElement();
-    doReturn("locator").when(element).getTagName();
+    doReturn("select").when(element).getTagName();
   }
 
   @Test
