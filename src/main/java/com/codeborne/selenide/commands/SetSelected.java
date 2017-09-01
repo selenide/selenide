@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 
 public class SetSelected implements Command<WebElement> {
   Click click = new Click();
-  
+
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     boolean selected = (Boolean) args[0];
