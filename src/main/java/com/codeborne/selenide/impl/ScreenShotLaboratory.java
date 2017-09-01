@@ -2,7 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -10,10 +16,16 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -30,9 +42,14 @@ public class ScreenShotLaboratory {
   private static final Logger log = Logger.getLogger(ScreenShotLaboratory.class.getName());
 
   protected AtomicLong screenshotCounter = new AtomicLong();
-  protected String currentContext = "";
-  protected List<File> currentContextScreenshots;
-  protected List<File> allScreenshots = new ArrayList<>();
+  protected ThreadLocal<String> currentContext = new ThreadLocal<String>() {
+    @Override
+    protected String initialValue() {
+      return "";
+    }
+  };
+  protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
+  protected final List<File> allScreenshots = new ArrayList<>();
 
   protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
@@ -64,7 +81,7 @@ public class ScreenShotLaboratory {
   }
 
   protected String generateScreenshotFileName() {
-    return currentContext + timestamp() + "." + screenshotCounter.getAndIncrement();
+    return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
   /**
@@ -220,10 +237,12 @@ public class ScreenShotLaboratory {
   }
 
   protected File addToHistory(File screenshot) {
-    if (currentContextScreenshots != null) {
-      currentContextScreenshots.add(screenshot);
+    if (currentContextScreenshots.get() != null) {
+      currentContextScreenshots.get().add(screenshot);
     }
-    allScreenshots.add(screenshot);
+    synchronized (allScreenshots) {
+      allScreenshots.add(screenshot);
+    }
     return screenshot;
   }
 
@@ -292,23 +311,27 @@ public class ScreenShotLaboratory {
   }
 
   public void startContext(String context) {
-    this.currentContext = context;
-    currentContextScreenshots = new ArrayList<>();
+    currentContext.set(context);
+    currentContextScreenshots.set(new ArrayList<>());
   }
 
   public List<File> finishContext() {
-    List<File> result = currentContextScreenshots;
-    this.currentContext = "";
-    currentContextScreenshots = null;
+    List<File> result = currentContextScreenshots.get();
+    currentContext.set("");
+    currentContextScreenshots.remove();
     return result;
   }
 
   public List<File> getScreenshots() {
-    return allScreenshots;
+    synchronized (allScreenshots) {
+      return Collections.unmodifiableList(allScreenshots);
+    }
   }
 
   public File getLastScreenshot() {
-    return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
+    synchronized (allScreenshots) {
+      return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
+    }
   }
 
   public String formatScreenShotPath() {
