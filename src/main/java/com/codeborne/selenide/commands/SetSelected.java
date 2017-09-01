@@ -17,8 +17,11 @@ public class SetSelected implements Command<WebElement> {
       if (element.getAttribute("readonly") != null) {
         throw new InvalidStateException("Cannot change value of readonly element");
       }
-      if (!isSelectable(element)) {
+      if (selected && !isSelectable(element)) {
         throw new InvalidStateException("Can select option element or input of type checkbox or radio element only.");
+      }
+      if (!selected && !isDeselectable(element)) {
+        throw new InvalidStateException("Can de-select input of type checkbox element only.");
       }
       click.execute(proxy, locator, NO_ARGS);
     }
@@ -33,6 +36,15 @@ public class SetSelected implements Command<WebElement> {
     if ("input".equals(tagName)) {
       String type = element.getAttribute("type");
       return "radio".equals(type) || "checkbox".equals(type);
+    }
+    return false;
+  }
+
+  private boolean isDeselectable(WebElement element) {
+    String tagName = element.getTagName();
+    if ("input".equals(tagName)) {
+      String type = element.getAttribute("type");
+      return "checkbox".equals(type);
     }
     return false;
   }
