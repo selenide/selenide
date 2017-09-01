@@ -20,14 +20,12 @@ public class SetSelectedTest extends IntegrationTest {
   public void failsToSelectTextbox() {
     SelenideElement element = $(By.xpath("//input[@type='text']"));
     element.setSelected(true);
-    element.setSelected(false);
   }
 
   @Test(expected = InvalidStateException.class)
   public void failsToSelectButton() {
     SelenideElement element = $(By.tagName("button"));
     element.setSelected(true);
-    element.setSelected(false);
   }
 
   @Test
@@ -43,7 +41,6 @@ public class SetSelectedTest extends IntegrationTest {
   public void failsToSelectCheckbox() {
     SelenideElement element = $(By.xpath("//input[@name='favorite3']"));
     element.setSelected(true);
-    element.setSelected(false);
   }
 
   @Test
@@ -62,7 +59,6 @@ public class SetSelectedTest extends IntegrationTest {
   @Test(expected = InvalidStateException.class)
   public void failsToDeselectRadio() {
     SelenideElement element = $(By.xpath("//input[@name='me1']"));
-    element.setSelected(true);
     element.setSelected(false);
   }
 
@@ -77,7 +73,6 @@ public class SetSelectedTest extends IntegrationTest {
   @Test(expected = InvalidStateException.class)
   public void failsToDeselectOption() {
     SelenideElement element = $(By.xpath("//option[@value='master']"));
-    element.setSelected(true);
     element.setSelected(false);
   }
 }
