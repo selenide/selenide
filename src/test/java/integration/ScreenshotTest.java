@@ -42,8 +42,9 @@ public class ScreenshotTest extends IntegrationTest {
     BufferedImage img = ImageIO.read(screenshot);
     assertEquals("Screenshot doesn't fit width " + info, img.getWidth(), element.getSize().getWidth());
     assertEquals("Screenshot doesn't fit height " + info, img.getHeight(), element.getSize().getHeight());
-    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder
-            + ", but was: " + screenshot.getPath(), screenshot.getPath().startsWith(Configuration.reportsFolder));
+    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder +
+            ", but was: " + screenshot.getPath(),
+        screenshot.getPath().startsWith(Configuration.reportsFolder));
   }
 
   @Test
