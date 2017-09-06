@@ -350,7 +350,6 @@ task jbrowser(type: Test) {
 }
 
 task grid(type: Test) {
-  systemProperties['selenide.browser'] = 'htmlunit'
   include 'grid/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
