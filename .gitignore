@@ -1,5 +1,5 @@
 build
-.idea
+.idea/workspace.xml
 out
 *.ipr
 *.iws
