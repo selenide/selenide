@@ -14,13 +14,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 
 public class ScreenshotTest extends IntegrationTest {
@@ -40,9 +43,14 @@ public class ScreenshotTest extends IntegrationTest {
     BufferedImage img = ImageIO.read(screenshot);
     assertEquals("Screenshot doesn't fit width " + info, img.getWidth(), element.getSize().getWidth());
     assertEquals("Screenshot doesn't fit height " + info, img.getHeight(), element.getSize().getHeight());
-    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder +
-            ", but was: " + screenshot.getPath(),
-        screenshot.getPath().startsWith(Configuration.reportsFolder));
+    // Since File.getPath() return system-dependent path, we have to replace non-UNIX separators with UNIX separators
+    // to make sure that test will be passed.
+    String path = screenshot.getPath();
+    if (!FileSystems.getDefault().getSeparator().equals("/")) {
+      path = path.replace(FileSystems.getDefault().getSeparator(), "/");
+    }
+    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder + ", but was: " + path,
+        path.startsWith(Configuration.reportsFolder));
   }
 
   @Test
