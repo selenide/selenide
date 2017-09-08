@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -14,14 +15,14 @@ public class PageWithJQuery extends IntegrationTest {
   }
 
   @Test
-  public void setValueTriggersOnChangeEvent() {
+  public void setValueShoulNotTriggerOnChangeEvent() {
     $("#username").setValue("john");
-    $("h2").shouldHave(text("john"));
+    $("h2").shouldNotHave(exactText(""));
 
     $("#username").append(" ");
     $("#username").append("bon-jovi");
 
-    $("h2").shouldHave(text("john bon-jovi"));
+    $("h2").shouldNotHave(exactText(""));
   }
 
   @Test

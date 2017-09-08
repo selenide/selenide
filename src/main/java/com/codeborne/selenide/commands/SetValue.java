@@ -45,7 +45,6 @@ public class SetValue implements Command<WebElement> {
     } else {
       element.clear();
       element.sendKeys(text);
-      events.fireChangeEvent(element);
     }
   }
 
