@@ -3,7 +3,6 @@ package integration;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
