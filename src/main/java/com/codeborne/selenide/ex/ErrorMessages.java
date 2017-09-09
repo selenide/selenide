@@ -39,14 +39,14 @@ public class ErrorMessages {
     if (!Configuration.screenshots) {
       return "";
     }
-    if(Configuration.savePageSource) {
-       if(screenshotPath == null || screenshotPath.isEmpty()) {
-          return "\nScreenshot: " + screenshotPath;
-       }
-       return "\nScreenshot: " + screenshotPath
+    if (Configuration.savePageSource) {
+      if (screenshotPath == null || screenshotPath.isEmpty()) {
+        return "\nScreenshot: " + screenshotPath;
+      }
+      return "\nScreenshot: " + screenshotPath
               + "\nHtml: " + screenshotPath.substring(0, screenshotPath.lastIndexOf('.')) + ".html";
-    }else {
-       return "\nScreenshot: " + screenshotPath;
+    } else {
+      return "\nScreenshot: " + screenshotPath;
     }
   }
 
