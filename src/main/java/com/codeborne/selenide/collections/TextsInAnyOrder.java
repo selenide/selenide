@@ -23,13 +23,13 @@ public class TextsInAnyOrder extends ExactTexts {
     for (int i = 0; i < expectedTexts.size(); i++) {
       String expectedText = expectedTexts.get(i);
       boolean bFound = false;
-      for(WebElement element: elements) {
-    	  if (Html.text.contains(element.getText(), expectedText)) {
-    		  bFound = true;
-    	  }
+      for (WebElement element: elements) {
+        if (Html.text.contains(element.getText(), expectedText)) {
+          bFound = true;
+        }
       }
-      if(bFound == false) {
-    	  return false;
+      if (bFound == false) {
+        return false;
       }
     }
     return true;
