@@ -21,7 +21,6 @@ public class ErrorMessagesTest {
   @BeforeClass
   public static void rememberOldValues() {
     reportsUrl = Configuration.reportsUrl;
-    Configuration.savePageSource = false;
   }
 
   @AfterClass
@@ -37,6 +36,7 @@ public class ErrorMessagesTest {
     Configuration.screenshots = true;
     screenshots = mock(ScreenShotLaboratory.class);
     doCallRealMethod().when(screenshots).formatScreenShotPath();
+    Configuration.savePageSource = false;
   }
 
   @Test
