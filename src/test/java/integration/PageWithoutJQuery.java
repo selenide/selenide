@@ -13,7 +13,7 @@ public class PageWithoutJQuery extends IntegrationTest {
   }
 
   @Test
-  public void setValueShoulNotTriggerOnChangeEvent() {
+  public void setValueShouldNotTriggerOnChangeEvent() {
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("_"));
 

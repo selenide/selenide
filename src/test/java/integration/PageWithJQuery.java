@@ -15,14 +15,14 @@ public class PageWithJQuery extends IntegrationTest {
   }
 
   @Test
-  public void setValueShoulNotTriggerOnChangeEvent() {
+  public void setValueShouldNotTriggerOnChangeEvent() {
     $("#username").setValue("john");
-    $("h2").shouldNotHave(exactText(""));
+    $("h2").shouldNotHave(text("john"));
 
     $("#username").append(" ");
     $("#username").append("bon-jovi");
 
-    $("h2").shouldNotHave(exactText(""));
+    $("h2").shouldNotHave(text("john bon-jovi"));
   }
 
   @Test
