@@ -125,6 +125,10 @@ task checkstyleHtmlTest {
   }
 }
 
+[checkstyleMain, checkstyleTest].each { task ->
+    task.logging.setLevel(LogLevel.LIFECYCLE)
+}
+
 checkstyleMain.finalizedBy checkstyleHtmlMain
 checkstyleTest.finalizedBy checkstyleHtmlTest
 

@@ -9,12 +9,19 @@ if [ -z "$HERE" ] ; then
 fi
 
 ARTIFACTS_DIR="${HERE}/build/reports/"
-ARTIFACTS_FILE=${TRAVIS_JOB_NUMBER}_log.tar.gz
+ARTIFACTS_FILE=${TRAVIS_BUILD_NUMBER}_tests_report.tar.gz
+FAILURE_MESSAGE="\nBUILD FAILED. PLEASE READ CHECKSTYLE AND TEST RESULT REPORTS ON THE LINK ABOVE OR IN A LOG ABOVE\n"
+SUCCESS_MESSAGE="\nYOU CAN FIND TEST RESULTS REPORTS ON THE LINK ABOVE\n"
 
-ls $ARTIFACTS_DIR
 echo "COMPRESSING build artifacts."
-cd $ARTIFACTS_DIR
-tar -zcvf $ARTIFACTS_FILE *
-# upload to http://transfer.sh
-echo "Uploading to transfer.sh"
-curl --upload-file $ARTIFACTS_FILE http://transfer.sh
+cd ${ARTIFACTS_DIR}
+tar -zcf ${ARTIFACTS_FILE} *
+
+echo "Uploading build artifacts"
+curl --upload-file ${ARTIFACTS_FILE} https://transfer.sh/
+if [ $TRAVIS_TEST_RESULT -eq 0 ];
+then
+	echo -e ${SUCCESS_MESSAGE}
+else
+	echo -e ${FAILURE_MESSAGE}
+fi
