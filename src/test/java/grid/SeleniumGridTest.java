@@ -26,6 +26,7 @@ public class SeleniumGridTest extends IntegrationTest {
     });
 
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
+    Configuration.browser = "htmlunit";
   }
 
   @Test

@@ -305,7 +305,7 @@ public class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   public void userCanFollowLinks() {
-    $(By.linkText("Want to see ajax in action?")).followLink();
+    $(By.linkText("Want to see ajax in action?")).scrollTo().followLink();
     assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
