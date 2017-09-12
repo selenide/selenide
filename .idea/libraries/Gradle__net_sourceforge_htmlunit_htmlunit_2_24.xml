@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.sourceforge.htmlunit:htmlunit:2.24">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.htmlunit/htmlunit/2.24/e69abf8a4b5d13a9fd5c353c1557ef59f1570a8e/htmlunit-2.24.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.htmlunit/htmlunit/2.24/9df1a9853a0b4edd142b10a8ffa8041a7f2fe27/htmlunit-2.24-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

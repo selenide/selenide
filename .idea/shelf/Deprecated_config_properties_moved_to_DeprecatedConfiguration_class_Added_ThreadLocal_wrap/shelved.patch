@@ -1,0 +1,142 @@
+Index: src/main/java/com/codeborne/selenide/DeprecatedConfiguration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/codeborne/selenide/DeprecatedConfiguration.java	(revision )
++++ src/main/java/com/codeborne/selenide/DeprecatedConfiguration.java	(revision )
+@@ -0,0 +1,34 @@
++package com.codeborne.selenide;
++
++/**
++ * @deprecated use (@code Configuration.get()} instead.
++ */
++@Deprecated
++public class DeprecatedConfiguration {
++  /**
++   * @deprecated this options allowed only a single switch.
++   *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
++   *
++   * Value of "chrome.switches" parameter (in case of using Chrome driver).
++   * Can be configured either programmatically or by system property,
++   * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
++   *
++   * Default value: none
++   */
++  @Deprecated
++  public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
++
++  /**
++   * @deprecated this options is not thread safe.
++   *   Please use thread safe {@code Configuration.get().reportsFolder} instead
++   *
++   * Folder to store screenshots to.
++   * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
++   *
++   * Default value: "build/reports/tests" (this is default for Gradle projects)
++   */
++  @Deprecated
++  public static String reportsFolder = System.getProperty("selenide.reportsFolder",
++      System.getProperty("selenide.reports", "build/reports/tests"));
++
++}
+Index: src/main/java/com/codeborne/selenide/Configuration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/codeborne/selenide/Configuration.java	(revision ad5e3eef1727aff19e076e58e4fd79bcdd9a663a)
++++ src/main/java/com/codeborne/selenide/Configuration.java	(revision )
+@@ -7,7 +7,7 @@
+ import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
+ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
+ 
+-public class Configuration {
++public class Configuration extends DeprecatedConfiguration {
+   private static final Logger LOG = Logger.getLogger(Configuration.class.getName());
+ 
+   /**
+@@ -129,19 +129,6 @@
+           System.getProperty("selenide.start-maximized", "true")));
+ 
+   /**
+-   * @deprecated this options allowed only a single switch.
+-   *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
+-   *
+-   * Value of "chrome.switches" parameter (in case of using Chrome driver).
+-   * Can be configured either programmatically or by system property, 
+-   * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
+-   *
+-   * Default value: none
+-   */
+-  @Deprecated
+-  public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+-
+-  /**
+    * Should webdriver wait until page is completely loaded.
+    * Possible values: "none", "normal" and "eager".
+    *
+@@ -195,15 +182,6 @@
+   public static boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
+ 
+   /**
+-   * Folder to store screenshots to.
+-   * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
+-   *
+-   * Default value: "build/reports/tests" (this is default for Gradle projects)
+-   */
+-  public static String reportsFolder = System.getProperty("selenide.reportsFolder",
+-          System.getProperty("selenide.reports", "build/reports/tests"));
+-
+-  /**
+    * Optional: URL of CI server where reports are published to.
+    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
+    *
+@@ -348,4 +326,29 @@
+    */
+   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
+           System.getProperty("selenide.fileDownload", HTTPGET.name()));
++
++  private static final ThreadLocal<ConfigurationContainer> configurationContainer =
++      new ThreadLocal<ConfigurationContainer>() {
++        @Override
++        protected ConfigurationContainer initialValue() {
++          return new ConfigurationContainer();
++        }
++      };
++
++  public static ConfigurationContainer get() {
++    return configurationContainer.get();
++  }
++
++  public static class ConfigurationContainer {
++    /**
++     * Folder to store screenshots to.
++     * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
++     *
++     * Default value: "build/reports/tests" (this is default for Gradle projects)
++     */
++    public String reportsFolder = System.getProperty("selenide.reportsFolder",
++        System.getProperty("selenide.reports", "build/reports/tests"));
++
++    private ConfigurationContainer() {}
++  }
+ }
+Index: src/test/java/integration/ScreenshotTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/integration/ScreenshotTest.java	(revision ad5e3eef1727aff19e076e58e4fd79bcdd9a663a)
++++ src/test/java/integration/ScreenshotTest.java	(revision )
+@@ -49,8 +49,8 @@
+     if (!FileSystems.getDefault().getSeparator().equals("/")) {
+       path = path.replace(FileSystems.getDefault().getSeparator(), "/");
+     }
+-    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder + ", but was: " + path,
+-        path.startsWith(Configuration.reportsFolder));
++    assertTrue("Screenshot file should be located in " + Configuration.get().reportsFolder + ", but was: " + path,
++        path.startsWith(Configuration.get().reportsFolder));
+   }
+ 
+   @Test
