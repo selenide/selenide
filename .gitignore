@@ -1,8 +1,9 @@
 build
-.idea/workspace.xml
+.idea
 out
 *.ipr
 *.iws
+*.iml
 .gradle
 .project
 .classpath
