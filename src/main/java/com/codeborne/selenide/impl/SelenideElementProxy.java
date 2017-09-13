@@ -21,6 +21,7 @@ import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
@@ -59,6 +60,7 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
+    SelenideLogger.commitStep(log, IN_PROGRESS);
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);

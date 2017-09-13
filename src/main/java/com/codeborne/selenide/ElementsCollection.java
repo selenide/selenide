@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.toList;
 
@@ -54,6 +55,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     validateAssertionMode();
 
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
+    SelenideLogger.commitStep(log, IN_PROGRESS);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, collectionsTimeout);
