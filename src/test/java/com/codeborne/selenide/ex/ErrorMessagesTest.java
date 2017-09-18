@@ -93,6 +93,6 @@ public class ErrorMessagesTest {
 
     String screenshot = ErrorMessages.screenshot();
     assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
-                 + "\nHtml: http://ci.mycompany.com/job/666/artifact/test-result/12345.html", screenshot);
+                 + "\nPage source: http://ci.mycompany.com/job/666/artifact/test-result/12345.html", screenshot);
   }
 }
