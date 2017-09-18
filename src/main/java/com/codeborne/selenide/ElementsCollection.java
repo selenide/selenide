@@ -53,7 +53,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
     validateAssertionMode();
 
-    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
+    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, collectionsTimeout);
