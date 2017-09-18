@@ -1,7 +1,8 @@
 == Changelog
 
 === 4.7 (planned to 2x.09.2017)
-*
+* #210 Show path to page html in addition to screenshot -- Thanks @hyunil-shin for PR #590
+* #570 Fixed concurrency issue with screenshots during parallel runs -- Thanks Jane Riabchenko for PR #595
 
 === 4.6 (released 31.08.2017)
 * #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote    -- thanks to @BorisOsipov
