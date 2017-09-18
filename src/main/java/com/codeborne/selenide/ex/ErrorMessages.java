@@ -39,7 +39,17 @@ public class ErrorMessages {
     if (!Configuration.screenshots) {
       return "";
     }
-    return "\nScreenshot: " + screenshotPath;
+
+    if (screenshotPath == null || screenshotPath.isEmpty()) {
+      return "\nScreenshot: " + screenshotPath;
+    }
+
+    if (Configuration.savePageSource) {
+      String htmlFilePath = getHtmlFilePath(screenshotPath);
+      return "\nScreenshot: " + screenshotPath + "\nPage source: " + htmlFilePath;
+    } else {
+      return "\nScreenshot: " + screenshotPath;
+    }
   }
 
   public static String causedBy(Throwable cause) {
@@ -57,5 +67,9 @@ public class ErrorMessages {
       return "";
     }
     return "\nJavascript Errors: " + jsErrors;
+  }
+
+  private static String getHtmlFilePath(String screenshotPath) {
+    return screenshotPath.substring(0, screenshotPath.lastIndexOf('.')) + ".html";
   }
 }
