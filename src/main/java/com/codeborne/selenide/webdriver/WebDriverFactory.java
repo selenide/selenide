@@ -146,14 +146,23 @@ public class WebDriverFactory {
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
+        if (capability == null) {
+          continue;
+        }
         String value = System.getProperties().getProperty(key);
-        if (capability.equals("args")) {
-          List<String> args = Arrays.asList(value.split(","));
-          currentChromeOptions.addArguments(args);
-        } else {
-          log.warning(capability + "is ignored." +
-                  "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                  "are supported for the chromeoptions at the moment");
+        switch (capability) {
+          case "args":
+            List<String> args = Arrays.asList(value.split(","));
+            currentChromeOptions.addArguments(args);
+            break;
+          case "binary":
+            currentChromeOptions.setBinary(value);
+            break;
+          default:
+            log.warning(capability + "is ignored." +
+                    "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
+                    "are supported for the chromeoptions at the moment");
+            break;
         }
       }
     }
