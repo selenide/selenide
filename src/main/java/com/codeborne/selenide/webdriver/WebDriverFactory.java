@@ -2,10 +2,8 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverProvider;
-import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -20,6 +18,7 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -28,6 +27,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
@@ -76,6 +76,8 @@ public class WebDriverFactory {
   protected WebDriver createRemoteDriver(String remote, String browser, Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+      Platform platform = platformName != null ? Platform.fromString(platformName) : Platform.ANY;
+      capabilities.setPlatform(platform);
       capabilities.setBrowserName(isIE() ? INTERNET_EXPLORER : browser);
       return new RemoteWebDriver(new URL(remote), capabilities);
     } catch (MalformedURLException e) {
@@ -170,6 +172,14 @@ public class WebDriverFactory {
 
   protected ChromeOptions createChromeOptions() {
     ChromeOptions options = new ChromeOptions();
+    if(pathToExtensionChrome!=null){
+      List<File> filesExtension =
+              Arrays.stream(pathToExtensionChrome
+                      .split(","))
+                      .map(pathToFile -> new File(pathToFile))
+                      .collect(Collectors.toList());
+      options.addExtensions(filesExtension);
+    }
     options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments(chromeSwitches);

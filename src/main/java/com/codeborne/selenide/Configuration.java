@@ -110,6 +110,14 @@ public class Configuration {
    */
   public static String remote = System.getProperty("remote");
 
+
+  /**
+   * The platform where tests using Selenium Grid will be started
+   * Can be configured either programmatically or by system property "-DplatformName=win7"
+   */
+  public static String platformName = System.getProperty("platformName");
+
+
   /**
    * The browser window size.
    * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
@@ -140,6 +148,15 @@ public class Configuration {
    */
   @Deprecated
   public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+
+  /**
+   * The browser plugins.
+   * Can be configured either programmatically or by system property "-DpathToExtension.chrome=%pathToFileCrx%".
+   * You can connect a lot of plug-ins to pass to them a path separated by a comma ("-DpathToExtension.chrome=adblockpluschrome.crx,extension_1_13_8.crx")
+   * Default value: none (The browser starts without plug-ins)
+   */
+  public static String pathToExtensionChrome = System.getProperty("pathToExtension.chrome");
+
 
   /**
    * Should webdriver wait until page is completely loaded.
