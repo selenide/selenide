@@ -55,6 +55,73 @@ public class WebDriverFactoryTest {
   }
 
   @Test
+  public void transfersStringCapabilitiesFromSystemPropsToDriver() {
+    System.setProperty("capabilities.some.cap", "abcd");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    assertThat(driverFactory.createCommonCapabilities(proxy).getCapability("some.cap"), is("abcd"));
+  }
+
+  @Test
+  public void transfersBooleanCapabilitiesFromSystemPropsToDriver() {
+    System.setProperty("capabilities.some.cap", "true");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    assertThat(driverFactory.createCommonCapabilities(proxy).getCapability("some.cap"), is(true));
+  }
+
+  @Test
+  public void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
+    System.setProperty("capabilities.some.cap", "25");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    assertThat(driverFactory.createCommonCapabilities(proxy).getCapability("some.cap"), is(25));
+  }
+
+  @Test
+  public void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
+    System.setProperty("firefoxprofile.some.cap", "25");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
+    assertThat(profile.getIntegerPreference("some.cap", 0), is(25));
+
+  }
+
+  @Test
+  public void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
+    System.setProperty("firefoxprofile.some.cap", "false");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
+    assertThat(profile.getBooleanPreference("some.cap", true), is(false));
+  }
+
+  @Test
+  public void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
+    System.setProperty("firefoxprofile.some.cap", "abdd");
+
+    final AbstractDriverFactory driverFactory = new DefaultDriverFactory();
+
+    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
+    assertThat(profile.getStringPreference("some.cap", "sjlj"), is("abdd"));
+  }
+
+  @Test
+  public void transferChromeOptionArgumentsFromSystemPropsToDriver() throws IOException {
+    System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123");
+    String arrayOfArguments = new ChromeDriverFactory().createChromeOptions().toJson().getAsJsonObject().getAsJsonArray("args").toString();
+    assertThat(arrayOfArguments, containsString("abdd"));
+    assertThat(arrayOfArguments, containsString("--abcd"));
+    assertThat(arrayOfArguments, containsString("xcvcd=123"));
+  }
+
+  @Test
   public void canMaximizeBrowserWindow_chrome() {
     Configuration.startMaximized = true;
     Configuration.browser = "chrome";
@@ -64,54 +131,6 @@ public class WebDriverFactoryTest {
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 1200));
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));
-  }
-
-  @Test
-  public void transfersStringCapabilitiesFromSystemPropsToDriver() {
-    System.setProperty("capabilities.some.cap", "abcd");
-    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is("abcd"));
-  }
-
-  @Test
-  public void transfersBooleanCapabilitiesFromSystemPropsToDriver() {
-    System.setProperty("capabilities.some.cap", "true");
-    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is(true));
-  }
-
-  @Test
-  public void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
-    System.setProperty("capabilities.some.cap", "25");
-    assertThat(factory.createCommonCapabilities(proxy).getCapability("some.cap"), is(25));
-  }
-
-  @Test
-  public void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
-    System.setProperty("firefoxprofile.some.cap", "25");
-    FirefoxProfile profile = (FirefoxProfile) factory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
-    assertThat(profile.getIntegerPreference("some.cap", 0), is(25));
-  }
-
-  @Test
-  public void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
-    System.setProperty("firefoxprofile.some.cap", "false");
-    FirefoxProfile profile = (FirefoxProfile) factory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
-    assertThat(profile.getBooleanPreference("some.cap", true), is(false));
-  }
-
-  @Test
-  public void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
-    System.setProperty("firefoxprofile.some.cap", "abdd");
-    FirefoxProfile profile = (FirefoxProfile) factory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
-    assertThat(profile.getStringPreference("some.cap", "sjlj"), is("abdd"));
-  }
-
-  @Test
-  public void transferChromeOptionArgumentsFromSystemPropsToDriver() throws IOException {
-    System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123");
-    String arrayOfArguments = factory.createChromeOptions().toJson().getAsJsonObject().getAsJsonArray("args").toString();
-    assertThat(arrayOfArguments, containsString("abdd"));
-    assertThat(arrayOfArguments, containsString("--abcd"));
-    assertThat(arrayOfArguments, containsString("xcvcd=123"));
   }
 
   @After
