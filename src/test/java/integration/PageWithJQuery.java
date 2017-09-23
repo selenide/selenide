@@ -27,6 +27,6 @@ public class PageWithJQuery extends IntegrationTest {
   @Test
   public void selectByXpath() {
     $(By.xpath("html/body/div[2]/form[1]/fieldset[1]//input[@name='username']")).val("Underwood");
-    $(By.xpath("/html//h2[1]")).shouldHave(text("Underwood"));
+    $(By.xpath("/html//h2[1]")).shouldNotHave(text("Underwood"));
   }
 }
