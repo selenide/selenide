@@ -20,87 +20,90 @@ import static com.codeborne.selenide.impl.Describe.describe;
 
 public class WebDriverFactory {
 
-    private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
+  private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
 
-    public WebDriver createWebDriver(Proxy proxy) {
-        log.config("Configuration.browser=" + browser);
-        log.config("Configuration.browser.version=" + browserVersion);
-        log.config("Configuration.remote=" + remote);
-        log.config("Configuration.browserSize=" + browserSize);
-        log.config("Configuration.startMaximized=" + startMaximized);
+  public WebDriver createWebDriver(Proxy proxy) {
+    log.config("Configuration.browser=" + browser);
+    log.config("Configuration.browser.version=" + browserVersion);
+    log.config("Configuration.remote=" + remote);
+    log.config("Configuration.browserSize=" + browserSize);
+    log.config("Configuration.startMaximized=" + startMaximized);
 
-        final AbstractDriverFactory[] factories = new AbstractDriverFactory[] {
-                new RemoteDriverFactory(),
-                new ChromeDriverFactory(),
-                new MarionetteDriverFactory(),
-                new FirefoxDriverFactory(),
-                new HtmlUnitDriverFactory(),
-                new EdgeDriverFactory(),
-                new InternetExplorerDriverFactory(),
-                new PhantomJsDriverFactory(),
-                new OperaDriverFactory(),
-                new SafariDriverFactory(),
-                new JBrowserDriverFactory(),
-        };
+    final AbstractDriverFactory[] factories = new AbstractDriverFactory[]{
+        new RemoteDriverFactory(),
+        new ChromeDriverFactory(),
+        new MarionetteDriverFactory(),
+        new FirefoxDriverFactory(),
+        new HtmlUnitDriverFactory(),
+        new EdgeDriverFactory(),
+        new InternetExplorerDriverFactory(),
+        new PhantomJsDriverFactory(),
+        new OperaDriverFactory(),
+        new SafariDriverFactory(),
+        new JBrowserDriverFactory(),
+    };
 
-        WebDriver webdriver = Arrays.stream(factories)
-                .filter(AbstractDriverFactory::supports)
-                .findAny()
-                .map(driverFactory -> driverFactory.create(proxy))
-                .orElseGet(() -> new DefaultDriverFactory().create(proxy));
+    WebDriver webdriver = Arrays.stream(factories)
+        .filter(AbstractDriverFactory::supports)
+        .findAny()
+        .map(driverFactory -> driverFactory.create(proxy))
+        .orElseGet(() -> new DefaultDriverFactory().create(proxy));
 
-        webdriver = adjustBrowserSize(webdriver);
+    webdriver = adjustBrowserSize(webdriver);
 
-        if (!isHeadless()) {
-            Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
-            log.info("BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
-                    + " Platform=" + capabilities.getPlatform());
-        }
-        log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
-        if (remote == null) {
-            BuildInfo seleniumInfo = new BuildInfo();
-            log.info("Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+    if (!isHeadless()) {
+      Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
+      log.info(
+          "BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
+              + " Platform=" + capabilities.getPlatform());
+    }
+    log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
+    if (remote == null) {
+      BuildInfo seleniumInfo = new BuildInfo();
+      log.info(
+          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo
+              .getBuildTime());
+    } else {
+      ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
+    }
+
+    return webdriver;
+  }
+
+  protected WebDriver adjustBrowserSize(WebDriver driver) {
+    if (browserSize != null) {
+      log.info("Set browser size to " + browserSize);
+      String[] dimension = browserSize.split("x");
+      int width = Integer.parseInt(dimension[0]);
+      int height = Integer.parseInt(dimension[1]);
+      driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
+    } else if (startMaximized) {
+      try {
+        if (isChrome()) {
+          maximizeChromeBrowser(driver.manage().window());
         } else {
-            ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
+          driver.manage().window().maximize();
         }
-
-        return webdriver;
+      } catch (Exception cannotMaximize) {
+        log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
+      }
     }
+    return driver;
+  }
 
-    protected WebDriver adjustBrowserSize(WebDriver driver) {
-        if (browserSize != null) {
-            log.info("Set browser size to " + browserSize);
-            String[] dimension = browserSize.split("x");
-            int width = Integer.parseInt(dimension[0]);
-            int height = Integer.parseInt(dimension[1]);
-            driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
-        } else if (startMaximized) {
-            try {
-                if (isChrome()) {
-                    maximizeChromeBrowser(driver.manage().window());
-                } else {
-                    driver.manage().window().maximize();
-                }
-            } catch (Exception cannotMaximize) {
-                log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
-            }
-        }
-        return driver;
-    }
+  protected void maximizeChromeBrowser(WebDriver.Window window) {
+    // Chrome driver does not yet support maximizing. Let' apply black magic!
+    org.openqa.selenium.Dimension screenResolution = getScreenSize();
 
-    protected void maximizeChromeBrowser(WebDriver.Window window) {
-        // Chrome driver does not yet support maximizing. Let' apply black magic!
-        org.openqa.selenium.Dimension screenResolution = getScreenSize();
+    window.setSize(screenResolution);
+    window.setPosition(new org.openqa.selenium.Point(0, 0));
+  }
 
-        window.setSize(screenResolution);
-        window.setPosition(new org.openqa.selenium.Point(0, 0));
-    }
+  Dimension getScreenSize() {
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-    Dimension getScreenSize() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-        return new Dimension(
-                (int) toolkit.getScreenSize().getWidth(),
-                (int) toolkit.getScreenSize().getHeight());
-    }
+    return new Dimension(
+        (int) toolkit.getScreenSize().getWidth(),
+        (int) toolkit.getScreenSize().getHeight());
+  }
 }

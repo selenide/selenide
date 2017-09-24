@@ -6,11 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.logging.Logger;
-
-class MarionetteDriverFactory extends AbstractDriverFactory {
-
-  private static final Logger log = Logger.getLogger(MarionetteDriverFactory.class.getName());
+class MarionetteDriverFactory extends FirefoxDriverFactory {
 
   @Override
   boolean supports() {

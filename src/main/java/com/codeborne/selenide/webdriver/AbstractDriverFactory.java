@@ -1,23 +1,22 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverProvider;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Logger;
-
-import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.browserVersion;
 import static com.codeborne.selenide.Configuration.pageLoadStrategy;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.openqa.selenium.remote.CapabilityType.*;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.PROXY;
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
+import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
+
+import com.codeborne.selenide.WebDriverProvider;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 abstract class AbstractDriverFactory {
 
@@ -90,39 +89,5 @@ abstract class AbstractDriverFactory {
       }
     }
     return currentBrowserCapabilities;
-  }
-
-  DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
-    FirefoxProfile myProfile = new FirefoxProfile();
-    myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
-    myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
-    myProfile.setPreference("network.negotiate-auth.delegation-uris", "http://,https://");
-    myProfile.setPreference("network.negotiate-auth.trusted-uris", "http://,https://");
-    myProfile.setPreference("network.http.phishy-userpass-length", 255);
-    myProfile.setPreference("security.csp.enable", false);
-
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    myProfile = transferFirefoxProfileFromSystemProperties(myProfile, "firefoxprofile.");
-    capabilities.setCapability("marionette", false);
-    capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
-    return capabilities;
-  }
-
-  private FirefoxProfile transferFirefoxProfileFromSystemProperties(FirefoxProfile currentFirefoxProfile, String prefix) {
-    for (String key : System.getProperties().stringPropertyNames()) {
-      if (key.startsWith(prefix)) {
-        String capability = key.substring(prefix.length());
-        String value = System.getProperties().getProperty(key);
-        log.config("Use " + key + "=" + value);
-        if (value.equals("true") || value.equals("false")) {
-          currentFirefoxProfile.setPreference(capability, Boolean.valueOf(value));
-        } else if (value.matches("^-?\\d+$")) { //if integer
-          currentFirefoxProfile.setPreference(capability, Integer.parseInt(value));
-        } else {
-          currentFirefoxProfile.setPreference(capability, value);
-        }
-      }
-    }
-    return currentFirefoxProfile;
   }
 }
