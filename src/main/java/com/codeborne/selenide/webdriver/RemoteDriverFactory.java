@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -29,7 +30,10 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
       capabilities.setBrowserName(isIE() ? INTERNET_EXPLORER : browser);
-      return new RemoteWebDriver(new URL(remote), capabilities);
+
+      RemoteWebDriver webDriver = new RemoteWebDriver(new URL(remote), capabilities);
+      webDriver.setFileDetector(new LocalFileDetector());
+      return webDriver;
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
     }

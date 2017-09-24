@@ -6,7 +6,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.BuildInfo;
-import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
@@ -51,22 +50,9 @@ public class WebDriverFactory {
 
     webdriver = adjustBrowserSize(webdriver);
 
-    if (!isHeadless()) {
-      Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
-      log.info(
-          "BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
-              + " Platform=" + capabilities.getPlatform());
-    }
+    logBrowserVersion(webdriver);
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
-    if (remote == null) {
-      BuildInfo seleniumInfo = new BuildInfo();
-      log.info(
-          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo
-              .getBuildTime());
-    } else {
-      ((RemoteWebDriver) webdriver).setFileDetector(new LocalFileDetector());
-    }
-
+    logSeleniumInfo();
     return webdriver;
   }
 
@@ -105,5 +91,23 @@ public class WebDriverFactory {
     return new Dimension(
         (int) toolkit.getScreenSize().getWidth(),
         (int) toolkit.getScreenSize().getHeight());
+  }
+
+  void logSeleniumInfo() {
+    if (remote == null) {
+      BuildInfo seleniumInfo = new BuildInfo();
+      log.info(
+          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo
+              .getBuildTime());
+    }
+  }
+
+  void logBrowserVersion(WebDriver webdriver) {
+    if (!isHeadless()) {
+      Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
+      log.info(
+          "BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
+              + " Platform=" + capabilities.getPlatform());
+    }
   }
 }
