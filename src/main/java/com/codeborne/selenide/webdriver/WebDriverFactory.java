@@ -9,13 +9,14 @@ import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.impl.Describe.describe;
+import static java.util.Arrays.asList;
 
 public class WebDriverFactory {
 
@@ -28,7 +29,7 @@ public class WebDriverFactory {
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
 
-    final AbstractDriverFactory[] factories = new AbstractDriverFactory[]{
+    final List<AbstractDriverFactory> factories = asList(
         new RemoteDriverFactory(),
         new ChromeDriverFactory(),
         new MarionetteDriverFactory(),
@@ -39,10 +40,10 @@ public class WebDriverFactory {
         new PhantomJsDriverFactory(),
         new OperaDriverFactory(),
         new SafariDriverFactory(),
-        new JBrowserDriverFactory(),
-    };
+        new JBrowserDriverFactory()
+    );
 
-    WebDriver webdriver = Arrays.stream(factories)
+    WebDriver webdriver = factories.stream()
         .filter(AbstractDriverFactory::supports)
         .findAny()
         .map(driverFactory -> driverFactory.create(proxy))
