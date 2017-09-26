@@ -22,26 +22,26 @@ public class WebDriverFactory {
 
   private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
 
+  protected List<AbstractDriverFactory> factories = asList(
+      new RemoteDriverFactory(),
+      new ChromeDriverFactory(),
+      new MarionetteDriverFactory(),
+      new FirefoxDriverFactory(),
+      new HtmlUnitDriverFactory(),
+      new EdgeDriverFactory(),
+      new InternetExplorerDriverFactory(),
+      new PhantomJsDriverFactory(),
+      new OperaDriverFactory(),
+      new SafariDriverFactory(),
+      new JBrowserDriverFactory()
+  );
+
   public WebDriver createWebDriver(Proxy proxy) {
     log.config("Configuration.browser=" + browser);
     log.config("Configuration.browser.version=" + browserVersion);
     log.config("Configuration.remote=" + remote);
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
-
-    final List<AbstractDriverFactory> factories = asList(
-        new RemoteDriverFactory(),
-        new ChromeDriverFactory(),
-        new MarionetteDriverFactory(),
-        new FirefoxDriverFactory(),
-        new HtmlUnitDriverFactory(),
-        new EdgeDriverFactory(),
-        new InternetExplorerDriverFactory(),
-        new PhantomJsDriverFactory(),
-        new OperaDriverFactory(),
-        new SafariDriverFactory(),
-        new JBrowserDriverFactory()
-    );
 
     WebDriver webdriver = factories.stream()
         .filter(AbstractDriverFactory::supports)
