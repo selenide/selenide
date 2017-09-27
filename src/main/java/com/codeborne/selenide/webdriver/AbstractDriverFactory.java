@@ -20,7 +20,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 abstract class AbstractDriverFactory {
 
-  private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
+  private static final Logger log = Logger.getLogger(AbstractDriverFactory.class.getName());
 
   abstract boolean supports();
 

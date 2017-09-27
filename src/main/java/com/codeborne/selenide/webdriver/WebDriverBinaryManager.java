@@ -13,7 +13,7 @@ import static com.codeborne.selenide.WebDriverRunner.*;
  */
 public class WebDriverBinaryManager {
 
-  private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
+  private static final Logger log = Logger.getLogger(WebDriverBinaryManager.class.getName());
 
   private static final String CHROME_PROP = "webdriver.chrome.driver";
   private static final String MARIONETTE_PROP = "webdriver.gecko.driver";
