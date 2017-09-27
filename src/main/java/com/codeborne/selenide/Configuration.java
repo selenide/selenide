@@ -348,4 +348,15 @@ public class Configuration {
    */
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
           System.getProperty("selenide.fileDownload", HTTPGET.name()));
+
+  /**
+   * Controls Selenide and WebDriverManager integration.
+   * When integration is enabled you don't need to download and setup any browser driver executables.
+   * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
+   *
+   * Default: true
+   */
+  public static Boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
+
+
 }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.remote;
 import static com.codeborne.selenide.WebDriverRunner.*;
 
 /**
