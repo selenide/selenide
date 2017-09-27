@@ -114,12 +114,7 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
     $("#age").clear();
     $("#age").sendKeys("21");
-    if (isHtmlUnit()) {
-      assertEquals("<input id=\"age\" name=\"age\" value=\"21\"></input>", $("#age").toString());
-    }
-    else {
-      assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
-    }
+    assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
   }
 
   @Test
