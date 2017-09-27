@@ -356,7 +356,7 @@ public class Configuration {
    *
    * Default: true
    */
-  public static Boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
+  public static boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
 
 
 }
