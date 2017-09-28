@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
+import static com.codeborne.selenide.Configuration.presentationMode.BoxStyle.*;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 
 public class Configuration {
@@ -64,7 +65,7 @@ public class Configuration {
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
   public static boolean reopenBrowserOnFail = Boolean.parseBoolean(
-      System.getProperty("selenide.reopenBrowserOnFail", "true"));
+          System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
@@ -105,7 +106,7 @@ public class Configuration {
   /**
    * URL of remote web driver (in case of using Selenium Grid).
    * Can be configured either programmatically or by system property "-Dremote=http://localhost:5678/wd/hub".
-   *
+   * <p>
    * Default value: null (Grid is not used).
    */
   public static String remote = System.getProperty("remote");
@@ -133,9 +134,9 @@ public class Configuration {
    *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
    *
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property, 
+   * Can be configured either programmatically or by system property,
    * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
-   *
+   * <p>
    * Default value: none
    */
   @Deprecated
@@ -156,8 +157,10 @@ public class Configuration {
    *  Though, we left default value `normal` because we afraid to break users' existing tests.
    * 
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
+   *
    * @since 3.5
    */
+
   public static String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
           System.getProperty("selenide.page-load-strategy", "normal"));
   
@@ -237,8 +240,7 @@ public class Configuration {
     if (!isEmpty(build_url)) {
       LOG.config("Using Jenkins BUILD_URL: " + build_url);
       return build_url + "artifact/";
-    }
-    else {
+    } else {
       LOG.config("No BUILD_URL variable found. It's not Jenkins.");
       return null;
     }
@@ -247,21 +249,21 @@ public class Configuration {
   /**
    * Mock "alert" and "confirm" javascript dialogs.
    * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
-   *
+   * <p>
    * Default value: false
-   *        (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
+   * (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
    */
   public static boolean dismissModalDialogs =
-      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
+          Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
 
   /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * (that is quite slow because it sends every character separately).
-   *
+   * <p>
    * Tested on Codeborne projects - works well, speed up ~30%.
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
-   *
+   * <p>
    * https://github.com/codeborne/selenide/issues/135
    * Can be configured either programmatically or by system property "-Dselenide.fastSetValue=true".
    * Default value: false
@@ -296,7 +298,7 @@ public class Configuration {
     /**
      * Use Sizzle for CSS selectors.
      * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
-     *
+     * <p>
      * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
      */
     Sizzle
@@ -324,12 +326,12 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
-  
+
   public enum FileDownloadMode {
     /**
      * Download files via direct http request.
-     * Works only for <a href></a> elements. 
-     * Sends GET request to "href" with all cookies from current browser session. 
+     * Works only for <a href></a> elements.
+     * Sends GET request to "href" with all cookies from current browser session.
      */
     HTTPGET,
 
@@ -348,4 +350,74 @@ public class Configuration {
    */
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
           System.getProperty("selenide.fileDownload", HTTPGET.name()));
+
+  /**
+   * presentation Mode Config
+   */
+  public static class presentationMode {
+    /**
+     * Activate presentation Mode
+     * Default: false
+     */
+    public static boolean active = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.active", "false"));
+
+    /**
+     * Flash element before click
+     * Default: true
+     */
+    public static boolean flashElements = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.flashElements", "true"));
+
+    /**
+     * Mark element before click
+     * Default: false
+     */
+    public static boolean markElements = Boolean.parseBoolean(System.getProperty("selenide.presentationMode.markElements", "false"));
+
+    /**
+     * Delay before click in ms.
+     * Default: 500
+     */
+    public static Integer delayBeforeCommand = Integer.parseInt(System.getProperty("selenide.presentationMode.delayBeforeCommand",
+            "500"));
+
+    /**
+     * Element flasher color
+     * Default: #00ff00
+     */
+    public static String flashColor = System.getProperty("selenide.presentationMode.flashColor", "#00ff00");
+
+    /**
+     * Element marker color
+     * Default: #00ff00
+     */
+    public static String markColor = System.getProperty("selenide.presentationMode.markColor", "#00ff00");
+
+    public enum BoxStyle {
+      /**
+       * Show marker element as a transparent rectangular, filed with color.
+       *
+       */
+      BORDER,
+
+      /**
+       * Show marker element as a frame without any filling.
+       *
+       */
+      FILL
+    }
+
+    /**
+     * Element flasher style
+     * Default: FILL
+     */
+    public static BoxStyle flashStyle = BoxStyle.valueOf(
+            System.getProperty("selenide.presentationMode.flashStyle", FILL.name()));
+
+    /**
+     * Element marker style
+     * Default: BORDER
+     */
+    public static BoxStyle markStyle = BoxStyle.valueOf(
+            System.getProperty("selenide.presentationMode.markStyle", BORDER.name()));
+  }
 }
