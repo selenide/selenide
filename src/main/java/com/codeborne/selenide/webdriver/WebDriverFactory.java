@@ -36,6 +36,8 @@ public class WebDriverFactory {
       new JBrowserDriverFactory()
   );
 
+  protected WebDriverBinaryManager webDriverBinaryManager = new WebDriverBinaryManager();
+
   public WebDriver createWebDriver(Proxy proxy) {
     log.config("Configuration.browser=" + browser);
     log.config("Configuration.browser.version=" + browserVersion);
@@ -43,8 +45,8 @@ public class WebDriverFactory {
     log.config("Configuration.browserSize=" + browserSize);
     log.config("Configuration.startMaximized=" + startMaximized);
 
-    if (driverManagerEnabled && remote != null) {
-      WebDriverBinaryManager.setupBinaryPath();
+    if (driverManagerEnabled && remote == null) {
+      webDriverBinaryManager.setupBinaryPath();
     }
 
     WebDriver webdriver = factories.stream()
