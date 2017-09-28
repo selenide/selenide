@@ -29,9 +29,9 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void canSubmitPromtDialog() {
-    $(byValue("Promt button")).click();
-    promt("Please input your username", "Aegon Targaryen");
+  public void canSubmitPromptDialog() {
+    $(byValue("Prompt button")).click();
+    prompt("Please input your username", "Aegon Targaryen");
     $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
     $("#container").shouldBe(empty);
   }
