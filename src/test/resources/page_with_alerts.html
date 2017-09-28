@@ -16,6 +16,12 @@
         document.getElementById('container').innerHTML = '';
       }
 
+      function runPromt() {
+        var username = prompt("Please input your username");
+        document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
+        document.getElementById('container').innerHTML = '';
+      }
+
       function triggerConfirm() {
         setTimeout(runConfirm, 1000);
         return false;
@@ -46,6 +52,7 @@
             <input id="username" name="username"/>
           </label> <br/>
           <input type="button" onclick="return runAlert();" value="Alert button"><br/><br/>
+          <input type="button" onclick="return runPromt();" value="Promt button"><br/><br/>
           <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
 
           <input type="button" onclick="return triggerAlert();" value="Slow alert"><br/><br/>
