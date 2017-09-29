@@ -1,7 +1,7 @@
 == Changelog
 
 === 4.7 (planned to 2x.09.2017)
-* upgrade to selenium-java 3.5.3
+* upgrade to selenium-java 3.6.0
 * upgrade to browsermob-core 2.1.5 (and downgrade to littleproxy 1.1.0-beta-bmp-17)
 * #610 integration with DriverManager
 * #591 Added method prompt() -- Thanks to Anton Aftakhov aka @simple-elf
