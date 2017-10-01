@@ -4,10 +4,12 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.logging.Logger;
+
+import static com.codeborne.selenide.Configuration.headless;
 
 class FirefoxDriverFactory extends AbstractDriverFactory {
 
@@ -24,43 +26,46 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   private WebDriver createFirefoxDriver(final Proxy proxy) {
-    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
+    FirefoxOptions options = createFirefoxOptions(proxy);
     log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
             "Use browser=marionette with geckodriver, when using it.");
-    return new FirefoxDriver(capabilities);
+    return new FirefoxDriver(options);
   }
 
-  DesiredCapabilities createFirefoxCapabilities(Proxy proxy) {
-    FirefoxProfile myProfile = new FirefoxProfile();
-    myProfile.setPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
-    myProfile.setPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
-    myProfile.setPreference("network.negotiate-auth.delegation-uris", "http://,https://");
-    myProfile.setPreference("network.negotiate-auth.trusted-uris", "http://,https://");
-    myProfile.setPreference("network.http.phishy-userpass-length", 255);
-    myProfile.setPreference("security.csp.enable", false);
+  FirefoxOptions createFirefoxOptions(Proxy proxy) {
+    FirefoxOptions firefoxOptions = new FirefoxOptions();
+    firefoxOptions.setHeadless(headless);
+    firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
+    firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
+    firefoxOptions.addPreference("network.negotiate-auth.delegation-uris", "http://,https://");
+    firefoxOptions.addPreference("network.negotiate-auth.trusted-uris", "http://,https://");
+    firefoxOptions.addPreference("network.http.phishy-userpass-length", 255);
+    firefoxOptions.addPreference("security.csp.enable", false);
 
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    myProfile = transferFirefoxProfileFromSystemProperties(myProfile, "firefoxprofile.");
-    capabilities.setCapability("marionette", false);
-    capabilities.setCapability(FirefoxDriver.PROFILE, myProfile);
-    return capabilities;
+    firefoxOptions.setCapability("marionette", false);
+    firefoxOptions.merge(createCommonCapabilities(proxy));
+    firefoxOptions = transferFirefoxProfileFromSystemProperties(firefoxOptions);
+
+    return firefoxOptions;
   }
 
-  private FirefoxProfile transferFirefoxProfileFromSystemProperties(FirefoxProfile currentFirefoxProfile, String prefix) {
+  private FirefoxOptions transferFirefoxProfileFromSystemProperties(FirefoxOptions currentFirefoxOptions) {
+    String prefix = "firefoxprofile.";
+    FirefoxProfile profile = new FirefoxProfile();
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         log.config("Use " + key + "=" + value);
         if (value.equals("true") || value.equals("false")) {
-          currentFirefoxProfile.setPreference(capability, Boolean.valueOf(value));
+          profile.setPreference(capability, Boolean.valueOf(value));
         } else if (value.matches("^-?\\d+$")) { //if integer
-          currentFirefoxProfile.setPreference(capability, Integer.parseInt(value));
+          profile.setPreference(capability, Integer.parseInt(value));
         } else {
-          currentFirefoxProfile.setPreference(capability, value);
+          profile.setPreference(capability, value);
         }
       }
     }
-    return currentFirefoxProfile;
+    return currentFirefoxOptions.setProfile(profile);
   }
 }

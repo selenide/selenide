@@ -1,18 +1,20 @@
 package com.codeborne.selenide.webdriver;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-
 import com.codeborne.selenide.Configuration;
-import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class FirefoxDriverFactoryTest {
 
@@ -54,8 +56,7 @@ public class FirefoxDriverFactoryTest {
   @Test
   public void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap", "25");
-    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(
-        FirefoxDriver.PROFILE);
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(proxy).getProfile();
     assertThat(profile.getIntegerPreference("some.cap", 0), is(25));
 
   }
@@ -63,22 +64,24 @@ public class FirefoxDriverFactoryTest {
   @Test
   public void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap", "false");
-    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(proxy).getProfile();
     assertThat(profile.getBooleanPreference("some.cap", true), is(false));
   }
 
   @Test
   public void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap", "abdd");
-    FirefoxProfile profile = (FirefoxProfile) driverFactory.createFirefoxCapabilities(proxy).getCapability(FirefoxDriver.PROFILE);
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(proxy).getProfile();
     assertThat(profile.getStringPreference("some.cap", "sjlj"), is("abdd"));
   }
 
   @Test
   public void transferChromeOptionArgumentsFromSystemPropsToDriver() throws IOException {
     System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123");
-    String arrayOfArguments = new ChromeDriverFactory().createChromeOptions().toJson()
-        .getAsJsonObject().getAsJsonArray("args").toString();
+    String chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy).toString();
+    Matcher matcher = Pattern.compile("args=\\[(.*)\\],").matcher(chromeOptions);
+    matcher.find();
+    String arrayOfArguments = matcher.group(1);
 
     assertThat(arrayOfArguments, containsString("abdd"));
     assertThat(arrayOfArguments, containsString("--abcd"));

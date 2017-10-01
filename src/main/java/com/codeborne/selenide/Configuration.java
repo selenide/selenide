@@ -358,5 +358,11 @@ public class Configuration {
    */
   public static boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
 
-
+  /**
+   * Enables the ability to run the browser in headless mode.
+   * Works only for Chrome(59+) and Firefox(56+).
+   *
+   * Default: false
+   */
+  public static boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
 }

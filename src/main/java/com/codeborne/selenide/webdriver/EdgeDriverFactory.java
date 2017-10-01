@@ -3,7 +3,8 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 class EdgeDriverFactory extends AbstractDriverFactory {
@@ -20,6 +21,8 @@ class EdgeDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createInternetExplorerDriver(final Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    return new InternetExplorerDriver(capabilities);
+    EdgeOptions options = new EdgeOptions();
+    options.merge(capabilities);
+    return new EdgeDriver(options);
   }
 }

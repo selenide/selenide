@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
  */
 public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,
     FindsByTagName, FindsByClassName, FindsByCssSelector,
-    FindsByXPath, WrapsDriver, WrapsElement, Locatable {
+    FindsByXPath, WrapsDriver, WrapsElement, org.openqa.selenium.interactions.internal.Locatable {
 
   /**
    * <p>

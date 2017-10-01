@@ -4,7 +4,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 class MarionetteDriverFactory extends FirefoxDriverFactory {
 
@@ -19,8 +19,8 @@ class MarionetteDriverFactory extends FirefoxDriverFactory {
   }
 
   private WebDriver createMarionetteDriver(final Proxy proxy) {
-    DesiredCapabilities capabilities = createFirefoxCapabilities(proxy);
-    capabilities.setCapability("marionette", true);
-    return new FirefoxDriver(capabilities);
+    FirefoxOptions firefoxOptions = createFirefoxOptions(proxy);
+    firefoxOptions.setCapability("marionette", true);
+    return new FirefoxDriver(firefoxOptions);
   }
 }
