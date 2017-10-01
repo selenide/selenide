@@ -11,7 +11,7 @@ class EdgeDriverFactory extends AbstractDriverFactory {
 
   @Override
   WebDriver create(final Proxy proxy) {
-    return createInternetExplorerDriver(proxy);
+    return createEdgeDriver(proxy);
   }
 
   @Override
@@ -19,7 +19,7 @@ class EdgeDriverFactory extends AbstractDriverFactory {
     return WebDriverRunner.isEdge();
   }
 
-  private WebDriver createInternetExplorerDriver(final Proxy proxy) {
+  private WebDriver createEdgeDriver(final Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
