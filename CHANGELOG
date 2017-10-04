@@ -1,6 +1,9 @@
 == Changelog
 
-=== 4.7 (released to 29.09.2017)
+=== 4.7.1 (released 05.10.2017)
+* declare compile-time dependency `guava 23.0` instead of `guava 21.0` (for those whose Maven downloads the older guava version)
+
+=== 4.7 (released 29.09.2017)
 * upgrade to selenium-java 3.5.3
 * upgrade to browsermob-core 2.1.5 (and downgrade to littleproxy 1.1.0-beta-bmp-17)
 * #610 integration with DriverManager
