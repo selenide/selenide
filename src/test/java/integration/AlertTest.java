@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,10 +10,8 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
 
 public class AlertTest extends IntegrationTest {
   @Before
