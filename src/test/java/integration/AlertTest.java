@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.AfterClass;
 import org.junit.Before;
