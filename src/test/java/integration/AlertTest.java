@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -31,9 +32,15 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void canSubmitPromptDialog() {
-    assumeFalse(isHtmlUnit());
+  public void canSubmitPromptDialogWithDefaultValue() {
+    $(byValue("Prompt button")).click();
+    prompt();
+    $("#message").shouldHave(text("Hello, default!"));
+    $("#container").shouldBe(empty);
+  }
 
+  @Test
+  public void canSubmitPromptDialog() {
     $(byValue("Prompt button")).click();
     prompt("Please input your username", "Aegon Targaryen");
     $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
