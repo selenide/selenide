@@ -17,7 +17,7 @@
       }
 
       function runPrompt() {
-        var username = prompt("Please input your username");
+        var username = prompt("Please input your username", "default");
         document.getElementById('message').innerHTML = 'Hello, ' + username + '!';
         document.getElementById('container').innerHTML = '';
       }
