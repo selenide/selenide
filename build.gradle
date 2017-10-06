@@ -67,7 +67,7 @@ dependencies {
   provided 'org.testng:testng:6.9.10'
   
   testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.5.3', transitive: false
-  testCompile 'org.mockito:mockito-core:2.8.9'
+  testCompile 'org.mockito:mockito-core:2.10.0'
   testCompile 'org.seleniumhq.selenium:jetty-repacked:9.4.5.v20170502'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.5.v20170502'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.4.5.v20170502'
