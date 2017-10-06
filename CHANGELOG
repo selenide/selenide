@@ -1,7 +1,7 @@
 == Changelog
 
 === 4.8 (going to release ~15.10.2017)
-*
+* upgraded to org.apache.httpcomponents:httpcore:4.4.7
 
 === 4.7.1 (released 05.10.2017)
 * declare compile-time dependency `guava 23.0` instead of `guava 21.0` (for those whose Maven downloads the older guava version)
