@@ -54,7 +54,7 @@ dependencies {
     exclude group: 'org.seleniumhq.selenium', module: 'htmlunit-driver'
   }
   runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.3', transitive: false
-  compile 'com.google.code.gson:gson:2.8.0'
+  compile 'com.google.code.gson:gson:2.8.2'
   compile 'com.google.guava:guava:23.0'
   runtime 'commons-codec:commons-codec:1.10'
   provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.27', transitive: false
