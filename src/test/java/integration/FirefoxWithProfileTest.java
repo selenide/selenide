@@ -4,6 +4,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.io.File;
@@ -17,7 +18,7 @@ public class FirefoxWithProfileTest extends IntegrationTest {
     assumeTrue(WebDriverRunner.isFirefox());
 
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
-    WebDriver driver = new FirefoxDriver(profile);
+    WebDriver driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
     driver.manage().window().maximize();
     try {
       WebDriverRunner.setWebDriver(driver);
@@ -37,7 +38,6 @@ public class FirefoxWithProfileTest extends IntegrationTest {
     profile.addExtension(new File(currentThread().getContextClassLoader().getResource("firepath-0.9.7-fx.xpi").getPath()));
     profile.setPreference("extensions.firebug.showFirstRunPage", false);
     profile.setPreference("extensions.firebug.allPagesActivation", "on");
-    profile.setEnableNativeEvents(true);
     profile.setPreference("intl.accept_languages", "no,en-us,en");
     profile.setPreference("extensions.firebug.console.enableSites", "true");
     return profile;

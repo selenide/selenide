@@ -4,15 +4,12 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.chromeSwitches;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.CHROME;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
@@ -20,10 +17,8 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
 
   WebDriver create(final Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    ChromeOptions options = createChromeOptions();
-    capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-    return new ChromeDriver(capabilities);
+    ChromeOptions options = createChromeOptions(proxy);
+    return new ChromeDriver(options);
   }
 
   @Override
@@ -31,19 +26,16 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return CHROME.equalsIgnoreCase(browser);
   }
 
-  ChromeOptions createChromeOptions() {
+  ChromeOptions createChromeOptions(Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
+    options.setHeadless(headless);
     options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments(chromeSwitches);
     }
-    options = transferChromeOptionsFromSystemProperties(options, "chromeoptions.");
-    try {
-      log.config("Chrome options:" + options.toJson().toString());
-    } catch (IOException e) {
-      log.warning("Error while reading from file:" + e.getMessage() + ". Ignoring it.");
-      e.printStackTrace(System.err);
-    }
+    options.merge(createCommonCapabilities(proxy));
+    options = transferChromeOptionsFromSystemProperties(options);
+    log.config("Chrome options:" + options.toString());
     return options;
   }
 
@@ -51,10 +43,10 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    * This method only handles so-called "arguments" for ChromeOptions (there is also "ExperimentalOptions", "Extensions" etc.)
    *
    * @param currentChromeOptions
-   * @param prefix
    * @return
    */
-  private ChromeOptions transferChromeOptionsFromSystemProperties(final ChromeOptions currentChromeOptions, final String prefix) {
+  private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
+    String prefix = "chromeoptions.";
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());

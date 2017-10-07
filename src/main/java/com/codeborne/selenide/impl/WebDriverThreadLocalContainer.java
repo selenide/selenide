@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.*;
-import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -23,7 +22,6 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.SEVERE;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
@@ -127,7 +125,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     ALL_WEB_DRIVERS_THREADS.remove(thread);
     WebDriver webdriver = THREAD_WEB_DRIVER.remove(thread.getId());
     SelenideProxyServer proxy = THREAD_PROXY_SERVER.remove(thread.getId());
-    
+
     if (webdriver != null && !holdBrowserOpen) {
       log.info("Close webdriver: " + thread.getId() + " -> " + webdriver);
       if (proxy != null) {
@@ -185,23 +183,10 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       catch (WebDriverException cannotCloseBrowser) {
         log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
       }
-      finally {
-        killBrowser(webdriver);
-      }
-      
+
       if (proxy != null) {
         log.info("Trying to shutdown " + proxy + " ...");
         proxy.shutdown();
-      }
-    }
-
-    protected void killBrowser(WebDriver webdriver) {
-      if (webdriver instanceof Killable) {
-        try {
-          ((Killable) webdriver).kill();
-        } catch (Exception e) {
-          log.log(SEVERE, "Failed to kill browser " + webdriver + ':', e);
-        }
       }
     }
   }
@@ -231,7 +216,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   protected WebDriver createDriver() {
     Proxy userProvidedProxy = proxy;
-    
+
     if (Configuration.fileDownload == PROXY) {
       SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
       selenideProxyServer.start();
@@ -242,7 +227,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     WebDriver webdriver = factory.createWebDriver(userProvidedProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
-        describe(webdriver) + " -> " + webdriver);
+            describe(webdriver) + " -> " + webdriver);
 
     return markForAutoClose(addListeners(webdriver));
   }

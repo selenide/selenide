@@ -1,22 +1,19 @@
 package com.codeborne.selenide.webdriver;
 
-import static com.codeborne.selenide.Configuration.browserVersion;
-import static com.codeborne.selenide.Configuration.pageLoadStrategy;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
-import static org.openqa.selenium.remote.CapabilityType.PROXY;
-import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
-import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
-
 import com.codeborne.selenide.WebDriverProvider;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
+
+import static com.codeborne.selenide.Configuration.browserVersion;
+import static com.codeborne.selenide.Configuration.pageLoadStrategy;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.openqa.selenium.remote.CapabilityType.*;
 
 abstract class AbstractDriverFactory {
 
@@ -31,7 +28,6 @@ abstract class AbstractDriverFactory {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
-      capabilities.setCapability(ACCEPT_SSL_CERTS, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
       if (isPhantomjs()) {
         capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
@@ -66,14 +62,15 @@ abstract class AbstractDriverFactory {
     if (browserVersion != null && !browserVersion.isEmpty()) {
       browserCapabilities.setVersion(browserVersion);
     }
-    browserCapabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, pageLoadStrategy);
-    browserCapabilities.setCapability("acceptSslCerts", true);
+    browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, pageLoadStrategy);
+    browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
 
-    browserCapabilities = transferCapabilitiesFromSystemProperties(browserCapabilities, "capabilities.");
+    transferCapabilitiesFromSystemProperties(browserCapabilities);
     return browserCapabilities;
   }
 
-  private DesiredCapabilities transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities, String prefix) {
+  private void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
+    String prefix = "capabilities.";
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
@@ -88,6 +85,5 @@ abstract class AbstractDriverFactory {
         }
       }
     }
-    return currentBrowserCapabilities;
   }
 }

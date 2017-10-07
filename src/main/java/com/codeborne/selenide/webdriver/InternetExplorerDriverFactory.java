@@ -4,6 +4,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 class InternetExplorerDriverFactory extends AbstractDriverFactory {
@@ -20,6 +21,7 @@ class InternetExplorerDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createInternetExplorerDriver(final Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    return new InternetExplorerDriver(capabilities);
+    InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
+    return new InternetExplorerDriver(options);
   }
 }
