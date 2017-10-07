@@ -42,9 +42,18 @@ public class SoftAsserts extends ExitCodeListener {
     failIfErrors(result);
   }
 
+  @Override
+  public void beforeConfiguration(ITestResult result) {
+    addSelenideErrorListener(result);
+  }
+
   void addSelenideErrorListener(ITestResult result) {
-    if (shouldIntercept(result.getTestClass().getRealClass()) &&
-        shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod())) {
+    boolean listenerAlreadyAdded = SelenideLogger.hasListener(LISTENER_SOFT_ASSERT);
+    boolean hasSoftAssertListener = shouldIntercept(result.getTestClass().getRealClass());
+    boolean isTestMethod = shouldIntercept(result.getMethod().getConstructorOrMethod().getMethod());
+    if (hasSoftAssertListener && isTestMethod && !listenerAlreadyAdded) {
+      SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
+    } else if (hasSoftAssertListener && !listenerAlreadyAdded) {
       SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
     }
   }
