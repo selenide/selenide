@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.8 (going to release ~15.10.2017)
+=== 4.8 (released 08.10.2017)
 * updated to selenium 3.6   -- thanks to ostap-oleksyn
 * upgraded to org.apache.httpcomponents:httpcore:4.4.7
 * #614 fix issue with soft asserts   -- thanks to ostap-oleksyn
