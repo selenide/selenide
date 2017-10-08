@@ -14,17 +14,18 @@ import static com.codeborne.selenide.Selenide.*;
 public class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest {
 
   @Before
-  public void openTestPage () {
+  public void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void canInitializeElementsContainerFieldsWithoutFindByAnnotation () {
+  public void canInitializeElementsContainerFieldsWithoutFindByAnnotation() {
     MyPage page = page(MyPage.class);
 
     page.container.getSelf().should(exist, visible);
     page.container.headerLink.shouldHave(text("Options with 'apostrophes' and \"quotes\""));
-    page.container.options.shouldHave(texts("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"", "Mickey \"Rock'n'Roll\" Rourke"));
+    page.container.options.shouldHave(texts("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"",
+                                            "Mickey \"Rock'n'Roll\" Rourke"));
   }
 
 
