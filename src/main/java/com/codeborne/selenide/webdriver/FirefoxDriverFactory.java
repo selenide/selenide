@@ -27,8 +27,6 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createFirefoxDriver(final Proxy proxy) {
     FirefoxOptions options = createFirefoxOptions(proxy);
-    log.info("Firefox 48+ is currently not supported by Selenium Firefox driver. " +
-            "Use browser=marionette with geckodriver, when using it.");
     return new FirefoxDriver(options);
   }
 
@@ -42,7 +40,6 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.http.phishy-userpass-length", 255);
     firefoxOptions.addPreference("security.csp.enable", false);
 
-    firefoxOptions.setCapability("marionette", false);
     firefoxOptions.merge(createCommonCapabilities(proxy));
     firefoxOptions = transferFirefoxProfileFromSystemProperties(firefoxOptions);
 

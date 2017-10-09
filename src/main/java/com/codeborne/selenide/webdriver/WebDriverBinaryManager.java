@@ -17,7 +17,7 @@ public class WebDriverBinaryManager {
       OperaDriverManager.getInstance().setup();
     } else if (isPhantomjs() && !isSystemPropertySet("phantomjs.binary.path")) {
       PhantomJsDriverManager.getInstance().setup();
-    } else if (isMarionette() && !isSystemPropertySet("webdriver.gecko.driver")) {
+    } else if (isFirefox() && !isSystemPropertySet("webdriver.gecko.driver")) {
       FirefoxDriverManager.getInstance().setup();
     }
   }

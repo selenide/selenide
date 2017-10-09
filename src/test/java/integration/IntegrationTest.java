@@ -82,7 +82,7 @@ public abstract class IntegrationTest {
     
     // proxy breaks Firefox/Marionette because of this error: 
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
-    Configuration.fileDownload = isFirefox() || isMarionette() ? HTTPGET : PROXY; 
+    Configuration.fileDownload = isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY;
   }
 
   @BeforeClass

@@ -213,8 +213,8 @@ task firefox(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task marionette(type: Test) {
-  systemProperties['selenide.browser'] = 'marionette'
+task legacyFirefox(type: Test) {
+  systemProperties['selenide.browser'] = 'legacyFirefox'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
