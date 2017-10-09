@@ -22,7 +22,7 @@ public class WebDriverRunner {
   public static final String INTERNET_EXPLORER = "internet explorer";
   public static final String EDGE = "edge";
   public static final String FIREFOX = "firefox";
-  public static final String LEGACY_FIREFOX = "legacyFirefox";
+  public static final String LEGACY_FIREFOX = "legacy_firefox";
 
   /**
    * To use Safari webdriver, you need to include extra dependency to your project:
