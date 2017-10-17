@@ -261,6 +261,38 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return get(size() - 1);
   }
 
+  /**
+   * return the first n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection first(int elements) {
+    List<WebElement> elementList;
+    try {
+       elementList = getActualElements().subList(0, elements);
+    } catch (IndexOutOfBoundsException e){
+      throw new IndexOutOfBoundsException("Index: " + elements + ", Size: " + size());
+    }
+
+    return new ElementsCollection(new WebElementsCollectionWrapper(elementList));
+  }
+
+  /**
+   * return the last n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection last(int elements) {
+    List<WebElement> elementList;
+    try {
+      elementList = getActualElements().subList(size() - elements, size());
+    } catch (IllegalArgumentException e){
+      throw new IndexOutOfBoundsException("Index: " + (size() - elements) + ", Size: " + size());
+    }
+
+    return new ElementsCollection(new WebElementsCollectionWrapper(elementList));
+  }
+
   @Override
   public int size() {
     return getActualElements().size();
