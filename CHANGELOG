@@ -1,5 +1,8 @@
 == Changelog
 
+=== 4.9
+* #621 Make marionette the default firefox driver implementation -- thanks to ostap-oleksyn
+
 === 4.8 (released 08.10.2017)
 * updated to selenium 3.6   -- thanks to ostap-oleksyn
 * upgraded to org.apache.httpcomponents:httpcore:4.4.7
