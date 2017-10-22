@@ -27,27 +27,32 @@ class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   private WebDriver createRemoteDriver(final String remote, final String browser, final Proxy proxy) {
-    String browserName;
-    if (isLegacyFirefox()) {
-      browserName = BrowserType.FIREFOX;
-    } else if (isIE()) {
-      browserName = BrowserType.IE;
-    } else if (isEdge()) {
-      browserName = BrowserType.EDGE;
-    } else if (isOpera()) {
-      browserName = BrowserType.OPERA_BLINK;
-    } else {
-      browserName = browser;
-    }
-
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-      capabilities.setBrowserName(browserName);
+      capabilities.setBrowserName(getBrowserNameForGrid());
       RemoteWebDriver webDriver = new RemoteWebDriver(new URL(remote), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
+    }
+  }
+
+  String getBrowserNameForGrid() {
+    if (isLegacyFirefox()) {
+      return BrowserType.FIREFOX;
+    }
+    else if (isIE()) {
+      return BrowserType.IE;
+    }
+    else if (isEdge()) {
+      return BrowserType.EDGE;
+    }
+    else if (isOpera()) {
+      return BrowserType.OPERA_BLINK;
+    }
+    else {
+      return browser;
     }
   }
 }
