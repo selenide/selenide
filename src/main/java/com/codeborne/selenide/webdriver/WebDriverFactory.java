@@ -25,7 +25,7 @@ public class WebDriverFactory {
   protected List<AbstractDriverFactory> factories = asList(
       new RemoteDriverFactory(),
       new ChromeDriverFactory(),
-      new MarionetteDriverFactory(),
+      new LegacyFirefoxDriverFactory(),
       new FirefoxDriverFactory(),
       new HtmlUnitDriverFactory(),
       new EdgeDriverFactory(),

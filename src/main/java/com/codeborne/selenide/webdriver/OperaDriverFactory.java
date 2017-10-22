@@ -3,6 +3,8 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 
 class OperaDriverFactory extends AbstractDriverFactory {
 
@@ -17,6 +19,8 @@ class OperaDriverFactory extends AbstractDriverFactory {
   }
 
   private WebDriver createOperaDriver(final Proxy proxy) {
-    return createInstanceOf("org.openqa.selenium.opera.OperaDriver", proxy);
+    OperaOptions operaOptions = new OperaOptions();
+    operaOptions.merge(createCommonCapabilities(proxy));
+    return new OperaDriver(operaOptions);
   }
 }
