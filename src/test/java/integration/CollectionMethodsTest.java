@@ -4,13 +4,16 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.*;
@@ -209,19 +212,53 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void canIterateCollection_withListIterator() {
     ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
-    assertTrue(it.hasNext()); 
-    assertTrue(it.hasPrevious()); 
+    assertTrue(it.hasNext());
+    assertTrue(it.hasPrevious());
     it.previous().shouldHave(text("@rusmail.ru"));
-    
-    assertTrue(it.hasPrevious()); 
+
+    assertTrue(it.hasPrevious());
     it.previous().shouldHave(text("@myrambler.ru"));
-    
-    assertTrue(it.hasPrevious()); 
+
+    assertTrue(it.hasPrevious());
     it.previous().shouldHave(text("@livemail.ru"));
-  
+
     assertFalse(it.hasPrevious());
-    
+
     it.next().shouldHave(text("@livemail.ru"));
     assertTrue(it.hasPrevious());
+  }
+
+  @Test
+  public void canGetFirstNElements() {
+    ElementsCollection collection =  $$x("//select[@name='domain']/option");
+    collection.first(2).shouldHaveSize(2);
+    collection.first(10).shouldHaveSize(collection.size());
+
+    List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
+            .map(SelenideElement::getText)
+            .collect(Collectors.toList()).subList(0, 2);
+
+    List<String> selenideSublist = collection.first(2).stream()
+            .map(SelenideElement::getText)
+            .collect(Collectors.toList());
+
+    Assert.assertEquals(regularSublist, selenideSublist);
+  }
+
+  @Test
+  public void canGetLastNElements() {
+    ElementsCollection collection =  $$x("//select[@name='domain']/option");
+    collection.last(2).shouldHaveSize(2);
+    collection.last(10).shouldHaveSize(collection.size());
+
+    List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
+            .map(SelenideElement::getText)
+            .collect(Collectors.toList()).subList(2, collection.size());
+
+    List<String> selenideSublist = collection.last(2).stream()
+            .map(SelenideElement::getText)
+            .collect(Collectors.toList());
+
+    Assert.assertEquals(regularSublist, selenideSublist);
   }
 }
