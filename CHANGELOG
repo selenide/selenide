@@ -3,6 +3,7 @@
 === 4.9
 * #621 Make marionette the default firefox driver implementation -- thanks to ostap-oleksyn
 * #617 Fix initialization of SelenideElements without @FindBy annotation declared inside ElementsContainer -- thanks to ostap-oleksyn
+* #623 Add methods `$$(“.item”).first(3)` and `$$(“.item”).last(3)` -- thanks to ostap-oleksyn
 
 === 4.8 (released 08.10.2017)
 * updated to selenium 3.6   -- thanks to ostap-oleksyn
