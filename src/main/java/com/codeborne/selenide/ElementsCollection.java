@@ -261,6 +261,26 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return get(size() - 1);
   }
 
+  /**
+   * returns the first n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection first(int elements) {
+    List<WebElement> sublist = getActualElements().subList(0, Math.min(elements, size()));
+    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
+  }
+
+  /**
+   * returns the last n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection last(int elements) {
+    List<WebElement> sublist = getActualElements().subList(Math.max(size() - elements, 0), size());
+    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
+  }
+
   @Override
   public int size() {
     return getActualElements().size();
