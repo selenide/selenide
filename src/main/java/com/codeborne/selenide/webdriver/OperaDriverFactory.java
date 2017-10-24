@@ -22,7 +22,9 @@ class OperaDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createOperaDriver(final Proxy proxy) {
     OperaOptions operaOptions = new OperaOptions();
-    operaOptions.setBinary(browserBinary);
+    if (!browserBinary.isEmpty()) {
+      operaOptions.setBinary(browserBinary);
+    }
     operaOptions.merge(createCommonCapabilities(proxy));
     return new OperaDriver(operaOptions);
   }

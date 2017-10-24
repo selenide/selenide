@@ -29,7 +29,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   ChromeOptions createChromeOptions(Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(headless);
-    options.setBinary(browserBinary);
+    if (!browserBinary.isEmpty()) {
+      options.setBinary(browserBinary);
+    }
     options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments(chromeSwitches);

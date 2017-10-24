@@ -3,10 +3,12 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.browserBinary;
@@ -34,7 +36,9 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   FirefoxOptions createFirefoxOptions(Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(headless);
-    firefoxOptions.setBinary(browserBinary);
+    if (!browserBinary.isEmpty()) {
+      firefoxOptions.setBinary(browserBinary);
+    }
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
     firefoxOptions.addPreference("network.negotiate-auth.delegation-uris", "http://,https://");
