@@ -365,4 +365,10 @@ public class Configuration {
    * Default: false
    */
   public static boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
+
+  /**
+   * Sets the path to browser executable.
+   * Works only for Chrome, Firefox and Opera.
+   */
+  public static String browserBinary = System.getProperty("selenide.browserBinary", "");
 }
