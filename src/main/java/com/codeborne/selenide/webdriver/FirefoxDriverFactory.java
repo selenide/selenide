@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.browserBinary;
 import static com.codeborne.selenide.Configuration.headless;
 
 class FirefoxDriverFactory extends AbstractDriverFactory {
@@ -33,6 +34,9 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   FirefoxOptions createFirefoxOptions(Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(headless);
+    if (!browserBinary.isEmpty()) {
+      firefoxOptions.setBinary(browserBinary);
+    }
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
     firefoxOptions.addPreference("network.negotiate-auth.delegation-uris", "http://,https://");

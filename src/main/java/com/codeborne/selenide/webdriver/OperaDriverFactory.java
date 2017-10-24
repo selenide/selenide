@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
 
+import static com.codeborne.selenide.Configuration.browserBinary;
+
 class OperaDriverFactory extends AbstractDriverFactory {
 
   @Override
@@ -20,6 +22,9 @@ class OperaDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createOperaDriver(final Proxy proxy) {
     OperaOptions operaOptions = new OperaOptions();
+    if (!browserBinary.isEmpty()) {
+      operaOptions.setBinary(browserBinary);
+    }
     operaOptions.merge(createCommonCapabilities(proxy));
     return new OperaDriver(operaOptions);
   }
