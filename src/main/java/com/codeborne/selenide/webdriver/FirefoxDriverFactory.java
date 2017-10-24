@@ -3,12 +3,10 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.browserBinary;
