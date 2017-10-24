@@ -66,7 +66,7 @@ public class HookActionsTest  extends IntegrationTest {
   class TestAction implements HookAction {
     private boolean isActive;
 
-    public TestAction(boolean isActive) {
+    TestAction(boolean isActive) {
       this.isActive = isActive;
     }
 

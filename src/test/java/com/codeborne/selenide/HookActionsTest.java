@@ -91,7 +91,7 @@ public class HookActionsTest {
     private String testString;
     private boolean isActive;
 
-    public TestAction(String testString, boolean isActive) {
+    TestAction(String testString, boolean isActive) {
       this.testString = testString;
       this.isActive = isActive;
     }
@@ -109,7 +109,7 @@ public class HookActionsTest {
 
   class TestActionWithCommandArgs extends TestAction {
 
-    public TestActionWithCommandArgs(String testString, boolean isActive) {
+    TestActionWithCommandArgs(String testString, boolean isActive) {
       super(testString, isActive);
     }
 
