@@ -14,59 +14,61 @@ public class HookActionsTest {
 
   @After
   public void cleanUp() {
-    HookActions.getInstance().removeAction("testHook");
+    HookActions.getInstance().removeBeforeAction("testHook");
+    HookActions.getInstance().removeAfterAction("testHook");
+    HookActions.getInstance().removeErrorAction("testHook");
     catchAction = "";
   }
 
   @Test
   public void preformBeforeHook() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction("Before action", true));
-    HookActions.getInstance().beforePreform(null, "command");
+    HookActions.getInstance().beforePerform(null, "command");
     assertThat("Before action error", catchAction.equals("Before action"), is(true));
   }
 
   @Test
   public void preformAfterHook() {
     HookActions.getInstance().addAfterAction("testHook", new TestAction("After action", true));
-    HookActions.getInstance().afterPreform(null, "command");
+    HookActions.getInstance().afterPerform(null, "command");
     assertThat("After action error", catchAction.equals("After action"), is(true));
   }
 
   @Test
   public void preformErrorHook() {
     HookActions.getInstance().addErrorAction("testHook", new TestAction("Error action", true));
-    HookActions.getInstance().errorPreform(null, "command");
+    HookActions.getInstance().errorPerform(null, "command");
     assertThat("Error action error", catchAction.equals("Error action"), is(true));
   }
 
   @Test
   public void preformNotActivateHook() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction("Unactivated action", false));
-    HookActions.getInstance().beforePreform(null, "command");
+    HookActions.getInstance().beforePerform(null, "command");
     assertThat("Call Unactivated Action", catchAction.equals(""), is(true));
   }
 
   @Test
   public void removeBeforeHook() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction("Removed Before action", true));
-    HookActions.getInstance().removeAction("testHook");
-    HookActions.getInstance().beforePreform(null, "command");
+    HookActions.getInstance().removeBeforeAction("testHook");
+    HookActions.getInstance().beforePerform(null, "command");
     assertThat("Removed Before action called", catchAction.equals(""), is(true));
   }
 
   @Test
   public void removeAfterHook() {
     HookActions.getInstance().addAfterAction("testHook", new TestAction("Removed After action", true));
-    HookActions.getInstance().removeAction("testHook");
-    HookActions.getInstance().afterPreform(null, "command");
+    HookActions.getInstance().removeAfterAction("testHook");
+    HookActions.getInstance().afterPerform(null, "command");
     assertThat("Removed After action called", catchAction.equals(""), is(true));
   }
 
   @Test
   public void removeErrorHook() {
     HookActions.getInstance().addErrorAction("testHook", new TestAction("Removed error action", true));
-    HookActions.getInstance().removeAction("testHook");
-    HookActions.getInstance().errorPreform(null, "command");
+    HookActions.getInstance().removeErrorAction("testHook");
+    HookActions.getInstance().errorPerform(null, "command");
     assertThat("Removed Error action called", catchAction.equals(""), is(true));
   }
 
@@ -74,16 +76,15 @@ public class HookActionsTest {
   public void preformTwoHooks() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction("hook1", true));
     HookActions.getInstance().addBeforeAction("testHook1", new TestAction("hook2", true));
-    HookActions.getInstance().beforePreform(null, "command");
+    HookActions.getInstance().beforePerform(null, "command");
     assertThat("Two actions error", catchAction.equals("hook1hook2"), is(true));
-    HookActions.getInstance().removeAction("testHook");
-    HookActions.getInstance().removeAction("testHook1");
+    HookActions.getInstance().removeBeforeAction("testHook1");
   }
 
   @Test
   public void preformHookWithCommandArgs() {
     HookActions.getInstance().addBeforeAction("testHook", new TestActionWithCommandArgs("testHook", true));
-    HookActions.getInstance().beforePreform(null, "command", "one", "two", "three");
+    HookActions.getInstance().beforePerform(null, "command", "one", "two", "three");
     assertThat("Hook with command args usage", catchAction.equals("onetwothree"), is(true));
   }
 
@@ -97,7 +98,7 @@ public class HookActionsTest {
     }
 
     @Override
-    public boolean conditionForAction(WebElement element, String methodName, Object... args) {
+    public boolean isActive(WebElement element, String methodName, Object... args) {
       return isActive;
     }
 

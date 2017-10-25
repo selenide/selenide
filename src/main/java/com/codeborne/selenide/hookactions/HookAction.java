@@ -12,10 +12,10 @@ public interface HookAction {
    * @return boolean
    *
    */
-  boolean conditionForAction(WebElement element, String methodName, Object... args);
+  boolean isActive(WebElement element, String methodName, Object... args);
 
   /**
-   * Action, if conditionForAction is true
+   * Action, if isActive is true
    *
    * @param element     WebElement
    * @param methodName  Name of method, who called hook

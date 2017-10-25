@@ -22,7 +22,7 @@ public class DemoAction implements HookAction {
   }
 
   @Override
-  public boolean conditionForAction(WebElement element, String methodName, Object... args) {
+  public boolean isActive(WebElement element, String methodName, Object... args) {
     return hoockedActions.contains(methodName);
   }
 

@@ -33,8 +33,8 @@ public class HookActions {
    * @param methodName  Name of method, who called hook
    * @param args        Called command arguments
    */
-  public void beforePreform(WebElement element, String methodName, Object... args) {
-    preform(element, methodName, beforeActions.values(), args);
+  public void beforePerform(WebElement element, String methodName, Object... args) {
+    perform(element, methodName, beforeActions.values(), args);
   }
 
   /**
@@ -44,8 +44,8 @@ public class HookActions {
    * @param methodName  Name of method, who called hook
    * @param args        Called command arguments
    */
-  public void afterPreform(WebElement element, String methodName, Object... args) {
-    preform(element, methodName, afterActions.values(), args);
+  public void afterPerform(WebElement element, String methodName, Object... args) {
+    perform(element, methodName, afterActions.values(), args);
   }
 
   /**
@@ -55,8 +55,8 @@ public class HookActions {
    * @param methodName  Name of method, who called hook
    * @param args        Called command arguments
    */
-  public void errorPreform(WebElement element, String methodName, Object... args) {
-    preform(element, methodName, errorActions.values(), args);
+  public void errorPerform(WebElement element, String methodName, Object... args) {
+    perform(element, methodName, errorActions.values(), args);
   }
 
   /**
@@ -90,27 +90,39 @@ public class HookActions {
   }
 
   /**
-   * Remove action from HookActions
-   * Try to remove from before, after and error actions lists.
+   * Remove action from before HookActions list
    *
    * @param name    Name of hook to remove
    */
-  public void removeAction(String name) {
-    if (instance.get().beforeActions.containsKey(name))
-      instance.get().beforeActions.remove(name);
-    if (instance.get().afterActions.containsKey(name))
-      instance.get().afterActions.remove(name);
-    if (instance.get().errorActions.containsKey(name))
-      instance.get().errorActions.remove(name);
+  public void removeBeforeAction(String name) {
+    instance.get().beforeActions.remove(name);
+  }
+
+  /**
+   * Remove action from after HookActions list
+   *
+   * @param name    Name of hook to remove
+   */
+  public void removeAfterAction(String name) {
+    instance.get().afterActions.remove(name);
+  }
+
+  /**
+   * Remove action from error HookActions list
+   *
+   * @param name    Name of hook to remove
+   */
+  public void removeErrorAction(String name) {
+    instance.get().errorActions.remove(name);
   }
 
   private static HookActions instance() {
     return instance.get();
   }
 
-  private void preform(WebElement element, String methodName, Collection<HookAction> actions, Object... args) {
+  private void perform(WebElement element, String methodName, Collection<HookAction> actions, Object... args) {
     for (HookAction action : actions) {
-      if (action.conditionForAction(element, methodName, args)) action.action(element, methodName, args);
+      if (action.isActive(element, methodName, args)) action.action(element, methodName, args);
     }
   }
 }

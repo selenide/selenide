@@ -14,7 +14,6 @@ public class HookActionsDemo {
 
   public static void main(String[] args) throws InterruptedException {
     URL url = HookActionsDemo.class.getResource("/page_with_big_divs.html");
-
     HookActions.getInstance().addBeforeAction("beforeDemo", new DemoAction("ing"));
     HookActions.getInstance().addAfterAction("afterDemo", new DemoAction("ed"));
     HookActions.getInstance().addErrorAction("errorDemo", new DemoAction(" failed"));

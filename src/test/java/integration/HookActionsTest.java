@@ -21,21 +21,23 @@ public class HookActionsTest  extends IntegrationTest {
 
   @After
   public void cleanUp() {
-    HookActions.getInstance().removeAction("testHook");
+    HookActions.getInstance().removeBeforeAction("testHook");
+    HookActions.getInstance().removeAfterAction("testHook");
+    HookActions.getInstance().removeErrorAction("testHook");
     catchAction = "";
   }
 
   @Test
   public void beforeActionTest() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction(true));
-    $("div", 0).click();
+    $("h1").click();
     assertThat("Before action error", catchAction.equals("click"), is(true));
   }
 
   @Test
   public void afterActionTest() {
     HookActions.getInstance().addAfterAction("testHook", new TestAction(true));
-    $("div", 0).click();
+    $("h1").click();
     assertThat("After action error", catchAction.equals("click"), is(true));
   }
 
@@ -52,7 +54,7 @@ public class HookActionsTest  extends IntegrationTest {
   public void twoActionsTest() {
     HookActions.getInstance().addBeforeAction("testHook", new TestAction(true));
     HookActions.getInstance().addAfterAction("testHook", new TestAction(true));
-    $("div", 0).click();
+    $("h1").click();
     assertThat("After action error", catchAction.equals("clickclick"), is(true));
   }
 
@@ -71,7 +73,7 @@ public class HookActionsTest  extends IntegrationTest {
     }
 
     @Override
-    public boolean conditionForAction(WebElement element, String methodName, Object... args) {
+    public boolean isActive(WebElement element, String methodName, Object... args) {
       return isActive;
     }
 
@@ -84,7 +86,7 @@ public class HookActionsTest  extends IntegrationTest {
   class TestActionWithArgs implements HookAction {
 
     @Override
-    public boolean conditionForAction(WebElement element, String methodName, Object... args) {
+    public boolean isActive(WebElement element, String methodName, Object... args) {
       return true;
     }
 

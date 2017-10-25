@@ -61,23 +61,23 @@ class SelenideElementProxy implements InvocationHandler {
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
-    HookActions.getInstance().beforePreform((WebElement) proxy, method.getName(), args);
+    HookActions.getInstance().beforePerform((WebElement) proxy, method.getName(), args);
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
-      HookActions.getInstance().afterPreform((WebElement) proxy, method.getName(), args);
+      HookActions.getInstance().afterPerform((WebElement) proxy, method.getName(), args);
       return result;
     }
     catch (Error error) {
       SelenideLogger.commitStep(log, error);
-      HookActions.getInstance().errorPreform((WebElement) proxy, method.getName(), args);
+      HookActions.getInstance().errorPerform((WebElement) proxy, method.getName(), args);
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else
         throw UIAssertionError.wrap(error, timeoutMs);
     }
     catch (RuntimeException error) {
-      HookActions.getInstance().errorPreform((WebElement) proxy, method.getName(), args);
+      HookActions.getInstance().errorPerform((WebElement) proxy, method.getName(), args);
       SelenideLogger.commitStep(log, error);
       throw error;
     }
