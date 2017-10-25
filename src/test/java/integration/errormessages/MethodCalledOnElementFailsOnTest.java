@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
 import org.junit.Before;
@@ -74,20 +75,18 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   public void shouldCondition_WhenCollectionElementByIndex_WithNonExistentCollection() {
-    SelenideElement element = $$("ul .nonexistent").get(1);
+
 
     try {
+      SelenideElement element = $$("ul .nonexistent").get(1);
       element.shouldHave(text("Miller"));
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(), startsWith(": expected: >= 2, actual: 0, collection: ul .nonexistent"));
+      assertThat(expected.getMessage(), containsString("Elements: ["));
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 1, Size: 0"));
-    }
-    //todo - is it OK??
+    }    //todo - is it OK??
         /*
             Element not found {ul .nonexistent}
             Expected: visible
@@ -101,18 +100,17 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   public void shouldCondition_WhenCollectionElementByIndex_WithIndexOutOfRange() {
-    SelenideElement element = $$("ul li").get(10);
+
 
     try {
+      SelenideElement element = $$("ul li").get(10);
       element.shouldHave(text("Miller"));
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
-      assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(), startsWith(": expected: >= 11, actual: 2, collection: ul li"));
+      assertThat(expected.getMessage(), containsString("Elements: ["));
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
     }
         /*
             Element not found {ul li[10]}
@@ -126,18 +124,17 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   public void actionWithVisibilityWaiting_WhenCollectionElementByIndex_WithIndexOutOfRange() {
-    SelenideElement element = $$("ul li").get(10);
+
 
     try {
+      SelenideElement element = $$("ul li").get(10);
       element.click();
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible"));
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(), startsWith(": expected: >= 11, actual: 2, collection: ul li"));
+      assertThat(expected.getMessage(), containsString("Elements: ["));
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
     }
         /*
             Element not found {ul li[10]}
@@ -431,18 +428,17 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
    ******************************************************/
   @Test
   public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentStartCollection() {
-    SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).get(0).find("label");
 
     try {
+      SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).get(0).find("label");
       element.shouldHave(exactText("detective"));
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(),
+              startsWith(": expected: >= 1, actual: 0, collection: ul .nonexistent.filter(css class 'the-expanse')"));
+      assertThat(expected.getMessage(), containsString("Elements: []")); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
     }
         /*
             Element not found {ul .nonexistent.filter(css class 'the-expanse')}
@@ -456,18 +452,17 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithEmptyFilteredCollection() {
-    SelenideElement element = $$("ul li").filterBy(cssClass("nonexistent")).get(0).find("label");
+
 
     try {
+      SelenideElement element = $$("ul li").filterBy(cssClass("nonexistent")).get(0).find("label");
       element.shouldHave(exactText("detective"));
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(), startsWith(": expected: >= 1, actual: 0, collection: ul li.filter(css class 'nonexistent')"));
+      assertThat(expected.getMessage(), containsString("Elements: []")); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
     }
         /*
             Element not found {ul li.filter(css class 'nonexistent')}
@@ -481,18 +476,17 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   @Test
   public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithIndexOutOfRange() {
-    SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(2).find("label");
+
 
     try {
+      SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(2).find("label");
       element.shouldHave(exactText("detective"));
       fail("Expected ElementNotFound");
     }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'the-expanse')[2]}"));
-      assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
+    catch (ListSizeMismatch expected) {
+      assertThat(expected.getMessage(), startsWith(": expected: >= 3, actual: 2, collection: ul li.filter(css class 'the-expanse')"));
+      assertThat(expected.getMessage(), containsString("Elements: [")); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 2, Size: 2"));
     }
         /*
             Element not found {ul li.filter(css class 'the-expanse')[2]}

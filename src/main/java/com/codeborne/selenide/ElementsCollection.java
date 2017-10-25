@@ -242,7 +242,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public SelenideElement get(int index) {
-    shouldBe(CollectionCondition.sizeGreaterThan(index));
+    shouldBe(CollectionCondition.sizeGreaterThanOrEqual(index + 1));
     return CollectionElement.wrap(collection, index);
   }
 
