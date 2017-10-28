@@ -15,19 +15,19 @@ import static org.mockito.Mockito.when;
  */
 public class ElementSupplierTest {
 
-    @Test
-    public void getSearchCriteriaShouldCallDescribeMethod() throws Exception {
-        WebElement mock = mock(WebElement.class);
-        when(Describe.describe(mock)).thenReturn("was triggered");
-        String actualValue = new ElementSupplier(() -> mock).getSearchCriteria();
-        assertThat(actualValue, containsString("was triggered"));
-    }
+  @Test
+  public void getSearchCriteriaShouldCallDescribeMethod() throws Exception {
+    WebElement mock = mock(WebElement.class);
+    when(Describe.describe(mock)).thenReturn("was triggered");
+    String actualValue = new ElementSupplier(() -> mock).getSearchCriteria();
+    assertThat(actualValue, containsString("was triggered"));
+  }
 
-    @Test
-    public void whenExceptionIsComingFromDescribeSearchCriteriaShouldReturnMessageOfException() throws Exception {
-        WebElement mock = mock(WebElement.class);
-        when(Describe.describe(mock)).thenThrow(new StaleElementReferenceException("element changed"));
-        String actualValue = new ElementSupplier(() -> mock).getSearchCriteria();
-        assertThat(actualValue, equalTo("StaleElementReferenceException: element changed"));
-    }
+  @Test
+  public void whenExceptionIsComingFromDescribeSearchCriteriaShouldReturnMessageOfException() throws Exception {
+    WebElement mock = mock(WebElement.class);
+    when(Describe.describe(mock)).thenThrow(new StaleElementReferenceException("element changed"));
+    String actualValue = new ElementSupplier(() -> mock).getSearchCriteria();
+    assertThat(actualValue, equalTo("StaleElementReferenceException: element changed"));
+  }
 }
