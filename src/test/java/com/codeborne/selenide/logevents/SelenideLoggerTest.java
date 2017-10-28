@@ -42,13 +42,13 @@ public class SelenideLoggerTest {
 
   @Test
   public void printsReadableArgumentsValues() {
-    assertEquals("", SelenideLogger.readableArguments(null));
+    assertEquals("", SelenideLogger.readableArguments((Object[]) null));
     assertEquals("111", SelenideLogger.readableArguments(111));
     assertEquals("[1, 2, 3]", SelenideLogger.readableArguments(1, 2, 3));
-    assertEquals("a", SelenideLogger.readableArguments(new String[] {"a"}));
-    assertEquals("[a, bb]", SelenideLogger.readableArguments(new String[] {"a", "bb"}));
-    assertEquals("null", SelenideLogger.readableArguments(new String[] {null}));
-    assertEquals("[null, a, null]", SelenideLogger.readableArguments(new String[] {null, "a", null}));
+    assertEquals("a", SelenideLogger.readableArguments((Object[]) new String[] {"a"}));
+    assertEquals("[a, bb]", SelenideLogger.readableArguments((Object[]) new String[] {"a", "bb"}));
+    assertEquals("null", SelenideLogger.readableArguments((Object[]) new String[] {null}));
+    assertEquals("[null, a, null]", SelenideLogger.readableArguments((Object[]) new String[] {null, "a", null}));
   }
 
   @Test

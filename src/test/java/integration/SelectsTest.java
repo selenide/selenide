@@ -5,17 +5,24 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class SelectsTest extends IntegrationTest {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @Before
   public void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -63,9 +70,20 @@ public class SelectsTest extends IntegrationTest {
     assertThat(select.getSelectedText(), equalTo("@мыло.ру"));
   }
 
-  @Test(expected = ElementNotFound.class)
-  public void throwsElementNotFound() {
-    $(By.xpath("//select[@name='domain']")).selectOption("unexisting-option");
+  @Test()
+  public void throwsElementNotFoundWithOptionsText() {
+    thrown.expect(ElementNotFound.class);
+    thrown.expectMessage("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\n"
+        + "Expected: exist");
+    $x("//select[@name='domain']").selectOption("unexisting-option");
+  }
+
+  @Test()
+  public void throwsElementNotFoundWithOptionsIndex() {
+    thrown.expect(ElementNotFound.class);
+    thrown.expectMessage("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\n"
+        + "Expected: exist");
+    $x("//select[@name='domain']").selectOption(999);
   }
 
   @Test

@@ -31,10 +31,8 @@ public class CollectionWaitTest extends IntegrationTest {
 
   @Test
   public void reproduceStaleElementException_priorToSelenide33() {
-    List<SelenideElement> elements = new ArrayList<>();
-    for (SelenideElement selenideElement : $$("h1")) {
-      elements.add(selenideElement);
-    }
+    List<SelenideElement> elements = new ArrayList<>($$("h1"));
+    
     executeJavaScript("window.location.reload();");
 
     elements.get(0).shouldBe(visible).shouldHave(text("Elements will appear soon"));
@@ -43,7 +41,7 @@ public class CollectionWaitTest extends IntegrationTest {
 
   @Test(expected = AssertionError.class)
   public void failsIfWrongSize() {
-    $$("#collection li").shouldHave(size(4));
+    $$("#collection li").shouldHave(size(-1));
   }
 
   @Test

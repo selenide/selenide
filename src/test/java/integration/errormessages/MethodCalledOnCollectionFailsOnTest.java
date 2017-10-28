@@ -150,7 +150,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {<ul>/.nonexistent}"));
+      assertThat(expected.getMessage(), startsWith("Element not found {ul/.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());

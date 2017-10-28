@@ -87,7 +87,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
-   * Supported values: "chrome", "firefox", "ie", "htmlunit", "phantomjs", "opera", "marionette"
+   * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "htmlunit", "phantomjs", "opera", "safari", "edge", "jbrowser"
    * <p/>
    * Default value: "firefox"
    */
@@ -348,4 +348,27 @@ public class Configuration {
    */
   public static FileDownloadMode fileDownload = FileDownloadMode.valueOf(
           System.getProperty("selenide.fileDownload", HTTPGET.name()));
+
+  /**
+   * Controls Selenide and WebDriverManager integration.
+   * When integration is enabled you don't need to download and setup any browser driver executables.
+   * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
+   *
+   * Default: true
+   */
+  public static boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
+
+  /**
+   * Enables the ability to run the browser in headless mode.
+   * Works only for Chrome(59+) and Firefox(56+).
+   *
+   * Default: false
+   */
+  public static boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
+
+  /**
+   * Sets the path to browser executable.
+   * Works only for Chrome, Firefox and Opera.
+   */
+  public static String browserBinary = System.getProperty("selenide.browserBinary", "");
 }

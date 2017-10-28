@@ -1,5 +1,47 @@
 == Changelog
 
+=== 4.9
+* #621 Make marionette the default firefox driver implementation -- thanks to ostap-oleksyn
+* #617 Fix initialization of SelenideElements without @FindBy annotation declared inside ElementsContainer -- thanks to Artem Savosik @CaBocuk
+* #623 Add methods `$$(“.item”).first(3)` and `$$(“.item”).last(3)` -- thanks to ostap-oleksyn
+
+=== 4.8 (released 08.10.2017)
+* updated to selenium 3.6   -- thanks to ostap-oleksyn
+* upgraded to org.apache.httpcomponents:httpcore:4.4.7
+* #614 fix issue with soft asserts   -- thanks to ostap-oleksyn
+
+=== 4.7.1 (released 05.10.2017)
+* declare compile-time dependency `guava 23.0` instead of `guava 21.0` (for those whose Maven downloads the older guava version)
+
+=== 4.7 (released 29.09.2017)
+* upgrade to selenium-java 3.5.3
+* upgrade to browsermob-core 2.1.5 (and downgrade to littleproxy 1.1.0-beta-bmp-17)
+* #610 integration with DriverManager
+* #591 Added method prompt() -- Thanks to Anton Aftakhov aka @simple-elf
+* #210 Show path to page html in addition to screenshot -- Thanks @hyunil-shin for PR #590
+* #570 Fixed concurrency issue with screenshots during parallel runs -- Thanks Jane Riabchenko for PR #595
+* upgrade to htmlunit 2.27 -- Thanks to @alexander-kotlyar
+
+=== 4.6 (released 31.08.2017)
+* #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote    -- thanks to @BorisOsipov
+* #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
+* #528 - Wrong ElementNotFound exception message  -- thanks to @BorisOsipov
+* #573 - Method `$.shouldHave(exactValue(" foo  "))` does NOT trim leading/trailing spaces anymore - thanks to @mseele for this PR 
+
+=== 4.5.1 (released 27.06.2017)
+* #484 added method $.getSearchCriteria()
+* #484 fixed performance issue: Selenide tried to log collections' parent WebElement without waiting for it
+
+=== 4.5 (released 26.06.2017)
+* Performance improvement of method `$.setValue()` -- thanks to Alexander Popov
+* #549 Selenide waits too much for collections
+* Add methods $().$x and $().$$x -- thanks to Oleksii Cherevatyi 
+* Fix support for Opera driver -- thanks to Roman Marinsky
+* Remove spam from logs: `INFO: Close proxy server: 24 -> null` -- thanks to Andrew Zakordonets 
+* upgrade to org.littleshoot:littleproxy:1.1.2
+* upgrade to phantomjsdriver 1.4.3
+* added many unit tests for Selenide itself -- thanks to Andrew Zakordonets
+
 === 4.4.3 (released 25.04.2017)
 * upgrade to selenium-java 3.4.0
 

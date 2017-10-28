@@ -1,5 +1,6 @@
 package integration;
 
+import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,13 +22,13 @@ public class ConfirmTest extends IntegrationTest {
 
   @Before
   public void openTestPage() {
-    assumeFalse(isFirefox());
+    assumeFalse(isFirefox() || isChrome());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
   }
 
-  @Test
+  @Test @Video
   public void canSubmitConfirmDialogWithoutCheckingText() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
@@ -35,7 +36,7 @@ public class ConfirmTest extends IntegrationTest {
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @Test
+  @Test @Video
   public void canSubmitConfirmDialogAndCheckText() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
@@ -43,7 +44,7 @@ public class ConfirmTest extends IntegrationTest {
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @Test
+  @Test @Video
   public void canCancelConfirmDialog() {
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
@@ -52,7 +53,7 @@ public class ConfirmTest extends IntegrationTest {
     $("#container").shouldNotBe(empty);
   }
 
-  @Test
+  @Test @Video
   public void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
     try {
@@ -66,7 +67,7 @@ public class ConfirmTest extends IntegrationTest {
     }
   }
 
-  @Test
+  @Test @Video
   public void confirmReturnsActualDialogText() {
     assumeTrue(supportsModalDialogs());
 
@@ -74,7 +75,7 @@ public class ConfirmTest extends IntegrationTest {
     assertEquals("Get out of this page, " + userName + '?', confirm());
   }
 
-  @Test
+  @Test @Video
   public void dismissReturnsActualDialogText() {
     assumeTrue(supportsModalDialogs());
 
@@ -82,7 +83,7 @@ public class ConfirmTest extends IntegrationTest {
     assertEquals("Get out of this page, " + userName + '?', dismiss());
   }
 
-  @Test
+  @Test @Video
   public void waitsUntilConfirmDialogAppears() {
     onConfirmReturn(true);
     $(byText("Slow confirm")).click();

@@ -12,7 +12,6 @@ import java.util.*;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.toList;
@@ -54,7 +53,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
     validateAssertionMode();
 
-    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, conditions);
+    SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
       for (CollectionCondition condition : conditions) {
         waitUntil(condition, collectionsTimeout);
@@ -80,20 +79,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     lastError = null;
     final long startTime = System.currentTimeMillis();
-    boolean conditionMatched = false;
     do {
       try {
         actualElements = collection.getActualElements();
         if (condition.apply(actualElements)) {
-          if (conditionMatched) {
-            return;
-          } else {
-            conditionMatched = true;
-            sleep(collectionsPollingInterval);
-            continue;
-          }
-        } else {
-          conditionMatched = false;
+          return;
         }
       } catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
@@ -105,10 +95,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
-
-    if (!condition.apply(actualElements)) {
-      condition.fail(collection, actualElements, lastError, timeoutMs);
-    }
+    
+    condition.fail(collection, actualElements, lastError, timeoutMs);
+  }
+  
+  void sleep(long ms) {
+    Selenide.sleep(ms);
   }
 
   /**
@@ -267,6 +259,26 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   public SelenideElement last() {
     return get(size() - 1);
+  }
+
+  /**
+   * returns the first n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection first(int elements) {
+    List<WebElement> sublist = getActualElements().subList(0, Math.min(elements, size()));
+    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
+  }
+
+  /**
+   * returns the last n elements of the collection
+   * @param elements - number of elements
+   * @return
+   */
+  public ElementsCollection last(int elements) {
+    List<WebElement> sublist = getActualElements().subList(Math.max(size() - elements, 0), size());
+    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
   }
 
   @Override

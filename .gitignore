@@ -3,6 +3,7 @@ build
 out
 *.ipr
 *.iws
+*.iml
 .gradle
 .project
 .classpath
@@ -10,3 +11,4 @@ chromedriver.log
 phantomjsdriver.log
 .settings
 integration/ScreenshotTest/canTakeScreenshotOfElement/
+classes

@@ -33,8 +33,13 @@ public abstract class Condition implements Predicate<WebElement> {
   public static final Condition exist = new Condition("exist") {
     @Override
     public boolean apply(WebElement element) {
-      element.isDisplayed();
-      return true;
+      try {
+        element.isDisplayed();
+        return true;
+      }
+      catch (StaleElementReferenceException e) {
+        return false;
+      }
     }
   };
 
@@ -159,7 +164,7 @@ public abstract class Condition implements Predicate<WebElement> {
 
   private static String getAttributeValue(WebElement element, String attributeName) {
     String attr = element.getAttribute(attributeName);
-    return attr == null ? "" : attr.trim();
+    return attr == null ? "" : attr;
   }
 
   /**

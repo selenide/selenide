@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
  */
 public interface SelenideElement extends WebElement, FindsByLinkText, FindsById, FindsByName,
     FindsByTagName, FindsByClassName, FindsByCssSelector,
-    FindsByXPath, WrapsDriver, WrapsElement, Locatable {
+    FindsByXPath, WrapsDriver, WrapsElement, org.openqa.selenium.interactions.internal.Locatable {
 
   /**
    * <p>
@@ -476,6 +476,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.FindByXpath
    */
   SelenideElement $x(String xpath, int index);
+
   /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
@@ -637,6 +638,12 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File download() throws FileNotFoundException;
 
   /**
+   * Return criteria by which this element is located
+   * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
+   */
+  String getSearchCriteria();
+
+  /**
    * @return the original Selenium WebElement wrapped by this object
    * 
    * @see com.codeborne.selenide.commands.ToWebElement
@@ -664,6 +671,11 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    * @see com.codeborne.selenide.commands.Click
    */
   @Override void click();
+
+  /**
+   * Click the element with a relative offset from the upper left corner of the element
+   */
+  void click(int offsetX, int offsetY);
 
   /**
    * Click with right mouse button on this element

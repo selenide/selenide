@@ -18,6 +18,7 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.*;
@@ -36,13 +37,13 @@ public class ScreenshotTest extends IntegrationTest {
     SelenideElement element = $("#small_div");
     File screenshot = element.screenshot();
     String info = "(Screenshot of element: " + screenshot.getAbsolutePath() + ") ";
+    String screenshotPath = IS_OS_WINDOWS ? Configuration.reportsFolder.replace("/", "\\") : Configuration.reportsFolder;
 
     BufferedImage img = ImageIO.read(screenshot);
     assertEquals("Screenshot doesn't fit width " + info, img.getWidth(), element.getSize().getWidth());
     assertEquals("Screenshot doesn't fit height " + info, img.getHeight(), element.getSize().getHeight());
-    assertTrue("Screenshot file should be located in " + Configuration.reportsFolder +
-            ", but was: " + screenshot.getPath(),
-        screenshot.getPath().startsWith(Configuration.reportsFolder));
+    assertTrue("Screenshot file should be located in " + screenshotPath + ", but was: " +
+            screenshot.getPath(), screenshot.getPath().startsWith(screenshotPath));
   }
 
   @Test

@@ -25,7 +25,6 @@ import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 
 /**
  * The main starting point of Selenide.
@@ -532,8 +531,47 @@ public class Selenide {
    */
   public static String confirm(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = Wait().until(alertIsPresent());
+      Alert alert = switchTo().alert();
       String actualDialogText = alert.getText();
+      alert.accept();
+      checkDialogText(expectedDialogText, actualDialogText);
+      return actualDialogText;
+    }
+    return null;
+  }
+
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
+   * @return actual dialog text
+   */
+  public static String prompt() {
+    return prompt(null, null);
+  }
+
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
+   * @param inputText if not null, sets value in prompt dialog input
+   * @return actual dialog text
+   */
+  public static String prompt(String inputText) {
+    return prompt(null, inputText);
+  }
+
+  /**
+   * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
+   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
+   *
+   * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
+   * @param inputText if not null, sets value in prompt dialog input
+   * @throws DialogTextMismatch if confirmation message differs from expected message
+   * @return actual dialog text
+   */
+  public static String prompt(String expectedDialogText, String inputText) {
+    if (!doDismissModalDialogs()) {
+      Alert alert = switchTo().alert();
+      String actualDialogText = alert.getText();
+      if (inputText != null)
+        alert.sendKeys(inputText);
       alert.accept();
       checkDialogText(expectedDialogText, actualDialogText);
       return actualDialogText;
@@ -560,7 +598,7 @@ public class Selenide {
    */
   public static String dismiss(String expectedDialogText) {
     if (!doDismissModalDialogs()) {
-      Alert alert = Wait().until(alertIsPresent());
+      Alert alert = switchTo().alert();
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(expectedDialogText, actualDialogText);
