@@ -35,12 +35,14 @@ repositories {
 }
 
 dependencies {
-  implementation('com.codeborne:selenide:4.5.1')
-  implementation('io.appium:java-client:5.0.0')
+  compile('com.codeborne:selenide:4.8')
+  compile('io.appium:java-client:5.0.4')
+  testCompile('junit:junit:4.12')
 }
 
 task libs(type: Sync) {
   from configurations.compileClasspath
+  from configurations.testCompile
   into "$buildDir/lib"
 }
 
