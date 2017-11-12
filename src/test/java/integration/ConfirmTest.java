@@ -30,6 +30,7 @@ public class ConfirmTest extends IntegrationTest {
 
   @Test @Video
   public void canSubmitConfirmDialogWithoutCheckingText() {
+    assumeFalse(isHtmlUnit()); // until https://github.com/SeleniumHQ/htmlunit-driver/pull/62
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm();
@@ -38,6 +39,7 @@ public class ConfirmTest extends IntegrationTest {
 
   @Test @Video
   public void canSubmitConfirmDialogAndCheckText() {
+    assumeFalse(isHtmlUnit()); // until https://github.com/SeleniumHQ/htmlunit-driver/pull/62
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, " + userName + '?');
@@ -46,6 +48,7 @@ public class ConfirmTest extends IntegrationTest {
 
   @Test @Video
   public void canCancelConfirmDialog() {
+    assumeFalse(isHtmlUnit()); // until https://github.com/SeleniumHQ/htmlunit-driver/pull/62
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, " + userName + '?');
