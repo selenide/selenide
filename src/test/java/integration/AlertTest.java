@@ -67,6 +67,15 @@ public class AlertTest extends IntegrationTest {
     $("#message").shouldHave(text("Hello, Быстрый Гарри!"));
     $("#container").shouldBe(empty);
   }
+
+  @Test
+  public void waitsUntilPromptDialogAppears() {
+    $(By.name("username")).val("Медленный Барри");
+    $(byValue("Slow prompt")).click();
+    prompt("Медленный Барри");
+    $("#message").shouldHave(text("Hello, Медленный Барри!"));
+    $("#container").shouldBe(empty);
+  }
   
   @AfterClass
   public static void tearDown() {

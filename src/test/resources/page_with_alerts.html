@@ -8,6 +8,11 @@
         setTimeout(runAlert, 1000);
         return false;
       }
+
+      function triggerPrompt() {
+        setTimeout(runPrompt, 1000);
+        return false;
+      }
       
       function runAlert() {
         var username = document.getElementById('username').value;
@@ -56,6 +61,7 @@
           <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
 
           <input type="button" onclick="return triggerAlert();" value="Slow alert"><br/><br/>
+          <input type="button" onclick="return triggerPrompt();" value="Slow prompt"><br/><br/>
           <a href="page_with_jquery.html" onclick="return triggerConfirm();">Slow confirm</a><br/><br/>
         </fieldset>
       </form>
