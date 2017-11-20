@@ -512,7 +512,6 @@ public class Selenide {
 
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
-   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
    * @throws DialogTextMismatch if confirmation message differs from expected message
@@ -548,7 +547,6 @@ public class Selenide {
 
   /**
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
-   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
    * @param inputText if not null, sets value in prompt dialog input
@@ -579,7 +577,6 @@ public class Selenide {
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
-   * Method does nothing in case of HtmlUnit browser (since HtmlUnit does not support alerts).
    *
    * @param expectedDialogText if not null, check that confirmation dialog displays this message (case-sensitive)
    * @throws DialogTextMismatch if confirmation message differs from expected message
