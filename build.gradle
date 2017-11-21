@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.4'
-    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
+    classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
   }
 }
 
