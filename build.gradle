@@ -39,7 +39,7 @@ configurations {
 
 dependencies {
   compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.7.2'
-  compile('org.apache.httpcomponents:httpcore:4.4.7')
+  compile('org.apache.httpcomponents:httpcore:4.4.8')
   compile('org.seleniumhq.selenium:selenium-java:3.6.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
