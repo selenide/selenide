@@ -4,7 +4,7 @@ buildscript {
     maven { url 'https://plugins.gradle.org/m2' }
   }
   dependencies {
-    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.2'
+    classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.4'
     classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
   }
 }
