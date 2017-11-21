@@ -29,6 +29,14 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
+  public void canSubmitPromptDialogWithDefaultValue() {
+    $(byValue("Prompt button")).click();
+    prompt();
+    $("#message").shouldHave(text("Hello, default!"));
+    $("#container").shouldBe(empty);
+  }
+
+  @Test
   public void canSubmitPromptDialog() {
     $(byValue("Prompt button")).click();
     prompt("Please input your username", "Aegon Targaryen");
