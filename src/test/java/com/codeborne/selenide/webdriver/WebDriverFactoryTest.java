@@ -1,16 +1,21 @@
 package com.codeborne.selenide.webdriver;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import com.codeborne.selenide.Configuration;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
-import static org.mockito.Mockito.*;
-
 public class WebDriverFactoryTest {
+
   WebDriverFactory factory = spy(new WebDriverFactory());
   WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
 
@@ -57,8 +62,4 @@ public class WebDriverFactoryTest {
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));
   }
 
-  @After
-  public void tearDown() {
-    System.clearProperty("capabilities.some.cap");
-  }
 }
