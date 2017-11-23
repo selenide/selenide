@@ -40,7 +40,7 @@ configurations {
 dependencies {
   compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.7.2'
   compile('org.apache.httpcomponents:httpcore:4.4.8')
-  compile('org.seleniumhq.selenium:selenium-java:3.6.0') {
+  compile('org.seleniumhq.selenium:selenium-java:3.7.1') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -66,7 +66,7 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
   
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.6.0', transitive: false
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.7.1', transitive: false
   testCompile 'org.mockito:mockito-core:2.12.0'
   testCompile 'org.seleniumhq.selenium:jetty-repacked:9.4.5.v20170502'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.5.v20170502'
