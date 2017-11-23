@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -33,6 +34,8 @@ import static org.junit.Assert.assertTrue;
 
 public class LocalHttpServer {
   private static final Logger log = Logger.getLogger(LocalHttpServer.class.getName());
+  private static final String CONTENT_TYPE_HTML_TEXT  = "text/html";
+  private static final String CONTENT_TYPE_IMAGE_PNG  = "image/png";
 
   private final Server server;
 
@@ -107,7 +110,8 @@ public class LocalHttpServer {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       long start = System.nanoTime();
 
-      byte[] fileContent = readFileContent(request);
+      String fileName = getFilenameFromRequest(request);
+      byte[] fileContent = readFileContent(fileName);
       if (fileContent == null) {
         response.setStatus(SC_NOT_FOUND);
         logRequest(request, "NOT_FOUND", start);
@@ -118,6 +122,7 @@ public class LocalHttpServer {
       response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
 
+      response.setContentType(getContentType(fileName));
       printResponse(response, fileContent);
       logRequest(request, "ok", start);
     }
@@ -140,7 +145,8 @@ public class LocalHttpServer {
       String sessionId = getSessionId(request);
       assertTrue(sessions.contains(sessionId));
 
-      byte[] fileContent = readFileContent(request);
+      String fileName = getFilenameFromRequest(request);
+      byte[] fileContent = readFileContent(fileName);
       if (fileContent == null) {
         response.setStatus(SC_NOT_FOUND);
         logRequest(request, "NOT_FOUND", start);
@@ -150,6 +156,8 @@ public class LocalHttpServer {
       response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
       response.setHeader("content-disposition", "attachment; filename=" + request.getPathInfo());
+      response.setContentType(getContentType(fileName));
+
       printResponse(response, fileContent);
       logRequest(request, "ok", start);
     }
@@ -174,6 +182,7 @@ public class LocalHttpServer {
         }
 
         String message = "<h3>Uploaded " + uploadedFiles.size() + " files</h3>" + items;
+        response.setContentType(CONTENT_TYPE_HTML_TEXT);
         printResponse(response, message.getBytes("UTF-8"));
         logRequest(request, message, start);
       } catch (FileUploadException e) {
@@ -194,8 +203,7 @@ public class LocalHttpServer {
     throw new IllegalArgumentException("No cookie 'session_id' found: " + Arrays.toString(request.getCookies()));
   }
 
-  static byte[] readFileContent(HttpServletRequest request) throws IOException {
-    String fileName = request.getPathInfo().replaceFirst("\\/(.*)", "$1");
+  static byte[] readFileContent(String fileName) throws IOException {
     InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName);
     if (in == null) return null;
     try {
@@ -205,8 +213,16 @@ public class LocalHttpServer {
     }
   }
 
+  private static String getFilenameFromRequest(HttpServletRequest request) {
+    return request.getPathInfo().replaceFirst("\\/(.*)", "$1");
+  }
+
+  static String getContentType(String fileName) {
+    String fileExtension = FilenameUtils.getExtension(fileName);
+    return fileExtension.contains("png") ? CONTENT_TYPE_IMAGE_PNG : CONTENT_TYPE_HTML_TEXT;
+  }
+
   static void printResponse(HttpServletResponse http, byte[] fileContent) throws IOException {
-    http.setContentType("text/html");
     try (OutputStream os = http.getOutputStream()) {
       os.write(fileContent);
     }
