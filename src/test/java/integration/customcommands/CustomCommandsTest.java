@@ -7,11 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.customcommands.MyFramework.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
 
 public class CustomCommandsTest extends IntegrationTest {
   @Before
@@ -23,7 +21,6 @@ public class CustomCommandsTest extends IntegrationTest {
   
   @Test
   public void userCanAddAnyCustomCommandsToSelenide() {
-    assumeFalse(isHtmlUnit());
     $_("#valid-image").tripleClick().tripleClick().tripleClick().click();
     $_("#invalid-image").tripleClick().quadrupleClick();
 
