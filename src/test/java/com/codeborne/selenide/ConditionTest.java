@@ -1,11 +1,8 @@
 package com.codeborne.selenide;
 
 import org.junit.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -22,7 +19,7 @@ public class ConditionTest {
   @Test
   public void textConditionChecksForSubstring() {
     assertTrue(Condition.text("John Malkovich The First").apply(elementWithText("John Malkovich The First")));
-    
+
     assertFalse(Condition.text("John Malkovich First").apply(elementWithText("John Malkovich The First")));
     assertFalse(Condition.text("john bon jovi").apply(elementWithText("John Malkovich The First")));
   }
@@ -32,12 +29,12 @@ public class ConditionTest {
     WebElement element = elementWithText("John Malkovich The First");
     assertTrue(Condition.text("john malkovich").apply(element));
   }
-  
+
   @Test
   public void textConditionIgnoresWhitespaces() {
     assertTrue(Condition.text("john the malkovich").apply(
         elementWithText("John  the\n Malkovich")));
-    
+
     assertTrue(Condition.text("This is nonbreakable space").apply(
         elementWithText("This is nonbreakable\u00a0space")));
   }
@@ -81,7 +78,7 @@ public class ConditionTest {
     assertTrue(Condition.value("John Malkovich").apply(element));
     assertTrue(Condition.value("malko").apply(element));
   }
-  
+
   @Test
   public void elementIsVisible() {
     assertTrue(Condition.visible.apply(elementWithVisibility(true)));
@@ -93,7 +90,7 @@ public class ConditionTest {
     assertTrue(Condition.exist.apply(elementWithVisibility(true)));
     assertTrue(Condition.exist.apply(elementWithVisibility(false)));
   }
-  
+
   @Test
   public void elementExists_returnsFalse_ifItThrowsException() {
     WebElement element = mock(WebElement.class);
@@ -216,7 +213,7 @@ public class ConditionTest {
   public void elementVisibleButNotSelected() {
     WebElement element = elementWithVisibility(true);
     when(element.isSelected()).thenReturn(false);
-    
+
     assertTrue(Condition.or("Visible, not Selected",
         Condition.visible,
         Condition.checked).apply(element));
