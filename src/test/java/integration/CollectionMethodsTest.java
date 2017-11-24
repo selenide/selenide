@@ -130,6 +130,14 @@ public class CollectionMethodsTest extends IntegrationTest {
   }
 
   @Test
+  public void userCanFilterElementsByConditionOnChild() {
+    ElementsCollection collectionToFilter = $$("#multirowTable tr");
+    ElementsCollection collectionFiltered = collectionToFilter.filterBy(child("td:nth-child(2)", text("Norris")));
+    collectionToFilter.shouldHaveSize(2);
+    collectionFiltered.shouldHaveSize(1);
+  }
+
+  @Test
   public void userCanExcludeMatchingElements() {
     $$("#multirowTable tr").shouldHaveSize(2);
     $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);

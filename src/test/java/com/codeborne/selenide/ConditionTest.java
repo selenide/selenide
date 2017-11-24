@@ -223,25 +223,6 @@ public class ConditionTest {
   }
 
   @Test
-  public void elementChild() {
-    WebDriver driver = new HtmlUnitDriver(true);
-    driver.get("about:blank");
-    JavascriptExecutor js = (JavascriptExecutor) driver;
-    WebElement parent = (WebElement) js.executeScript(
-        "parent = document.createElement('div');"
-            + "child = document.createElement('div');"
-            + "parent.innerHTML = 'parent';"
-            + "child.innerHTML = 'child';"
-            + "parent.appendChild(child);"
-            + "document.body.appendChild(parent);"
-            + "return parent;"
-    );
-
-    assertTrue(Condition.child("div", Condition.text("child")).apply(parent));
-    assertFalse(Condition.child("div", Condition.text("parent")).apply(parent));
-  }
-
-  @Test
   public void conditionChild() {
     Condition condition = Condition.child("div", Condition.visible);
     assertEquals("child div has visible", condition.toString());
