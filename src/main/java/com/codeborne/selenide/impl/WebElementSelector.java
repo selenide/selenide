@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
@@ -20,14 +21,14 @@ import static java.lang.Thread.currentThread;
  */
 public class WebElementSelector {
   public static WebElementSelector instance = new WebElementSelector();
-  
+
   protected String sizzleSource;
 
   public WebElement findElement(SearchContext context, By selector) {
     if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElement(selector);
     }
-    
+
     List<WebElement> webElements = evaluateSizzleSelector(context, (ByCssSelector) selector);
     return webElements.isEmpty() ? null : webElements.get(0);
   }
@@ -36,7 +37,7 @@ public class WebElementSelector {
     if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElements(selector);
     }
-    
+
     return evaluateSizzleSelector(context, (ByCssSelector) selector);
   }
 
@@ -46,7 +47,7 @@ public class WebElementSelector {
     String sizzleSelector = sizzleCssSelector.toString()
         .replace("By.selector: ", "")
         .replace("By.cssSelector: ", "");
-    
+
     if (context instanceof WebElement)
       return executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
     else
@@ -66,11 +67,11 @@ public class WebElementSelector {
       return false;
     }
   }
-  
+
   protected synchronized void injectSizzle() {
     if (sizzleSource == null) {
       try {
-        sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"));
+        sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"), Charset.defaultCharset());
       } catch (IOException e) {
         throw new RuntimeException("Cannot load sizzle.js from classpath", e);
       }

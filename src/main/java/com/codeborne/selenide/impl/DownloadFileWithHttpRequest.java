@@ -105,7 +105,7 @@ public class DownloadFileWithHttpRequest {
     try {
       HttpClientBuilder builder = HttpClientBuilder.create();
       SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy()).build();
-      builder.setSslcontext(sslContext);
+      builder.setSSLContext(sslContext);
 
       HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 
