@@ -235,7 +235,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     }
     else {
       assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+          containsString("Unable to locate element: .nonexistent"));
     }
   }
 }
