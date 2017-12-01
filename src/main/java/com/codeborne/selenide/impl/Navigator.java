@@ -48,7 +48,6 @@ public class Navigator {
   protected void navigateToAbsoluteUrl(String url, String domain, String login, String password) {
     if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
-      if (!domain.isEmpty()) domain += "\\";
     }
     else {
       if (!domain.isEmpty()) domain += "%5C";
