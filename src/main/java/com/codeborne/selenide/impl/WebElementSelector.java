@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
@@ -71,7 +72,7 @@ public class WebElementSelector {
   protected synchronized void injectSizzle() {
     if (sizzleSource == null) {
       try {
-        sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"), Charset.defaultCharset());
+        sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"), StandardCharsets.UTF_8);
       } catch (IOException e) {
         throw new RuntimeException("Cannot load sizzle.js from classpath", e);
       }
