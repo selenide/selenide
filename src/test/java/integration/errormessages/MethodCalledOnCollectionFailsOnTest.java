@@ -15,6 +15,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
@@ -228,14 +229,17 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
   private void assertCauseMessage(UIAssertionError expected) {
     if (isHtmlUnit()) {
-      assertThat(expected.getCause().getMessage(), containsString("Returned node was not a DOM element"));
+      assertThat(expected.getCause().getMessage(), containsString("Returned node (null) was not a DOM element"));
     }
     else if (isPhantomjs()) {
       assertThat(expected.getCause().getMessage(), containsString("Unable to find element with css selector '.nonexistent'"));
     }
     else {
+      String expectedCauseMessage = isFirefox()
+          ? "Unable to locate element: .nonexistent"
+          : "Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}";
       assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}"));
+          containsString(expectedCauseMessage));
     }
   }
 }

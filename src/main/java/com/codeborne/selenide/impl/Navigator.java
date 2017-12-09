@@ -1,12 +1,10 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.security.UserAndPassword;
 
 import java.net.URL;
 import java.util.logging.Logger;
@@ -50,7 +48,6 @@ public class Navigator {
   protected void navigateToAbsoluteUrl(String url, String domain, String login, String password) {
     if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
-      if (!domain.isEmpty()) domain += "\\";
     }
     else {
       if (!domain.isEmpty()) domain += "%5C";
@@ -68,9 +65,6 @@ public class Navigator {
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
-      if (isIE() && !"".equals(login)) {
-        Selenide.switchTo().alert().authenticateUsing(new UserAndPassword(domain + login, password));
-      }
       collectJavascriptErrors((JavascriptExecutor) webdriver);
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
