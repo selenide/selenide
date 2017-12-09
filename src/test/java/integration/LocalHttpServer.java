@@ -44,7 +44,7 @@ public class LocalHttpServer {
    * @param ssl
    * @throws IOException
    */
-  public LocalHttpServer(int port, boolean ssl) throws IOException {
+  public LocalHttpServer(int port, boolean ssl) {
     server = new Server();
 
     if (ssl) {
@@ -107,7 +107,7 @@ public class LocalHttpServer {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       long start = System.nanoTime();
 
       String fileName = getFilenameFromRequest(request);
@@ -140,7 +140,7 @@ public class LocalHttpServer {
 
   private class FileDownloadHandler extends HttpServlet {
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       long start = System.nanoTime();
       String sessionId = getSessionId(request);
       assertTrue(sessions.contains(sessionId));
@@ -167,7 +167,7 @@ public class LocalHttpServer {
 
   private class FileUploadHandler extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       long start = System.nanoTime();
 
       DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -214,7 +214,7 @@ public class LocalHttpServer {
   }
 
   private static String getFilenameFromRequest(HttpServletRequest request) {
-    return request.getPathInfo().replaceFirst("\\/(.*)", "$1");
+    return request.getPathInfo().replaceFirst("/(.*)", "$1");
   }
 
   static String getContentType(String fileName) {
