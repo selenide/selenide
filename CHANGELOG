@@ -1,9 +1,16 @@
 == Changelog
 
 === 4.9
+* #638 upgrade to selenium-java:3.8.1  -- thanks to Aleksandr Rasolka
 * #621 Make marionette the default firefox driver implementation -- thanks to ostap-oleksyn
 * #617 Fix initialization of SelenideElements without @FindBy annotation declared inside ElementsContainer -- thanks to Artem Savosik @CaBocuk
 * #623 Add methods `$$(“.item”).first(3)` and `$$(“.item”).last(3)` -- thanks to ostap-oleksyn
+* #627 Add ability to set browser binary path using configuration parameter -- thanks to ostap-oleksyn
+* #634 fix method prompt() in HtmlUnit -- thanks to Anton Aftakhov
+* upgrade to guava:23.5-jre
+* upgrade to httpcore:4.4.8
+* upgrade to htmlunit-driver:2.28.2
+* upgrade to webdrivermanager:2.0.1
 
 === 4.8 (released 08.10.2017)
 * updated to selenium 3.6   -- thanks to ostap-oleksyn
