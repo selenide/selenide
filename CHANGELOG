@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.9
+=== 4.9 (released 20.12.2017)
 * #638 upgrade to selenium-java:3.8.1  -- thanks to Aleksandr Rasolka
 * #621 Make marionette the default firefox driver implementation -- thanks to ostap-oleksyn
 * #617 Fix initialization of SelenideElements without @FindBy annotation declared inside ElementsContainer -- thanks to Artem Savosik @CaBocuk
