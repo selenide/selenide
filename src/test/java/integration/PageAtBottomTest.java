@@ -32,7 +32,7 @@ public class PageAtBottomTest extends IntegrationTest {
   }
 
   private String printScrollParams() {
-    return "\nwindow.scrollY=" + Selenide.executeJavaScript("return window.scrollY;") +
+    return "\nwindow.scrollY=" + Selenide.executeJavaScript("return window.pageYOffset;") +
           "\nwindow.innerHeight=" + Selenide.executeJavaScript("return window.innerHeight;") +
           "\ndocument.body.scrollHeight=" + Selenide.executeJavaScript("return document.body.scrollHeight;");
   }
