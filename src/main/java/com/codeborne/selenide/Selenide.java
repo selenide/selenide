@@ -837,7 +837,7 @@ public class Selenide {
    * Useful if you need to scroll down by x pixels unknown number of times.
    */
   public static boolean atBottom() {
-    return Selenide.executeJavaScript("return window.scrollY + window.innerHeight >= document.body.scrollHeight");
+    return Selenide.executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
   }
 
   private static <T> List<String> listToString(List<T> objects) {
