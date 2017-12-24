@@ -43,9 +43,9 @@ public class ReadonlyElementsTest extends IntegrationTest {
     Configuration.fastSetValue = false;
 
     assertThat(verifySetValue2ThrowsException(), anyOf(
-        containsString("Element is read-only and so may not be used for actions"),
         containsString("Element must be user-editable in order to clear it"),
         containsString("You may only edit editable elements"),
+        containsString("You may only interact with enabled elements"),
             containsString("Element is not currently interactable and may not be manipulated")
     ));
   }
