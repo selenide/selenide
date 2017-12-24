@@ -36,7 +36,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test
   public void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
-    assertThat(verifySetValueThrowsException(), containsString("Cannot change value of readonly element"));
+    assertThat(verifySetValueThrowsException(), anyOf(
+            containsString("Cannot change value of readonly element"),
+            containsString("Element must be user-editable in order to clear it")
+    ));
   }
 
   @Test(expected = InvalidStateException.class)
