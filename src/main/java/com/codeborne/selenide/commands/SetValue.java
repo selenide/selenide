@@ -39,6 +39,7 @@ public class SetValue implements Command<WebElement> {
     if (text == null || text.isEmpty()) {
       element.clear();
     } else if (fastSetValue) {
+      element.clear(); // to enforce blur on previous element
       String error = setValueByJs(element, text);
       if (error != null) throw new InvalidStateException(error);
       events.fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
