@@ -34,14 +34,37 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @Test
+  public void cannotSetValueToDisabledField_slowSetValue() {
+    Configuration.fastSetValue = false;
+
+    assertThat(verifySetValue2ThrowsException(), anyOf(
+        containsString("Element is read-only and so may not be used for actions"),
+        containsString("Element must be user-editable in order to clear it"),
+        containsString("You may only edit editable elements"),
+            containsString("Element is not currently interactable and may not be manipulated")
+    ));
+  }
+
+  @Test
   public void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
     assertThat(verifySetValueThrowsException(), containsString("Cannot change value of readonly element"));
   }
 
+  @Test
+  public void cannotSetValueToDisabledField_fastSetValue() {
+    Configuration.fastSetValue = true;
+    assertThat(verifySetValue2ThrowsException(), containsString("Cannot change value of disabled element"));
+  }
+
   @Test(expected = InvalidStateException.class)
   public void cannotSetValueToReadonlyTextArea() {
     $("#text-area").val("textArea value");
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void cannotSetValueToDisabledTextArea() {
+    $("#text-area-disabled").val("textArea value");
   }
 
   @Test(expected = InvalidStateException.class)
@@ -96,12 +119,25 @@ public class ReadonlyElementsTest extends IntegrationTest {
   private String verifySetValueThrowsException() {
     try {
       $(By.name("username")).val("another-username");
-      fail("should throw InvalidStateException where setting value to readonly element");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     }
     catch (InvalidStateException expected) {
       $(By.name("username")).shouldBe(empty);
       $(By.name("username")).shouldHave(exactValue(""));
+      return expected.getMessage();
+    }
+  }
+
+  private String verifySetValue2ThrowsException() {
+    try {
+      $(By.name("password")).val("another-pwd");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
+      return null;
+    }
+    catch (InvalidStateException expected) {
+      $(By.name("password")).shouldBe(empty);
+      $(By.name("password")).shouldHave(exactValue(""));
       return expected.getMessage();
     }
   }
