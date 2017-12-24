@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -22,6 +23,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
     timeout = 10 * averageSeleniumCommandDuration;
   }
 
+  @After
+  public void cleanUp(){
+      Configuration.fastSetValue = false;
+  }
   @Test
   public void cannotSetValueToReadonlyField_slowSetValue() {
     Configuration.fastSetValue = false;
@@ -131,7 +136,7 @@ public class ReadonlyElementsTest extends IntegrationTest {
 
   private String verifySetValue2ThrowsException() {
     try {
-      $(By.name("password")).val("another-pwd");
+      $(By.name("password")).setValue("another-pwd");
       fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     }
