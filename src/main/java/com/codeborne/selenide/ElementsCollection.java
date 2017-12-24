@@ -95,10 +95,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
-
     condition.fail(collection, actualElements, lastError, timeoutMs);
   }
-
   void sleep(long ms) {
     Selenide.sleep(ms);
   }
@@ -242,7 +240,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public SelenideElement get(int index) {
-    if(getActualElements().size() <= index){
+    if (getActualElements().size() <= index) {
       actualElements = collection.getActualElements();
     }
     return CollectionElement.wrap(collection, getActualElements(), index);

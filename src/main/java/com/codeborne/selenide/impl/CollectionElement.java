@@ -35,14 +35,9 @@ public class CollectionElement extends WebElementSource {
       el.isEnabled(); // check staleness
 
       return el;
-    } catch(StaleElementReferenceException | IndexOutOfBoundsException e){
+    } catch (StaleElementReferenceException | IndexOutOfBoundsException e) {
       actualElements = collection.getActualElements();
-
-      if(actualElements.size() <= index){
-        throw e;
-      }else{
-        return actualElements.get(index);
-      }
+      return actualElements.get(index);
     }
   }
 
