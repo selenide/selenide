@@ -24,8 +24,8 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @After
-  public void cleanUp(){
-      Configuration.fastSetValue = false;
+  public void cleanUp() {
+    Configuration.fastSetValue = false;
   }
   @Test
   public void cannotSetValueToReadonlyField_slowSetValue() {
