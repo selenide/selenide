@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -22,6 +23,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
     timeout = 10 * averageSeleniumCommandDuration;
   }
 
+  @After
+  public void cleanUp() {
+    Configuration.fastSetValue = false;
+  }
   @Test
   public void cannotSetValueToReadonlyField_slowSetValue() {
     Configuration.fastSetValue = false;
@@ -34,6 +39,18 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @Test
+  public void cannotSetValueToDisabledField_slowSetValue() {
+    Configuration.fastSetValue = false;
+
+    assertThat(verifySetValue2ThrowsException(), anyOf(
+        containsString("Element must be user-editable in order to clear it"),
+        containsString("You may only edit editable elements"),
+        containsString("You may only interact with enabled elements"),
+            containsString("Element is not currently interactable and may not be manipulated")
+    ));
+  }
+
+  @Test
   public void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
     assertThat(verifySetValueThrowsException(), anyOf(
@@ -42,9 +59,23 @@ public class ReadonlyElementsTest extends IntegrationTest {
     ));
   }
 
+  @Test
+  public void cannotSetValueToDisabledField_fastSetValue() {
+    Configuration.fastSetValue = true;
+    assertThat(verifySetValue2ThrowsException(), anyOf(
+            containsString("Cannot change value of disabled element"),
+            containsString("Element is not currently interactable and may not be manipulated")
+    ));
+  }
+
   @Test(expected = InvalidStateException.class)
   public void cannotSetValueToReadonlyTextArea() {
     $("#text-area").val("textArea value");
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void cannotSetValueToDisabledTextArea() {
+    $("#text-area-disabled").val("textArea value");
   }
 
   @Test(expected = InvalidStateException.class)
@@ -99,12 +130,25 @@ public class ReadonlyElementsTest extends IntegrationTest {
   private String verifySetValueThrowsException() {
     try {
       $(By.name("username")).val("another-username");
-      fail("should throw InvalidStateException where setting value to readonly element");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     }
     catch (InvalidStateException expected) {
       $(By.name("username")).shouldBe(empty);
       $(By.name("username")).shouldHave(exactValue(""));
+      return expected.getMessage();
+    }
+  }
+
+  private String verifySetValue2ThrowsException() {
+    try {
+      $(By.name("password")).setValue("another-pwd");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
+      return null;
+    }
+    catch (InvalidStateException expected) {
+      $(By.name("password")).shouldBe(empty);
+      $(By.name("password")).shouldHave(exactValue(""));
       return expected.getMessage();
     }
   }
