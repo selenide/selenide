@@ -59,7 +59,10 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test
   public void cannotSetValueToDisabledField_fastSetValue() {
     Configuration.fastSetValue = true;
-    assertThat(verifySetValue2ThrowsException(), containsString("Cannot change value of disabled element"));
+    assertThat(verifySetValue2ThrowsException(), anyOf(
+            containsString("Cannot change value of disabled element"),
+            containsString("Element is not currently interactable and may not be manipulated")
+    ));
   }
 
   @Test(expected = InvalidStateException.class)
