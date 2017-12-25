@@ -39,10 +39,9 @@ public class SetValue implements Command<WebElement> {
     if (text == null || text.isEmpty()) {
       element.clear();
     } else if (fastSetValue) {
-      element.clear(); // to enforce blur on previous element
       String error = setValueByJs(element, text);
       if (error != null) throw new InvalidStateException(error);
-      events.fireEvent(element, "focus", "keydown", "keypress", "input", "keyup", "change");
+      events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
     } else {
       element.clear();
       element.sendKeys(text);
@@ -54,6 +53,7 @@ public class SetValue implements Command<WebElement> {
     return executeJavaScript(
         "return (function(webelement, text) {" +
             "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
+            "webelement.focus();" +
             "var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));" +
             "webelement.value = " +
             "maxlength == -1 ? text " +
