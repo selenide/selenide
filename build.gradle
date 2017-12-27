@@ -73,4 +73,4 @@ artifacts {
   archives javadocJar
 }
 
-wrapper.gradleVersion = '4.3'
+wrapper.gradleVersion = '4.4.1'
