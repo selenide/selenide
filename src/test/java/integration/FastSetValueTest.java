@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +23,6 @@ public class FastSetValueTest extends IntegrationTest {
     $("#password").setValue("admin");
     $("#usernameHint").should(disappear);
     $("#passwordHint").should(appear);
-
   }
 
   @Test
@@ -37,10 +35,4 @@ public class FastSetValueTest extends IntegrationTest {
     $("#usernameHint").should(disappear);
     $("#passwordHint").should(appear);
   }
-
-  @AfterClass
-  public static void cleanup() {
-    Configuration.fastSetValue = false;
-  }
-
 }
