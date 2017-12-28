@@ -49,6 +49,7 @@ public class Commands {
     add("dragAndDropTo", new DragAndDropTo());
     add("hover", new Hover());
     add("scrollTo", new ScrollTo());
+    add("scrollIntoView", new ScrollIntoView());
   }
 
   private void addInfoCommands() {
@@ -134,7 +135,7 @@ public class Commands {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args) 
+  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args)
       throws IOException {
     Command command = commands.get(methodName);
     if (command == null) {
