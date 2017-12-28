@@ -16,7 +16,6 @@ import static org.junit.Assume.assumeFalse;
 public class UserAgentTest extends IntegrationTest {
   @Test
   public void currentUserAgentTest() {
-    Configuration.browser = "chrome";
     assumeFalse(isHtmlUnit());
 
     open("/start_page.html");
