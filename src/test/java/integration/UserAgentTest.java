@@ -24,6 +24,6 @@ public class UserAgentTest extends IntegrationTest {
 
     assertThat(userAgent, not(isEmptyOrNullString()));
     assertTrue(String.format("Current user agent [%s] should belong to '%s' browser", userAgent, browser),
-      StringUtils.containsIgnoreCase(userAgent, browser));
+        StringUtils.containsIgnoreCase(userAgent, browser));
   }
 }
