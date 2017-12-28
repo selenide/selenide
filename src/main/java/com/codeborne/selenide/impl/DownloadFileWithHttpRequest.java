@@ -38,15 +38,16 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.Selenide.getUserAgent;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class DownloadFileWithHttpRequest {
   private static final Logger log = Logger.getLogger(DownloadFileWithHttpRequest.class.getName());
-  
+
   public static boolean ignoreSelfSignedCerts = true;
-  
+
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
@@ -83,7 +84,8 @@ public class DownloadFileWithHttpRequest {
         .setCookieSpec(CookieSpecs.STANDARD)
         .build()
     );
-    
+    httpGet.setHeader("User-Agent", getUserAgent());
+
     HttpContext localContext = new BasicHttpContext();
     localContext.setAttribute(COOKIE_STORE, mimicCookieState());
 

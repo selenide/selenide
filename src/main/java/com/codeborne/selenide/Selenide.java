@@ -142,7 +142,7 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
-  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl, 
+  public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     open(relativeOrAbsoluteUrl, domain, login, password);
@@ -603,10 +603,10 @@ public class Selenide {
   /**
    * Switch to window/tab/frame/parentFrame/innerFrame/alert.
    * Allows switching to window by title, index, name etc.
-   * 
+   *
    * Similar to org.openqa.selenium.WebDriver#switchTo(), but all methods wait until frame/window/alert
    * appears if it's not visible yet (like other Selenide methods).
-   * 
+   *
    * @return SelenideTargetLocator
    */
   public static SelenideTargetLocator switchTo() {
@@ -646,12 +646,12 @@ public class Selenide {
 
   /**
    * Create a org.openqa.selenium.support.ui.FluentWait instance with Selenide timeout/polling.
-   * 
-   * Sample usage: 
+   *
+   * Sample usage:
    * {@code
    *   Wait().until(invisibilityOfElementLocated(By.id("magic-id")));
    * }
-   * 
+   *
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
   public static FluentWait<WebDriver> Wait() {
@@ -715,7 +715,7 @@ public class Selenide {
     } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
       log.warning(cannotExecuteJs.toString());
       return emptyList();
-    } 
+    }
   }
 
   private static List<String> errorsFromList(List<Object> errors) {
@@ -820,6 +820,15 @@ public class Selenide {
    */
   public static void clearBrowserLocalStorage() {
     executeJavaScript("localStorage.clear();");
+  }
+
+  /**
+   * Get current user agent from browser session
+   *
+   * @return browser user agent
+   */
+  public static String getUserAgent() {
+    return executeJavaScript("return navigator.userAgent;");
   }
 
   private static List<LogEntry> getLogEntries(String logType, Level logLevel) {
