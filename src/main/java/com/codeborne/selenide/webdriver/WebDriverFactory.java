@@ -1,12 +1,9 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Selenide;
-import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.BuildInfo;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.awt.*;
 import java.util.List;
@@ -14,7 +11,6 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static java.util.Arrays.asList;
 
@@ -100,7 +96,7 @@ public class WebDriverFactory {
         (int) toolkit.getScreenSize().getHeight());
   }
 
-  void logSeleniumInfo() {
+  protected void logSeleniumInfo() {
     if (remote == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info(
@@ -109,12 +105,13 @@ public class WebDriverFactory {
     }
   }
 
-  void logBrowserVersion(WebDriver webdriver) {
-    if (!isHeadless()) {
-      Capabilities capabilities = ((RemoteWebDriver) webdriver).getCapabilities();
-      log.info(
-          "BrowserName=" + capabilities.getBrowserName() + " Version=" + capabilities.getVersion()
-              + " Platform=" + capabilities.getPlatform());
+  protected void logBrowserVersion(WebDriver webdriver) {
+    if (webdriver instanceof HasCapabilities) {
+      Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
+      log.info("BrowserName=" + capabilities.getBrowserName() +
+          " Version=" + capabilities.getVersion() + " Platform=" + capabilities.getPlatform());
+    } else {
+      log.info("BrowserName=" + webdriver.getClass().getName());
     }
   }
 }
