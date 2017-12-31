@@ -1,5 +1,5 @@
 == Changelog
-=== 4.9.1 (to be released)
+=== 4.9.1 (released 31.12.2017)
 * fixed bug where disabled input fields were not handled properly by setValue()
 * fixed behaviour of setFastValue, which caused blur event to be ignored
 * #654 fixed ClassCastException in WebDriverFactory#logBrowserVersion()
