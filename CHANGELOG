@@ -1,4 +1,8 @@
 == Changelog
+
+=== 4.10 (planned to **.01.2018)
+* #641 fixed performance of $$ iteration -- thanks to @CaBocuk for PR 653
+
 === 4.9.1 (released 31.12.2017)
 * fixed bug where disabled input fields were not handled properly by setValue()
 * fixed behaviour of setFastValue, which caused blur event to be ignored
