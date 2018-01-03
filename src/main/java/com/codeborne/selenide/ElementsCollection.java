@@ -95,10 +95,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       sleep(collectionsPollingInterval);
     }
     while (System.currentTimeMillis() - startTime < timeoutMs);
-    
     condition.fail(collection, actualElements, lastError, timeoutMs);
   }
-  
   void sleep(long ms) {
     Selenide.sleep(ms);
   }
@@ -193,7 +191,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection) 
+   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection)
    *              that returns List instead of array
    */
   @Deprecated
@@ -242,7 +240,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public SelenideElement get(int index) {
-    return CollectionElement.wrap(collection, index);
+    if (getActualElements().size() <= index) {
+      actualElements = collection.getActualElements();
+    }
+    return CollectionElement.wrap(collection, getActualElements(), index);
   }
 
   /**
