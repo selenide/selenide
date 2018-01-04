@@ -10,7 +10,7 @@ public class GetText implements Command<String> {
   
   @Override
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    WebElement element = locator.getWebElement();
+    WebElement element = locator.findAndAssertElementExists();
     return "select".equalsIgnoreCase(element.getTagName()) ? 
         getSelectedText.execute(proxy, locator, args) : 
         element.getText();
