@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import java.util.logging.Logger;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
@@ -141,6 +142,13 @@ public class Configuration {
   @Deprecated
   public static String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
 
+  /**
+   * Browser capabilities.
+   * Warning: this capabilities will override capabilities were set by system properties.
+   * <p/>
+   * Default value: null
+   */
+  public static DesiredCapabilities browserCapabilities;
   /**
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -66,7 +67,12 @@ abstract class AbstractDriverFactory {
     browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
 
     transferCapabilitiesFromSystemProperties(browserCapabilities);
+    browserCapabilities = mergeCapabilitiesFromConfiguration(browserCapabilities);
     return browserCapabilities;
+  }
+
+  DesiredCapabilities mergeCapabilitiesFromConfiguration(DesiredCapabilities currentCapabilities) {
+    return currentCapabilities.merge(Configuration.browserCapabilities);
   }
 
   private void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
