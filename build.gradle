@@ -53,7 +53,7 @@ dependencies {
     exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
     exclude group: 'org.seleniumhq.selenium', module: 'htmlunit-driver'
   }
-  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.3', transitive: false
+  runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.4', transitive: false
   compile 'com.google.code.gson:gson:2.8.2'
   compile 'com.google.guava:guava:23.6-jre'
   runtime 'commons-codec:commons-codec:1.11'

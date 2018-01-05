@@ -4,6 +4,7 @@
 * #639 - Add "User-Agent" header when downloading file -- thanks to Aleksandr Rasolka @rosolko
 * #556 - add possibility to set custom capabilities for custom Chrome options or Firefox profies  --  Thanks to @SergeyPirogov for PR 556 and @BorisOsipov for PR 664
 * upgrade to htmlunit 2.29 & guava:23.6-jre
+* upgrade to phantomjsdriver 1.4.4
 
 === 4.9.1 (released 31.12.2017)
 * fixed bug where disabled input fields were not handled properly by setValue()
