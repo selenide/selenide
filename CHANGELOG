@@ -2,6 +2,7 @@
 === 4.10.0 (to be released)
 * #641 - Increased Elements Collection performance -- thanks to Artem Savosik @CaBocuk for PR 653
 * #639 - Add "User-Agent" header when downloading file -- thanks to Aleksandr Rasolka @rosolko
+* #556 - add possibility to set custom capabilities for custom Chrome options or Firefox profies  --  Thanks to @SergeyPirogov for PR 556 and @BorisOsipov for PR 664
 
 === 4.9.1 (released 31.12.2017)
 * fixed bug where disabled input fields were not handled properly by setValue()
