@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
@@ -29,6 +30,15 @@ public class ByTextTest extends IntegrationTest {
   public void spacesInTextAreIgnored() {
     $(byText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
     $(withText("L'a Baskerville")).shouldHave(text("L'a Baskerville"));
+  }
+
+  @Test
+  public void nonBreakableSpacesInTextAreIgnored() {
+    $("#hello-world").shouldHave(text("Hello world"));
+    $(byText("Hello world")).shouldHave(attribute("id", "hello-world"));
+    $(withText("Hello world")).shouldHave(text("Hello world"));
+    $(withText("Hello ")).shouldHave(text("Hello world"));
+    $(withText(" world")).shouldHave(text("Hello world"));
   }
 
   @Test
