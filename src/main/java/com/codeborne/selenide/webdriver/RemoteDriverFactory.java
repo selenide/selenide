@@ -1,7 +1,10 @@
 package com.codeborne.selenide.webdriver;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -11,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.remote;
 import static com.codeborne.selenide.WebDriverRunner.*;
 
@@ -28,14 +32,35 @@ class RemoteDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createRemoteDriver(final String remote, final String browser, final Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-      capabilities.setBrowserName(getBrowserNameForGrid());
+      DesiredCapabilities capabilities = getDriverCapabilities(proxy);
       RemoteWebDriver webDriver = new RemoteWebDriver(new URL(remote), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
     }
+  }
+
+  DesiredCapabilities getDriverCapabilities(Proxy proxy) {
+    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+    capabilities.setBrowserName(getBrowserNameForGrid());
+    if (headless) {
+      capabilities.merge(getHeadlessCapabilities());
+    }
+    return capabilities;
+  }
+
+  Capabilities getHeadlessCapabilities() {
+    if (isChrome()) {
+      ChromeOptions options = new ChromeOptions();
+      options.setHeadless(headless);
+      return options;
+    } else if (isFirefox()) {
+      FirefoxOptions options = new FirefoxOptions();
+      options.setHeadless(headless);
+      return options;
+    }
+    return new DesiredCapabilities();
   }
 
   String getBrowserNameForGrid() {
