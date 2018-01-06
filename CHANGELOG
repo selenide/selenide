@@ -1,8 +1,10 @@
 == Changelog
+
 === 4.10.0 (to be released)
-* #641 - Increased Elements Collection performance -- thanks to Artem Savosik @CaBocuk for PR 653
-* #639 - Add "User-Agent" header when downloading file -- thanks to Aleksandr Rasolka @rosolko
-* #556 - add possibility to set custom capabilities for custom Chrome options or Firefox profies  --  Thanks to @SergeyPirogov for PR 556 and @BorisOsipov for PR 664
+* #641 Increased Elements Collection performance -- thanks to Artem Savosik @CaBocuk for PR 653
+* #639 Add "User-Agent" header when downloading file -- thanks to Aleksandr Rasolka @rosolko
+* #556 add possibility to set custom capabilities for custom Chrome options or Firefox profies  --  Thanks to @SergeyPirogov for PR 556 and @BorisOsipov for PR 664
+* #660 add possibility to create headless RemoteDriver  -- thanks to @BorisOsipov for PR 661
 * upgrade to htmlunit 2.29 & guava:23.6-jre
 * upgrade to phantomjsdriver 1.4.4
 
