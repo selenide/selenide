@@ -9,7 +9,6 @@ notifications:
   
 language: java
 sudo: true
-dist: trusty
 cache:
   directories:
   - $HOME/.gradle
