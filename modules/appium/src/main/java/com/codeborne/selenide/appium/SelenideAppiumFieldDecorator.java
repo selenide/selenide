@@ -1,13 +1,5 @@
 package com.codeborne.selenide.appium;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.Selenide;
@@ -28,6 +20,14 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   private final SearchContext searchContext;
@@ -89,23 +89,24 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   }
 
   private List<ElementsContainer> createElementsContainerList(Field field) {
-
     Class<?> listType = getListGenericType(field);
     List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
 
     return selfList
       .stream()
-      .map(element -> {
-        try {
-          return initElementsContainer(listType, element);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-          throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
-        }
-      }).collect(Collectors.toList());
+      .map(element -> initElementsContainerList(field, listType, element))
+      .collect(toList());
   }
 
-  private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
-    throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+  private ElementsContainer initElementsContainerList(Field field, Class<?> listType, SelenideElement element) {
+    try {
+      return initElementsContainer(listType, element);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
+    }
+  }
+
+  private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self) throws Exception {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
