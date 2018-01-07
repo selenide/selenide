@@ -5,8 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
@@ -89,17 +89,19 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   }
 
   private List<ElementsContainer> createElementsContainerList(Field field) {
-    try {
-      List<ElementsContainer> result = new ArrayList<>();
-      Class<?> listType = getListGenericType(field);
-      List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
-      for (SelenideElement element : selfList) {
-        result.add(initElementsContainer(listType, element));
-      }
-      return result;
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
-    }
+
+    Class<?> listType = getListGenericType(field);
+    List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
+
+    return selfList
+      .stream()
+      .map(element -> {
+        try {
+          return initElementsContainer(listType, element);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+          throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
+        }
+      }).collect(Collectors.toList());
   }
 
   private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
