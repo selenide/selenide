@@ -4,8 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
 public class Selectors {
+  private static final String NORMALIZE_SPACE_XPATH = "normalize-space(translate(string(.), '\t\n\r\u00a0', '    '))";
+
   /**
-   * Find element CONTAINING given text (as a substring)
+   * Find element CONTAINING given text (as a substring).
+   *
+   * This method ignores difference between space, \n, \r, \t and &nbsp;
+   * This method ignores multiple spaces.
    *
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
@@ -15,7 +20,10 @@ public class Selectors {
   }
 
   /**
-   * Find element that has EXACTLY this text
+   * Find element that has given text (the whole text, not a substring).
+   *
+   * This method ignores difference between space, \n, \r, \t and &nbsp;
+   * This method ignores multiple spaces.
    *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
@@ -84,7 +92,7 @@ public class Selectors {
     protected final String elementText;
 
     public ByText(String elementText) {
-      super(".//*/text()[normalize-space(.) = " + Quotes.escape(elementText) + "]/parent::*");
+      super(".//*/text()[" + NORMALIZE_SPACE_XPATH + " = " + Quotes.escape(elementText) + "]/parent::*");
       this.elementText = elementText;
     }
 
@@ -102,7 +110,7 @@ public class Selectors {
     protected final String elementText;
 
     public WithText(String elementText) {
-      super(".//*/text()[contains(normalize-space(.), " + Quotes.escape(elementText) + ")]/parent::*");
+      super(".//*/text()[contains(" + NORMALIZE_SPACE_XPATH + ", " + Quotes.escape(elementText) + ")]/parent::*");
       this.elementText = elementText;
     }
 

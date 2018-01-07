@@ -14,7 +14,8 @@ public class SelectorsTest {
     By selector = Selectors.withText("john");
     assertTrue(selector instanceof By.ByXPath);
     assertEquals("with text: john", selector.toString());
-    assertEquals(".//*/text()[contains(normalize-space(.), \"john\")]/parent::*", ((WithText) selector).getXPath());
+    assertEquals(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')), " +
+        "\"john\")]/parent::*", ((WithText) selector).getXPath());
   }
 
   @Test
@@ -22,7 +23,8 @@ public class SelectorsTest {
     By selector = Selectors.withText("Ludvig'van\"Beethoven");
     assertEquals("with text: Ludvig'van\"Beethoven", selector.toString());
     assertTrue(selector instanceof By.ByXPath);
-    assertEquals(".//*/text()[contains(normalize-space(.), concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*", 
+    assertEquals(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')), " +
+            "concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*",
         ((WithText) selector).getXPath());
   }
 
@@ -31,7 +33,8 @@ public class SelectorsTest {
     By selector = Selectors.byText("john");
     assertEquals("by text: john", selector.toString());
     assertTrue(selector instanceof By.ByXPath);
-    assertEquals(".//*/text()[normalize-space(.) = \"john\"]/parent::*", ((ByText) selector).getXPath());
+    assertEquals(".//*/text()[normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')) = \"john\"]/parent::*",
+        ((ByText) selector).getXPath());
   }
 
   @Test
@@ -39,7 +42,8 @@ public class SelectorsTest {
     By selector = Selectors.byText("Ludvig'van\"Beethoven");
     assertEquals("by text: Ludvig'van\"Beethoven", selector.toString());
     assertTrue(selector instanceof By.ByXPath);
-    assertEquals(".//*/text()[normalize-space(.) = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*", 
+    assertEquals(".//*/text()[normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')) = " +
+            "concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*",
         ((ByText) selector).getXPath());
   }
 
