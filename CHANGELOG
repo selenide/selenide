@@ -6,6 +6,7 @@
 * #556 add possibility to set custom capabilities for custom Chrome options or Firefox profies  --  Thanks to @SergeyPirogov for PR 556 and @BorisOsipov for PR 664
 * #660 add possibility to create headless RemoteDriver  -- thanks to @BorisOsipov for PR 661
 * #597 support non-breakable spaces in `byText` and `withText`
+* #649 Provide scrollIntoView to workaround problems in Firefox
 * upgrade to htmlunit 2.29 & guava:23.6-jre
 * upgrade to phantomjsdriver 1.4.4
 
