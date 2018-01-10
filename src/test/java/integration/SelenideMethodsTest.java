@@ -304,6 +304,19 @@ public class SelenideMethodsTest extends IntegrationTest {
     assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
   }
 
+
+  @Test
+  public void userCanFollowLinksUsingScrollIntoViewBoolean() {
+    $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).followLink();
+    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
+  }
+
+  @Test
+  public void userCanFollowLinksUsingScrollIntoViewOptions() {
+    $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").followLink();
+    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
+  }
+
   @Test
   public void userCanUseSeleniumActions() {
     $(By.name("rememberMe")).shouldNotBe(selected);
