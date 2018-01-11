@@ -18,7 +18,7 @@ apply plugin: 'checkstyle'
 
 group='com.codeborne'
 archivesBaseName = 'selenide'
-version='4.10-SNAPSHOT'
+version='4.10'
 
 [compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
 [compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
