@@ -13,6 +13,7 @@ public class BySelectorCollection implements WebElementsCollection {
 
   private final SearchContext parent;
   private final By selector;
+  private List<WebElement> actualElements;
 
   public BySelectorCollection(By selector) {
     this(null, selector);
@@ -24,9 +25,18 @@ public class BySelectorCollection implements WebElementsCollection {
   }
 
   @Override
+  public List<WebElement> getElements() {
+    if (actualElements == null) {
+      return getActualElements();
+    }
+    return actualElements;
+  }
+
+  @Override
   public List<WebElement> getActualElements() {
     SearchContext searchContext = parent == null ? getWebDriver() : parent;
-    return WebElementSelector.instance.findElements(searchContext, selector);
+    actualElements = WebElementSelector.instance.findElements(searchContext, selector);
+    return actualElements;
   }
 
   @Override

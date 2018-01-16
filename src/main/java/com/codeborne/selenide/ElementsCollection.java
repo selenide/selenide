@@ -18,8 +18,6 @@ import static java.util.stream.Collectors.toList;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private final WebElementsCollection collection;
-  private List<WebElement> actualElements;
-  private Exception lastError;
 
   public ElementsCollection(WebElementsCollection collection) {
     this.collection = collection;
@@ -77,7 +75,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
-    lastError = null;
+    Exception lastError = null;
+    List<WebElement> actualElements = null;
     final long startTime = System.currentTimeMillis();
     do {
       try {
@@ -85,7 +84,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         if (condition.apply(actualElements)) {
           return;
         }
-      } catch (WebDriverException elementNotFound) {
+      }
+      catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
 
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
@@ -158,11 +158,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return find(condition);
   }
 
-  private List<WebElement> getActualElements() {
-    if (actualElements == null) {
-      actualElements = collection.getActualElements();
-    }
-    return actualElements;
+  private List<WebElement> getElements() {
+    return collection.getElements();
   }
 
   /**
@@ -170,7 +167,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @return array of texts
    */
   public List<String> texts() {
-    return texts(getActualElements());
+    return texts(getElements());
   }
 
   /**
@@ -178,7 +175,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @Deprecated
   public String[] getTexts() {
-    return getTexts(getActualElements());
+    return getTexts(getElements());
   }
 
   /**
@@ -240,10 +237,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public SelenideElement get(int index) {
-    if (getActualElements().size() <= index) {
-      actualElements = collection.getActualElements();
-    }
-    return CollectionElement.wrap(collection, getActualElements(), index);
+    return CollectionElement.wrap(collection, index);
   }
 
   /**
@@ -268,7 +262,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @return
    */
   public ElementsCollection first(int elements) {
-    List<WebElement> sublist = getActualElements().subList(0, Math.min(elements, size()));
+    List<WebElement> sublist = getElements().subList(0, Math.min(elements, size()));
     return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
   }
 
@@ -278,13 +272,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @return
    */
   public ElementsCollection last(int elements) {
-    List<WebElement> sublist = getActualElements().subList(Math.max(size() - elements, 0), size());
+    List<WebElement> sublist = getElements().subList(Math.max(size() - elements, 0), size());
     return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
   }
 
   @Override
   public int size() {
-    return getActualElements().size();
+    return getElements().size();
   }
 
   @Override
@@ -300,7 +294,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public String toString() {
     try {
-      return elementsToString(getActualElements());
+      return elementsToString(getElements());
     } catch (Exception e) {
       return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
     }

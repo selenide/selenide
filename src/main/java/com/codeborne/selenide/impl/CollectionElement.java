@@ -7,37 +7,33 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 
 public class CollectionElement extends WebElementSource {
-  public static SelenideElement wrap(WebElementsCollection collection, List<WebElement> actualElements, int index) {
+  public static SelenideElement wrap(WebElementsCollection collection, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
         collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-        new SelenideElementProxy(new CollectionElement(collection, actualElements, index)));
+        new SelenideElementProxy(new CollectionElement(collection, index)));
   }
 
   private final WebElementsCollection collection;
-  private List<WebElement> actualElements;
   private final int index;
 
-  CollectionElement(WebElementsCollection collection, List<WebElement> actualElements, int index) {
+  CollectionElement(WebElementsCollection collection, int index) {
     this.collection = collection;
-    this.actualElements = actualElements;
     this.index = index;
   }
 
   @Override
   public WebElement getWebElement() {
     try {
-      WebElement el = actualElements.get(index);
+      WebElement el = collection.getElements().get(index);
       el.isEnabled(); // check staleness
 
       return el;
     } catch (StaleElementReferenceException | IndexOutOfBoundsException e) {
-      actualElements = collection.getActualElements();
-      return actualElements.get(index);
+      return collection.getActualElements().get(index);
     }
   }
 

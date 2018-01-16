@@ -26,11 +26,12 @@ public class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest
     page.h1.shouldHave(Condition.text("Page with selects"));
     assertEquals(3, page.h2s.size());
     page.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
+    page.h2First.shouldBe(visible).shouldHave(text("Dropdown list"));
   }
-
 
   private static class MyPage {
     SelenideElement h1 = $("h1");
     List<SelenideElement> h2s = $$("h2");
+    SelenideElement h2First = $$("h2").get(0);
   }
 }

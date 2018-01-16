@@ -17,7 +17,7 @@ public class SelenideElementListIterator extends SelenideElementIterator impleme
 
   @Override
   public SelenideElement previous() {
-    return CollectionElement.wrap(collection, actualElements, --index);
+    return CollectionElement.wrap(collection, --index);
   }
 
   @Override
