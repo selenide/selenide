@@ -149,7 +149,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
         log.severe("Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds");
       }
       else {
-        log.fine("Closed webdriver in " + duration + " ms");
+        log.info("Closed webdriver in " + duration + " ms");
       }
     }
     else if (proxy != null && !holdBrowserOpen) {
