@@ -148,9 +148,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       if (duration >= closeBrowserTimeoutMs) {
         log.severe("Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds");
       }
-      else if (duration > 200) {
-        log.info("Closed webdriver in " + duration + " ms");
-      }
       else {
         log.fine("Closed webdriver in " + duration + " ms");
       }
