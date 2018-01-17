@@ -19,9 +19,6 @@ class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
 
   @Override
   WebDriver create(final Proxy proxy) {
-    log.info("Firefox 48+ is not supported by legacy Firefox driver. " +
-            "Use browser=firefox with geckodriver, when using it.");
-
     return createLegacyFirefoxDriver(proxy);
   }
 
