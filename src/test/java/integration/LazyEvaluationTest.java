@@ -17,12 +17,17 @@ public class LazyEvaluationTest extends IntegrationTest {
 
   static SelenideElement input1 = $$("input").first();
   static SelenideElement input2 = $$("input").last();
-  static SelenideElement input3 = $$("input").get(1);
+  static SelenideElement input3 = $$("input").get(4);
 
-  static ElementsCollection inputs = $$("input").filterBy(visible);
+
+  static ElementsCollection inputs1 = $$("input").filterBy(visible);
+  static ElementsCollection inputs2 = $$("input").first(2);
+  static ElementsCollection inputs3 = $$("input").last(2);
+
+
 
   @Before
-  public void openTestPageWithImages() {
+  public void openTestPage() {
     openFile("page_with_jquery.html");
   }
 
@@ -33,11 +38,17 @@ public class LazyEvaluationTest extends IntegrationTest {
   }
 
   @Test
-  public void collectionRelatedLazyOperations() {
+  public void singleElementFromCollectionLazyFound() {
     input1.shouldBe(visible);
     input2.shouldBe(visible);
     input3.shouldBe(visible);
-    inputs.shouldHave(sizeGreaterThanOrEqual(1));
+  }
+
+  @Test
+  public void collectionLazyFound() {
+    inputs1.shouldHave(sizeGreaterThanOrEqual(1));
+    inputs2.shouldHaveSize(2);
+    inputs3.shouldHaveSize(2);
   }
 
 
