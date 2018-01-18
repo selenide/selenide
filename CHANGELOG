@@ -2,6 +2,7 @@
 
 === 4.10.1 (released 18.01.2018)
 * #672 fixed lazy evaluation of `$$.get(index)`, `$$.first(n)`, `$$.last(n)`, `$$.last()`
+* #678 upgrade to webdrivermanager:2.1.0
 
 === 4.10 (released 12.01.2018)
 * #641 Increased Elements Collection performance -- thanks to Artem Savosik @CaBocuk for PR 653
