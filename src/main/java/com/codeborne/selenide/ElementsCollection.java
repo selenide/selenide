@@ -250,31 +250,26 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * return the last element of the collection
-   * @return
+   * @return the last element of the collection
    */
   public SelenideElement last() {
-    return get(size() - 1);
+    return LastCollectionElement.wrap(collection);
   }
 
   /**
    * returns the first n elements of the collection
-   * @param elements - number of elements
-   * @return
+   * @param elements number of elements
    */
   public ElementsCollection first(int elements) {
-    List<WebElement> sublist = getElements().subList(0, Math.min(elements, size()));
-    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
+    return new ElementsCollection(new HeadOfCollection(collection, elements));
   }
 
   /**
    * returns the last n elements of the collection
-   * @param elements - number of elements
-   * @return
+   * @param elements number of elements
    */
   public ElementsCollection last(int elements) {
-    List<WebElement> sublist = getElements().subList(Math.max(size() - elements, 0), size());
-    return new ElementsCollection(new WebElementsCollectionWrapper(sublist));
+    return new ElementsCollection(new TailOfCollection(collection, elements));
   }
 
   @Override
