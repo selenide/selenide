@@ -23,10 +23,8 @@ public class CollectionElementTest {
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    WebElementsCollection collection =
-            new WebElementsCollectionWrapper(singletonList(mockedWebElement));
-    SelenideElement selenideElement = CollectionElement.wrap(
-        collection, collection.getActualElements(), 0);
+    WebElementsCollection collection = new WebElementsCollectionWrapper(singletonList(mockedWebElement));
+    SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
     assertEquals("<a>selenide</a>", selenideElement.toString());
 
   }
@@ -38,9 +36,7 @@ public class CollectionElementTest {
     WebElement mockedWebElement2 = mock(WebElement.class);
     List<WebElement> listOfMockedElements = asList(mockedWebElement1, mockedWebElement2);
     when(mockedWebElementCollection.getActualElements()).thenReturn(listOfMockedElements);
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection,
-                                                                mockedWebElementCollection.getActualElements(),
-                                                                1);
+    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     assertEquals(mockedWebElement2, collectionElement.getWebElement());
   }
@@ -51,9 +47,7 @@ public class CollectionElementTest {
     int index = 1;
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection,
-                                                                mockedWebElementCollection.getActualElements(),
-                                                                1);
+    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
     assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.getSearchCriteria());
   }
 
@@ -63,9 +57,7 @@ public class CollectionElementTest {
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     int index = 1;
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection,
-                                                                mockedWebElementCollection.getActualElements(),
-                                                                1);
+    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
     assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.toString());
 
   }
@@ -75,10 +67,7 @@ public class CollectionElementTest {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    int index = 1;
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection,
-                                                                mockedWebElementCollection.getActualElements(),
-                                                                1);
+    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
@@ -95,11 +84,8 @@ public class CollectionElementTest {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(asList(mock(WebElement.class)));
-    int index = 1;
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection,
-                                                                mockedWebElementCollection.getActualElements(),
-                                                                1);
+    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mock(WebElement.class)));
+    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     Condition mockedCollection = mock(Condition.class);
     when(mockedCollection.toString()).thenReturn("Reason description");

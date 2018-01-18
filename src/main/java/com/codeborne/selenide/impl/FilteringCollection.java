@@ -1,15 +1,17 @@
 package com.codeborne.selenide.impl;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.collect.Collections2.filter;
 
 public class FilteringCollection implements WebElementsCollection {
   private final WebElementsCollection originalCollection;
   private final Predicate<WebElement> filter;
+  private List<WebElement> actualElements;
 
   public FilteringCollection(WebElementsCollection originalCollection, Predicate<WebElement> filter) {
     this.originalCollection = originalCollection;
@@ -17,8 +19,17 @@ public class FilteringCollection implements WebElementsCollection {
   }
 
   @Override
+  public List<WebElement> getElements() {
+    if (actualElements == null) {
+      return getActualElements();
+    }
+    return actualElements;
+  }
+
+  @Override
   public List<WebElement> getActualElements() {
-    return Lists.newArrayList(Collections2.filter(originalCollection.getActualElements(), filter));
+    actualElements = new ArrayList<>(filter(originalCollection.getActualElements(), filter));
+    return actualElements;
   }
 
   @Override

@@ -17,6 +17,7 @@ public class LazyEvaluationTest extends IntegrationTest {
 
   static SelenideElement input1 = $$("input").first();
   static SelenideElement input2 = $$("input").last();
+
   static SelenideElement input3 = $$("input").get(2);
 
 

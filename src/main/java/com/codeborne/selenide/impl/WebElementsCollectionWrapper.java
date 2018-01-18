@@ -10,8 +10,12 @@ public class WebElementsCollectionWrapper implements WebElementsCollection {
   private final List<WebElement> elements;
 
   public WebElementsCollectionWrapper(Collection<? extends WebElement> elements) {
-    this.elements = new ArrayList<>(elements.size());
-    this.elements.addAll(elements);
+    this.elements = new ArrayList<>(elements);
+  }
+
+  @Override
+  public List<WebElement> getElements() {
+    return elements;
   }
 
   @Override
