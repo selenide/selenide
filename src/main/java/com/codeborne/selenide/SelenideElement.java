@@ -209,15 +209,21 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   boolean isDisplayed();
 
   /**
-   * Return true iff element matches given condition
+   * immediately returns true if element matches given condition
+   * Method doesn't wait!
+   * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
+   * @see #has
    * @see com.codeborne.selenide.commands.Matches
    */
   boolean is(Condition condition);
 
   /**
-   * Return true iff element matches given condition
+   * immediately returns true if element matches given condition
+   * Method doesn't wait!
+   * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
+   * @see #is
    * @see com.codeborne.selenide.commands.Matches
    */
   boolean has(Condition condition);
