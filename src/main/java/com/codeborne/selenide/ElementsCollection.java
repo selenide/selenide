@@ -242,6 +242,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * return the first element of the collection
+   * NOTICE: $(css) is faster and returns the same result as $$(css).first()
    * @return
    */
   public SelenideElement first() {
