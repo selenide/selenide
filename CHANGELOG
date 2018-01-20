@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.10.1 (released 18.01.2018)
+=== 4.10.01 (released 19.01.2018)
 * #672 fixed lazy evaluation of `$$.get(index)`, `$$.first(n)`, `$$.last(n)`, `$$.last()`
 * #678 upgrade to webdrivermanager:2.1.0
 
