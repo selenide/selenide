@@ -79,6 +79,11 @@ public class ReadonlyElementsTest extends IntegrationTest {
   }
 
   @Test(expected = InvalidStateException.class)
+  public void cannotChangeValueOfDisabledCheckbox() {
+    $(By.name("disabledCheckbox")).setSelected(false);
+  }
+
+  @Test(expected = InvalidStateException.class)
   public void cannotSetValueToReadonlyCheckbox() {
     $(By.name("rememberMe")).setSelected(true);
   }

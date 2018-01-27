@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -49,6 +50,21 @@ public class CheckboxTest extends IntegrationTest {
 
     $(By.name("rememberMe")).setSelected(false);
     $(By.name("rememberMe")).shouldNotBe(selected);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void userCannotSetSelectOnTextInput() {
+    $("#username").setSelected(false);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void userCannotSetSelectOnArbitryElement() {
+    $("#username-mirror").setSelected(false);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void userCannotCheckInvisibleCheckbox() {
+    $(By.name("invisibleCheckbox")).setSelected(false);
   }
 
 }
