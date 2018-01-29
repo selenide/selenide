@@ -18,6 +18,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
     FindsByXPath, WrapsDriver, WrapsElement, org.openqa.selenium.interactions.internal.Locatable {
 
   /**
+   *
+   * @Deprecated this is a very legacy method with strange implementation. Don't use it. Use #click on links too
+   *
    * <p>
    * Actual for &lt;a href&gt; elements. Navigates browser by clicking this link.
    * </p>
@@ -29,6 +32,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *
    * @see com.codeborne.selenide.commands.FollowLink
    */
+  @Deprecated
   void followLink();
 
   /**
