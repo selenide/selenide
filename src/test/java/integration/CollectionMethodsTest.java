@@ -84,22 +84,22 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(
-        texts("dynamic content", "dynamic content2"),
-        texts("mic cont", "content2"),
-        exactTexts(asList("dynamic content", "dynamic content2")));
+            texts("dynamic content", "dynamic content2"),
+            texts("mic cont", "content2"),
+            exactTexts(asList("dynamic content", "dynamic content2")));
   }
 
   @Test
   public void ignoresWhitespacesInTexts() {
     $$("#dynamic-content-container span").shouldHave(
-        texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
-        exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+            texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
+            exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
   }
 
   @Test(expected = TextsMismatch.class)
   public void canCheckThatElementsHaveExactlyCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(
-        exactTexts("content", "content2"));
+            exactTexts("content", "content2"));
   }
 
   @Test(expected = ElementNotFound.class)
@@ -140,7 +140,7 @@ public class CollectionMethodsTest extends IntegrationTest {
   public void errorMessageShouldShow_whichElementInChainWasNotFound() {
     thrown.expect(ElementNotFound.class);
     thrown.expectMessage("Element not found {#multirowTable.findBy(text 'INVALID-TEXT')}");
-    
+
     $$("#multirowTable").findBy(text("INVALID-TEXT")).findAll("valid-selector").shouldHave(texts("foo bar"));
   }
 
@@ -158,7 +158,7 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void collectionMethodsCanBeChained() {
     $$("#multirowTable tr").shouldHave(size(2))
-        .filterBy(text("Norris")).shouldHave(size(1));
+            .filterBy(text("Norris")).shouldHave(size(1));
   }
 
   @Test
@@ -183,7 +183,7 @@ public class CollectionMethodsTest extends IntegrationTest {
   public void canGetCollectionLastElement() {
     $$("#radioButtons input").last().shouldHave(value("woland"));
   }
-  
+
   @Test
   public void canFindElementsByMultipleSelectors() {
     $$(".first_row").shouldHave(size(1));
@@ -194,18 +194,18 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void canIterateCollection_withIterator() {
     Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
-    assertTrue(it.hasNext()); 
+    assertTrue(it.hasNext());
     it.next().shouldHave(text("@livemail.ru"));
 
-    assertTrue(it.hasNext()); 
+    assertTrue(it.hasNext());
     it.next().shouldHave(text("@myrambler.ru"));
-    
-    assertTrue(it.hasNext()); 
+
+    assertTrue(it.hasNext());
     it.next().shouldHave(text("@rusmail.ru"));
-    
-    assertTrue(it.hasNext()); 
+
+    assertTrue(it.hasNext());
     it.next().shouldHave(text("@мыло.ру"));
-  
+
     assertFalse(it.hasNext());
   }
 
@@ -230,7 +230,7 @@ public class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   public void canGetFirstNElements() {
-    ElementsCollection collection =  $$x("//select[@name='domain']/option");
+    ElementsCollection collection = $$x("//select[@name='domain']/option");
     collection.first(2).shouldHaveSize(2);
     collection.first(10).shouldHaveSize(collection.size());
 
@@ -247,7 +247,7 @@ public class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   public void canGetLastNElements() {
-    ElementsCollection collection =  $$x("//select[@name='domain']/option");
+    ElementsCollection collection = $$x("//select[@name='domain']/option");
     collection.last(2).shouldHaveSize(2);
     collection.last(10).shouldHaveSize(collection.size());
 
@@ -260,5 +260,15 @@ public class CollectionMethodsTest extends IntegrationTest {
             .collect(Collectors.toList());
 
     Assert.assertEquals(regularSublist, selenideSublist);
+  }
+
+  @Test
+  public void canChainFilterAndFirst() {
+    $$("div").filterBy(visible).first()
+            .shouldBe(visible)
+            .shouldHave(text("non-clickable element"));
+
+    $$("div").filterBy(visible).get(2).click();
+
   }
 }
