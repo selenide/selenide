@@ -40,6 +40,17 @@ public class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  public void downloadsFileWithCyrillicName() throws IOException {
+    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+
+    File downloadedFile = $(byText("Download file with cyrillic name")).download();
+
+    assertEquals("файл-с-русским-названием.txt", downloadedFile.getName());
+    assertEquals("Превед медвед!", readFileToString(downloadedFile, "UTF-8"));
+    assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+  }
+
+  @Test
   public void downloadExternalFile() throws FileNotFoundException {
     open("http://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
