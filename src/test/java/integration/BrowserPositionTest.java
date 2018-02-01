@@ -2,10 +2,12 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Point;
 
+import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assert.assertEquals;
@@ -18,11 +20,18 @@ public class BrowserPositionTest extends IntegrationTest {
 
   @Before
   public void prepareTestData() {
+    Configuration.browser = WebDriverRunner.CHROME;
+
     position = "30x60";
     String[] coordinates = position.split("x");
     int x = Integer.parseInt(coordinates[0]);
     int y = Integer.parseInt(coordinates[1]);
     point = new Point(x, y);
+  }
+
+  @After
+  public void closeBrowser() {
+    close();
   }
 
   @Test
