@@ -9,7 +9,7 @@ import org.openqa.selenium.Point;
 
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assume.assumeFalse;
@@ -20,8 +20,6 @@ public class BrowserPositionTest extends IntegrationTest {
 
   @Before
   public void prepareTestData() {
-    Configuration.browser = WebDriverRunner.CHROME;
-
     position = "30x60";
     String[] coordinates = position.split("x");
     int x = Integer.parseInt(coordinates[0]);
@@ -36,7 +34,7 @@ public class BrowserPositionTest extends IntegrationTest {
 
   @Test
   public void ableToSetBrowserPosition() {
-    assumeFalse(isHtmlUnit());
+    assumeFalse(isHeadless());
 
     Configuration.browserPosition = position;
 
@@ -47,7 +45,7 @@ public class BrowserPositionTest extends IntegrationTest {
 
   @Test
   public void ableToOpenBrowserWithoutPosition() {
-    assumeFalse(isHtmlUnit());
+    assumeFalse(isHeadless());
 
     open("/start_page.html");
 
