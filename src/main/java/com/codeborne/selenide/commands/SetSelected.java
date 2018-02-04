@@ -17,7 +17,7 @@ public class SetSelected implements Command<WebElement> {
       throw new InvalidStateException("Cannot change invisible element");
     }
     String tag = element.getTagName();
-    if (!tag.equals("options")) {
+    if (!tag.equals("option")) {
       if (tag.equals("input")) {
         String type = element.getAttribute("type");
         if (!type.equals("checkbox") && !type.equals("radio")) {
