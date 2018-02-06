@@ -6,7 +6,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.*;
@@ -62,11 +64,13 @@ class ChromeDriverFactory extends AbstractDriverFactory {
             break;
           }
           case "prefs": {
+            Map<String, Object> prefs = new HashMap<>();
             Arrays.asList(value.split(","))
                     .forEach(expOpt -> {
-                              String[] prefs = expOpt.split("=");
-                              currentChromeOptions.setExperimentalOption(prefs[0], prefs[1]);
+                              String[] keyValue = expOpt.split("=");
+                              prefs.put(keyValue[0], keyValue[1]);
                     });
+            currentChromeOptions.setExperimentalOption("prefs", prefs);
             break;
           }
           default:
