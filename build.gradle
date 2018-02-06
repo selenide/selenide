@@ -16,12 +16,12 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
-group='com.codeborne'
+group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version='4.11-SNAPSHOT'
+version = '4.11-SNAPSHOT'
 
-[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
-[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
+[compileJava, compileTestJava]*.options.collect { options -> options.encoding = 'UTF-8' }
+[compileJava, compileTestJava]*.options.collect { options -> options.debug = true }
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -39,8 +39,8 @@ configurations {
 
 dependencies {
   compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '2.1.0'
-  compile('org.apache.httpcomponents:httpcore:4.4.8')
-  compile('org.seleniumhq.selenium:selenium-java:3.8.1') {
+  compile('org.apache.httpcomponents:httpcore:4.4.9')
+  compile('org.seleniumhq.selenium:selenium-java:3.9.0') {
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
     exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
@@ -55,9 +55,9 @@ dependencies {
   }
   runtime group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.4', transitive: false
   compile 'com.google.code.gson:gson:2.8.2'
-  compile 'com.google.guava:guava:23.6-jre'
+  compile 'com.google.guava:guava:24.0-jre'
   runtime 'commons-codec:commons-codec:1.11'
-  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.29.0', transitive: false
+  provided group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.29.1', transitive: false
   provided group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.29'
   testRuntime group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.29', transitive: false
   compile('net.lightbody.bmp:browsermob-core:2.1.5')
@@ -66,7 +66,7 @@ dependencies {
   provided 'junit:junit:4.12'
   provided 'org.testng:testng:6.9.10'
 
-  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.8.1', transitive: false
+  testCompile group: 'org.seleniumhq.selenium', name: 'selenium-server', version: '3.9.0', transitive: false
   testCompile 'org.mockito:mockito-core:2.13.0'
   testCompile 'org.eclipse.jetty:jetty-server:9.4.8.v20171121'
   testCompile 'org.eclipse.jetty:jetty-servlet:9.4.8.v20171121'
@@ -121,7 +121,7 @@ task checkstyleHtmlTest {
 }
 
 [checkstyleMain, checkstyleTest].each { task ->
-    task.logging.setLevel(LogLevel.LIFECYCLE)
+  task.logging.setLevel(LogLevel.LIFECYCLE)
 }
 
 checkstyleMain.finalizedBy checkstyleHtmlMain
@@ -258,16 +258,16 @@ jar {
   }
 }
 
-task sourcesJar(type: Jar, dependsOn:classes) {
+task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
   from sourceSets.main.allSource
 }
 
 javadoc {
-  failOnError=false
+  failOnError = false
 }
 
-task javadocJar(type: Jar, dependsOn:javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
@@ -279,7 +279,7 @@ artifacts {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.4.1'
+  gradleVersion = '4.5.1'
   jarFile = './gradle-wrapper/gradle-wrapper.jar'
   scriptFile = './gradle'
 }
