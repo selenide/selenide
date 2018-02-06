@@ -131,7 +131,10 @@ public class Configuration {
 
   /**
    * @deprecated this options allowed only a single switch.
-   *   Please use more generic -Dchromeoptions.args=<comma-separated list of switches> instead
+   *   Please use instead more generic -Dchromeoptions.args=<comma-separated list of switches>
+   *   <p>
+   *   or use -Dchromeoptions.prefs=<comma-separated dictionary of key=value>
+   *   <p>
    *
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
    * Can be configured either programmatically or by system property, 

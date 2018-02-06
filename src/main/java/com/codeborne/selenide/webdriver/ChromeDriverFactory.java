@@ -42,8 +42,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return options;
   }
 
+
   /**
-   * This method only handles so-called "arguments" for ChromeOptions (there is also "ExperimentalOptions", "Extensions" etc.)
+   * This method only handles so-called "arguments" and "preferences" for ChromeOptions (there is also "Extensions" etc.)
    *
    * @param currentChromeOptions
    * @return
@@ -54,13 +55,26 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
-        if (capability.equals("args")) {
-          List<String> args = Arrays.asList(value.split(","));
-          currentChromeOptions.addArguments(args);
-        } else {
-          log.warning(capability + "is ignored." +
-                  "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                  "are supported for the chromeoptions at the moment");
+        switch (capability) {
+          case "args": {
+            List<String> args = Arrays.asList(value.split(","));
+            currentChromeOptions.addArguments(args);
+            break;
+          }
+          case "prefs": {
+            Arrays.asList(value.split(","))
+                    .forEach(expOpt -> {
+                              String[] prefs = expOpt.split("=");
+                              currentChromeOptions.setExperimentalOption(prefs[0], prefs[1]);
+                    });
+            break;
+          }
+          default:
+            log.warning(capability + "is ignored." +
+                    "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
+                    "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
+                    "are supported for the chromeoptions at the moment");
+            break;
         }
       }
     }
