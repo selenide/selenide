@@ -46,7 +46,8 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
 
   /**
-   * This method only handles so-called "arguments" and "preferences" for ChromeOptions (there is also "Extensions" etc.)
+   * This method only handles so-called "arguments" and "preferences"
+   * for ChromeOptions (there is also "Extensions" etc.)
    *
    * @param currentChromeOptions
    * @return
@@ -65,16 +66,26 @@ class ChromeDriverFactory extends AbstractDriverFactory {
           }
           case "prefs": {
             Map<String, Object> prefs = new HashMap<>();
-            Arrays.asList(value.split(","))
-                    .forEach(expOpt -> {
-                              String[] keyValue = expOpt.split("=");
-                              prefs.put(keyValue[0], keyValue[1]);
-                    });
+            String[] allPrefs = value.split(",");
+            for (String pref: allPrefs) {
+              String[] keyValue = pref.split("=");
+              if (keyValue.length == 1){
+                log.warning("Missing '=' sign while parsing <key=value> pairs from "
+                        + capability + ". Key '" + keyValue[0] + "' is ignored.");
+                continue;
+              }
+              else if (keyValue.length > 2){
+                log.warning("More than one '=' sign while parsing <key=value> pairs from "
+                        + capability + ". Key '" + keyValue[0] + "' is ignored.");
+                continue;
+              }
+              prefs.put(keyValue[0], parseString(keyValue[1]));
+            }
             currentChromeOptions.setExperimentalOption("prefs", prefs);
             break;
           }
           default:
-            log.warning(capability + "is ignored." +
+            log.warning(capability + " is ignored." +
                     "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
                     "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
                     "are supported for the chromeoptions at the moment");
@@ -83,5 +94,24 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       }
     }
     return currentChromeOptions;
+  }
+
+  private Object parseString(String value) {
+    if (value.equals("true")){
+
+      return true;
+    }
+    if (value.equals("false")){
+
+      return false;
+    }
+    try {
+
+      return Integer.parseInt(value);
+    }
+    catch (NumberFormatException e){
+
+      return value;
+    }
   }
 }
