@@ -96,6 +96,12 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return currentChromeOptions;
   }
 
+  /**
+   * prefs Map <String, Object> can contain Int/Boolean/Strings as value
+   * we parse "true/false" to boolean, numbers to int, and the rest stays string
+   * @param value
+   * @return
+   */
   private Object parseString(String value) {
     if (value.equals("true")) {
 
