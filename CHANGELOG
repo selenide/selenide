@@ -1,5 +1,6 @@
 == Changelog
 * deprecated followLink method - just use click instead.
+* #688 support downloading files with cyrillic name
 
 
 === 4.10.01 (released 19.01.2018)
