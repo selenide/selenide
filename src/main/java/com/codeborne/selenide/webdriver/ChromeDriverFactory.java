@@ -69,12 +69,12 @@ class ChromeDriverFactory extends AbstractDriverFactory {
             String[] allPrefs = value.split(",");
             for (String pref: allPrefs) {
               String[] keyValue = pref.split("=");
-              if (keyValue.length == 1){
+              if (keyValue.length == 1) {
                 log.warning("Missing '=' sign while parsing <key=value> pairs from "
                         + capability + ". Key '" + keyValue[0] + "' is ignored.");
                 continue;
               }
-              else if (keyValue.length > 2){
+              else if (keyValue.length > 2) {
                 log.warning("More than one '=' sign while parsing <key=value> pairs from "
                         + capability + ". Key '" + keyValue[0] + "' is ignored.");
                 continue;
@@ -97,11 +97,11 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   private Object parseString(String value) {
-    if (value.equals("true")){
+    if (value.equals("true")) {
 
       return true;
     }
-    if (value.equals("false")){
+    if (value.equals("false")) {
 
       return false;
     }
@@ -109,7 +109,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
       return Integer.parseInt(value);
     }
-    catch (NumberFormatException e){
+    catch (NumberFormatException ignore) {
 
       return value;
     }
