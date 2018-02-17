@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -65,22 +66,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
             break;
           }
           case "prefs": {
-            Map<String, Object> prefs = new HashMap<>();
-            String[] allPrefs = value.split(",");
-            for (String pref: allPrefs) {
-              String[] keyValue = pref.split("=");
-              if (keyValue.length == 1) {
-                log.warning("Missing '=' sign while parsing <key=value> pairs from "
-                        + capability + ". Key '" + keyValue[0] + "' is ignored.");
-                continue;
-              }
-              else if (keyValue.length > 2) {
-                log.warning("More than one '=' sign while parsing <key=value> pairs from "
-                        + capability + ". Key '" + keyValue[0] + "' is ignored.");
-                continue;
-              }
-              prefs.put(keyValue[0], parseString(keyValue[1]));
-            }
+            Map<String, Object> prefs = parsePreferencesFromString(value);
             currentChromeOptions.setExperimentalOption("prefs", prefs);
             break;
           }
@@ -96,28 +82,47 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return currentChromeOptions;
   }
 
+  private Map<String, Object> parsePreferencesFromString(String preferencesString) {
+    Map<String, Object> prefs = new HashMap<>();
+    String[] allPrefs = preferencesString.split(",");
+    for (String pref : allPrefs) {
+      String[] keyValue = pref.split("=");
+
+      if (keyValue.length == 1) {
+        log.warning(String.format(
+            "Missing '=' sign while parsing <key=value> pairs from %s. Key '%s' is ignored.",
+            preferencesString, keyValue[0]));
+        continue;
+      } else if (keyValue.length > 2) {
+        log.warning(String.format(
+            "More than one '=' sign while parsing <key=value> pairs from %s. Key '%s' is ignored.",
+            preferencesString, keyValue[0]));
+        continue;
+      }
+
+      Object prefValue = convertStringToNearestObjectType(keyValue[1]);
+      prefs.put(keyValue[0], prefValue);
+    }
+    return prefs;
+  }
+
   /**
-   * prefs Map <String, Object> can contain Int/Boolean/Strings as value
-   * we parse "true/false" to boolean, numbers to int, and the rest stays string
-   * @param value
-   * @return
+   * Converts String to Boolean\Integer or returns original String.
+   * @param value string to convert
+   * @return string's object representation
    */
-  private Object parseString(String value) {
-    if (value.equals("true")) {
-
-      return true;
-    }
-    if (value.equals("false")) {
-
-      return false;
-    }
-    try {
-
-      return Integer.parseInt(value);
-    }
-    catch (NumberFormatException ignore) {
-
-      return value;
+  private Object convertStringToNearestObjectType(String value) {
+    switch (value) {
+      case "true":
+        return true;
+      case "false":
+        return false;
+      default: {
+        if (NumberUtils.isParsable(value)) {
+          return Integer.parseInt(value);
+        }
+        return value;
+      }
     }
   }
 }
