@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.barchart.udt:barchart-udt-bundle:2.3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.barchart.udt/barchart-udt-bundle/2.3.0/3d1a29b2b08d20533ad08918411528dd1880515e/barchart-udt-bundle-2.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.barchart.udt/barchart-udt-bundle/2.3.0/dbb3b69c400494d28555f6c9c343c873cbe3a4bb/barchart-udt-bundle-2.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

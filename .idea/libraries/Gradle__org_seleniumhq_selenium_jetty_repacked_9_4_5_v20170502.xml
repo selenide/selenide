@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.seleniumhq.selenium:jetty-repacked:9.4.5.v20170502">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/jetty-repacked/9.4.5.v20170502/59ec814960e98c7d88e5a1c727b969c3dd08cf1/jetty-repacked-9.4.5.v20170502.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.seleniumhq.selenium/jetty-repacked/9.4.5.v20170502/b04f3ee8f5e43fa3b162981b50bb72fe1acabb33/jetty-repacked-9.4.5.v20170502-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

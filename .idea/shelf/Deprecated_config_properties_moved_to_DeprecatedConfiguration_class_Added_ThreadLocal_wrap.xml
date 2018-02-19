@@ -1,0 +1,4 @@
+<changelist name="Deprecated_config_properties_moved_to_DeprecatedConfiguration_class_Added_ThreadLocal_wrap" date="1504677188400" recycled="false">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Deprecated_config_properties_moved_to_DeprecatedConfiguration_class_Added_ThreadLocal_wrap/shelved.patch" />
+  <option name="DESCRIPTION" value="Deprecated config properties moved to DeprecatedConfiguration class Added ThreadLocal wrapper for ConfigurationContainer with reportFolder property as example  TODO(1): create a non-static copy of each property from DeprecatedConfiguration class in ConfigurationContainer TODO(2): mark every copied static property as deprecated with corresponding JavaDoc comment TODO(3): update all the code in Selenide to replace Configuration.&lt;property&gt; with Configuration.get().&lt;property&gt;" />
+</changelist>

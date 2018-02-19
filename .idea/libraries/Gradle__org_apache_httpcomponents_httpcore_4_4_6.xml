@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.httpcomponents:httpcore:4.4.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.6/e3fd8ced1f52c7574af952e2e6da0df8df08eb82/httpcore-4.4.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.6/57cc0a7af46d66754e632bddc558a913b9e66ac3/httpcore-4.4.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
