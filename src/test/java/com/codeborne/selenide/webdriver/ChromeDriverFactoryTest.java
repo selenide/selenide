@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class ChomeDriverFactoryTest {
+public class ChromeDriverFactoryTest {
 
   private Proxy proxy = mock(Proxy.class);
 
@@ -24,13 +24,13 @@ public class ChomeDriverFactoryTest {
   @SuppressWarnings("unchecked")
   @Test
   public void transferChromeOptionArgumentsFromSystemPropsToDriver() throws IOException {
-    System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123");
+    System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123,--user-agent=\"A,B\"");
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments, hasItems("abdd"));
     assertThat(optionArguments, hasItems("--abcd"));
     assertThat(optionArguments, hasItems("xcvcd=123"));
+    assertThat(optionArguments, hasItems("--user-agent=A,B"));
   }
-
 }

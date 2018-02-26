@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -55,15 +56,29 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         if (capability.equals("args")) {
-          List<String> args = Arrays.asList(value.split(","));
+          List<String> args = splitArgs(value);
           currentChromeOptions.addArguments(args);
         } else {
           log.warning(capability + "is ignored." +
                   "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                  "are supported for the chromeoptions at the moment");
+                  "are supported for the chromeoptions at the moment." +
+                  "If you want to use argument, which contains commas (e.g. user-agent) - " +
+                  "you should wrap it in quotes.");
         }
       }
     }
     return currentChromeOptions;
+  }
+
+  private List<String> splitArgs(String args) {
+    ArrayList<String> commaSeparated = new ArrayList<>(Arrays.asList(args.split(",")));
+    for (int i = 0; i < commaSeparated.size(); i++) {
+      if (commaSeparated.get(i).contains("\"") && commaSeparated.get(i + 1).contains("\"")) {
+        String withQuotes = commaSeparated.get(i) + "," + commaSeparated.get(i + 1);
+        commaSeparated.set(i, withQuotes.replace("\"", ""));
+        commaSeparated.remove(i + 1);
+      }
+    }
+    return commaSeparated;
   }
 }
