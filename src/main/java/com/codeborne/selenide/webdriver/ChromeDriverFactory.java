@@ -56,7 +56,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         if (capability.equals("args")) {
-          List<String> args = splitArgs(value);
+          List<String> args = splitStringTakingCareOfQuotes(value);
           currentChromeOptions.addArguments(args);
         } else {
           log.warning(capability + "is ignored." +
@@ -70,7 +70,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return currentChromeOptions;
   }
 
-  private List<String> splitArgs(String args) {
+  private List<String> splitStringTakingCareOfQuotes(String args) {
     ArrayList<String> commaSeparated = new ArrayList<>(Arrays.asList(args.split(",")));
     for (int i = 0; i < commaSeparated.size(); i++) {
       if (commaSeparated.get(i).contains("\"") && commaSeparated.get(i + 1).contains("\"")) {
