@@ -38,7 +38,9 @@ public class HttpHelperTest {
         "Content-Disposition", "attachment; filename*=UTF-8''Na%C3%AFve%20file.txt").get());
 
     assertEquals("файл-с-русским.txt", helper.getFileNameFromContentDisposition(
-        "content-disposition", "attachement; filename=UTF-8''%D1%84%D0%B0%D0%B9%D0%BB-%D1%81-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%BC.txt").get());
+        "content-disposition",
+        "attachement; filename=UTF-8''%D1%84%D0%B0%D0%B9%D0%BB-%D1%81-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%BC.txt")
+        .get());
   }
 
   @Test
