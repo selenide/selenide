@@ -34,7 +34,7 @@
     </script>
   </head>
   <body onload="initBlur(); scheduleFillTextArea();">
-  <div style="display: none"></div>
+  <div style="display: none">abcd</div>
     <div id="non-clickable-element" 
          style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
       <a href="http://google.com">non-clickable element</a>
@@ -123,7 +123,7 @@
             <input name="password" value="" maxlength="24"/>
           </label> <br/>
           <input type="checkbox" name="rememberMe">Remember me<br/><br/>
-
+          <input type="checkbox" name="invisibleCheckbox" style="display: none">Invisible<br/><br/>
           <textarea id="text-area" rows="1" cols="60"></textarea>
           <textarea id="empty-text-area" rows="1" cols="1"></textarea>
           <input id="age" name="age" value="18"/>

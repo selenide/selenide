@@ -40,4 +40,17 @@ public class MultipleSelectTest extends IntegrationTest {
         size(2),
         texts("Кот \"Бегемот\"", "Theodor Woland"));
   }
+
+  @Test
+  public void userCanUseSetSelectedOnOptions() {
+    select.$("option[value=cat]").setSelected(true);
+
+    select.getSelectedOptions().shouldHave(
+            size(1),
+            texts("Кот \"Бегемот\""));
+
+    select.$("option[value=cat]").setSelected(false);
+
+    select.getSelectedOptions().shouldHave(size(0));
+  }
 }
