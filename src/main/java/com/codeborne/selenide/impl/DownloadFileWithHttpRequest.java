@@ -33,10 +33,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Selenide.getUserAgent;
 import static com.codeborne.selenide.impl.Describe.describe;
@@ -47,6 +46,8 @@ public class DownloadFileWithHttpRequest {
   private static final Logger log = Logger.getLogger(DownloadFileWithHttpRequest.class.getName());
 
   public static boolean ignoreSelfSignedCerts = true;
+
+  private HttpHelper httpHelper = new HttpHelper();
 
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
@@ -132,9 +133,9 @@ public class DownloadFileWithHttpRequest {
 
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
     for (Header header : response.getAllHeaders()) {
-      String fileName = getFileNameFromContentDisposition(header.getName(), header.getValue());
-      if (fileName != null) {
-        return fileName;
+      Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
+      if (fileName.isPresent()) {
+        return fileName.get();
       }
     }
 
@@ -143,15 +144,7 @@ public class DownloadFileWithHttpRequest {
       log.info(header.getName() + '=' + header.getValue());
     }
 
-    return new URL(fileToDownloadLocation).getFile().replaceFirst("/|\\\\", "");
-  }
-
-  protected String getFileNameFromContentDisposition(String headerName, String headerValue) {
-    if ("Content-Disposition".equalsIgnoreCase(headerName)) {
-      Matcher regex = Pattern.compile(".*filename=\"?([^\"]*)\"?.*").matcher(headerValue);
-      return regex.matches() ? regex.replaceFirst("$1") : null;
-    }
-    return null;
+    return new URL(fileToDownloadLocation).getFile().replaceFirst("[/\\\\]", "");
   }
 
   protected BasicCookieStore mimicCookieState() {
