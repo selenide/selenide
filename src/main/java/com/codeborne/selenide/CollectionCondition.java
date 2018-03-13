@@ -56,6 +56,24 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   public static CollectionCondition texts(List<String> expectedTexts) {
     return new Texts(expectedTexts);
   }
+  
+  /**
+   * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  public static CollectionCondition textsInAnyOrder(String... expectedTexts) {
+    return new TextsInAnyOrder(expectedTexts);
+  }
+  
+  /**
+   * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
+   *
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   */
+  public static CollectionCondition textsInAnyOrder(List<String> expectedTexts) {
+    return new TextsInAnyOrder(expectedTexts);
+  }
 
   /**
    * Checks that given collection has given texts (each collection element EQUALS TO corresponding text)
