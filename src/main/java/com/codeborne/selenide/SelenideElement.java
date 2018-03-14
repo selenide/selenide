@@ -641,9 +641,9 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   /**
    * Ask browser to scrolls the element on which it's called into the visible area of the browser window.
    * <p>
-   * If <b>alignToTop</b> boolean value if <i>true</i> - the top of the element will be aligned to the top.
+   * If <b>alignToTop</b> boolean value is <i>true</i> - the top of the element will be aligned to the top.
    * <p>
-   * If <b>alignToTop</b> boolean value if <i>false</i> - the bottom of the element will be aligned to the bottom.
+   * If <b>alignToTop</b> boolean value is <i>false</i> - the bottom of the element will be aligned to the bottom.
    * Usage:
    * <pre>
    *     element.scrollIntoView(true);
