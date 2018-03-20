@@ -121,6 +121,14 @@ public class Configuration {
           System.getProperty("selenide.browser-size"));
 
   /**
+   * The browser window position on screen.
+   * Can be configured either programmatically or by system property "-Dselenide.browserPosition=10x10".
+   *
+   * Default value: none (browser window position will not be set explicitly)
+   */
+  public static String browserPosition = System.getProperty("selenide.browserPosition");
+
+  /**
    * The browser window is maximized when started.
    * Can be configured either programmatically or by system property "-Dselenide.startMaximized=true".
    * <p>
@@ -137,7 +145,7 @@ public class Configuration {
    *   <p>
    *
    * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property, 
+   * Can be configured either programmatically or by system property,
    * i.e. "-Dselenide.chrome.switches=--disable-popup-blocking".
    *
    * Default value: none
@@ -158,20 +166,20 @@ public class Configuration {
    *
    * Can be configured either programmatically or by system property "-Dselenide.pageLoadStrategy=eager".
    * Default value: "normal".
-   * 
+   *
    *  - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
    *  - `eager`: return after DOMContentLoaded fires;
    *  - `none`: return immediately
    *
    *  In some cases `eager` can bring performance boosts for the slow tests.
    *  Though, we left default value `normal` because we afraid to break users' existing tests.
-   * 
+   *
    * See https://w3c.github.io/webdriver/webdriver-spec.html#dfn-page-loading-strategy
    * @since 3.5
    */
   public static String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
           System.getProperty("selenide.page-load-strategy", "normal"));
-  
+
   /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
@@ -335,12 +343,12 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
-  
+
   public enum FileDownloadMode {
     /**
      * Download files via direct http request.
-     * Works only for <a href></a> elements. 
-     * Sends GET request to "href" with all cookies from current browser session. 
+     * Works only for <a href></a> elements.
+     * Sends GET request to "href" with all cookies from current browser session.
      */
     HTTPGET,
 
