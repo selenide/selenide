@@ -6,6 +6,7 @@
 * #692 added support for `-Dchromeoptions.prefs=profile.block_third_party_cookies=false,profile.avatar_index=26`  -- thanks to Tymur Kubai aka @sirdir
 * #686 fix occasional NPE's in SelenideReport  -- thanks to @dkorobtsov
 * #478 added method `$$.shouldHave(textsInAnyOrder("Push", "Image", "Email"))`-- thanks @hyunil-shin for PR #589
+* #687 Add ability to set browser window position  -- thanks to Aleksandr Rasolka @rosolko for PR 687
 
 === 4.10.01 (released 19.01.2018)
 * #672 fixed lazy evaluation of `$$.get(index)`, `$$.first(n)`, `$$.last(n)`, `$$.last()`
