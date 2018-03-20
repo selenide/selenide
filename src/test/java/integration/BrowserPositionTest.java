@@ -17,12 +17,12 @@ public class BrowserPositionTest extends IntegrationTest {
   @Before
   @After
   public void closeBrowser() {
-    assumeFalse(isHeadless());
     close();
   }
 
   @Test
   public void ableToSetBrowserPosition() {
+    assumeFalse(isHeadless());
     Configuration.browserPosition = "30x60";
 
     open("/start_page.html");
@@ -32,6 +32,7 @@ public class BrowserPositionTest extends IntegrationTest {
 
   @Test
   public void anotherBrowserPosition() {
+    assumeFalse(isHeadless());
     Configuration.browserPosition = "110x100";
 
     open("/start_page.html");
