@@ -40,6 +40,22 @@ public class Screenshots {
   }
 
   /**
+   * Take screenshot of WebElement/SelenideElement in iframe
+   * @return a temporary file, not guaranteed to be stored after tests complete.
+   */
+  public static File takeScreenShot(WebElement element, WebElement iframe) {
+    return screenshots.takeScreenshot(element, iframe);
+  }
+
+  /**
+   * Take screenshot of WebElement/SelenideElement in iframe
+   * @return buffered image
+   */
+  public static BufferedImage takeScreenShotAsImage(WebElement element, WebElement iframe) {
+    return screenshots.takeScreenshotAsImage(element, iframe);
+  }
+
+  /**
    * Take screenshot of the WebElement/SelenideElement
    * @return buffered image
    */

@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.reportsFolder;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.io.File.separatorChar;
 import static java.util.logging.Level.SEVERE;
@@ -124,6 +125,20 @@ public class ScreenShotLaboratory {
     }
   }
 
+  public File takeScreenshot(WebElement element, WebElement iframe) {
+    try {
+      BufferedImage dest = takeScreenshotAsImage(element, iframe);
+      File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      ensureFolderExists(screenshotOfElement);
+      ImageIO.write(dest, "png", screenshotOfElement);
+      return screenshotOfElement;
+    }
+    catch (IOException e) {
+      printOnce("takeScreenshot", e);
+      return null;
+    }
+  }
+
   public BufferedImage takeScreenshotAsImage(WebElement element) {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
@@ -159,6 +174,52 @@ public class ScreenShotLaboratory {
       log.warning("Cannot take screenshot because element is not displayed on current screen position");
       return null;
     }
+  }
+
+  public BufferedImage takeScreenshotAsImage(WebElement element, WebElement iframe) {
+    if (!WebDriverRunner.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
+      return null;
+    }
+
+    WebDriver webdriver = getWebDriver();
+    if (!(webdriver instanceof TakesScreenshot)) {
+      log.warning("Cannot take screenshot because browser does not support screenshots");
+      return null;
+    }
+    byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
+    Point iframeLocation = iframe.getLocation();
+    int iframeWidth;
+    int iframeHeight;
+    BufferedImage img;
+    try {
+      img = ImageIO.read(new ByteArrayInputStream(screen));
+      iframeWidth = iframe.getSize().getWidth();
+      iframeHeight = iframe.getSize().getHeight();
+      if (iframeWidth > img.getWidth()) {
+        iframeWidth = img.getWidth() - iframeLocation.getX();
+      }
+      if (iframeHeight > img.getHeight()) {
+        iframeHeight = img.getHeight() - iframeLocation.getY();
+      }
+    }
+    catch (IOException e) {
+      printOnce("takeScreenshotImage", e);
+      return null;
+    }
+    switchTo().frame(iframe);
+    Point elementLocation = element.getLocation();
+    int elementWidth = element.getSize().getWidth();
+    int elementHeight = element.getSize().getHeight();
+    if (elementWidth > iframeWidth) {
+      elementWidth = iframeWidth - elementLocation.getX();
+    }
+    if (elementHeight > iframeHeight) {
+      elementHeight = iframeHeight - elementLocation.getY();
+    }
+    switchTo().defaultContent();
+    return img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
+      elementWidth, elementHeight);
   }
 
   public File takeScreenShotAsFile() {
