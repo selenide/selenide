@@ -1,6 +1,4 @@
-plugins {
-  id 'signing'
-}
+apply plugin: 'signing'
 
 defaultTasks 'clean', 'check', 'allTests', 'install', 'uploadArchives'
 
