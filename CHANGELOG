@@ -3,10 +3,11 @@
 === 4.11.01 (planned to xx.03.2018)
 * deprecated followLink method - just use click instead.
 * #688 support downloading files with cyrillic name
-* #692 added support for `-Dchromeoptions.prefs=profile.block_third_party_cookies=false,profile.avatar_index=26`  -- thanks to Tymur Kubai aka @sirdir
-* #686 fix occasional NPE's in SelenideReport  -- thanks to @dkorobtsov
-* #478 added method `$$.shouldHave(textsInAnyOrder("Push", "Image", "Email"))`-- thanks @hyunil-shin for PR #589
-* #687 Add ability to set browser window position  -- thanks to Aleksandr Rasolka @rosolko for PR 687
+* #692 added support for `-Dchromeoptions.prefs=profile.block_third_party_cookies=false,profile.avatar_index=26` -- thanks to Tymur Kubai aka @sirdir
+* #686 fix occasional NPE's in SelenideReport -- thanks to @dkorobtsov
+* #478 added method `$$.shouldHave(textsInAnyOrder("Push", "Image", "Email"))` -- thanks @hyunil-shin for PR #589
+* #687 Add ability to set browser window position -- thanks to Aliaksandr Rasolka @rosolko for PR 687
+* #655 fix listeners soft asserts return null screenshot for failed test -- thanks to Boris Osipov @BorisOsipov for PR #659
 
 === 4.10.01 (released 19.01.2018)
 * #672 fixed lazy evaluation of `$$.get(index)`, `$$.first(n)`, `$$.last(n)`, `$$.last()`
