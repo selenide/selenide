@@ -1,3 +1,4 @@
+apply from: 'build.gradle'
 apply plugin: 'signing'
 
 defaultTasks 'clean', 'check', 'allTests', 'install', 'uploadArchives'
