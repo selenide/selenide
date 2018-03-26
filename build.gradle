@@ -1,9 +1,11 @@
+import com.github.spotbugs.SpotBugsTask
+
 plugins {
   id 'java'
   id 'maven'
   id 'jacoco'
   id 'checkstyle'
-  id 'findbugs'
+  id 'com.github.spotbugs' version '1.6.1'
   id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
@@ -75,15 +77,14 @@ task libsTest(type: Sync) {
 
 compileJava.dependsOn libsProd, libsTest
 
-findbugs {
-  toolVersion = "3.0.1"
+spotbugs {
   sourceSets = [sourceSets.main]
   effort = "max"
-  reportsDir = file("$project.buildDir/reports/findbugs")
-  excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
+  reportsDir = file("$project.buildDir/reports/spotbugs")
+  excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
 }
 
-tasks.withType(FindBugs) {
+tasks.withType(SpotBugsTask) {
   reports {
     xml.enabled = true
     html.enabled = false
