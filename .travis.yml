@@ -3,10 +3,10 @@ branches:
     - master
 
 notifications:
-  slack: 
+  slack:
     rooms:
       secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
-  
+
 language: java
 sudo: true
 cache:
@@ -18,9 +18,9 @@ script: "./gradle clean check test chrome htmlunit --info"
 jdk:
   - oraclejdk8
 
-before_install:  
+before_install:
  - export CHROME_BIN=/usr/bin/google-chrome
- - export DISPLAY=:99.0 
+ - export DISPLAY=:99.0
  - sh -e /etc/init.d/xvfb start
  - sudo apt-get update
  - sudo apt-get install -y libappindicator1 fonts-liberation
@@ -29,7 +29,7 @@ before_install:
  - rm -fr /home/travis/.m2/repository/webdriver/
 
 after_success:
-- ./gradle jacocoTestReport coveralls
+- ./gradlew jacocoTestReport coveralls
 - bash <(curl -s https://codecov.io/bash)
 
 after_script: "./.upload_reports.sh"
