@@ -21,6 +21,11 @@ public class SimpleReport {
   public void finish(String title) {
     EventsCollector logEventListener = SelenideLogger.removeListener("simpleReport");
 
+    if (logEventListener == null) {
+      log.warning("Can not publish report because Selenide logger has not started.");
+      return;
+    }
+
     OptionalInt maxLineLength = logEventListener.events()
             .stream()
             .map(LogEvent::getElement)

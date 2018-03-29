@@ -23,6 +23,7 @@ public class WebDriverFactoryTest {
   public void setUp() {
     Configuration.browser = null;
     Configuration.browserSize = null;
+    Configuration.browserPosition = null;
     Configuration.startMaximized = false;
   }
 
@@ -62,4 +63,12 @@ public class WebDriverFactoryTest {
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));
   }
 
+  @Test
+  public void canConfigureBrowserWindowPosition() {
+    Configuration.browserPosition = "20x40";
+
+    factory.adjustBrowserPosition(webdriver);
+
+    verify(webdriver.manage().window()).setPosition(new Point(20, 40));
+  }
 }

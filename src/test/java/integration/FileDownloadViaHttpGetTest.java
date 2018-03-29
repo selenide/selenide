@@ -39,6 +39,17 @@ public class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
   }
 
+  @Test
+  public void downloadsFileWithCyrillicName() throws IOException {
+    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+
+    File downloadedFile = $(byText("Download file with cyrillic name")).download();
+
+    assertEquals("файл-с-русским-названием.txt", downloadedFile.getName());
+    assertEquals("Превед медвед!", readFileToString(downloadedFile, "UTF-8"));
+    assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+  }
+
   @Test(expected = FileNotFoundException.class)
   public void downloadMissingFile() throws IOException {
     $(byText("Download missing file")).download();

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
 import net.lightbody.bmp.filters.ResponseFilter;
@@ -10,25 +11,17 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
 
+  private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
   private final List<File> downloadedFiles = new ArrayList<>();
   private final List<Response> responses = new ArrayList<>();
-  private final Pattern patternContentDisposition = 
-      Pattern.compile(".*filename\\*?=\"?([^\";]*)\"?(;charset=.*)?.*", CASE_INSENSITIVE);
 
   /**
    * Activate this filter.
@@ -97,20 +90,12 @@ public class FileDownloadFilter implements ResponseFilter {
 
   String getFileName(HttpResponse response) {
     for (Map.Entry<String, String> header : response.headers().entries()) {
-      String fileName = getFileNameFromContentDisposition(header.getKey(), header.getValue());
-      if (fileName != null) {
-        return fileName;
+      Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getKey(), header.getValue());
+      if (fileName.isPresent()) {
+        return fileName.get();
       }
     }
 
-    return null;
-  }
-
-  protected String getFileNameFromContentDisposition(String headerName, String headerValue) {
-    if ("Content-Disposition".equalsIgnoreCase(headerName) && headerValue != null) {
-      Matcher regex = patternContentDisposition.matcher(headerValue);
-      return regex.matches() ? regex.replaceFirst("$1") : null;
-    }
     return null;
   }
 

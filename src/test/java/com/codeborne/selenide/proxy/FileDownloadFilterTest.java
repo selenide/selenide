@@ -34,33 +34,6 @@ public class FileDownloadFilterTest {
   }
 
   @Test
-  public void extractsFileNameFromHttpHeader() {
-    assertEquals("statement.xls", filter.getFileNameFromContentDisposition(
-        "Content-Disposition", "Content-Disposition=attachment; filename=statement.xls"));
-
-    assertEquals("statement-40817810048000102279.pdf", filter.getFileNameFromContentDisposition(
-        "Content-Disposition", "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\""));
-
-    assertEquals("selenide-2.6.1.jar", filter.getFileNameFromContentDisposition(
-        "content-disposition", "attachement; filename=selenide-2.6.1.jar"));
-
-    assertEquals("Prices.csv", filter.getFileNameFromContentDisposition(
-        "Content-Disposition", "attachment; filename=Prices.csv;charset=UTF-8"));
-
-    assertEquals("Naïve file.txt", filter.getFileNameFromContentDisposition(
-        "Content-Disposition", "Content-Disposition: attachment; filename=Naïve file.txt"));
-
-    assertEquals("Naïve file.txt", filter.getFileNameFromContentDisposition(
-        "Content-Disposition", "Content-Disposition: ATTACHMENT; FILENAME=Naïve file.txt"));
-  }
-
-  @Test
-  public void fileNameIsNull_ifContentDispositionHeaderIsEmpty() {
-    assertNull(filter.getFileNameFromContentDisposition("Content-Disposition", null));
-    assertNull(filter.getFileNameFromContentDisposition("Content-Disposition", ""));
-  }
-
-  @Test
   public void getsFileNameFromResponseHeader() {
     mockHeaders()
         .add("content-disposition", "attachement; filename=report.pdf")

@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.internal.BuildInfo;
 
 import java.awt.*;
@@ -52,11 +53,27 @@ public class WebDriverFactory {
         .orElseGet(() -> new DefaultDriverFactory().create(proxy));
 
     webdriver = adjustBrowserSize(webdriver);
+    webdriver = adjustBrowserPosition(webdriver);
 
     logBrowserVersion(webdriver);
     log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
     logSeleniumInfo();
     return webdriver;
+  }
+
+  protected WebDriver adjustBrowserPosition(WebDriver driver) {
+    if (browserPosition != null) {
+      log.info("Set browser position to " + browserPosition);
+      String[] coordinates = browserPosition.split("x");
+      int x = Integer.parseInt(coordinates[0]);
+      int y = Integer.parseInt(coordinates[1]);
+      Point target = new Point(x, y);
+      Point current = driver.manage().window().getPosition();
+      if (!current.equals(target)) {
+        driver.manage().window().setPosition(target);
+      }
+    }
+    return driver;
   }
 
   protected WebDriver adjustBrowserSize(WebDriver driver) {

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -155,7 +156,7 @@ public class LocalHttpServer {
 
       response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
-      response.setHeader("content-disposition", "attachment; filename=" + request.getPathInfo());
+      response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
       response.setContentType(getContentType(fileName));
 
       printResponse(response, fileContent);
