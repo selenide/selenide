@@ -49,7 +49,7 @@ uploadArchives {
           }
           developer {
             id 'vinogradoff'
-            name 'Aleksei Vinogradov'
+            name 'Alexei Vinogradov'
           }
           developer {
             id 'angryziber'
