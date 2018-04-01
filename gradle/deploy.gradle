@@ -1,7 +1,3 @@
-signing {
-  sign configurations.archives
-}
-
 jar {
   manifest {
     attributes(
@@ -31,75 +27,79 @@ artifacts {
   archives javadocJar
 }
 
-ext {
-  sonatypeUsername = project.properties['sonatypeUsername'] ?: 'unknown'
-  sonatypePassword = project.properties['sonatypePassword'] ?: 'unknown'
-}
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+if (project.hasProperty("signing.keyId")) {
+  apply plugin: 'signing'
 
-      repository(url: project.version.endsWith("-SNAPSHOT") ?
-        'https://oss.sonatype.org/content/repositories/snapshots/' :
-        'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-        authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
-      }
+  signing {
+    sign configurations.archives
+  }
 
-      pom.project {
-        name archivesBaseName
-        packaging 'jar'
-        description 'Selenide = concise API for Selenium WebDriver'
-        url 'https://github.com/codeborne/selenide'
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        scm {
-          url 'scm:git@github.com:codeborne/selenide.git'
-          connection 'scm:git@github.com:codeborne/selenide.git'
-          developerConnection 'scm:git@github.com:codeborne/selenide.git'
+        repository(url: project.version.endsWith("-SNAPSHOT") ?
+          'https://oss.sonatype.org/content/repositories/snapshots/' :
+          'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+          authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
         }
 
-        licenses {
-          license {
-            name 'MIT'
-            url 'https://opensource.org/licenses/MIT'
-            distribution 'repo'
+        pom.project {
+          name archivesBaseName
+          packaging 'jar'
+          description 'Selenide = concise API for Selenium WebDriver'
+          url 'https://github.com/codeborne/selenide'
+
+          scm {
+            url 'scm:git@github.com:codeborne/selenide.git'
+            connection 'scm:git@github.com:codeborne/selenide.git'
+            developerConnection 'scm:git@github.com:codeborne/selenide.git'
+          }
+
+          licenses {
+            license {
+              name 'MIT'
+              url 'https://opensource.org/licenses/MIT'
+              distribution 'repo'
+            }
+          }
+
+          developers {
+            developer {
+              id 'asolntsev'
+              name 'Andrei Solntsev'
+            }
+            developer {
+              id 'BorisOsipov'
+              name 'Boris Osipov'
+            }
+            developer {
+              id 'rosolko'
+              name 'Aliaksandr Rasolka'
+            }
+            developer {
+              id 'vinogradoff'
+              name 'Alexei Vinogradov'
+            }
           }
         }
 
-        developers {
-          developer {
-            id 'asolntsev'
-            name 'Andrei Solntsev'
-          }
-          developer {
-            id 'BorisOsipov'
-            name 'Boris Osipov'
-          }
-          developer {
-            id 'rosolko'
-            name 'Aliaksandr Rasolka'
-          }
-          developer {
-            id 'vinogradoff'
-            name 'Alexei Vinogradov'
-          }
+        //mess with the generated pom to set the 'packaging' tag
+        pom.withXml { XmlProvider xmlProvider ->
+          def xml = xmlProvider.asString()
+          def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
+
+          pomXml.version[0] + { packaging('jar') }
+
+          def newXml = new StringWriter()
+          def printer = new XmlNodePrinter(new PrintWriter(newXml))
+          printer.preserveWhitespace = true
+          printer.print(pomXml)
+          xml.setLength(0)
+          xml.append(newXml.toString())
         }
-      }
-
-      //mess with the generated pom to set the 'packaging' tag
-      pom.withXml { XmlProvider xmlProvider ->
-        def xml = xmlProvider.asString()
-        def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
-
-        pomXml.version[0] + { packaging('jar') }
-
-        def newXml = new StringWriter()
-        def printer = new XmlNodePrinter(new PrintWriter(newXml))
-        printer.preserveWhitespace = true
-        printer.print(pomXml)
-        xml.setLength(0)
-        xml.append(newXml.toString())
       }
     }
   }
