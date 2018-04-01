@@ -5,9 +5,11 @@ plugins {
   id 'maven'
   id 'jacoco'
   id 'checkstyle'
+  id 'signing'
   id 'com.github.spotbugs' version '1.6.1'
   id 'com.github.kt3k.coveralls' version '2.8.2'
 }
+apply from: 'deploy.gradle'
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'

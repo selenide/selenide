@@ -1,10 +1,10 @@
-apply from: 'build.gradle'
-apply plugin: 'signing'
-
-defaultTasks 'clean', 'check', 'allTests', 'install', 'uploadArchives'
-
 signing {
   sign configurations.archives
+}
+
+ext {
+  sonatypeUsername = project.properties['sonatypeUsername'] ?: 'unknown'
+  sonatypePassword = project.properties['sonatypePassword'] ?: 'unknown'
 }
 
 uploadArchives {
