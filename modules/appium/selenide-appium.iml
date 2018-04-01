@@ -8,7 +8,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="selenide" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -16,10 +15,11 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/.ideaLibSources/java-client-4.1.2-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/java-client-5.0.4-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="selenide" />
   </component>
 </module>
