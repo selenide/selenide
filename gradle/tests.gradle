@@ -1,0 +1,85 @@
+test {
+  include 'com/codeborne/selenide/**/*'
+}
+
+task ie(type: Test) {
+  systemProperties['selenide.browser'] = 'ie'
+  systemProperties['selenide.timeout'] = '8000'
+  include 'integration/**/*'
+  exclude '**/AlertText.*'
+  exclude '**/ConfirmTest.*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task edge(type: Test) {
+  systemProperties['selenide.browser'] = 'edge'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task chrome(type: Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task safari(type: Test) {
+  systemProperties['selenide.browser'] = 'safari'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task htmlunit(type: Test) {
+  systemProperties['selenide.browser'] = 'htmlunit'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task phantomjs(type: Test) {
+  systemProperties['selenide.browser'] = 'phantomjs'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task firefox(type: Test) {
+  systemProperties['selenide.browser'] = 'firefox'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task legacy_firefox(type: Test) {
+  systemProperties['selenide.browser'] = 'legacy_firefox'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task jbrowser(type: Test) {
+  systemProperties['selenide.browser'] = 'jbrowser'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task grid(type: Test) {
+  include 'grid/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task testng(type: Test) {
+  useTestNG()
+  include '**/*'
+  systemProperties['selenide.browser'] = 'htmlunit'
+}
+
+tasks.withType(Test).all { testTask ->
+  testTask.systemProperties['file.encoding'] = 'UTF-8'
+  testTask.systemProperties['BUILD_URL'] = System.getenv()['BUILD_URL']
+  // testTask.maxParallelForks = 2
+  testTask.systemProperties += System.properties
+  testTask.jacoco {
+    enabled = true
+    includes = ['com/codeborne/selenide/**/*']
+  }
+  testTask.outputs.upToDateWhen { false }
+}
+
+task allTests(dependsOn: ['clean', 'test', 'chrome', 'htmlunit', 'phantomjs']) {}
