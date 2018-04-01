@@ -73,16 +73,16 @@ uploadArchives {
             name 'Andrei Solntsev'
           }
           developer {
-            id 'vadger'
-            name 'Vadim Gerasimov'
+            id 'BorisOsipov'
+            name 'Boris Osipov'
+          }
+          developer {
+            id 'rosolko'
+            name 'Aliaksandr Rasolka'
           }
           developer {
             id 'vinogradoff'
             name 'Alexei Vinogradov'
-          }
-          developer {
-            id 'angryziber'
-            name 'Anton Keks'
           }
         }
       }
