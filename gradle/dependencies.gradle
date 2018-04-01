@@ -8,7 +8,7 @@ configurations {
 }
 
 dependencies {
-  implementation('org.seleniumhq.selenium:selenium-java:3.11.0') {
+  api('org.seleniumhq.selenium:selenium-java:3.11.0') {
     exclude group: 'commons-codec', module: 'commons-codec'
     exclude group: 'com.google.guava', module: 'guava'
     exclude group: 'com.google.code.gson', module: 'gson'
@@ -33,7 +33,7 @@ dependencies {
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25') { transitive = false }
 
   testImplementation('org.seleniumhq.selenium:selenium-server:3.11.0') { transitive = false }
-  testImplementation('org.mockito:mockito-core:2.16.0')
+  testImplementation('org.mockito:mockito-core:2.17.0')
   testImplementation('org.eclipse.jetty:jetty-server:9.4.9.v20180320')
   testImplementation('org.eclipse.jetty:jetty-servlet:9.4.9.v20180320')
   testImplementation('commons-fileupload:commons-fileupload:1.3.3')
@@ -42,13 +42,12 @@ dependencies {
 }
 
 task libsProd(type: Sync) {
-  from configurations.compile
-  from configurations.runtime
+  from configurations.compileClasspath
   into "$buildDir/lib-prod"
 }
 
 task libsTest(type: Sync) {
-  from configurations.testRuntime
+  from configurations.testRuntimeClasspath - configurations.compileClasspath
   into "$buildDir/lib-test"
 }
 
