@@ -136,6 +136,10 @@ public class WebDriverRunner {
     return webdriverContainer.getAndCheckWebDriver();
   }
 
+  /**
+   * Get selenide proxy. Currently it's activated only if Configuration.fileDownload == PROXY
+   * @return null if proxy server is not started
+   */
   public static SelenideProxyServer getSelenideProxy() {
     return webdriverContainer.getProxyServer();
   }
