@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -58,11 +59,11 @@ public class WebDriverRunner {
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */
   public static final String OPERA = "opera";
-  
+
   /**
    * To use JbrowserDriver, you need to include extra dependency to your project:
    * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
-   * 
+   *
    * Note: You need minimum of Java 8.
    */
   public static final String JBROWSER = "jbrowser";
@@ -133,6 +134,10 @@ public class WebDriverRunner {
    */
   public static WebDriver getAndCheckWebDriver() {
     return webdriverContainer.getAndCheckWebDriver();
+  }
+
+  public static SelenideProxyServer getSelenideProxy() {
+    return webdriverContainer.getProxyServer();
   }
 
   /**
@@ -232,7 +237,7 @@ public class WebDriverRunner {
   public static boolean isOpera() {
     return OPERA.equalsIgnoreCase(browser);
   }
-  
+
   /**
    * Is Selenide configured to use JBrowser browser
    */

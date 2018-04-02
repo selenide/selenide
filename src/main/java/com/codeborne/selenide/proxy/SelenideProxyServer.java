@@ -17,7 +17,7 @@ import static java.lang.Integer.parseInt;
 
 /**
  * Selenide own proxy server to intercept server responses
- * 
+ *
  * It holds map of request and response filters by name.
  */
 public class SelenideProxyServer {
@@ -33,7 +33,7 @@ public class SelenideProxyServer {
       addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, maxSize));
     }
   };
-  
+
   protected int port;
   protected Map<String, RequestFilter> requestFilters = new HashMap<>();
   protected Map<String, ResponseFilter> responseFilters = new HashMap<>();
@@ -50,7 +50,7 @@ public class SelenideProxyServer {
 
   /**
    * Start the server
-   * 
+   *
    * It automatically adds one response filter "download" that can intercept downloaded files.
    */
   public void start() {
@@ -67,12 +67,12 @@ public class SelenideProxyServer {
     port = proxy.getPort();
   }
 
-  private void addRequestFilter(String name, RequestFilter requestFilter) {
+  public void addRequestFilter(String name, RequestFilter requestFilter) {
     proxy.addRequestFilter(requestFilter);
     requestFilters.put(name, requestFilter);
   }
 
-  private void addResponseFilter(String name, ResponseFilter responseFilter) {
+  public void addResponseFilter(String name, ResponseFilter responseFilter) {
     proxy.addResponseFilter(responseFilter);
     responseFilters.put(name, responseFilter);
   }
@@ -113,7 +113,7 @@ public class SelenideProxyServer {
 
   /**
    * Get response filter by name
-   * 
+   *
    * By default, the only one filter "download" is available.
    */
   @SuppressWarnings("unchecked")
