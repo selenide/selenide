@@ -52,8 +52,8 @@ public class ProxyServerUsageTest extends IntegrationTest {
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#submit").click();
 
-    assertEquals(1, requests.size());
-    assertEquals(1, responses.size());
+    assertEquals("All requests: " + requests, 1, requests.size());
+    assertEquals("All responses: " + responses, 1, responses.size());
 
     assertThat(requests.get(0), containsString("/upload"));
     assertThat(requests.get(0), containsString("Content-Disposition: form-data; name=\"cv\"; filename=\"hello_world.txt\""));
