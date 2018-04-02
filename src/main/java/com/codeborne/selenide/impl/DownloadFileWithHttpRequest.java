@@ -72,9 +72,14 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
-    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : HttpClients.createDefault();
+    CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
+    configureHttpGet(httpGet);
+    addHttpHeaders(httpGet);
+    return httpClient.execute(httpGet, createHttpContext());
+  }
 
+  protected void configureHttpGet(HttpGet httpGet) {
     httpGet.setConfig(RequestConfig.custom()
         .setConnectTimeout((int) Configuration.timeout)
         .setSocketTimeout((int) Configuration.timeout)
@@ -85,12 +90,10 @@ public class DownloadFileWithHttpRequest {
         .setCookieSpec(CookieSpecs.STANDARD)
         .build()
     );
-    httpGet.setHeader("User-Agent", getUserAgent());
+  }
 
-    HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(COOKIE_STORE, mimicCookieState());
-
-    return httpClient.execute(httpGet, localContext);
+  protected CloseableHttpClient createDefaultHttpClient() {
+    return HttpClients.createDefault();
   }
 
   private static class TrustAllStrategy implements TrustStrategy {
@@ -104,7 +107,7 @@ public class DownloadFileWithHttpRequest {
    configure HttpClient to ignore self-signed certs
    as described here: http://literatejava.com/networks/ignore-ssl-certificate-errors-apache-httpclient-4-4/
   */
-  private CloseableHttpClient createTrustingHttpClient() throws IOException {
+  protected CloseableHttpClient createTrustingHttpClient() throws IOException {
     try {
       HttpClientBuilder builder = HttpClientBuilder.create();
       SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy()).build();
@@ -125,6 +128,16 @@ public class DownloadFileWithHttpRequest {
     catch (Exception e) {
       throw new IOException(e);
     }
+  }
+
+  protected HttpContext createHttpContext() {
+    HttpContext localContext = new BasicHttpContext();
+    localContext.setAttribute(COOKIE_STORE, mimicCookieState());
+    return localContext;
+  }
+
+  protected void addHttpHeaders(HttpGet httpGet) {
+    httpGet.setHeader("User-Agent", getUserAgent());
   }
 
   protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
