@@ -38,14 +38,18 @@ public class ProxyServerUsageTest extends IntegrationTest {
     getSelenideProxy().addRequestFilter("proxy-usages.request", new RequestFilter() {
       @Override
       public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-        requests.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+        if (!messageInfo.getUrl().contains("gstatic.com")) {
+          requests.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+        }
         return null;
       }
     });
     getSelenideProxy().addResponseFilter("proxy-usages.response", new ResponseFilter() {
       @Override
       public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-        responses.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+        if (!messageInfo.getUrl().contains("gstatic.com")) {
+          responses.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+        }
       }
     });
 
