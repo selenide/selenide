@@ -6,12 +6,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.CHROME;
@@ -61,7 +58,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         String value = System.getProperties().getProperty(key);
         switch (capability) {
           case "args": {
-            List<String> args = splitStringTakingCareOfQuotes(value);
+            List<String> args = splitStringTakingCareOfEscapedCommas(value);
             currentChromeOptions.addArguments(args);
             break;
           }
@@ -72,7 +69,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
           }
           default:
             log.warning(capability + " is ignored." +
-                    "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
+                    "Only so-called arguments (chromeoptions.args=<values comma separated, escaped commas are ignored>) " +
                     "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
                     "are supported for the chromeoptions at the moment");
             break;
@@ -82,16 +79,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     return currentChromeOptions;
   }
 
-  private List<String> splitStringTakingCareOfQuotes(String args) {
-    ArrayList<String> commaSeparated = new ArrayList<>(Arrays.asList(args.split(",")));
-    for (int i = 0; i < commaSeparated.size(); i++) {
-      if (commaSeparated.get(i).contains("\"") && commaSeparated.get(i + 1).contains("\"")) {
-        String withQuotes = commaSeparated.get(i) + "," + commaSeparated.get(i + 1);
-        commaSeparated.set(i, withQuotes.replace("\"", ""));
-        commaSeparated.remove(i + 1);
-      }
-    }
-    return commaSeparated;
+  private List<String> splitStringTakingCareOfEscapedCommas(String args) {
+    List<String> splittedStrings = new ArrayList<>(Arrays.asList(args.split("(?<!\\\\),")));
+    return splittedStrings.stream().map(s -> s.replaceAll("\\\\,", ",")).collect(Collectors.toList());
   }
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {
