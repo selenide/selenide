@@ -2,13 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -176,7 +170,7 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public BufferedImage takeScreenshotAsImage(WebElement element, WebElement iframe) {
+  private WebDriver checkIfFullyValidDriver() {
     if (!WebDriverRunner.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
@@ -187,27 +181,41 @@ public class ScreenShotLaboratory {
       log.warning("Cannot take screenshot because browser does not support screenshots");
       return null;
     }
+    else if (!(webdriver instanceof JavascriptExecutor)) {
+      log.warning("Cannot take screenshot as driver is not supporting javascript execution");
+      return null;
+    }
+    return webdriver;
+  }
+
+  public BufferedImage takeScreenshotAsImage(WebElement element, WebElement iframe) {
+    WebDriver webdriver = checkIfFullyValidDriver();
+    if (webdriver == null) {
+      return null;
+    }
     byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
     Point iframeLocation = iframe.getLocation();
-    int iframeWidth;
-    int iframeHeight;
     BufferedImage img;
     try {
       img = ImageIO.read(new ByteArrayInputStream(screen));
-      iframeWidth = iframe.getSize().getWidth();
-      iframeHeight = iframe.getSize().getHeight();
-      if (iframeWidth > img.getWidth()) {
-        iframeWidth = img.getWidth() - iframeLocation.getX();
-      }
-      if (iframeHeight > img.getHeight()) {
-        iframeHeight = img.getHeight() - iframeLocation.getY();
-      }
     }
     catch (IOException e) {
       printOnce("takeScreenshotImage", e);
       return null;
     }
+    catch (RasterFormatException ex) {
+      log.warning("Cannot take screenshot because iframe is not displayed");
+      return null;
+    }
+    int iframeHeight = iframe.getSize().getHeight();
     switchTo().frame(iframe);
+    int iframeWidth = ((Long) ((JavascriptExecutor) webdriver).executeScript("return document.body.clientWidth")).intValue();
+    if (iframeHeight > img.getHeight()) {
+      iframeHeight = img.getHeight() - iframeLocation.getY();
+    }
+    if (iframeWidth > img.getWidth()) {
+      iframeWidth = img.getWidth() - iframeLocation.getX();
+    }
     Point elementLocation = element.getLocation();
     int elementWidth = element.getSize().getWidth();
     int elementHeight = element.getSize().getHeight();
@@ -218,8 +226,15 @@ public class ScreenShotLaboratory {
       elementHeight = iframeHeight - elementLocation.getY();
     }
     switchTo().defaultContent();
-    return img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
-      elementWidth, elementHeight);
+    try {
+      img = img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
+        elementWidth, elementHeight);
+    }
+    catch (RasterFormatException ex) {
+      log.warning("Cannot take screenshot because element is not displayed in iframe");
+      return null;
+    }
+    return img;
   }
 
   public File takeScreenShotAsFile() {
