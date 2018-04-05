@@ -4,9 +4,11 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
+import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getFocusedElement;
 
 /**
@@ -562,6 +564,23 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public String toString() {
         return firstFailedCondition == null ? super.toString() : firstFailedCondition.toString();
+      }
+    };
+  }
+
+  /**
+   * Used to apply a condition on a child of the element
+   * Example element.child("span", have(text("abc"))
+   * @param childCssSelector the CSS selector of the child inside the element
+   * @param condition the condition to check on this child
+   * @return
+   */
+  public static Condition child(final String childCssSelector, final Condition condition) {
+    return new Condition("child " + childCssSelector + " has " + condition.name) {
+      @Override
+      public boolean apply(WebElement element) {
+        SelenideElement child = $(element.findElement(By.cssSelector(childCssSelector)));
+        return child.has(condition);
       }
     };
   }
