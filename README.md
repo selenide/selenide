@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 [![Coverage Status](https://coveralls.io/repos/codeborne/selenide/badge.svg?branch=master&service=github)](https://coveralls.io/github/codeborne/selenide?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/codeborne/selenide/blob/master/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
 
@@ -56,11 +55,11 @@ See [Frequently asked questions](http://selenide.org/faq.html)
 ```bash
 git clone https://github.com/codeborne/selenide.git
 cd selenide
-./gradle jar
+./gradlew jar
 ```
 After build you'll find Selenide's .jar file under `build/libs/` directory.
 
-To build Selenide on Windows use `gradle.bat jar` command.
+To build Selenide on Windows use `gradlew.bat jar` command.
 
 Feel free to fork, clone, build, run tests and contribute pull requests for Selenide!
 

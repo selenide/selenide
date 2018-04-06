@@ -60,7 +60,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      SelenideLogger.commitStep(log, error);
+      SelenideLogger.commitStep(log, UIAssertionError.wrap(error, collectionsTimeout));
       switch (assertionMode) {
         case SOFT:
           return this;

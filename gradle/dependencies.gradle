@@ -1,0 +1,54 @@
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  provided
+  compile.extendsFrom provided
+}
+
+dependencies {
+  api('org.seleniumhq.selenium:selenium-java:3.11.0') {
+    exclude group: 'commons-codec', module: 'commons-codec'
+    exclude group: 'com.google.guava', module: 'guava'
+    exclude group: 'com.google.code.gson', module: 'gson'
+    exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+    exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
+  }
+  implementation('io.github.bonigarcia:webdrivermanager:2.1.0')
+  implementation('org.apache.httpcomponents:httpcore:4.4.9')
+  implementation('com.google.code.gson:gson:2.8.2')
+  implementation('com.google.guava:guava:24.1-jre')
+  implementation('net.lightbody.bmp:browsermob-core:2.1.5')
+
+  runtimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
+  runtimeOnly('commons-codec:commons-codec:1.11')
+
+  provided('org.seleniumhq.selenium:htmlunit-driver:2.29.3') { transitive = false }
+  provided('net.sourceforge.htmlunit:htmlunit:2.29')
+  provided('junit:junit:4.12')
+  provided('org.testng:testng:6.9.10')
+
+  testRuntimeOnly('net.sourceforge.htmlunit:htmlunit:2.29') { transitive = false }
+  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25') { transitive = false }
+
+  testImplementation('org.seleniumhq.selenium:selenium-server:3.11.0') { transitive = false }
+  testImplementation('org.mockito:mockito-core:2.17.0')
+  testImplementation('org.eclipse.jetty:jetty-server:9.4.9.v20180320')
+  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.9.v20180320')
+  testImplementation('commons-fileupload:commons-fileupload:1.3.3')
+  testImplementation('com.automation-remarks:video-recorder-core:1.4.1')
+  testImplementation('com.automation-remarks:video-recorder-junit:1.4.1')
+}
+
+task libsProd(type: Sync) {
+  from configurations.compileClasspath
+  into "$buildDir/lib-prod"
+}
+
+task libsTest(type: Sync) {
+  from configurations.testRuntimeClasspath - configurations.compileClasspath
+  into "$buildDir/lib-test"
+}
+
+compileJava.dependsOn libsProd, libsTest

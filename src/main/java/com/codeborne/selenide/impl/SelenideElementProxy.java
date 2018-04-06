@@ -65,7 +65,7 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      SelenideLogger.commitStep(log, error);
+      SelenideLogger.commitStep(log, UIAssertionError.wrap(error, timeoutMs));
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else

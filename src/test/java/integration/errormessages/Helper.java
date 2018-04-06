@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Helper {
-  static void assertScreenshot(UIAssertionError expected) {
+  public static void assertScreenshot(UIAssertionError expected) {
     if (WebDriverRunner.getWebDriver() instanceof TakesScreenshot) {
       assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
     }
