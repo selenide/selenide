@@ -8,8 +8,16 @@ import org.openqa.selenium.WebElement;
 import java.io.IOException;
 
 public class GetSelectedValue implements Command<String> {
-  private Command<SelenideElement> getSelectedOption = new GetSelectedOption();
-  
+  private Command<SelenideElement> getSelectedOption;
+
+  public GetSelectedValue() {
+    this.getSelectedOption = new GetSelectedOption();
+  }
+
+  public GetSelectedValue(Command<SelenideElement> getSelectedOption) {
+    this.getSelectedOption = getSelectedOption;
+  }
+
   @Override
   public String execute(SelenideElement proxy, WebElementSource selectElement, Object[] args) throws IOException {
     WebElement option = getSelectedOption.execute(proxy, selectElement, args);

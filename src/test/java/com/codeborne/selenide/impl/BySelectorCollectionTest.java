@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -11,9 +12,14 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BySelectorCollectionTest {
+
+  private SelenideElement mockedWebElement = mock(SelenideElement.class);
 
   @Test
   public void testNoParentConstructor() {
@@ -24,7 +30,6 @@ public class BySelectorCollectionTest {
 
   @Test
   public void testWithWebElementParentConstructor() {
-    SelenideElement mockedWebElement = mock(SelenideElement.class);
     when(mockedWebElement.getSearchCriteria()).thenReturn("By.tagName: a");
 
     BySelectorCollection bySelectorCollection = new BySelectorCollection(mockedWebElement, By.name("selenide"));
@@ -39,16 +44,25 @@ public class BySelectorCollectionTest {
     assertEquals("By.name: selenide", description);
   }
 
+  @Test
+  public void testGetElementsMethod() {
+    BySelectorCollection bySelectorCollection = spy(new BySelectorCollection(new NotWebElement(), By.name("selenide")));
+    assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
+    assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
+    verify(bySelectorCollection, times(1)).getActualElements();
+
+  }
+
   private class NotWebElement implements SearchContext {
 
     @Override
     public List<WebElement> findElements(By by) {
-      return singletonList(mock(WebElement.class));
+      return singletonList(mockedWebElement);
     }
 
     @Override
     public WebElement findElement(By by) {
-      return mock(WebElement.class);
+      return mockedWebElement;
     }
   }
 }

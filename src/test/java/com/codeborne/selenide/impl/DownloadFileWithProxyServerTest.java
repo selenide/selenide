@@ -32,13 +32,13 @@ public class DownloadFileWithProxyServerTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
-  WebDriver webdriver = mock(WebDriver.class);
-  SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  WebElementSource linkWithHref = mock(WebElementSource.class);
-  WebElement link = mock(WebElement.class);
+  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
+  private WebDriver webdriver = mock(WebDriver.class);
+  private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private WebElementSource linkWithHref = mock(WebElementSource.class);
+  private WebElement link = mock(WebElement.class);
 
-  FileDownloadFilter filter = spy(new FileDownloadFilter());
+  private FileDownloadFilter filter = spy(new FileDownloadFilter());
 
   @Before
   public void setUp() {

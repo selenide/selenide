@@ -13,8 +13,16 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 
 public class SelectRadio implements Command<SelenideElement> {
-  Click click = new Click();
-  
+  private Click click;
+
+  public SelectRadio() {
+    this.click = new Click();
+  }
+
+  public SelectRadio(Click click) {
+    this.click = click;
+  }
+
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String value = (String) args[0];

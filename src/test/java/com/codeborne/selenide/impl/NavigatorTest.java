@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class NavigatorTest {
-  Navigator navigator = new Navigator();
+  private Navigator navigator = new Navigator();
 
   @Test
   public void detectsAbsoluteUrls() {
@@ -18,7 +18,7 @@ public class NavigatorTest {
     assertThat("case insensitive: HTTP", navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"), is(true));
     assertThat("case insensitive: HTTPS", navigator.isAbsoluteUrl("HTTPS://SELENIDE.ORG"), is(true));
     assertThat("case insensitive: FILE", navigator.isAbsoluteUrl("FILE:///TMP/MEMORY.DUMP"), is(true));
-    
+
     assertThat("relative url", navigator.isAbsoluteUrl("/tmp/memory.dump"), is(false));
     assertThat("relative url", navigator.isAbsoluteUrl("/payments/history"), is(false));
   }
@@ -36,5 +36,13 @@ public class NavigatorTest {
 
     assertEquals("http://chuck-norris.com?timestamp=666",
         navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789&abc=def", 666));
+  }
+
+  @Test
+  public void returnsAbsoluteUrl() {
+    String baseUrl = "http://localhost:8080";
+    String relativeUrl = "/users/id=1";
+    String absoluteUrl = navigator.absoluteUrl(relativeUrl);
+    assertEquals(absoluteUrl, baseUrl + relativeUrl);
   }
 }

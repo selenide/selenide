@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.*;
+
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
@@ -72,5 +73,19 @@ public class CollectionConditionTest {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts(asList("One", "Two", "Three"));
     assertThat(collectionCondition, instanceOf(ExactTexts.class));
     assertEquals("Exact texts content", "Exact texts [One, Two, Three]", collectionCondition.toString());
+  }
+
+  @Test
+  public void testTextsInAnyOrderWithObjectsList() {
+    CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder("One", "Two", "Three");
+    assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
+    assertEquals("Text in any order content", "TextsInAnyOrder [One, Two, Three]", collectionCondition.toString());
+  }
+
+  @Test
+  public void testTextsInAnyOrderWithStringsList() {
+    CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder(asList("One", "Two", "Three"));
+    assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
+    assertEquals("Text in any order content", "TextsInAnyOrder [One, Two, Three]", collectionCondition.toString());
   }
 }

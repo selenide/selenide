@@ -12,8 +12,18 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.impl.Events.events;
 
 public class SetValue implements Command<WebElement> {
-  SelectOptionByValue selectOptionByValue = new SelectOptionByValue();
-  SelectRadio selectRadio = new SelectRadio();
+  private SelectOptionByValue selectOptionByValue;
+  private SelectRadio selectRadio;
+
+  public SetValue() {
+    this.selectOptionByValue = new SelectOptionByValue();
+    this.selectRadio = new SelectRadio();
+  }
+
+  public SetValue(SelectOptionByValue selectOptionByValue, SelectRadio selectRadio) {
+    this.selectOptionByValue = selectOptionByValue;
+    this.selectRadio = selectRadio;
+  }
 
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
