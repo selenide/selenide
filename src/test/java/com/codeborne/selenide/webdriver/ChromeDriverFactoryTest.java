@@ -32,16 +32,14 @@ public class ChromeDriverFactoryTest {
 
   @Test
   public void transferChromeOptionArgumentsFromSystemPropsToDriver() {
-    // abdd, --abcd, xcvcd=123, a="def", b="a\"d", --user-agent="A,B") should work
-    System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,xcvcd=123,a=\"def\",b=\"a\\\"d\",--user-agent=\"A,B\"");
+    // abdd, --abcd, xcvcd=123, --user-agent=A\,B) should work
+    System.setProperty("chromeoptions.args", "abdd,--abcd,xcvcd=123,--user-agent=A\\,B");
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments, hasItems("abdd"));
     assertThat(optionArguments, hasItems("--abcd"));
     assertThat(optionArguments, hasItems("xcvcd=123"));
-    assertThat(optionArguments, hasItems("a=def"));
-    assertThat(optionArguments, hasItems("b=a\"d"));
     assertThat(optionArguments, hasItems("--user-agent=A,B"));
   }
 
