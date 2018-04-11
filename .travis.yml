@@ -1,8 +1,3 @@
-notifications:
-  slack:
-    rooms:
-      secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
-
 language: java
 
 jdk:
@@ -16,6 +11,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache/
 
 before_install:
  - export CHROME_BIN=/usr/bin/google-chrome
@@ -30,3 +26,9 @@ before_install:
 script:
   - ./gradlew check chrome htmlunit --no-daemon --console=plain
   - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+
+notifications:
+  slack:
+    rooms:
+      secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
+
