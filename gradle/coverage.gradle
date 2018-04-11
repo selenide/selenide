@@ -11,11 +11,3 @@ jacocoTestReport {
     file("$project.buildDir/jacoco/chrome.exec")
   )
 }
-
-coveralls {
-  jacocoReportPath = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-}
-
-tasks.coveralls {
-  onlyIf { System.env.'CI' }
-}

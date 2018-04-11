@@ -47,3 +47,10 @@ task checkstyleHtmlTest {
 
 checkstyleMain.finalizedBy checkstyleHtmlMain
 checkstyleTest.finalizedBy checkstyleHtmlTest
+
+sonarqube {
+  properties {
+    property 'sonar.projectName', 'selenide'
+    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/htmlunit.exec, $project.buildDir/jacoco/chrome.exec"
+  }
+}
