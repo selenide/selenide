@@ -29,4 +29,4 @@ before_install:
 
 script:
   - ./gradlew check chrome htmlunit --no-daemon --console=plain
-  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN}
+  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
