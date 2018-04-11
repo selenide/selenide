@@ -35,7 +35,6 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     if (!browserBinary.isEmpty()) {
       options.setBinary(browserBinary);
     }
-    options.addArguments("--no-sandbox");  // This make Chromium reachable (?)
     if (chromeSwitches != null) {
       options.addArguments(chromeSwitches);
     }

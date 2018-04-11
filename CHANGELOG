@@ -1,6 +1,10 @@
 == Changelog
 
-=== 4.11.0 (release 02.04.2018)
+=== 4.11.1 (released 03.04.2018)
+* #711 Fix problem with hanging Chrome on Windows    -- thanks to Aliaksandr Rasolka @rosolko for PR 711
+ (Chrome processes are still alive after calling `close` method)
+
+=== 4.11.0 (released 02.04.2018)
 * upgrade to selenium-java:3.11.0
 * deprecated followLink method - just use click instead.
 * #688 support downloading files with cyrillic name
