@@ -44,8 +44,8 @@ public class Screenshots {
    * for partially visible WebElement/Selenide horizontal scroll bar will be present
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */
-  public static File takeScreenShot(WebElement element, WebElement iframe) {
-    return screenshots.takeScreenshot(element, iframe);
+  public static File takeScreenShot(WebElement iframe, WebElement element) {
+    return screenshots.takeScreenshot(iframe, element);
   }
 
   /**
@@ -53,8 +53,8 @@ public class Screenshots {
    * for partially visible WebElement/Selenide horizontal scroll bar will be present
    * @return buffered image
    */
-  public static BufferedImage takeScreenShotAsImage(WebElement element, WebElement iframe) {
-    return screenshots.takeScreenshotAsImage(element, iframe);
+  public static BufferedImage takeScreenShotAsImage(WebElement iframe, WebElement element) {
+    return screenshots.takeScreenshotAsImage(iframe, element);
   }
 
   /**

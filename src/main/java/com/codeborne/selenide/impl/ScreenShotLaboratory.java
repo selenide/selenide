@@ -119,9 +119,12 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public File takeScreenshot(WebElement element, WebElement iframe) {
+  public File takeScreenshot(WebElement iframe, WebElement element) {
     try {
-      BufferedImage dest = takeScreenshotAsImage(element, iframe);
+      BufferedImage dest = takeScreenshotAsImage(iframe, element);
+      if (dest == null) {
+        return null;
+      }
       File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
       ensureFolderExists(screenshotOfElement);
       ImageIO.write(dest, "png", screenshotOfElement);
@@ -188,7 +191,7 @@ public class ScreenShotLaboratory {
     return webdriver;
   }
 
-  public BufferedImage takeScreenshotAsImage(WebElement element, WebElement iframe) {
+  public BufferedImage takeScreenshotAsImage(WebElement iframe, WebElement element) {
     WebDriver webdriver = checkIfFullyValidDriver();
     if (webdriver == null) {
       return null;
