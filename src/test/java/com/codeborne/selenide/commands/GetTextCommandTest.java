@@ -49,6 +49,6 @@ public class GetTextCommandTest {
     when(mockedElement.getTagName()).thenReturn("href");
     String text = "This is text";
     when(mockedElement.getText()).thenReturn(text);
-    assertEquals(text, getTextCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertEquals(text, getTextCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 }

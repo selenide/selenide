@@ -33,26 +33,31 @@ public class MatchesCommandTest {
   @Test
   public void testExecuteMethodWhenNoElementFound() {
     when(locator.getWebElement()).thenReturn(null);
-    assertFalse(matchesCommand.execute(proxy, locator, new Object[] {Condition.disabled}));
+    assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}));
   }
 
   @Test
   public void testExecuteMethodWhenElementDoesntMeetCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    assertFalse(matchesCommand.execute(proxy, locator, new Object[] {Condition.disabled}));
+    assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}));
   }
 
   @Test
   public void testExecuteMethodWhenElementMeetsCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    assertTrue(matchesCommand.execute(proxy, locator, new Object[] {Condition.enabled}));
+    assertTrue(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}));
   }
 
   @Test
   public void testExecuteMethodWhenWebDriverExceptionIsThrown() {
     catchExecuteMethodWithException(new WebDriverException());
+  }
+
+  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
+    doThrow(exception).when(locator).getWebElement();
+    assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}));
   }
 
   @Test
@@ -73,10 +78,5 @@ public class MatchesCommandTest {
   @Test(expected = InvalidSelectorException.class)
   public void testExecuteMethodWhenRunTimeExceptionIsThrown() {
     catchExecuteMethodWithException(new RuntimeException("invalid selector"));
-  }
-
-  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
-    doThrow(exception).when(locator).getWebElement();
-    assertFalse(matchesCommand.execute(proxy, locator, new Object[] {Condition.enabled}));
   }
 }

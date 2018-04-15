@@ -26,7 +26,7 @@ public class IsImageCommandTest {
   public void testExecuteMethodWhenElementIsNotImage() {
     when(mockedElement.getTagName()).thenReturn("href");
     try {
-      isImageCommand.execute(proxy, locator, new Object[] {"something more"});
+      isImageCommand.execute(proxy, locator, new Object[]{"something more"});
     } catch (IllegalArgumentException exception) {
       assertEquals("Method isImage() is only applicable for img elements", exception.getMessage());
     }

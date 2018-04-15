@@ -19,15 +19,15 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class SeleniumGridTest extends IntegrationTest {
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     close();
-    
+
     int hubPort = findFreePort();
     GridLauncherV3.main(new String[]{"-port", "" + hubPort});
 
     GridLauncherV3.main(new String[]{"-port", "" + findFreePort(),
-        "-role", "node",
-        "-hub", "http://localhost:" + hubPort + "/grid/register"
+      "-role", "node",
+      "-hub", "http://localhost:" + hubPort + "/grid/register"
     });
 
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";

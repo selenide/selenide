@@ -39,7 +39,7 @@ public class WebDriverThreadLocalContainerTest {
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
 
-  private static String getTestCapturedLog() throws IOException {
+  private static String getTestCapturedLog() {
     customLogHandler.flush();
     return logCapturingStream.toString();
   }
@@ -66,16 +66,16 @@ public class WebDriverThreadLocalContainerTest {
   @Test
   public void createWebDriverWithoutProxy() {
     Configuration.fileDownload = HTTPGET;
-    
+
     container.createDriver();
-    
+
     verify(container.factory).createWebDriver(null);
   }
 
   @Test
   public void createWebDriverWithSelenideProxyServer() {
     Configuration.fileDownload = PROXY;
-    
+
     container.createDriver();
 
     ArgumentCaptor<Proxy> captor = ArgumentCaptor.forClass(Proxy.class);
@@ -89,7 +89,7 @@ public class WebDriverThreadLocalContainerTest {
     Configuration.reopenBrowserOnFail = true;
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
-    
+
     assertSame(webdriver, container.getAndCheckWebDriver());
     verify(container).isBrowserStillOpen(any());
   }
@@ -99,7 +99,7 @@ public class WebDriverThreadLocalContainerTest {
     Configuration.reopenBrowserOnFail = false;
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
-    
+
     assertSame(webdriver, container.getAndCheckWebDriver());
     verify(container, never()).isBrowserStillOpen(any());
   }

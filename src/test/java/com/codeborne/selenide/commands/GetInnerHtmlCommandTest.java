@@ -30,6 +30,6 @@ public class GetInnerHtmlCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("innerHTML")).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getInnerHtmlCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(elementAttribute, getInnerHtmlCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

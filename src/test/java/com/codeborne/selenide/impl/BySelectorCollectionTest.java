@@ -18,7 +18,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BySelectorCollectionTest {
-
   private SelenideElement mockedWebElement = mock(SelenideElement.class);
 
   @Test
@@ -54,7 +53,6 @@ public class BySelectorCollectionTest {
   }
 
   private class NotWebElement implements SearchContext {
-
     @Override
     public List<WebElement> findElements(By by) {
       return singletonList(mockedWebElement);

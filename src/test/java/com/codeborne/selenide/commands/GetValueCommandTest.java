@@ -27,6 +27,6 @@ public class GetValueCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("value")).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getValueCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(elementAttribute, getValueCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

@@ -24,7 +24,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
   private final TestLogListener testLogListener = new TestLogListener();
 
   @BeforeMethod
-  public void addListener() throws Exception {
+  public void addListener() {
     SelenideLogger.addListener("SoftAssertTestLogListener", testLogListener);
   }
 
@@ -39,7 +39,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
   }
 
   @AfterMethod
-  public void tearDown() throws Exception {
+  public void tearDown() {
     SelenideLogger.removeListener("SoftAssertTestLogListener");
   }
 

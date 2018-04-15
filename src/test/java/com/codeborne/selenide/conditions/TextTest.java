@@ -12,16 +12,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TextTest {
-
-  private Text text;
   private final String defaultText = "Hello World";
+  private Text text;
   private WebElement mWebElement = mock(WebElement.class);
 
   @Before
   public void setup() {
     text = new Text(defaultText);
   }
-
 
   @Test
   public void testApplyForNonSelectText() {
@@ -33,7 +31,6 @@ public class TextTest {
 
   @Test
   public void testApplyForSelectTagName() {
-
     WebElement element1 = mock(WebElement.class);
     String element1Text = "Hello";
     WebElement element2 = mock(WebElement.class);
@@ -54,6 +51,5 @@ public class TextTest {
     when(element2.getText()).thenReturn(" " + element2Text);
 
     assertTrue(text.apply(mWebElement));
-
   }
 }

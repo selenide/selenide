@@ -23,7 +23,6 @@ public class SetValueCommandTest {
   private SelectRadio mockedSelectRadio;
   private WebElement mockedFoundElement;
 
-
   @Before
   public void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
@@ -53,7 +52,7 @@ public class SetValueCommandTest {
   public void testExecuteWithSelectTagElement() {
     System.setProperty("selenide.versatileSetValue", "true");
     when(mockedFoundElement.getTagName()).thenReturn("select");
-    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[] {"value"});
+    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"value"});
     assertEquals(proxy, returnedElement);
   }
 
@@ -61,25 +60,25 @@ public class SetValueCommandTest {
   public void testExecuteWithInputTagElement() {
     when(mockedFoundElement.getTagName()).thenReturn("input");
     when(mockedFoundElement.getAttribute("type")).thenReturn("radio");
-    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[] {"value"});
+    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"value"});
     assertEquals(proxy, returnedElement);
   }
 
   @Test
   public void testElementGetClearedWhenArgsTextIsNull() {
-    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[] {null});
+    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{null});
     assertEquals(proxy, returnedElement);
   }
 
   @Test
   public void testElementGetClearedWhenArgsTextIsEmpty() {
-    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[] {""});
+    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{""});
     assertEquals(proxy, returnedElement);
   }
 
   @Test
   public void testElementGetClearedWhenArgsTextIsNotEmpty() {
-    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[] {"text"});
+    WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"text"});
     assertEquals(proxy, returnedElement);
   }
 

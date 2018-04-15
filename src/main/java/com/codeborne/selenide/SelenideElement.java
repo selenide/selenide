@@ -700,7 +700,7 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
    *
    * @see com.codeborne.selenide.commands.DownloadFile
    */
-  File download() throws FileNotFoundException;
+  File download();
 
   /**
    * Return criteria by which this element is located

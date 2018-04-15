@@ -39,7 +39,7 @@ public class GetSelectedTextCommandTest {
   @Test
   public void testExecuteMethodWhenSelectedOptionReturnsNothing() {
     when(getSelectedOptionCommand.execute(proxy, selectElement, Command.NO_ARGS)).thenReturn(null);
-    assertNull(getSelectedTextCommand.execute(proxy, selectElement, new Object[] {"something more"}));
+    assertNull(getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}));
   }
 
   @Test
@@ -47,6 +47,6 @@ public class GetSelectedTextCommandTest {
     when(getSelectedOptionCommand.execute(proxy, selectElement, Command.NO_ARGS)).thenReturn(mockedElement);
     String elementText = "Element text";
     when(mockedElement.getText()).thenReturn(elementText);
-    assertEquals(elementText, getSelectedTextCommand.execute(proxy, selectElement, new Object[] {"something more"}));
+    assertEquals(elementText, getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}));
   }
 }

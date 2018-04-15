@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class LastCollectionElementTest {
-
   private WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
   private SelenideElement mockedElement1 = mock(SelenideElement.class);
   private SelenideElement mockedElement2 = mock(SelenideElement.class);
@@ -49,13 +48,11 @@ public class LastCollectionElementTest {
 
   @Test
   public void testGetElementMethodWhenStaleElementReferenceExceptionThrown() {
-
     checkGetElementsMethodWithException(new StaleElementReferenceException("Something went wrong"));
   }
 
   @Test
   public void testGetElementMethodWhenIndexOutBoundExceptionThrown() {
-
     checkGetElementsMethodWithException(new IndexOutOfBoundsException());
   }
 
@@ -86,5 +83,4 @@ public class LastCollectionElementTest {
   public void testToString() {
     assertEquals("Collection description.last", lastCollectionElement.toString());
   }
-
 }

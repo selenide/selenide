@@ -15,7 +15,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FindAllByXpathCommandTest {
-
   private SelenideElement parent;
   private WebElementSource locator;
   private SelenideElement element1;

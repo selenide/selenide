@@ -15,7 +15,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ErrorsCollectorTest {
-
   private ErrorsCollector errorsCollector;
   private LogEvent mockedLogEvent = mock(LogEvent.class);
   private LogEvent mockedInProgressEvent = mock(LogEvent.class);
@@ -24,7 +23,6 @@ public class ErrorsCollectorTest {
   private Field errorsField;
   private String defaultErrorMessage = "Couldn't find an element";
   private String defaultTestName = "ITestName";
-
 
   @BeforeMethod
   public void setup() throws NoSuchFieldException {
@@ -35,7 +33,6 @@ public class ErrorsCollectorTest {
     when(mockedPassedEvent.getStatus()).thenReturn(LogEvent.EventStatus.PASS);
     when(mockedFailedEvent.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
     when(mockedFailedEvent.getError()).thenReturn(new StaleElementReferenceException(defaultErrorMessage));
-
   }
 
   @Test
@@ -69,7 +66,6 @@ public class ErrorsCollectorTest {
     assertEquals(0, errors.size());
   }
 
-
   @Test
   public void testFailIfErrorMethodWhenOnlyOneError() {
     errorsCollector.onEvent(mockedFailedEvent);
@@ -77,7 +73,7 @@ public class ErrorsCollectorTest {
       errorsCollector.failIfErrors(defaultTestName);
     } catch (SoftAssertionError error) {
       assertTrue("I couldn't find default error message in error message",
-                 error.getMessage().contains(defaultErrorMessage));
+        error.getMessage().contains(defaultErrorMessage));
     }
   }
 
@@ -95,15 +91,15 @@ public class ErrorsCollectorTest {
     } catch (SoftAssertionError error) {
       String errorMessage = error.getMessage();
       assertTrue("Error title is missing",
-                 errorMessage.contains(String.format("Test %s failed.", defaultTestName)));
+        errorMessage.contains(String.format("Test %s failed.", defaultTestName)));
       assertTrue("Record about number of failed checks is missing",
-                 errorMessage.contains("2 checks failed"));
+        errorMessage.contains("2 checks failed"));
       assertTrue("First event message is missing",
-                 errorMessage.contains(
-                   String.format("FAIL #1: org.openqa.selenium.StaleElementReferenceException: %s", defaultErrorMessage)));
+        errorMessage.contains(
+          String.format("FAIL #1: org.openqa.selenium.StaleElementReferenceException: %s", defaultErrorMessage)));
       assertTrue("Second event message is missing",
-                 errorMessage.contains(
-                   String.format("FAIL #2: org.openqa.selenium.StaleElementReferenceException: %s", failedEvent2Message)));
+        errorMessage.contains(
+          String.format("FAIL #2: org.openqa.selenium.StaleElementReferenceException: %s", failedEvent2Message)));
     }
   }
 }

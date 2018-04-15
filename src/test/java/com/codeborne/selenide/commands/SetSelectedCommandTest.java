@@ -21,7 +21,6 @@ public class SetSelectedCommandTest {
   private SetSelected setSelectedCommand;
   private WebElement mockedFoundElement;
 
-
   @Before
   public void setup() {
     Click mockedClick = mock(Click.class);
@@ -45,7 +44,7 @@ public class SetSelectedCommandTest {
   public void testExecuteMethodWhenElementIsNotDisplayed() {
     when(mockedFoundElement.isDisplayed()).thenReturn(false);
     try {
-      setSelectedCommand.execute(proxy, locator, new Object[] {true});
+      setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
       assertEquals("Cannot change invisible element", exception.getMessage());
     }
@@ -54,6 +53,17 @@ public class SetSelectedCommandTest {
   @Test
   public void testExecuteMethodWhenElementIsNotInput() {
     checkExecuteMethodWhenTypeOfElementIsIncorrect("select");
+  }
+
+  private void checkExecuteMethodWhenTypeOfElementIsIncorrect(String tagName) {
+    when(mockedFoundElement.isDisplayed()).thenReturn(true);
+    when(mockedFoundElement.getTagName()).thenReturn(tagName);
+    when(mockedFoundElement.getAttribute("type")).thenReturn("href");
+    try {
+      setSelectedCommand.execute(proxy, locator, new Object[]{true});
+    } catch (InvalidStateException exception) {
+      assertEquals("Only use setSelected on checkbox/option/radio", exception.getMessage());
+    }
   }
 
   @Test
@@ -66,6 +76,18 @@ public class SetSelectedCommandTest {
     checkExecuteMethodWhenElementIsReadOnlyOrDisabled("true", null);
   }
 
+  private void checkExecuteMethodWhenElementIsReadOnlyOrDisabled(String readOnlyValue, String disabledValue) {
+    when(mockedFoundElement.isDisplayed()).thenReturn(true);
+    when(mockedFoundElement.getTagName()).thenReturn("option");
+    when(mockedFoundElement.getAttribute("readonly")).thenReturn(readOnlyValue);
+    when(mockedFoundElement.getAttribute("disabled")).thenReturn(disabledValue);
+    try {
+      setSelectedCommand.execute(proxy, locator, new Object[]{true});
+    } catch (InvalidStateException exception) {
+      assertEquals("Cannot change value of readonly/disabled element", exception.getMessage());
+    }
+  }
+
   @Test
   public void testExecuteMethodWhenElementNotOptionNotReadonlyDisabled() {
     checkExecuteMethodWhenElementIsReadOnlyOrDisabled(null, "true");
@@ -76,35 +98,11 @@ public class SetSelectedCommandTest {
     checkExecuteMethodWhenElementIsReadOnlyOrDisabled("true", "true");
   }
 
-  private void checkExecuteMethodWhenTypeOfElementIsIncorrect(String tagName) {
-    when(mockedFoundElement.isDisplayed()).thenReturn(true);
-    when(mockedFoundElement.getTagName()).thenReturn(tagName);
-    when(mockedFoundElement.getAttribute("type")).thenReturn("href");
-    try {
-      setSelectedCommand.execute(proxy, locator, new Object[] {true});
-    } catch (InvalidStateException exception) {
-      assertEquals("Only use setSelected on checkbox/option/radio", exception.getMessage());
-    }
-  }
-
-  private void checkExecuteMethodWhenElementIsReadOnlyOrDisabled(String readOnlyValue, String disabledValue) {
-    when(mockedFoundElement.isDisplayed()).thenReturn(true);
-    when(mockedFoundElement.getTagName()).thenReturn("option");
-    when(mockedFoundElement.getAttribute("readonly")).thenReturn(readOnlyValue);
-    when(mockedFoundElement.getAttribute("disabled")).thenReturn(disabledValue);
-    try {
-      setSelectedCommand.execute(proxy, locator, new Object[] {true});
-    } catch (InvalidStateException exception) {
-      assertEquals("Cannot change value of readonly/disabled element", exception.getMessage());
-    }
-  }
-
   @Test
   public void testExecuteMethodWhenElementIsSelected() {
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     when(mockedFoundElement.getTagName()).thenReturn("option");
-    WebElement returnedElement = setSelectedCommand.execute(proxy, locator, new Object[] {true});
+    WebElement returnedElement = setSelectedCommand.execute(proxy, locator, new Object[]{true});
     assertEquals(proxy, returnedElement);
   }
-
 }

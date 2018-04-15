@@ -1,6 +1,14 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.collections.*;
+import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ListSize;
+import com.codeborne.selenide.collections.SizeGreaterThan;
+import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
+import com.codeborne.selenide.collections.SizeLessThan;
+import com.codeborne.selenide.collections.SizeLessThanOrEqual;
+import com.codeborne.selenide.collections.SizeNotEqual;
+import com.codeborne.selenide.collections.Texts;
+import com.codeborne.selenide.collections.TextsInAnyOrder;
 
 import org.junit.Test;
 
@@ -10,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class CollectionConditionTest {
-
   @Test
   public void testSizeIsEmptyListSize() {
     CollectionCondition collectionCondition = CollectionCondition.size(10);

@@ -21,7 +21,6 @@ public class ValCommandTest {
   private GetValue mockedGetValue;
   private SetValue mockedSetValue;
 
-
   @Before
   public void setup() {
     mockedGetValue = mock(GetValue.class);
@@ -55,6 +54,6 @@ public class ValCommandTest {
 
   @Test
   public void testExecuteValueWithArgs() {
-    assertEquals(proxy, valCommand.execute(proxy, locator, new Object[] {"value"}));
+    assertEquals(proxy, valCommand.execute(proxy, locator, new Object[]{"value"}));
   }
 }

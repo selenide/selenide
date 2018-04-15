@@ -30,6 +30,6 @@ public class GetNameCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("name")).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getNameCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(elementAttribute, getNameCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

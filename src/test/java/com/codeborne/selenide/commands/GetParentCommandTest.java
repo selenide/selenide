@@ -43,6 +43,6 @@ public class GetParentCommandTest {
 
   @Test
   public void testExecuteMethod() {
-    assertEquals(mockedElement, getParentCommand.execute(proxy, locator, new Object[] {"..", "something more"}));
+    assertEquals(mockedElement, getParentCommand.execute(proxy, locator, new Object[]{"..", "something more"}));
   }
 }

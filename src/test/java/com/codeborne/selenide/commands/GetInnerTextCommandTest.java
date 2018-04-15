@@ -30,6 +30,6 @@ public class GetInnerTextCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("textContent")).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getInnerTextCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(elementAttribute, getInnerTextCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

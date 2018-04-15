@@ -18,7 +18,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ExistsCommandTest {
-
   private SelenideElement proxy;
   private WebElementSource locator;
   private WebElement element;
@@ -35,14 +34,19 @@ public class ExistsCommandTest {
   @Test
   public void testExistExecuteMethod() {
     when(locator.getWebElement()).thenReturn(null);
-    assertFalse(existsCommand.execute(proxy, locator, new Object[] {}));
+    assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
     when(locator.getWebElement()).thenReturn(element);
-    assertTrue(existsCommand.execute(proxy, locator, new Object[] {}));
+    assertTrue(existsCommand.execute(proxy, locator, new Object[]{}));
   }
 
   @Test
   public void testExistExecuteMethodWithWebDriverException() {
     checkExecuteMethodWithException(new WebDriverException());
+  }
+
+  private <T extends Throwable> void checkExecuteMethodWithException(T exception) {
+    doThrow(exception).when(locator).getWebElement();
+    assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
   }
 
   @Test
@@ -58,10 +62,5 @@ public class ExistsCommandTest {
   @Test
   public void testExistsExecuteMethodWithIndexOutOfBoundException() {
     checkExecuteMethodWithException(new IndexOutOfBoundsException("Out of bound"));
-  }
-
-  private <T extends Throwable> void checkExecuteMethodWithException(T exception) {
-    doThrow(exception).when(locator).getWebElement();
-    assertFalse(existsCommand.execute(proxy, locator, new Object[] {}));
   }
 }

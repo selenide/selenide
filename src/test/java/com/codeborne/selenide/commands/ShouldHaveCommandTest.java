@@ -20,7 +20,6 @@ public class ShouldHaveCommandTest {
   private ShouldHave shouldHaveCommand;
   private WebElement mockedFoundElement;
 
-
   @Before
   public void setup() {
     shouldHaveCommand = new ShouldHave();
@@ -41,13 +40,13 @@ public class ShouldHaveCommandTest {
 
   @Test
   public void testExecuteMethodWithNonStringArgs() {
-    SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[] {Condition.disabled});
+    SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[]{Condition.disabled});
     assertEquals(proxy, returnedElement);
   }
 
   @Test
   public void testExecuteMethodWithStringArgs() {
-    SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[] {"hello"});
+    SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[]{"hello"});
     assertEquals(proxy, returnedElement);
   }
 }

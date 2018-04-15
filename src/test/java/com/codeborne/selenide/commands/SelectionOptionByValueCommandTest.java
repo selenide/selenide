@@ -44,7 +44,7 @@ public class SelectionOptionByValueCommandTest {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.singletonList(mockedFoundElement));
-    selectOptionByValueCommand.execute(proxy, selectField, new Object[] {defaultElementValue});
+    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{defaultElementValue});
   }
 
   @Test
@@ -52,12 +52,12 @@ public class SelectionOptionByValueCommandTest {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.singletonList(mockedFoundElement));
-    selectOptionByValueCommand.execute(proxy, selectField, new Object[] {new String[] {defaultElementValue}});
+    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
   }
 
   @Test
   public void testSelectByValueWithArgNotString() {
-    assertNull(selectOptionByValueCommand.execute(proxy, selectField, new Object[] {new int[] {1}}));
+    assertNull(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}));
   }
 
   @Test
@@ -66,10 +66,10 @@ public class SelectionOptionByValueCommandTest {
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.emptyList());
     try {
-      selectOptionByValueCommand.execute(proxy, selectField, new Object[] {new String[] {defaultElementValue}});
+      selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
     } catch (NoSuchElementException exception) {
       assertTrue("Value is not present in error message",
-          exception.getMessage().contains(String.format("Cannot locate option with value: %s", defaultElementValue)));
+        exception.getMessage().contains(String.format("Cannot locate option with value: %s", defaultElementValue)));
     }
   }
 }

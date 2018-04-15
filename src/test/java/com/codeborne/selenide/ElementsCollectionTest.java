@@ -36,7 +36,6 @@ public class ElementsCollectionTest {
   public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
 
   private WebElementsCollection source = mock(WebElementsCollection.class);
-
   private WebElement element1 = element("h1");
   private WebElement element2 = element("h2");
   private WebElement element3 = element("h3");
@@ -90,30 +89,26 @@ public class ElementsCollectionTest {
     checkFilterMethod(false);
   }
 
-  @Test
-  public void testFilterBy() {
-    checkFilterMethod(true);
-  }
-
   private void checkFilterMethod(boolean useBy) {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getActualElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
-    ElementsCollection filteredCollection = useBy ? collection.filterBy(Condition.text("Hello")) :
-        collection.filter(Condition.text("Hello"));
+    ElementsCollection filteredCollection = useBy ?
+      collection.filterBy(Condition.text("Hello")) :
+      collection.filter(Condition.text("Hello"));
     assertEquals(1, filteredCollection.size());
     assertEquals("Hello", filteredCollection.get(0).getText());
   }
 
   @Test
-  public void testExclude() {
-    checkExcludeMethod(false);
+  public void testFilterBy() {
+    checkFilterMethod(true);
   }
 
   @Test
-  public void testExcludeWith() {
-    checkExcludeMethod(true);
+  public void testExclude() {
+    checkExcludeMethod(false);
   }
 
   private void checkExcludeMethod(boolean useWith) {
@@ -122,20 +117,20 @@ public class ElementsCollectionTest {
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     ElementsCollection filteredCollection = useWith ?
-        collection.excludeWith(Condition.text("Mark")) :
-        collection.exclude(Condition.text("Mark"));
+      collection.excludeWith(Condition.text("Mark")) :
+      collection.exclude(Condition.text("Mark"));
     assertEquals(1, filteredCollection.size());
     assertEquals("Hello", filteredCollection.get(0).getText());
   }
 
   @Test
-  public void testFind() {
-    checkFindMethod(false);
+  public void testExcludeWith() {
+    checkExcludeMethod(true);
   }
 
   @Test
-  public void testFindBy() {
-    checkFindMethod(true);
+  public void testFind() {
+    checkFindMethod(false);
   }
 
   private void checkFindMethod(boolean useBy) {
@@ -146,6 +141,11 @@ public class ElementsCollectionTest {
     Condition condition = Condition.text("Hello");
     SelenideElement foundElement = useBy ? collection.findBy(condition) : collection.find(condition);
     assertEquals("Hello", foundElement.getText());
+  }
+
+  @Test
+  public void testFindBy() {
+    checkFindMethod(true);
   }
 
   @Test
@@ -164,7 +164,7 @@ public class ElementsCollectionTest {
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
-    String[] expectedTexts = new String[] {"Hello", "Mark"};
+    String[] expectedTexts = new String[]{"Hello", "Mark"};
     assertEquals(expectedTexts.length, elementsTexts.length);
     for (int index = 0; index < expectedTexts.length; index++) {
       assertEquals(expectedTexts[index], elementsTexts[index]);
@@ -176,7 +176,7 @@ public class ElementsCollectionTest {
     doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
-    String[] expectedTexts = new String[] {"org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark"};
+    String[] expectedTexts = new String[]{"org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark"};
     assertEquals(expectedTexts.length, elementsTexts.length);
     for (int index = 0; index < expectedTexts.length; index++) {
       assertTrue(elementsTexts[index].contains(expectedTexts[index]));
@@ -272,9 +272,9 @@ public class ElementsCollectionTest {
   public void sleepsAsLessAsPossible_untilConditionGetsMatched() {
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getActualElements()).thenReturn(
-        Collections.singletonList(element1),
-        asList(element1, element2),
-        asList(element1, element2, element2)
+      Collections.singletonList(element1),
+      asList(element1, element2),
+      asList(element1, element2, element2)
     );
 
     collection.shouldHave(size(3));

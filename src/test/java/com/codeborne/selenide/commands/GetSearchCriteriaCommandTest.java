@@ -26,6 +26,6 @@ public class GetSearchCriteriaCommandTest {
 
   @Test
   public void testExecuteMethod() {
-    assertEquals(defaultSearchCriteria, getSearchCriteriaCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertEquals(defaultSearchCriteria, getSearchCriteriaCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 }

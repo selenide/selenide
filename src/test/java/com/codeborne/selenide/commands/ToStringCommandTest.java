@@ -23,7 +23,6 @@ public class ToStringCommandTest {
   private ToString toStringCommand;
   private WebElement mockedFoundElement;
 
-
   @Before
   public void setup() {
     toStringCommand = new ToString();
@@ -39,29 +38,28 @@ public class ToStringCommandTest {
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     String elementText = "text";
     when(mockedFoundElement.getText()).thenReturn(elementText);
-    String elementString = toStringCommand.execute(proxy, locator, new Object[] {});
+    String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertEquals("<null selected:true>text</null>", elementString);
   }
 
   @Test
   public void testExecuteMethodWhenWebDriverExceptionIsThrown() {
     doThrow(new WebDriverException()).when(locator).getWebElement();
-    String elementString = toStringCommand.execute(proxy, locator, new Object[] {});
+    String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertTrue(elementString.contains("WebDriverException"));
   }
 
   @Test
   public void testExecuteMethodWhenElementNotFoundIsThrown() {
     doThrow(new ElementNotFound(By.name(""), Condition.visible)).when(locator).getWebElement();
-    String elementString = toStringCommand.execute(proxy, locator, new Object[] {});
+    String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertEquals("Element not found {By.name: }", elementString);
   }
 
   @Test
   public void testExecuteMethodWhenIndexOutOfBoundExceptionIsThrown() {
     doThrow(new IndexOutOfBoundsException()).when(locator).getWebElement();
-    String elementString = toStringCommand.execute(proxy, locator, new Object[] {});
+    String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertEquals("java.lang.IndexOutOfBoundsException", elementString);
   }
-
 }

@@ -31,13 +31,13 @@ public class GetDataAttributeCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getDataAttributeCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(elementAttribute, getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 
   @Test
   public void testExecuteMethodWithNoDataAttribute() {
     String argument = "class";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(null);
-    assertNull(getDataAttributeCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertNull(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

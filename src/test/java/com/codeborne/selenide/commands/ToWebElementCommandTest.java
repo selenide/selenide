@@ -17,7 +17,6 @@ public class ToWebElementCommandTest {
   private ToWebElement toWebElementCommand;
   private WebElement mockedFoundElement;
 
-
   @Before
   public void setup() {
     toWebElementCommand = new ToWebElement();

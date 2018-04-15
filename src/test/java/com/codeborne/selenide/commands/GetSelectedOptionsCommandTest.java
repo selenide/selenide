@@ -43,7 +43,7 @@ public class GetSelectedOptionsCommandTest {
 
   @Test
   public void testExecuteMethod() {
-    ElementsCollection elementsCollection = getSelectedOptionsCommand.execute(proxy, locator, new Object[] {"something more"});
+    ElementsCollection elementsCollection = getSelectedOptionsCommand.execute(proxy, locator, new Object[]{"something more"});
     for (int index = 0; index < elementsCollection.size(); index++) {
       String mockedElementText = mMockedElementsList.get(index).getText();
       String foundElementText = elementsCollection.get(index).getText();

@@ -48,11 +48,11 @@ public class SelectRadioCommandTest {
   public void testExecuteMethodWhenNoElementsIsFound() {
     when(locator.findAll()).thenReturn(Collections.emptyList());
     try {
-      selectRadioCommand.execute(proxy, locator, new Object[] {defaultElementValue});
+      selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (ElementNotFound exception) {
       assertEquals(String.format("Element not found {null}\n" +
           "Expected: value '%s'", defaultElementValue),
-          exception.getMessage());
+        exception.getMessage());
     }
   }
 
@@ -61,7 +61,7 @@ public class SelectRadioCommandTest {
     when(locator.findAll()).thenReturn(Collections.singletonList(mockedFoundElement));
     when(mockedFoundElement.getAttribute("readonly")).thenReturn("true");
     try {
-      selectRadioCommand.execute(proxy, locator, new Object[] {defaultElementValue});
+      selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (InvalidStateException exception) {
       assertEquals("Cannot select readonly radio button", exception.getMessage());
     }
@@ -70,7 +70,7 @@ public class SelectRadioCommandTest {
   @Test
   public void testExecuteMethodOnFoundRadioButton() {
     when(locator.findAll()).thenReturn(Collections.singletonList(mockedFoundElement));
-    SelenideElement clickedElement = selectRadioCommand.execute(proxy, locator, new Object[] {defaultElementValue});
+    SelenideElement clickedElement = selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     assertEquals(mockedFoundElement, clickedElement.getWrappedElement());
   }
 }

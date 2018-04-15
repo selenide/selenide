@@ -22,7 +22,6 @@ public class SelectOptionContainingTextTest {
   private WebElement element;
   private WebElement option1;
   private WebElement option2;
-
   private SelenideElement proxy;
   private WebElementSource select;
 
@@ -38,39 +37,39 @@ public class SelectOptionContainingTextTest {
   }
 
   @Test
-  public void selects_firstMatchingOption_forSingleSelect() {
+  public void selectsFirstMatchingOptionForSingleSelect() {
     doReturn("false").when(element).getAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
-        .findElements(
-          By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
+      .findElements(
+        By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
 
-    command.execute(proxy, select, new Object[] {"option-subtext"});
+    command.execute(proxy, select, new Object[]{"option-subtext"});
 
     verify(option1).click();
     verify(option2, never()).click();
   }
 
   @Test
-  public void selects_allMatchingOptions_forMultipleSelect() {
+  public void selectsAllMatchingOptionsForMultipleSelect() {
     doReturn("true").when(element).getAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
-        .findElements(
-          By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
+      .findElements(
+        By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
 
-    command.execute(proxy, select, new Object[] {"option-subtext"});
+    command.execute(proxy, select, new Object[]{"option-subtext"});
 
     verify(option1).click();
     verify(option2).click();
   }
 
   @Test
-  public void throws_NoSuchElementException_whenNoElementsFound() {
+  public void throwsNoSuchElementExceptionWhenNoElementsFound() {
     String elementText = "option-subtext";
     try {
-      command.execute(proxy, select, new Object[] {elementText});
+      command.execute(proxy, select, new Object[]{elementText});
     } catch (NoSuchElementException exception) {
       assertTrue("Text is not present in exception message",
-          exception.getMessage().contains("Cannot locate option containing text: " + elementText));
+        exception.getMessage().contains("Cannot locate option containing text: " + elementText));
     }
   }
 }

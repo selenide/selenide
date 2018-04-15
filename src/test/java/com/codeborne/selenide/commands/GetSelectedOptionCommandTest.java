@@ -38,7 +38,7 @@ public class GetSelectedOptionCommandTest {
 
   @Test
   public void testExecuteMethod() {
-    SelenideElement selectedElement = getSelectedOptionCommand.execute(proxy, locator, new Object[] {"something more"});
+    SelenideElement selectedElement = getSelectedOptionCommand.execute(proxy, locator, new Object[]{"something more"});
     assertEquals(mockedElement1Text, selectedElement.getText());
   }
 }

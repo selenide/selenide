@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FindCommandTest {
-
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement element1;

@@ -29,26 +29,32 @@ public class IsDisplayedCommandTest {
 
   @Test
   public void testExecuteMethodWhenElementIsNotPresent() {
-    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 
   @Test
   public void testExecuteMethodWhenElementIsNotDisplayed() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isDisplayed()).thenReturn(false);
-    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 
   @Test
   public void testExecuteMethodWhenElementIsDisplayed() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isDisplayed()).thenReturn(true);
-    assertTrue(isDisplayedCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertTrue(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 
   @Test
   public void testExecuteMethodWhenWebDriverExceptionIsThrown() {
     catchExecuteMethodWithException(new WebDriverException());
+  }
+
+  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
+    when(locator.getWebElement()).thenReturn(mockedElement);
+    doThrow(exception).when(mockedElement).isDisplayed();
+    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 
   @Test
@@ -65,12 +71,4 @@ public class IsDisplayedCommandTest {
   public void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
     catchExecuteMethodWithException(new NotFoundException("invalid selector"));
   }
-
-  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
-    when(locator.getWebElement()).thenReturn(mockedElement);
-    doThrow(exception).when(mockedElement).isDisplayed();
-    assertFalse(isDisplayedCommand.execute(proxy, locator, new Object[] {"something more"}));
-  }
-
-
 }

@@ -14,7 +14,6 @@ public class GetParent implements Command<SelenideElement> {
   }
 
   GetParent(Find find) {
-
     this.find = find;
   }
 

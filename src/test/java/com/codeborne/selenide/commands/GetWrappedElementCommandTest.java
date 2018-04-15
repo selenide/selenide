@@ -24,6 +24,6 @@ public class GetWrappedElementCommandTest {
 
   @Test
   public void testExecuteMethod() {
-    assertEquals(mockedElement, getWrappedElementCommand.execute(proxy, locator, new Object[] {"something more"}));
+    assertEquals(mockedElement, getWrappedElementCommand.execute(proxy, locator, new Object[]{"something more"}));
   }
 }

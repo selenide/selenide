@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GetClosestCommandTest {
-
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -37,7 +36,7 @@ public class GetClosestCommandTest {
           argument.substring(1))),
       0)).
       thenReturn(mockedElement);
-    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 
   @Test
@@ -46,6 +45,6 @@ public class GetClosestCommandTest {
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
     when(locator.find(proxy, By.xpath(String.format("ancestor::%s[1]", argument)), 0)).thenReturn(mockedElement);
-    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[] {argument, "something more"}));
+    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }
