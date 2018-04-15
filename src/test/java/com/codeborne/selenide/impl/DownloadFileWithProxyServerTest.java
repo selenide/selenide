@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -63,9 +65,12 @@ public class DownloadFileWithProxyServerTest {
   }
 
   private void emulateServerResponseWithFiles(final File... files) {
-    doAnswer(invocation -> {
-      filter.getDownloadedFiles().addAll(asList(files));
-      return null;
+    doAnswer(new Answer() {
+      @Override
+      public Object answer(final InvocationOnMock invocation) throws Throwable {
+        filter.getDownloadedFiles().addAll(asList(files));
+        return null;
+      }
     }).when(link).click();
   }
 
@@ -108,7 +113,7 @@ public class DownloadFileWithProxyServerTest {
   }
 
   @Test
-  public void throwsFileNotFoundException_ifNoFilesHaveBeenDownloadedAfterClick() throws IOException {
+  public void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() throws IOException {
     emulateServerResponseWithFiles();
 
     thrown.expect(FileNotFoundException.class);
