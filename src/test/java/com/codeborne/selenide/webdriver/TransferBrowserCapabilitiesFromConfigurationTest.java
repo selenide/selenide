@@ -19,7 +19,7 @@ public class TransferBrowserCapabilitiesFromConfigurationTest {
   private static final String SOME_CAP = "some.cap";
 
   @After
-  public void clearConfiguration() throws Exception {
+  public void clearConfiguration() {
     Configuration.browserCapabilities = null;
     System.clearProperty(SOME_CAP);
   }
@@ -33,7 +33,7 @@ public class TransferBrowserCapabilitiesFromConfigurationTest {
   }
 
   @Test
-  public void transferCapabilitiesFromConfiguration() throws Exception {
+  public void transferCapabilitiesFromConfiguration() {
     DesiredCapabilities someCapabilities = new DesiredCapabilities();
     someCapabilities.setCapability(SOME_CAP, "SOME_VALUE");
     DesiredCapabilities mergedCapabilities = driverFactory.mergeCapabilitiesFromConfiguration(someCapabilities);
@@ -42,7 +42,7 @@ public class TransferBrowserCapabilitiesFromConfigurationTest {
   }
 
   @Test
-  public void overrideCapabilitiesFromConfiguration() throws Exception {
+  public void overrideCapabilitiesFromConfiguration() {
     System.setProperty(SOME_CAP, "SOME_VALUE_FROM_ENV_VARIABLE");
     assertThat(driverFactory.createCommonCapabilities(proxy).getCapability(SOME_CAP),
         is("SOME_VALUE_FROM_CONFIGURATION"));

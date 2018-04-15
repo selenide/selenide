@@ -4,7 +4,10 @@ import org.junit.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.not;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +22,6 @@ public class ConditionTest {
   @Test
   public void textConditionChecksForSubstring() {
     assertTrue(Condition.text("John Malkovich The First").apply(elementWithText("John Malkovich The First")));
-    
     assertFalse(Condition.text("John Malkovich First").apply(elementWithText("John Malkovich The First")));
     assertFalse(Condition.text("john bon jovi").apply(elementWithText("John Malkovich The First")));
   }
@@ -34,7 +36,6 @@ public class ConditionTest {
   public void textConditionIgnoresWhitespaces() {
     assertTrue(Condition.text("john the malkovich").apply(
         elementWithText("John  the\n Malkovich")));
-    
     assertTrue(Condition.text("This is nonbreakable space").apply(
         elementWithText("This is nonbreakable\u00a0space")));
   }
@@ -54,10 +55,20 @@ public class ConditionTest {
   }
 
   @Test
+  public void textCaseSencitiveToString() {
+    assertEquals("textCaseSensitive 'John Malcovich'", Condition.textCaseSensitive("John Malcovich").toString());
+  }
+
+  @Test
   public void exactTextIsCaseInsensitive() {
     WebElement element = elementWithText("John Malkovich");
     assertTrue(Condition.exactText("john malkovich").apply(element));
     assertFalse(Condition.exactText("john").apply(element));
+  }
+
+  @Test
+  public void exactTextToString() {
+    assertEquals("exact text 'John Malcovich'", Condition.exactText("John Malcovich").toString());
   }
 
   @Test
@@ -66,6 +77,11 @@ public class ConditionTest {
     assertFalse(Condition.exactTextCaseSensitive("john malkovich").apply(element));
     assertTrue(Condition.exactTextCaseSensitive("John Malkovich").apply(element));
     assertFalse(Condition.exactTextCaseSensitive("John").apply(element));
+  }
+
+  @Test
+  public void exactTextCaseSensitiveToString() {
+    assertEquals("exact text case sensitive 'John Malcovich'", Condition.exactTextCaseSensitive("John Malcovich").toString());
   }
 
   @Test
@@ -78,7 +94,12 @@ public class ConditionTest {
     assertTrue(Condition.value("John Malkovich").apply(element));
     assertTrue(Condition.value("malko").apply(element));
   }
-  
+
+  @Test
+  public void valueToString() {
+    assertEquals("value 'John Malkovich'", Condition.value("John Malkovich").toString());
+  }
+
   @Test
   public void elementIsVisible() {
     assertTrue(Condition.visible.apply(elementWithVisibility(true)));
@@ -90,7 +111,7 @@ public class ConditionTest {
     assertTrue(Condition.exist.apply(elementWithVisibility(true)));
     assertTrue(Condition.exist.apply(elementWithVisibility(false)));
   }
-  
+
   @Test
   public void elementExists_returnsFalse_ifItThrowsException() {
     WebElement element = mock(WebElement.class);
@@ -102,6 +123,13 @@ public class ConditionTest {
   public void elementIsHidden() {
     assertTrue(Condition.hidden.apply(elementWithVisibility(false)));
     assertFalse(Condition.hidden.apply(elementWithVisibility(true)));
+  }
+
+  @Test
+  public void elementIsHiddenWithStaleElementException() {
+    WebElement element = mock(WebElement.class);
+    doThrow(new StaleElementReferenceException("Oooops")).when(element).isDisplayed();
+    assertTrue(Condition.hidden.apply(element));
   }
 
   @Test
@@ -159,6 +187,11 @@ public class ConditionTest {
   }
 
   @Test
+  public void elementMatchTextToString() {
+    assertEquals("match text 'John Malcovich'", Condition.matchesText("John Malcovich").toString());
+  }
+
+  @Test
   public void elementHasText() {
     assertTrue(Condition.hasText("selenide").apply(elementWithText("selenidehello")));
     assertTrue(Condition.hasText("hello").apply(elementWithText("selenidehello")));
@@ -170,6 +203,11 @@ public class ConditionTest {
     assertTrue(Condition.hasClass("btn").apply(elementWithAttribute("class", "btn btn-warning")));
     assertTrue(Condition.hasClass("btn-warning").apply(elementWithAttribute("class", "btn btn-warning")));
     assertFalse(Condition.hasClass("active").apply(elementWithAttribute("class", "btn btn-warning")));
+  }
+
+  @Test
+  public void elementHasClassToString() {
+    assertEquals("css class 'Foo'", Condition.hasClass("Foo").toString());
   }
 
   @Test
@@ -186,9 +224,21 @@ public class ConditionTest {
   }
 
   @Test
+  public void elementEnabledActualValue() {
+    assertEquals("enabled", Condition.enabled.actualValue(elementWithEnabled(true)));
+    assertEquals("disabled", Condition.enabled.actualValue(elementWithEnabled(false)));
+  }
+
+  @Test
   public void elementDisabled() {
     assertTrue(Condition.disabled.apply(elementWithEnabled(false)));
     assertFalse(Condition.disabled.apply(elementWithEnabled(true)));
+  }
+
+  @Test
+  public void elementDisabledActualValue() {
+    assertEquals("enabled", Condition.disabled.actualValue(elementWithEnabled(true)));
+    assertEquals("disabled", Condition.disabled.actualValue(elementWithEnabled(false)));
   }
 
   @Test
@@ -198,30 +248,101 @@ public class ConditionTest {
   }
 
   @Test
+  public void elementSelectedActualValue() {
+    assertEquals("true", Condition.selected.actualValue(elementWithSelected(true)));
+    assertEquals("false", Condition.selected.actualValue(elementWithSelected(false)));
+  }
+
+  @Test
   public void elementChecked() {
     assertTrue(Condition.checked.apply(elementWithSelected(true)));
     assertFalse(Condition.checked.apply(elementWithSelected(false)));
   }
 
   @Test
-  public void elementNotCondition() {
-    assertTrue(Condition.not(Condition.checked).apply(elementWithSelected(false)));
-    assertFalse(Condition.not(Condition.checked).apply(elementWithSelected(true)));
+  public void elementCheckedActualValue() {
+    assertEquals("true", Condition.checked.actualValue(elementWithSelected(true)));
+    assertEquals("false", Condition.checked.actualValue(elementWithSelected(false)));
   }
 
   @Test
-  public void elementVisibleButNotSelected() {
-    WebElement element = elementWithVisibility(true);
-    when(element.isSelected()).thenReturn(false);
-    
+  public void elementNotCondition() {
+    assertTrue(not(Condition.checked).apply(elementWithSelected(false)));
+    assertFalse(not(Condition.checked).apply(elementWithSelected(true)));
+  }
+
+  @Test
+  public void elementNotCondtionActualValue() {
+    assertEquals("false", not(Condition.checked).actualValue(elementWithSelected(false)));
+    assertEquals("true", not(Condition.checked).actualValue(elementWithSelected(true)));
+  }
+
+  @Test
+  public void elementAndCondition() {
+    WebElement element = elementWithSelectedAndText(true, "text");
+    assertTrue(Condition.and("selected with text", be(Condition.selected),
+                             Condition.have(Condition.text("text"))).apply(element));
+    assertFalse(Condition.and("selected with text", not(be(Condition.selected)),
+                             Condition.have(Condition.text("text"))).apply(element));
+    assertFalse(Condition.and("selected with text", be(Condition.selected),
+                             Condition.have(Condition.text("incorrect"))).apply(element));
+  }
+
+  @Test
+  public void elementAndConditionActualValue() {
+    WebElement element = elementWithSelectedAndText(false, "text");
+    Condition condition = Condition.and("selected with text", be(Condition.selected),
+                                  Condition.have(Condition.text("text")));
+    assertNull(condition.actualValue(element));
+    assertFalse(condition.apply(element));
+    assertEquals("false", condition.actualValue(element));
+  }
+
+  @Test
+  public void elementAndConditionToString() {
+    WebElement element = elementWithSelectedAndText(false, "text");
+    Condition condition = Condition.and("selected with text", be(Condition.selected),
+                                        Condition.have(Condition.text("text")));
+    assertEquals("selected with text", condition.toString());
+    assertFalse(condition.apply(element));
+    assertEquals("be selected", condition.toString());
+  }
+
+  @Test
+  public void elementOrCondition() {
+    WebElement element = elementWithSelectedAndText(false, "text");
+    when(element.isDisplayed()).thenReturn(true);
     assertTrue(Condition.or("Visible, not Selected",
         Condition.visible,
         Condition.checked).apply(element));
+    assertFalse(Condition.or("Selected with text",
+                             Condition.checked,
+                             Condition.text("incorrect")).apply(element));
+  }
+
+  @Test
+  public void elementOrConditionActualValue() {
+    WebElement element = elementWithSelectedAndText(false, "text");
+    Condition condition = Condition.or("selected with text", be(Condition.selected),
+                                        Condition.have(Condition.text("text")));
+    assertNull(condition.actualValue(element));
+    assertTrue(condition.apply(element));
+    assertEquals("false", condition.actualValue(element));
+  }
+
+  @Test
+  public void elementOrConditionToString() {
+    WebElement element = elementWithSelectedAndText(false, "text");
+    Condition condition = Condition.or("selected with text", be(Condition.selected),
+                                        Condition.have(Condition.text("text")));
+    assertEquals("selected with text", condition.toString());
+    assertTrue(condition.apply(element));
+    assertEquals("be selected", condition.toString());
   }
 
   @Test
   public void conditionBe() {
-    Condition condition = Condition.be(Condition.visible);
+    Condition condition = be(Condition.visible);
     assertEquals("be visible", condition.toString());
   }
 
@@ -270,6 +391,13 @@ public class ConditionTest {
   private WebElement elementWithSelected(boolean isSelected) {
     WebElement element = mock(WebElement.class);
     when(element.isSelected()).thenReturn(isSelected);
+    return element;
+  }
+
+  private WebElement elementWithSelectedAndText(boolean isSelected, String text) {
+    WebElement element = mock(WebElement.class);
+    when(element.isSelected()).thenReturn(isSelected);
+    when(element.getText()).thenReturn(text);
     return element;
   }
 }

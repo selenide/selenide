@@ -18,7 +18,7 @@ public class SoftAsserts extends ExternalResource {
   }
 
   @Override
-  protected void before() throws Throwable {
+  protected void before() {
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, new ErrorsCollector());
   }
 

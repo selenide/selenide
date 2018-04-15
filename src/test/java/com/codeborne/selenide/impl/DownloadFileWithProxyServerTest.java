@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.rules.MockWebdriverContainer;
+
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,13 +33,12 @@ public class DownloadFileWithProxyServerTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
-  WebDriver webdriver = mock(WebDriver.class);
-  SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  WebElementSource linkWithHref = mock(WebElementSource.class);
-  WebElement link = mock(WebElement.class);
-
-  FileDownloadFilter filter = spy(new FileDownloadFilter());
+  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
+  private WebDriver webdriver = mock(WebDriver.class);
+  private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private WebElementSource linkWithHref = mock(WebElementSource.class);
+  private WebElement link = mock(WebElement.class);
+  private FileDownloadFilter filter = spy(new FileDownloadFilter());
 
   @Before
   public void setUp() {
@@ -46,7 +46,7 @@ public class DownloadFileWithProxyServerTest {
     doNothing().when(command.waiter).sleep(anyLong());
     when(webdriverContainer.getWebDriver()).thenReturn(webdriver);
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
-    
+
     when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
@@ -63,14 +63,24 @@ public class DownloadFileWithProxyServerTest {
     verify(link).click();
     verify(filter).deactivate();
   }
-  
+
+  private void emulateServerResponseWithFiles(final File... files) {
+    doAnswer(new Answer() {
+      @Override
+      public Object answer(final InvocationOnMock invocation) throws Throwable {
+        filter.getDownloadedFiles().addAll(asList(files));
+        return null;
+      }
+    }).when(link).click();
+  }
+
   @Test
   public void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
+      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
     File file = command.download(linkWithHref, link, proxy);
     assertThat(file.getName(), is("report.pdf"));
@@ -80,7 +90,7 @@ public class DownloadFileWithProxyServerTest {
     verify(webdriver.switchTo()).window("tab1");
     verifyNoMoreInteractions(webdriver.switchTo());
   }
-  
+
   @Test
   public void ignoresErrorIfWindowHasAlreadyBeenClosedMeanwhile() throws IOException {
     TargetLocator targetLocator = mock(TargetLocator.class);
@@ -90,8 +100,8 @@ public class DownloadFileWithProxyServerTest {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-        .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
+      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
     File file = command.download(linkWithHref, link, proxy);
     assertThat(file.getName(), is("report.pdf"));
@@ -103,21 +113,11 @@ public class DownloadFileWithProxyServerTest {
   }
 
   @Test
-  public void throwsFileNotFoundException_ifNoFilesHaveBeenDownloadedAfterClick() throws IOException {
+  public void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() throws IOException {
     emulateServerResponseWithFiles();
 
     thrown.expect(FileNotFoundException.class);
     thrown.expectMessage("Failed to download file <a href='report.pdf'>report</a>");
     command.download(linkWithHref, link, proxy);
-  }
-
-  private void emulateServerResponseWithFiles(final File... files) {
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        filter.getDownloadedFiles().addAll(asList(files));
-        return null;
-      }
-    }).when(link).click();
   }
 }

@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+
 import org.openqa.selenium.support.ui.Select;
 
 public class SelectOptionByValue implements Command {
@@ -11,8 +12,7 @@ public class SelectOptionByValue implements Command {
     Select select = new Select(selectField.getWebElement());
     if (args[0] instanceof String) {
       select.selectByValue((String) args[0]);
-    }
-    else {
+    } else if (args[0] instanceof String[]) {
       String[] values = (String[]) args[0];
       for (String value : values) {
         select.selectByValue(value);
