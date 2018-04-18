@@ -24,3 +24,5 @@ apply from: 'gradle/code-analysis.gradle'
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/tests.gradle'
 apply from: 'gradle/deploy.gradle'
+
+wrapper.gradleVersion = '4.7'
