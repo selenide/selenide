@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -356,6 +357,16 @@ public class Selenide {
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
     return ElementFinder.wrap($(parent), seleniumSelector, index);
+  }
+
+  /**
+   * Initialize SelenideElement from supplier
+   * ATTENTION! This method doesn't invoke supplier's get yet!
+   * @param howToGetElement supplier that help us get element
+   * @return SelenideElement
+   */
+  public static SelenideElement $(Supplier<? extends WebElement> howToGetElement) {
+    return ElementSupplier.wrap(howToGetElement);
   }
 
   /**
