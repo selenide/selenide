@@ -16,7 +16,12 @@ import java.net.URL;
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.remote;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isOpera;
 
 class RemoteDriverFactory extends AbstractDriverFactory {
 

@@ -11,7 +11,9 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
@@ -85,7 +87,7 @@ public class Navigator {
 
   protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
     if (!captureJavascriptErrors) return;
-    
+
     try {
       webdriver.executeScript(
           "if (!window._selenide_jsErrors) {\n" +
@@ -122,7 +124,7 @@ public class Navigator {
         relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
         isLocalFile(relativeOrAbsoluteUrl);
   }
-  
+
   protected boolean isLocalFile(String url) {
     return url.toLowerCase().startsWith("file:");
   }

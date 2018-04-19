@@ -1,8 +1,18 @@
 package com.codeborne.selenide.webdriver;
 
-import io.github.bonigarcia.wdm.*;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.EdgeDriverManager;
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
+import io.github.bonigarcia.wdm.OperaDriverManager;
+import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isEdge;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.isOpera;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class WebDriverBinaryManager {

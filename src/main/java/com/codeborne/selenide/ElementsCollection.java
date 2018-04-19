@@ -1,16 +1,31 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.UIAssertionError;
-import com.codeborne.selenide.impl.*;
+import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.CollectionElement;
+import com.codeborne.selenide.impl.CollectionElementByCondition;
+import com.codeborne.selenide.impl.FilteringCollection;
+import com.codeborne.selenide.impl.HeadOfCollection;
+import com.codeborne.selenide.impl.LastCollectionElement;
+import com.codeborne.selenide.impl.SelenideElementIterator;
+import com.codeborne.selenide.impl.SelenideElementListIterator;
+import com.codeborne.selenide.impl.TailOfCollection;
+import com.codeborne.selenide.impl.WebElementsCollection;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.assertionMode;
+import static com.codeborne.selenide.Configuration.collectionsPollingInterval;
+import static com.codeborne.selenide.Configuration.collectionsTimeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
