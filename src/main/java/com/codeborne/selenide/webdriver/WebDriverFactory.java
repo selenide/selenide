@@ -94,16 +94,24 @@ public class WebDriverFactory {
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
     } else if (startMaximized) {
       try {
-        if (isChrome()) {
-          maximizeChromeBrowser(driver.manage().window());
-        } else {
-          driver.manage().window().maximize();
-        }
+        maximizeBrowser(driver);
       } catch (Exception cannotMaximize) {
         log.warning("Cannot maximize " + describe(driver) + ": " + cannotMaximize);
       }
     }
     return driver;
+  }
+
+  private void maximizeBrowser(WebDriver driver) {
+    try {
+      driver.manage().window().maximize();
+    } catch (Exception cannotMaximize) {
+      if (isChrome()) {
+        maximizeChromeBrowser(driver.manage().window());
+      } else {
+        throw cannotMaximize;
+      }
+    }
   }
 
   protected void maximizeChromeBrowser(WebDriver.Window window) {
