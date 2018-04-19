@@ -1,16 +1,25 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Selenide;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.BuildInfo;
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserPosition;
+import static com.codeborne.selenide.Configuration.browserSize;
+import static com.codeborne.selenide.Configuration.browserVersion;
+import static com.codeborne.selenide.Configuration.driverManagerEnabled;
+import static com.codeborne.selenide.Configuration.remote;
+import static com.codeborne.selenide.Configuration.startMaximized;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static java.util.Arrays.asList;

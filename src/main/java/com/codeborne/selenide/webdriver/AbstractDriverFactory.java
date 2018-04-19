@@ -14,7 +14,11 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.browserVersion;
 import static com.codeborne.selenide.Configuration.pageLoadStrategy;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.openqa.selenium.remote.CapabilityType.*;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
+import static org.openqa.selenium.remote.CapabilityType.PROXY;
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
+import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 abstract class AbstractDriverFactory {
 

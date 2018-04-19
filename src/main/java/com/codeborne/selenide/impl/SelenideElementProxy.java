@@ -18,7 +18,9 @@ import java.util.Set;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.assertionMode;
+import static com.codeborne.selenide.Configuration.pollingInterval;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -44,7 +46,7 @@ class SelenideElementProxy implements InvocationHandler {
   ));
 
   private final WebElementSource webElementSource;
-  
+
   protected SelenideElementProxy(WebElementSource webElementSource) {
     this.webElementSource = webElementSource;
   }
@@ -77,7 +79,7 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
-  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, 
+  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
                                     Object proxy, Method method, Object[] args) throws Throwable, Error {
     final long startTime = currentTimeMillis();
     Throwable lastError;
@@ -95,7 +97,7 @@ class SelenideElementProxy implements InvocationHandler {
       catch (Throwable e) {
         lastError = e;
       }
-      
+
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         throw Cleanup.of.wrap(lastError);
       }
@@ -122,13 +124,13 @@ class SelenideElementProxy implements InvocationHandler {
     if (e instanceof FileNotFoundException) return false;
     if (e instanceof IllegalArgumentException) return false;
     if (e instanceof ReflectiveOperationException) return false;
-    
+
     return e instanceof Exception || e instanceof AssertionError;
   }
 
   private long getTimeoutMs(Method method, Object[] args) {
-    return isWaitCommand(method) ? 
-        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] : 
+    return isWaitCommand(method) ?
+        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
         timeout;
   }
 

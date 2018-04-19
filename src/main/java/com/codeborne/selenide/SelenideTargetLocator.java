@@ -1,7 +1,15 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.ArrayList;
@@ -96,7 +104,7 @@ public class SelenideTargetLocator implements TargetLocator {
       }
     };
   }
-  
+
   private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final String nameOrHandleOrTitle) {
     return new ExpectedCondition<WebDriver>() {
       @Override
@@ -118,7 +126,7 @@ public class SelenideTargetLocator implements TargetLocator {
       }
     };
   }
-  
+
   private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final int index) {
     return new ExpectedCondition<WebDriver>() {
       @Override
@@ -175,9 +183,9 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   protected static WebDriver windowByTitle(String title) {
     WebDriver driver = getWebDriver();
-    
+
     Set<String> windowHandles = driver.getWindowHandles();
-    
+
     for (String windowHandle : windowHandles) {
       driver.switchTo().window(windowHandle);
       if (title.equals(driver.getTitle())) {
