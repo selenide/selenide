@@ -1,21 +1,24 @@
-jacocoTestReport {
+tasks.withType(JacocoReport) {
   reports {
-    xml.enabled true
-    csv.enabled false
-    html.enabled true
-    html.destination file("${buildDir}/reports/jacocoHtml")
+    csv.enabled = false
+    html.enabled = true
   }
+}
+
+jacocoTestReport {
   executionData = files(
-    file("$project.buildDir/jacoco/test.exec"),
-    file("$project.buildDir/jacoco/htmlunit.exec"),
-    file("$project.buildDir/jacoco/chrome.exec")
+    file("$buildDir/jacoco/test.exec"),
+    file("$buildDir/jacoco/htmlunit.exec"),
+    file("$buildDir/jacoco/chrome.exec")
   )
 }
 
 coveralls {
-  jacocoReportPath = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+  jacocoReportPath = "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
 }
 
 tasks.coveralls {
-  onlyIf { System.env.'CI' }
+  onlyIf {
+    System.env.'CI'
+  }
 }

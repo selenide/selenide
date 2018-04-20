@@ -1,3 +1,5 @@
+import java.nio.charset.StandardCharsets
+
 plugins {
   id 'java-library'
   id 'maven'
@@ -11,18 +13,24 @@ group = 'com.codeborne'
 archivesBaseName = 'selenide'
 version = '4.11.2-SNAPSHOT'
 
-[compileJava, compileTestJava]*.options.collect { options -> options.encoding = 'UTF-8' }
-[compileJava, compileTestJava]*.options.collect { options -> options.debug = true }
+ext {
+  encoding = StandardCharsets.UTF_8.name()
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = encoding
+  options.debug = true
+}
 compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 defaultTasks 'check', 'test', 'install'
 
-apply from: 'gradle/dependencies.gradle'
-apply from: 'gradle/code-analysis.gradle'
-apply from: 'gradle/coverage.gradle'
-apply from: 'gradle/tests.gradle'
-apply from: 'gradle/deploy.gradle'
+apply from: rootProject.file('gradle/dependencies.gradle')
+apply from: rootProject.file('gradle/code-analysis.gradle')
+apply from: rootProject.file('gradle/coverage.gradle')
+apply from: rootProject.file('gradle/tests.gradle')
+apply from: rootProject.file('gradle/deploy.gradle')
 
 wrapper.gradleVersion = '4.7'
