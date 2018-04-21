@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Configuration.setValueChangeEvent;
 import static com.codeborne.selenide.impl.Events.events;
 
 public class Append implements Command<WebElement> {
@@ -12,7 +13,9 @@ public class Append implements Command<WebElement> {
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement input = locator.getWebElement();
     input.sendKeys((String) args[0]);
-    events.fireChangeEvent(input);
+    if (setValueChangeEvent) {
+      events.fireChangeEvent(input);
+    }
     return proxy;
   }
 }
