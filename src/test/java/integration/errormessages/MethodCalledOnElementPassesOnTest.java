@@ -6,11 +6,16 @@ import integration.IntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MethodCalledOnElementPassesOnTest extends IntegrationTest {
 

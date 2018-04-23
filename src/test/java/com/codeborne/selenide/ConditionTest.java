@@ -6,7 +6,10 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,7 +34,7 @@ public class ConditionTest {
     WebElement element = elementWithText("John Malkovich The First");
     assertTrue(Condition.text("john malkovich").apply(element));
   }
-  
+
   @Test
   public void textConditionIgnoresWhitespaces() {
     assertTrue(Condition.text("john the malkovich").apply(

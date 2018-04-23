@@ -7,7 +7,12 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeTrue;

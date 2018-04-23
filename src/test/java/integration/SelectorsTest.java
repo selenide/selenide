@@ -4,9 +4,17 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byId;
+import static com.codeborne.selenide.Selectors.byLinkText;
+import static com.codeborne.selenide.Selectors.byName;
+import static com.codeborne.selenide.Selectors.byPartialLinkText;
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class SelectorsTest extends IntegrationTest {
   @Before

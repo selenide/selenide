@@ -20,7 +20,10 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -137,7 +140,7 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentOuterWebElement/1471818981483.1.png
             Timeout: 6 s.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }

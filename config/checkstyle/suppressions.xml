@@ -23,6 +23,5 @@
     <suppress checks="JavadocMethod" files=".*[/\\]ElementsCollection.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]CollectionCondition.java"/>
     <suppress checks="JavadocMethod" files="src[/\\]test[/\\]java[/\\].*"/>
-    <suppress checks="AvoidStarImport" files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="ClassFanOutComplexity" files=".*[/\\]Commands.java"/>
 </suppressions>

@@ -14,13 +14,23 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;

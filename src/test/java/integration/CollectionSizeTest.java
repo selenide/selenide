@@ -5,7 +5,12 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.CollectionCondition.*;
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
+import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
+import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
+import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class CollectionSizeTest extends IntegrationTest {

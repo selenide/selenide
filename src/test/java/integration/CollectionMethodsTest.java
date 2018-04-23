@@ -16,12 +16,24 @@ import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.CollectionCondition.*;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.getElements;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CollectionMethodsTest extends IntegrationTest {
   @Before

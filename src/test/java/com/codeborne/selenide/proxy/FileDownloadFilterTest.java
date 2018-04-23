@@ -14,8 +14,11 @@ import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 public class FileDownloadFilterTest {
   FileDownloadFilter filter = new FileDownloadFilter();

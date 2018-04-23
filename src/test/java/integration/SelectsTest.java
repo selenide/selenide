@@ -10,7 +10,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
@@ -65,7 +68,7 @@ public class SelectsTest extends IntegrationTest {
 
     select.selectOption(2);
     assertThat(select.getSelectedText(), equalTo("@rusmail.ru"));
-    
+
     select.selectOption(3);
     assertThat(select.getSelectedText(), equalTo("@мыло.ру"));
   }
@@ -164,10 +167,10 @@ public class SelectsTest extends IntegrationTest {
   @Test
   public void selectingOptionTriggersChangeEvent() {
     $("#selectedDomain").shouldBe(empty);
-    
+
     $(By.xpath("//select[@name='domain']")).selectOption("@мыло.ру");
     $("#selectedDomain").shouldHave(text("@мыло.ру"));
-    
+
     $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
     $("#selectedDomain").shouldHave(text("@myrambler.ru"));
   }

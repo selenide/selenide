@@ -9,7 +9,12 @@ import java.util.logging.Logger;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class EventsTest {
   Events events = spy(new Events());
@@ -23,9 +28,9 @@ public class EventsTest {
   @Test
   public void triggersEventsByExecutingJSCode() {
     doNothing().when(events).executeJavaScript(same(element), any());
-    
+
     events.fireEvent(element, "input", "keyup", "change");
-    
+
     verify(events).executeJavaScript(element, "input", "keyup", "change");
     verifyNoMoreInteractions(events.log);
   }
@@ -39,7 +44,7 @@ public class EventsTest {
     verify(events).executeJavaScript(element, "change");
     verifyNoMoreInteractions(events.log);
   }
-  
+
   @Test
   public void ignoresButLogs_anyOtherExceptions() {
     doThrow(new UnsupportedOperationException("webdriver does not support JS"))

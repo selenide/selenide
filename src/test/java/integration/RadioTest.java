@@ -8,7 +8,9 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selectors.byName;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getSelectedRadio;
+import static com.codeborne.selenide.Selenide.selectRadio;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

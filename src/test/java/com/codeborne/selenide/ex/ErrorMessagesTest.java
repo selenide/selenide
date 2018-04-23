@@ -12,7 +12,11 @@ import java.util.Locale;
 import static com.codeborne.selenide.Screenshots.screenshots;
 import static java.io.File.separatorChar;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 public class ErrorMessagesTest {
 
@@ -83,7 +87,7 @@ public class ErrorMessagesTest {
     assertEquals("", screenshot);
     verify(screenshots, never()).takeScreenShot();
   }
-  
+
   @Test
   public void printHtmlPath_if_savePageSourceIsEnabled() {
     Configuration.savePageSource = true;

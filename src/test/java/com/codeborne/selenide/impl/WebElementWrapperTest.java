@@ -11,7 +11,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.CHROME;
+import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
+import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -57,10 +59,10 @@ public class WebElementWrapperTest {
   public void toStringPrintsTagNameWithSomeAttributes() {
     browser = HTMLUNIT;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
-    
+
     assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
   }
-  
+
   @Test
   public void toStringFallbacksToMinimalImplementation_ifFailedToCallJavaScript() {
     browser = CHROME;
@@ -69,7 +71,7 @@ public class WebElementWrapperTest {
     when(((JavascriptExecutor) webdriverContainer.getWebDriver())
         .executeScript(anyString(), any()))
         .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
-    
+
     assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
   }
 }

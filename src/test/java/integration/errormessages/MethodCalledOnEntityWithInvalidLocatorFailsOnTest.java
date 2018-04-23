@@ -12,10 +12,15 @@ import org.junit.Test;
 import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
+import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -167,8 +172,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
     }
     //todo  - need to fix
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...
@@ -195,8 +200,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
     }
     //todo  - need to fix
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...
@@ -223,8 +228,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
               "InvalidSelectorError: An invalid or illegal selector was specified\n"));
     }
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...
@@ -251,8 +256,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
               "InvalidSelectorError: An invalid or illegal selector was specified\n"));
     }
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...
@@ -279,8 +284,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
               "InvalidSelectorError: An invalid or illegal selector was specified\n"));
     }
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...
@@ -307,8 +312,8 @@ public class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integrati
               "InvalidSelectorError: An invalid or illegal selector was specified\n"));
     }
         /*
-            org.openqa.selenium.InvalidSelectorException: 
-            The given selector ##invalid-locator is either invalid or does not result in a WebElement. 
+            org.openqa.selenium.InvalidSelectorException:
+            The given selector ##invalid-locator is either invalid or does not result in a WebElement.
             The following error occurred:
             InvalidSelectorError: An invalid or illegal selector was specified
             ...

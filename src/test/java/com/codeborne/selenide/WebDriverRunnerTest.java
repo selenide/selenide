@@ -20,7 +20,14 @@ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class WebDriverRunnerTest {
   static WebDriver driver;
@@ -30,7 +37,7 @@ public class WebDriverRunnerTest {
 
   URL url = currentThread().getContextClassLoader().getResource("start_page.html");
 
-  @Before 
+  @Before
   public void resetWebDriverContainer() {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();

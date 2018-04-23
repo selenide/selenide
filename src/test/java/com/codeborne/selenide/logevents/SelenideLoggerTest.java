@@ -14,7 +14,11 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 public class SelenideLoggerTest {
 
@@ -36,7 +40,7 @@ public class SelenideLoggerTest {
     assertEquals("click", SelenideLogger.readableMethodName("click"));
     assertEquals("set value", SelenideLogger.readableMethodName("setValue"));
     assertEquals("should be", SelenideLogger.readableMethodName("shouldBe"));
-    assertEquals("converts java method name to human readable clause", 
+    assertEquals("converts java method name to human readable clause",
         SelenideLogger.readableMethodName("convertsJavaMethodNameToHumanReadableClause"));
   }
 
@@ -56,7 +60,7 @@ public class SelenideLoggerTest {
     LogEventListener listener1 = mock(LogEventListener.class);
     LogEventListener listener2 = mock(LogEventListener.class);
     LogEventListener listener3 = mock(LogEventListener.class);
-    
+
     SelenideLogger.addListener("simpleReport", listener1);
     SelenideLogger.addListener("softAsserts", listener2);
     SelenideLogger.addListener("userProvided", listener3);
@@ -64,7 +68,7 @@ public class SelenideLoggerTest {
     WebElement webElement = mock(WebElement.class);
     when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
-    
+
     $("div").click();
 
     verifyEvent(listener1);

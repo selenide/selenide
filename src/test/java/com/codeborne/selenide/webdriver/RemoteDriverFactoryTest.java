@@ -5,11 +5,11 @@ import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.remote.BrowserType;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RemoteDriverFactoryTest {
   RemoteDriverFactory factory = new RemoteDriverFactory();
-  
+
   @After
   public void tearDown() {
     Configuration.browser = null;

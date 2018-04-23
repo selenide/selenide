@@ -15,8 +15,14 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static org.junit.Assert.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 public class PageObjectTest extends IntegrationTest {
 
@@ -180,7 +186,7 @@ public class PageObjectTest extends IntegrationTest {
   static class MissingSelectsPage {
     private MissingSelectsPage() {
     }
-    
+
     @FindBy(xpath = "//select[@name='wrong-select-name']")
     public WebElement domainSelect;
 

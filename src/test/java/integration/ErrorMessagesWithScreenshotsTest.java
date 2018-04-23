@@ -10,15 +10,21 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.reportsFolder;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
-  
+
   @Before
   public final void setTimeout() {
     timeout = 0;

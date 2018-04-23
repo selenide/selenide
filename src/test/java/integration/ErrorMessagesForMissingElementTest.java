@@ -1,19 +1,37 @@
 package integration;
 
-import com.codeborne.selenide.*;
-import com.codeborne.selenide.ex.*;
-import com.codeborne.selenide.impl.*;
-import org.junit.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.*;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
-import java.io.*;
+import java.io.File;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.*;
-import static com.codeborne.selenide.Selenide.*;
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.reportsFolder;
+import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getElement;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 public class ErrorMessagesForMissingElementTest extends IntegrationTest {
   private PageObject pageObject;
