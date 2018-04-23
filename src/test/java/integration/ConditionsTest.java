@@ -4,7 +4,15 @@ import com.codeborne.selenide.Condition;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class ConditionsTest extends IntegrationTest {

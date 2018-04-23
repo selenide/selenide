@@ -7,7 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static integration.customcommands.MyFramework.*;
+import static integration.customcommands.MyFramework.$_;
+import static integration.customcommands.MyFramework.quadrupleClickCounter;
+import static integration.customcommands.MyFramework.tripleClickCounter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,7 +20,7 @@ public class CustomCommandsTest extends IntegrationTest {
     tripleClickCounter.set(0);
     quadrupleClickCounter.set(0);
   }
-  
+
   @Test
   public void userCanAddAnyCustomCommandsToSelenide() {
     $_("#valid-image").tripleClick().tripleClick().tripleClick().click();
@@ -26,7 +28,7 @@ public class CustomCommandsTest extends IntegrationTest {
 
     assertTrue("Can also use standard Selenium methods", $_("#valid-image img").isDisplayed());
     $_("#valid-image img").shouldBe(visible);
-    
+
     assertEquals(4, tripleClickCounter.get());
     assertEquals(1, quadrupleClickCounter.get());
   }

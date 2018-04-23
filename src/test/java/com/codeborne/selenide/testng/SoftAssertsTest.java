@@ -11,8 +11,18 @@ import org.junit.Test;
 import org.testng.ITestResult;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.testng.ITestResult.FAILURE;
 
 public class SoftAssertsTest {
@@ -28,15 +38,15 @@ public class SoftAssertsTest {
     assertNotNull(listener.getListenersAnnotation(SoftAssertTestNGTest1.class));
     assertNotNull(listener.getListenersAnnotation(SoftAssertTestNGTest2.class));
     assertNotNull(listener.getListenersAnnotation(ReportsNGTest.class));
-    
+
     assertNull(listener.getListenersAnnotation(AttributeTest.class));
   }
-  
+
   @Test
   public void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
     assertTrue(listener.shouldIntercept(SoftAssertTestNGTest1.class));
     assertTrue(listener.shouldIntercept(SoftAssertTestNGTest2.class));
-    
+
     assertFalse(listener.shouldIntercept(ReportsNGTest.class));
     assertFalse(listener.shouldIntercept(AttributeTest.class));
   }
@@ -50,7 +60,7 @@ public class SoftAssertsTest {
   @Test
   public void addsSelenideErrorListener_forMethodsThatNeedSoftAsserts() throws Exception {
     ITestResult result = mockTestResult(SoftAssertTestNGTest1.class, "successfulTest1");
-    
+
     listener.addSelenideErrorListener(result);
 
     assertTrue(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
@@ -59,7 +69,7 @@ public class SoftAssertsTest {
   @Test
   public void shouldNotAddSelenideErrorListener_forMethodsThatDoNotNeedSoftAsserts() throws Exception {
     ITestResult result = mockTestResult(ReportsNGTest.class, "successfulMethod");
-    
+
     listener.addSelenideErrorListener(result);
 
     assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
@@ -76,7 +86,7 @@ public class SoftAssertsTest {
         .when(errorsCollector).failIfErrors("integration.testng.SoftAssertTestNGTest2.userCanUseSoftAssertWithTestNG2");
 
     listener.onTestFailure(result);
-    
+
     verify(result).setStatus(FAILURE);
     verify(result).setThrowable(softAssertionError);
 
@@ -100,9 +110,9 @@ public class SoftAssertsTest {
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     doNothing().when(errorsCollector)
         .failIfErrors("integration.testng.SoftAssertTestNGTest2.userCanUseSoftAssertWithTestNG2");
-    
+
     listener.onTestFailure(result);
-    
+
     verify(result, never()).setStatus(FAILURE);
     verify(result, never()).setThrowable(any(Throwable.class));
   }

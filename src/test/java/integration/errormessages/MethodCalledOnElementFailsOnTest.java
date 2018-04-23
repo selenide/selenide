@@ -10,13 +10,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -57,7 +65,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentWebElement/1471304286016.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
 
             chrome
@@ -66,7 +74,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentElement/1477036866229.0.png
             Timeout: 0 ms.
-            Caused by: NoSuchElementException: no such element: 
+            Caused by: NoSuchElementException: no such element:
               Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
 
         */
@@ -274,7 +282,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471352505699.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
@@ -301,7 +309,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:..._WithNonExistentInnerElement/1471353844670.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
@@ -378,7 +386,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), 
+      assertThat(expected.getMessage(),
           startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
       assertScreenshot(expected);
@@ -420,7 +428,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471823617503.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
@@ -526,7 +534,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471825188045.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }

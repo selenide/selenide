@@ -5,7 +5,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Selenide.$;
 

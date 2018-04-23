@@ -12,8 +12,13 @@ import java.util.Set;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.Wait;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -35,7 +40,7 @@ public class TabsTest extends IntegrationTest {
     $("h1").shouldHave(text("Tabs"));
 
     String windowHandle = driver.getWindowHandle();
-    
+
     driver.switchTo().window(nextWindowHandle(driver));
     $("h1").shouldHave(text("File uploads"));
 
@@ -113,7 +118,7 @@ public class TabsTest extends IntegrationTest {
 //
 //    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
 //    $(byText("Page6: same title")).click();
-//    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1")); 
+//    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
 //    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
 //
 //    switchTo().windowExceptHandles("Test::tabs::title", firstHandle, secondHandle);
@@ -121,7 +126,7 @@ public class TabsTest extends IntegrationTest {
 //
 //    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
-  
+
   @After
   public void tearDown() {
     close();

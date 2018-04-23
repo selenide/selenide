@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.ex.*;
+import com.codeborne.selenide.ex.InvalidStateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;

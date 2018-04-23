@@ -5,7 +5,11 @@ import com.automation.remarks.video.recorder.VideoRecorder;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.junit.TextReport;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 
@@ -16,9 +20,19 @@ import java.util.logging.Logger;
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserSize;
+import static com.codeborne.selenide.Configuration.clickViaJs;
+import static com.codeborne.selenide.Configuration.fastSetValue;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 public abstract class IntegrationTest {
@@ -42,7 +56,7 @@ public abstract class IntegrationTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Rule public VideoRule video = new VideoRule();
-  
+
   private static int port;
   protected static LocalHttpServer server;
   private long defaultTimeout;
@@ -79,8 +93,8 @@ public abstract class IntegrationTest {
     fastSetValue = false;
     browserSize = "1024x768";
     server.uploadedFiles.clear();
-    
-    // proxy breaks Firefox/Marionette because of this error: 
+
+    // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
     Configuration.fileDownload = isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY;
   }

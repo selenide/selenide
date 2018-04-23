@@ -9,7 +9,9 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.page;
 import static org.junit.Assert.assertEquals;
 
 public class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {

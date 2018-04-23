@@ -2,19 +2,25 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.SoftAsserts;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.open;
 
 @Ignore
 public class SoftAssertJUnitTest extends IntegrationTest {
   @Rule public SoftAsserts softAsserts = new SoftAsserts();
-  
+
   @Before
   public void switchToSoftAssertionsMode() {
     open("/page_with_selects_without_jquery.html");

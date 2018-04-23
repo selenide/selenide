@@ -7,11 +7,17 @@ import org.junit.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeFalse;
 
 public class FramesTest extends IntegrationTest {

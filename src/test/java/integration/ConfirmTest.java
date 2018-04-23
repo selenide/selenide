@@ -10,8 +10,15 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.confirm;
+import static com.codeborne.selenide.Selenide.dismiss;
+import static com.codeborne.selenide.Selenide.onConfirmReturn;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
@@ -88,7 +95,7 @@ public class ConfirmTest extends IntegrationTest {
     onConfirmReturn(true);
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
-    
+
     if (!isHeadless()) {
       assertEquals("Get out of this page, " + userName + '?', confirmDialogText);
     }

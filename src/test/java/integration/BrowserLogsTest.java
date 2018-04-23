@@ -8,8 +8,15 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.assertNoJavascriptErrors;
+import static com.codeborne.selenide.Selenide.getJavascriptErrors;
+import static com.codeborne.selenide.Selenide.getWebDriverLogs;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,7 +37,7 @@ public class BrowserLogsTest extends IntegrationTest {
 
     assertNoJavascriptErrors();
     $(byText("Generate JS Error")).click();
-    
+
     assertEquals(1, getJavascriptErrors().size());
 
     String jsError = getJavascriptErrors().get(0);

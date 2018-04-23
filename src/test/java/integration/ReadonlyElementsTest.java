@@ -8,7 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.exactValue;
+import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -96,7 +98,7 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test
   public void waitsUntilInputGetsEditable_slowSetValue() {
     $("#enable-inputs").click();
-    
+
     Configuration.fastSetValue = false;
     $(By.name("username")).val("another-username");
     $(By.name("username")).shouldHave(exactValue("another-username"));
@@ -105,7 +107,7 @@ public class ReadonlyElementsTest extends IntegrationTest {
   @Test
   public void waitsUntilInputGetsEditable_fastSetValue() {
     $("#enable-inputs").click();
-    
+
     Configuration.fastSetValue = true;
     $(By.name("username")).val("another-username");
     $(By.name("username")).shouldHave(exactValue("another-username"));
