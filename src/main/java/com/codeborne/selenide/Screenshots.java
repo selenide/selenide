@@ -40,6 +40,24 @@ public class Screenshots {
   }
 
   /**
+   * Take screenshot of WebElement/SelenideElement in iframe
+   * for partially visible WebElement/Selenide horizontal scroll bar will be present
+   * @return a temporary file, not guaranteed to be stored after tests complete.
+   */
+  public static File takeScreenShot(WebElement iframe, WebElement element) {
+    return screenshots.takeScreenshot(iframe, element);
+  }
+
+  /**
+   * Take screenshot of WebElement/SelenideElement in iframe
+   * for partially visible WebElement/Selenide horizontal scroll bar will be present
+   * @return buffered image
+   */
+  public static BufferedImage takeScreenShotAsImage(WebElement iframe, WebElement element) {
+    return screenshots.takeScreenshotAsImage(iframe, element);
+  }
+
+  /**
    * Take screenshot of the WebElement/SelenideElement
    * @return buffered image
    */

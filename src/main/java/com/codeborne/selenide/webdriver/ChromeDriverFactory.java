@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserBinary;
+import static com.codeborne.selenide.Configuration.chromeSwitches;
+import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.WebDriverRunner.CHROME;
 
 class ChromeDriverFactory extends AbstractDriverFactory {

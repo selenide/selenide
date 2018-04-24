@@ -6,7 +6,11 @@ import com.codeborne.selenide.impl.Cleanup;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.getJavascriptErrors;
-import static com.codeborne.selenide.ex.ErrorMessages.*;
+import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
+import static com.codeborne.selenide.ex.ErrorMessages.jsErrors;
+import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
+import static com.codeborne.selenide.ex.ErrorMessages.timeout;
+
 
 public class UIAssertionError extends AssertionError {
   private String screenshot;
@@ -20,7 +24,7 @@ public class UIAssertionError extends AssertionError {
   protected UIAssertionError(String message) {
     super(message);
   }
-  
+
   protected UIAssertionError(String message, Throwable cause) {
     super(message, cause);
   }
@@ -36,8 +40,8 @@ public class UIAssertionError extends AssertionError {
 
   /**
    * Get path to screenshot taken after failed test
-   * 
-   * @return empty string if screenshots are disabled  
+   *
+   * @return empty string if screenshots are disabled
    */
   public String getScreenshot() {
     return screenshot;
@@ -45,8 +49,8 @@ public class UIAssertionError extends AssertionError {
 
   /**
    * Get all javascript errors found during test execution
-   * 
-   * @return empty list if no errors found 
+   *
+   * @return empty list if no errors found
    */
   public List<String> getJsErrors() {
     return jsErrors;

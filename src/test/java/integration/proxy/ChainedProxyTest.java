@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Proxy;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,18 +30,18 @@ import static org.junit.Assume.assumeFalse;
 /**
  * Selenide runs its own proxy server.
  * User can also configure Selenide to use his proxy server (for Selenide, this is "chained" proxy).
- * 
- * This test verifies that both these proxies work well together.  
+ *
+ * This test verifies that both these proxies work well together.
  */
 public class ChainedProxyTest extends IntegrationTest {
   static BrowserMobProxy chainedProxy;
   List<String> visitedUrls = new ArrayList<>();
-  
+
   @Before
-  public void setUp() throws UnknownHostException {
+  public void setUp() {
     assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
     assumeFalse(isHtmlUnit()); // Why it's not working? It's magic for me...
-    
+
     if (chainedProxy == null) {
       close();
 
@@ -80,11 +79,11 @@ public class ChainedProxyTest extends IntegrationTest {
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
-    
+
     // Assert that files are actually uploaded via 2 proxies
     $("h3").shouldHave(text("Uploaded 2 files"));
     assertEquals(2, server.uploadedFiles.size());
-    
+
     // Assert that "chained" proxy has intercepted requests
     assertTrue("Expected at least 2 urls, but got: " + visitedUrls, visitedUrls.size() >= 2);
     assertThat(visitedUrls.get(0), containsString("/file_upload_form.html"));

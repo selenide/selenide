@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockWebdriverContainer extends ExternalResource {
   @Override
-  protected void before() throws Throwable {
+  protected void before() {
     webdriverContainer = mock(WebDriverThreadLocalContainer.class);
   }
 

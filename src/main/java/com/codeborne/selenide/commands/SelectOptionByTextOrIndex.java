@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
@@ -13,8 +14,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
   public Void execute(SelenideElement proxy, WebElementSource selectField, Object[] args) {
     if (args[0] instanceof String[]) {
       selectOptionsByTexts(selectField, (String[]) args[0]);
-    }
-    else {
+    } else if (args[0] instanceof int[]) {
       selectOptionsByIndexes(selectField, (int[]) args[0]);
     }
     return null;

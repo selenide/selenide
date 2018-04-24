@@ -11,7 +11,11 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,14 +49,14 @@ public class FileDownloadFilter implements ResponseFilter {
   @Override
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (!active) return;
-    responses.add(new Response(messageInfo.getUrl(), 
-        response.getStatus().code(), 
+    responses.add(new Response(messageInfo.getUrl(),
+        response.getStatus().code(),
         response.getStatus().reasonPhrase(),
         toMap(response.headers()),
         contents.getContentType(),
         contents.getTextContents()
     ));
-    
+
     if (response.getStatus().code() < 200 || response.getStatus().code() >= 300) return;
 
     String fileName = getFileName(response);
@@ -105,13 +109,13 @@ public class FileDownloadFilter implements ResponseFilter {
   public String getResponses() {
     StringBuilder sb = new StringBuilder();
     sb.append("Intercepted ").append(responses.size()).append(" responses.");
-    
+
     for (Response response : responses) {
       sb.append("\n  ").append(response).append("\n");
     }
     return sb.toString();
   }
-  
+
   private static class Response {
     private String url;
     private int code;
@@ -120,7 +124,7 @@ public class FileDownloadFilter implements ResponseFilter {
     private Map<String, String> headers;
     private String content;
 
-    private Response(String url, int code, String reasonPhrase, Map<String, String> headers, 
+    private Response(String url, int code, String reasonPhrase, Map<String, String> headers,
                      String contentType, String content) {
       this.url = url;
       this.code = code;

@@ -1,5 +1,13 @@
 == Changelog
 
+=== 4.11.2 (released 2x.04.2018)
+* PR #705 Make screenshot of SelenideElement/WebElement which is inside iframe -- thanks to @andrejska
+* PR #646 Added method to check if page is scrolled to the bottom -- thanks to @pavelpp
+* PR #715 Added static analysis for avoiding start import for main package, fixing existing violations -- thanks to @andrejska
+* PR #714 dd series of unit tests for commands, collections, conditions, impl package classes -- thanks to @azakordonets
+* Upgrade to webdrivermanager:2.2.1
+* Upgrade to htmlunit:2.30
+
 === 4.11.1 (released 03.04.2018)
 * #711 Fix problem with hanging Chrome on Windows    -- thanks to Aliaksandr Rasolka @rosolko for PR 711
  (Chrome processes are still alive after calling `close` method)

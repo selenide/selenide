@@ -6,7 +6,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
-import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -19,7 +18,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.*;
@@ -38,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class SelenideElementProxyTest {
   private static final Logger log = Logger.getLogger(SelenideElementProxyTest.class.getName());
-  
+
   RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   WebElement element = mock(WebElement.class);
 
@@ -120,7 +118,7 @@ public class SelenideElementProxyTest {
     $("#firstName").shouldNotBe(enabled);
     $("#firstName").shouldNotHave(text("goodbye"));
   }
-  
+
   @Test
   public void elementNotFoundAsExpected2() {
     when(webdriver.findElement(By.cssSelector("#firstName")))
@@ -155,66 +153,62 @@ public class SelenideElementProxyTest {
     $("#firstName").setValue("john");
   }
 
-  protected LogEventListener createListener(final String selector, final String subject, 
+  protected LogEventListener createListener(final String selector, final String subject,
                                             final EventStatus status) {
-    return new LogEventListener() {
-      @Override
-      public void onEvent(LogEvent currentLog) {
-        log.info("{" + currentLog.getElement() + "} " +
-                currentLog.getSubject() + ": " + currentLog.getStatus()
-            );
-        assertThat(currentLog.getElement(), containsString(selector));
-        assertThat(currentLog.getSubject(), containsString(subject));
-        assertEquals(currentLog.getStatus(), status);
-      }
+    return currentLog -> {
+      String format = String.format("{%s} %s: %s", currentLog.getElement(), currentLog.getSubject(), currentLog.getStatus());
+      log.info(format);
+      assertThat(currentLog.getElement(), containsString(selector));
+      assertThat(currentLog.getSubject(), containsString(subject));
+      assertEquals(currentLog.getStatus(), status);
     };
   }
-  
+
   @Test
   public void shouldLogSetValueSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "set value", PASS));
-    
+
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = $("#firstName");
     selEl.setValue("ABC");
   }
-  
+
   @Test
   public void shouldLogShouldSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should have", PASS));
-    
+
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
     SelenideElement selEl = $("#firstName");
     selEl.shouldHave(value("ABC"));
   }
-  
+
   @Test
   public void shouldLogShouldNotSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should not have", PASS));
-    
+
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
     SelenideElement selEl = $("#firstName");
     selEl.shouldNotHave(value("ABC"));
   }
-  
+
   @Test(expected = ElementShould.class)
   public void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
     SelenideLogger.addListener("test", createListener(selector, "should have", FAIL));
-    
+
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
-    
+
     $("#firstName").shouldHave(value("ABC"));
   }
 
   @Test
-  public void shouldNotRetry_onIllegalArgumentException() throws IOException {
+  public void shouldNotRetry_onIllegalArgumentException() {
     assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")), is(false));
   }
 

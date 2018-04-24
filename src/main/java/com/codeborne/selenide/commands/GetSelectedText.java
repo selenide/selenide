@@ -6,8 +6,16 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 public class GetSelectedText implements Command<String> {
-  GetSelectedOption getSelectedOption = new GetSelectedOption();
-  
+  private GetSelectedOption getSelectedOption;
+
+  public GetSelectedText(GetSelectedOption getSelectedOption) {
+    this.getSelectedOption = getSelectedOption;
+  }
+
+  public GetSelectedText() {
+    this.getSelectedOption = new GetSelectedOption();
+  }
+
   @Override
   public String execute(SelenideElement proxy, WebElementSource selectElement, Object[] args) {
     WebElement option = getSelectedOption.execute(proxy, selectElement, NO_ARGS);

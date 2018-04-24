@@ -5,9 +5,19 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
 public class Val implements Command<Object> {
-  GetValue getValue = new GetValue();
-  SetValue setValue = new SetValue();
-  
+  private GetValue getValue;
+  private SetValue setValue;
+
+  public Val() {
+    this.getValue = new GetValue();
+    this.setValue = new SetValue();
+  }
+
+  public Val(GetValue getValue, SetValue setValue) {
+    this.getValue = getValue;
+    this.setValue = setValue;
+  }
+
   @Override
   public Object execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     if (args == null || args.length == 0) {

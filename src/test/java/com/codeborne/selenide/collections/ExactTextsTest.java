@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class ExactTextsTest {
 
   @Test
-  public void varArgsConstructor() throws Exception {
+  public void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
     assertEquals("Expected texts list", asList("One", "Two", "Three"), exactTexts.expectedTexts);
   }

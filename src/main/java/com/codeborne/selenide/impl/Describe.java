@@ -1,7 +1,11 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 import java.util.SortedMap;
@@ -42,7 +46,7 @@ public class Describe {
             "   }" +
             "}" +
             "return s;", element);
-    
+
     SortedMap<String, String> sortedByName = new TreeMap<>();
     if (map != null) {
       sortedByName.putAll(map);
@@ -51,7 +55,7 @@ public class Describe {
     if (!sortedByName.containsKey("type")) {
       sortedByName.put("type", element.getAttribute("type"));
     }
-    
+
     for (Map.Entry<String, String> entry : sortedByName.entrySet()) {
       attr(entry.getKey(), entry.getValue());
     }
@@ -140,7 +144,7 @@ public class Describe {
     }
     return this;
   }
-  
+
   private Describe isDisplayed(WebElement element) {
     try {
       if (!element.isDisplayed()) {
@@ -168,7 +172,7 @@ public class Describe {
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
   }
-  
+
   public static String describe(WebDriver webDriver) {
     return webDriver.getClass().getSimpleName();
   }
