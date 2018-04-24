@@ -32,7 +32,7 @@ task safari(type: Test) {
 task htmlunit(type: Test) {
   systemProperties['selenide.browser'] = 'htmlunit'
   include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
+  exclude 'com/codeborne/selenide/**/*', 'integration/*PageWithoutJQuery*'
 }
 
 task phantomjs(type: Test) {

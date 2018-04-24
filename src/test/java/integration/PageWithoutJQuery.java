@@ -1,6 +1,7 @@
 package integration;
 
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import com.codeborne.selenide.Configuration;
 
@@ -35,7 +36,10 @@ public class PageWithoutJQuery extends IntegrationTest {
     $("#username").append("bon-jovi");
 
     $("#username-mirror").shouldHave(text("_"));
+  }
 
+  @After
+  public void tearDown() {
     Configuration.setValueChangeEvent = true;
   }
 }
