@@ -3,6 +3,7 @@ package integration;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import com.codeborne.selenide.Configuration;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -22,6 +23,19 @@ public class PageWithJQuery extends IntegrationTest {
     $("#username").append("bon-jovi");
 
     $("h2").shouldHave(text("john bon-jovi"));
+  }
+
+  @Test
+  public void setValueDoesNotTriggerOnChangeEvent() {
+    Configuration.setValueChangeEvent = false;
+    $("#username").setValue("john");
+    $("h2").shouldNotHave(text("john"));
+
+    $("#username").append(" ");
+    $("#username").append("bon-jovi");
+
+    $("h2").shouldNotHave(text("john bon-jovi"));
+    Configuration.setValueChangeEvent = true;
   }
 
   @Test

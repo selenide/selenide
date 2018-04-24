@@ -304,9 +304,9 @@ public class Configuration {
   /**
    * If set to true, 'setValue' and 'val' methods of SelenideElement trigger changeEvent after main manipulations.
    *
-   * Firing change event, is not natural and could lead to unpredictable results. It is done by browser according
-   * to web driver actions. Recommended behaviour is to disable this option.
-   * Make it true by default, for backward compatibility.
+   * Firing change event is not natural and could lead to unpredictable results. Browser fires this event automatically
+   * according to web driver actions. Recommended behaviour is to disable this option.
+   * Make its true by default for backward compatibility.
    *
    * Can be configured either programmatically or by system property "-Dselenide.setValueChangeEvent=true".
    * Default value: true
