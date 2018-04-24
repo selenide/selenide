@@ -7,6 +7,8 @@ import com.codeborne.selenide.Configuration;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.junit.Assume.assumeFalse;
 
 public class PageWithoutJQuery extends IntegrationTest {
   @Before
@@ -16,6 +18,8 @@ public class PageWithoutJQuery extends IntegrationTest {
 
   @Test
   public void setValueTriggersOnChangeEvent() {
+    assumeFalse(isHtmlUnit());
+
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("john"));
 
@@ -27,6 +31,8 @@ public class PageWithoutJQuery extends IntegrationTest {
 
   @Test
   public void setValueDoesNotTriggerOnChangeEvent() {
+    assumeFalse(isHtmlUnit());
+
     Configuration.setValueChangeEvent = false;
 
     $("#username").setValue("john");
