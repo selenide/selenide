@@ -52,7 +52,12 @@ public class SetValue implements Command<WebElement> {
     } else if (fastSetValue) {
       String error = setValueByJs(element, text);
       if (error != null) throw new InvalidStateException(error);
-      events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+      if (setValueChangeEvent) {
+        events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+      }
+      else {
+        events.fireEvent(element, "keydown", "keypress", "input", "keyup");
+      }
     } else {
       element.clear();
       element.sendKeys(text);

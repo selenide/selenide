@@ -35,4 +35,16 @@ public class FastSetValueTest extends IntegrationTest {
     $("#usernameHint").should(disappear);
     $("#passwordHint").should(appear);
   }
+
+  @Test
+  public void fastSetValue_withoutChangeEvent() {
+    Configuration.fastSetValue = true;
+    Configuration.setValueChangeEvent = false;
+    $("#username").setValue("john");
+    $("#usernameHint").should(appear);
+
+    $("#password").setValue("admin");
+    $("#usernameHint").should(disappear);
+    $("#passwordHint").should(appear);
+  }
 }
