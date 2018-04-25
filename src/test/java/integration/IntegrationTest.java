@@ -1,7 +1,6 @@
 package integration;
 
 import com.automation.remarks.junit.VideoRule;
-import com.automation.remarks.video.recorder.VideoRecorder;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.junit.TextReport;
