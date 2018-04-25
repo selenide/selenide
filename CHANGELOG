@@ -1,6 +1,9 @@
 == Changelog
 
-=== 4.11.2 (released 2x.04.2018)
+=== 4.11.3 (released 0x.05.2018)
+*
+
+=== 4.11.2 (released 25.04.2018)
 * PR #718 introduce setValueChangeEvent option  -- thanks to @MikeShysh
 * PR #705 Make screenshot of SelenideElement/WebElement which is inside iframe -- thanks to @andrejska
 * PR #646 Added method to check if page is scrolled to the bottom -- thanks to @pavelpp
