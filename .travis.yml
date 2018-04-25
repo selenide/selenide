@@ -1,3 +1,6 @@
+git:
+  depth: 99999
+
 language: java
 
 jdk:
@@ -31,4 +34,3 @@ notifications:
   slack:
     rooms:
       secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
-
