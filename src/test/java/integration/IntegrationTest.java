@@ -42,7 +42,7 @@ public abstract class IntegrationTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Rule public VideoRule video = new VideoRule();
-  
+
   private static int port;
   protected static LocalHttpServer server;
   private long defaultTimeout;
@@ -79,8 +79,8 @@ public abstract class IntegrationTest {
     fastSetValue = false;
     browserSize = "1024x768";
     server.uploadedFiles.clear();
-    
-    // proxy breaks Firefox/Marionette because of this error: 
+
+    // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
     Configuration.fileDownload = isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY;
   }
@@ -90,10 +90,8 @@ public abstract class IntegrationTest {
     File videoFolder = new File("build/reports/tests/" + Configuration.browser);
     videoFolder.mkdirs();
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
-    VideoRecorder.conf()
-        .withVideoFolder(videoFolder.getAbsolutePath())
-        .videoEnabled(!isHeadless())
-        .withRecordMode(ANNOTATED);
+    System.setProperty("video.enabled", String.valueOf(!isHeadless()));
+    System.setProperty("video.mode", String.valueOf(ANNOTATED));
   }
 
   @AfterClass
