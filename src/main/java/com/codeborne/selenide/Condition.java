@@ -4,10 +4,14 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.Html;
 import com.google.common.base.Predicate;
+import com.google.common.util.concurrent.Uninterruptibles;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.internal.Locatable;
 
 import static com.codeborne.selenide.Selenide.getFocusedElement;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
@@ -100,6 +104,26 @@ public abstract class Condition implements Predicate<WebElement> {
    * <p><code>$("#loginLink").should(disappear);</code></p>
    */
   public static final Condition disappear = hidden;
+
+  /**
+   * Checks that element is moving
+   *
+   * Element should implement {@link Locatable}
+   *
+   * <p>Sample: <code>$("#loginLink").shouldBe(moving);</code></p>
+   */
+  public static final Condition moving = new Condition("moving") {
+    @Override
+    public boolean apply(WebElement element) {
+      if (!(element instanceof Locatable)) {
+        throw new RuntimeException("Provided WebElement is not Locatable, cannot understand if it moving or not");
+      }
+      Point initialLocation = ((Locatable) element).getCoordinates().inViewPort();
+      Uninterruptibles.sleepUninterruptibly(200, MILLISECONDS);
+      Point finalLocation = ((Locatable) element).getCoordinates().inViewPort();
+      return !initialLocation.equals(finalLocation);
+    }
+  };
 
   /**
    * @deprecated please use {@link #attribute(String, String)} instead
