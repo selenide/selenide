@@ -29,3 +29,16 @@ dependencies {
   testRuntimeOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25')
 }
+
+
+task libsProd(type: Sync) {
+  from configurations.compileClasspath
+  into "$buildDir/lib-prod"
+}
+
+task libsTest(type: Sync) {
+  from configurations.testRuntimeClasspath - configurations.compileClasspath
+  into "$buildDir/lib-test"
+}
+
+compileJava.dependsOn libsProd, libsTest
