@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
@@ -42,6 +48,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   protected Proxy proxy;
 
   protected final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+
+  protected final BasicThreadFactory poolThreadFactory = new BasicThreadFactory.Builder()
+    .namingPattern("selenide-%d")
+    .daemon(true)
+    .build();
+
+  protected final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor(poolThreadFactory);
 
   protected void closeUnusedWebdrivers() {
     for (Thread thread : ALL_WEB_DRIVERS_THREADS) {
@@ -141,13 +154,10 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
       long start = System.currentTimeMillis();
 
-      Thread t = new Thread(new CloseBrowser(webdriver, proxy));
-      t.setDaemon(true);
-      t.start();
-
       try {
-        t.join(closeBrowserTimeoutMs);
-      } catch (InterruptedException e) {
+        final Future<?> f = pool.submit(new CloseBrowserTask(webdriver, proxy));
+        f.get(closeBrowserTimeoutMs, TimeUnit.MILLISECONDS);
+      } catch (Exception e) {
         log.log(FINE, "Failed to close webdriver in " + closeBrowserTimeoutMs + " milliseconds", e);
       }
 
@@ -165,11 +175,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
   }
 
-  private static class CloseBrowser implements Runnable {
+  private static class CloseBrowserTask implements Runnable {
     private final WebDriver webdriver;
     private final SelenideProxyServer proxy;
 
-    private CloseBrowser(WebDriver webdriver, SelenideProxyServer proxy) {
+    private CloseBrowserTask(WebDriver webdriver, SelenideProxyServer proxy) {
       this.webdriver = webdriver;
       this.proxy = proxy;
     }
@@ -254,22 +264,17 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     if (!cleanupThreadStarted.get()) {
       synchronized (this) {
-        if (!cleanupThreadStarted.get()) {
-          new UnusedWebdriversCleanupThread().start();
-          cleanupThreadStarted.set(true);
+        if (cleanupThreadStarted.compareAndSet(false, true)) {
+          pool.scheduleWithFixedDelay(new CloseUnusedWebdriversTask(), 100,100, TimeUnit.MILLISECONDS);
         }
       }
     }
-    Runtime.getRuntime().addShutdownHook(new WebdriversFinalCleanupThread(currentThread()));
+    Runtime.getRuntime().addShutdownHook(new WebdriverCleanupShutdownHook());
     return webDriver;
   }
 
-  protected class WebdriversFinalCleanupThread extends Thread {
-    private final Thread thread;
-
-    public WebdriversFinalCleanupThread(Thread thread) {
-      this.thread = thread;
-    }
+  protected class WebdriverCleanupShutdownHook extends Thread {
+    private final Thread thread = currentThread();
 
     @Override
     public void run() {
@@ -277,23 +282,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
   }
 
-  protected class UnusedWebdriversCleanupThread extends Thread {
-    public UnusedWebdriversCleanupThread() {
-      setDaemon(true);
-      setName("Webdrivers killer thread");
-    }
+  protected class CloseUnusedWebdriversTask implements Runnable {
 
     @Override
     public void run() {
-      while (true) {
         closeUnusedWebdrivers();
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException e) {
-          Thread.currentThread().interrupt();
-          break;
-        }
       }
-    }
   }
 }
