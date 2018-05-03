@@ -264,7 +264,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (!cleanupThreadStarted.get()) {
       synchronized (this) {
         if (cleanupThreadStarted.compareAndSet(false, true)) {
-          pool.scheduleWithFixedDelay(new CloseUnusedWebdriversTask(), 100,100, TimeUnit.MILLISECONDS);
+          pool.scheduleWithFixedDelay(new CloseUnusedWebdriversTask(), 100, 100, TimeUnit.MILLISECONDS);
         }
       }
     }
