@@ -117,13 +117,13 @@ public class ConditionTest {
 
   @Test(expected = RuntimeException.class)
   public void elementMovingNotLocatable() {
-    Condition.moving.apply(elementWithVisibility(false));
+    Condition.moveAround.apply(elementWithVisibility(false));
   }
 
   @Test
   public void elementMoving() {
-    assertFalse(Condition.moving.apply(remoteWebElementNotMoving()));
-    assertTrue(Condition.moving.apply(remoteWebElementIsMoving()));
+    assertFalse(Condition.moveAround.apply(remoteWebElementNotMoving()));
+    assertTrue(Condition.moveAround.apply(remoteWebElementIsMoving()));
   }
 
   @Test
