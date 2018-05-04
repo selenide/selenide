@@ -1,7 +1,7 @@
 == Changelog
 
 === 4.11.3 (released 0x.05.2018)
-*
+* PR #726 fixed browserBinary usage on remote server, extended logging for browserBinary
 
 === 4.11.2 (released 25.04.2018)
 * PR #718 introduce setValueChangeEvent option  -- thanks to @MikeShysh
