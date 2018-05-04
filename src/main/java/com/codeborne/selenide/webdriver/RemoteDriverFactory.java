@@ -58,20 +58,25 @@ class RemoteDriverFactory extends AbstractDriverFactory {
       capabilities.merge(getHeadlessCapabilities());
     }
     if (!browserBinary.isEmpty()) {
-      log.info("Using browser binary: " + browserBinary);
-      if (isChrome()) {
-        ChromeOptions options = new ChromeOptions();
-        options.setBinary(browserBinary);
-        capabilities.merge(options);
-      } else if (isFirefox()) {
-        FirefoxOptions options = new FirefoxOptions();
-        options.setBinary(browserBinary);
-        capabilities.merge(options);
-      } else {
-        log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
-      }
+      capabilities.merge(getBrowserBinaryCapabilites());
     }
     return capabilities;
+  }
+
+  Capabilities getBrowserBinaryCapabilites() {
+    log.info("Using browser binary: " + browserBinary);
+    if (isChrome()) {
+      ChromeOptions options = new ChromeOptions();
+      options.setBinary(browserBinary);
+      return options;
+    } else if (isFirefox()) {
+      FirefoxOptions options = new FirefoxOptions();
+      options.setBinary(browserBinary);
+      return options;
+    } else {
+      log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
+    }
+    return new DesiredCapabilities();
   }
 
   Capabilities getHeadlessCapabilities() {
@@ -83,6 +88,8 @@ class RemoteDriverFactory extends AbstractDriverFactory {
       FirefoxOptions options = new FirefoxOptions();
       options.setHeadless(headless);
       return options;
+    } else {
+      log.warning("Headless mode on remote server is only supported for Chrome/Firefox, setting will be ignored.");
     }
     return new DesiredCapabilities();
   }

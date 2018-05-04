@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Configuration.browserBinary;
 
 class SafariDriverFactory extends AbstractDriverFactory {
 
-  private static final Logger log = Logger.getLogger(OperaDriverFactory.class.getName());
+  private static final Logger log = Logger.getLogger(SafariDriverFactory.class.getName());
 
   @Override
   boolean supports() {
