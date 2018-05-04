@@ -31,7 +31,7 @@ public class ConditionTest {
     WebElement element = elementWithText("John Malkovich The First");
     assertTrue(Condition.text("john malkovich").apply(element));
   }
-  
+
   @Test
   public void textConditionIgnoresWhitespaces() {
     assertTrue(Condition.text("john the malkovich").apply(
@@ -203,6 +203,12 @@ public class ConditionTest {
     assertTrue(Condition.hasClass("btn").apply(elementWithAttribute("class", "btn btn-warning")));
     assertTrue(Condition.hasClass("btn-warning").apply(elementWithAttribute("class", "btn btn-warning")));
     assertFalse(Condition.hasClass("active").apply(elementWithAttribute("class", "btn btn-warning")));
+  }
+
+  @Test
+  public void elementHasCssValue() {
+    assertTrue(Condition.cssValue("display", "none").apply(elementWithCssStyle("display", "none")));
+    assertFalse(Condition.cssValue("font-size", "24").apply(elementWithCssStyle("font-size", "20")));
   }
 
   @Test
@@ -398,6 +404,12 @@ public class ConditionTest {
     WebElement element = mock(WebElement.class);
     when(element.isSelected()).thenReturn(isSelected);
     when(element.getText()).thenReturn(text);
+    return element;
+  }
+
+  private WebElement elementWithCssStyle(String propertyName, String value) {
+    WebElement element = mock(WebElement.class);
+    when(element.getCssValue(propertyName)).thenReturn(value);
     return element;
   }
 }

@@ -405,6 +405,26 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
+   * <p>Sample: <code>$("input").shouldHave(cssValue("font-size", "12"));</code></p>
+   *
+   * @param propertyName the css property name of the element
+   * @param expectedValue expected value of css property
+   */
+  public static Condition cssValue(final String propertyName, final String expectedValue) {
+    return new Condition("cssValue") {
+      @Override
+      public boolean apply(WebElement element) {
+        return expectedValue.equalsIgnoreCase(element.getCssValue(propertyName));
+      }
+
+      @Override
+      public String actualValue(WebElement element) {
+        return element.getCssValue(propertyName);
+      }
+    };
+  }
+
+  /**
    * Check if browser focus is currently in given element.
    */
   public static final Condition focused = new Condition("focused") {
