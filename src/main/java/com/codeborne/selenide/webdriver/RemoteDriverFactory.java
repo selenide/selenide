@@ -12,10 +12,12 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserBinary;
+import static com.codeborne.selenide.Configuration.headless;
+import static com.codeborne.selenide.Configuration.remote;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
