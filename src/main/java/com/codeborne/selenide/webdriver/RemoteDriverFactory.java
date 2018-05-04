@@ -80,6 +80,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   Capabilities getHeadlessCapabilities() {
+    log.info("Starting in headless mode");
     if (isChrome()) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(headless);
