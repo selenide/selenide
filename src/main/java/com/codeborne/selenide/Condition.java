@@ -405,9 +405,15 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * <p>Sample: <code>$("input").shouldHave(cssValue("font-size", "12"));</code></p>
+   * Checks if css property (style) applies for the element. 
+   * Both explicit and computed properties are supported
+   * <p>Sample:
+   * <code><input style="font-size: 12"></code></p>
+   * <p><code>$("input").shouldHave(cssValue("font-size", "12"));
+   * $("input").shouldHave(cssValue("display", "block"));
+   * </code></p>
    *
-   * @param propertyName the css property name of the element
+   * @param propertyName the css property (style) name  of the element
    * @param expectedValue expected value of css property
    */
   public static Condition cssValue(final String propertyName, final String expectedValue) {
