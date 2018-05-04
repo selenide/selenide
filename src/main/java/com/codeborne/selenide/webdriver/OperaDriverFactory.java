@@ -6,9 +6,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
 
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.Configuration.browserBinary;
 
 class OperaDriverFactory extends AbstractDriverFactory {
+
+  private static final Logger log = Logger.getLogger(OperaDriverFactory.class.getName());
 
   @Override
   boolean supports() {
@@ -23,6 +27,7 @@ class OperaDriverFactory extends AbstractDriverFactory {
   private WebDriver createOperaDriver(final Proxy proxy) {
     OperaOptions operaOptions = new OperaOptions();
     if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
       operaOptions.setBinary(browserBinary);
     }
     operaOptions.merge(createCommonCapabilities(proxy));

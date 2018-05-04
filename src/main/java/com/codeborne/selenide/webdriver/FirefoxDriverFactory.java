@@ -35,6 +35,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(headless);
     if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
       firefoxOptions.setBinary(browserBinary);
     }
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");

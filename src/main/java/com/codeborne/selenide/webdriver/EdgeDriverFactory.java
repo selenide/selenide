@@ -7,7 +7,13 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.logging.Logger;
+
+import static com.codeborne.selenide.Configuration.browserBinary;
+
 class EdgeDriverFactory extends AbstractDriverFactory {
+
+  private static final Logger log = Logger.getLogger(EdgeDriverFactory.class.getName());
 
   @Override
   WebDriver create(final Proxy proxy) {
@@ -23,6 +29,10 @@ class EdgeDriverFactory extends AbstractDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
+    if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
+      log.warning("Changing browser binary not supported in Edge, setting will be ignored.");
+    }
     return new EdgeDriver(options);
   }
 }

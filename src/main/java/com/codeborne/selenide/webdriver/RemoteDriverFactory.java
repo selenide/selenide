@@ -12,10 +12,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.headless;
-import static com.codeborne.selenide.Configuration.remote;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isEdge;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
@@ -24,6 +24,9 @@ import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isOpera;
 
 class RemoteDriverFactory extends AbstractDriverFactory {
+
+
+  private static final Logger log = Logger.getLogger(RemoteDriverFactory.class.getName());
 
   @Override
   boolean supports() {
@@ -51,6 +54,20 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     capabilities.setBrowserName(getBrowserNameForGrid());
     if (headless) {
       capabilities.merge(getHeadlessCapabilities());
+    }
+    if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
+      if (isChrome()) {
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary(browserBinary);
+        capabilities.merge(options);
+      } else if (isFirefox()) {
+        FirefoxOptions options = new FirefoxOptions();
+        options.setBinary(browserBinary);
+        capabilities.merge(options);
+      } else {
+        log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
+      }
     }
     return capabilities;
   }
