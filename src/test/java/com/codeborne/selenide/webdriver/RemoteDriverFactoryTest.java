@@ -61,7 +61,6 @@ public class RemoteDriverFactoryTest {
     Capabilities caps = factory.getBrowserBinaryCapabilites();
     for (Object value : caps.asMap().values()) {
       if (value instanceof Map) {
-        System.out.println(value);
         if (((Map) value).get("binary").equals("c:/browser.exe")) {
           assertTrue(true);
           return;
@@ -78,7 +77,6 @@ public class RemoteDriverFactoryTest {
     Capabilities caps = factory.getBrowserBinaryCapabilites();
     for (Object value : caps.asMap().values()) {
       if (value instanceof Map) {
-        System.out.println(value);
         if (((Map) value).get("binary").equals("c:/browser.exe")) {
           assertTrue(true);
           return;
