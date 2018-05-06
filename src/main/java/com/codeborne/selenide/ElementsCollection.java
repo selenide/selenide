@@ -78,12 +78,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      SelenideLogger.commitStep(log, UIAssertionError.wrap(error, collectionsTimeout));
+      Error wrappedError = UIAssertionError.wrap(error, collectionsTimeout);
+      SelenideLogger.commitStep(log, wrappedError);
       switch (assertionMode) {
         case SOFT:
           return this;
         default:
-          throw UIAssertionError.wrap(error, collectionsTimeout);
+          throw wrappedError;
       }
     }
     catch (RuntimeException e) {
