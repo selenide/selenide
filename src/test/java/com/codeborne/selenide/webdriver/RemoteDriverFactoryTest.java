@@ -1,18 +1,21 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.After;
-import org.junit.Test;
-import org.openqa.selenium.remote.BrowserType;
+import org.junit.*;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.*;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class RemoteDriverFactoryTest {
   RemoteDriverFactory factory = new RemoteDriverFactory();
-  
+
   @After
   public void tearDown() {
-    Configuration.browser = null;
+    Configuration.browser = "";
+    Configuration.browserBinary = "";
   }
 
   @Test
@@ -49,5 +52,50 @@ public class RemoteDriverFactoryTest {
   public void getBrowserNameForGrid_other_browsers() {
     Configuration.browser = "anotherWebdriver";
     assertEquals("anotherWebdriver", factory.getBrowserNameForGrid());
+  }
+
+  @Test
+  public void browserBinaryCanBeSetForFirefox() {
+    Configuration.browser = "firefox";
+    Configuration.browserBinary = "c:/browser.exe";
+    Capabilities caps = factory.getBrowserBinaryCapabilites();
+    for (Object value : caps.asMap().values()) {
+      if (value instanceof Map) {
+        System.out.println(value);
+        if (((Map) value).get("binary").equals("c:/browser.exe")) {
+          assertTrue(true);
+          return;
+        }
+      }
+    }
+    fail("No browser binary is found in the capability object");
+  }
+
+  @Test
+  public void browserBinaryCanBeSetForChrome() {
+    Configuration.browser = "chrome";
+    Configuration.browserBinary = "c:/browser.exe";
+    Capabilities caps = factory.getBrowserBinaryCapabilites();
+    for (Object value : caps.asMap().values()) {
+      if (value instanceof Map) {
+        System.out.println(value);
+        if (((Map) value).get("binary").equals("c:/browser.exe")) {
+          assertTrue(true);
+          return;
+        }
+      }
+    }
+    fail("No browser binary is found in the capability object");
+  }
+
+  @Test
+  public void browserBinaryCanNotBeSetForOtherBrowsers() {
+    Configuration.browserBinary = "c:/browser.exe";
+    Configuration.browser = "opera";
+    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
+    Configuration.browser = "edge";
+    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
+    Configuration.browser = "ie";
+    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
   }
 }
