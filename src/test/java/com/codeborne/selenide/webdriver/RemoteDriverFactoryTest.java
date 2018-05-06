@@ -3,10 +3,13 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Configuration;
 import org.junit.*;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.*;
 
 import java.util.Map;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 public class RemoteDriverFactoryTest {
@@ -59,15 +62,8 @@ public class RemoteDriverFactoryTest {
     Configuration.browser = "firefox";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
-    for (Object value : caps.asMap().values()) {
-      if (value instanceof Map) {
-        if (((Map) value).get("binary").equals("c:/browser.exe")) {
-          assertTrue(true);
-          return;
-        }
-      }
-    }
-    fail("No browser binary is found in the capability object");
+    Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
+    assertThat(options.get("binary"), is("c:/browser.exe"));
   }
 
   @Test
@@ -75,15 +71,8 @@ public class RemoteDriverFactoryTest {
     Configuration.browser = "chrome";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
-    for (Object value : caps.asMap().values()) {
-      if (value instanceof Map) {
-        if (((Map) value).get("binary").equals("c:/browser.exe")) {
-          assertTrue(true);
-          return;
-        }
-      }
-    }
-    fail("No browser binary is found in the capability object");
+    Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
+    assertThat(options.get("binary"), is("c:/browser.exe"));
   }
 
   @Test

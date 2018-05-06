@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.*;
 
 import java.util.*;
@@ -78,16 +77,8 @@ public class FirefoxDriverFactoryTest {
   public void browserBinaryCanBeSet() {
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = driverFactory.createFirefoxOptions(proxy);
-    //System.out.println(((Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS)).get("binary"));
-    for (Object value : caps.asMap().values()) {
-      if (value instanceof Map) {
-        if (((Map) value).get("binary").equals("c:/browser.exe")) {
-          assertTrue(true);
-          return;
-        }
-      }
-    }
-    fail("No browser binary is found in the capability object");
+    Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
+    assertThat(options.get("binary"), is("c:/browser.exe"));
   }
 
   @Test

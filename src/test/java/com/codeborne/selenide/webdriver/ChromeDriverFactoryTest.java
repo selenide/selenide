@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.codeborne.selenide.*;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.*;
@@ -100,15 +101,8 @@ public class ChromeDriverFactoryTest {
   public void browserBinaryCanBeSet() {
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = new ChromeDriverFactory().createChromeOptions(proxy);
-    for (Object value : caps.asMap().values()) {
-      if (value instanceof Map) {
-        if (((Map) value).get("binary").equals("c:/browser.exe")) {
-          assertTrue(true);
-          return;
-        }
-      }
-    }
-    fail("No browser binary is found in the capability object");
+    Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
+    assertThat(options.get("binary"), Matchers.is("c:/browser.exe"));
   }
 
   @Test
