@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -39,6 +40,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.by;
+import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
@@ -389,6 +391,8 @@ public class SelenideMethodsTest extends IntegrationTest {
   public void userCanCheckCssValue() {
     $(byId("theHiddenElement")).shouldHave(cssValue("display", "none"));
     $(byText("First name")).shouldNotHave(cssValue("font-size", "24"));
+    $(byText("Last name")).shouldHave(cssValue("non-exist-prop", ""));
+    $(byCssSelector("#status")).shouldHave(cssValue("line-height", "10px"));
   }
 
   @Test

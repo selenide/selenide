@@ -405,16 +405,24 @@ public abstract class Condition implements Predicate<WebElement> {
   }
 
   /**
-   * Checks if css property (style) applies for the element. 
-   * Both explicit and computed properties are supported
-   * <p>Sample:
-   * <code><input style="font-size: 12"></code></p>
-   * <p><code>$("input").shouldHave(cssValue("font-size", "12"));
-   * $("input").shouldHave(cssValue("display", "block"));
-   * </code></p>
+   * Checks if css property (style) applies for the element.
+   * Both explicit and computed properties are supported.
+   * <p>
+   * Note that if css property is missing {@link WebElement#getCssValue} return empty string.
+   * In this case you should assert against empty string.
+   * <p>
+   * Sample:
+   * <p>
+   * {@code <input style="font-size: 12">}
+   * <p>
+   * {@code $("input").shouldHave(cssValue("font-size", "12"));}
+   * <p>
+   * {@code $("input").shouldHave(cssValue("display", "block"));}
    *
    * @param propertyName the css property (style) name  of the element
    * @param expectedValue expected value of css property
+   *
+   * @see WebElement#getCssValue
    */
   public static Condition cssValue(final String propertyName, final String expectedValue) {
     return new Condition("cssValue") {
@@ -426,6 +434,11 @@ public abstract class Condition implements Predicate<WebElement> {
       @Override
       public String actualValue(WebElement element) {
         return element.getCssValue(propertyName);
+      }
+
+      @Override
+      public String toString() {
+        return name + " " + propertyName + '=' + expectedValue;
       }
     };
   }
