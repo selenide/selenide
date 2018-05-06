@@ -23,7 +23,7 @@ public class RemoteDriverFactoryHeadlessOptionsTest {
 
   @After
   public void tearDown() {
-    Configuration.browser = null;
+    Configuration.browser = "";
     Configuration.headless = false;
   }
 

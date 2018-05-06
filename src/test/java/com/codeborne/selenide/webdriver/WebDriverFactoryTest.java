@@ -21,7 +21,7 @@ public class WebDriverFactoryTest {
 
   @Before
   public void setUp() {
-    Configuration.browser = null;
+    Configuration.browser = "";
     Configuration.browserSize = null;
     Configuration.browserPosition = null;
     Configuration.startMaximized = false;
