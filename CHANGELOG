@@ -1,6 +1,6 @@
 == Changelog
 
-=== 4.11.3 (released 0x.05.2018)
+=== 4.11.3 (released 07.05.2018)
 * PR #730 Fix duplicating screenshots on error issue #729 -- thanks to Boris Osipov @BorisOsipov
 * PR #727 Add cssValue condition issued in #628 -- thanks to Aliaksandr Rasolka @rosolko
 * PR #726 fixed browserBinary usage on remote server issue #725 -- thanks to Alexei Vinogradov @vinogradoff
