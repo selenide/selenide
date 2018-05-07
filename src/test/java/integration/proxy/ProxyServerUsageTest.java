@@ -1,24 +1,20 @@
 package integration.proxy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.IntegrationTest;
-import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpResponse;
-import net.lightbody.bmp.filters.RequestFilter;
-import net.lightbody.bmp.filters.ResponseFilter;
-import net.lightbody.bmp.util.HttpMessageContents;
-import net.lightbody.bmp.util.HttpMessageInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class ProxyServerUsageTest extends IntegrationTest {
@@ -35,26 +31,24 @@ public class ProxyServerUsageTest extends IntegrationTest {
   public void canAddInterceptorsToProxyServer() {
     openFile("file_upload_form.html");
 
-    getSelenideProxy().addRequestFilter("proxy-usages.request", new RequestFilter() {
-      @Override
-      public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-        if (!messageInfo.getUrl().contains("gstatic.com")) {
-          requests.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
-        }
-        return null;
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+
+    selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
+      if (!messageInfo.getUrl().contains("gstatic.com")) {
+        requests.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
       }
+      return null;
     });
-    getSelenideProxy().addResponseFilter("proxy-usages.response", new ResponseFilter() {
-      @Override
-      public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-        if (!messageInfo.getUrl().contains("gstatic.com")) {
-          responses.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
-        }
+    selenideProxy.addResponseFilter("proxy-usages.response", (response, contents, messageInfo) -> {
+      if (!messageInfo.getUrl().contains("gstatic.com")) {
+        responses.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
       }
     });
 
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#submit").click();
+
+    assertNotNull("Check browser mob proxy instance", getSelenideProxy().getProxy());
 
     assertEquals("All requests: " + requests, 1, requests.size());
     assertEquals("All responses: " + responses, 1, responses.size());
