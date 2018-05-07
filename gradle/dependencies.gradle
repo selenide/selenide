@@ -15,7 +15,9 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
   }
-  implementation('io.github.bonigarcia:webdrivermanager:2.2.1')
+  implementation('io.github.bonigarcia:webdrivermanager:2.2.1') {
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
+  }
   implementation('org.apache.httpcomponents:httpcore:4.4.9')
   implementation('com.google.code.gson:gson:2.8.2')
   implementation('com.google.guava:guava:24.1-jre')
@@ -35,9 +37,9 @@ dependencies {
 
   testImplementation('org.seleniumhq.selenium:selenium-server:3.11.0') { transitive = false }
   testImplementation('org.mockito:mockito-core:2.18.0')
-  testCompile 'org.seleniumhq.selenium:jetty-repacked:9.4.7.v20170914'
-  testCompile 'org.eclipse.jetty:jetty-server:9.4.7.v20170914'
-  testCompile 'org.eclipse.jetty:jetty-servlet:9.4.7.v20170914'
+  testImplementation('org.seleniumhq.selenium:jetty-repacked:9.4.7.v20170914')
+  testImplementation('org.eclipse.jetty:jetty-server:9.4.7.v20170914')
+  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.7.v20170914')
   testImplementation('commons-fileupload:commons-fileupload:1.3.3')
   testImplementation('com.automation-remarks:video-recorder-core:1.4.1')
   testImplementation('com.automation-remarks:video-recorder-junit:1.4.1')
