@@ -19,6 +19,7 @@ class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
 
   @Override
   WebDriver create(final Proxy proxy) {
+    System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     return createLegacyFirefoxDriver(proxy);
   }
 

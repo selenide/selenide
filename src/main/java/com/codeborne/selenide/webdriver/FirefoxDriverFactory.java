@@ -23,6 +23,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
 
   @Override
   WebDriver create(final Proxy proxy) {
+    System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     return createFirefoxDriver(proxy);
   }
 
