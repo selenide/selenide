@@ -32,7 +32,7 @@ public class BasicAuthTest extends IntegrationTest {
         "",
         "user",
         "passwd");
-    assertThat(source(), containsString("\"authenticated\": true,"));
+    assertThat(source(), containsString("\"authenticated\":true,"));
   }
 
   @Test
