@@ -36,7 +36,7 @@ dependencies {
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25') { transitive = false }
 
   testImplementation('org.seleniumhq.selenium:selenium-server:3.12.0') { transitive = false }
-  testImplementation('org.mockito:mockito-core:2.18.0')
+  testImplementation('org.mockito:mockito-core:2.18.3')
   testImplementation('org.seleniumhq.selenium:jetty-repacked:9.4.7.v20170914')
   testImplementation('org.eclipse.jetty:jetty-server:9.4.7.v20170914')
   testImplementation('org.eclipse.jetty:jetty-servlet:9.4.7.v20170914')
