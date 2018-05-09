@@ -1,6 +1,7 @@
 == Changelog
 
-=== 4.11.4
+=== 4.11.4 (released 09.05.2018)
+* #673 Redirect tons of firefox logs to /dev/null  -- thanks to Aliaksandr Rasolka @rosolko for PR #732
 * upgrade to selenium 3.12.0
 * upgrade to gson:2.8.4
 * upgrade to guava:25.0
