@@ -1,5 +1,10 @@
 == Changelog
 
+=== 4.11.4
+* upgrade to selenium 3.12.0
+* upgrade to gson:2.8.4
+* upgrade to guava:25.0
+
 === 4.11.3 (released 07.05.2018)
 * PR #730 Fix duplicating screenshots on error issue #729 -- thanks to Boris Osipov @BorisOsipov
 * PR #727 Add cssValue condition issued in #628 -- thanks to Aliaksandr Rasolka @rosolko
