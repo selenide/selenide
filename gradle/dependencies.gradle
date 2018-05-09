@@ -20,7 +20,7 @@ dependencies {
   }
   implementation('org.apache.httpcomponents:httpcore:4.4.9')
   implementation('com.google.code.gson:gson:2.8.4')
-  implementation('com.google.guava:guava:24.1-jre')
+  implementation('com.google.guava:guava:25.0-jre')
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
   runtimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
