@@ -19,7 +19,7 @@ dependencies {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   implementation('org.apache.httpcomponents:httpcore:4.4.9')
-  implementation('com.google.code.gson:gson:2.8.2')
+  implementation('com.google.code.gson:gson:2.8.4')
   implementation('com.google.guava:guava:24.1-jre')
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
