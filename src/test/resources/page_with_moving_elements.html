@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test page :: with moving elements</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<script>
+  function runForever() {
+    var elem = document.getElementById("forever_moving_element");
+    var posX = 0;
+    var posY = 0;
+    setInterval(frame, 10);
+    function frame() {
+      if (posX === 0 && posY < 150) {
+        posY++;
+        elem.style.top = posX + 'px';
+        elem.style.left = posY + 'px';
+      } else if (posX < 150 && posY === 150) {
+        posX++;
+        elem.style.top = posX + 'px';
+        elem.style.left = posY + 'px';
+      } else if (posX === 150 && posY > 0) {
+        posY--;
+        elem.style.top = posX + 'px';
+        elem.style.left = posY + 'px';
+      } else if (posY === 0 && posX > 0) {
+        posX--;
+        elem.style.top = posX + 'px';
+        elem.style.left = posY + 'px';
+      }
+    }
+  }
+
+  function runLittleBit() {
+    var elem = document.getElementById("moving_then_frozen_element");
+    var pos = 0;
+    setInterval(frame, 10);
+    function frame() {
+      if (pos < 150) {
+        pos++;
+        elem.style.left = pos + 'px';
+      }
+    }
+  }
+</script>
+<div id="forever_moving_container" style="width: 200px; height: 200px; position: relative; background: yellowgreen">
+  <div id="forever_moving_element" style="width: 50px; height: 50px; position: absolute; background: red;" onclick="runForever()"></div>
+</div>
+<div id="not_moving_element" style="width: 200px; height: 20px; background: yellow"></div>
+<div id="moving_and_frozen_container" style="width: 200px; height: 50px; position: relative; background: pink">
+  <div id="moving_then_frozen_element" style="width: 50px; height: 50px; position: absolute; background: blueviolet" onclick="runLittleBit()"></div>
+</div>
+</body>
+</html>
