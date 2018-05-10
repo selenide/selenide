@@ -11,7 +11,7 @@ import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 
 public class HttpHelper {
 
-  private final Pattern pattern = Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
+  private final Pattern pattern = Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
   public Optional<String> getFileNameFromContentDisposition(String headerName, String headerValue) {
     if (!"Content-Disposition".equalsIgnoreCase(headerName) || headerValue == null) {

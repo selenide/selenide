@@ -19,6 +19,12 @@ public class HttpHelperTest {
     assertEquals("selenide-2.6.1.jar", helper.getFileNameFromContentDisposition(
         "content-disposition", "attachement; filename=selenide-2.6.1.jar").get());
 
+    assertEquals("selenide-4.11.5.md", helper.getFileNameFromContentDisposition(
+        "Content-Disposition", "attachement; filename=selenide-4.11.5.md?sessioncookie=12345%2323").get());
+
+    assertEquals("random_file.txt", helper.getFileNameFromContentDisposition(
+        "Content-Disposition", "attachement; filename=random_file.txt?auth=5v1kij42xXSsc;charset=CP1251").get());
+
     assertEquals("Prices.csv", helper.getFileNameFromContentDisposition(
         "Content-Disposition", "attachment; filename=Prices.csv;charset=UTF-8").get());
 
