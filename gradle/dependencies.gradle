@@ -15,7 +15,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents', module: 'httpcore'
     exclude group: 'net.sourceforge.htmlunit', module: 'htmlunit'
   }
-  implementation('io.github.bonigarcia:webdrivermanager:2.2.1') {
+  api('io.github.bonigarcia:webdrivermanager:2.2.1') {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
   }
   implementation('org.apache.httpcomponents:httpcore:4.4.9')
