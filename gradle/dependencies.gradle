@@ -10,8 +10,8 @@ ext {
 
 dependencies {
   api('org.seleniumhq.selenium:selenium-java:3.11.0')
+  api('io.github.bonigarcia:webdrivermanager:2.2.1')
 
-  implementation('io.github.bonigarcia:webdrivermanager:2.2.1')
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
