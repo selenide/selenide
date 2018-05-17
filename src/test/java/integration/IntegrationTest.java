@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
@@ -94,7 +95,6 @@ public abstract class IntegrationTest {
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
     System.setProperty("video.enabled", String.valueOf(!isHeadless()));
     System.setProperty("video.mode", String.valueOf(ANNOTATED));
-
   }
 
   @AfterClass
