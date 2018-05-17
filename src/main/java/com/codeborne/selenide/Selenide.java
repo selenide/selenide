@@ -35,7 +35,6 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
-import static com.codeborne.selenide.WebDriverRunner.url;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -186,7 +185,7 @@ public class Selenide {
    * Reload current page
    */
   public static void refresh() {
-    navigator.open(url());
+    navigator.refresh();
   }
 
   /**
