@@ -23,6 +23,8 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
 
   @Override
   WebDriver create(final Proxy proxy) {
+    String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+    System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
     return createFirefoxDriver(proxy);
   }
 
@@ -35,6 +37,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(headless);
     if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
       firefoxOptions.setBinary(browserBinary);
     }
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");

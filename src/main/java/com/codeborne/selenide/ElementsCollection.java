@@ -39,7 +39,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Checks is the collection is of given size
+   * Asserts if the collection is of given size
    *
    * @param expectedSize
    * @return ElementsCollection
@@ -49,13 +49,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
+   * Asserts conditions
    * $$(".error").shouldBe(empty)
+   *
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
     return should("be", conditions);
   }
 
   /**
+   * Assert conditions
    * $$(".error").shouldHave(size(3))
    * $$(".error").shouldHave(texts("Error1", "Error2"))
    */
@@ -75,12 +78,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      SelenideLogger.commitStep(log, UIAssertionError.wrap(error, collectionsTimeout));
+      Error wrappedError = UIAssertionError.wrap(error, collectionsTimeout);
+      SelenideLogger.commitStep(log, wrappedError);
       switch (assertionMode) {
         case SOFT:
           return this;
         default:
-          throw UIAssertionError.wrap(error, collectionsTimeout);
+          throw wrappedError;
       }
     }
     catch (RuntimeException e) {
@@ -117,7 +121,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Filters collection elements based on the given condition
+   * Filters collection elements based on the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @param condition
    * @return ElementsCollection
    */
@@ -126,7 +131,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Filters collection elements based on the given condition
+   * Filters collection elements based on the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #filter(Condition)
    * @param condition
    * @return ElementsCollection
@@ -136,7 +142,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Filters elements excluding those which met the given condition
+   * Filters elements excluding those which met the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @param condition
    * @return ElementsCollection
    */
@@ -145,7 +152,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Filters elements excluding those which met the given condition
+   * Filters elements excluding those which met the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #exclude(Condition)
    * @param condition
    * @return ElementsCollection
@@ -155,7 +163,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Find the first element which met the given condition
+   * Find the first element which met the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @param condition
    * @return SelenideElement
    */
@@ -164,7 +173,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Find the first element which met the given condition
+   * Find the first element which met the given condition (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #find(Condition)
    * @param condition
    * @return SelenideElement
@@ -250,13 +260,21 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return sb.toString();
   }
 
+  /**
+   * Gets the n-th element of collection (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
+   * @param index 0..N
+   * @return
+   */
   @Override
   public SelenideElement get(int index) {
     return CollectionElement.wrap(collection, index);
   }
 
   /**
-   * return the first element of the collection
+   * returns the first element of the collection
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
    * NOTICE: $(css) is faster and returns the same result as $$(css).first()
    * @return
    */
@@ -265,28 +283,37 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @return the last element of the collection
+   * returns the last element of the collection (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   * @return
    */
   public SelenideElement last() {
     return LastCollectionElement.wrap(collection);
   }
 
   /**
-   * returns the first n elements of the collection
-   * @param elements number of elements
+   * returns the first n elements of the collection (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   * @param elements number of elements 1..N
    */
   public ElementsCollection first(int elements) {
     return new ElementsCollection(new HeadOfCollection(collection, elements));
   }
 
   /**
-   * returns the last n elements of the collection
-   * @param elements number of elements
+   * returns the last n elements of the collection (lazy evaluation)
+   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   * @param elements number of elements 1..N
    */
   public ElementsCollection last(int elements) {
     return new ElementsCollection(new TailOfCollection(collection, elements));
   }
 
+  /**
+   * return actual size of the collection, doesn't wait on collection to be loaded.
+   * ATTENTION not recommended for use in tests. Use collection.shouldHave(size(n)); for assertions instead.
+   * @return
+   */
   @Override
   public int size() {
     return getElements().size();

@@ -136,4 +136,8 @@ public class Navigator {
   public void forward() {
     getWebDriver().navigate().forward();
   }
+
+  public void refresh() {
+    getWebDriver().navigate().refresh();
+  }
 }

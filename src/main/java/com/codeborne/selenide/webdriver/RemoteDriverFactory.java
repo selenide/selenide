@@ -12,8 +12,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserBinary;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.remote;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
@@ -24,6 +26,9 @@ import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isOpera;
 
 class RemoteDriverFactory extends AbstractDriverFactory {
+
+
+  private static final Logger log = Logger.getLogger(RemoteDriverFactory.class.getName());
 
   @Override
   boolean supports() {
@@ -52,10 +57,30 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     if (headless) {
       capabilities.merge(getHeadlessCapabilities());
     }
+    if (!browserBinary.isEmpty()) {
+      capabilities.merge(getBrowserBinaryCapabilites());
+    }
     return capabilities;
   }
 
+  Capabilities getBrowserBinaryCapabilites() {
+    log.info("Using browser binary: " + browserBinary);
+    if (isChrome()) {
+      ChromeOptions options = new ChromeOptions();
+      options.setBinary(browserBinary);
+      return options;
+    } else if (isFirefox()) {
+      FirefoxOptions options = new FirefoxOptions();
+      options.setBinary(browserBinary);
+      return options;
+    } else {
+      log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
+    }
+    return new DesiredCapabilities();
+  }
+
   Capabilities getHeadlessCapabilities() {
+    log.info("Starting in headless mode");
     if (isChrome()) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(headless);
@@ -64,6 +89,8 @@ class RemoteDriverFactory extends AbstractDriverFactory {
       FirefoxOptions options = new FirefoxOptions();
       options.setHeadless(headless);
       return options;
+    } else {
+      log.warning("Headless mode on remote server is only supported for Chrome/Firefox, setting will be ignored.");
     }
     return new DesiredCapabilities();
   }

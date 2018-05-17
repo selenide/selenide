@@ -22,6 +22,7 @@ import static java.lang.Integer.parseInt;
  */
 public class SelenideProxyServer {
   protected final Proxy outsideProxy;
+
   protected BrowserMobProxy proxy = new BrowserMobProxyServer() {
     int maxSize = 64 * 1024 * 1024; // 64 MB
     @Override
@@ -33,6 +34,15 @@ public class SelenideProxyServer {
       addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, maxSize));
     }
   };
+
+  /**
+   * Method return current instance of browser mob proxy
+   *
+   * @return browser mob proxy instance
+   */
+  public BrowserMobProxy getProxy() {
+    return proxy;
+  }
 
   protected int port;
   protected Map<String, RequestFilter> requestFilters = new HashMap<>();

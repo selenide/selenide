@@ -302,6 +302,18 @@ public class Configuration {
   public static boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
 
   /**
+   * If set to true, 'setValue' and 'val' methods of SelenideElement trigger changeEvent after main manipulations.
+   *
+   * Firing change event is not natural and could lead to unpredictable results. Browser fires this event automatically
+   * according to web driver actions. Recommended behaviour is to disable this option.
+   * Make its true by default for backward compatibility.
+   *
+   * Can be configured either programmatically or by system property "-Dselenide.setValueChangeEvent=true".
+   * Default value: true
+   */
+  public static boolean setValueChangeEvent = Boolean.parseBoolean(System.getProperty("selenide.setValueChangeEvent", "true"));
+
+  /**
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
    */
   public static SelectorMode selectorMode = CSS;

@@ -3,6 +3,9 @@
   <head>
     <title>Test page :: with selects, but withour JQuery</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+      #status {line-height: 10px;}
+    </style>
     <script type="text/javascript">
       function scheduleFillTextArea() {
         setTimeout(fillTextArea, commandDuration * 3);
@@ -35,15 +38,15 @@
   </head>
   <body onload="initBlur(); scheduleFillTextArea();">
   <div style="display: none">abcd</div>
-    <div id="non-clickable-element" 
+    <div id="non-clickable-element"
          style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
       <a href="http://google.com">non-clickable element</a>
     </div>
-    <div id="clickable-element" 
+    <div id="clickable-element"
          style="z-index: -90; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
       <a href="http://www.yandex.ru/">clickable element</a>
     </div>
-    
+
     <h1>Page with selects</h1>
 
 
@@ -137,7 +140,7 @@
     <table id="user-table">
       <thead>
         <tr>
-          <th>First name</th>
+          <th style="font-size:24;">First name</th>
           <th>Last name</th>
           <th>Age</th>
         </tr>
@@ -181,15 +184,15 @@
     </div>
 
     <span id="hello-world">Hello&nbsp;world</span>
-    
-    <div style="display: none;" 
-         id="gopher" 
-         class="invisible-with-multiple-attributes" 
-         data-animal-id="111" 
-         onClick="void(0);" 
+
+    <div style="display: none;"
+         id="gopher"
+         class="invisible-with-multiple-attributes"
+         data-animal-id="111"
+         onClick="void(0);"
          onChange="console.log(this);"
          placeholder="Животное"
-         ng-class="widget" 
+         ng-class="widget"
          ng-click="none">Суслик</div>
   </body>
 </html>

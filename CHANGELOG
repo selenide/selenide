@@ -1,6 +1,24 @@
 == Changelog
 
-=== 4.11.2 (released 2x.04.2018)
+=== 4.11.5 (planed **.05.2018)
+* PR #735 Incorrect filename of downloaded file issued in #735 -- thanks to Aliaksandr Rasolka @rosolko
+* PR #736 Provide webdrivermanager on api level -- thanks to Aliaksandr Rasolka @rosolko
+* PR #737 Add threadId to log messages on closeWebDriver() -- thanks to Alexander Poleschuk @AlexanderPoleschuk
+
+=== 4.11.4 (released 09.05.2018)
+* #673 Redirect tons of firefox logs to /dev/null  -- thanks to Aliaksandr Rasolka @rosolko for PR #732
+* upgrade to selenium 3.12.0
+* upgrade to gson:2.8.4
+* upgrade to guava:25.0
+
+=== 4.11.3 (released 07.05.2018)
+* PR #730 Fix duplicating screenshots on error issue #729 -- thanks to Boris Osipov @BorisOsipov
+* PR #727 Add cssValue condition issued in #628 -- thanks to Aliaksandr Rasolka @rosolko
+* PR #726 fixed browserBinary usage on remote server issue #725 -- thanks to Alexei Vinogradov @vinogradoff
+* PR #731 Add ability to get browser mob proxy instance -- thanks to Aliaksandr Rasolka @rosolko
+
+=== 4.11.2 (released 25.04.2018)
+* PR #718 introduce setValueChangeEvent option  -- thanks to @MikeShysh
 * PR #705 Make screenshot of SelenideElement/WebElement which is inside iframe -- thanks to @andrejska
 * PR #646 Added method to check if page is scrolled to the bottom -- thanks to @pavelpp
 * PR #715 Added static analysis for avoiding start import for main package, fixing existing violations -- thanks to @andrejska

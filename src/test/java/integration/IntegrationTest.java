@@ -4,7 +4,11 @@ import com.automation.remarks.junit.VideoRule;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 import com.codeborne.selenide.junit.TextReport;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 
@@ -12,7 +16,6 @@ import java.io.File;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.*;
@@ -91,6 +94,7 @@ public abstract class IntegrationTest {
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
     System.setProperty("video.enabled", String.valueOf(!isHeadless()));
     System.setProperty("video.mode", String.valueOf(ANNOTATED));
+
   }
 
   @AfterClass

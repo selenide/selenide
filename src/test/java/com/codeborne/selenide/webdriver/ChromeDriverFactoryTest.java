@@ -5,15 +5,17 @@ import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBro
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import java.util.Map;
 
+import com.codeborne.selenide.*;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
-import org.openqa.selenium.Proxy;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 @SuppressWarnings("unchecked")
@@ -27,6 +29,8 @@ public class ChromeDriverFactoryTest {
   public void tearDown() {
     System.clearProperty(CHROME_OPTIONS_ARGS);
     System.clearProperty(CHROME_OPTIONS_PREFS);
+    Configuration.browserBinary = "";
+    Configuration.headless = false;
   }
 
 
@@ -92,4 +96,22 @@ public class ChromeDriverFactoryTest {
     assertThat(prefsMap, hasEntry("key4", true));
   }
 
+
+  @Test
+  public void browserBinaryCanBeSet() {
+    Configuration.browserBinary = "c:/browser.exe";
+    Capabilities caps = new ChromeDriverFactory().createChromeOptions(proxy);
+    Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
+    assertThat(options.get("binary"), Matchers.is("c:/browser.exe"));
+  }
+
+  @Test
+  public void headlessCanBeSet() {
+    Configuration.headless = true;
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments, hasItems("--headless"));
+
+  }
 }

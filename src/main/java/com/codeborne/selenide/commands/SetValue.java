@@ -8,6 +8,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Configuration.fastSetValue;
+import static com.codeborne.selenide.Configuration.setValueChangeEvent;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.impl.Events.events;
 
@@ -51,11 +52,18 @@ public class SetValue implements Command<WebElement> {
     } else if (fastSetValue) {
       String error = setValueByJs(element, text);
       if (error != null) throw new InvalidStateException(error);
-      events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+      if (setValueChangeEvent) {
+        events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+      }
+      else {
+        events.fireEvent(element, "keydown", "keypress", "input", "keyup");
+      }
     } else {
       element.clear();
       element.sendKeys(text);
-      events.fireChangeEvent(element);
+      if (setValueChangeEvent) {
+        events.fireChangeEvent(element);
+      }
     }
   }
 

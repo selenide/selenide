@@ -36,6 +36,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(headless);
     if (!browserBinary.isEmpty()) {
+      log.info("Using browser binary: " + browserBinary);
       options.setBinary(browserBinary);
     }
     if (chromeSwitches != null) {
