@@ -6,6 +6,9 @@ language: java
 jdk:
   - oraclejdk8
 
+addons:
+  chrome: stable
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -17,20 +20,19 @@ cache:
     - $HOME/.sonar/cache/
 
 before_install:
- - export CHROME_BIN=/usr/bin/google-chrome
- - export DISPLAY=:99.0
- - sh -e /etc/init.d/xvfb start
- - sudo apt-get update
- - sudo apt-get install -y libappindicator1 fonts-liberation
- - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
- - sudo dpkg -i google-chrome*.deb
- - rm -fr /home/travis/.m2/repository/webdriver/
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - rm -fr /home/travis/.m2/repository/webdriver/
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 
 script:
   - ./gradlew check chrome htmlunit --no-daemon --console=plain
   - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
 
--after_script: "./.upload_reports.sh"
+after_script: "./.upload_reports.sh"
 
 notifications:
   slack:
