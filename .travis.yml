@@ -26,8 +26,7 @@ script:
 jdk:
 - oraclejdk8
 before_install:
-- openssl aes-256-cbc -K $encrypted_5bc7821a2315_key -iv $encrypted_5bc7821a2315_iv
-  -in config/secring.gpg.enc -out ~\/.gradle/secring.gpg -d
+ - openssl aes-256-cbc -K $encrypted_5bc7821a2315_key -iv $encrypted_5bc7821a2315_iv -in config/secring.gpg.enc -out ~\/.gradle/secring.gpg -d
  - export CHROME_BIN=/usr/bin/google-chrome
  - export DISPLAY=:99.0
  - sh -e /etc/init.d/xvfb start
