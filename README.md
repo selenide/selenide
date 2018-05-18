@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
-[![Coverage Status](https://coveralls.io/repos/github/codeborne/selenide/badge.svg?branch=master)](https://coveralls.io/github/codeborne/selenide?branch=master)
+[![Sonar Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
+[![Sonar Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=coverage)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/codeborne/selenide/blob/master/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
 

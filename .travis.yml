@@ -1,35 +1,47 @@
-branches:
-  only:
-    - master
+git:
+  depth: 99999
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+env:
+  global:
+    - secure: "lhf27njZE3PpaoLdl0+hrjFaqe7VsPm39rfbmQhq0u1fLO/6BLbHxWUwo1GleI+Hxh1DAyoNRpR+uZOwqx3hOqRotTnLbaInvGmXZasRUq/DRMzN0WMGmarqmDpHAsJ7TZL6ECo4skoKRapziSdjxkc8eyQ45ZgNezTFpFfQJDM="
+
+addons:
+  apt:
+    update: true
+  chrome: stable
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache/
+
+before_install:
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - rm -fr /home/travis/.m2/repository/webdriver/
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
+
+script:
+  - ./gradlew check --no-daemon --console=plain
+  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+
+after_script: "./.upload_reports.sh"
 
 notifications:
   slack:
     rooms:
       secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
-
-language: java
-sudo: true
-cache:
-  directories:
-  - $HOME/.gradle
-
-script: "./gradlew clean check test chrome htmlunit --info"
-
-jdk:
-  - oraclejdk8
-
-before_install:
- - export CHROME_BIN=/usr/bin/google-chrome
- - export DISPLAY=:99.0
- - sh -e /etc/init.d/xvfb start
- - sudo apt-get update
- - sudo apt-get install -y libappindicator1 fonts-liberation
- - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
- - sudo dpkg -i google-chrome*.deb
- - rm -fr /home/travis/.m2/repository/webdriver/
-
-after_success:
-- ./gradlew jacocoTestReport coveralls
-- bash <(curl -s https://codecov.io/bash)
-
-after_script: "./.upload_reports.sh"
