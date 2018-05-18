@@ -7,6 +7,8 @@ jdk:
   - oraclejdk8
 
 addons:
+  apt:
+    update: true
   chrome: stable
   sonarcloud:
     organization: codeborne
@@ -25,6 +27,7 @@ cache:
 
 before_install:
   - export CHROME_BIN=/usr/bin/google-chrome
+  - sudo apt-get install -y libappindicator1 fonts-liberation
   - rm -fr /home/travis/.m2/repository/webdriver/
 
 before_script:
@@ -33,8 +36,8 @@ before_script:
   - sleep 3
 
 script:
-  - ./gradlew check chrome htmlunit --no-daemon --console=plain
-  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.branch.name=${TRAVIS_BRANCH}
+  - ./gradlew check --no-daemon --console=plain
+  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.host.url=${SONAR_HOST} -Dsonar.branch.name=${TRAVIS_BRANCH}
 
 after_script: "./.upload_reports.sh"
 
