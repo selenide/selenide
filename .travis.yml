@@ -20,7 +20,7 @@ script:
     #- ./gradlew htmlunit
     - ./gradlew uploadArchives --info
       -Psigning.keyId=System.getenv('signing.keyId')
-      -Psigning.password=System.getenv('signing.password')"
+      -Psigning.password=System.getenv('signing.password')
       -Psigning.secretKeyRingFile=/home/travis/.gradle/secring.gpg
 
 jdk:
@@ -41,4 +41,6 @@ after_success:
 - ./gradlew jacocoTestReport coveralls
 - bash <(curl -s https://codecov.io/bash)
 
-after_script: "./.upload_reports.sh"
+after_script:
+ - rm -fr /home/travis/.gradle/secring.gpg
+ - ./.upload_reports.sh
