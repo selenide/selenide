@@ -6,18 +6,19 @@ language: java
 jdk:
   - oraclejdk8
 
-env:
-  global:
-    - secure: "lhf27njZE3PpaoLdl0+hrjFaqe7VsPm39rfbmQhq0u1fLO/6BLbHxWUwo1GleI+Hxh1DAyoNRpR+uZOwqx3hOqRotTnLbaInvGmXZasRUq/DRMzN0WMGmarqmDpHAsJ7TZL6ECo4skoKRapziSdjxkc8eyQ45ZgNezTFpFfQJDM="
-
 addons:
   apt:
     update: true
   chrome: stable
+  sonarcloud:
+    organization: codeborne
+    token:
+      - secure: "lhf27njZE3PpaoLdl0+hrjFaqe7VsPm39rfbmQhq0u1fLO/6BLbHxWUwo1GleI+Hxh1DAyoNRpR+uZOwqx3hOqRotTnLbaInvGmXZasRUq/DRMzN0WMGmarqmDpHAsJ7TZL6ECo4skoKRapziSdjxkc8eyQ45ZgNezTFpFfQJDM="
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -fr /home/travis/.m2/repository/webdriver/
 
 cache:
   directories:
@@ -26,18 +27,21 @@ cache:
     - $HOME/.sonar/cache/
 
 before_install:
-  - export CHROME_BIN=/usr/bin/google-chrome
   - sudo apt-get install -y libappindicator1 fonts-liberation
-  - rm -fr /home/travis/.m2/repository/webdriver/
+  - export CHROME_BIN=/usr/bin/google-chrome
+
+install: true
 
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - sleep 3
+  - sleep 5
 
 script:
   - ./gradlew check --no-daemon --console=plain
-  - ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+  - ./gradlew htmlunit --no-daemon --console=plain
+  - ./gradlew chrome --no-daemon --console=plain --stacktrace
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./gradlew sonarqube --no-daemon --console=plain -Dsonar.host.url=${SONAR_HOST} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
 
 after_script: "./.upload_reports.sh"
 
