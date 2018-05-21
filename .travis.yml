@@ -10,10 +10,6 @@ addons:
   apt:
     update: true
   chrome: stable
-  sonarcloud:
-    organization: codeborne
-    token:
-      - secure: "lhf27njZE3PpaoLdl0+hrjFaqe7VsPm39rfbmQhq0u1fLO/6BLbHxWUwo1GleI+Hxh1DAyoNRpR+uZOwqx3hOqRotTnLbaInvGmXZasRUq/DRMzN0WMGmarqmDpHAsJ7TZL6ECo4skoKRapziSdjxkc8eyQ45ZgNezTFpFfQJDM="
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -40,8 +36,8 @@ before_script:
 script:
   - ./gradlew check --no-daemon --console=plain
   - ./gradlew htmlunit --no-daemon --console=plain
-  - ./gradlew chrome --no-daemon --console=plain --stacktrace
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./gradlew sonarqube --no-daemon --console=plain -Dsonar.host.url=${SONAR_HOST} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
+  - ./gradlew chrome --no-daemon --console=plain
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
 
 after_script: "./.upload_reports.sh"
 
