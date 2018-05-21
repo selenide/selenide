@@ -13,9 +13,8 @@ import com.github.spotbugs.SpotBugsTask
 
 spotbugs {
   sourceSets = [sourceSets.main]
-  effort = "max"
-  reportsDir = file("$project.buildDir/reports/spotbugs")
-  excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
+  effort = 'max'
+  excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
 }
 
 tasks.withType(SpotBugsTask) {
@@ -25,25 +24,16 @@ tasks.withType(SpotBugsTask) {
   }
 }
 
-task checkstyleHtmlMain {
-  doLast {
-    ant.xslt(in: checkstyleMain.reports.xml.destination,
-      style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
-      out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+tasks.withType(Checkstyle) {
+  logging.level = LogLevel.LIFECYCLE
+  reports {
+    html.stylesheet = resources.text.fromFile(rootProject.file('config/checkstyle/checkstyle-noframes-sorted.xsl'))
   }
 }
 
-task checkstyleHtmlTest {
-  doLast {
-    ant.xslt(in: checkstyleTest.reports.xml.destination,
-      style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
-      out: new File(checkstyleTest.reports.xml.destination.parent, 'test.html'))
+sonarqube {
+  properties {
+    property 'sonar.projectName', 'selenide'
+    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/htmlunit.exec, $project.buildDir/jacoco/chrome.exec"
   }
 }
-
-[checkstyleMain, checkstyleTest].each { task ->
-  task.logging.setLevel(LogLevel.LIFECYCLE)
-}
-
-checkstyleMain.finalizedBy checkstyleHtmlMain
-checkstyleTest.finalizedBy checkstyleHtmlTest
