@@ -4,6 +4,7 @@
 * PR #735 Incorrect filename of downloaded file issued in #735 -- thanks to Aliaksandr Rasolka @rosolko
 * PR #736 Provide webdrivermanager on api level -- thanks to Aliaksandr Rasolka @rosolko
 * PR #737 Add threadId to log messages on closeWebDriver() -- thanks to Alexander Poleschuk @AlexanderPoleschuk
+* PR #741 Use selenium refresh for selenide refresh instead of reopen current url issued in #740 -- thanks to Aliaksandr Rasolka @rosolko
 
 === 4.11.4 (released 09.05.2018)
 * #673 Redirect tons of firefox logs to /dev/null  -- thanks to Aliaksandr Rasolka @rosolko for PR #732
