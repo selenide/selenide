@@ -101,6 +101,9 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new ExactTexts(expectedTexts);
   }
 
+  /**
+   * Should be used for explaining the reason of condition
+   */
   public CollectionCondition because(String message) {
     return new ExplainedCollectionCondition(this, message);
   }
