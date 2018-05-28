@@ -18,4 +18,10 @@ public class CollectionConditionReasonTest {
     Assert.assertEquals("size >= 1", condition.toString());
   }
 
+  @Test
+  public void testCollectionConditionNullBecause() {
+    CollectionCondition condition = CollectionCondition.sizeGreaterThanOrEqual(1).because(null);
+    Assert.assertEquals("size >= 1 (because null)", condition.toString());
+  }
+
 }

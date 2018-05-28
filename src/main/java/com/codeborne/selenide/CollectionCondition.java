@@ -132,7 +132,6 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
       return delegate.toString() + " (because " + message + ")";
     }
 
-
   }
 
 
