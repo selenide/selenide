@@ -38,10 +38,11 @@ before_script:
 
 script:
   - ./gradlew check --no-daemon --console=plain
-  - ./gradlew htmlunit --no-daemon --console=plain
-  - ./gradlew chrome --no-daemon --console=plain
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi
-  - if [ "${TRAVIS_BRANCH}" = "master" ]; then ./gradlew uploadArchives --no-daemon --console=plain -Psigning.keyId=${SIGNING_KEY_ID} -Psigning.password=${SIGNING_PASSWORD} -Psigning.secretKeyRingFile=/home/travis/.gradle/secring.gpg; -PsonatypeUsername=${sonatypeUsername} -PsonatypePassword=${sonatypePassword} fi
+#  - ./gradlew htmlunit --no-daemon --console=plain
+#  - ./gradlew chrome --no-daemon --console=plain
+#  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi
+#  - if [ "${TRAVIS_BRANCH}" = "master" ]; then ./gradlew uploadArchives --no-daemon --console=plain -Psigning.keyId=${SIGNING_KEY_ID} -Psigning.password=${SIGNING_PASSWORD} -Psigning.secretKeyRingFile=/home/travis/.gradle/secring.gpg; -PsonatypeUsername=${sonatypeUsername} -PsonatypePassword=${sonatypePassword} fi
+  - ./gradlew uploadArchives --no-daemon --console=plain -Psigning.keyId=${SIGNING_KEY_ID} -Psigning.password=${SIGNING_PASSWORD} -Psigning.secretKeyRingFile=/home/travis/.gradle/secring.gpg; -PsonatypeUsername=${sonatypeUsername} -PsonatypePassword=${sonatypePassword}
 
 after_script:
   - rm -fr /home/travis/.gradle/secring.gpg
