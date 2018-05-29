@@ -1,6 +1,7 @@
 jar {
   manifest {
     attributes(
+      "Automatic-Module-Name": project.group + '.' + project.name,
       "Implementation-Title": project.group + '.' + project.name,
       "Implementation-Version": version,
       "Implementation-Vendor": "Codeborne")
