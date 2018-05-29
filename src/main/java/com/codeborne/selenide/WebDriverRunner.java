@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.headless;
 
 public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
@@ -204,7 +205,7 @@ public class WebDriverRunner {
    * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
    */
   public static boolean isHeadless() {
-    return isHtmlUnit() || isPhantomjs();
+    return isHtmlUnit() || isPhantomjs() || headless;
   }
 
   /**
