@@ -22,10 +22,10 @@ Selenide is based on and is compatible to Selenium WebDriver 2.0 and 3.0
 
     @Test
     public void testLogin() {
-    open("/login");
-    $(By.name("user.name")).setValue("johny");
-    $("#submit").click();
-    $("#username").shouldHave(text("Hello, Johny!"));
+      open("/login");
+      $(By.name("user.name")).setValue("johny");
+      $("#submit").click();
+      $("#username").shouldHave(text("Hello, Johny!"));
     }
 
 Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/codeborne/selenide/wiki/Selenide-vs-Selenium).
