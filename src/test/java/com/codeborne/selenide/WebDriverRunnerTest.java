@@ -20,6 +20,8 @@ import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
 import static java.lang.Thread.currentThread;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 public class WebDriverRunnerTest {
@@ -30,7 +32,7 @@ public class WebDriverRunnerTest {
 
   URL url = currentThread().getContextClassLoader().getResource("start_page.html");
 
-  @Before 
+  @Before
   public void resetWebDriverContainer() {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();
@@ -71,6 +73,44 @@ public class WebDriverRunnerTest {
     Configuration.browser = HTMLUNIT;
     open(url);
     verify(listener1).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
+  }
+
+  @Test
+  public void chrome_supportsAlerts() {
+    Configuration.browser = "chrome";
+    assertTrue(WebDriverRunner.supportsModalDialogs());
+  }
+
+  @Test
+  public void headless_chrome_supportsAlerts() {
+    Configuration.browser = "chrome";
+    Configuration.headless = true;
+    assertTrue(WebDriverRunner.supportsModalDialogs());
+  }
+
+  @Test
+  public void firefox_supportsAlerts() {
+    Configuration.browser = "firefox";
+    assertTrue(WebDriverRunner.supportsModalDialogs());
+  }
+
+  @Test
+  public void headless_firefox_supportsAlerts() {
+    Configuration.browser = "firefox";
+    Configuration.headless = true;
+    assertTrue(WebDriverRunner.supportsModalDialogs());
+  }
+
+  @Test
+  public void safari_doesNotSupportAlerts() {
+    Configuration.browser = "safari";
+    assertFalse(WebDriverRunner.supportsModalDialogs());
+  }
+
+  @Test
+  public void phantomjs_doesNotSupportAlerts() {
+    Configuration.browser = "phantomjs";
+    assertFalse(WebDriverRunner.supportsModalDialogs());
   }
 
   public static class CustomWebDriverProvider implements WebDriverProvider {

@@ -212,7 +212,7 @@ public class WebDriverRunner {
    * Does this browser support "alert" and "confirm" dialogs.
    */
   public static boolean supportsModalDialogs() {
-    return !isHeadless() && !isSafari() || isHtmlUnit();
+    return !isPhantomjs() && !isSafari();
   }
 
   /**

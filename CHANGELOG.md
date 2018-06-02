@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.12.1 (released 02.06.2018)
+
+* fix support for alert/confirm dialogs in headless chrome/firefox
+
 ## 4.12.0 (released 30.05.2018)
 
 * PR #735 Incorrect filename of downloaded file issued in #735 -- thanks to Aliaksandr Rasolka @rosolko
