@@ -84,22 +84,22 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void canCheckThatElementsHaveCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(
-            texts("dynamic content", "dynamic content2"),
-            texts("mic cont", "content2"),
-            exactTexts(asList("dynamic content", "dynamic content2")));
+      texts("dynamic content", "dynamic content2"),
+      texts("mic cont", "content2"),
+      exactTexts(asList("dynamic content", "dynamic content2")));
   }
 
   @Test
   public void ignoresWhitespacesInTexts() {
     $$("#dynamic-content-container span").shouldHave(
-            texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
-            exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+      texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
+      exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
   }
 
   @Test(expected = TextsMismatch.class)
   public void canCheckThatElementsHaveExactlyCorrectTexts() {
     $$("#dynamic-content-container span").shouldHave(
-            exactTexts("content", "content2"));
+      exactTexts("content", "content2"));
   }
 
   @Test(expected = ElementNotFound.class)
@@ -158,7 +158,7 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void collectionMethodsCanBeChained() {
     $$("#multirowTable tr").shouldHave(size(2))
-            .filterBy(text("Norris")).shouldHave(size(1));
+      .filterBy(text("Norris")).shouldHave(size(1));
   }
 
   @Test
@@ -235,12 +235,12 @@ public class CollectionMethodsTest extends IntegrationTest {
     collection.first(10).shouldHaveSize(collection.size());
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
-            .map(SelenideElement::getText)
-            .collect(Collectors.toList()).subList(0, 2);
+      .map(SelenideElement::getText)
+      .collect(Collectors.toList()).subList(0, 2);
 
     List<String> selenideSublist = collection.first(2).stream()
-            .map(SelenideElement::getText)
-            .collect(Collectors.toList());
+      .map(SelenideElement::getText)
+      .collect(Collectors.toList());
 
     Assert.assertEquals(regularSublist, selenideSublist);
   }
@@ -252,12 +252,12 @@ public class CollectionMethodsTest extends IntegrationTest {
     collection.last(10).shouldHaveSize(collection.size());
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
-            .map(SelenideElement::getText)
-            .collect(Collectors.toList()).subList(2, collection.size());
+      .map(SelenideElement::getText)
+      .collect(Collectors.toList()).subList(2, collection.size());
 
     List<String> selenideSublist = collection.last(2).stream()
-            .map(SelenideElement::getText)
-            .collect(Collectors.toList());
+      .map(SelenideElement::getText)
+      .collect(Collectors.toList());
 
     Assert.assertEquals(regularSublist, selenideSublist);
   }
@@ -265,10 +265,20 @@ public class CollectionMethodsTest extends IntegrationTest {
   @Test
   public void canChainFilterAndFirst() {
     $$("div").filterBy(visible).first()
-            .shouldBe(visible)
-            .shouldHave(text("non-clickable element"));
+      .shouldBe(visible)
+      .shouldHave(text("non-clickable element"));
 
     $$("div").filterBy(visible).get(2).click();
 
+  }
+
+  @Test
+  public void canActualizeCollectionElements() {
+    openFile("elements_disappear_on_click.html");
+
+    ElementsCollection divs = $$("#remove");
+    divs.shouldHave(size(1));
+    $("#remove").click();
+    divs.actualize().shouldHave(size(0));
   }
 }
