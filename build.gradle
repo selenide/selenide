@@ -5,7 +5,7 @@ plugins {
   id 'maven'
   id 'jacoco'
   id 'checkstyle'
-  id 'com.github.spotbugs' version '1.6.1'
+  id 'com.github.spotbugs' version '1.6.2'
   id 'org.sonarqube' version '2.6.2'
 }
 
@@ -33,4 +33,4 @@ apply from: rootProject.file('gradle/coverage.gradle')
 apply from: rootProject.file('gradle/tests.gradle')
 apply from: rootProject.file('gradle/deploy.gradle')
 
-wrapper.gradleVersion = '4.7'
+wrapper.gradleVersion = '4.8'
