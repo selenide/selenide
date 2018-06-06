@@ -1,8 +1,11 @@
 package com.codeborne.selenide;
 
 import org.junit.Test;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.not;
@@ -110,6 +113,17 @@ public class ConditionTest {
   public void elementExists() {
     assertTrue(Condition.exist.apply(elementWithVisibility(true)));
     assertTrue(Condition.exist.apply(elementWithVisibility(false)));
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void elementMovingNotLocatable() {
+    Condition.moveAround.apply(elementWithVisibility(false));
+  }
+
+  @Test
+  public void elementMoving() {
+    assertFalse(Condition.moveAround.apply(remoteWebElementNotMoving()));
+    assertTrue(Condition.moveAround.apply(remoteWebElementIsMoving()));
   }
 
   @Test
@@ -373,6 +387,45 @@ public class ConditionTest {
   private WebElement elementWithVisibility(boolean isVisible) {
     WebElement element = mock(WebElement.class);
     when(element.isDisplayed()).thenReturn(isVisible);
+    return element;
+  }
+
+  private Coordinates getCoordinatesWithViewPort(int x, int y) {
+    return new Coordinates() {
+      @Override
+      public Point onScreen() {
+        return null;
+      }
+
+      @Override
+      public Point inViewPort() {
+        return new Point(x, y);
+      }
+
+      @Override
+      public Point onPage() {
+        return null;
+      }
+
+      @Override
+      public Object getAuxiliary() {
+        return null;
+      }
+    };
+  }
+
+  private RemoteWebElement remoteWebElementNotMoving() {
+    RemoteWebElement element = mock(RemoteWebElement.class);
+    when(element.getCoordinates())
+      .thenReturn(getCoordinatesWithViewPort(1, 1));
+    return element;
+  }
+
+  private RemoteWebElement remoteWebElementIsMoving() {
+    RemoteWebElement element = mock(RemoteWebElement.class);
+    when(element.getCoordinates())
+      .thenReturn(getCoordinatesWithViewPort(1, 1))
+      .thenReturn(getCoordinatesWithViewPort(2, 2));
     return element;
   }
 
