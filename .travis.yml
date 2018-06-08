@@ -33,17 +33,11 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 5
 
-jobs:
-  include:
-    - stage: check
-      script: ./gradlew check --no-daemon --console=plain
-    - stage: htmlunit
-      script: ./gradlew htmlunit --no-daemon --console=plain
-    - stage: chrome
-      script: ./gradlew chrome --no-daemon --console=plain
-    - name: sonarqube
-        if: branch = master
-        script: ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+script:
+  - ./gradlew check --no-daemon --console=plain
+  - ./gradlew htmlunit --no-daemon --console=plain
+  - ./gradlew chrome --no-daemon --console=plain
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
 
 after_script: "./.upload_reports.sh"
 
