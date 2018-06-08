@@ -11,9 +11,7 @@ ext {
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-  api('io.github.bonigarcia:webdrivermanager:2.2.1') {
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-  }
+  api('io.github.bonigarcia:webdrivermanager:2.2.2')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
@@ -22,7 +20,7 @@ dependencies {
   compileOnly("org.testng:testng:$testngVersion")
 
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion")
-  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.9.v20180320')
+  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.11.v20180605')
   testImplementation("junit:junit:$junitVersion")
   testImplementation("org.testng:testng:$testngVersion")
   testImplementation('org.mockito:mockito-core:2.18.3')
