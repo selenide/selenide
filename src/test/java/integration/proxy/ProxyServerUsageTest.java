@@ -34,14 +34,16 @@ public class ProxyServerUsageTest extends IntegrationTest {
     SelenideProxyServer selenideProxy = getSelenideProxy();
 
     selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
-      if (!messageInfo.getUrl().contains("gstatic.com")) {
-        requests.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+      String url = messageInfo.getUrl();
+      if (!url.contains("gstatic.com") || !url.contains("google.com")) {
+        requests.add(url + "\n\n" + contents.getTextContents());
       }
       return null;
     });
     selenideProxy.addResponseFilter("proxy-usages.response", (response, contents, messageInfo) -> {
-      if (!messageInfo.getUrl().contains("gstatic.com")) {
-        responses.add(messageInfo.getUrl() + "\n\n" + contents.getTextContents());
+      String url = messageInfo.getUrl();
+      if (!url.contains("gstatic.com")|| !url.contains("google.com")) {
+        responses.add(url + "\n\n" + contents.getTextContents());
       }
     });
 
