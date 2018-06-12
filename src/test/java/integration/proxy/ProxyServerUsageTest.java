@@ -35,14 +35,14 @@ public class ProxyServerUsageTest extends IntegrationTest {
 
     selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
       String url = messageInfo.getUrl();
-      if (!url.contains("gstatic.com") || !url.contains("google.com")) {
+      if (!isChromeOwnTechnicalRequest(url)) {
         requests.add(url + "\n\n" + contents.getTextContents());
       }
       return null;
     });
     selenideProxy.addResponseFilter("proxy-usages.response", (response, contents, messageInfo) -> {
       String url = messageInfo.getUrl();
-      if (!url.contains("gstatic.com")|| !url.contains("google.com")) {
+      if (!isChromeOwnTechnicalRequest(url)) {
         responses.add(url + "\n\n" + contents.getTextContents());
       }
     });
@@ -60,5 +60,9 @@ public class ProxyServerUsageTest extends IntegrationTest {
     assertThat(requests.get(0), containsString("Hello, WinRar!"));
 
     assertThat(responses.get(0), containsString("<h3>Uploaded 1 files</h3>"));
+  }
+
+  private boolean isChromeOwnTechnicalRequest(String url) {
+    return url.contains("gstatic.com") || url.contains("google.com");
   }
 }
