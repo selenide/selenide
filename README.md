@@ -32,7 +32,7 @@ Look for [detailed comparison of Selenide and Selenium WebDriver API](https://gi
 
 ## Changelog
 
-Here is [CHANGELOG](https://github.com/codeborne/selenide/blob/master/CHANGELOG)
+Here is [CHANGELOG](https://github.com/codeborne/selenide/blob/master/CHANGELOG.md)
 
 ## How to start?
 
