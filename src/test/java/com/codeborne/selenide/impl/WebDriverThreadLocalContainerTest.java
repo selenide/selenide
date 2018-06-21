@@ -16,7 +16,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -27,8 +26,7 @@ import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.close;
 import static java.lang.Thread.currentThread;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
@@ -54,7 +52,12 @@ public class WebDriverThreadLocalContainerTest {
     Handler[] handlers = log.getParent().getHandlers();
     customLogHandler = new StreamHandler(logCapturingStream, handlers[0].getFormatter());
     log.addHandler(customLogHandler);
+  }
 
+  @Before
+  @After
+  public void resetSetting() {
+    Configuration.reopenBrowserOnFail = true;
   }
 
   @After
@@ -137,7 +140,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void closeWebDriverLoggingWhenProxyIsAdded() throws IOException {
+  public void closeWebDriverLoggingWhenProxyIsAdded() {
     Configuration.holdBrowserOpen = false;
     Configuration.fileDownload = PROXY;
 
@@ -157,4 +160,16 @@ public class WebDriverThreadLocalContainerTest {
     assertThat(capturedLog, containsString(String.format("Close proxy server: %s ->", currentThreadId)));
   }
 
+  @Test
+  public void shouldNotOpenANewBrowser_ifSettingIsDisabled() {
+    Configuration.reopenBrowserOnFail = false;
+
+    try {
+      container.getWebDriver();
+      fail("expected IllegalStateException");
+    }
+    catch (IllegalStateException expected) {
+      assertThat(expected.getMessage(), containsString("reopenBrowserOnFail=false"));
+    }
+  }
 }
