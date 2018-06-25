@@ -6,7 +6,7 @@ ext {
   junitVersion = '4.12'
   testngVersion = '6.9.10'
   htmlunitDriverVersion = '2.31.0'
-  seleniumVersion = '3.12.0'
+  seleniumVersion = '3.13.0'
 }
 
 dependencies {
