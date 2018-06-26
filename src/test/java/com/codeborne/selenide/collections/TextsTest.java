@@ -1,6 +1,6 @@
 package com.codeborne.selenide.collections;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTests;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -10,17 +10,18 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsTest {
-
+class TextsTest extends UnitTests {
   @Test
   void testApplyWithEmptyList() {
-    Assertions.assertFalse(new Texts("One", "Two", "Three").apply(emptyList()));
+    assertThat(new Texts("One", "Two", "Three").apply(emptyList()))
+      .isFalse();
   }
 
   @Test
   void testApplyWithWrongSizeList() {
     Texts texts = new Texts(asList("One", "Two", "Three"));
-    Assertions.assertFalse(texts.apply(singletonList(mock(WebElement.class))));
+    assertThat(texts.apply(singletonList(mock(WebElement.class))))
+      .isFalse();
   }
 
   @Test
@@ -35,7 +36,8 @@ class TextsTest {
 
     when(mockElement1.getText()).thenReturn(shouldMatch ? "OneThing" : "Three");
     when(mockElement2.getText()).thenReturn(shouldMatch ? "Two" : "Selenide");
-    Assertions.assertEquals(shouldMatch, texts.apply(asList(mockElement1, mockElement2)));
+    assertThat(texts.apply(asList(mockElement1, mockElement2)))
+      .isEqualTo(shouldMatch);
   }
 
   @Test
@@ -45,6 +47,7 @@ class TextsTest {
 
   @Test
   void testToString() {
-    Assertions.assertEquals("Texts [One, Two]", new Texts(asList("One", "Two")).toString());
+    assertThat(new Texts(asList("One", "Two")).toString())
+      .isEqualTo("Texts [One, Two]");
   }
 }
