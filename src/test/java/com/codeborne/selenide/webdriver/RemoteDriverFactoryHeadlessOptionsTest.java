@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -21,6 +22,7 @@ public class RemoteDriverFactoryHeadlessOptionsTest {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
   private Proxy proxy = mock(Proxy.class);
 
+  @Before
   @After
   public void tearDown() {
     Configuration.browser = "";
