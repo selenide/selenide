@@ -73,7 +73,11 @@ task testng(type: Test) {
 tasks.withType(Test) {
   systemProperty('file.encoding', encoding)
   systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
-//  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+  if (System.getenv('CI')) {
+    maxParallelForks = 1
+  } else {
+    maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+  }
   systemProperties += System.properties
   jacoco {
     enabled = true
