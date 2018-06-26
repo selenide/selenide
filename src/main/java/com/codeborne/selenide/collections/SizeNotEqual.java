@@ -21,7 +21,7 @@ public class SizeNotEqual extends CollectionCondition {
 
   @Override
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
-    throw new ListSizeMismatch("<>", expectedSize, collection, elements, lastError, timeoutMs);
+    throw new ListSizeMismatch("<>", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 
   @Override
