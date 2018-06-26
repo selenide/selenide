@@ -1,7 +1,8 @@
 # Changelog
 
 ## 4.12.2
-* #695 Do not open a browser if `Configuration.reopenBrowserOnFail` is `false` and user has not set webdriver manually 
+
+* [#695](https://github.com/codeborne/selenide/issues/695) Do not open a browser if `Configuration.reopenBrowserOnFail` is `false` and user has not set webdriver manually 
 * Upgrade selenium to 3.13.0 version
 * Upgrade webdrivermanager to 2.2.3 version
 
