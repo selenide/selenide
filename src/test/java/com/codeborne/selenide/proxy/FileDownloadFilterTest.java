@@ -3,6 +3,7 @@ package com.codeborne.selenide.proxy;
 import java.io.File;
 import java.io.IOException;
 
+import com.codeborne.selenide.UnitTest;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -13,14 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class FileDownloadFilterTest {
+class FileDownloadFilterTest extends UnitTest {
   private FileDownloadFilter filter = new FileDownloadFilter();
   private HttpResponse response = mock(HttpResponse.class);
   private HttpMessageContents contents = mock(HttpMessageContents.class);
@@ -42,7 +40,8 @@ class FileDownloadFilterTest {
       .add("content-disposition", "attachement; filename=report.pdf")
       .add("referrer", "http://google.kz");
 
-    assertThat(filter.getFileName(response), is("report.pdf"));
+    assertThat(filter.getFileName(response))
+      .isEqualTo("report.pdf");
   }
 
   private HttpHeaders mockHeaders() {
@@ -57,7 +56,8 @@ class FileDownloadFilterTest {
       .add("location", "/downloads")
       .add("referrer", "http://google.kz");
 
-    assertNull(filter.getFileName(response));
+    assertThat(filter.getFileName(response))
+      .isNullOrEmpty();
   }
 
   @Test
@@ -76,8 +76,8 @@ class FileDownloadFilterTest {
     mockStatusCode(199, "below 200");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
-      "\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
+    assertThat(filter.getResponses())
+      .isEqualTo("Intercepted 1 responses.\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   private void mockStatusCode(int code, String reason) {
@@ -90,8 +90,8 @@ class FileDownloadFilterTest {
     mockStatusCode(300, "300 or above");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses(), is("Intercepted 1 responses." +
-      "\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n"));
+    assertThat(filter.getResponses())
+      .isEqualTo("Intercepted 1 responses.\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   @Test
@@ -101,7 +101,8 @@ class FileDownloadFilterTest {
     mockHeaders();
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses(), is("Intercepted 1 responses.\n  null -> 200 \"200=success\" {} app/json  (7 bytes)\n"));
+    assertThat(filter.getResponses())
+      .isEqualTo("Intercepted 1 responses.\n  null -> 200 \"200=success\" {} app/json  (7 bytes)\n");
   }
 
   @Test
@@ -112,10 +113,13 @@ class FileDownloadFilterTest {
     when(contents.getBinaryContents()).thenReturn(new byte[]{1, 2, 3, 4, 5});
 
     filter.filterResponse(response, contents, messageInfo);
-    assertThat(filter.getDownloadedFiles().size(), is(1));
+    assertThat(filter.getDownloadedFiles().size())
+      .isEqualTo(1);
 
     File file = filter.getDownloadedFiles().get(0);
-    assertThat(file.getName(), is("report.pdf"));
-    assertThat(readFileToByteArray(file), is(new byte[]{1, 2, 3, 4, 5}));
+    assertThat(file.getName())
+      .isEqualTo("report.pdf");
+    assertThat(readFileToByteArray(file))
+      .isEqualTo(new byte[]{1, 2, 3, 4, 5});
   }
 }

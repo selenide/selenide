@@ -2,21 +2,18 @@ package com.codeborne.selenide.proxy;
 
 import java.net.InetSocketAddress;
 
+import com.codeborne.selenide.UnitTest;
 import net.lightbody.bmp.BrowserMobProxyServer;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideProxyServerTest {
+class SelenideProxyServerTest extends UnitTest {
   @Test
   void canInterceptResponses() {
     BrowserMobProxyServer bmp = mock(BrowserMobProxyServer.class);
@@ -30,14 +27,16 @@ class SelenideProxyServerTest {
       verify(bmp).setTrustAllServers(true);
       verify(bmp, never()).setChainedProxy(any(InetSocketAddress.class));
       verify(bmp).start();
-      MatcherAssert.assertThat(proxyServer.createSeleniumProxy().getHttpProxy(), endsWith(":8888"));
+      assertThat(proxyServer.createSeleniumProxy().getHttpProxy())
+        .endsWith(":8888");
     } finally {
       proxyServer.shutdown();
     }
     verify(bmp).abort();
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
-    MatcherAssert.assertThat(filter.getDownloadedFiles().size(), is(0));
+    assertThat(filter.getDownloadedFiles().size())
+      .isEqualTo(0);
   }
 
   @Test
@@ -47,7 +46,9 @@ class SelenideProxyServerTest {
 
     InetSocketAddress proxyAddress = SelenideProxyServer.getProxyAddress(proxy);
 
-    Assertions.assertEquals("111.22.3.4444", proxyAddress.getHostName());
-    Assertions.assertEquals(8080, proxyAddress.getPort());
+    assertThat(proxyAddress.getHostName())
+      .isEqualTo("111.22.3.4444");
+    assertThat(proxyAddress.getPort())
+      .isEqualTo(8080);
   }
 }
