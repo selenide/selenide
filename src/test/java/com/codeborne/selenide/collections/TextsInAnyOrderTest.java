@@ -1,6 +1,6 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -8,7 +8,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsInAnyOrderTest extends UnitTests {
+class TextsInAnyOrderTest extends UnitTest {
   @Test
   void testApplyWithSameOrder() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("One", "Two", "Three"));
@@ -47,7 +47,7 @@ class TextsInAnyOrderTest extends UnitTests {
 
   @Test
   void testToString() {
-    assertThat(new TextsInAnyOrder(asList("One", "Two")).toString())
-      .isEqualTo("TextsInAnyOrder [One, Two]");
+    assertThat(new TextsInAnyOrder(asList("One", "Two")))
+      .hasToString("TextsInAnyOrder [One, Two]");
   }
 }

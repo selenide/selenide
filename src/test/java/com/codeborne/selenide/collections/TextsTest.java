@@ -1,6 +1,6 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -10,7 +10,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsTest extends UnitTests {
+class TextsTest extends UnitTest {
   @Test
   void testApplyWithEmptyList() {
     assertThat(new Texts("One", "Two", "Three").apply(emptyList()))
@@ -47,7 +47,7 @@ class TextsTest extends UnitTests {
 
   @Test
   void testToString() {
-    assertThat(new Texts(asList("One", "Two")).toString())
-      .isEqualTo("Texts [One, Two]");
+    assertThat(new Texts(asList("One", "Two")))
+      .hasToString("Texts [One, Two]");
   }
 }

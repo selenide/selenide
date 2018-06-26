@@ -2,7 +2,7 @@ package com.codeborne.selenide.collections;
 
 import java.util.List;
 
-import com.codeborne.selenide.UnitTests;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
@@ -15,7 +15,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExactTextsTest extends UnitTests {
+class ExactTextsTest extends UnitTest {
   @Test
   void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
@@ -66,8 +66,8 @@ class ExactTextsTest extends UnitTests {
     try {
       exactTexts.fail(mock(WebElementsCollection.class), elements, exception, 10000);
     } catch (ElementNotFound ex) {
-      assertThat(ex.getMessage())
-        .isEqualToIgnoringNewLines("Element not found {null}Expected: [One]");
+      assertThat(ex)
+        .hasMessage("Element not found {null}\nExpected: [One]");
     }
   }
 
@@ -93,16 +93,16 @@ class ExactTextsTest extends UnitTests {
         exception,
         10000);
     } catch (TextsMismatch ex) {
-      assertThat(ex.getMessage())
-        .isEqualToIgnoringNewLines("Actual: [Hello]Expected: [One]Collection: Collection description");
+      assertThat(ex)
+        .hasMessage("\nActual: [Hello]\nExpected: [One]\nCollection: Collection description");
     }
   }
 
   @Test
   void testToString() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertThat(exactTexts.toString())
-      .isEqualToNormalizingNewlines("Exact texts [One, Two, Three]");
+    assertThat(exactTexts)
+      .hasToString("Exact texts [One, Two, Three]");
   }
 
   @Test
@@ -111,8 +111,8 @@ class ExactTextsTest extends UnitTests {
       new ExactTexts();
       fail("expected IllegalArgumentException");
     } catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage())
-        .isEqualTo("No expected texts given");
+      assertThat(expected)
+        .hasMessage("No expected texts given");
     }
   }
 
@@ -122,8 +122,8 @@ class ExactTextsTest extends UnitTests {
       new ExactTexts(emptyList());
       fail("expected IllegalArgumentException");
     } catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage())
-        .isEqualTo("No expected texts given");
+      assertThat(expected)
+        .hasMessage("No expected texts given");
     }
   }
 }

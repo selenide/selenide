@@ -1,6 +1,6 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SizeNotEqualTest extends UnitTests {
+class SizeNotEqualTest extends UnitTest {
   @Test
   void testApplyWithEmptyList() {
     assertThat(new SizeNotEqual(10).apply(emptyList()))
@@ -41,14 +41,14 @@ class SizeNotEqualTest extends UnitTests {
         new Exception("Exception message"),
         10000);
     } catch (ListSizeMismatch ex) {
-      assertThat(ex.getMessage())
-        .isEqualToIgnoringNewLines(": expected: <> 10, actual: 0, collection: Collection descriptionElements: []");
+      assertThat(ex)
+        .hasMessage(": expected: <> 10, actual: 0, collection: Collection description\nElements: []");
     }
   }
 
   @Test
   void testToString() {
-    assertThat(new SizeNotEqual(10).toString())
-      .isEqualTo("size <> 10");
+    assertThat(new SizeNotEqual(10))
+      .hasToString("size <> 10");
   }
 }
