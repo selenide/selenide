@@ -1,6 +1,5 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.jupiter.api.Test;
@@ -9,20 +8,21 @@ import org.openqa.selenium.WebElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SizeLessThanTest extends UnitTests {
+class SizeLessThanTest {
   @Test
   void testApplyWithWrongSizeList() {
-    assertThat(new SizeLessThan(1).apply(asList(mock(WebElement.class), mock(WebElement.class))))
-      .isFalse();
+    assertFalse(new SizeLessThan(1).apply(asList(mock(WebElement.class), mock(WebElement.class))));
   }
 
   @Test
   void testApplyWithCorrectSizeLessThan() {
-    assertThat(new SizeLessThan(2).apply(singletonList(mock(WebElement.class))))
-      .isTrue();
+    assertTrue(new SizeLessThan(2).apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
@@ -36,14 +36,13 @@ class SizeLessThanTest extends UnitTests {
         new Exception("Exception message"),
         10000);
     } catch (ListSizeMismatch ex) {
-      assertThat(ex.getMessage())
-        .isEqualToIgnoringNewLines(": expected: < 10, actual: 0, collection: Collection descriptionElements: []");
+      assertEquals(": expected: < 10, actual: 0, collection: Collection description\n" +
+        "Elements: []", ex.getMessage());
     }
   }
 
   @Test
   void testToString() {
-    assertThat(new SizeLessThan(10).toString())
-      .isEqualTo("size < 10");
+    assertEquals("size < 10", new SizeLessThan(10).toString());
   }
 }

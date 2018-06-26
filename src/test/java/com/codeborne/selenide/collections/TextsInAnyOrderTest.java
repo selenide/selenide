@@ -1,6 +1,6 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -8,7 +8,8 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsInAnyOrderTest extends UnitTests {
+class TextsInAnyOrderTest {
+
   @Test
   void testApplyWithSameOrder() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("One", "Two", "Three"));
@@ -23,8 +24,7 @@ class TextsInAnyOrderTest extends UnitTests {
     when(mockElement1.getText()).thenReturn("One");
     when(mockElement2.getText()).thenReturn("Two");
     when(mockElement3.getText()).thenReturn("Three");
-    assertThat(texts.apply(asList(mockElement1, mockElement2, mockElement3)))
-      .isEqualTo(shouldMatch);
+    Assertions.assertEquals(shouldMatch, texts.apply(asList(mockElement1, mockElement2, mockElement3)));
   }
 
   @Test
@@ -47,7 +47,6 @@ class TextsInAnyOrderTest extends UnitTests {
 
   @Test
   void testToString() {
-    assertThat(new TextsInAnyOrder(asList("One", "Two")).toString())
-      .isEqualTo("TextsInAnyOrder [One, Two]");
+    Assertions.assertEquals("TextsInAnyOrder [One, Two]", new TextsInAnyOrder(asList("One", "Two")).toString());
   }
 }

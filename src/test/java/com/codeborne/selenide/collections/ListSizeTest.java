@@ -1,6 +1,5 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTests;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.junit.jupiter.api.Test;
@@ -8,26 +7,27 @@ import org.openqa.selenium.WebElement;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ListSizeTest extends UnitTests {
+class ListSizeTest {
+
   @Test
   void testApplyWithEmptyList() {
-    assertThat(new ListSize(10).apply(emptyList()))
-      .isFalse();
+    assertFalse(new ListSize(10).apply(emptyList()));
   }
 
   @Test
   void testApplyWithWrongSizeList() {
-    assertThat(new ListSize(10).apply(singletonList(mock(WebElement.class))))
-      .isFalse();
+    assertFalse(new ListSize(10).apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
   void testApplyWithCorrectListSize() {
-    assertThat(new ListSize(1).apply(singletonList(mock(WebElement.class))))
-      .isTrue();
+    assertTrue(new ListSize(1).apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
@@ -41,14 +41,13 @@ class ListSizeTest extends UnitTests {
         new Exception("Exception message"),
         10000);
     } catch (ListSizeMismatch ex) {
-      assertThat(ex.getMessage())
-        .isEqualToIgnoringNewLines(": expected: = 10, actual: 0, collection: Collection descriptionElements: []");
+      assertEquals(": expected: = 10, actual: 0, collection: Collection description\n" +
+        "Elements: []", ex.getMessage());
     }
   }
 
   @Test
   void testToString() {
-    assertThat(new ListSize(10).toString())
-      .isEqualTo("size(10)");
+    assertEquals("size(10)", new ListSize(10).toString());
   }
 }
