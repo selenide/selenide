@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ShouldCommandTest {
+class ShouldCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private Should shouldCommand;
@@ -34,18 +34,21 @@ class ShouldCommandTest {
     Field prefixField = should.getClass().getDeclaredField("prefix");
     prefixField.setAccessible(true);
     String prefix = (String) prefixField.get(should);
-    Assertions.assertTrue(prefix.isEmpty());
+    assertThat(prefix.isEmpty())
+      .isTrue();
   }
 
   @Test
   void testExecuteMethodWithNonStringArgs() {
     SelenideElement returnedElement = shouldCommand.execute(proxy, locator, new Object[]{Condition.disabled});
-    Assertions.assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
   void testExecuteMethodWithStringArgs() {
     SelenideElement returnedElement = shouldCommand.execute(proxy, locator, new Object[]{"hello"});
-    Assertions.assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 }

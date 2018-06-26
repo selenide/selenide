@@ -3,8 +3,8 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetParentCommandTest {
+class GetParentCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -36,11 +36,13 @@ class GetParentCommandTest {
     Field findField = getParentCommand.getClass().getDeclaredField("find");
     findField.setAccessible(true);
     Find find = (Find) findField.get(getParentCommand);
-    Assertions.assertNotNull(find);
+    assertThat(find)
+      .isNotNull();
   }
 
   @Test
   void testExecuteMethod() {
-    Assertions.assertEquals(mockedElement, getParentCommand.execute(proxy, locator, new Object[]{"..", "something more"}));
+    assertThat(getParentCommand.execute(proxy, locator, new Object[]{"..", "something more"}))
+      .isEqualTo(mockedElement);
   }
 }

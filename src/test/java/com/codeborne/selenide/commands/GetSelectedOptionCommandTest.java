@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedOptionCommandTest {
+class GetSelectedOptionCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private String mockedElement1Text = "Element text2";
@@ -38,6 +38,7 @@ class GetSelectedOptionCommandTest {
   @Test
   void testExecuteMethod() {
     SelenideElement selectedElement = getSelectedOptionCommand.execute(proxy, locator, new Object[]{"something more"});
-    Assertions.assertEquals(mockedElement1Text, selectedElement.getText());
+    assertThat(selectedElement.getText())
+      .isEqualTo(mockedElement1Text);
   }
 }

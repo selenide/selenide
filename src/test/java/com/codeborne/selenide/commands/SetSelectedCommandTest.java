@@ -3,9 +3,9 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SetSelectedCommandTest {
+class SetSelectedCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SetSelected setSelectedCommand;
@@ -35,7 +35,8 @@ class SetSelectedCommandTest {
     Field clickField = setSelected.getClass().getDeclaredField("click");
     clickField.setAccessible(true);
     Click click = (Click) clickField.get(setSelected);
-    Assertions.assertNotNull(click);
+    assertThat(click)
+      .isNotNull();
   }
 
   @Test
@@ -44,7 +45,8 @@ class SetSelectedCommandTest {
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
-      Assertions.assertEquals("Cannot change invisible element", exception.getMessage());
+      assertThat(exception)
+        .hasMessage("Cannot change invisible element");
     }
   }
 
@@ -60,7 +62,8 @@ class SetSelectedCommandTest {
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
-      Assertions.assertEquals("Only use setSelected on checkbox/option/radio", exception.getMessage());
+      assertThat(exception)
+        .hasMessage("Only use setSelected on checkbox/option/radio");
     }
   }
 
@@ -82,7 +85,8 @@ class SetSelectedCommandTest {
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
-      Assertions.assertEquals("Cannot change value of readonly/disabled element", exception.getMessage());
+      assertThat(exception)
+        .hasMessage("Cannot change value of readonly/disabled element");
     }
   }
 
@@ -101,6 +105,7 @@ class SetSelectedCommandTest {
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     when(mockedFoundElement.getTagName()).thenReturn("option");
     WebElement returnedElement = setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    Assertions.assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 }

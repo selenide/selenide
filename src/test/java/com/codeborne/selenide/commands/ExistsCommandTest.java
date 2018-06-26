@@ -2,9 +2,9 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExistsCommandTest {
+class ExistsCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private WebElement element;
@@ -32,9 +32,11 @@ class ExistsCommandTest {
   @Test
   void testExistExecuteMethod() {
     when(locator.getWebElement()).thenReturn(null);
-    Assertions.assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isFalse();
     when(locator.getWebElement()).thenReturn(element);
-    Assertions.assertTrue(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isTrue();
   }
 
   @Test
@@ -44,7 +46,8 @@ class ExistsCommandTest {
 
   private <T extends Throwable> void checkExecuteMethodWithException(T exception) {
     doThrow(exception).when(locator).getWebElement();
-    Assertions.assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isFalse();
   }
 
   @Test
@@ -54,8 +57,8 @@ class ExistsCommandTest {
 
   @Test
   void testExistsExecuteMethodInvalidSelectorException() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable")));
+    assertThatThrownBy(() -> checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable")))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test

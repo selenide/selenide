@@ -1,6 +1,6 @@
 package com.codeborne.selenide.conditions;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextTest {
+class TextTest extends UnitTest {
   private final String defaultText = "Hello World";
   private Text text;
   private WebElement mWebElement = mock(WebElement.class);
@@ -23,9 +23,11 @@ class TextTest {
   @Test
   void testApplyForNonSelectText() {
     when(mWebElement.getText()).thenReturn(defaultText);
-    Assertions.assertTrue(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isTrue();
     when(mWebElement.getText()).thenReturn("Hello");
-    Assertions.assertFalse(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isFalse();
   }
 
   @Test
@@ -45,10 +47,12 @@ class TextTest {
 
     when(mWebElement.getTagName()).thenReturn("select");
 
-    Assertions.assertFalse(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isFalse();
 
     when(element2.getText()).thenReturn(" " + element2Text);
 
-    Assertions.assertTrue(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isTrue();
   }
 }

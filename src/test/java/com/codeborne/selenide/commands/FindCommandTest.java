@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FindCommandTest {
+class FindCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement element1;
@@ -26,18 +26,21 @@ class FindCommandTest {
 
   @Test
   void testExecuteMethodWithNoArgsPassed() {
-    Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> findCommand.execute(proxy, locator));
+    assertThatThrownBy(() -> findCommand.execute(proxy, locator))
+      .isInstanceOf(ArrayIndexOutOfBoundsException.class);
   }
 
   @Test
   void testExecuteMethodWithZeroLengthArgs() {
     when(locator.find(proxy, By.xpath(".."), 0)).thenReturn(element1);
-    Assertions.assertEquals(element1, findCommand.execute(proxy, locator, By.xpath("..")));
+    assertThat(findCommand.execute(proxy, locator, By.xpath("..")))
+      .isEqualTo(element1);
   }
 
   @Test
   void testExecuteMethodWithMoreThenOneArgsList() {
     when(locator.find(proxy, By.xpath(".."), 1)).thenReturn(element1);
-    Assertions.assertEquals(element1, findCommand.execute(proxy, locator, By.xpath(".."), 1));
+    assertThat(findCommand.execute(proxy, locator, By.xpath(".."), 1))
+      .isEqualTo(element1);
   }
 }

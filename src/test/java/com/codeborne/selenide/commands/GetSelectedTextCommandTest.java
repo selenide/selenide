@@ -4,15 +4,15 @@ import java.lang.reflect.Field;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedTextCommandTest {
+class GetSelectedTextCommandTest extends UnitTest {
   private SelenideElement proxy = mock(SelenideElement.class);
   private WebElementSource selectElement = mock(WebElementSource.class);
   private SelenideElement mockedElement = mock(SelenideElement.class);
@@ -30,13 +30,15 @@ class GetSelectedTextCommandTest {
     Field getSelectedOptionField = getSelectedText.getClass().getDeclaredField("getSelectedOption");
     getSelectedOptionField.setAccessible(true);
     GetSelectedOption getSelectedOption = (GetSelectedOption) getSelectedOptionField.get(getSelectedText);
-    Assertions.assertNotNull(getSelectedOption);
+    assertThat(getSelectedOption)
+      .isNotNull();
   }
 
   @Test
   void testExecuteMethodWhenSelectedOptionReturnsNothing() {
     when(getSelectedOptionCommand.execute(proxy, selectElement, Command.NO_ARGS)).thenReturn(null);
-    Assertions.assertNull(getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}));
+    assertThat(getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}))
+      .isNullOrEmpty();
   }
 
   @Test
@@ -44,6 +46,7 @@ class GetSelectedTextCommandTest {
     when(getSelectedOptionCommand.execute(proxy, selectElement, Command.NO_ARGS)).thenReturn(mockedElement);
     String elementText = "Element text";
     when(mockedElement.getText()).thenReturn(elementText);
-    Assertions.assertEquals(elementText, getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}));
+    assertThat(getSelectedTextCommand.execute(proxy, selectElement, new Object[]{"something more"}))
+      .isEqualTo(elementText);
   }
 }

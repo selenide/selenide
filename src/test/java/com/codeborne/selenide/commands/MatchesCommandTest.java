@@ -2,8 +2,8 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchesCommandTest {
+class MatchesCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -31,21 +31,24 @@ class MatchesCommandTest {
   @Test
   void testExecuteMethodWhenNoElementFound() {
     when(locator.getWebElement()).thenReturn(null);
-    Assertions.assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}));
+    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}))
+      .isFalse();
   }
 
   @Test
   void testExecuteMethodWhenElementDoesntMeetCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    Assertions.assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}));
+    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}))
+      .isFalse();
   }
 
   @Test
   void testExecuteMethodWhenElementMeetsCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    Assertions.assertTrue(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}));
+    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}))
+      .isTrue();
   }
 
   @Test
@@ -55,7 +58,8 @@ class MatchesCommandTest {
 
   private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
     doThrow(exception).when(locator).getWebElement();
-    Assertions.assertFalse(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}));
+    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}))
+      .isFalse();
   }
 
   @Test
@@ -70,13 +74,13 @@ class MatchesCommandTest {
 
   @Test
   void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> catchExecuteMethodWithException(new NotFoundException("invalid selector")));
+    assertThatThrownBy(() -> catchExecuteMethodWithException(new NotFoundException("invalid selector")))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void testExecuteMethodWhenRunTimeExceptionIsThrown() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> catchExecuteMethodWithException(new RuntimeException("invalid selector")));
+    assertThatThrownBy(() -> catchExecuteMethodWithException(new RuntimeException("invalid selector")))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 }

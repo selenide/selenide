@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelectRadioCommandTest {
+class SelectRadioCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelectRadio selectRadioCommand;
@@ -39,7 +39,8 @@ class SelectRadioCommandTest {
     Field clickField = selectRadio.getClass().getDeclaredField("click");
     clickField.setAccessible(true);
     Click click = (Click) clickField.get(selectRadio);
-    Assertions.assertNotNull(click);
+    assertThat(click)
+      .isNotNull();
   }
 
   @Test
@@ -48,9 +49,8 @@ class SelectRadioCommandTest {
     try {
       selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (ElementNotFound exception) {
-      Assertions.assertEquals(String.format("Element not found {null}\n" +
-          "Expected: value '%s'", defaultElementValue),
-        exception.getMessage());
+      assertThat(exception)
+        .hasMessage(String.format("Element not found {null}\nExpected: value '%s'", defaultElementValue));
     }
   }
 
@@ -61,7 +61,8 @@ class SelectRadioCommandTest {
     try {
       selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (InvalidStateException exception) {
-      Assertions.assertEquals("Cannot select readonly radio button", exception.getMessage());
+      assertThat(exception)
+        .hasMessage("Cannot select readonly radio button");
     }
   }
 
@@ -69,6 +70,7 @@ class SelectRadioCommandTest {
   void testExecuteMethodOnFoundRadioButton() {
     when(locator.findAll()).thenReturn(Collections.singletonList(mockedFoundElement));
     SelenideElement clickedElement = selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
-    Assertions.assertEquals(mockedFoundElement, clickedElement.getWrappedElement());
+    assertThat(clickedElement.getWrappedElement())
+      .isEqualTo(mockedFoundElement);
   }
 }

@@ -1,15 +1,15 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSearchCriteriaCommandTest {
+class GetSearchCriteriaCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private GetSearchCriteria getSearchCriteriaCommand;
@@ -25,6 +25,7 @@ class GetSearchCriteriaCommandTest {
 
   @Test
   void testExecuteMethod() {
-    Assertions.assertEquals(defaultSearchCriteria, getSearchCriteriaCommand.execute(proxy, locator, new Object[]{"something more"}));
+    assertThat(getSearchCriteriaCommand.execute(proxy, locator, new Object[]{"something more"}))
+      .isEqualTo(defaultSearchCriteria);
   }
 }

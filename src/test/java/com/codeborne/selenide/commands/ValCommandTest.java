@@ -4,15 +4,15 @@ import java.lang.reflect.Field;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ValCommandTest {
+class ValCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private Val valCommand;
@@ -38,20 +38,25 @@ class ValCommandTest {
     GetValue getValue = (GetValue) getValueField.get(val);
     SetValue setValue = (SetValue) setValueField.get(val);
 
-    Assertions.assertNotNull(getValue);
-    Assertions.assertNotNull(setValue);
+    assertThat(getValue)
+      .isNotNull();
+    assertThat(setValue)
+      .isNotNull();
   }
 
   @Test
   void testExecuteValueWithNoArgs() {
     String getValueResult = "getValueResult";
     when(mockedGetValue.execute(proxy, locator, Command.NO_ARGS)).thenReturn(getValueResult);
-    Assertions.assertEquals(getValueResult, valCommand.execute(proxy, locator, null));
-    Assertions.assertEquals(getValueResult, valCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(valCommand.execute(proxy, locator, null))
+      .isEqualTo(getValueResult);
+    assertThat(valCommand.execute(proxy, locator, new Object[]{}))
+      .isEqualTo(getValueResult);
   }
 
   @Test
   void testExecuteValueWithArgs() {
-    Assertions.assertEquals(proxy, valCommand.execute(proxy, locator, new Object[]{"value"}));
+    assertThat(valCommand.execute(proxy, locator, new Object[]{"value"}))
+      .isEqualTo(proxy);
   }
 }

@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-class SelectOptionContainingTextTest {
+class SelectOptionContainingTextTest extends UnitTest {
   private SelectOptionContainingText command = new SelectOptionContainingText();
 
   private WebElement element;
@@ -67,9 +67,8 @@ class SelectOptionContainingTextTest {
     try {
       command.execute(proxy, select, new Object[]{elementText});
     } catch (NoSuchElementException exception) {
-      Assertions.assertTrue(
-        exception.getMessage().contains("Cannot locate option containing text: " + elementText),
-        "Text is not present in exception message");
+      assertThat(exception)
+        .hasMessageContaining(("Cannot locate option containing text: " + elementText));
     }
   }
 }

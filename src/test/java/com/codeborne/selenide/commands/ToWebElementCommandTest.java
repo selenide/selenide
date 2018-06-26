@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ToWebElementCommandTest {
+class ToWebElementCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private ToWebElement toWebElementCommand;
@@ -27,6 +27,7 @@ class ToWebElementCommandTest {
 
   @Test
   void testExecuteMethod() {
-    Assertions.assertEquals(mockedFoundElement, toWebElementCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(toWebElementCommand.execute(proxy, locator, new Object[]{}))
+      .isEqualTo(mockedFoundElement);
   }
 }

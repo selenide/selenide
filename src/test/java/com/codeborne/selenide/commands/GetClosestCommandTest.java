@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetClosestCommandTest {
+class GetClosestCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -35,7 +35,8 @@ class GetClosestCommandTest {
           argument.substring(1))),
       0)).
       thenReturn(mockedElement);
-    Assertions.assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(mockedElement);
   }
 
   @Test
@@ -44,6 +45,7 @@ class GetClosestCommandTest {
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
     when(locator.find(proxy, By.xpath(String.format("ancestor::%s[1]", argument)), 0)).thenReturn(mockedElement);
-    Assertions.assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(mockedElement);
   }
 }

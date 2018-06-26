@@ -3,12 +3,12 @@ package com.codeborne.selenide.commands;
 import java.util.List;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 
-class UtilCommandTest {
+class UtilCommandTest extends UnitTest {
   @Test
   void testArgsToCondition() {
     List<Condition> conditions = Util.argsToConditions(new Object[]{
@@ -17,19 +17,21 @@ class UtilCommandTest {
       "hello",
       2L
     });
-    Assertions.assertEquals(asList(Condition.enabled, Condition.visible, Condition.exist), conditions);
+    assertThat(conditions)
+      .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.exist));
   }
 
   @Test
   void testArgsToConditionWithIllegalArguments() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+    assertThatThrownBy(() -> {
       List<Condition> conditions = Util.argsToConditions(new Object[]{
         Condition.enabled,
         new Condition[]{Condition.appear, Condition.exist},
         1,
         2.0
       });
-      Assertions.assertEquals(asList(Condition.enabled, Condition.visible, Condition.exist), conditions);
-    });
+      assertThat(conditions)
+        .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.exist));
+    }).isInstanceOf(IllegalArgumentException.class);
   }
 }

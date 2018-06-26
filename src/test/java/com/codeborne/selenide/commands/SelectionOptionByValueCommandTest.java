@@ -3,8 +3,8 @@ package com.codeborne.selenide.commands;
 import java.util.Collections;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.Quotes;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelectionOptionByValueCommandTest {
+class SelectionOptionByValueCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource selectField;
   private SelectOptionByValue selectOptionByValueCommand;
@@ -55,7 +55,8 @@ class SelectionOptionByValueCommandTest {
 
   @Test
   void testSelectByValueWithArgNotString() {
-    Assertions.assertNull(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}));
+    assertThat(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}))
+      .isNull();
   }
 
   @Test
@@ -66,10 +67,8 @@ class SelectionOptionByValueCommandTest {
     try {
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
     } catch (NoSuchElementException exception) {
-      Assertions.assertTrue(
-        exception.getMessage().contains(
-          String.format("Cannot locate option with value: %s", defaultElementValue)),
-        "Value is not present in error message");
+      assertThat(exception)
+        .hasMessageContaining(String.format("Cannot locate option with value: %s", defaultElementValue));
     }
   }
 }

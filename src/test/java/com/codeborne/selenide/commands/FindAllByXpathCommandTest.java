@@ -4,8 +4,8 @@ import java.util.Collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -13,7 +13,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FindAllByXpathCommandTest {
+class FindAllByXpathCommandTest extends UnitTest {
   private SelenideElement parent;
   private WebElementSource locator;
   private SelenideElement element1;
@@ -32,20 +32,23 @@ class FindAllByXpathCommandTest {
 
   @Test
   void testExecuteMethodWithNoArgsPassed() {
-    Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> findAllByXpathCommand.execute(parent, locator));
+    assertThatThrownBy(() -> findAllByXpathCommand.execute(parent, locator))
+      .isInstanceOf(ArrayIndexOutOfBoundsException.class);
   }
 
   @Test
   void testExecuteMethodWithZeroLengthArgs() {
     when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".");
-    Assertions.assertEquals(defaultText, findAllCommandCollection.first().getText());
+    assertThat(findAllCommandCollection.first().getText())
+      .isEqualTo(defaultText);
   }
 
   @Test
   void testExecuteMethodWithMoreThenOneArgsList() {
     when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".", "/..");
-    Assertions.assertEquals(defaultText, findAllCommandCollection.first().getText());
+    assertThat(findAllCommandCollection.first().getText())
+      .isEqualTo(defaultText);
   }
 }

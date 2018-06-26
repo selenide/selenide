@@ -1,15 +1,15 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetInnerTextCommandTest {
+class GetInnerTextCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -29,6 +29,7 @@ class GetInnerTextCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("textContent")).thenReturn(elementAttribute);
-    Assertions.assertEquals(elementAttribute, getInnerTextCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getInnerTextCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(elementAttribute);
   }
 }

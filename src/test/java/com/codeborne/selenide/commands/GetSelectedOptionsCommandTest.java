@@ -1,11 +1,12 @@
 package com.codeborne.selenide.commands;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +16,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedOptionsCommandTest {
+class GetSelectedOptionsCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private GetSelectedOptions getSelectedOptionsCommand;
@@ -43,10 +44,10 @@ class GetSelectedOptionsCommandTest {
   @Test
   void testExecuteMethod() {
     ElementsCollection elementsCollection = getSelectedOptionsCommand.execute(proxy, locator, new Object[]{"something more"});
-    for (int index = 0; index < elementsCollection.size(); index++) {
-      String mockedElementText = mMockedElementsList.get(index).getText();
-      String foundElementText = elementsCollection.get(index).getText();
-      Assertions.assertEquals(mockedElementText, foundElementText);
-    }
+    final List<String> foundTexts = elementsCollection.stream().map(SelenideElement::getText).collect(Collectors.toList());
+
+    assertThat(mMockedElementsList)
+      .extracting(WebElement::getText)
+      .isEqualTo(foundTexts);
   }
 }

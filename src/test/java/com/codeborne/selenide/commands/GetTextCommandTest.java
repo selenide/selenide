@@ -3,15 +3,15 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetTextCommandTest {
+class GetTextCommandTest extends UnitTest {
   private SelenideElement proxy = mock(SelenideElement.class);
   private WebElementSource locator = mock(WebElementSource.class);
   private SelenideElement mockedElement = mock(SelenideElement.class);
@@ -30,7 +30,8 @@ class GetTextCommandTest {
     Field getSelectedTextField = getText.getClass().getDeclaredField("getSelectedText");
     getSelectedTextField.setAccessible(true);
     GetSelectedText getSelectedText = (GetSelectedText) getSelectedTextField.get(getText);
-    Assertions.assertNotNull(getSelectedText);
+    assertThat(getSelectedText)
+      .isNotNull();
   }
 
   @Test
@@ -39,7 +40,8 @@ class GetTextCommandTest {
     Object[] args = {"something more"};
     String selectedElementText = "Selected Text";
     when(getSelectedTextCommand.execute(proxy, locator, args)).thenReturn(selectedElementText);
-    Assertions.assertEquals(selectedElementText, getTextCommand.execute(proxy, locator, args));
+    assertThat(getTextCommand.execute(proxy, locator, args))
+      .isEqualTo(selectedElementText);
   }
 
   @Test
@@ -47,6 +49,7 @@ class GetTextCommandTest {
     when(mockedElement.getTagName()).thenReturn("href");
     String text = "This is text";
     when(mockedElement.getText()).thenReturn(text);
-    Assertions.assertEquals(text, getTextCommand.execute(proxy, locator, new Object[]{"something more"}));
+    assertThat(getTextCommand.execute(proxy, locator, new Object[]{"something more"}))
+      .isEqualTo(text);
   }
 }

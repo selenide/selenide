@@ -1,15 +1,15 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetNameCommandTest {
+class GetNameCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -29,6 +29,7 @@ class GetNameCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("name")).thenReturn(elementAttribute);
-    Assertions.assertEquals(elementAttribute, getNameCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getNameCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(elementAttribute);
   }
 }

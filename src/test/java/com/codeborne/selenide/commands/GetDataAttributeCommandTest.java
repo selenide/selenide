@@ -1,15 +1,15 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetDataAttributeCommandTest {
+class GetDataAttributeCommandTest extends UnitTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
@@ -29,14 +29,15 @@ class GetDataAttributeCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(elementAttribute);
-    Assertions.assertEquals(elementAttribute,
-      getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(elementAttribute);
   }
 
   @Test
   void testExecuteMethodWithNoDataAttribute() {
     String argument = "class";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(null);
-    Assertions.assertNull(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isNull();
   }
 }
