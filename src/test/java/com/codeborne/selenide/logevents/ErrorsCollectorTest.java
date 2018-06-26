@@ -1,20 +1,19 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.ex.SoftAssertionError;
+import java.lang.reflect.Field;
+import java.util.List;
 
+import com.codeborne.selenide.ex.SoftAssertionError;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Field;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ErrorsCollectorTest {
+class ErrorsCollectorTest {
   private ErrorsCollector errorsCollector;
   private LogEvent mockedLogEvent = mock(LogEvent.class);
   private LogEvent mockedInProgressEvent = mock(LogEvent.class);

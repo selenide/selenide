@@ -1,41 +1,41 @@
 package com.codeborne.selenide.logevents;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
-import static org.junit.Assert.assertEquals;
 
-public class SelenideLogTest {
+class SelenideLogTest {
 
   @Test
-  public void testGetSubject() {
+  void testGetSubject() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals("Subject", log.getSubject());
+    Assertions.assertEquals("Subject", log.getSubject());
   }
 
   @Test
-  public void testGetStatus() {
+  void testGetStatus() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals(IN_PROGRESS, log.getStatus());
+    Assertions.assertEquals(IN_PROGRESS, log.getStatus());
   }
 
   @Test
-  public void testGetElement() {
+  void testGetElement() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals("Element", log.getElement());
+    Assertions.assertEquals("Element", log.getElement());
   }
 
   @Test
-  public void testError() {
+  void testError() {
     SelenideLog log = new SelenideLog("Element", "Subject");
     Throwable error = new Throwable("Error message");
     log.setError(error);
-    assertEquals(error, log.getError());
+    Assertions.assertEquals(error, log.getError());
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals(String.format("$(%s) %s", log.getElement(), log.getSubject()), log.toString());
+    Assertions.assertEquals(String.format("$(%s) %s", log.getElement(), log.getSubject()), log.toString());
   }
 }

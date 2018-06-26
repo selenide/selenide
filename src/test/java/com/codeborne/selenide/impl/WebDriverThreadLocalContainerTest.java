@@ -1,11 +1,17 @@
 package com.codeborne.selenide.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.openqa.selenium.NoSuchSessionException;
@@ -15,35 +21,34 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
-
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.close;
 import static java.lang.Thread.currentThread;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class WebDriverThreadLocalContainerTest {
-  private final WebDriverThreadLocalContainer container = spy(new WebDriverThreadLocalContainer());
+class WebDriverThreadLocalContainerTest {
   private static final Logger log =
-      Logger.getLogger(WebDriverThreadLocalContainer.class.getName()); // matches the logger in the affected class
+    Logger.getLogger(WebDriverThreadLocalContainer.class.getName()); // matches the logger in the affected class
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
+  private final WebDriverThreadLocalContainer container = spy(new WebDriverThreadLocalContainer());
 
-  private static String getTestCapturedLog() {
-    customLogHandler.flush();
-    return logCapturingStream.toString();
-  }
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     container.factory = mock(WebDriverFactory.class);
     doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(any());
     doReturn(mock(WebDriver.class)).when(container.factory).createWebDriver(null);
@@ -54,20 +59,20 @@ public class WebDriverThreadLocalContainerTest {
     log.addHandler(customLogHandler);
   }
 
-  @Before
-  @After
-  public void resetSetting() {
+  @BeforeEach
+  @AfterEach
+  void resetSetting() {
     Configuration.reopenBrowserOnFail = true;
   }
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     WebDriverRunner.setProxy(null);
     close();
   }
 
   @Test
-  public void createWebDriverWithoutProxy() {
+  void createWebDriverWithoutProxy() {
     Configuration.fileDownload = HTTPGET;
 
     container.createDriver();
@@ -76,7 +81,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void createWebDriverWithSelenideProxyServer() {
+  void createWebDriverWithSelenideProxyServer() {
     Configuration.fileDownload = PROXY;
 
     container.createDriver();
@@ -88,7 +93,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void checksIfBrowserIsStillAlive() {
+  void checksIfBrowserIsStillAlive() {
     Configuration.reopenBrowserOnFail = true;
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
@@ -98,7 +103,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void doesNotReopenBrowserIfItFailed() {
+  void doesNotReopenBrowserIfItFailed() {
     Configuration.reopenBrowserOnFail = false;
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
@@ -108,7 +113,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void checksIfBrowserIsStillAlive_byCallingGetTitle() {
+  void checksIfBrowserIsStillAlive_byCallingGetTitle() {
     WebDriver webdriver = mock(WebDriver.class);
     doReturn("blah").when(webdriver).getTitle();
 
@@ -116,7 +121,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void isBrowserStillOpen_UnreachableBrowserException() {
+  void isBrowserStillOpen_UnreachableBrowserException() {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(UnreachableBrowserException.class).when(webdriver).getTitle();
 
@@ -124,7 +129,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void isBrowserStillOpen_NoSuchWindowException() {
+  void isBrowserStillOpen_NoSuchWindowException() {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchWindowException.class).when(webdriver).getTitle();
 
@@ -132,7 +137,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void isBrowserStillOpen_NoSuchSessionException() {
+  void isBrowserStillOpen_NoSuchSessionException() {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchSessionException.class).when(webdriver).getTitle();
 
@@ -140,7 +145,7 @@ public class WebDriverThreadLocalContainerTest {
   }
 
   @Test
-  public void closeWebDriverLoggingWhenProxyIsAdded() {
+  void closeWebDriverLoggingWhenProxyIsAdded() {
     Configuration.holdBrowserOpen = false;
     Configuration.fileDownload = PROXY;
 
@@ -160,15 +165,19 @@ public class WebDriverThreadLocalContainerTest {
     assertThat(capturedLog, containsString(String.format("Close proxy server: %s ->", currentThreadId)));
   }
 
+  private static String getTestCapturedLog() {
+    customLogHandler.flush();
+    return logCapturingStream.toString();
+  }
+
   @Test
-  public void shouldNotOpenANewBrowser_ifSettingIsDisabled() {
+  void shouldNotOpenANewBrowser_ifSettingIsDisabled() {
     Configuration.reopenBrowserOnFail = false;
 
     try {
       container.getWebDriver();
       fail("expected IllegalStateException");
-    }
-    catch (IllegalStateException expected) {
+    } catch (IllegalStateException expected) {
       assertThat(expected.getMessage(), containsString("reopenBrowserOnFail=false"));
     }
   }

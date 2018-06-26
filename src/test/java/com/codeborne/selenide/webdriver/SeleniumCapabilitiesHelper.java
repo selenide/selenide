@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import org.openqa.selenium.Capabilities;
 
 class SeleniumCapabilitiesHelper {

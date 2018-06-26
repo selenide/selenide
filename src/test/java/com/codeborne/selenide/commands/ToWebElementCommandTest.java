@@ -2,23 +2,22 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ToWebElementCommandTest {
+class ToWebElementCommandTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private ToWebElement toWebElementCommand;
   private WebElement mockedFoundElement;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     toWebElementCommand = new ToWebElement();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -27,7 +26,7 @@ public class ToWebElementCommandTest {
   }
 
   @Test
-  public void testExecuteMethod() {
-    assertEquals(mockedFoundElement, toWebElementCommand.execute(proxy, locator, new Object[]{}));
+  void testExecuteMethod() {
+    Assertions.assertEquals(mockedFoundElement, toWebElementCommand.execute(proxy, locator, new Object[]{}));
   }
 }

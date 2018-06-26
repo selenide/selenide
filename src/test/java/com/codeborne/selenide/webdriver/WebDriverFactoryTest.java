@@ -1,5 +1,12 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -7,20 +14,13 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
+class WebDriverFactoryTest {
 
-public class WebDriverFactoryTest {
+  private WebDriverFactory factory = spy(new WebDriverFactory());
+  private WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
 
-  WebDriverFactory factory = spy(new WebDriverFactory());
-  WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     Configuration.browser = "";
     Configuration.browserSize = null;
     Configuration.browserPosition = null;
@@ -28,13 +28,13 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void doesNotChangeWindowSizeByDefault() {
+  void doesNotChangeWindowSizeByDefault() {
     factory.adjustBrowserSize(webdriver);
     verifyNoMoreInteractions(webdriver);
   }
 
   @Test
-  public void canConfigureBrowserWindowSize() {
+  void canConfigureBrowserWindowSize() {
     Configuration.browserSize = "1600x800";
 
     factory.adjustBrowserSize(webdriver);
@@ -43,7 +43,7 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void canMaximizeBrowserWindow() {
+  void canMaximizeBrowserWindow() {
     Configuration.startMaximized = true;
 
     factory.adjustBrowserSize(webdriver);
@@ -52,7 +52,7 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void canMaximizeBrowserWindow_chrome() {
+  void canMaximizeBrowserWindow_chrome() {
     Configuration.startMaximized = true;
     Configuration.browser = "chrome";
     doReturn(new Dimension(1600, 1200)).when(factory).getScreenSize();
@@ -64,7 +64,7 @@ public class WebDriverFactoryTest {
   }
 
   @Test
-  public void canConfigureBrowserWindowPosition() {
+  void canConfigureBrowserWindowPosition() {
     Configuration.browserPosition = "20x40";
 
     factory.adjustBrowserPosition(webdriver);

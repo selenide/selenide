@@ -1,43 +1,41 @@
 package com.codeborne.selenide.collections;
 
+import java.util.List;
+
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExactTextsTest {
+class ExactTextsTest {
 
   @Test
-  public void varArgsConstructor() {
+  void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertEquals("Expected texts list", asList("One", "Two", "Three"), exactTexts.expectedTexts);
+    assertEquals(asList("One", "Two", "Three"), exactTexts.expectedTexts, "Expected texts list");
   }
 
   @Test
-  public void testApplyOnWrongSizeList() {
+  void testApplyOnWrongSizeList() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
     assertFalse(exactTexts.apply(singletonList(mock(WebElement.class))));
   }
 
   @Test
-  public void testApplyOnCorrectSizeAndCorrectElementsText() {
+  void testApplyOnCorrectSizeAndCorrectElementsText() {
     testApplyMethodOnDifferentCondtions(true);
-  }
-
-  @Test
-  public void testApplyOnCorrectListSizeButWrongElementsText() {
-    testApplyMethodOnDifferentCondtions(false);
   }
 
   private void testApplyMethodOnDifferentCondtions(boolean shouldMatch) {
@@ -52,13 +50,13 @@ public class ExactTextsTest {
   }
 
   @Test
-  public void testFailWithNullElementsList() {
-    failOnEmptyOrNullElementsList(null);
+  void testApplyOnCorrectListSizeButWrongElementsText() {
+    testApplyMethodOnDifferentCondtions(false);
   }
 
   @Test
-  public void testFailWithEmptyElementsLIst() {
-    failOnEmptyOrNullElementsList(emptyList());
+  void testFailWithNullElementsList() {
+    failOnEmptyOrNullElementsList(null);
   }
 
   private void failOnEmptyOrNullElementsList(List<WebElement> elements) {
@@ -72,7 +70,12 @@ public class ExactTextsTest {
   }
 
   @Test
-  public void failOnTextMismatch() {
+  void testFailWithEmptyElementsLIst() {
+    failOnEmptyOrNullElementsList(emptyList());
+  }
+
+  @Test
+  void failOnTextMismatch() {
     ExactTexts exactTexts = new ExactTexts("One");
     Exception exception = new Exception("Exception method");
 
@@ -84,40 +87,38 @@ public class ExactTextsTest {
 
     try {
       exactTexts.fail(mockedElementsCollection,
-                      singletonList(mockedWebElement),
-                      exception,
-                      10000);
+        singletonList(mockedWebElement),
+        exception,
+        10000);
     } catch (TextsMismatch ex) {
       assertEquals("\nActual: [Hello]\n" +
-          "Expected: [One]\n" +
-          "Collection: Collection description", ex.getMessage());
+        "Expected: [One]\n" +
+        "Collection: Collection description", ex.getMessage());
     }
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
     assertEquals("Exact texts [One, Two, Three]", exactTexts.toString());
   }
 
   @Test
-  public void emptyArrayIsNotAllowed() {
+  void emptyArrayIsNotAllowed() {
     try {
       new ExactTexts();
       fail("expected IllegalArgumentException");
-    }
-    catch (IllegalArgumentException expected) {
+    } catch (IllegalArgumentException expected) {
       assertThat(expected.getMessage(), is("No expected texts given"));
     }
   }
 
   @Test
-  public void emptyListIsNotAllowed() {
+  void emptyListIsNotAllowed() {
     try {
       new ExactTexts(emptyList());
       fail("expected IllegalArgumentException");
-    }
-    catch (IllegalArgumentException expected) {
+    } catch (IllegalArgumentException expected) {
       assertThat(expected.getMessage(), is("No expected texts given"));
     }
   }

@@ -1,28 +1,27 @@
 package com.codeborne.selenide.commands;
 
+import java.util.Collections;
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FindAllByXpathCommandTest {
+class FindAllByXpathCommandTest {
   private SelenideElement parent;
   private WebElementSource locator;
   private SelenideElement element1;
   private FindAllByXpath findAllByXpathCommand;
   private String defaultText = "Default Text";
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     findAllByXpathCommand = new FindAllByXpath();
     parent = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -31,22 +30,22 @@ public class FindAllByXpathCommandTest {
     when(element1.isSelected()).thenReturn(true);
   }
 
-  @Test(expected = ArrayIndexOutOfBoundsException.class)
-  public void testExecuteMethodWithNoArgsPassed() {
-    findAllByXpathCommand.execute(parent, locator);
+  @Test
+  void testExecuteMethodWithNoArgsPassed() {
+    Assertions.assertThrows(ArrayIndexOutOfBoundsException.class, () -> findAllByXpathCommand.execute(parent, locator));
   }
 
   @Test
-  public void testExecuteMethodWithZeroLengthArgs() {
+  void testExecuteMethodWithZeroLengthArgs() {
     when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".");
-    assertEquals(defaultText, findAllCommandCollection.first().getText());
+    Assertions.assertEquals(defaultText, findAllCommandCollection.first().getText());
   }
 
   @Test
-  public void testExecuteMethodWithMoreThenOneArgsList() {
+  void testExecuteMethodWithMoreThenOneArgsList() {
     when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".", "/..");
-    assertEquals(defaultText, findAllCommandCollection.first().getText());
+    Assertions.assertEquals(defaultText, findAllCommandCollection.first().getText());
   }
 }

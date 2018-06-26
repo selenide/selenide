@@ -1,23 +1,23 @@
 package com.codeborne.selenide.impl;
 
+import java.util.List;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CollectionElementTest {
+class CollectionElementTest {
 
   @Test
-  public void testWrap() {
+  void testWrap() {
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.isDisplayed()).thenReturn(true);
@@ -25,12 +25,11 @@ public class CollectionElementTest {
 
     WebElementsCollection collection = new WebElementsCollectionWrapper(singletonList(mockedWebElement));
     SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
-    assertEquals("<a>selenide</a>", selenideElement.toString());
-
+    Assertions.assertEquals("<a>selenide</a>", selenideElement.toString());
   }
 
   @Test
-  public void testGetWebElement() {
+  void testGetWebElement() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
@@ -38,32 +37,31 @@ public class CollectionElementTest {
     when(mockedWebElementCollection.getActualElements()).thenReturn(listOfMockedElements);
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
-    assertEquals(mockedWebElement2, collectionElement.getWebElement());
+    Assertions.assertEquals(mockedWebElement2, collectionElement.getWebElement());
   }
 
   @Test
-  public void testGetSearchCriteria() {
+  void testGetSearchCriteria() {
     String collectionDescription = "Collection description";
     int index = 1;
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
-    assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.getSearchCriteria());
+    Assertions.assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.getSearchCriteria());
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     int index = 1;
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
-    assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.toString());
-
+    Assertions.assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.toString());
   }
 
   @Test
-  public void testCreateElementNotFoundErrorWithEmptyCollection() {
+  void testCreateElementNotFoundErrorWithEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
@@ -72,15 +70,15 @@ public class CollectionElementTest {
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    assertEquals("Element not found {Collection description}\n" +
-        "Expected: visible\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    Assertions.assertEquals("Element not found {Collection description}\n" +
+      "Expected: visible\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
   }
 
   @Test
-  public void testCreateElementNotFoundErrorWithNonEmptyCollection() {
+  void testCreateElementNotFoundErrorWithNonEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
@@ -91,11 +89,10 @@ public class CollectionElementTest {
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    assertEquals("Element not found {Collection description[1]}\n" +
-        "Expected: Reason description\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    Assertions.assertEquals("Element not found {Collection description[1]}\n" +
+      "Expected: Reason description\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
   }
-
 }

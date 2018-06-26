@@ -1,20 +1,19 @@
 package com.codeborne.selenide.logevents;
 
-import org.junit.Test;
-
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class EventsCollectorTest {
+class EventsCollectorTest {
 
   @Test
-  public void testOnEvent() {
+  void testOnEvent() {
     EventsCollector eventsCollector = new EventsCollector();
     SelenideLog selenideLog = new SelenideLog("Link", "Not Found");
     eventsCollector.onEvent(selenideLog);
 
     List<LogEvent> events = eventsCollector.events();
-    assertEquals(selenideLog, events.get(0));
+    Assertions.assertEquals(selenideLog, events.get(0));
   }
 }

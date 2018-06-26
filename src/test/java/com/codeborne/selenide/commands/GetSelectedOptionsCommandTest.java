@@ -1,29 +1,28 @@
 package com.codeborne.selenide.commands;
 
+import java.util.List;
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.junit.Test;
-
-import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetSelectedOptionsCommandTest {
+class GetSelectedOptionsCommandTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private GetSelectedOptions getSelectedOptionsCommand;
   private List<WebElement> mMockedElementsList;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     getSelectedOptionsCommand = new GetSelectedOptions();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -42,12 +41,12 @@ public class GetSelectedOptionsCommandTest {
   }
 
   @Test
-  public void testExecuteMethod() {
+  void testExecuteMethod() {
     ElementsCollection elementsCollection = getSelectedOptionsCommand.execute(proxy, locator, new Object[]{"something more"});
     for (int index = 0; index < elementsCollection.size(); index++) {
       String mockedElementText = mMockedElementsList.get(index).getText();
       String foundElementText = elementsCollection.get(index).getText();
-      assertEquals(mockedElementText, foundElementText);
+      Assertions.assertEquals(mockedElementText, foundElementText);
     }
   }
 }

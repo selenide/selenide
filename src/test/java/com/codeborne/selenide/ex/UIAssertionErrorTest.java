@@ -1,18 +1,17 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class UIAssertionErrorTest {
+class UIAssertionErrorTest {
 
   @Test
-  public void testThrowableConstructor() {
+  void testThrowableConstructor() {
     UIAssertionError uiAssertionError = new UIAssertionError(new Throwable("Error message"));
     String expectedString = "UIAssertionError Throwable: Error message\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Throwable: Error message";
-    assertEquals(expectedString, uiAssertionError.toString());
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Throwable: Error message";
+    Assertions.assertEquals(expectedString, uiAssertionError.toString());
   }
 }

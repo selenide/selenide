@@ -1,64 +1,67 @@
 package com.codeborne.selenide.webdriver;
 
+import java.util.Map;
+
 import com.codeborne.selenide.Configuration;
-import org.junit.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.*;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Map;
-
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RemoteDriverFactoryTest {
-  RemoteDriverFactory factory = new RemoteDriverFactory();
+class RemoteDriverFactoryTest {
+  private RemoteDriverFactory factory = new RemoteDriverFactory();
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     Configuration.browser = "";
     Configuration.browserBinary = "";
   }
 
   @Test
-  public void getBrowserNameForGrid_legacy_firefox() {
+  void getBrowserNameForGrid_legacy_firefox() {
     Configuration.browser = "legacy_firefox";
     assertEquals(BrowserType.FIREFOX, factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void getBrowserNameForGrid_internet_explorer() {
+  void getBrowserNameForGrid_internet_explorer() {
     Configuration.browser = "internet explorer";
     assertEquals(BrowserType.IE, factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void getBrowserNameForGrid_ie() {
+  void getBrowserNameForGrid_ie() {
     Configuration.browser = "ie";
     assertEquals(BrowserType.IE, factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void getBrowserNameForGrid_edge() {
+  void getBrowserNameForGrid_edge() {
     Configuration.browser = "edge";
     assertEquals(BrowserType.EDGE, factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void getBrowserNameForGrid_opera() {
+  void getBrowserNameForGrid_opera() {
     Configuration.browser = "opera";
     assertEquals(BrowserType.OPERA_BLINK, factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void getBrowserNameForGrid_other_browsers() {
+  void getBrowserNameForGrid_other_browsers() {
     Configuration.browser = "anotherWebdriver";
     assertEquals("anotherWebdriver", factory.getBrowserNameForGrid());
   }
 
   @Test
-  public void browserBinaryCanBeSetForFirefox() {
+  void browserBinaryCanBeSetForFirefox() {
     Configuration.browser = "firefox";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
@@ -67,7 +70,7 @@ public class RemoteDriverFactoryTest {
   }
 
   @Test
-  public void browserBinaryCanBeSetForChrome() {
+  void browserBinaryCanBeSetForChrome() {
     Configuration.browser = "chrome";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
@@ -76,7 +79,7 @@ public class RemoteDriverFactoryTest {
   }
 
   @Test
-  public void browserBinaryCanNotBeSetForOtherBrowsers() {
+  void browserBinaryCanNotBeSetForOtherBrowsers() {
     Configuration.browserBinary = "c:/browser.exe";
     Configuration.browser = "opera";
     assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());

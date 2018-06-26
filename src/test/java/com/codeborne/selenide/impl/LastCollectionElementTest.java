@@ -1,16 +1,15 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementNotFound;
-
-import org.openqa.selenium.StaleElementReferenceException;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class LastCollectionElementTest {
+class LastCollectionElementTest {
   private WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
   private SelenideElement mockedElement1 = mock(SelenideElement.class);
   private SelenideElement mockedElement2 = mock(SelenideElement.class);
@@ -51,11 +50,6 @@ public class LastCollectionElementTest {
     checkGetElementsMethodWithException(new StaleElementReferenceException("Something went wrong"));
   }
 
-  @Test
-  public void testGetElementMethodWhenIndexOutBoundExceptionThrown() {
-    checkGetElementsMethodWithException(new IndexOutOfBoundsException());
-  }
-
   private <T extends Throwable> void checkGetElementsMethodWithException(T exception) {
     doThrow(exception).when(mockedElement2).isEnabled();
     when(mockedElementsCollection.getActualElements()).thenReturn(Collections.singletonList(mockedElement1));
@@ -63,20 +57,25 @@ public class LastCollectionElementTest {
   }
 
   @Test
+  public void testGetElementMethodWhenIndexOutBoundExceptionThrown() {
+    checkGetElementsMethodWithException(new IndexOutOfBoundsException());
+  }
+
+  @Test
   public void testCreateElementNotFoundErrorMethodWhenCollectionIsEmpty() {
     when(mockedElementsCollection.getActualElements()).thenReturn(Collections.emptyList());
     ElementNotFound notFoundError = lastCollectionElement
-        .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
+      .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertEquals("Element not found {Collection description}\n" +
-                   "Expected: visible", notFoundError.getMessage());
+      "Expected: visible", notFoundError.getMessage());
   }
 
   @Test
   public void testCreateElementNotFoundErrorMethodWhenCollectionIsNotEmpty() {
     ElementNotFound notFoundError = lastCollectionElement
-        .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
+      .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertEquals("Element not found {Collection description.last}\n" +
-                   "Expected: be empty", notFoundError.getMessage());
+      "Expected: be empty", notFoundError.getMessage());
   }
 
   @Test

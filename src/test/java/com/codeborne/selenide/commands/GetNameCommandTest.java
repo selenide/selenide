@@ -2,22 +2,21 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetNameCommandTest {
+class GetNameCommandTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
   private GetName getNameCommand;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     getNameCommand = new GetName();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -26,10 +25,10 @@ public class GetNameCommandTest {
   }
 
   @Test
-  public void testExecuteMethod() {
+  void testExecuteMethod() {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("name")).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getNameCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    Assertions.assertEquals(elementAttribute, getNameCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

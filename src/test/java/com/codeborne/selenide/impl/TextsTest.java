@@ -1,17 +1,16 @@
 package com.codeborne.selenide.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class TextsTest {
+class TextsTest {
   @Test
-  public void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
-    assertEquals("Bruce Willis", Html.text.reduceSpaces("Bruce   \n\t   Willis"));
-    assertEquals("", Html.text.reduceSpaces(""));
-    assertEquals("", Html.text.reduceSpaces("   "));
-    assertEquals("a", Html.text.reduceSpaces("a"));
-    assertEquals("a", Html.text.reduceSpaces("  a\n"));
-    assertEquals("Bruce Willis", Html.text.reduceSpaces("     Bruce   \n\t   Willis  \n\n\n"));
+  void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
+    Assertions.assertEquals("Bruce Willis", Html.text.reduceSpaces("Bruce   \n\t   Willis"));
+    Assertions.assertEquals("", Html.text.reduceSpaces(""));
+    Assertions.assertEquals("", Html.text.reduceSpaces("   "));
+    Assertions.assertEquals("a", Html.text.reduceSpaces("a"));
+    Assertions.assertEquals("a", Html.text.reduceSpaces("  a\n"));
+    Assertions.assertEquals("Bruce Willis", Html.text.reduceSpaces("     Bruce   \n\t   Willis  \n\n\n"));
   }
 }

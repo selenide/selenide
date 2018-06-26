@@ -1,26 +1,26 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class ElementShouldTest {
+class ElementShouldTest {
 
   @Test
-  public void testToString() {
+  void testToString() {
     String searchCriteria = "by.name: selenide";
     String prefix = "be ";
     WebElement webElementMock = mock(WebElement.class);
     Exception exception = new Exception("Error message");
     ElementShould elementShould = new ElementShould(searchCriteria, prefix, Condition.appear, webElementMock, exception);
     String expectedString = "Element should be visible {by.name: selenide}\n" +
-        "Element: '<null displayed:false></null>'\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Exception: Error message";
-    assertEquals(expectedString, elementShould.toString());
+      "Element: '<null displayed:false></null>'\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Exception: Error message";
+    Assertions.assertEquals(expectedString, elementShould.toString());
   }
 }

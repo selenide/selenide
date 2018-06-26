@@ -1,18 +1,20 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SelenideElementIteratorTest {
+class SelenideElementIteratorTest {
   @Test
-  public void testHasNext() {
+  void testHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mock(WebElement.class)));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
@@ -20,7 +22,7 @@ public class SelenideElementIteratorTest {
   }
 
   @Test
-  public void testDoesNotHasNext() {
+  void testDoesNotHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getActualElements()).thenReturn(emptyList());
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
@@ -28,7 +30,7 @@ public class SelenideElementIteratorTest {
   }
 
   @Test
-  public void testNext() {
+  void testNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.isDisplayed()).thenReturn(true);
@@ -45,7 +47,7 @@ public class SelenideElementIteratorTest {
   }
 
   @Test
-  public void testRemove() {
+  void testRemove() {
     try {
       WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
       SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);

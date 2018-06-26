@@ -9,90 +9,89 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
-public class CollectionConditionTest {
+class CollectionConditionTest {
   @Test
-  public void testSizeIsEmptyListSize() {
+  void testSizeIsEmptyListSize() {
     CollectionCondition collectionCondition = CollectionCondition.size(10);
-    assertThat(collectionCondition, instanceOf(ListSize.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(ListSize.class));
   }
 
   @Test
-  public void testSizeGreaterThan() {
+  void testSizeGreaterThan() {
     CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThan(10);
-    assertThat(collectionCondition, instanceOf(SizeGreaterThan.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeGreaterThan.class));
   }
 
   @Test
-  public void testSizeGraterThenOrEqual() {
+  void testSizeGraterThenOrEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThanOrEqual(10);
-    assertThat(collectionCondition, instanceOf(SizeGreaterThanOrEqual.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeGreaterThanOrEqual.class));
   }
 
   @Test
-  public void testSizeLessThan() {
+  void testSizeLessThan() {
     CollectionCondition collectionCondition = CollectionCondition.sizeLessThan(10);
-    assertThat(collectionCondition, instanceOf(SizeLessThan.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeLessThan.class));
   }
 
   @Test
-  public void testSizeLessThanOrEqual() {
+  void testSizeLessThanOrEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeLessThanOrEqual(10);
-    assertThat(collectionCondition, instanceOf(SizeLessThanOrEqual.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeLessThanOrEqual.class));
   }
 
   @Test
-  public void testSizeNotEqual() {
+  void testSizeNotEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeNotEqual(10);
-    assertThat(collectionCondition, instanceOf(SizeNotEqual.class));
+    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeNotEqual.class));
   }
 
   @Test
-  public void testTextsWithObjectsList() {
+  void testTextsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.texts("One", "Two", "Three");
-    assertThat(collectionCondition, instanceOf(Texts.class));
-    assertEquals("Texts content", "Texts [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(Texts.class));
+    Assertions.assertEquals("Texts [One, Two, Three]", collectionCondition.toString(), "Texts content");
   }
 
   @Test
-  public void testTextsWithListOfStrings() {
+  void testTextsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.texts(asList("One", "Two", "Three"));
-    assertThat(collectionCondition, instanceOf(Texts.class));
-    assertEquals("Texts content", "Texts [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(Texts.class));
+    Assertions.assertEquals("Texts [One, Two, Three]", collectionCondition.toString(), "Texts content");
   }
 
   @Test
-  public void testExactTextsWithObjectsList() {
+  void testExactTextsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts("One", "Two", "Three");
-    assertThat(collectionCondition, instanceOf(ExactTexts.class));
-    assertEquals("Exact texts content", "Exact texts [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(ExactTexts.class));
+    Assertions.assertEquals("Exact texts [One, Two, Three]", collectionCondition.toString(), "Exact texts content");
   }
 
   @Test
-  public void testExactTextsWithListOfStrings() {
+  void testExactTextsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts(asList("One", "Two", "Three"));
-    assertThat(collectionCondition, instanceOf(ExactTexts.class));
-    assertEquals("Exact texts content", "Exact texts [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(ExactTexts.class));
+    Assertions.assertEquals("Exact texts [One, Two, Three]", collectionCondition.toString(), "Exact texts content");
   }
 
   @Test
-  public void testTextsInAnyOrderWithObjectsList() {
+  void testTextsInAnyOrderWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder("One", "Two", "Three");
-    assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
-    assertEquals("Text in any order content", "TextsInAnyOrder [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
+    Assertions.assertEquals("TextsInAnyOrder [One, Two, Three]", collectionCondition.toString(), "Text in any order content");
   }
 
   @Test
-  public void testTextsInAnyOrderWithStringsList() {
+  void testTextsInAnyOrderWithStringsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder(asList("One", "Two", "Three"));
-    assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
-    assertEquals("Text in any order content", "TextsInAnyOrder [One, Two, Three]", collectionCondition.toString());
+    MatcherAssert.assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
+    Assertions.assertEquals("TextsInAnyOrder [One, Two, Three]", collectionCondition.toString(), "Text in any order content");
   }
 }

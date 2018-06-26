@@ -2,23 +2,22 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetClosestCommandTest {
+class GetClosestCommandTest {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
   private GetClosest getClosestCommand;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     getClosestCommand = new GetClosest();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -26,7 +25,7 @@ public class GetClosestCommandTest {
   }
 
   @Test
-  public void testExecuteMethodWithTagsStartsWithDot() {
+  void testExecuteMethodWithTagsStartsWithDot() {
     String argument = ".class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
@@ -36,15 +35,15 @@ public class GetClosestCommandTest {
           argument.substring(1))),
       0)).
       thenReturn(mockedElement);
-    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    Assertions.assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 
   @Test
-  public void testExecuteMethodWithTagsThatDontStartsWithDot() {
+  void testExecuteMethodWithTagsThatDontStartsWithDot() {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
     when(locator.find(proxy, By.xpath(String.format("ancestor::%s[1]", argument)), 0)).thenReturn(mockedElement);
-    assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    Assertions.assertEquals(mockedElement, getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 }

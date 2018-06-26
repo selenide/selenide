@@ -2,21 +2,20 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-public class SelectOptionContainingTextTest {
+class SelectOptionContainingTextTest {
   private SelectOptionContainingText command = new SelectOptionContainingText();
 
   private WebElement element;
@@ -25,8 +24,8 @@ public class SelectOptionContainingTextTest {
   private SelenideElement proxy;
   private WebElementSource select;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     element = mock(WebElement.class);
     option1 = mock(WebElement.class);
     option2 = mock(WebElement.class);
@@ -37,7 +36,7 @@ public class SelectOptionContainingTextTest {
   }
 
   @Test
-  public void selectsFirstMatchingOptionForSingleSelect() {
+  void selectsFirstMatchingOptionForSingleSelect() {
     doReturn("false").when(element).getAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
       .findElements(
@@ -50,7 +49,7 @@ public class SelectOptionContainingTextTest {
   }
 
   @Test
-  public void selectsAllMatchingOptionsForMultipleSelect() {
+  void selectsAllMatchingOptionsForMultipleSelect() {
     doReturn("true").when(element).getAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
       .findElements(
@@ -63,13 +62,13 @@ public class SelectOptionContainingTextTest {
   }
 
   @Test
-  public void throwsNoSuchElementExceptionWhenNoElementsFound() {
+  void throwsNoSuchElementExceptionWhenNoElementsFound() {
     String elementText = "option-subtext";
     try {
       command.execute(proxy, select, new Object[]{elementText});
     } catch (NoSuchElementException exception) {
-      assertTrue("Text is not present in exception message",
-        exception.getMessage().contains("Cannot locate option containing text: " + elementText));
+      Assertions.assertTrue(
+        exception.getMessage().contains("Cannot locate option containing text: " + elementText), "Text is not present in exception message");
     }
   }
 }

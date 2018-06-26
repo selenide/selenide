@@ -1,64 +1,64 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.Test;
-import org.openqa.selenium.By;
-
 import java.util.List;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.impl.WebElementsCollection;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ElementNotFoundTest {
+class ElementNotFoundTest {
 
   @Test
-  public void testElementNotFoundWithByCriteria() {
+  void testElementNotFoundWithByCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(By.id("Hello"), Condition.exist);
     String expectedMessage = "Element not found {By.id: Hello}\n" +
-        "Expected: exist\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.";
-    assertEquals(expectedMessage, elementNotFoundById.toString());
+      "Expected: exist\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.";
+    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
   }
 
   @Test
-  public void testElementNotFoundWithStringCriteria() {
+  void testElementNotFoundWithStringCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist);
     String expectedMessage = "Element not found {Hello}\n" +
-        "Expected: exist\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.";
-    assertEquals(expectedMessage, elementNotFoundById.toString());
+      "Expected: exist\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.";
+    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
   }
 
   @Test
-  public void testElementNotFoundWithStringCriteriaAndThrowableError() {
+  void testElementNotFoundWithStringCriteriaAndThrowableError() {
     ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist, new Throwable("Error message"));
     String expectedMessage = "Element not found {Hello}\n" +
-        "Expected: exist\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Throwable: Error message";
-    assertEquals(expectedMessage, elementNotFoundById.toString());
+      "Expected: exist\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Throwable: Error message";
+    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
   }
 
   @Test
-  public void testElementNotFoundWithWebElementCollectionAndThrowableError() {
+  void testElementNotFoundWithWebElementCollectionAndThrowableError() {
     WebElementsCollection webElementCollectionMock = mock(WebElementsCollection.class);
     when(webElementCollectionMock.description()).thenReturn("mock collection description");
     List<String> expectedStrings = asList("One", "Two", "Three");
 
     ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
-                                                              expectedStrings,
-                                                              new Throwable("Error message"));
+      expectedStrings,
+      new Throwable("Error message"));
     String expectedMessage = "Element not found {mock collection description}\n" +
-        "Expected: [One, Two, Three]\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Throwable: Error message";
-    assertEquals(expectedMessage, elementNotFoundById.toString());
+      "Expected: [One, Two, Three]\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Throwable: Error message";
+    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
   }
 }

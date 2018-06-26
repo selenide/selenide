@@ -1,19 +1,19 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
-import org.junit.Test;
-import org.openqa.selenium.WebElement;
-
 import java.util.List;
 
+import com.codeborne.selenide.Condition;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
+
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FilteringCollectionTest {
+class FilteringCollectionTest {
   @Test
-  public void testGetActualElement() {
+  void testGetActualElement() {
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
 
@@ -25,16 +25,15 @@ public class FilteringCollectionTest {
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);
 
     List<WebElement> actualElements = filteringCollection.getActualElements();
-    assertEquals(1, actualElements.size());
-    assertEquals(mockedWebElement2, actualElements.get(0));
+    Assertions.assertEquals(1, actualElements.size());
+    Assertions.assertEquals(mockedWebElement2, actualElements.get(0));
   }
 
   @Test
-  public void testDescription() {
+  void testDescription() {
     WebElementsCollection mockedCollection = mock(WebElementsCollection.class);
     when(mockedCollection.description()).thenReturn("Collection description");
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);
-    assertEquals("Collection description.filter(visible)", filteringCollection.description());
+    Assertions.assertEquals("Collection description.filter(visible)", filteringCollection.description());
   }
-
 }
