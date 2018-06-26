@@ -2,16 +2,15 @@ package com.codeborne.selenide.ex;
 
 import java.util.List;
 
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 
-class ListSizeMismatchTest {
-
+class ListSizeMismatchTest extends UnitTest {
   @Test
   void testToString() {
     String operator = "Operator";
@@ -37,6 +36,7 @@ class ListSizeMismatchTest {
       "Screenshot: null\n" +
       "Timeout: 1 s.\n" +
       "Caused by: java.lang.Exception: Exception message";
-    Assertions.assertEquals(expectedString, listSizeMismatch.toString());
+    assertThat(listSizeMismatch)
+      .hasToString(expectedString);
   }
 }

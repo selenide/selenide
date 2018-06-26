@@ -1,10 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
-class UIAssertionErrorTest {
-
+class UIAssertionErrorTest extends UnitTest {
   @Test
   void testThrowableConstructor() {
     UIAssertionError uiAssertionError = new UIAssertionError(new Throwable("Error message"));
@@ -12,6 +11,7 @@ class UIAssertionErrorTest {
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Throwable: Error message";
-    Assertions.assertEquals(expectedString, uiAssertionError.toString());
+    assertThat(uiAssertionError)
+      .hasToString(expectedString);
   }
 }

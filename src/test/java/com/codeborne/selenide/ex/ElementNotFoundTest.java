@@ -3,8 +3,8 @@ package com.codeborne.selenide.ex;
 import java.util.List;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -12,8 +12,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementNotFoundTest {
-
+class ElementNotFoundTest extends UnitTest {
   @Test
   void testElementNotFoundWithByCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(By.id("Hello"), Condition.exist);
@@ -21,7 +20,8 @@ class ElementNotFoundTest {
       "Expected: exist\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
-    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
+    assertThat(elementNotFoundById)
+      .hasToString(expectedMessage);
   }
 
   @Test
@@ -31,7 +31,8 @@ class ElementNotFoundTest {
       "Expected: exist\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
-    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
+    assertThat(elementNotFoundById)
+      .hasToString(expectedMessage);
   }
 
   @Test
@@ -42,7 +43,8 @@ class ElementNotFoundTest {
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Throwable: Error message";
-    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
+    assertThat(elementNotFoundById)
+      .hasToString(expectedMessage);
   }
 
   @Test
@@ -59,6 +61,7 @@ class ElementNotFoundTest {
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Throwable: Error message";
-    Assertions.assertEquals(expectedMessage, elementNotFoundById.toString());
+    assertThat(elementNotFoundById)
+      .hasToString(expectedMessage);
   }
 }

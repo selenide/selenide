@@ -1,10 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
-class DialogTextMismatchTest {
-
+class DialogTextMismatchTest extends UnitTest {
   @Test
   void dialogMismatchTextStringTest() {
     DialogTextMismatch dialogTextMismatch = new DialogTextMismatch("Actual text", "Expected text");
@@ -13,6 +12,7 @@ class DialogTextMismatchTest {
       "Expected: Expected text\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
-    Assertions.assertEquals(expectedString, dialogTextMismatch.toString());
+    assertThat(dialogTextMismatch)
+      .hasToString(expectedString);
   }
 }

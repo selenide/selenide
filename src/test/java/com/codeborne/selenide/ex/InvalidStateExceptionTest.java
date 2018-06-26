@@ -1,10 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
-class InvalidStateExceptionTest {
-
+class InvalidStateExceptionTest extends UnitTest {
   @Test
   void testThrowableConstructor() {
     InvalidStateException invalidStateException = new InvalidStateException(new Throwable("Error message"));
@@ -12,7 +11,8 @@ class InvalidStateExceptionTest {
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Throwable: Error message";
-    Assertions.assertEquals(expectedString, invalidStateException.toString());
+    assertThat(invalidStateException)
+      .hasToString(expectedString);
   }
 
   @Test
@@ -23,6 +23,7 @@ class InvalidStateExceptionTest {
       "Timeout: 0 ms.\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
-    Assertions.assertEquals(expectedString, invalidStateException.toString());
+    assertThat(invalidStateException)
+      .hasToString(expectedString);
   }
 }

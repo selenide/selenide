@@ -3,9 +3,9 @@ package com.codeborne.selenide.ex;
 import java.util.Locale;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-class ErrorMessagesTest {
-
+class ErrorMessagesTest extends UnitTest {
   private static String reportsUrl;
 
   @BeforeAll
@@ -46,13 +45,20 @@ class ErrorMessagesTest {
   @Test
   void formatsTimeoutToReadable() {
     Locale.setDefault(Locale.UK);
-    Assertions.assertEquals("\nTimeout: 0 ms.", ErrorMessages.timeout(0));
-    Assertions.assertEquals("\nTimeout: 1 ms.", ErrorMessages.timeout(1));
-    Assertions.assertEquals("\nTimeout: 999 ms.", ErrorMessages.timeout(999));
-    Assertions.assertEquals("\nTimeout: 1 s.", ErrorMessages.timeout(1000));
-    Assertions.assertEquals("\nTimeout: 1.001 s.", ErrorMessages.timeout(1001));
-    Assertions.assertEquals("\nTimeout: 1.500 s.", ErrorMessages.timeout(1500));
-    Assertions.assertEquals("\nTimeout: 4 s.", ErrorMessages.timeout(4000));
+    assertThat(ErrorMessages.timeout(0))
+      .isEqualToIgnoringNewLines("Timeout: 0 ms.");
+    assertThat(ErrorMessages.timeout(1))
+      .isEqualToIgnoringNewLines("Timeout: 1 ms.");
+    assertThat(ErrorMessages.timeout(999))
+      .isEqualToIgnoringNewLines("Timeout: 999 ms.");
+    assertThat(ErrorMessages.timeout(1000))
+      .isEqualToIgnoringNewLines("Timeout: 1 s.");
+    assertThat(ErrorMessages.timeout(1001))
+      .isEqualToIgnoringNewLines("Timeout: 1.001 s.");
+    assertThat(ErrorMessages.timeout(1500))
+      .isEqualToIgnoringNewLines("Timeout: 1.500 s.");
+    assertThat(ErrorMessages.timeout(4000))
+      .isEqualToIgnoringNewLines("Timeout: 4 s.");
   }
 
   @Test
@@ -62,7 +68,8 @@ class ErrorMessagesTest {
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
-    Assertions.assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png", screenshot);
+    assertThat(screenshot)
+      .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png");
   }
 
   @Test
@@ -76,7 +83,8 @@ class ErrorMessagesTest {
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
-    Assertions.assertEquals("\nScreenshot: file:" + currentDir + "/test-result/12345.png", screenshot);
+    assertThat(screenshot)
+      .isEqualToIgnoringNewLines("Screenshot: file:" + currentDir + "/test-result/12345.png");
   }
 
   @Test
@@ -84,7 +92,8 @@ class ErrorMessagesTest {
     Configuration.screenshots = false;
 
     String screenshot = ErrorMessages.screenshot();
-    Assertions.assertEquals("", screenshot);
+    assertThat(screenshot)
+      .isNullOrEmpty();
     verify(screenshots, never()).takeScreenShot();
   }
 
@@ -96,7 +105,8 @@ class ErrorMessagesTest {
     doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
 
     String screenshot = ErrorMessages.screenshot();
-    Assertions.assertEquals("\nScreenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
-      + "\nPage source: http://ci.mycompany.com/job/666/artifact/test-result/12345.html", screenshot);
+    assertThat(screenshot)
+      .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
+        + "Page source: http://ci.mycompany.com/job/666/artifact/test-result/12345.html");
   }
 }

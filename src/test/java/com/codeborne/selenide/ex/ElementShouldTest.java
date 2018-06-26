@@ -1,14 +1,13 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static org.mockito.Mockito.mock;
 
-class ElementShouldTest {
-
+class ElementShouldTest extends UnitTest {
   @Test
   void testToString() {
     String searchCriteria = "by.name: selenide";
@@ -21,6 +20,7 @@ class ElementShouldTest {
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Exception: Error message";
-    Assertions.assertEquals(expectedString, elementShould.toString());
+    assertThat(elementShould)
+      .hasToString(expectedString);
   }
 }
