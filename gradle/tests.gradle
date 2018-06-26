@@ -71,6 +71,7 @@ task testng(type: Test) {
 }
 
 tasks.withType(Test) {
+  useJUnitPlatform()
   systemProperty('file.encoding', encoding)
   systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
   if (System.getenv('CI')) {

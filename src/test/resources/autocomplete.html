@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::jquery autocomplete</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="jquery-ui.min.css">
-    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
-    <script type="text/javascript" src="jquery-ui.min.js" language="JavaScript"></script>
-    <script type="text/javascript">
+<head>
+  <title>Test::jquery autocomplete</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" href="jquery-ui.min.css">
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript" src="jquery-ui.min.js" language="JavaScript"></script>
+  <script type="text/javascript">
       function log(e) {
         if (typeof console !== "undefined") console.log(e);
         $('#log').append('<li>' + e.type + ': ' + e.keyCode + ', ' + e.charCode + ', ' + e.which + '</li>');
       }
-      
+
       $(function() {
         var availableTags = [
           "ActionScript",
@@ -47,27 +47,29 @@
               }
             });
       });
-    </script>
-    <style type="text/css" media="screen">
+
+  </script>
+  <style type="text/css" media="screen">
       body {
         font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
         font-size: 62.5%;
       }
-    </style>
-  </head>
-  <body>
-    <h1>Page with JQuery autocomplete</h1>
 
-    <ul id="log">
-    </ul>
+  </style>
+</head>
+<body>
+<h1>Page with JQuery autocomplete</h1>
 
-    <br/>
-    <label for="tags">Tags:
-      <input id="tags"/>
-    </label>
-  
-    <h4></h4>
+<ul id="log">
+</ul>
 
-    <button id="anyButton" onclick="void(0);">search</button>
-  </body>
+<br/>
+<label for="tags">Tags:
+  <input id="tags"/>
+</label>
+
+<h4></h4>
+
+<button id="anyButton" onclick="void(0);">search</button>
+</body>
 </html>

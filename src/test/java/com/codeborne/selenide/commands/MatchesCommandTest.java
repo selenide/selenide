@@ -70,11 +70,13 @@ class MatchesCommandTest {
 
   @Test
   void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
-    Assertions.assertThrows(InvalidSelectorException.class, () -> catchExecuteMethodWithException(new NotFoundException("invalid selector")));
+    Assertions.assertThrows(InvalidSelectorException.class,
+      () -> catchExecuteMethodWithException(new NotFoundException("invalid selector")));
   }
 
   @Test
   void testExecuteMethodWhenRunTimeExceptionIsThrown() {
-    Assertions.assertThrows(InvalidSelectorException.class, () -> catchExecuteMethodWithException(new RuntimeException("invalid selector")));
+    Assertions.assertThrows(InvalidSelectorException.class,
+      () -> catchExecuteMethodWithException(new RuntimeException("invalid selector")));
   }
 }

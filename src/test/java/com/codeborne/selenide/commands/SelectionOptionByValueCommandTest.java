@@ -67,7 +67,9 @@ class SelectionOptionByValueCommandTest {
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
     } catch (NoSuchElementException exception) {
       Assertions.assertTrue(
-        exception.getMessage().contains(String.format("Cannot locate option with value: %s", defaultElementValue)), "Value is not present in error message");
+        exception.getMessage().contains(
+          String.format("Cannot locate option with value: %s", defaultElementValue)),
+        "Value is not present in error message");
     }
   }
 }

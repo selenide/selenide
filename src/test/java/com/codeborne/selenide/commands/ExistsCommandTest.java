@@ -54,7 +54,8 @@ class ExistsCommandTest {
 
   @Test
   void testExistsExecuteMethodInvalidSelectorException() {
-    Assertions.assertThrows(InvalidSelectorException.class, () -> checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable")));
+    Assertions.assertThrows(InvalidSelectorException.class,
+      () -> checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable")));
   }
 
   @Test

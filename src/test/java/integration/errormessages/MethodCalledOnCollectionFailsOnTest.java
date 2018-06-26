@@ -6,8 +6,9 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
@@ -20,32 +21,33 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 
-public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
+class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
-  @Before
-  public void openPage() {
+  @BeforeEach
+  void openPage() {
     Given.openedPageWithBody(
-        "<ul>Hello to:",
-        "<li class='the-expanse detective'>Miller</li>",
-        "<li class='the-expanse missing'>Julie Mao</li>",
-        "</ul>"
+      "<ul>Hello to:",
+      "<li class='the-expanse detective'>Miller</li>",
+      "<li class='the-expanse missing'>Julie Mao</li>",
+      "</ul>"
     );
     Configuration.timeout = 0;
   }
 
   @Test
-  public void shouldCondition_When$$Collection_WithNonExistentWebElements() {
+  void shouldCondition_When$$Collection_WithNonExistentWebElements() {
     ElementsCollection collection = $$("ul .nonexistent");
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
       assertScreenshot(expected);
@@ -69,16 +71,14 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
         */
   }
 
-
   @Test
-  public void shouldCondition_WhenFilteredCollection_On$$CollectionWithNonExistentWebElements() {
+  void shouldCondition_WhenFilteredCollection_On$$CollectionWithNonExistentWebElements() {
     ElementsCollection collection = $$("ul .nonexistent").filter(cssClass("the-expanse"));
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
       assertScreenshot(expected);
@@ -94,14 +94,13 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenFilteredCollection_WithNotSatisfiedCondition() {
+  void shouldCondition_WhenFilteredCollection_WithNotSatisfiedCondition() {
     ElementsCollection collection = $$("ul li").filter(cssClass("nonexistent"));
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
       assertScreenshot(expected);
@@ -117,14 +116,13 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerCollection_WithNonExistentOuterWebElement() {
+  void shouldCondition_WhenInnerCollection_WithNonExistentOuterWebElement() {
     ElementsCollection collection = $(".nonexistent").findAll("li");
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); // todo - is it correct?
       assertScreenshot(expected);
@@ -137,20 +135,33 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentOuterWebElement/1471818981483.1.png
             Timeout: 6 s.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
 
+  private void assertCauseMessage(UIAssertionError expected) {
+    if (isHtmlUnit()) {
+      assertThat(expected.getCause().getMessage(), containsString("Returned node (null) was not a DOM element"));
+    } else if (isPhantomjs()) {
+      assertThat(expected.getCause().getMessage(), containsString("Unable to find element with css selector '.nonexistent'"));
+    } else {
+      String expectedCauseMessage = isFirefox()
+        ? "Unable to locate element: .nonexistent"
+        : "Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}";
+      assertThat(expected.getCause().getMessage(),
+        containsString(expectedCauseMessage));
+    }
+  }
+
   @Test
-  public void shouldCondition_WhenInnerCollection_WithNonExistentInnerWebElements() {
+  void shouldCondition_WhenInnerCollection_WithNonExistentInnerWebElements() {
     ElementsCollection collection = $("ul").findAll(".nonexistent");
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul/.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
       assertScreenshot(expected);
@@ -181,14 +192,13 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
    * What is a correct result?
    */
   @Test
-  public void shouldHaveSizeCondition_When$$Collection_WithNotSatisfiedConditionInShould() {
+  void shouldHaveSizeCondition_When$$Collection_WithNotSatisfiedConditionInShould() {
     ElementsCollection collection = $$("ul li");
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
-    }
-    catch (ListSizeMismatch expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ListSizeMismatch expected) {
       assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 2, collection: ul li"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
@@ -206,14 +216,13 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldHaveSizeCondition_When$$Collection_WithNonExistentCollection() {
+  void shouldHaveSizeCondition_When$$Collection_WithNonExistentCollection() {
     ElementsCollection collection = $$("ul .nonexistent");
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
-    }
-    catch (ListSizeMismatch expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ListSizeMismatch expected) {
       assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 0, collection: ul .nonexistent"));
       assertScreenshot(expected);
       assertThat(expected.getCause(), nullValue());
@@ -225,21 +234,5 @@ public class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
             Screenshot: file:/..._WithNonExistentCollection/1471357025434.0.png
             Timeout: 6 s.
         */
-  }
-
-  private void assertCauseMessage(UIAssertionError expected) {
-    if (isHtmlUnit()) {
-      assertThat(expected.getCause().getMessage(), containsString("Returned node (null) was not a DOM element"));
-    }
-    else if (isPhantomjs()) {
-      assertThat(expected.getCause().getMessage(), containsString("Unable to find element with css selector '.nonexistent'"));
-    }
-    else {
-      String expectedCauseMessage = isFirefox()
-          ? "Unable to locate element: .nonexistent"
-          : "Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}";
-      assertThat(expected.getCause().getMessage(),
-          containsString(expectedCauseMessage));
-    }
   }
 }

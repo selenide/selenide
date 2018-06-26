@@ -5,30 +5,29 @@ import java.util.List;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.IntegrationTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
-public class ProxyServerUsageTest extends IntegrationTest {
-  List<String> requests = new ArrayList<>();
-  List<String> responses = new ArrayList<>();
+class ProxyServerUsageTest extends IntegrationTest {
+  private List<String> requests = new ArrayList<>();
+  private List<String> responses = new ArrayList<>();
 
-  @Before
-  @After
-  public void setUp() {
+  @BeforeEach
+  @AfterEach
+  void setUp() {
     closeWebDriver();
   }
 
   @Test
-  public void canAddInterceptorsToProxyServer() {
+  void canAddInterceptorsToProxyServer() {
     openFile("file_upload_form.html");
 
     SelenideProxyServer selenideProxy = getSelenideProxy();
@@ -50,16 +49,17 @@ public class ProxyServerUsageTest extends IntegrationTest {
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#submit").click();
 
-    assertNotNull("Check browser mob proxy instance", getSelenideProxy().getProxy());
+    Assertions.assertNotNull(getSelenideProxy().getProxy(), "Check browser mob proxy instance");
 
-    assertEquals("All requests: " + requests, 1, requests.size());
-    assertEquals("All responses: " + responses, 1, responses.size());
+    Assertions.assertEquals(1, requests.size(), "All requests: " + requests);
+    Assertions.assertEquals(1, responses.size(), "All responses: " + responses);
 
-    assertThat(requests.get(0), containsString("/upload"));
-    assertThat(requests.get(0), containsString("Content-Disposition: form-data; name=\"cv\"; filename=\"hello_world.txt\""));
-    assertThat(requests.get(0), containsString("Hello, WinRar!"));
+    MatcherAssert.assertThat(requests.get(0), containsString("/upload"));
+    MatcherAssert.assertThat(requests.get(0),
+      containsString("Content-Disposition: form-data; name=\"cv\"; filename=\"hello_world.txt\""));
+    MatcherAssert.assertThat(requests.get(0), containsString("Hello, WinRar!"));
 
-    assertThat(responses.get(0), containsString("<h3>Uploaded 1 files</h3>"));
+    MatcherAssert.assertThat(responses.get(0), containsString("<h3>Uploaded 1 files</h3>"));
   }
 
   private boolean isChromeOwnTechnicalRequest(String url) {

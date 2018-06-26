@@ -1,11 +1,12 @@
 package integration;
 
-import com.codeborne.selenide.SelenideElement;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -13,14 +14,14 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 
-public class CollectionWaitTest extends IntegrationTest {
-  @Before
-  public void openTestPage() {
+class CollectionWaitTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPage() {
     openFile("collection_with_delays.html");
   }
 
   @Test
-  public void waitsUntilNthElementAppears() {
+  void waitsUntilNthElementAppears() {
     $$("#collection li").get(5).shouldBe(visible);
     $$("#collection li").get(33).shouldBe(visible);
     $$("#collection li").get(49).shouldBe(visible);
@@ -30,22 +31,22 @@ public class CollectionWaitTest extends IntegrationTest {
   }
 
   @Test
-  public void reproduceStaleElementException_priorToSelenide33() {
+  void reproduceStaleElementException_priorToSelenide33() {
     List<SelenideElement> elements = new ArrayList<>($$("h1"));
-    
+
     executeJavaScript("window.location.reload();");
 
     elements.get(0).shouldBe(visible).shouldHave(text("Elements will appear soon"));
   }
 
-
-  @Test(expected = AssertionError.class)
-  public void failsIfWrongSize() {
-    $$("#collection li").shouldHave(size(-1));
+  @Test
+  void failsIfWrongSize() {
+    Assertions.assertThrows(AssertionError.class,
+      () -> $$("#collection li").shouldHave(size(-1)));
   }
 
   @Test
-  public void canDetermineSize() {
+  void canDetermineSize() {
     $$("#collection li").shouldHave(size(50));
   }
 }

@@ -1,29 +1,39 @@
 package integration;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Logger;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
@@ -34,14 +44,16 @@ import static org.junit.Assert.assertTrue;
 
 public class LocalHttpServer {
   private static final Logger log = Logger.getLogger(LocalHttpServer.class.getName());
-  private static final String CONTENT_TYPE_HTML_TEXT  = "text/html";
-  private static final String CONTENT_TYPE_IMAGE_PNG  = "image/png";
-
+  private static final String CONTENT_TYPE_HTML_TEXT = "text/html";
+  private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
+  public final List<FileItem> uploadedFiles = new ArrayList<>(2);
   private final Server server;
+  private Set<String> sessions = new ConcurrentSkipListSet<>();
 
   /**
    * @param port
    * @param ssl
+   *
    * @throws IOException
    */
   public LocalHttpServer(int port, boolean ssl) {
@@ -78,11 +90,46 @@ public class LocalHttpServer {
     sslContextFactory.setKeyManagerPassword("selenide.rulez");
 
     ServerConnector sslConnector = new ServerConnector(server,
-        new SslConnectionFactory(sslContextFactory, "http/1.1"),
-        new HttpConnectionFactory(https));
+      new SslConnectionFactory(sslContextFactory, "http/1.1"),
+      new HttpConnectionFactory(https));
     sslConnector.setPort(port);
 
-    server.setConnectors(new Connector[] {sslConnector});
+    server.setConnectors(new Connector[]{sslConnector});
+  }
+
+  private static byte[] readFileContent(String fileName) throws IOException {
+    InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName);
+    if (in == null) return null;
+    try {
+      return IOUtils.toByteArray(in);
+    } finally {
+      in.close();
+    }
+  }
+
+  private static String getFilenameFromRequest(HttpServletRequest request) {
+    return request.getPathInfo().replaceFirst("/(.*)", "$1");
+  }
+
+  private static String getContentType(String fileName) {
+    String fileExtension = FilenameUtils.getExtension(fileName);
+    return fileExtension.contains("png") ? CONTENT_TYPE_IMAGE_PNG : CONTENT_TYPE_HTML_TEXT;
+  }
+
+  private static void printResponse(HttpServletResponse http, byte[] fileContent) throws IOException {
+    try (OutputStream os = http.getOutputStream()) {
+      os.write(fileContent);
+    }
+  }
+
+  /**
+   * Method may be used to locally run test server used by Selenide own tests
+   *
+   * @param args not used
+   */
+  public static void main(String[] args) throws Exception {
+    LocalHttpServer server = new LocalHttpServer(8080, false).start();
+    Thread.currentThread().join();
   }
 
   public LocalHttpServer start() throws Exception {
@@ -93,12 +140,21 @@ public class LocalHttpServer {
   private void logRequest(HttpServletRequest request, Object response, long startTime) {
     String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
     log.info(time + " " +
-        on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) +
-        " -> " + response +
-        " " + (System.nanoTime() - startTime) / 1000000 + " ms");
+      on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()) +
+      " -> " + response +
+      " " + (System.nanoTime() - startTime) / 1000000 + " ms");
   }
 
-  private Set<String> sessions = new ConcurrentSkipListSet<>();
+  private String getSessionId(HttpServletRequest request) {
+    if (request.getCookies() != null) {
+      for (Cookie cookie : request.getCookies()) {
+        if ("session_id".equals(cookie.getName())) {
+          return cookie.getValue();
+        }
+      }
+    }
+    throw new IllegalArgumentException("No cookie 'session_id' found: " + Arrays.toString(request.getCookies()));
+  }
 
   private class FileHandler extends HttpServlet {
     @Override
@@ -163,8 +219,6 @@ public class LocalHttpServer {
     }
   }
 
-  public final List<FileItem> uploadedFiles = new ArrayList<>(2);
-
   private class FileUploadHandler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -190,51 +244,5 @@ public class LocalHttpServer {
         log.log(SEVERE, e.getMessage(), e);
       }
     }
-  }
-
-  private String getSessionId(HttpServletRequest request) {
-    if (request.getCookies() != null) {
-      for (Cookie cookie : request.getCookies()) {
-        if ("session_id".equals(cookie.getName())) {
-          return cookie.getValue();
-        }
-      }
-    }
-    throw new IllegalArgumentException("No cookie 'session_id' found: " + Arrays.toString(request.getCookies()));
-  }
-
-  static byte[] readFileContent(String fileName) throws IOException {
-    InputStream in = currentThread().getContextClassLoader().getResourceAsStream(fileName);
-    if (in == null) return null;
-    try {
-      return IOUtils.toByteArray(in);
-    } finally {
-      in.close();
-    }
-  }
-
-  private static String getFilenameFromRequest(HttpServletRequest request) {
-    return request.getPathInfo().replaceFirst("/(.*)", "$1");
-  }
-
-  static String getContentType(String fileName) {
-    String fileExtension = FilenameUtils.getExtension(fileName);
-    return fileExtension.contains("png") ? CONTENT_TYPE_IMAGE_PNG : CONTENT_TYPE_HTML_TEXT;
-  }
-
-  static void printResponse(HttpServletResponse http, byte[] fileContent) throws IOException {
-    try (OutputStream os = http.getOutputStream()) {
-      os.write(fileContent);
-    }
-  }
-
-  /**
-   * Method may be used to locally run test server used by Selenide own tests
-   *
-   * @param args not used
-   */
-  public static void main(String[] args) throws Exception {
-    LocalHttpServer server = new LocalHttpServer(8080, false).start();
-    Thread.currentThread().join();
   }
 }

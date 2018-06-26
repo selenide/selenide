@@ -1,26 +1,34 @@
 package integration;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.confirm;
+import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
-import static org.junit.Assert.fail;
 
-public class AlertTest extends IntegrationTest {
-  @Before
-  public void openTestPage() {
+class AlertTest extends IntegrationTest {
+  @AfterAll
+  static void tearDown() {
+    close();
+  }
+
+  @BeforeEach
+  void openTestPage() {
     openFile("page_with_alerts.html");
   }
 
   @Test
-  public void canSubmitAlertDialog() {
+  void canSubmitAlertDialog() {
     $(By.name("username")).val("Greg");
     $(byValue("Alert button")).click();
     confirm("Are you sure, Greg?");
@@ -29,7 +37,7 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void canSubmitPromptDialogWithDefaultValue() {
+  void canSubmitPromptDialogWithDefaultValue() {
     $(byValue("Prompt button")).click();
     prompt();
     $("#message").shouldHave(text("Hello, default!"));
@@ -37,7 +45,7 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void canSubmitPromptDialog() {
+  void canSubmitPromptDialog() {
     $(byValue("Prompt button")).click();
     prompt("Please input your username", "Aegon Targaryen");
     $("#message").shouldHave(text("Hello, Aegon Targaryen!"));
@@ -45,22 +53,21 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void selenideChecksDialogText() {
+  void selenideChecksDialogText() {
     $(By.name("username")).val("Gregg");
     $(byValue("Alert button")).click();
     try {
       confirm("Good bye, Greg!");
-    }
-    catch (DialogTextMismatch expected) {
+    } catch (DialogTextMismatch expected) {
       return;
     }
     if (supportsModalDialogs()) {
-      fail("Should throw DialogTextMismatch for mismatching text");
+      Assertions.fail("Should throw DialogTextMismatch for mismatching text");
     }
   }
 
   @Test
-  public void waitsUntilAlertDialogAppears() {
+  void waitsUntilAlertDialogAppears() {
     $(By.name("username")).val("Быстрый Гарри");
     $(byValue("Slow alert")).click();
     confirm("Are you sure, Быстрый Гарри?");
@@ -69,16 +76,11 @@ public class AlertTest extends IntegrationTest {
   }
 
   @Test
-  public void waitsUntilPromptDialogAppears() {
+  void waitsUntilPromptDialogAppears() {
     $(By.name("username")).val("Медленный Барри");
     $(byValue("Slow prompt")).click();
     prompt("Медленный Барри");
     $("#message").shouldHave(text("Hello, Медленный Барри!"));
     $("#container").shouldBe(empty);
-  }
-
-  @AfterClass
-  public static void tearDown() {
-    close();
   }
 }

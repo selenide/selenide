@@ -6,7 +6,7 @@ import org.junit.rules.ExternalResource;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static org.mockito.Mockito.mock;
 
-public class MockWebdriverContainer extends ExternalResource {
+class MockWebdriverContainer extends ExternalResource {
   @Override
   protected void before() {
     webdriverContainer = mock(WebDriverThreadLocalContainer.class);

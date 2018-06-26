@@ -6,42 +6,49 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 
-public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
+class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
-  @Before
-  public void openPage() {
+  @BeforeEach
+  void openPage() {
     Given.openedPageWithBody(
-        "<ul>Hello to:",
-        "<li class='the-expanse detective'>Miller <label>detective</label></li>",
-        "<li class='the-expanse missing'>Julie Mao</li>",
-        "</ul>"
+      "<ul>Hello to:",
+      "<li class='the-expanse detective'>Miller <label>detective</label></li>",
+      "<li class='the-expanse missing'>Julie Mao</li>",
+      "</ul>"
     );
     Configuration.timeout = 0;
   }
 
   @Test
-  public void shouldCondition_When$Element_WithNonExistentElement() {
+  void shouldCondition_When$Element_WithNonExistentElement() {
     SelenideElement element = $("ul .nonexistent");
 
     try {
       element.shouldHave(text("Miller"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
       assertScreenshot(expected);
@@ -57,7 +64,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentWebElement/1471304286016.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
 
             chrome
@@ -66,21 +73,30 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentElement/1477036866229.0.png
             Timeout: 0 ms.
-            Caused by: NoSuchElementException: no such element: 
+            Caused by: NoSuchElementException: no such element:
               Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
 
         */
   }
 
+  private void assertCauseMessage(UIAssertionError expected, String selector) {
+    if (WebDriverRunner.isPhantomjs()) {
+      assertThat(expected.getCause().getMessage(),
+        containsString("Unable to find element with css selector '" + selector + "'"));
+    } else if (!isHtmlUnit()) {
+      assertThat(expected.getCause().getMessage(),
+        containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}"));
+    }
+  }
+
   @Test
-  public void shouldCondition_WhenCollectionElementByIndex_WithNonExistentCollection() {
+  void shouldCondition_WhenCollectionElementByIndex_WithNonExistentCollection() {
     SelenideElement element = $$("ul .nonexistent").get(1);
 
     try {
       element.shouldHave(text("Miller"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
@@ -100,14 +116,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenCollectionElementByIndex_WithIndexOutOfRange() {
+  void shouldCondition_WhenCollectionElementByIndex_WithIndexOutOfRange() {
     SelenideElement element = $$("ul li").get(10);
 
     try {
       element.shouldHave(text("Miller"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
       assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
       assertScreenshot(expected);
@@ -125,14 +140,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void actionWithVisibilityWaiting_WhenCollectionElementByIndex_WithIndexOutOfRange() {
+  void actionWithVisibilityWaiting_WhenCollectionElementByIndex_WithIndexOutOfRange() {
     SelenideElement element = $$("ul li").get(10);
 
     try {
       element.click();
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
@@ -150,14 +164,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenCollectionElementByCondition_WithNonExistentCollection() {
+  void shouldCondition_WhenCollectionElementByCondition_WithNonExistentCollection() {
     SelenideElement element = $$(".nonexistent").findBy(cssClass("the-expanse"));
 
     try {
       element.shouldBe(exist);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
@@ -178,14 +191,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenCollectionElementByCondition_WithNotSatisfiedCondition() {
+  void shouldCondition_WhenCollectionElementByCondition_WithNotSatisfiedCondition() {
     SelenideElement element = $$("li").findBy(cssClass("nonexistent"));
 
     try {
       element.shouldBe(visible);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
@@ -206,14 +218,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void actionWithExistenceWaiting_WhenCollectionElementByCondition_WithNotSatisfiedCondition() {
+  void actionWithExistenceWaiting_WhenCollectionElementByCondition_WithNotSatisfiedCondition() {
     SelenideElement element = $$("li").findBy(cssClass("nonexistent"));
 
     try {
       element.text();
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: css class 'nonexistent'")); //todo - is it correct?
       assertScreenshot(expected);
@@ -229,14 +240,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElement_WithNonExistentOuterElement() {
+  void shouldCondition_WhenInnerElement_WithNonExistentOuterElement() {
     SelenideElement element = $(".nonexistent").find(".the-expanse");
 
     try {
       element.should(appear);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
       assertScreenshot(expected);
@@ -254,14 +264,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElement_WithNonExistentInnerElement() {
+  void shouldCondition_WhenInnerElement_WithNonExistentInnerElement() {
     SelenideElement element = $("ul").find(".nonexistent");
 
     try {
       element.shouldBe(visible);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
@@ -274,21 +283,19 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471352505699.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
 
-
   @Test
-  public void actionWithVisibilityWaiting_WhenInnerElement_WithNonExistentInnerElement() {
+  void actionWithVisibilityWaiting_WhenInnerElement_WithNonExistentInnerElement() {
     SelenideElement element = $("ul").find(".nonexistent");
 
     try {
       element.doubleClick();
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: visible"));
       assertScreenshot(expected);
@@ -301,7 +308,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:..._WithNonExistentInnerElement/1471353844670.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
@@ -312,20 +319,19 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
    ******************************************************/
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentStartCollection() {
+  void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentStartCollection() {
     SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).findBy(cssClass("detective")).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
-          startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}"));
+        startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}"));
     }
         /*
             Element not found {ul .nonexistent.filter(css class 'the-expanse')}
@@ -341,20 +347,19 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithEmptyFilteredCollection() {
+  void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithEmptyFilteredCollection() {
     SelenideElement element = $$("ul li").filterBy(cssClass("nonexistent")).findBy(cssClass("detective")).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
-          startsWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}"));
+        startsWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}"));
     }
         /*
             Element not found {ul li.filter(css class 'nonexistent')}
@@ -370,21 +375,20 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentOuterElement() {
+  void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentOuterElement() {
     SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).findBy(cssClass("nonexistent")).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), 
-          startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
+      assertThat(expected.getMessage(),
+        startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
       assertScreenshot(expected);
       assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
       assertThat(expected.getCause().getMessage(),
-          startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
+        startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
     }
         /*
             Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}
@@ -400,14 +404,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentInnerElement() {
+  void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentInnerElement() {
     SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).findBy(cssClass("detective")).find(".nonexistent");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
       assertScreenshot(expected);
@@ -420,7 +423,7 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471823617503.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
   }
@@ -430,14 +433,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
    * $$.filterBy(condition).get(index).find
    ******************************************************/
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentStartCollection() {
+  void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentStartCollection() {
     SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).get(0).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
@@ -455,14 +457,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithEmptyFilteredCollection() {
+  void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithEmptyFilteredCollection() {
     SelenideElement element = $$("ul li").filterBy(cssClass("nonexistent")).get(0).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
       assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
       assertScreenshot(expected);
@@ -480,14 +481,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithIndexOutOfRange() {
+  void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithIndexOutOfRange() {
     SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(2).find("label");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'the-expanse')[2]}"));
       assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
       assertScreenshot(expected);
@@ -506,14 +506,13 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   @Test
-  public void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentInnerElement() {
+  void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentInnerElement() {
     SelenideElement element = $$("ul li").filterBy(cssClass("the-expanse")).get(0).find(".nonexistent");
 
     try {
       element.shouldHave(exactText("detective"));
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound expected) {
+      Assertions.fail("Expected ElementNotFound");
+    } catch (ElementNotFound expected) {
       assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
       assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
       assertScreenshot(expected);
@@ -526,19 +525,8 @@ public class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
             Screenshot: file:/..._WithNonExistentInnerElement/1471825188045.0.png
             Timeout: 0 ms.
-            Caused by: 
+            Caused by:
             NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
         */
-  }
-
-  private void assertCauseMessage(UIAssertionError expected, String selector) {
-    if (WebDriverRunner.isPhantomjs()) {
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to find element with css selector '" + selector + "'"));
-    }
-    else if (!isHtmlUnit()) {
-      assertThat(expected.getCause().getMessage(),
-          containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}"));
-    }
   }
 }

@@ -1,27 +1,38 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FramesTest extends IntegrationTest {
-  @Before
-  public void openPage() {
+class FramesTest extends IntegrationTest {
+  @AfterAll
+  static void tearDown() {
+    close();
+  }
+
+  @BeforeEach
+  void openPage() {
     openFile("page_with_frames.html");
   }
 
   @Test
-  public void canSwitchIntoInnerFrame() {
+  void canSwitchIntoInnerFrame() {
     assertEquals("Test::frames", title());
 
     switchTo().innerFrame("parentFrame");
@@ -46,7 +57,7 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
+  void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
 
@@ -55,7 +66,7 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchBetweenFramesByTitle() {
+  void canSwitchBetweenFramesByTitle() {
     assertEquals("Test::frames", title());
 
     switchTo().frame("topFrame");
@@ -71,8 +82,8 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchBetweenFramesByIndex() {
-    assumeFalse(isChrome());
+  void canSwitchBetweenFramesByIndex() {
+    Assumptions.assumeFalse(isChrome());
     assertEquals("Test::frames", title());
 
     switchTo().frame(0);
@@ -85,10 +96,5 @@ public class FramesTest extends IntegrationTest {
     switchTo().defaultContent();
     switchTo().frame(2);
     $("h1").shouldHave(text("Page with JQuery"));
-  }
-
-  @AfterClass
-  public static void tearDown() {
-    close();
   }
 }

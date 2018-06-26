@@ -1,9 +1,9 @@
 <html lang="ru">
-  <head>
-    <title>Test::alerts</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="Content-Language" content="ru" />
-    <script type="text/javascript">
+<head>
+  <title>Test::alerts</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Language" content="ru"/>
+  <script type="text/javascript">
       function triggerAlert() {
         setTimeout(runAlert, 1000);
         return false;
@@ -31,7 +31,7 @@
         setTimeout(runConfirm, 1000);
         return false;
       }
-      
+
       function runConfirm() {
         var username = document.getElementById('username').value;
         if (confirm("Get out of this page, " + username + "?")) {
@@ -42,29 +42,30 @@
           return false;
         }
       }
-    </script>
-  </head>
-  <body>
-    <h1>Page with alerts</h1>
 
-    <br/>
-    <div id="message" style="width: 400px; color: red;"><br/></div>
+  </script>
+</head>
+<body>
+<h1>Page with alerts</h1>
 
-    <div id="container" style="width: 400px">
-      <form>
-        <fieldset title="Login form">
-          <label> Username:
-            <input id="username" name="username"/>
-          </label> <br/>
-          <input type="button" onclick="return runAlert();" value="Alert button"><br/><br/>
-          <input type="button" onclick="return runPrompt();" value="Prompt button"><br/><br/>
-          <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
+<br/>
+<div id="message" style="width: 400px; color: red;"><br/></div>
 
-          <input type="button" onclick="return triggerAlert();" value="Slow alert"><br/><br/>
-          <input type="button" onclick="return triggerPrompt();" value="Slow prompt"><br/><br/>
-          <a href="page_with_jquery.html" onclick="return triggerConfirm();">Slow confirm</a><br/><br/>
-        </fieldset>
-      </form>
-    </div>
-  </body>
+<div id="container" style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username"/>
+      </label> <br/>
+      <input type="button" onclick="return runAlert();" value="Alert button"><br/><br/>
+      <input type="button" onclick="return runPrompt();" value="Prompt button"><br/><br/>
+      <a href="page_with_jquery.html" onclick="return runConfirm();">Confirm button</a><br/><br/>
+
+      <input type="button" onclick="return triggerAlert();" value="Slow alert"><br/><br/>
+      <input type="button" onclick="return triggerPrompt();" value="Slow prompt"><br/><br/>
+      <a href="page_with_jquery.html" onclick="return triggerConfirm();">Slow confirm</a><br/><br/>
+    </fieldset>
+  </form>
+</div>
+</body>
 </html>

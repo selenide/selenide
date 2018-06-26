@@ -29,7 +29,8 @@ class GetDataAttributeCommandTest {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(elementAttribute);
-    Assertions.assertEquals(elementAttribute, getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    Assertions.assertEquals(elementAttribute,
+      getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
   }
 
   @Test

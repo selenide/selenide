@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test page :: with selects, but withour JQuery</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <style>
+<head>
+  <title>Test page :: with selects, but withour JQuery</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style>
       #status {line-height: 10px;}
-    </style>
-    <script type="text/javascript">
+
+  </style>
+  <script type="text/javascript">
       function scheduleFillTextArea() {
         setTimeout(fillTextArea, commandDuration * 3);
       }
@@ -34,165 +35,168 @@
       function onDomainChanged(select) {
         document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
       }
-    </script>
-  </head>
-  <body onload="initBlur(); scheduleFillTextArea();">
-  <div style="display: none">abcd</div>
-    <div id="non-clickable-element"
-         style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
-      <a href="http://google.com">non-clickable element</a>
-    </div>
-    <div id="clickable-element"
-         style="z-index: -90; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
-      <a href="http://www.yandex.ru/">clickable element</a>
-    </div>
 
-    <h1>Page with selects</h1>
+  </script>
+</head>
+<body onload="initBlur(); scheduleFillTextArea();">
+<div style="display: none">abcd</div>
+<div id="non-clickable-element"
+     style="z-index: -100; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
+  <a href="http://google.com">non-clickable element</a>
+</div>
+<div id="clickable-element"
+     style="z-index: -90; position: absolute; top: 10px; right: 200px; width: 190px; height: 50px; background-color: lightgrey;">
+  <a href="http://www.yandex.ru/">clickable element</a>
+</div>
+
+<h1>Page with selects</h1>
 
 
+<div class="container">
   <div class="container">
-      <div class="container">
-        <div id="domain-container" class="container">
-          <h2>Dropdown list</h2>
-          <h6 id="selectedDomain"></h6>
-          <div id="dropdown-list-container" class="container">
-            <select name="domain" onchange="onDomainChanged(this);">
-              <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
-              <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
-              <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
-              <option value="мыло.ру" data-mailServerId="111АБВГД">@мыло.ру</option>
-            </select>
-          </div>
-        </div>
+    <div id="domain-container" class="container">
+      <h2>Dropdown list</h2>
+      <h6 id="selectedDomain"></h6>
+      <div id="dropdown-list-container" class="container">
+        <select name="domain" onchange="onDomainChanged(this);">
+          <option value="livemail.ru" data-mailServerId="111">@livemail.ru</option>
+          <option value="myrambler.ru" data-mailServerId="222A">@myrambler.ru</option>
+          <option value="rusmail.ru" data-mailServerId="33333B">@rusmail.ru</option>
+          <option value="мыло.ру" data-mailServerId="111АБВГД">@мыло.ру</option>
+        </select>
       </div>
     </div>
+  </div>
+</div>
 
-    <br/>
-    <br/>
+<br/>
+<br/>
 
-    <div id="apostrophes-and-quotes" class="container">
-      <h2><a href="#">Options with 'apostrophes' and "quotes"</a></h2>
-      <select id="hero">
-        <option value="">-- Select your hero --</option>
-        <option value="john mc'lain">John Mc'Lain</option>
-        <option value='arnold "schwarzenegger"'>Arnold "Schwarzenegger"</option>
-        <option value="mickey rourke">Mickey "Rock'n'Roll" Rourke</option>
-      </select>
-    </div>
+<div id="apostrophes-and-quotes" class="container">
+  <h2><a href="#">Options with 'apostrophes' and "quotes"</a></h2>
+  <select id="hero">
+    <option value="">-- Select your hero --</option>
+    <option value="john mc'lain">John Mc'Lain</option>
+    <option value='arnold "schwarzenegger"'>Arnold "Schwarzenegger"</option>
+    <option value="mickey rourke">Mickey "Rock'n'Roll" Rourke</option>
+  </select>
+</div>
 
-    <br/>
-    <br/>
+<br/>
+<br/>
 
-    <div id="radioButtons">
-      <h2>Radio buttons</h2>
-      <input type="radio" name="me" value="master">Мастер</input>
-      <input type="radio" name="me" value="margarita">Маргарита</input>
-      <input type="radio" name="me" value="cat">Кот "Бегемот"</input>
-      <input type="radio" name="me" value="woland">Theodor Woland</input>
-    </div>
+<div id="radioButtons">
+  <h2>Radio buttons</h2>
+  <input type="radio" name="me" value="master">Мастер</input>
+  <input type="radio" name="me" value="margarita">Маргарита</input>
+  <input type="radio" name="me" value="cat">Кот "Бегемот"</input>
+  <input type="radio" name="me" value="woland">Theodor Woland</input>
+</div>
 
-    <br/>
-    <br/>
+<br/>
+<br/>
 
-    <table id="multirowTable" class="table multirow_table" border="1">
-      <tbody>
-        <tr id="multirowTableFirstRow">
-          <td class="first_row">Chack</td>
-          <td>Norris</td>
-        </tr>
-        <tr id="multirowTableSecondRow">
-          <td class="second_row">Chack</td>
-          <td id="baskerville">   <span></span> L'a
-            Baskerville
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<table id="multirowTable" class="table multirow_table" border="1">
+  <tbody>
+  <tr id="multirowTableFirstRow">
+    <td class="first_row">Chack</td>
+    <td>Norris</td>
+  </tr>
+  <tr id="multirowTableSecondRow">
+    <td class="second_row">Chack</td>
+    <td id="baskerville"><span></span> L'a
+      Baskerville
+    </td>
+  </tr>
+  </tbody>
+</table>
 
-    <div id="status">
-        Username: <span class="name">Bob Smith</span>&nbsp;Last login: <span class="last-login">01.01.1970</span>
-    </div>
+<div id="status">
+  Username: <span class="name">Bob Smith</span>&nbsp;Last login: <span class="last-login">01.01.1970</span>
+</div>
 
-    <div id="theHiddenElement" style="display: none">Видишь суслика? И я не вижу. <b>А он есть</b>!</div>
+<div id="theHiddenElement" style="display: none">Видишь суслика? И я не вижу. <b>А он есть</b>!</div>
 
-    <br/>
-    <div style="width: 400px">
-      <form action="#submitted-form" method="post">
-        <fieldset title="Login form">
-          <label> Username:
-            <input name="username" value="" readonly="readonly"/>
-          </label> <br/>
-          <label>Password:
-            <input name="password" value="" maxlength="24"/>
-          </label> <br/>
-          <input type="checkbox" name="rememberMe">Remember me<br/><br/>
-          <input type="checkbox" name="invisibleCheckbox" style="display: none">Invisible<br/><br/>
-          <textarea id="text-area" rows="1" cols="60"></textarea>
-          <textarea id="empty-text-area" rows="1" cols="1"></textarea>
-          <input id="age" name="age" value="18"/>
-          <input id="login" type="submit" value="Log in"/>
-        </fieldset>
-      </form>
-    </div>
+<br/>
+<div style="width: 400px">
+  <form action="#submitted-form" method="post">
+    <fieldset title="Login form">
+      <label> Username:
+        <input name="username" value="" readonly="readonly"/>
+      </label> <br/>
+      <label>Password:
+        <input name="password" value="" maxlength="24"/>
+      </label> <br/>
+      <input type="checkbox" name="rememberMe">Remember me<br/><br/>
+      <input type="checkbox" name="invisibleCheckbox" style="display: none">Invisible<br/><br/>
+      <textarea id="text-area" rows="1" cols="60"></textarea>
+      <textarea id="empty-text-area" rows="1" cols="1"></textarea>
+      <input id="age" name="age" value="18"/>
+      <input id="login" type="submit" value="Log in"/>
+    </fieldset>
+  </form>
+</div>
 
-    <div id="container"></div>
+<div id="container"></div>
 
-    <table id="user-table">
-      <thead>
-        <tr>
-          <th style="font-size:24;">First name</th>
-          <th>Last name</th>
-          <th>Age</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="firstname">Bob</td>
-          <td class="lastname">Dilan</td>
-          <td class="age">25</td>
-        </tr>
-        <tr>
-          <td class="firstname">John</td>
-          <td class="lastname">Smith</td>
-          <td class="age">28</td>
-        </tr>
-      </tbody>
-    </table>
+<table id="user-table">
+  <thead>
+  <tr>
+    <th style="font-size:24;">First name</th>
+    <th>Last name</th>
+    <th>Age</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="firstname">Bob</td>
+    <td class="lastname">Dilan</td>
+    <td class="age">25</td>
+  </tr>
+  <tr>
+    <td class="firstname">John</td>
+    <td class="lastname">Smith</td>
+    <td class="age">28</td>
+  </tr>
+  </tbody>
+</table>
 
-    <a href="long_ajax_request.html">Want to see ajax in action?</a>
+<a href="long_ajax_request.html">Want to see ajax in action?</a>
 
-    <script type="text/javascript">
+<script type="text/javascript">
       var commandDuration = 100;
 
       setTimeout(function() {document.getElementById('container').innerHTML = '<div id="dynamic-content-container"></div>';}, commandDuration*3);
       setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML = '<span id="dynamic-content">dynamic content</span>';}, commandDuration*4);
       setTimeout(function() {document.getElementById('dynamic-content-container').innerHTML += '<span id="dynamic-content2">dynamic content2</span>';}, commandDuration*5);
-    </script>
 
-    <h1>Now typing: </h1>
-    <h3 id="username-mirror">_</h3>
-    <span id="username-blur-counter">_</span>
-    <div style="width: 400px">
-      <form>
-        <fieldset title="Login form">
-          <label> Username:
-            <input id="username" name="username" value="" onchange="onUsernameChanged(this);" onblur="onUsernameBlur();"/>
-          </label> <br/>
-          <input id="password" name="password" type="password"/>
-        </fieldset>
-      </form>
-    </div>
+</script>
 
-    <span id="hello-world">Hello&nbsp;world</span>
+<h1>Now typing: </h1>
+<h3 id="username-mirror">_</h3>
+<span id="username-blur-counter">_</span>
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username" value="" onchange="onUsernameChanged(this);" onblur="onUsernameBlur();"/>
+      </label> <br/>
+      <input id="password" name="password" type="password"/>
+    </fieldset>
+  </form>
+</div>
 
-    <div style="display: none;"
-         id="gopher"
-         class="invisible-with-multiple-attributes"
-         data-animal-id="111"
-         onClick="void(0);"
-         onChange="console.log(this);"
-         placeholder="Животное"
-         ng-class="widget"
-         ng-click="none">Суслик</div>
-  </body>
+<span id="hello-world">Hello&nbsp;world</span>
+
+<div style="display: none;"
+     id="gopher"
+     class="invisible-with-multiple-attributes"
+     data-animal-id="111"
+     onClick="void(0);"
+     onChange="console.log(this);"
+     placeholder="Животное"
+     ng-class="widget"
+     ng-click="none">Суслик
+</div>
+</body>
 </html>

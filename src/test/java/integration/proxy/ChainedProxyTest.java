@@ -1,5 +1,8 @@
 package integration.proxy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
@@ -10,13 +13,11 @@ import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.filters.ResponseFilter;
 import net.lightbody.bmp.util.HttpMessageContents;
 import net.lightbody.bmp.util.HttpMessageInfo;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -24,23 +25,33 @@ import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Selenide runs its own proxy server.
  * User can also configure Selenide to use his proxy server (for Selenide, this is "chained" proxy).
- *
+ * <p>
  * This test verifies that both these proxies work well together.
  */
-public class ChainedProxyTest extends IntegrationTest {
-  static BrowserMobProxy chainedProxy;
-  List<String> visitedUrls = new ArrayList<>();
+class ChainedProxyTest extends IntegrationTest {
+  private static BrowserMobProxy chainedProxy;
+  private List<String> visitedUrls = new ArrayList<>();
 
-  @Before
-  public void setUp() {
-    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-    assumeFalse(isHtmlUnit()); // Why it's not working? It's magic for me...
+  @AfterAll
+  static void tearDown() {
+    WebDriverRunner.setProxy(null);
+    close();
+    if (chainedProxy != null) {
+      chainedProxy.stop();
+    }
+  }
+
+  @BeforeEach
+  void setUp() {
+    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+    Assumptions.assumeFalse(isHtmlUnit()); // Why it's not working? It's magic for me...
 
     if (chainedProxy == null) {
       close();
@@ -64,17 +75,8 @@ public class ChainedProxyTest extends IntegrationTest {
     visitedUrls.clear();
   }
 
-  @AfterClass
-  public static void tearDown() {
-    WebDriverRunner.setProxy(null);
-    close();
-    if (chainedProxy != null) {
-      chainedProxy.stop();
-    }
-  }
-
   @Test
-  public void selenideProxyCanWorkWithUserProvidedChainedProxy() {
+  void selenideProxyCanWorkWithUserProvidedChainedProxy() {
     openFile("file_upload_form.html");
     $("#cv").uploadFromClasspath("hello_world.txt");
     $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
@@ -85,7 +87,7 @@ public class ChainedProxyTest extends IntegrationTest {
     assertEquals(2, server.uploadedFiles.size());
 
     // Assert that "chained" proxy has intercepted requests
-    assertTrue("Expected at least 2 urls, but got: " + visitedUrls, visitedUrls.size() >= 2);
+    assertTrue(visitedUrls.size() >= 2, "Expected at least 2 urls, but got: " + visitedUrls);
     assertThat(visitedUrls.get(0), containsString("/file_upload_form.html"));
     assertThat(visitedUrls.get(visitedUrls.size() - 1), containsString("/upload"));
   }

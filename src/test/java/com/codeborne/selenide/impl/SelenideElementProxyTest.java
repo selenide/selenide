@@ -219,7 +219,8 @@ class SelenideElementProxyTest {
 
   @Test
   void shouldNotRetry_onIllegalArgumentException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")), is(false));
+    MatcherAssert.assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")),
+      is(false));
   }
 
   @Test

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::jquery</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
-    <script type="text/javascript">
+<head>
+  <title>Test::jquery</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript">
       function onUsernameChanged(input) {
         var val = $('#username').val();
         $('#log').append('onUsernameChanged(' + val + ')<br/>');
@@ -34,30 +34,31 @@
           e.stopImmediatePropagation();
         });
       });
-    </script>
-  </head>
-  <body>
-    <h1>Page with JQuery</h1>
 
-    <br/>
-    <h1>Now typing: </h1>
-    <div id="log"></div>
-    <h2></h2>
-    <div style="width: 400px">
-      <form>
-        <fieldset title="Login form">
-          <label> Username:
-            <input id="username" name="username" value="" onchange="onUsernameChanged(this);"/>
-          </label> <br/>
-          <label>Password:
-            <input id="password" name="password" class="masked" value="" onchange="onPasswordChanged();"/>
-          </label> <br/>
-          <input type="checkbox" id="rememberMe" name="rememberMe" onchange="onRememberMeChanged();">Remember me<br/><br/>
-        </fieldset>
-        <input type="button" id="double-clickable-button" value="double click me">
-      </form>
-    </div>
+  </script>
+</head>
+<body>
+<h1>Page with JQuery</h1>
 
-    <div id="hoverable" onmouseover="onHover(this);" onmouseout="offHover(this);">It's not hover</div>
-  </body>
+<br/>
+<h1>Now typing: </h1>
+<div id="log"></div>
+<h2></h2>
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username" value="" onchange="onUsernameChanged(this);"/>
+      </label> <br/>
+      <label>Password:
+        <input id="password" name="password" class="masked" value="" onchange="onPasswordChanged();"/>
+      </label> <br/>
+      <input type="checkbox" id="rememberMe" name="rememberMe" onchange="onRememberMeChanged();">Remember me<br/><br/>
+    </fieldset>
+    <input type="button" id="double-clickable-button" value="double click me">
+  </form>
+</div>
+
+<div id="hoverable" onmouseover="onHover(this);" onmouseout="offHover(this);">It's not hover</div>
+</body>
 </html>

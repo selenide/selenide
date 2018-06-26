@@ -1,20 +1,28 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-public class ConditionsTest extends IntegrationTest {
-  @Before
-  public void openTestPageWithJQuery() {
+class ConditionsTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void andShouldCheckConditions() {
+  void andShouldCheckConditions() {
     $("#multirowTable").should(and("both true", be(visible), have(cssClass("table"))));
     $("#multirowTable").shouldNot(and("first true", be(visible), have(cssClass("table1"))));
     $("#multirowTable").shouldNot(and("second true", be(hidden), have(cssClass("table"))));
@@ -22,7 +30,7 @@ public class ConditionsTest extends IntegrationTest {
   }
 
   @Test
-  public void orShouldCheckConditions() {
+  void orShouldCheckConditions() {
     $("#multirowTable").should(or("both true", be(visible), have(cssClass("table"))));
     $("#multirowTable").should(or("first true", be(visible), have(cssClass("table1"))));
     $("#multirowTable").should(or("second true", be(hidden), have(cssClass("table"))));
@@ -30,13 +38,13 @@ public class ConditionsTest extends IntegrationTest {
   }
 
   @Test
-  public void notShouldCheckConditions() {
+  void notShouldCheckConditions() {
     $("#multirowTable").should(be(visible));
     $("#multirowTable").should(not(be(hidden)));
   }
 
   @Test
-  public void userCanUseOrCondition() {
+  void userCanUseOrCondition() {
     Condition one_of_conditions = or("baskerville", text("Basker"), text("Walle"));
     $("#baskerville").shouldBe(one_of_conditions);
 

@@ -113,7 +113,8 @@ class DownloadFileWithProxyServerTest {
 
   @Test
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
-    Assertions.assertThrows(FileNotFoundException.class, () -> {
+    Assertions.assertThrows(FileNotFoundException.class,
+      () -> {
         emulateServerResponseWithFiles();
         command.download(linkWithHref, link, proxy);
       },

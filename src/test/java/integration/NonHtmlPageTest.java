@@ -1,15 +1,15 @@
 package integration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.WebDriverRunner.source;
-import static org.junit.Assert.assertTrue;
 
-public class NonHtmlPageTest extends IntegrationTest {
+class NonHtmlPageTest extends IntegrationTest {
   @Test
-  public void canOpenNonHtmlPage() {
+  void canOpenNonHtmlPage() {
     openFile("hello_world.txt");
     String source = source();
-    assertTrue("Actual source: " + source, source.contains("Hello, WinRar!"));
+    Assertions.assertTrue(source.contains("Hello, WinRar!"), "Actual source: " + source);
   }
 }

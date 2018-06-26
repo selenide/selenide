@@ -2,42 +2,43 @@ package integration.customcommands;
 
 import com.codeborne.selenide.commands.Commands;
 import integration.IntegrationTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static integration.customcommands.MyFramework.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static integration.customcommands.MyFramework.$_;
+import static integration.customcommands.MyFramework.quadrupleClickCounter;
+import static integration.customcommands.MyFramework.tripleClickCounter;
 
-public class CustomCommandsTest extends IntegrationTest {
-  @Before
-  public void setUpFramework() {
+class CustomCommandsTest extends IntegrationTest {
+  @BeforeEach
+  void setUpFramework() {
     MyFramework.setUp();
     tripleClickCounter.set(0);
     quadrupleClickCounter.set(0);
   }
-  
+
   @Test
-  public void userCanAddAnyCustomCommandsToSelenide() {
+  void userCanAddAnyCustomCommandsToSelenide() {
     $_("#valid-image").tripleClick().tripleClick().tripleClick().click();
     $_("#invalid-image").tripleClick().quadrupleClick();
 
-    assertTrue("Can also use standard Selenium methods", $_("#valid-image img").isDisplayed());
+    Assertions.assertTrue($_("#valid-image img").isDisplayed(), "Can also use standard Selenium methods");
     $_("#valid-image img").shouldBe(visible);
-    
-    assertEquals(4, tripleClickCounter.get());
-    assertEquals(1, quadrupleClickCounter.get());
+
+    Assertions.assertEquals(4, tripleClickCounter.get());
+    Assertions.assertEquals(1, quadrupleClickCounter.get());
   }
 
-  @Before
-  public void openTestPage() {
+  @BeforeEach
+  void openTestPage() {
     openFile("page_with_images.html");
   }
 
-  @After
-  public void resetSelenideDefaultCommands() {
+  @AfterEach
+  void resetSelenideDefaultCommands() {
     Commands.getInstance().resetDefaults();
   }
 }

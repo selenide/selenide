@@ -1,8 +1,9 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -11,20 +12,19 @@ import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assume.assumeFalse;
 
-public class InputFieldTest extends IntegrationTest {
+class InputFieldTest extends IntegrationTest {
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     open("/html5_input.html?" + System.currentTimeMillis());
   }
 
   @Test
-  public void selenideClearTest() {
-    assumeFalse("Fails with StringIndexOutOfBoundsException: start > length()", isHtmlUnit());
-    assumeFalse("Fails with Expected: '456', but: was ''", isPhantomjs());
-    
+  void selenideClearTest() {
+    Assumptions.assumeFalse(isHtmlUnit(), "Fails with StringIndexOutOfBoundsException: start > length()");
+    Assumptions.assumeFalse(isPhantomjs(), "Fails with Expected: '456', but: was ''");
+
     SelenideElement input = $("#id1");
     assertThat(input.getValue(), is(equalTo("")));
 

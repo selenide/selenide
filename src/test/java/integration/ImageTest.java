@@ -1,30 +1,30 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
 
-public class ImageTest extends IntegrationTest {
-  @Before
-  public void openTestPageWithImages() {
+class ImageTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithImages() {
     openFile("page_with_images.html");
   }
 
   @Test
-  public void userCanCheckIfImageIsLoadedCorrectly() {
-    assumeFalse(isHtmlUnit());
-    
-    assertTrue($("#valid-image img").isImage());
-    assertFalse($("#invalid-image img").isImage());
+  void userCanCheckIfImageIsLoadedCorrectly() {
+    Assumptions.assumeFalse(isHtmlUnit());
+
+    Assertions.assertTrue($("#valid-image img").isImage());
+    Assertions.assertFalse($("#invalid-image img").isImage());
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void isImageIsOnlyApplicableForImages() {
-    $("h1").isImage();
+  @Test
+  void isImageIsOnlyApplicableForImages() {
+    Assertions.assertThrows(IllegalArgumentException.class,
+      () -> $("h1").isImage());
   }
 }
