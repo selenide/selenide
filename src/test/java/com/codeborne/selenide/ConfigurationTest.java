@@ -1,21 +1,22 @@
 package com.codeborne.selenide;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ConfigurationTest {
+class ConfigurationTest extends UnitTest {
   @Test
   void getsReportsUrlFromSystemProperty() {
     System.setProperty("selenide.reportsUrl", "http://ci.org/job/123/artifact/");
-    Assertions.assertEquals("http://ci.org/job/123/artifact/", Configuration.getReportsUrl());
+    assertThat(Configuration.getReportsUrl())
+      .isEqualTo("http://ci.org/job/123/artifact/");
   }
 
   @Test
   void canConstructReportsUrlFromJenkinsProperty() {
     System.setProperty("BUILD_URL", "http://ci.org/job/123/");
-    Assertions.assertEquals("http://ci.org/job/123/artifact/", Configuration.getReportsUrl());
+    assertThat(Configuration.getReportsUrl())
+      .isEqualTo("http://ci.org/job/123/artifact/");
   }
 
   @AfterEach

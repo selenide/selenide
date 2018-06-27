@@ -5,7 +5,6 @@ import java.net.URL;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockWebDriverExtension.class)
-class WebDriverRunnerTest {
+class WebDriverRunnerTest extends UnitTest {
   private static WebDriver driver;
 
   private URL url = currentThread().getContextClassLoader().getResource("start_page.html");
@@ -56,7 +55,8 @@ class WebDriverRunnerTest {
     WebDriverRunner.closeWebDriver();
     Configuration.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
 
-    Assertions.assertSame(driver, WebDriverRunner.getWebDriver());
+    assertThat(WebDriverRunner.getWebDriver())
+      .isEqualTo(driver);
   }
 
   @Test
@@ -66,7 +66,8 @@ class WebDriverRunnerTest {
     WebDriverRunner.setWebDriver(myDriver);
 
     open(url);
-    Assertions.assertSame(myDriver, WebDriverRunner.getWebDriver());
+    assertThat(WebDriverRunner.getWebDriver())
+      .isEqualTo(myDriver);
   }
 
   @Test
@@ -81,39 +82,45 @@ class WebDriverRunnerTest {
   @Test
   void chrome_supportsAlerts() {
     Configuration.browser = "chrome";
-    Assertions.assertTrue(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isTrue();
   }
 
   @Test
   void headless_chrome_supportsAlerts() {
     Configuration.browser = "chrome";
     Configuration.headless = true;
-    Assertions.assertTrue(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isTrue();
   }
 
   @Test
   void firefox_supportsAlerts() {
     Configuration.browser = "firefox";
-    Assertions.assertTrue(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isTrue();
   }
 
   @Test
   void headless_firefox_supportsAlerts() {
     Configuration.browser = "firefox";
     Configuration.headless = true;
-    Assertions.assertTrue(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isTrue();
   }
 
   @Test
   void safari_doesNotSupportAlerts() {
     Configuration.browser = "safari";
-    Assertions.assertFalse(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isFalse();
   }
 
   @Test
   void phantomjs_doesNotSupportAlerts() {
     Configuration.browser = "phantomjs";
-    Assertions.assertFalse(WebDriverRunner.supportsModalDialogs());
+    assertThat(WebDriverRunner.supportsModalDialogs())
+      .isFalse();
   }
 
   private static class CustomWebDriverProvider implements WebDriverProvider {

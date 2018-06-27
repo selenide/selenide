@@ -9,89 +9,110 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.instanceOf;
 
-class CollectionConditionTest {
+class CollectionConditionTest extends UnitTest {
   @Test
   void testSizeIsEmptyListSize() {
     CollectionCondition collectionCondition = CollectionCondition.size(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(ListSize.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(ListSize.class);
   }
 
   @Test
   void testSizeGreaterThan() {
     CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThan(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeGreaterThan.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(SizeGreaterThan.class);
   }
 
   @Test
   void testSizeGraterThenOrEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThanOrEqual(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeGreaterThanOrEqual.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(SizeGreaterThanOrEqual.class);
   }
 
   @Test
   void testSizeLessThan() {
     CollectionCondition collectionCondition = CollectionCondition.sizeLessThan(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeLessThan.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(SizeLessThan.class);
   }
 
   @Test
   void testSizeLessThanOrEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeLessThanOrEqual(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeLessThanOrEqual.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(SizeLessThanOrEqual.class);
   }
 
   @Test
   void testSizeNotEqual() {
     CollectionCondition collectionCondition = CollectionCondition.sizeNotEqual(10);
-    MatcherAssert.assertThat(collectionCondition, instanceOf(SizeNotEqual.class));
+    assertThat(collectionCondition)
+      .isInstanceOf(SizeNotEqual.class);
   }
 
   @Test
   void testTextsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.texts("One", "Two", "Three");
-    MatcherAssert.assertThat(collectionCondition, instanceOf(Texts.class));
-    Assertions.assertEquals("Texts [One, Two, Three]", collectionCondition.toString(), "Texts content");
+    assertThat(collectionCondition)
+      .isInstanceOf(Texts.class);
+    assertThat(collectionCondition)
+      .as("Texts content")
+      .hasToString("Texts [One, Two, Three]");
   }
 
   @Test
   void testTextsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.texts(asList("One", "Two", "Three"));
-    MatcherAssert.assertThat(collectionCondition, instanceOf(Texts.class));
-    Assertions.assertEquals("Texts [One, Two, Three]", collectionCondition.toString(), "Texts content");
+    assertThat(collectionCondition)
+      .isInstanceOf(Texts.class);
+    assertThat(collectionCondition)
+      .as("Texts content")
+      .hasToString("Texts [One, Two, Three]");
   }
 
   @Test
   void testExactTextsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts("One", "Two", "Three");
-    MatcherAssert.assertThat(collectionCondition, instanceOf(ExactTexts.class));
-    Assertions.assertEquals("Exact texts [One, Two, Three]", collectionCondition.toString(), "Exact texts content");
+    assertThat(collectionCondition)
+      .isInstanceOf(ExactTexts.class);
+    assertThat(collectionCondition)
+      .as("Exact texts content")
+      .hasToString("Exact texts [One, Two, Three]");
   }
 
   @Test
   void testExactTextsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts(asList("One", "Two", "Three"));
-    MatcherAssert.assertThat(collectionCondition, instanceOf(ExactTexts.class));
-    Assertions.assertEquals("Exact texts [One, Two, Three]", collectionCondition.toString(), "Exact texts content");
+    assertThat(collectionCondition)
+      .isInstanceOf(ExactTexts.class);
+    assertThat(collectionCondition)
+      .as("Exact texts content")
+      .hasToString("Exact texts [One, Two, Three]");
   }
 
   @Test
   void testTextsInAnyOrderWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder("One", "Two", "Three");
-    MatcherAssert.assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
-    Assertions.assertEquals("TextsInAnyOrder [One, Two, Three]", collectionCondition.toString(), "Text in any order content");
+    assertThat(collectionCondition)
+      .isInstanceOf(TextsInAnyOrder.class);
+    assertThat(collectionCondition)
+      .as("Text in any order content")
+      .hasToString("TextsInAnyOrder [One, Two, Three]");
   }
 
   @Test
   void testTextsInAnyOrderWithStringsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder(asList("One", "Two", "Three"));
-    MatcherAssert.assertThat(collectionCondition, instanceOf(TextsInAnyOrder.class));
-    Assertions.assertEquals("TextsInAnyOrder [One, Two, Three]", collectionCondition.toString(), "Text in any order content");
+    assertThat(collectionCondition)
+      .isInstanceOf(TextsInAnyOrder.class);
+    assertThat(collectionCondition)
+      .as("Text in any order content")
+      .hasToString("TextsInAnyOrder [One, Two, Three]");
   }
 }

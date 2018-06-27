@@ -1,25 +1,27 @@
 package com.codeborne.selenide;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchTextConditionTest {
+class MatchTextConditionTest extends UnitTest {
   @Test
   void displaysHumanReadableName() {
-    Assertions.assertEquals("match text 'abc'", Condition.matchText("abc").toString());
+    assertThat(Condition.matchText("abc"))
+      .hasToString("match text 'abc'");
   }
 
   @Test
   void matchesWholeString() {
-    Assertions.assertTrue(Condition.matchText("Chuck Norris' gmail account is gmail@chuck.norris")
-      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
+    assertThat(Condition.matchText("Chuck Norris' gmail account is gmail@chuck.norris")
+      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .isTrue();
 
-    Assertions.assertTrue(Condition.matchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
-      .apply(element("Chuck Norris' gmail    account is gmail@chuck.norris")));
+    assertThat(Condition.matchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
+      .apply(element("Chuck Norris' gmail    account is gmail@chuck.norris")))
+      .isTrue();
   }
 
   private WebElement element(String text) {
@@ -30,8 +32,14 @@ class MatchTextConditionTest {
 
   @Test
   void matchesSubstring() {
-    Assertions.assertTrue(Condition.matchText("Chuck").apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
-    Assertions.assertTrue(Condition.matchText("Chuck\\s*Norris").apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
-    Assertions.assertTrue(Condition.matchText("gmail account").apply(element("Chuck Norris' gmail account is gmail@chuck.norris")));
+    assertThat(Condition.matchText("Chuck")
+      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .isTrue();
+    assertThat(Condition.matchText("Chuck\\s*Norris")
+      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .isTrue();
+    assertThat(Condition.matchText("gmail account")
+      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .isTrue();
   }
 }
