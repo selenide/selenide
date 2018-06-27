@@ -51,7 +51,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts (each collection element CONTAINS corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition texts(String... expectedTexts) {
@@ -60,7 +60,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts (each collection element CONTAINS corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition texts(List<String> expectedTexts) {
@@ -69,7 +69,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition textsInAnyOrder(String... expectedTexts) {
@@ -78,7 +78,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts in any order (each collection element CONTAINS corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition textsInAnyOrder(List<String> expectedTexts) {
@@ -87,7 +87,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts (each collection element EQUALS TO corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition exactTexts(String... expectedTexts) {
@@ -96,7 +96,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   /**
    * Checks that given collection has given texts (each collection element EQUALS TO corresponding text)
-   * <p>
+   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
