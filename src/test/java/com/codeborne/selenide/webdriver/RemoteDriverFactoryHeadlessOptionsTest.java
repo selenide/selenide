@@ -1,76 +1,79 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.Configuration;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.UnitTest;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class RemoteDriverFactoryHeadlessOptionsTest {
-
+class RemoteDriverFactoryHeadlessOptionsTest extends UnitTest {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
   private Proxy proxy = mock(Proxy.class);
 
-  @Before
-  @After
-  public void tearDown() {
+  @BeforeEach
+  @AfterEach
+  void tearDown() {
     Configuration.browser = "";
     Configuration.headless = false;
   }
 
   @Test
-  public void shouldNotAddChromeHeadlessOptions() {
+  void shouldNotAddChromeHeadlessOptions() {
     Configuration.headless = true;
     Configuration.browser = "chrome";
 
     Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
 
-    assertThat(launchArguments, hasItems("--headless"));
-    assertThat(launchArguments, hasItems("--disable-gpu"));
+    assertThat(launchArguments)
+      .contains("--headless");
+    assertThat(launchArguments)
+      .contains("--disable-gpu");
   }
 
   @Test
-  public void shouldNotAddFirefoxHeadlessOptions() {
+  void shouldNotAddFirefoxHeadlessOptions() {
     Configuration.headless = true;
     Configuration.browser = "firefox";
 
     Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
 
-    assertThat(launchArguments, hasItems("-headless"));
+    assertThat(launchArguments)
+      .contains("--headless");
   }
 
   @Test
-  public void shouldAddChromeHeadlessOptions() {
+  void shouldAddChromeHeadlessOptions() {
     Configuration.browser = "chrome";
 
     Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
 
-    assertThat(launchArguments, not(hasItems("--headless")));
-    assertThat(launchArguments, not(hasItems("--disable-gpu")));
+    assertThat(launchArguments)
+      .doesNotContain("--headless");
+    assertThat(launchArguments)
+      .doesNotContain("--disable-gpu");
   }
 
   @Test
-  public void shouldAddFirefoxHeadlessOptions() {
+  void shouldAddFirefoxHeadlessOptions() {
     Configuration.browser = "firefox";
 
     Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
 
-    assertThat(launchArguments, not(hasItems("-headless")));
+    assertThat(launchArguments)
+      .doesNotContain("--headless");
   }
-
 }
