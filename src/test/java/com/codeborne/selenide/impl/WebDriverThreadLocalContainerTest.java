@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -25,12 +26,6 @@ import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.close;
 import static java.lang.Thread.currentThread;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -40,9 +35,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class WebDriverThreadLocalContainerTest {
-  private static final Logger log =
-    Logger.getLogger(WebDriverThreadLocalContainer.class.getName()); // matches the logger in the affected class
+class WebDriverThreadLocalContainerTest extends UnitTest {
+  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
   private final WebDriverThreadLocalContainer container = spy(new WebDriverThreadLocalContainer());
@@ -88,8 +82,10 @@ class WebDriverThreadLocalContainerTest {
 
     ArgumentCaptor<Proxy> captor = ArgumentCaptor.forClass(Proxy.class);
     verify(container.factory).createWebDriver(captor.capture());
-    assertThat(captor.getValue().getHttpProxy(), is(notNullValue()));
-    assertThat(captor.getValue().getSslProxy(), is(notNullValue()));
+    assertThat(captor.getValue().getHttpProxy())
+      .isNotNull();
+    assertThat(captor.getValue().getSslProxy())
+      .isNotNull();
   }
 
   @Test
@@ -98,7 +94,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
 
-    assertSame(webdriver, container.getAndCheckWebDriver());
+    assertThat(container.getAndCheckWebDriver())
+      .isEqualTo(webdriver);
     verify(container).isBrowserStillOpen(any());
   }
 
@@ -108,7 +105,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
 
-    assertSame(webdriver, container.getAndCheckWebDriver());
+    assertThat(container.getAndCheckWebDriver())
+      .isEqualTo(webdriver);
     verify(container, never()).isBrowserStillOpen(any());
   }
 
@@ -117,7 +115,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     doReturn("blah").when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver), is(true));
+    assertThat(container.isBrowserStillOpen(webdriver))
+      .isTrue();
   }
 
   @Test
@@ -125,7 +124,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(UnreachableBrowserException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver), is(false));
+    assertThat(container.isBrowserStillOpen(webdriver))
+      .isFalse();
   }
 
   @Test
@@ -133,7 +133,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchWindowException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver), is(false));
+    assertThat(container.isBrowserStillOpen(webdriver))
+      .isFalse();
   }
 
   @Test
@@ -141,7 +142,8 @@ class WebDriverThreadLocalContainerTest {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchSessionException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver), is(false));
+    assertThat(container.isBrowserStillOpen(webdriver))
+      .isFalse();
   }
 
   @Test
@@ -161,8 +163,10 @@ class WebDriverThreadLocalContainerTest {
 
     String capturedLog = getTestCapturedLog();
     String currentThreadId = String.valueOf(currentThread().getId());
-    assertThat(capturedLog, containsString(String.format("Close webdriver: %s -> %s", currentThreadId, mockedWebDriver.toString())));
-    assertThat(capturedLog, containsString(String.format("Close proxy server: %s ->", currentThreadId)));
+    assertThat(capturedLog)
+      .contains(String.format("Close webdriver: %s -> %s", currentThreadId, mockedWebDriver.toString()));
+    assertThat(capturedLog)
+      .contains(String.format("Close proxy server: %s ->", currentThreadId));
   }
 
   private static String getTestCapturedLog() {
@@ -178,7 +182,8 @@ class WebDriverThreadLocalContainerTest {
       container.getWebDriver();
       fail("expected IllegalStateException");
     } catch (IllegalStateException expected) {
-      assertThat(expected.getMessage(), containsString("reopenBrowserOnFail=false"));
+      assertThat(expected)
+        .hasMessageContaining("reopenBrowserOnFail=false");
     }
   }
 }

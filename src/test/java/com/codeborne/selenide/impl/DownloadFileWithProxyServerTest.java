@@ -4,12 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +19,6 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -34,7 +32,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockWebDriverExtension.class)
-class DownloadFileWithProxyServerTest {
+class DownloadFileWithProxyServerTest extends UnitTest {
   private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
   private WebDriver webdriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
@@ -59,7 +57,8 @@ class DownloadFileWithProxyServerTest {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
     File file = command.download(linkWithHref, link, proxy);
-    MatcherAssert.assertThat(file.getName(), is("report.pdf"));
+    assertThat(file.getName())
+      .isEqualTo("report.pdf");
 
     verify(filter).activate();
     verify(link).click();
@@ -82,7 +81,8 @@ class DownloadFileWithProxyServerTest {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
     File file = command.download(linkWithHref, link, proxy);
-    MatcherAssert.assertThat(file.getName(), is("report.pdf"));
+    assertThat(file.getName())
+      .isEqualTo("report.pdf");
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
     verify(webdriver).close();
@@ -103,7 +103,8 @@ class DownloadFileWithProxyServerTest {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
     File file = command.download(linkWithHref, link, proxy);
-    MatcherAssert.assertThat(file.getName(), is("report.pdf"));
+    assertThat(file.getName())
+      .isEqualTo("report.pdf");
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
     verify(webdriver, never()).close();
@@ -113,11 +114,10 @@ class DownloadFileWithProxyServerTest {
 
   @Test
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
-    Assertions.assertThrows(FileNotFoundException.class,
-      () -> {
-        emulateServerResponseWithFiles();
-        command.download(linkWithHref, link, proxy);
-      },
-      "Failed to download file <a href='report.pdf'>report</a>");
+    emulateServerResponseWithFiles();
+
+    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }
 }

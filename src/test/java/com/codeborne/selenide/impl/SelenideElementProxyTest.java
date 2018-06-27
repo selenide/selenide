@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -13,10 +14,8 @@ import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.google.common.collect.ImmutableMap;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -37,14 +36,12 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementProxyTest {
+class SelenideElementProxyTest extends UnitTest {
   private static final Logger log = Logger.getLogger(SelenideElementProxyTest.class.getName());
 
   private RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
@@ -94,28 +91,32 @@ class SelenideElementProxyTest {
   @Test
   void elementNotFound() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
-    Assertions.assertThrows(ElementNotFound.class, () -> $("#firstName").shouldBe(visible));
+    assertThatThrownBy(() -> $("#firstName").shouldBe(visible))
+      .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
   void elementFoundButNotMatched() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenReturn(false);
-    Assertions.assertThrows(ElementShould.class, () -> $("#firstName").shouldBe(visible));
+    assertThatThrownBy(() -> $("#firstName").shouldBe(visible))
+      .isInstanceOf(ElementShould.class);
   }
 
   @Test
   void elementFoundButInvisible() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenThrow(new WebDriverException("failed to call isDisplayed"));
-    Assertions.assertThrows(ElementShould.class, () -> $("#firstName").shouldBe(visible));
+    assertThatThrownBy(() -> $("#firstName").shouldBe(visible))
+      .isInstanceOf(ElementShould.class);
   }
 
   @Test
   void elementFoundButConditionCheckFailed() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.isDisplayed()).thenReturn(true);
-    Assertions.assertThrows(ElementShould.class, () -> $("#firstName").shouldHave(text("goodbye")));
+    assertThatThrownBy(() -> $("#firstName").shouldHave(text("goodbye")))
+      .isInstanceOf(ElementShould.class);
   }
 
   @Test
@@ -145,14 +146,16 @@ class SelenideElementProxyTest {
   void webdriverReportsInvalidXpath_using_should() {
     when(webdriver.findElement(By.cssSelector("#firstName")))
       .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
-    Assertions.assertThrows(InvalidSelectorException.class, () -> $("#firstName").should(disappear));
+    assertThatThrownBy(() -> $("#firstName").should(disappear))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void webdriverReportsInvalidXpath_using_shouldNot() {
     when(webdriver.findElement(By.cssSelector("#firstName")))
       .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
-    Assertions.assertThrows(InvalidSelectorException.class, () -> $("#firstName").shouldNot(exist));
+    assertThatThrownBy(() -> $("#firstName").shouldNot(exist))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
@@ -173,14 +176,16 @@ class SelenideElementProxyTest {
     selEl.setValue("ABC");
   }
 
-  private LogEventListener createListener(final String selector, final String subject,
-                                          final EventStatus status) {
+  private LogEventListener createListener(final String selector, final String subject, final EventStatus status) {
     return currentLog -> {
       String format = String.format("{%s} %s: %s", currentLog.getElement(), currentLog.getSubject(), currentLog.getStatus());
       log.info(format);
-      MatcherAssert.assertThat(currentLog.getElement(), containsString(selector));
-      MatcherAssert.assertThat(currentLog.getSubject(), containsString(subject));
-      Assertions.assertEquals(currentLog.getStatus(), status);
+      assertThat(currentLog.getElement())
+        .contains(selector);
+      assertThat(currentLog.getSubject())
+        .contains(subject);
+      assertThat(currentLog.getStatus())
+        .isEqualTo(status);
     };
   }
 
@@ -214,37 +219,43 @@ class SelenideElementProxyTest {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
 
-    Assertions.assertThrows(ElementShould.class, () -> $("#firstName").shouldHave(value("ABC")));
+    assertThatThrownBy(() -> $("#firstName").shouldHave(value("ABC")))
+      .isInstanceOf(ElementShould.class);
   }
 
   @Test
   void shouldNotRetry_onIllegalArgumentException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")),
-      is(false));
+    assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")))
+      .isFalse();
   }
 
   @Test
   void shouldNotRetry_onFileNotFoundException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new FileNotFoundException("bla")), is(false));
+    assertThat(shouldRetryAfterError(new FileNotFoundException("bla")))
+      .isFalse();
   }
 
   @Test
   void shouldNotRetry_onClassLoadingException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new ClassNotFoundException("bla")), is(false));
+    assertThat(shouldRetryAfterError(new ClassNotFoundException("bla")))
+      .isFalse();
   }
 
   @Test
   void shouldNotRetry_onClassDefLoadingException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new NoClassDefFoundError("bla")), is(false));
+    assertThat(shouldRetryAfterError(new NoClassDefFoundError("bla")))
+      .isFalse();
   }
 
   @Test
   void shouldRetry_onAssertionError() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new AssertionError("bla")), is(true));
+    assertThat(shouldRetryAfterError(new AssertionError("bla")))
+      .isTrue();
   }
 
   @Test
   void shouldRetry_onAnyOtherException() {
-    MatcherAssert.assertThat(shouldRetryAfterError(new Exception("bla")), is(true));
+    assertThat(shouldRetryAfterError(new Exception("bla")))
+      .isTrue();
   }
 }

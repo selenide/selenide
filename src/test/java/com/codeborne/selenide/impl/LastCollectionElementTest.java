@@ -6,26 +6,26 @@ import java.util.Collections;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class LastCollectionElementTest {
+class LastCollectionElementTest extends UnitTest {
   private WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
   private SelenideElement mockedElement1 = mock(SelenideElement.class);
   private SelenideElement mockedElement2 = mock(SelenideElement.class);
 
   private LastCollectionElement lastCollectionElement;
 
-  @BeforeMethod
-  public void setup() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+  @BeforeEach
+  void setup() throws IllegalAccessException, InvocationTargetException, InstantiationException {
     String element1Text = "Hello";
     when(mockedElement1.getText()).thenReturn(element1Text);
     String element2Text = "World";
@@ -41,45 +41,48 @@ class LastCollectionElementTest {
   }
 
   @Test
-  public void testGetElementMethod() {
-    assertEquals(mockedElement2, lastCollectionElement.getWebElement());
+  void testGetElementMethod() {
+    assertThat(lastCollectionElement.getWebElement())
+      .isEqualTo(mockedElement2);
   }
 
   @Test
-  public void testGetElementMethodWhenStaleElementReferenceExceptionThrown() {
+  void testGetElementMethodWhenStaleElementReferenceExceptionThrown() {
     checkGetElementsMethodWithException(new StaleElementReferenceException("Something went wrong"));
   }
 
   private <T extends Throwable> void checkGetElementsMethodWithException(T exception) {
     doThrow(exception).when(mockedElement2).isEnabled();
     when(mockedElementsCollection.getActualElements()).thenReturn(Collections.singletonList(mockedElement1));
-    assertEquals(mockedElement1, lastCollectionElement.getWebElement());
+    assertThat(lastCollectionElement.getWebElement())
+      .isEqualTo(mockedElement1);
   }
 
   @Test
-  public void testGetElementMethodWhenIndexOutBoundExceptionThrown() {
+  void testGetElementMethodWhenIndexOutBoundExceptionThrown() {
     checkGetElementsMethodWithException(new IndexOutOfBoundsException());
   }
 
   @Test
-  public void testCreateElementNotFoundErrorMethodWhenCollectionIsEmpty() {
+  void testCreateElementNotFoundErrorMethodWhenCollectionIsEmpty() {
     when(mockedElementsCollection.getActualElements()).thenReturn(Collections.emptyList());
     ElementNotFound notFoundError = lastCollectionElement
       .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
-    assertEquals("Element not found {Collection description}\n" +
-      "Expected: visible", notFoundError.getMessage());
+    assertThat(notFoundError)
+      .hasMessage("Element not found {Collection description}\nExpected: visible");
   }
 
   @Test
-  public void testCreateElementNotFoundErrorMethodWhenCollectionIsNotEmpty() {
+  void testCreateElementNotFoundErrorMethodWhenCollectionIsNotEmpty() {
     ElementNotFound notFoundError = lastCollectionElement
       .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
-    assertEquals("Element not found {Collection description.last}\n" +
-      "Expected: be empty", notFoundError.getMessage());
+    assertThat(notFoundError)
+      .hasMessage("Element not found {Collection description.last}\nExpected: be empty");
   }
 
   @Test
-  public void testToString() {
-    assertEquals("Collection description.last", lastCollectionElement.toString());
+  void testToString() {
+    assertThat(lastCollectionElement)
+      .hasToString("Collection description.last");
   }
 }

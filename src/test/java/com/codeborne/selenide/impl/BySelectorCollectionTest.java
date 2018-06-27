@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import java.util.List;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -16,14 +16,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class BySelectorCollectionTest {
+class BySelectorCollectionTest extends UnitTest {
   private SelenideElement mockedWebElement = mock(SelenideElement.class);
 
   @Test
   void testNoParentConstructor() {
     BySelectorCollection bySelectorCollection = new BySelectorCollection(By.id("selenide"));
     String description = bySelectorCollection.description();
-    Assertions.assertEquals("By.id: selenide", description);
+    assertThat(description)
+      .isEqualTo("By.id: selenide");
   }
 
   @Test
@@ -32,21 +33,23 @@ class BySelectorCollectionTest {
 
     BySelectorCollection bySelectorCollection = new BySelectorCollection(mockedWebElement, By.name("selenide"));
     String description = bySelectorCollection.description();
-    Assertions.assertEquals("By.tagName: a/By.name: selenide", description);
+    assertThat(description)
+      .isEqualTo("By.tagName: a/By.name: selenide");
   }
 
   @Test
   void testWithNotWebElementParentConstructor() {
     BySelectorCollection bySelectorCollection = new BySelectorCollection(new NotWebElement(), By.name("selenide"));
     String description = bySelectorCollection.description();
-    Assertions.assertEquals("By.name: selenide", description);
+    assertThat(description)
+      .isEqualTo("By.name: selenide");
   }
 
   @Test
   void testGetElementsMethod() {
     BySelectorCollection bySelectorCollection = spy(new BySelectorCollection(new NotWebElement(), By.name("selenide")));
-    Assertions.assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
-    Assertions.assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
+    assertThat(bySelectorCollection.getElements().get(0))
+      .isEqualTo(mockedWebElement);
     verify(bySelectorCollection, times(1)).getActualElements();
   }
 

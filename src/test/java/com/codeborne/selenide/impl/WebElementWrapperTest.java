@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.google.common.collect.ImmutableMap;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockWebDriverExtension.class)
-class WebElementWrapperTest {
+class WebElementWrapperTest extends UnitTest {
   private WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -49,8 +49,8 @@ class WebElementWrapperTest {
       .executeScript(anyString(), any()))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
-    Assertions.assertEquals("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>",
-      new WebElementWrapper(element).toString());
+    assertThat(new WebElementWrapper(element))
+      .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
   }
 
   @Test
@@ -58,7 +58,8 @@ class WebElementWrapperTest {
     browser = HTMLUNIT;
     when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
 
-    Assertions.assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
+    assertThat(new WebElementWrapper(element))
+      .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 
   @Test
@@ -70,6 +71,7 @@ class WebElementWrapperTest {
       .executeScript(anyString(), any()))
       .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
 
-    Assertions.assertEquals("<h2 class=\"class1 class2\" id=\"id1\"></h2>", new WebElementWrapper(element).toString());
+    assertThat(new WebElementWrapper(element))
+      .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 }

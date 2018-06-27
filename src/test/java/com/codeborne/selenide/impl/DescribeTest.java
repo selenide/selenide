@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementShould;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -13,14 +13,17 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DescribeTest {
-
+class DescribeTest extends UnitTest {
   @Test
   void selectorIsReportedAsIs() {
-    Assertions.assertEquals("#firstName", Describe.selector(By.cssSelector("#firstName")));
-    Assertions.assertEquals("By.id: firstName", Describe.selector(By.id("firstName")));
-    Assertions.assertEquals("By.className: firstName", Describe.selector(By.className("firstName")));
-    Assertions.assertEquals("By.name: firstName", Describe.selector(By.name("firstName")));
+    assertThat(Describe.selector(By.cssSelector("#firstName")))
+      .isEqualTo("#firstName");
+    assertThat(Describe.selector(By.id("firstName")))
+      .isEqualTo("By.id: firstName");
+    assertThat(Describe.selector(By.className("firstName")))
+      .isEqualTo("By.className: firstName");
+    assertThat(Describe.selector(By.name("firstName")))
+      .isEqualTo("By.name: firstName");
   }
 
   @Test
@@ -32,6 +35,7 @@ class DescribeTest {
     when(selenideElement.toWebElement()).thenReturn(webElement);
     doThrow(new ElementShould(null, null, visible, webElement, null)).when(selenideElement).getTagName();
 
-    Assertions.assertEquals("StaleElementReferenceException: disappeared", Describe.shortly(selenideElement));
+    assertThat(Describe.shortly(selenideElement))
+      .isEqualTo("StaleElementReferenceException: disappeared");
   }
 }

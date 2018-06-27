@@ -1,60 +1,86 @@
 package com.codeborne.selenide.impl;
 
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
-class HttpHelperTest {
+class HttpHelperTest extends UnitTest {
   private HttpHelper helper = new HttpHelper();
 
   @Test
   void extractsFileNameFromHttpHeader() {
-    Assertions.assertEquals("statement.xls", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "Content-Disposition=attachment; filename=statement.xls").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=attachment; filename=statement.xls"))
+      .get()
+      .isEqualTo("statement.xls");
 
-    Assertions.assertEquals("statement-40817810048000102279.pdf", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\"").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "Content-Disposition=inline; filename=\"statement-40817810048000102279.pdf\""))
+      .get()
+      .isEqualTo("statement-40817810048000102279.pdf");
 
-    Assertions.assertEquals("selenide-2.6.1.jar", helper.getFileNameFromContentDisposition(
-      "content-disposition", "attachement; filename=selenide-2.6.1.jar").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "content-disposition", "attachement; filename=selenide-2.6.1.jar"))
+      .get()
+      .isEqualTo("selenide-2.6.1.jar");
 
-    Assertions.assertEquals("selenide-4.11.5.md", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachement; filename=selenide-4.11.5.md?sessioncookie=12345%2323").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachement; filename=selenide-4.11.5.md?sessioncookie=12345%2323"))
+      .get()
+      .isEqualTo("selenide-4.11.5.md");
 
-    Assertions.assertEquals("random_file.txt", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachement; filename=random_file.txt?auth=5v1kij42xXSsc;charset=CP1251").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachement; filename=random_file.txt?auth=5v1kij42xXSsc;charset=CP1251"))
+      .get()
+      .isEqualTo("random_file.txt");
 
-    Assertions.assertEquals("Prices.csv", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename=Prices.csv;charset=UTF-8").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename=Prices.csv;charset=UTF-8"))
+      .get()
+      .isEqualTo("Prices.csv");
 
-    Assertions.assertEquals("цены'.csv", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename=%D1%86%D0%B5%D0%BD%D1%8B%27.csv;charset=UTF-8").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename=%D1%86%D0%B5%D0%BD%D1%8B%27.csv;charset=UTF-8"))
+      .get()
+      .isEqualTo("цены'.csv");
 
-    Assertions.assertEquals("цены'.csv", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename=%F6%E5%ED%FB%27.csv;charset=CP1251").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename=%F6%E5%ED%FB%27.csv;charset=CP1251"))
+      .get()
+      .isEqualTo("цены'.csv");
 
-    Assertions.assertEquals("цены'.csv", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename*=UTF-8''%D1%86%D0%B5%D0%BD%D1%8B%27.csv").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename*=UTF-8''%D1%86%D0%B5%D0%BD%D1%8B%27.csv"))
+      .get()
+      .isEqualTo("цены'.csv");
 
-    Assertions.assertEquals("цены'.csv", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename*=cp1251''%F6%E5%ED%FB%27.csv").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename*=cp1251''%F6%E5%ED%FB%27.csv"))
+      .get()
+      .isEqualTo("цены'.csv");
 
-    Assertions.assertEquals("Naïve file.txt", helper.getFileNameFromContentDisposition(
-      "Content-Disposition", "attachment; filename*=UTF-8''Na%C3%AFve%20file.txt").get());
+    assertThat(helper.getFileNameFromContentDisposition(
+      "Content-Disposition", "attachment; filename*=UTF-8''Na%C3%AFve%20file.txt"))
+      .get()
+      .isEqualTo("Naïve file.txt");
 
-    Assertions.assertEquals("файл-с-русским.txt", helper.getFileNameFromContentDisposition(
+    assertThat(helper.getFileNameFromContentDisposition(
       "content-disposition",
-      "attachement; filename=UTF-8''%D1%84%D0%B0%D0%B9%D0%BB-%D1%81-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%BC.txt")
-      .get());
+      "attachement; filename=UTF-8''%D1%84%D0%B0%D0%B9%D0%BB-%D1%81-%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%BC.txt"))
+      .get()
+      .isEqualTo("файл-с-русским.txt");
   }
 
   @Test
   void fileNameIsNone_ifContentDispositionHeaderIsEmpty() {
-    Assertions.assertFalse(helper.getFileNameFromContentDisposition("Content-Disposition", null).isPresent());
-    Assertions.assertFalse(helper.getFileNameFromContentDisposition("Content-Disposition", "").isPresent());
+    assertThat(helper.getFileNameFromContentDisposition("Content-Disposition", null).isPresent())
+      .isFalse();
+    assertThat(helper.getFileNameFromContentDisposition("Content-Disposition", "").isPresent())
+      .isFalse();
   }
 
   @Test
   void fileNameIsNone_ifContentDispositionHeaderIsNotFound() {
-    Assertions.assertFalse(helper.getFileNameFromContentDisposition("another-header", "some.png").isPresent());
+    assertThat(helper.getFileNameFromContentDisposition("another-header", "some.png").isPresent())
+      .isFalse();
   }
 }

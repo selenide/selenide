@@ -1,24 +1,28 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementFinderTest {
+class ElementFinderTest extends UnitTest {
   @Test
   void testToStringForFinderByCssSelectors() {
     SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
 
-    Assertions.assertEquals("{By.id: app}", new ElementFinder(null, By.id("app"), 0).toString());
-    Assertions.assertEquals("{By.id: app[3]}", new ElementFinder(null, By.id("app"), 3).toString());
-    Assertions.assertEquals("{By.id: app}", new ElementFinder(parent, By.id("app"), 0).toString());
-    Assertions.assertEquals("{By.id: app[3]}", new ElementFinder(parent, By.id("app"), 3).toString());
+    assertThat(new ElementFinder(null, By.id("app"), 0))
+      .hasToString("{By.id: app}");
+    assertThat(new ElementFinder(null, By.id("app"), 3))
+      .hasToString("{By.id: app[3]}");
+    assertThat(new ElementFinder(parent, By.id("app"), 0))
+      .hasToString("{By.id: app}");
+    assertThat(new ElementFinder(parent, By.id("app"), 3))
+      .hasToString("{By.id: app[3]}");
   }
 
   @Test
@@ -27,9 +31,13 @@ class ElementFinderTest {
     when(parent.toString()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
 
-    Assertions.assertEquals("{By.xpath: //*[@id='app']}", new ElementFinder(null, By.xpath("//*[@id='app']"), 0).toString());
-    Assertions.assertEquals("{By.xpath: //*[@id='app'][3]}", new ElementFinder(null, By.xpath("//*[@id='app']"), 3).toString());
-    Assertions.assertEquals("{By.xpath: //*[@id='app']}", new ElementFinder(parent, By.xpath("//*[@id='app']"), 0).toString());
-    Assertions.assertEquals("{By.xpath: //*[@id='app'][3]}", new ElementFinder(parent, By.xpath("//*[@id='app']"), 3).toString());
+    assertThat(new ElementFinder(null, By.xpath("//*[@id='app']"), 0))
+      .hasToString("{By.xpath: //*[@id='app']}");
+    assertThat(new ElementFinder(null, By.xpath("//*[@id='app']"), 3))
+      .hasToString("{By.xpath: //*[@id='app'][3]}");
+    assertThat(new ElementFinder(parent, By.xpath("//*[@id='app']"), 0))
+      .hasToString("{By.xpath: //*[@id='app']}");
+    assertThat(new ElementFinder(parent, By.xpath("//*[@id='app']"), 3))
+      .hasToString("{By.xpath: //*[@id='app'][3]}");
   }
 }

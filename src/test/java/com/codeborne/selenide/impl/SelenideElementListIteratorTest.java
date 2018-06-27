@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -9,13 +9,13 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementListIteratorTest {
-
+class SelenideElementListIteratorTest extends UnitTest {
   @Test
   void testHasPrevious() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
-    Assertions.assertTrue(selenideElementIterator.hasPrevious());
+    assertThat(selenideElementIterator.hasPrevious())
+      .isTrue();
   }
 
   @Test
@@ -30,22 +30,26 @@ class SelenideElementListIteratorTest {
 
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
     SelenideElement previous = selenideElementIterator.previous();
-    Assertions.assertTrue(previous != null);
-    Assertions.assertEquals("<a>selenide</a>", previous.toString());
+    assertThat(previous)
+      .isNotNull();
+    assertThat(previous)
+      .hasToString("<a>selenide</a>");
   }
 
   @Test
   void testNextIndex() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
-    Assertions.assertEquals(2, selenideElementIterator.nextIndex());
+    assertThat(selenideElementIterator.nextIndex())
+      .isEqualTo(2);
   }
 
   @Test
   void testPreviousIndex() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 3);
-    Assertions.assertEquals(2, selenideElementIterator.previousIndex());
+    assertThat(selenideElementIterator.previousIndex())
+      .isEqualTo(2);
   }
 
   @Test
@@ -55,7 +59,8 @@ class SelenideElementListIteratorTest {
       SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 0);
       selenideElementIterator.add(mock(SelenideElement.class));
     } catch (UnsupportedOperationException e) {
-      Assertions.assertEquals("Cannot add elements to web page", e.getMessage());
+      assertThat(e)
+        .hasMessage("Cannot add elements to web page");
     }
   }
 
@@ -66,7 +71,8 @@ class SelenideElementListIteratorTest {
       SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 0);
       selenideElementIterator.set(mock(SelenideElement.class));
     } catch (UnsupportedOperationException e) {
-      Assertions.assertEquals("Cannot set elements to web page", e.getMessage());
+      assertThat(e)
+        .hasMessage("Cannot set elements to web page");
     }
   }
 }

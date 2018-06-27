@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -14,8 +14,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CollectionElementByConditionTest {
-
+class CollectionElementByConditionTest extends UnitTest {
   @Test
   void testWrap() {
     WebElement mockedWebElement = mock(WebElement.class);
@@ -26,7 +25,8 @@ class CollectionElementByConditionTest {
     SelenideElement selenideElement = CollectionElementByCondition.wrap(
       new WebElementsCollectionWrapper(singletonList(
         mockedWebElement)), Condition.visible);
-    Assertions.assertEquals("<a>selenide</a>", selenideElement.toString());
+    assertThat(selenideElement)
+      .hasToString("<a>selenide</a>");
   }
 
   @Test
@@ -40,7 +40,8 @@ class CollectionElementByConditionTest {
     when(mockedWebElement2.isDisplayed()).thenReturn(true);
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(mockedWebElementCollection, Condition.visible);
 
-    Assertions.assertEquals(mockedWebElement2, collectionElement.getWebElement());
+    assertThat(collectionElement.getWebElement())
+      .isEqualTo(mockedWebElement2);
   }
 
   @Test
@@ -49,7 +50,8 @@ class CollectionElementByConditionTest {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(mockedWebElementCollection, Condition.visible);
-    Assertions.assertEquals(String.format("%s.findBy(visible)", collectionDescription), collectionElement.toString());
+    assertThat(collectionElement)
+      .hasToString(String.format("%s.findBy(visible)", collectionDescription));
   }
 
   @Test
@@ -58,7 +60,8 @@ class CollectionElementByConditionTest {
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(mockedWebElementCollection, Condition.visible);
-    Assertions.assertEquals(String.format("%s.findBy(visible)", collectionDescription), collectionElement.toString());
+    assertThat(collectionElement)
+      .hasToString(String.format("%s.findBy(visible)", collectionDescription));
   }
 
   @Test
@@ -71,11 +74,12 @@ class CollectionElementByConditionTest {
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    Assertions.assertEquals("Element not found {Collection description}\n" +
-      "Expected: visible\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    assertThat(elementNotFoundError)
+      .hasToString("Element not found {Collection description}\n" +
+        "Expected: visible\n" +
+        "Screenshot: null\n" +
+        "Timeout: 0 ms.\n" +
+        "Caused by: java.lang.Error: Error message");
   }
 
   @Test
@@ -90,10 +94,11 @@ class CollectionElementByConditionTest {
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    Assertions.assertEquals("Element not found {Collection description.findBy(visible)}\n" +
-      "Expected: Reason description\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    assertThat(elementNotFoundError)
+      .hasToString("Element not found {Collection description.findBy(visible)}\n" +
+        "Expected: Reason description\n" +
+        "Screenshot: null\n" +
+        "Timeout: 0 ms.\n" +
+        "Caused by: java.lang.Error: Error message");
   }
 }

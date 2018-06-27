@@ -1,18 +1,15 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class CleanupTest {
+class CleanupTest extends UnitTest {
   @Test
   void cleansWebDriverExceptionMessage() {
-    String webdriverException = "org.openqa.selenium.NoSuchElementException: " +
+    String webDriverException = "org.openqa.selenium.NoSuchElementException: " +
       "The element could not be found (WARNING: The server did not provide any stacktrace information)\n" +
       "Command duration or timeout: 21 milliseconds\n" +
       "For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html\n" +
@@ -26,37 +23,50 @@ class CleanupTest {
       "browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, applicationCacheEnabled=false, " +
       "takesScreenshot=true}]";
     String expectedException = "NoSuchElementException: The element could not be found";
-    assertEquals(expectedException, Cleanup.of.webdriverExceptionMessage(webdriverException));
+    assertThat(Cleanup.of.webdriverExceptionMessage(webDriverException))
+      .isEqualTo(expectedException);
   }
 
   @Test
   void detectsIfWebdriverReportedInvalidSelectorError() {
-    assertFalse(Cleanup.of.isInvalidSelectorError(null));
-    assertFalse(Cleanup.of.isInvalidSelectorError(new NullPointerException()));
-    assertFalse(Cleanup.of.isInvalidSelectorError(new IllegalArgumentException()));
-    assertFalse(Cleanup.of.isInvalidSelectorError(new WebDriverException("Ups!")));
-    assertTrue(Cleanup.of.isInvalidSelectorError(new InvalidSelectorException("Wrong xpath")));
-    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("An invalid or illegal string was specified\n")));
-    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("invalid element state: " +
-      "Failed to execute query: '//input[:attr='al]' is not a valid selector.\n")));
-    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("Invalid selectors: //input[:attr='al]")));
-    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":" +
+    assertThat(Cleanup.of.isInvalidSelectorError(null))
+      .isFalse();
+    assertThat(Cleanup.of.isInvalidSelectorError(new NullPointerException()))
+      .isFalse();
+    assertThat(Cleanup.of.isInvalidSelectorError(new IllegalArgumentException()))
+      .isFalse();
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("Ups!")))
+      .isFalse();
+    assertThat(Cleanup.of.isInvalidSelectorError(new InvalidSelectorException("Wrong xpath")))
+      .isTrue();
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("An invalid or illegal string was specified\n")))
+      .isTrue();
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("invalid element state: " +
+      "Failed to execute query: '//input[:attr='al]' is not a valid selector.\n")))
+      .isTrue();
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("Invalid selectors: //input[:attr='al]")))
+      .isTrue();
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":" +
       "\"SYNTAX_ERR: DOM Exception 12\",,\"post\":\"{\\\"using\\\":\\\"css selector\\\"," +
-      "\\\"value\\\":\\\"//input[:attr='al]\\\"}\"}}\n")));
+      "\\\"value\\\":\\\"//input[:attr='al]\\\"}\"}}\n")))
+      .isTrue();
 
-    assertTrue(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":" +
+    assertThat(Cleanup.of.isInvalidSelectorError(new WebDriverException("{\"errorMessage\":" +
       "\"Unable to locate an element with the xpath expression //xxx[@' because of the " +
-      "following error:\\nError: INVALID_EXPRESSION_ERR: DOM XPath Exception 51\"}}\n")));
+      "following error:\\nError: INVALID_EXPRESSION_ERR: DOM XPath Exception 51\"}}\n")))
+      .isTrue();
 
     RuntimeException cssException = new RuntimeException("Invalid selectors: //input[:attr='al]");
     NoSuchElementException error = new NoSuchElementException("Unable to locate element using css", cssException);
-    assertTrue(Cleanup.of.isInvalidSelectorError(error));
+    assertThat(Cleanup.of.isInvalidSelectorError(error))
+      .isTrue();
   }
 
   @Test
   void phantomJsReportsStaleElementExceptionAsInvalidSelectorException() {
     InvalidSelectorException staleElementExceptionInPhantomJs = new InvalidSelectorException(
       "{\"errorMessage\":\"Element is not selectable\",\"request\": ..., takesScreenshot=true}]");
-    assertFalse(Cleanup.of.isInvalidSelectorError(staleElementExceptionInPhantomJs));
+    assertThat(Cleanup.of.isInvalidSelectorError(staleElementExceptionInPhantomJs))
+      .isFalse();
   }
 }

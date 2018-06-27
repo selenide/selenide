@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -14,8 +14,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CollectionElementTest {
-
+class CollectionElementTest extends UnitTest {
   @Test
   void testWrap() {
     WebElement mockedWebElement = mock(WebElement.class);
@@ -25,7 +24,8 @@ class CollectionElementTest {
 
     WebElementsCollection collection = new WebElementsCollectionWrapper(singletonList(mockedWebElement));
     SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
-    Assertions.assertEquals("<a>selenide</a>", selenideElement.toString());
+    assertThat(selenideElement)
+      .hasToString("<a>selenide</a>");
   }
 
   @Test
@@ -37,7 +37,8 @@ class CollectionElementTest {
     when(mockedWebElementCollection.getActualElements()).thenReturn(listOfMockedElements);
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
-    Assertions.assertEquals(mockedWebElement2, collectionElement.getWebElement());
+    assertThat(collectionElement.getWebElement())
+      .isEqualTo(mockedWebElement2);
   }
 
   @Test
@@ -47,7 +48,8 @@ class CollectionElementTest {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
-    Assertions.assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.getSearchCriteria());
+    assertThat(collectionElement.getSearchCriteria())
+      .isEqualTo(String.format("%s[%s]", collectionDescription, index));
   }
 
   @Test
@@ -57,7 +59,8 @@ class CollectionElementTest {
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
     int index = 1;
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
-    Assertions.assertEquals(String.format("%s[%s]", collectionDescription, index), collectionElement.toString());
+    assertThat(collectionElement)
+      .hasToString(String.format("%s[%s]", collectionDescription, index));
   }
 
   @Test
@@ -70,11 +73,12 @@ class CollectionElementTest {
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    Assertions.assertEquals("Element not found {Collection description}\n" +
-      "Expected: visible\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    assertThat(elementNotFoundError)
+      .hasToString("Element not found {Collection description}\n" +
+        "Expected: visible\n" +
+        "Screenshot: null\n" +
+        "Timeout: 0 ms.\n" +
+        "Caused by: java.lang.Error: Error message");
   }
 
   @Test
@@ -89,10 +93,11 @@ class CollectionElementTest {
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
-    Assertions.assertEquals("Element not found {Collection description[1]}\n" +
-      "Expected: Reason description\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Error: Error message", elementNotFoundError.toString());
+    assertThat(elementNotFoundError)
+      .hasToString("Element not found {Collection description[1]}\n" +
+        "Expected: Reason description\n" +
+        "Screenshot: null\n" +
+        "Timeout: 0 ms.\n" +
+        "Caused by: java.lang.Error: Error message");
   }
 }

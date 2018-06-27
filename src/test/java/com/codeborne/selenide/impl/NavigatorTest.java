@@ -1,41 +1,54 @@
 package com.codeborne.selenide.impl;
 
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.is;
-
-class NavigatorTest {
+class NavigatorTest extends UnitTest {
   private Navigator navigator = new Navigator();
 
   @Test
   void detectsAbsoluteUrls() {
-    MatcherAssert.assertThat("protocol http", navigator.isAbsoluteUrl("http://selenide.org"), is(true));
-    MatcherAssert.assertThat("protocol https", navigator.isAbsoluteUrl("https://selenide.org"), is(true));
-    MatcherAssert.assertThat("protocol file", navigator.isAbsoluteUrl("file:///tmp/memory.dump"), is(true));
+    assertThat(navigator.isAbsoluteUrl("http://selenide.org"))
+      .as("protocol http")
+      .isTrue();
+    assertThat(navigator.isAbsoluteUrl("https://selenide.org"))
+      .as("protocol https")
+      .isTrue();
+    assertThat(navigator.isAbsoluteUrl("file:///tmp/memory.dump"))
+      .as("protocol file")
+      .isTrue();
 
-    MatcherAssert.assertThat("case insensitive: HTTP", navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"), is(true));
-    MatcherAssert.assertThat("case insensitive: HTTPS", navigator.isAbsoluteUrl("HTTPS://SELENIDE.ORG"), is(true));
-    MatcherAssert.assertThat("case insensitive: FILE", navigator.isAbsoluteUrl("FILE:///TMP/MEMORY.DUMP"), is(true));
+    assertThat(navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"))
+      .as("case insensitive: HTTP")
+      .isTrue();
+    assertThat(navigator.isAbsoluteUrl("HTTPS://SELENIDE.ORG"))
+      .as("case insensitive: HTTPS")
+      .isTrue();
+    assertThat(navigator.isAbsoluteUrl("FILE:///TMP/MEMORY.DUMP"))
+      .as("case insensitive: FILE")
+      .isTrue();
 
-    MatcherAssert.assertThat("relative url", navigator.isAbsoluteUrl("/tmp/memory.dump"), is(false));
-    MatcherAssert.assertThat("relative url", navigator.isAbsoluteUrl("/payments/history"), is(false));
+    assertThat(navigator.isAbsoluteUrl("/tmp/memory.dump"))
+      .as("relative url")
+      .isFalse();
+    assertThat(navigator.isAbsoluteUrl("/payments/history"))
+      .as("relative url")
+      .isFalse();
   }
 
   @Test
   void addsRandomNumbersToEveryUrlToAvoidIECaching() {
-    Assertions.assertEquals("http://chuck-norris.com?timestamp=666",
-      navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com", 666));
+    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com", 666))
+      .isEqualTo("http://chuck-norris.com?timestamp=666");
 
-    Assertions.assertEquals("http://chuck-norris.com?timestamp=666",
-      navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789", 666));
+    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789", 666))
+      .isEqualTo("http://chuck-norris.com?timestamp=666");
 
-    Assertions.assertEquals("http://chuck-norris.com?timestamp=666",
-      navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789#", 666));
+    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789#", 666))
+      .isEqualTo("http://chuck-norris.com?timestamp=666");
 
-    Assertions.assertEquals("http://chuck-norris.com?timestamp=666",
-      navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789&abc=def", 666));
+    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789&abc=def", 666))
+      .isEqualTo("http://chuck-norris.com?timestamp=666");
   }
 
   @Test
@@ -43,6 +56,7 @@ class NavigatorTest {
     String baseUrl = "http://localhost:8080";
     String relativeUrl = "/users/id=1";
     String absoluteUrl = navigator.absoluteUrl(relativeUrl);
-    Assertions.assertEquals(absoluteUrl, baseUrl + relativeUrl);
+    assertThat(absoluteUrl)
+      .isEqualTo(baseUrl + relativeUrl);
   }
 }
