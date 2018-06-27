@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -98,10 +99,10 @@ class SelenideMethodsTest extends IntegrationTest {
     $("#theHiddenElement").shouldBe(present);
     $("#theHiddenElement").waitUntil(present, 1000);
 
-    $(".non-existing-element").should(not(exist));
+    $(".non-existing-element").should(Condition.not(exist));
     $(".non-existing-element").shouldNot(exist);
     $(".non-existing-element").shouldNotBe(present);
-    $(".non-existing-element").waitUntil(not(present), 1000);
+    $(".non-existing-element").waitUntil(Condition.not(present), 1000);
     $(".non-existing-element").waitWhile(present, 1000);
   }
 
@@ -237,7 +238,8 @@ class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).val("Going to press ENTER").pressEnter();
 
     sleep(500);
-    assertThat(url(), containsString("#submitted-form"));
+    assertThat(url())
+    .contains("#submitted-form");
   }
 
   @Test
@@ -482,10 +484,12 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void toStringShowsCurrentValue_evenIfItWasDynamicallyChanged() {
     openFile("page_with_jquery.html");
-    assertThat($("#double-clickable-button").toString(), containsString("value=\"double click me\""));
+    assertThat($("#double-clickable-button"))
+      .hasToString("value=\"double click me\"");
 
     $("#double-clickable-button").doubleClick();
-    assertThat($("#double-clickable-button").toString(), containsString("value=\"do not click me anymore\""));
+    assertThat($("#double-clickable-button"))
+    .hasToString("value=\"do not click me anymore\"");
   }
 
   @Test

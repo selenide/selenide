@@ -9,9 +9,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class InputFieldTest extends IntegrationTest {
 
@@ -26,18 +23,21 @@ class InputFieldTest extends IntegrationTest {
     Assumptions.assumeFalse(isPhantomjs(), "Fails with Expected: '456', but: was ''");
 
     SelenideElement input = $("#id1");
-    assertThat(input.getValue(), is(equalTo("")));
+    assertThat(input.getValue())
+      .isNullOrEmpty();
 
     input.clear();
     input.setValue(",.123");
     input.clear();
     input.setValue("456");
-    assertThat(input.getValue(), is(equalTo("456")));
+    assertThat(input.getValue())
+      .isEqualTo("456");
 
     input.clear();
     input.setValue(",.123");
     input.clear();
     input.setValue("456");
-    assertThat(input.getValue(), is(equalTo("456")));
+    assertThat(input.getValue())
+      .isEqualTo("456");
   }
 }

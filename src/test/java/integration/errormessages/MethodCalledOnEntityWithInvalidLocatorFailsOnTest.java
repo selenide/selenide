@@ -6,7 +6,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
 import integration.helpers.HTMLBuilderForTestPreconditions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,14 +18,9 @@ import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @Disabled
 class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest {
-
   @BeforeEach
   void openPage() {
     HTMLBuilderForTestPreconditions.Given.openedPageWithBody(
@@ -44,15 +38,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.shouldHave(text("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo - need to fix
         /*
@@ -72,15 +69,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.exists();
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo - need to fix
         /*
@@ -100,15 +100,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.shouldHave(text("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo - need to fix
         /*
@@ -127,15 +130,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.shouldBe(present);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo  - need to fix
         /*
@@ -154,15 +160,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.shouldBe(present);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo  - need to fix
         /*
@@ -181,15 +190,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       element.shouldBe(exactTextCaseSensitive("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
     //todo  - need to fix
         /*
@@ -208,17 +220,20 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      //todo - need to fix
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified\n"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
+    //todo - need to fix
         /*
             org.openqa.selenium.InvalidSelectorException:
             The given selector ##invalid-locator is either invalid or does not result in a WebElement.
@@ -235,16 +250,19 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       collection.getTexts();
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       //todo - need to fix
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified\n"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
         /*
             org.openqa.selenium.InvalidSelectorException:
@@ -262,16 +280,19 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       //todo - need to fix
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified\n"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
         /*
             org.openqa.selenium.InvalidSelectorException:
@@ -289,16 +310,19 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       //todo - need to fix
-      assertThat(expected.getMessage(), startsWith("Element not found {##invalid-locator}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {##invalid-locator}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("The given selector ##invalid-locator is either invalid or does not result in a WebElement. " +
           "The following error occurred:\n" +
-          "InvalidSelectorError: An invalid or illegal selector was specified\n"));
+          "InvalidSelectorError: An invalid or illegal selector was specified");
     }
         /*
             org.openqa.selenium.InvalidSelectorException:
@@ -316,13 +340,18 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       //todo - need to fix
-      assertThat(expected.getMessage(), startsWith("Element not found {ul}"));
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
-      assertThat(expected.getCause(), instanceOf(InvalidSelectorException.class));
-      assertThat(expected.getCause().getMessage(), containsString("##invalid-locator"));
+
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul}");
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
+      assertThat(expected.getCause())
+        .isInstanceOf(InvalidSelectorException.class);
+      assertThat(expected.getCause())
+        .hasMessageContaining("##invalid-locator");
     }
         /*
             Element not found {ul}

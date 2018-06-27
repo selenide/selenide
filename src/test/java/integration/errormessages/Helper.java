@@ -5,13 +5,13 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.TakesScreenshot;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Helper {
   public static void assertScreenshot(UIAssertionError expected) {
     if (WebDriverRunner.getWebDriver() instanceof TakesScreenshot) {
-      assertThat(expected.getScreenshot(), containsString(Configuration.reportsFolder));
+      assertThat(expected.getScreenshot())
+        .contains(Configuration.reportsFolder);
     }
   }
 }

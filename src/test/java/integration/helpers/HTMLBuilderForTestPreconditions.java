@@ -4,7 +4,6 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 
 public class HTMLBuilderForTestPreconditions {
-
   private static void execute(String jsCommand) {
     executeJavaScript(jsCommand);
   }

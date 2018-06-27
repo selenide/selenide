@@ -3,9 +3,9 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
-import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 
 class ReadonlyElementsTest extends IntegrationTest {
@@ -34,7 +33,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   void cannotSetValueToReadonlyField_slowSetValue() {
     Configuration.fastSetValue = false;
 
-    MatcherAssert.assertThat(verifySetValueThrowsException(), anyOf(
+    MatcherAssert.assertThat(verifySetValueThrowsException(), CoreMatchers.anyOf(
       containsString("Element is read-only and so may not be used for actions"),
       containsString("Element must be user-editable in order to clear it"),
       containsString("You may only edit editable elements")
@@ -44,7 +43,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   private String verifySetValueThrowsException() {
     try {
       $(By.name("username")).val("another-username");
-      Assertions.fail("should throw InvalidStateException where setting value to readonly/disabled element");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     } catch (InvalidStateException expected) {
       $(By.name("username")).shouldBe(empty);
@@ -57,7 +56,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   void cannotSetValueToDisabledField_slowSetValue() {
     Configuration.fastSetValue = false;
 
-    MatcherAssert.assertThat(verifySetValue2ThrowsException(), anyOf(
+    MatcherAssert.assertThat(verifySetValue2ThrowsException(), CoreMatchers.anyOf(
       containsString("Element must be user-editable in order to clear it"),
       containsString("You may only edit editable elements"),
       containsString("You may only interact with enabled elements"),
@@ -68,7 +67,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   private String verifySetValue2ThrowsException() {
     try {
       $(By.name("password")).setValue("another-pwd");
-      Assertions.fail("should throw InvalidStateException where setting value to readonly/disabled element");
+      fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     } catch (InvalidStateException expected) {
       $(By.name("password")).shouldBe(empty);
@@ -80,7 +79,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToReadonlyField_fastSetValue() {
     Configuration.fastSetValue = true;
-    MatcherAssert.assertThat(verifySetValueThrowsException(), anyOf(
+    MatcherAssert.assertThat(verifySetValueThrowsException(), CoreMatchers.anyOf(
       containsString("Cannot change value of readonly element"),
       containsString("Element must be user-editable in order to clear it")
     ));
@@ -89,7 +88,7 @@ class ReadonlyElementsTest extends IntegrationTest {
   @Test
   void cannotSetValueToDisabledField_fastSetValue() {
     Configuration.fastSetValue = true;
-    MatcherAssert.assertThat(verifySetValue2ThrowsException(), anyOf(
+    MatcherAssert.assertThat(verifySetValue2ThrowsException(), CoreMatchers.anyOf(
       containsString("Cannot change value of disabled element"),
       containsString("Element is not currently interactable and may not be manipulated")
     ));
@@ -97,32 +96,32 @@ class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void cannotSetValueToReadonlyTextArea() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $("#text-area").val("textArea value"));
+    assertThatThrownBy(() -> $("#text-area").val("textArea value"))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void cannotSetValueToDisabledTextArea() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $("#text-area-disabled").val("textArea value"));
+    assertThatThrownBy(() -> $("#text-area-disabled").val("textArea value"))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void cannotChangeValueOfDisabledCheckbox() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $(By.name("disabledCheckbox")).setSelected(false));
+    assertThatThrownBy(() -> $(By.name("disabledCheckbox")).setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void cannotSetValueToReadonlyCheckbox() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $(By.name("rememberMe")).setSelected(true));
+    assertThatThrownBy(() -> $(By.name("rememberMe")).setSelected(true))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void cannotSetValueToReadonlyRadiobutton() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $(By.name("me")).selectRadio("margarita"));
+    assertThatThrownBy(() -> $(By.name("me")).selectRadio("margarita"))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test

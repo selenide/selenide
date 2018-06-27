@@ -9,7 +9,6 @@ import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -40,7 +39,7 @@ class ConditionsTest extends IntegrationTest {
   @Test
   void notShouldCheckConditions() {
     $("#multirowTable").should(be(visible));
-    $("#multirowTable").should(not(be(hidden)));
+    $("#multirowTable").should(Condition.not(be(hidden)));
   }
 
   @Test

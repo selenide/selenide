@@ -6,7 +6,6 @@ import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -22,14 +21,8 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class MethodCalledOnElementFailsOnTest extends IntegrationTest {
-
   @BeforeEach
   void openPage() {
     Given.openedPageWithBody(
@@ -47,12 +40,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(text("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: text 'Miller'");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, "ul .nonexistent");
     }
         /*
@@ -81,11 +77,11 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
   private void assertCauseMessage(UIAssertionError expected, String selector) {
     if (WebDriverRunner.isPhantomjs()) {
-      assertThat(expected.getCause().getMessage(),
-        containsString("Unable to find element with css selector '" + selector + "'"));
+      assertThat(expected.getCause())
+        .hasMessageContaining("Unable to find element with css selector '" + selector + "'");
     } else if (!isHtmlUnit()) {
-      assertThat(expected.getCause().getMessage(),
-        containsString("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}"));
+      assertThat(expected.getCause())
+        .hasMessageContaining("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}");
     }
   }
 
@@ -95,13 +91,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(text("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 1, Size: 0"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 1, Size: 0");
     }
     //todo - is it OK??
         /*
@@ -121,13 +121,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(text("Miller"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
-      assertThat(expected.getMessage(), containsString("Expected: text 'Miller'"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li[10]}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: text 'Miller'");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 10, Size: 2");
     }
         /*
             Element not found {ul li[10]}
@@ -145,13 +149,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.click();
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li[10]}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li[10]}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 10, Size: 2"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 10, Size: 2");
     }
         /*
             Element not found {ul li[10]}
@@ -169,13 +177,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldBe(exist);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Element not found {.nonexistent.findBy(css class 'the-expanse')}"));
+      assertThat(expected.getCause())
+        .isInstanceOf(ElementNotFound.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Element not found {.nonexistent.findBy(css class 'the-expanse')}");
     }
         /*
             Element not found {.nonexistent}
@@ -196,13 +208,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldBe(visible);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {li.findBy(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
+      assertThat(expected.getCause())
+        .isInstanceOf(ElementNotFound.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Element not found {li.findBy(css class 'nonexistent')}");
     }
         /*
             Element not found {li.findBy(css class 'nonexistent')}
@@ -223,12 +239,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.text();
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {li.findBy(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: css class 'nonexistent'")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {li.findBy(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: css class 'nonexistent'"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             Element not found {li.findBy(css class 'nonexistent')}
@@ -245,12 +264,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.should(appear);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exist"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
         /*
@@ -269,12 +291,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldBe(visible);
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
         /*
@@ -294,12 +319,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.doubleClick();
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
         /*
@@ -324,14 +352,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}"));
+      assertThat(expected.getCause())
+        .isInstanceOf(ElementNotFound.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}");
     }
         /*
             Element not found {ul .nonexistent.filter(css class 'the-expanse')}
@@ -352,14 +383,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}"));
+      assertThat(expected.getCause())
+        .isInstanceOf(ElementNotFound.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}");
     }
         /*
             Element not found {ul li.filter(css class 'nonexistent')}
@@ -380,15 +414,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(),
-        startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exist"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(ElementNotFound.class));
-      assertThat(expected.getCause().getMessage(),
-        startsWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}"));
+      assertThat(expected.getCause())
+        .isInstanceOf(ElementNotFound.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}");
     }
         /*
             Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}
@@ -409,12 +445,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exact text 'detective'");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
         /*
@@ -438,13 +477,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 0, Size: 0");
     }
         /*
             Element not found {ul .nonexistent.filter(css class 'the-expanse')}
@@ -462,13 +505,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: visible")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: visible"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 0, Size: 0"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 0, Size: 0");
     }
         /*
             Element not found {ul li.filter(css class 'nonexistent')}
@@ -486,13 +533,17 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'the-expanse')[2]}"));
-      assertThat(expected.getMessage(), containsString("Expected: exist")); //todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse')[2]}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exist"); //todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(IndexOutOfBoundsException.class));
-      assertThat(expected.getCause().getMessage(), startsWith("Index: 2, Size: 2"));
+      assertThat(expected.getCause())
+        .isInstanceOf(IndexOutOfBoundsException.class);
+      assertThat(expected.getCause())
+        .hasMessageStartingWith("Index: 2, Size: 2");
     }
         /*
             Element not found {ul li.filter(css class 'the-expanse')[2]}
@@ -511,12 +562,15 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
 
     try {
       element.shouldHave(exactText("detective"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: exact text 'detective'"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exact text 'detective'");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
         /*

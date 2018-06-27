@@ -1,12 +1,9 @@
 package integration.errormessages;
 
-import java.util.Arrays;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import integration.IntegrationTest;
 import integration.helpers.HTMLBuilderForTestPreconditions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +11,8 @@ import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
-
   @BeforeEach
   void openPage() {
     HTMLBuilderForTestPreconditions.Given.openedPageWithBody(
@@ -41,14 +35,16 @@ class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting__When$$Collection() {
     ElementsCollection collection = $$("ul li");
 
-    assertThat(Arrays.toString(collection.getTexts()), is("[Miller, Julie Mao]"));
+    assertThat(collection.getTexts())
+      .hasToString("[Miller, Julie Mao]");
   }
 
   @Test
   void actionWithoutWaiting_When$$Collection_WithNonExistentWebElements() {
     ElementsCollection collection = $$("ul .nonexistent");
 
-    Assertions.assertEquals(true, collection.isEmpty());
+    assertThat(collection)
+      .isEmpty();
         /*
             there is no exceptions - when collection.isEmpty();
         */
@@ -58,7 +54,8 @@ class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_WhenInnerCollection_WithNonExistentInnerWebElements() {
     ElementsCollection collection = $("ul").findAll(".nonexistent");
 
-    Assertions.assertEquals(0, collection.size());
+    assertThat(collection)
+      .hasSize(0);
         /*
             there is no exceptions - when collection.isEmpty();
         */

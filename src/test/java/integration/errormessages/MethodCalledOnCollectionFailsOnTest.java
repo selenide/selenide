@@ -6,7 +6,6 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -21,14 +20,8 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
-
   @BeforeEach
   void openPage() {
     Given.openedPageWithBody(
@@ -46,12 +39,15 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: [Miller, Julie Mao]");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             Element not found {ul .nonexistent}
@@ -77,12 +73,15 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}"));
-      assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: [Miller, Julie Mao]");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             Element not found {ul .nonexistent.filter(css class 'the-expanse')}
@@ -99,12 +98,15 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul li.filter(css class 'nonexistent')}"));
-      assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent')}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: [Miller, Julie Mao]");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             Element not found {ul li.filter(css class 'nonexistent')}
@@ -121,12 +123,15 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: exist")); // todo - is it correct?
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: exist"); // todo - is it correct?
       assertScreenshot(expected);
-      assertThat(expected.getCause(), instanceOf(NoSuchElementException.class));
+      assertThat(expected.getCause())
+        .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected);
     }
         /*
@@ -142,15 +147,17 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
   private void assertCauseMessage(UIAssertionError expected) {
     if (isHtmlUnit()) {
-      assertThat(expected.getCause().getMessage(), containsString("Returned node (null) was not a DOM element"));
+      assertThat(expected.getCause())
+        .hasMessageContaining("Returned node (null) was not a DOM element");
     } else if (isPhantomjs()) {
-      assertThat(expected.getCause().getMessage(), containsString("Unable to find element with css selector '.nonexistent'"));
+      assertThat(expected.getCause())
+        .hasMessageContaining("Unable to find element with css selector '.nonexistent'");
     } else {
       String expectedCauseMessage = isFirefox()
         ? "Unable to locate element: .nonexistent"
         : "Unable to locate element: {\"method\":\"css selector\",\"selector\":\".nonexistent\"}";
-      assertThat(expected.getCause().getMessage(),
-        containsString(expectedCauseMessage));
+      assertThat(expected.getCause())
+        .hasMessageContaining(expectedCauseMessage);
     }
   }
 
@@ -160,12 +167,15 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(exactTexts("Miller", "Julie Mao"));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
-      assertThat(expected.getMessage(), startsWith("Element not found {ul/.nonexistent}"));
-      assertThat(expected.getMessage(), containsString("Expected: [Miller, Julie Mao]"));
+      assertThat(expected)
+        .hasMessageStartingWith("Element not found {ul/.nonexistent}");
+      assertThat(expected)
+        .hasMessageContaining("Expected: [Miller, Julie Mao]");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             Element not found {<ul>/.nonexistent}
@@ -197,11 +207,13 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 2, collection: ul li"));
+      assertThat(expected)
+        .hasMessageStartingWith(": expected: = 3, actual: 2, collection: ul li");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             ListSizeMismatch : expected: = 3, actual: 2, collection: ul li
@@ -221,11 +233,13 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      Assertions.fail("Expected ElementNotFound");
+      fail("Expected ElementNotFound");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected.getMessage(), startsWith(": expected: = 3, actual: 0, collection: ul .nonexistent"));
+      assertThat(expected)
+        .hasMessageStartingWith(": expected: = 3, actual: 0, collection: ul .nonexistent");
       assertScreenshot(expected);
-      assertThat(expected.getCause(), nullValue());
+      assertThat(expected.getCause())
+        .isNull();
     }
         /*
             ListSizeMismatch : expected: = 3, actual: 0, collection: ul .nonexistent

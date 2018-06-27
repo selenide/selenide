@@ -3,7 +3,6 @@ package integration.customcommands;
 import com.codeborne.selenide.commands.Commands;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,11 +24,15 @@ class CustomCommandsTest extends IntegrationTest {
     $_("#valid-image").tripleClick().tripleClick().tripleClick().click();
     $_("#invalid-image").tripleClick().quadrupleClick();
 
-    Assertions.assertTrue($_("#valid-image img").isDisplayed(), "Can also use standard Selenium methods");
+    assertThat($_("#valid-image img").isDisplayed())
+      .as("Can also use standard Selenium methods")
+      .isTrue();
     $_("#valid-image img").shouldBe(visible);
 
-    Assertions.assertEquals(4, tripleClickCounter.get());
-    Assertions.assertEquals(1, quadrupleClickCounter.get());
+    assertThat(tripleClickCounter.get())
+      .isEqualTo(4);
+    assertThat(quadrupleClickCounter.get())
+      .isEqualTo(1);
   }
 
   @BeforeEach

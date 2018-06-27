@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MethodCalledOnElementPassesOnTest extends IntegrationTest {
-
   @BeforeEach
   void openPage() {
     Given.openedPageWithBody(

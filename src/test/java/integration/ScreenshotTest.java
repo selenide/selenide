@@ -20,14 +20,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScreenshotTest extends IntegrationTest {
-
   @BeforeEach
   void openTestPage() {
     Assumptions.assumeFalse(isHtmlUnit());
@@ -53,7 +49,9 @@ class ScreenshotTest extends IntegrationTest {
   void resizeBigImageWidth() {
     SelenideElement element = $("#wide_div");
     BufferedImage img = element.screenshotAsImage();
-    assertThat("Screenshot doesn't fit width", img.getWidth(), is(lessThan(element.getSize().getWidth())));
+    assertThat(img.getWidth())
+      .as("Screenshot doesn't fit width")
+      .isLessThan(element.getSize().getWidth());
   }
 
   @Test
@@ -61,7 +59,9 @@ class ScreenshotTest extends IntegrationTest {
   void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
     BufferedImage img = new ScreenShotLaboratory().takeScreenshotAsImage(element);
-    assertThat("Screenshot doesn't fit height", img.getHeight(), is(lessThan(element.getSize().getHeight())));
+    assertThat(img.getHeight())
+      .as("Screenshot doesn't fit height")
+      .isLessThan(element.getSize().getHeight());
   }
 
   @Test
@@ -75,9 +75,11 @@ class ScreenshotTest extends IntegrationTest {
     String errorDetails = String.format("element.location: %s, element.size: %s, screen.size: (%s,%s)",
       element.getLocation(), element.getSize(), tmp.getWidth(), tmp.getHeight());
 
-    assertThat("Screenshot doesn't fit width - " + errorDetails,
-      img.getWidth(), is(lessThan(element.getSize().getWidth())));
-    assertThat("Screenshot doesn't fit height - " + errorDetails,
-      img.getHeight(), is(lessThan(element.getSize().getHeight())));
+    assertThat(img.getWidth())
+      .as("Screenshot doesn't fit width - " + errorDetails)
+      .isLessThan(element.getSize().getWidth());
+    assertThat(img.getHeight())
+      .as("Screenshot doesn't fit height - " + errorDetails)
+      .isLessThan(element.getSize().getHeight());
   }
 }

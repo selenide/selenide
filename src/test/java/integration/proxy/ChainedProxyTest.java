@@ -6,13 +6,9 @@ import java.util.List;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
-import io.netty.handler.codec.http.HttpResponse;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.filters.ResponseFilter;
-import net.lightbody.bmp.util.HttpMessageContents;
-import net.lightbody.bmp.util.HttpMessageInfo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,10 +20,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Selenide runs its own proxy server.
@@ -60,12 +52,9 @@ class ChainedProxyTest extends IntegrationTest {
       chainedProxy.setTrustAllServers(true);
       chainedProxy.start(0);
 
-      chainedProxy.addResponseFilter(new ResponseFilter() {
-        @Override
-        public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-          if (messageInfo.getUrl().startsWith(Configuration.baseUrl)) {
-            visitedUrls.add(messageInfo.getUrl());
-          }
+      chainedProxy.addResponseFilter((response, contents, messageInfo) -> {
+        if (messageInfo.getUrl().startsWith(Configuration.baseUrl)) {
+          visitedUrls.add(messageInfo.getUrl());
         }
       });
 
@@ -84,11 +73,15 @@ class ChainedProxyTest extends IntegrationTest {
 
     // Assert that files are actually uploaded via 2 proxies
     $("h3").shouldHave(text("Uploaded 2 files"));
-    assertEquals(2, server.uploadedFiles.size());
+    assertThat(server.uploadedFiles)
+      .hasSize(2);
 
     // Assert that "chained" proxy has intercepted requests
-    assertTrue(visitedUrls.size() >= 2, "Expected at least 2 urls, but got: " + visitedUrls);
-    assertThat(visitedUrls.get(0), containsString("/file_upload_form.html"));
-    assertThat(visitedUrls.get(visitedUrls.size() - 1), containsString("/upload"));
+    assertThat(visitedUrls.size())
+      .isGreaterThanOrEqualTo(2);
+    assertThat(visitedUrls.get(0))
+      .contains("/file_upload_form.html");
+    assertThat(visitedUrls.get(visitedUrls.size() - 1))
+      .contains("/upload");
   }
 }

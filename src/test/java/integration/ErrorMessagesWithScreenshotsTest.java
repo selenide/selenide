@@ -19,7 +19,6 @@ import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.fail;
 
 class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
@@ -55,7 +54,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .findAll(byText("mymail@gmail.com"))
         .find(cssClass("trash"))
         .shouldBe(visible);
-      fail();
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
       Assertions.assertTrue(
         e.getMessage().contains("Element not found {#nonexisting-form}"), "Actual error message: " + e.getMessage());
@@ -70,7 +69,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .find(byText("mymail@gmail.com"))
         .find(".trash")
         .shouldBe(visible);
-      fail();
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
       Assertions.assertTrue(
         e.getMessage().contains("Element not found {thead}"), "Actual error message: " + e.getMessage());
@@ -86,7 +85,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .findBy(text("mymail@gmail.com"))
         .find(".trash")
         .shouldBe(visible);
-      fail();
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
       Assertions.assertTrue(
         e.getMessage().contains("Element not found {#multirowTable/thead"), "Actual error message: " + e.getMessage());
@@ -102,7 +101,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .findBy(text("Norris"))
         .find(".second_row")
         .shouldBe(visible);
-      fail();
+      fail("Expected ElementNotFound");
     } catch (ElementNotFound e) {
       Assertions.assertTrue(
         e.getMessage().contains("Element not found {.second_row}"), "Actual error message: " + e.getMessage());
