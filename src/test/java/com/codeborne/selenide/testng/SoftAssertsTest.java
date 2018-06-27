@@ -39,7 +39,7 @@ class SoftAssertsTest extends UnitTest {
     assertThat(listener.getListenersAnnotation(ReportsNGTest.class))
       .isNotNull();
     assertThat(listener.getListenersAnnotation(AttributeTest.class))
-      .isNotNull();
+      .isNull();
   }
 
   @Test

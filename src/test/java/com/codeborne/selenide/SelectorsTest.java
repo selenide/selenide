@@ -25,7 +25,8 @@ class SelectorsTest extends UnitTest {
     assertThat(selector)
       .isInstanceOf(By.ByXPath.class);
     assertThat(((WithText) selector).getXPath())
-      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*");
+      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), " +
+        "concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*");
   }
 
   @Test
@@ -47,7 +48,8 @@ class SelectorsTest extends UnitTest {
     assertThat(selector)
       .isInstanceOf(By.ByXPath.class);
     assertThat(((ByText) selector).getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r ', '    ')) = concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*");
+      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r ', '    ')) = " +
+        "concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*");
   }
 
   @Test

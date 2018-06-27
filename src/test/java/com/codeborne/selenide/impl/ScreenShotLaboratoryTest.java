@@ -64,7 +64,7 @@ class ScreenShotLaboratoryTest extends UnitTest {
     assertThat(contextScreenshots.get(1))
       .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
     assertThat(contextScreenshots.get(2))
-      .isEqualTo((new File("ui/MyTest/test_some_method/12356789.2")));
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.2"));
   }
 
   @Test
@@ -87,7 +87,7 @@ class ScreenShotLaboratoryTest extends UnitTest {
     assertThat(allScreenshots.get(1))
       .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
     assertThat(allScreenshots.get(2))
-      .isEqualTo((new File("ui/YourTest/test_another_method/12356789.2")));
+      .isEqualTo(new File("ui/YourTest/test_another_method/12356789.2"));
     assertThat(allScreenshots.get(3))
       .hasToString("12356789.3");
     assertThat(allScreenshots.get(4))

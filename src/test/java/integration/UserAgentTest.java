@@ -18,9 +18,9 @@ class UserAgentTest extends IntegrationTest {
     String browser = Configuration.browser;
 
     assertThat(userAgent)
-      .isNullOrEmpty();
+      .isNotBlank();
     assertThat(userAgent)
       .withFailMessage(String.format("Current user agent [%s] should belong to '%s' browser", userAgent, browser))
-      .isEqualToIgnoringCase(browser);
+      .containsIgnoringCase(browser);
   }
 }

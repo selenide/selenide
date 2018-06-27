@@ -68,7 +68,7 @@ class SelectOptionContainingTextTest extends UnitTest {
       command.execute(proxy, select, new Object[]{elementText});
     } catch (NoSuchElementException exception) {
       assertThat(exception)
-        .hasMessageContaining(("Cannot locate option containing text: " + elementText));
+        .hasMessageContaining(String.format("Cannot locate option containing text: %s", elementText));
     }
   }
 }

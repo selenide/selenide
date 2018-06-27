@@ -57,14 +57,14 @@ class ProxyServerUsageTest extends IntegrationTest {
       .withFailMessage("All responses: " + responses)
       .hasSize(1);
 
-    assertThat(requests)
+    assertThat(requests.get(0))
       .contains("/upload");
-    assertThat(requests)
+    assertThat(requests.get(0))
       .contains("Content-Disposition: form-data; name=\"cv\"; filename=\"hello_world.txt\"");
-    assertThat(requests)
+    assertThat(requests.get(0))
       .contains("Hello, WinRar!");
 
-    assertThat(responses)
+    assertThat(responses.get(0))
       .contains("<h3>Uploaded 1 files</h3>");
   }
 

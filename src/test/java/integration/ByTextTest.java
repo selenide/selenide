@@ -59,9 +59,9 @@ class ByTextTest extends IntegrationTest {
 
   @Test
   void canFindElementContainingTextInsideParentElement() {
-    assertThat($$($("#multirowTable"), byText("Cha")))
+    assertThat($$($("#multirowTable"), withText("Cha")))
       .hasSize(2);
-    assertThat($$($("#multirowTable tr"), byText("ack")))
+    assertThat($$($("#multirowTable tr"), withText("ack")))
       .hasSize(1);
     assertThat($("#multirowTable tr", 1).find(withText("hac")).getAttribute("class"))
       .isEqualTo("second_row");

@@ -5,7 +5,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -30,7 +30,6 @@ import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.name;
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.selected;
@@ -57,14 +56,7 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.url;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -74,23 +66,32 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanCheckIfElementExists() {
-    assertTrue($(By.name("domain")).exists());
-    assertTrue($("#theHiddenElement").exists());
-    assertFalse($(By.name("non-existing-element")).exists());
+    assertThat($(By.name("domain")).exists())
+      .isTrue();
+    assertThat($("#theHiddenElement").exists())
+      .isTrue();
+    assertThat($(By.name("non-existing-element")).exists())
+      .isFalse();
   }
 
   @Test
   void userCanCheckIfElementIsDisplayed() {
-    assertTrue($(By.name("domain")).isDisplayed());
-    assertFalse($("#theHiddenElement").isDisplayed());
-    assertFalse($(By.name("non-existing-element")).isDisplayed());
+    assertThat($(By.name("domain")).isDisplayed())
+      .isTrue();
+    assertThat($("#theHiddenElement").isDisplayed())
+      .isFalse();
+    assertThat($(By.name("non-existing-element")).isDisplayed())
+      .isFalse();
   }
 
   @Test
   void userCanCheckIfElementExistsAndVisible() {
-    assertTrue($(By.name("domain")).isDisplayed());
-    assertFalse($("#theHiddenElement").isDisplayed());
-    assertFalse($(By.name("non-existing-element")).isDisplayed());
+    assertThat($(By.name("domain")).isDisplayed())
+      .isTrue();
+    assertThat($("#theHiddenElement").isDisplayed())
+      .isFalse();
+    assertThat($(By.name("non-existing-element")).isDisplayed())
+      .isFalse();
 
     $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
@@ -120,34 +121,40 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void toStringMethodShowsElementDetails() {
-    assertEquals("<h1>Page with selects</h1>", $("h1").toString());
-    assertEquals("<h2>Dropdown list</h2>", $("h2").toString());
-    assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>",
-      $(By.name("rememberMe")).toString());
+    assertThat($("h1"))
+      .hasToString("<h1>Page with selects</h1>");
+    assertThat($("h2"))
+      .hasToString("<h2>Dropdown list</h2>");
+    assertThat($(By.name("rememberMe")))
+      .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>");
 
     if (isHtmlUnit()) {
-      assertEquals("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>",
-        $(By.name("domain")).find("option").toString());
+      assertThat($(By.name("domain")).find("option"))
+        .hasToString("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>");
     } else {
-      assertEquals("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>",
-        $(By.name("domain")).find("option").toString());
+      assertThat($(By.name("domain")).find("option"))
+        .hasToString("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>");
     }
 
-    assertTrue($(byText("Want to see ajax in action?")).toString().contains("<a href="));
-    assertTrue($(byText("Want to see ajax in action?")).toString().contains(">Want to see ajax in action?</a>"));
+    assertThat($(byText("Want to see ajax in action?")).toString())
+      .contains("<a href=");
+    assertThat($(byText("Want to see ajax in action?")).toString())
+      .contains(">Want to see ajax in action?</a>");
   }
 
   @Test
   void toStringShowsAllAttributesButStyleSortedAlphabetically() {
     if (isHtmlUnit()) {
-      assertEquals("<div class=\"invisible-with-multiple-attributes\" id=\"gopher\" " +
-        "onclick=\"void(0);\" onchange=\"console.log(this);\" placeholder=\"Животное\" " +
-        "displayed:false></div>", $("#gopher").toString());
+      assertThat($("#gopher"))
+        .hasToString("<div class=\"invisible-with-multiple-attributes\" id=\"gopher\" " +
+          "onclick=\"void(0);\" onchange=\"console.log(this);\" placeholder=\"Животное\" " +
+          "displayed:false></div>");
     } else {
-      assertEquals("<div class=\"invisible-with-multiple-attributes\" " +
-        "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
-        "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
-        "displayed:false></div>", $("#gopher").toString());
+      assertThat($("#gopher"))
+        .hasToString("<div class=\"invisible-with-multiple-attributes\" " +
+          "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
+          "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
+          "displayed:false></div>");
     }
   }
 
@@ -155,36 +162,41 @@ class SelenideMethodsTest extends IntegrationTest {
   void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
     $("#age").clear();
     $("#age").sendKeys("21");
-    assertEquals("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>", $("#age").toString());
+    assertThat($("#age"))
+      .hasToString("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>");
   }
 
   @Test
   void userCanGetInnerHtmlOfElement() {
-    assertEquals("@livemail.ru", $(byValue("livemail.ru")).innerHtml());
-    assertEquals("@myrambler.ru", $(byText("@myrambler.ru")).innerHtml());
-    assertEquals("@мыло.ру", $(byText("@мыло.ру")).innerHtml());
-    assertEquals("Dropdown list", $("h2").innerHtml());
+    assertThat($(byValue("livemail.ru")).innerHtml())
+      .isEqualTo("@livemail.ru");
+    assertThat($(byText("@myrambler.ru")).innerHtml())
+      .isEqualTo("@myrambler.ru");
+    assertThat($(byText("@мыло.ру")).innerHtml())
+      .isEqualTo("@мыло.ру");
+    assertThat($("h2").innerHtml())
+      .isEqualTo("Dropdown list");
 
     if (isHtmlUnit()) {
-      assertEquals("<span></span> L'a\n      Baskerville", $("#baskerville").innerHtml().trim());
-      assertEquals("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>",
-        $("#status").innerHtml().trim());
+      assertThat($("#baskerville").innerHtml().trim())
+        .isEqualTo("<span></span> L'a\n      Baskerville");
+      assertThat($("#status").innerHtml().trim())
+        .isEqualTo("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>");
     } else {
-      assertEquals("<span></span> L'a\n      Baskerville", $("#baskerville").innerHtml().trim());
-      assertEquals("Username: " +
-          "<span class=\"name\">Bob Smith</span>&nbsp;" +
-          "Last login: <span class=\"last-login\">01.01.1970</span>",
-        $("#status").innerHtml().trim());
+      assertThat($("#baskerville").innerHtml().trim())
+        .isEqualTo("<span></span> L'a\n      Baskerville");
+      assertThat($("#status").innerHtml().trim())
+        .isEqualTo("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>");
     }
   }
 
   @Test
   void userCanGetTextAndHtmlOfHiddenElement() {
-    assertEquals("видишь суслика? и я не вижу. <b>а он есть</b>!",
-      $("#theHiddenElement").innerHtml().trim().toLowerCase());
+    assertThat($("#theHiddenElement").innerHtml().trim().toLowerCase())
+      .isEqualTo("видишь суслика? и я не вижу. <b>а он есть</b>!");
 
-    assertEquals("Видишь суслика? И я не вижу. А он есть!",
-      $("#theHiddenElement").innerText().trim());
+    assertThat($("#theHiddenElement").innerText().trim())
+      .isEqualTo("Видишь суслика? И я не вижу. А он есть!");
   }
 
   @Test
@@ -194,7 +206,8 @@ class SelenideMethodsTest extends IntegrationTest {
 //    $(By.name("password")).shouldBe(focused);
     $(By.name("password")).shouldHave(value("sherlyn"));
     $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
-    assertEquals("sherlyn", $(By.name("password")).val());
+    assertThat($(By.name("password")).val())
+      .isEqualTo("sherlyn");
   }
 
   @Test
@@ -229,17 +242,19 @@ class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).val("Sherlyn");
     $(By.name("password")).append(" theron");
     $(By.name("password")).shouldHave(value("Sherlyn theron"));
-    assertEquals("Sherlyn theron", $(By.name("password")).val());
+    assertThat($(By.name("password")).val())
+      .isEqualTo("Sherlyn theron");
   }
 
   @Test
   void userCanPressEnter() {
-    assertEquals(-1, url().indexOf("#submitted-form"));
+    assertThat(url().indexOf("#submitted-form"))
+      .isEqualTo(-1);
     $(By.name("password")).val("Going to press ENTER").pressEnter();
 
     sleep(500);
     assertThat(url())
-    .contains("#submitted-form");
+      .contains("#submitted-form");
   }
 
   @Test
@@ -258,17 +273,18 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanCheckIfElementContainsText() {
-    assertEquals("Page with selects", $("h1").text());
-    assertEquals("Dropdown list", $("h2").text());
-    assertEquals("@livemail.ru", $(By.name("domain")).find("option").text());
+    assertThat($("h1").text())
+      .isEqualTo("Page with selects");
+    assertThat($("h2").text())
+      .isEqualTo("Dropdown list");
+    assertThat($(By.name("domain")).find("option").text())
+      .isEqualTo("@livemail.ru");
     if (isHtmlUnit()) {
-      assertEquals("Radio buttons\n" +
-        "uncheckedМастер " +
-        "uncheckedМаргарита " +
-        "uncheckedКот \"Бегемот\" " +
-        "uncheckedTheodor Woland", $("#radioButtons").text());
+      assertThat($("#radioButtons").text())
+        .isEqualTo("Radio buttons\nuncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland");
     } else {
-      assertEquals("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland", $("#radioButtons").text());
+      assertThat($("#radioButtons").text())
+        .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
     }
 
     $("h1").shouldHave(text("Page "));
@@ -308,9 +324,9 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseHaveWrapper_errorMessage() {
-    Assertions.assertThrows(ElementShould.class,
-      () -> $("#username-blur-counter").should(have(text("wrong-text"))),
-      "Element should have text 'wrong-text' {#username-blur-counter}");
+    assertThatThrownBy(() -> $("#username-blur-counter").should(have(text("wrong-text"))))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageContaining("Element should have text 'wrong-text' {#username-blur-counter}");
   }
 
   @Test
@@ -320,9 +336,9 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseBeWrapper_errorMessage() {
-    Assertions.assertThrows(ElementShould.class,
-      () -> $("#username-blur-counter").should(be(disabled)),
-      "Element should be disabled {#username-blur-counter}");
+    assertThatThrownBy(() -> $("#username-blur-counter").should(be(disabled)))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageContaining("Element should be disabled {#username-blur-counter}");
   }
 
   @Test
@@ -330,27 +346,36 @@ class SelenideMethodsTest extends IntegrationTest {
     WebElement selenideElement = $(By.name("domain")).toWebElement();
     WebElement seleniumElement = getWebDriver().findElement(By.name("domain"));
 
-    assertSame(seleniumElement.getClass(), selenideElement.getClass());
-    assertEquals(seleniumElement.getTagName(), selenideElement.getTagName());
-    assertEquals(seleniumElement.getText(), selenideElement.getText());
+    assertThat(selenideElement.getClass())
+      .isEqualTo(seleniumElement.getClass());
+    assertThat(selenideElement.getTagName())
+      .isEqualTo(seleniumElement.getTagName());
+    assertThat(selenideElement.getText())
+      .isEqualTo(seleniumElement.getText());
   }
 
   @Test
   void userCanFollowLinks() {
     $(By.linkText("Want to see ajax in action?")).scrollTo().followLink();
-    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
+    assertThat(url())
+      .withFailMessage("Actual URL is: " + url())
+      .contains("long_ajax_request.html");
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewBoolean() {
     $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).followLink();
-    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
+    assertThat(url())
+      .withFailMessage("Actual URL is: " + url())
+      .contains("long_ajax_request.html");
   }
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewOptions() {
     $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").followLink();
-    assertTrue("Actual URL is: " + url(), url().contains("long_ajax_request.html"));
+    assertThat(url())
+      .withFailMessage("Actual URL is: " + url())
+      .contains("long_ajax_request.html");
   }
 
   @Test
@@ -364,16 +389,16 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldNotThrowsElementNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $(byText("Unexisting text")).shouldNotBe(hidden),
-      "Element not found {by text: Unexisting text}");
+    assertThatThrownBy(() -> $(byText("Unexisting text")).shouldNotBe(hidden))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {by text: Unexisting text}");
   }
 
   @Test
   void shouldNotThrowsElementMatches() {
-    Assertions.assertThrows(ElementShouldNot.class,
-      () -> $(byText("Bob")).shouldNotHave(cssClass("firstname")),
-      "Element should not have css class 'firstname' {by text: Bob}");
+    assertThatThrownBy(() -> $(byText("Bob")).shouldNotHave(cssClass("firstname")))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageContaining("Element should not have css class 'firstname' {by text: Bob}");
   }
 
   @Test
@@ -394,7 +419,8 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanGetPageTitle() {
-    assertEquals("Test page :: with selects, but withour JQuery", title());
+    assertThat(title())
+      .isEqualTo("Test page :: with selects, but withour JQuery");
   }
 
   @Test
@@ -450,8 +476,10 @@ class SelenideMethodsTest extends IntegrationTest {
       baseUrl = "http://localhost:8080";
       open("www.yandex.ru");
     } catch (WebDriverException e) {
-      assertTrue(e.getAdditionalInformation().contains("selenide.baseUrl: http://localhost:8080"));
-      assertTrue(e.getAdditionalInformation().contains("selenide.url: http://localhost:8080www.yandex.ru"));
+      assertThat(e.getAdditionalInformation())
+        .contains("selenide.baseUrl: http://localhost:8080");
+      assertThat(e.getAdditionalInformation())
+        .contains("selenide.url: http://localhost:8080www.yandex.ru");
     }
   }
 
@@ -484,76 +512,82 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void toStringShowsCurrentValue_evenIfItWasDynamicallyChanged() {
     openFile("page_with_jquery.html");
-    assertThat($("#double-clickable-button"))
-      .hasToString("value=\"double click me\"");
+    assertThat($("#double-clickable-button").toString())
+      .contains("value=\"double click me\"");
 
     $("#double-clickable-button").doubleClick();
-    assertThat($("#double-clickable-button"))
-    .hasToString("value=\"do not click me anymore\"");
+    assertThat($("#double-clickable-button").toString())
+      .contains("value=\"do not click me anymore\"");
   }
 
   @Test
   void userCanCheckConditions() {
-    assertTrue($("#login").is(visible));
-    assertTrue($("#multirowTable").has(text("Chack")));
+    assertThat($("#login").is(visible))
+      .isTrue();
+    assertThat($("#multirowTable").has(text("Chack")))
+      .isTrue();
 
-    assertFalse($(".non-existing-element").has(text("Ninja")));
-    assertFalse($("#multirowTable").has(text("Ninja")));
+    assertThat($(".non-existing-element").has(text("Ninja")))
+      .isFalse();
+    assertThat($("#multirowTable").has(text("Ninja")))
+      .isFalse();
   }
 
   @Test
   void checkFailsForInvalidSelector() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> $(By.xpath("//input[:attr='al]")).is(visible));
+    assertThatThrownBy(() -> $(By.xpath("//input[:attr='al]")).is(visible))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
     timeout = 100L;
 
-    Assertions.assertThrows(ElementShould.class,
-      () -> $("h1").should(text("Some wrong test").because("it's wrong text")),
-      "because it's wrong text");
+    assertThatThrownBy(() -> $("h1").should(text("Some wrong test").because("it's wrong text")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageContaining("because it's wrong text");
   }
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
     timeout = 100L;
 
-    Assertions.assertThrows(ElementShould.class,
-      () -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")),
-      "because it's wrong text");
+    assertThatThrownBy(() -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageContaining("because it's wrong text");
   }
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
     timeout = 100L;
 
-    Assertions.assertThrows(ElementShould.class,
-      () -> $("h1").shouldBe(text("Some wrong test").because("it's wrong text")),
-      "because it's wrong text");
+    assertThatThrownBy(() -> $("h1").shouldBe(text("Some wrong test").because("it's wrong text")))
+      .isInstanceOf(ElementShould.class)
+      .hasMessageContaining("because it's wrong text");
   }
 
   @Test
   void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
     timeout = 100L;
 
-    Assertions.assertThrows(ElementShouldNot.class,
-      () -> $("h1").shouldNot(text("Page with selects").because("it's wrong text")),
-      "because it's wrong text");
+    assertThatThrownBy(() -> $("h1").shouldNot(text("Page with selects").because("it's wrong text")))
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageContaining("because it's wrong text");
 
     try {
       $("h1").shouldNotHave(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     } catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains("because it's wrong text"));
+      assertThat(expected)
+        .hasMessageContaining("because it's wrong text");
     }
 
     try {
       $("h1").shouldNotBe(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
     } catch (ElementShouldNot expected) {
-      assertTrue(expected.getMessage().contains("because it's wrong text"));
+      assertThat(expected)
+        .hasMessageContaining("because it's wrong text");
     }
   }
 
@@ -563,8 +597,8 @@ class SelenideMethodsTest extends IntegrationTest {
       $("h1").waitWhile(visible.because("we expect it do disappear"), 100);
       fail("exception expected");
     } catch (ElementShouldNot expected) {
-      assertTrue("Actual error: " + expected.getMessage(),
-        expected.getMessage().contains("because we expect it do disappear"));
+      assertThat(expected)
+        .hasMessageContaining("because we expect it do disappear");
     }
   }
 
@@ -574,8 +608,8 @@ class SelenideMethodsTest extends IntegrationTest {
       $("h1").waitUntil(hidden.because("it's sensitive information"), 100);
       fail("exception expected");
     } catch (ElementShould expected) {
-      assertTrue("Actual error: " + expected.getMessage(),
-        expected.getMessage().contains("because it's sensitive information"));
+      assertThat(expected)
+        .hasMessageContaining("because it's sensitive information");
     }
   }
 
@@ -586,21 +620,28 @@ class SelenideMethodsTest extends IntegrationTest {
 
     zoom(1.1);
     assertBetween("", $(By.name("domain")).getLocation().getY(), 140, 160);
-    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+    assertThat($(By.name("domain")).getLocation().getX())
+      .isEqualTo(initialX);
 
     zoom(2.0);
     assertBetween("", $(By.name("domain")).getLocation().getY(), 240, 260);
-    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+    assertThat($(By.name("domain")).getLocation().getX())
+      .isEqualTo(initialX);
 
     zoom(0.5);
     assertBetween("", $(By.name("domain")).getLocation().getY(), 70, 80);
-    assertEquals(initialX, $(By.name("domain")).getLocation().getX());
+    assertThat($(By.name("domain")).getLocation().getX())
+      .isEqualTo(initialX);
   }
 
   private static void assertBetween(String message, int n, int lower, int upper) {
     if (!isHtmlUnit()) {
-      assertTrue(message + n + " should be between " + lower + " and " + upper, n >= lower);
-      assertTrue(message + n + " should be between " + lower + " and " + upper, n <= upper);
+      Assertions.assertThat(n >= lower)
+        .withFailMessage(message + n + " should be between " + lower + " and " + upper)
+        .isTrue();
+      Assertions.assertThat(n <= upper)
+        .withFailMessage(message + n + " should be between " + lower + " and " + upper)
+        .isTrue();
     }
   }
 }

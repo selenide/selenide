@@ -1,5 +1,7 @@
 package integration.errormessages;
 
+import java.util.Arrays;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import integration.IntegrationTest;
@@ -35,8 +37,8 @@ class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting__When$$Collection() {
     ElementsCollection collection = $$("ul li");
 
-    assertThat(collection.getTexts())
-      .hasToString("[Miller, Julie Mao]");
+    assertThat(Arrays.toString(collection.getTexts()))
+      .isEqualTo("[Miller, Julie Mao]");
   }
 
   @Test

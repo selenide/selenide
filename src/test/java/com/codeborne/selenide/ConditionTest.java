@@ -411,7 +411,8 @@ class ConditionTest extends UnitTest {
     WebElement element = elementWithSelectedAndText(true, "text");
     assertThat(Condition.and("selected with text", be(Condition.selected), Condition.have(Condition.text("text"))).apply(element))
       .isTrue();
-    assertThat(Condition.and("selected with text", Condition.not(be(Condition.selected)), Condition.have(Condition.text("text"))).apply(element))
+    assertThat(Condition.and("selected with text", Condition.not(be(Condition.selected)), Condition.have(Condition.text("text")))
+      .apply(element))
       .isFalse();
     assertThat(Condition.and("selected with text", be(Condition.selected), Condition.have(Condition.text("incorrect"))).apply(element))
       .isFalse();

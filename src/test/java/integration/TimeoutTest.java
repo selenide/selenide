@@ -48,7 +48,8 @@ class TimeoutTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expectedException) {
       assertThat(expectedException.toString())
-        .withFailMessage(String.format("Error message should contain timeout '1.500 s', but received: %s", expectedException.toString()))
+        .withFailMessage(String.format("Error message should contain timeout '1.500 s', but received: %s",
+          expectedException.toString()))
         .contains("1.500 s");
     }
   }
