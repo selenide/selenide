@@ -14,9 +14,7 @@ dependencies {
   api('io.github.bonigarcia:webdrivermanager:2.2.3')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
-  implementation("org.junit:junit-bom:5.2.0")
   implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  implementation("org.junit.platform:junit-platform-launcher:1.2.0")
 
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
   compileOnly("org.junit.jupiter:junit-jupiter-migrationsupport:$junitVersion")
