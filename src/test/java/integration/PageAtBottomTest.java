@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +24,13 @@ class PageAtBottomTest extends IntegrationTest {
 
   @Test
   void checkPageBottomIsReached() {
-    Assertions.assertFalse(atBottom(), "oops, we shouldn't be at the bottom yet! " + printScrollParams());
+    assertThat(atBottom())
+      .withFailMessage("oops, we shouldn't be at the bottom yet! " + printScrollParams())
+      .isFalse();
     Selenide.executeJavaScript("return window.scrollTo(0, document.body.scrollHeight);");
-    Assertions.assertTrue(atBottom(), "oops we should have reached the bottom already! " + printScrollParams());
+    assertThat(atBottom())
+      .withFailMessage("oops, we shouldn't be at the bottom yet! " + printScrollParams())
+      .isTrue();
   }
 
   private String printScrollParams() {

@@ -11,7 +11,6 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 
 class InputFieldTest extends IntegrationTest {
-
   @BeforeEach
   void setup() {
     open("/html5_input.html?" + System.currentTimeMillis());

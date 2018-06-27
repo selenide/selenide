@@ -1,7 +1,6 @@
 package integration;
 
 import com.automation.remarks.video.annotations.Video;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.source;
-import static org.hamcrest.CoreMatchers.containsString;
 
 class FrameWaitTest extends IntegrationTest {
   @BeforeEach
@@ -42,6 +40,7 @@ class FrameWaitTest extends IntegrationTest {
 
     switchTo().frame(2);
     sleep(100);
-    MatcherAssert.assertThat(source(), containsString("Page with JQuery"));
+    assertThat(source())
+      .contains("Page with JQuery");
   }
 }

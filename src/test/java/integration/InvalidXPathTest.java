@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -18,17 +17,18 @@ class InvalidXPathTest extends IntegrationTest {
 
   @Test
   void usingInvalidXPathShouldThrowInvalidSelectorException() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> $(By.xpath("##[id")).shouldNot(exist));
+    assertThatThrownBy(() -> $(By.xpath("##[id")).shouldNot(exist))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void lookingForMissingElementByXPathShouldFail() {
     try {
       $(By.xpath("//tagga")).should(exist);
-      Assertions.fail("Expected: ElementNotFound exception with cause");
+      fail("Expected: ElementNotFound exception with cause");
     } catch (ElementNotFound expectedException) {
-      Assertions.assertTrue(expectedException.toString().contains("Element not found {By.xpath: //tagga}"));
+      assertThat(expectedException.toString())
+        .contains("Element not found {By.xpath: //tagga}");
     }
   }
 }

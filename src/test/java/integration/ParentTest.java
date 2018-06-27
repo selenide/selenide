@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,27 +14,39 @@ class ParentTest extends IntegrationTest {
 
   @Test
   void canGetImmediateParentElement() {
-    Assertions.assertEquals($("body"), $("#theHiddenElement").parent());
-    Assertions.assertEquals($("#domain-container"), $("h2").parent());
-    Assertions.assertEquals($("#dropdown-list-container"), $(By.name("domain")).parent());
+    assertThat($("#theHiddenElement").parent())
+      .isEqualTo($("body"));
+    assertThat($("h2").parent())
+      .isEqualTo($("#domain-container"));
+    assertThat($(By.name("domain")).parent())
+      .isEqualTo($("#dropdown-list-container"));
 
-    Assertions.assertEquals($("#multirowTableSecondRow"), $(".second_row").parent());
+    assertThat($("#multirowTableSecondRow"))
+      .isEqualTo($(".second_row").parent());
   }
 
   @Test
   void canGetClosestMatchingAncestorByTagName() {
-    Assertions.assertEquals($("body"), $("#theHiddenElement").closest("body"));
-    Assertions.assertEquals($("body"), $("h2").closest("body"));
-    Assertions.assertEquals($("#dropdown-list-container"), $(By.name("domain")).closest("div"));
+    assertThat($("#theHiddenElement").closest("body"))
+      .isEqualTo($("body"));
+    assertThat($("h2").closest("body"))
+      .isEqualTo($("body"));
+    assertThat($(By.name("domain")).closest("div"))
+      .isEqualTo($("#dropdown-list-container"));
   }
 
   @Test
   void canGetClosestMatchingAncestorByClassName() {
-    Assertions.assertEquals($("#dropdown-list-container"), $(By.name("domain")).closest(".container"));
+    assertThat($(By.name("domain")).closest(".container"))
+      .isEqualTo($("#dropdown-list-container"));
 
-    Assertions.assertEquals($("#multirowTableSecondRow"), $(".second_row").closest("tr"));
-    Assertions.assertEquals($("#multirowTable"), $(".second_row").closest("table"));
-    Assertions.assertEquals($("#multirowTable"), $(".second_row").closest(".table"));
-    Assertions.assertEquals($("#multirowTable"), $(".second_row").closest(".multirow_table"));
+    assertThat($(".second_row").closest("tr"))
+      .isEqualTo($("#multirowTableSecondRow"));
+    assertThat($(".second_row").closest("table"))
+      .isEqualTo($("#multirowTable"));
+    assertThat($(".second_row").closest(".table"))
+      .isEqualTo($("#multirowTable"));
+    assertThat($(".second_row").closest(".multirow_table"))
+      .isEqualTo($("#multirowTable"));
   }
 }

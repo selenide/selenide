@@ -7,7 +7,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -21,7 +20,6 @@ import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 
 class PageObjectTest extends IntegrationTest {
-
   private SelectsPage pageWithSelects;
 
   @BeforeEach
@@ -35,25 +33,33 @@ class PageObjectTest extends IntegrationTest {
   void userCanSelectOptionByValue() {
     pageWithSelects.selectDomain("myrambler.ru");
 
-    Assertions.assertEquals("myrambler.ru", pageWithSelects.getSelectedOption().getAttribute("value"));
-    Assertions.assertEquals("@myrambler.ru", pageWithSelects.getSelectedOption().getText());
+    assertThat(pageWithSelects.getSelectedOption().getAttribute("value"))
+      .contains("myrambler.ru");
+    assertThat(pageWithSelects.getSelectedOption().getText())
+      .contains("@myrambler.ru");
   }
 
   @Test
   void userCanSelectOptionByText() {
     pageWithSelects.selectDomainByText("@мыло.ру");
-    Assertions.assertEquals("мыло.ру", pageWithSelects.getSelectedOption().getAttribute("value"));
-    Assertions.assertEquals("@мыло.ру", pageWithSelects.getSelectedOption().getText());
+
+    assertThat(pageWithSelects.getSelectedOption().getAttribute("value"))
+      .contains("мыло.ру");
+    assertThat(pageWithSelects.getSelectedOption().getText())
+      .contains("@мыло.ру");
   }
 
   @Test
   void userCanInjectExistingPageObject() {
     SelectsPage originalPageObject = new SelectsPage();
-    Assertions.assertNull(originalPageObject.domainSelect);
+    assertThat(originalPageObject.domainSelect)
+      .isNull();
 
     SelectsPage pageObject = page(originalPageObject);
-    Assertions.assertSame(originalPageObject, pageObject);
-    Assertions.assertNotNull(pageObject.domainSelect);
+    assertThat(pageObject)
+      .isEqualTo(originalPageObject);
+    assertThat(pageObject.domainSelect)
+      .isNotNull();
   }
 
   @Test
@@ -66,7 +72,8 @@ class PageObjectTest extends IntegrationTest {
   void canInjectListOfSelenideElements() {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
-    Assertions.assertEquals(3, pageWithSelects.h2s.size());
+    assertThat(pageWithSelects.h2s)
+      .hasSize(3);
     pageWithSelects.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     pageWithSelects.h2s.get(1).shouldBe(visible).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     pageWithSelects.h2s.get(2).shouldBe(visible).shouldHave(text("Radio buttons"));
@@ -76,7 +83,8 @@ class PageObjectTest extends IntegrationTest {
   void canInjectElementsCollection() {
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
 
-    Assertions.assertEquals(3, pageWithSelects.h2sElementsCollection.size());
+    assertThat(pageWithSelects.h2sElementsCollection)
+      .hasSize(3);
     pageWithSelects.h2sElementsCollection.get(0)
       .shouldBe(visible)
       .shouldHave(text("Dropdown list"));
@@ -99,7 +107,8 @@ class PageObjectTest extends IntegrationTest {
 
   @Test
   void canComposePageFromListOfReusableBlocks() {
-    Assertions.assertEquals(2, pageWithSelects.userInfoList.size());
+    assertThat(pageWithSelects.userInfoList)
+      .hasSize(2);
 
     pageWithSelects.userInfoList.get(0).getSelf().shouldBe(visible);
     pageWithSelects.userInfoList.get(0).firstName.shouldHave(text("Bob"));
@@ -111,24 +120,26 @@ class PageObjectTest extends IntegrationTest {
   @Test
   void pageObjectShouldNotRequireElementExistenceAtCreation() {
     MissingSelectsPage page = page(MissingSelectsPage.class);
-    Assertions.assertFalse(page.domainSelect.isDisplayed());
-    Assertions.assertFalse(page.status.name.isDisplayed());
+    assertThat(page.domainSelect.isDisplayed())
+      .isFalse();
+    assertThat(page.status.name.isDisplayed())
+      .isFalse();
   }
 
   @Test
   void pageObjectShouldFailWhenTryingToOperateMissingElements() {
     MissingSelectsPage page = page(MissingSelectsPage.class);
 
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> page.domainSelect.click());
+    assertThatThrownBy(() -> page.domainSelect.click())
+      .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
   void pageObjectShouldFailWhenTryingToOperateElementsInMissingContainer() {
     MissingSelectsPage page = page(MissingSelectsPage.class);
 
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> page.status.lastLogin.click());
+    assertThatThrownBy(() -> page.status.lastLogin.click())
+      .isInstanceOf(ElementNotFound.class);
   }
 
   private static class SelectsPage {

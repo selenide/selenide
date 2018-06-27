@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -28,12 +27,14 @@ class ReplacingElementTest extends IntegrationTest {
 
   @Test
   void getInnerText() {
-    Assertions.assertEquals("", $("#dynamic-element").innerText());
+    assertThat($("#dynamic-element").innerText())
+      .isEmpty();
   }
 
   @Test
   void getInnerHtml() {
-    Assertions.assertEquals("", $("#dynamic-element").innerHtml());
+    assertThat($("#dynamic-element").innerHtml())
+      .isEmpty();
   }
 
   @Test
@@ -43,8 +44,8 @@ class ReplacingElementTest extends IntegrationTest {
 
   @Test
   void testToString() {
-    Assertions.assertEquals("<input id=\"dynamic-element\" type=\"text\" value=\"I will be replaced soon\"></input>",
-      $("#dynamic-element").toString());
+    assertThat($("#dynamic-element"))
+      .hasToString("<input id=\"dynamic-element\" type=\"text\" value=\"I will be replaced soon\"></input>");
   }
 
   @Test

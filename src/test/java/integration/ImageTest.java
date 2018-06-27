@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +17,15 @@ class ImageTest extends IntegrationTest {
   void userCanCheckIfImageIsLoadedCorrectly() {
     Assumptions.assumeFalse(isHtmlUnit());
 
-    Assertions.assertTrue($("#valid-image img").isImage());
-    Assertions.assertFalse($("#invalid-image img").isImage());
+    assertThat($("#valid-image img").isImage())
+      .isTrue();
+    assertThat($("#invalid-image img").isImage())
+      .isFalse();
   }
 
   @Test
   void isImageIsOnlyApplicableForImages() {
-    Assertions.assertThrows(IllegalArgumentException.class,
-      () -> $("h1").isImage());
+    assertThatThrownBy(() -> $("h1").isImage())
+      .isInstanceOf(IllegalArgumentException.class);
   }
 }

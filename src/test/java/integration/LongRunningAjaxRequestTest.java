@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -43,7 +42,8 @@ class LongRunningAjaxRequestTest extends IntegrationTest {
   void userCanWaitUntilConditionIsMet() {
     timeout = 10;
     $(byText("Result 2")).waitUntil(visible, 3000);
-    Assertions.assertTrue($(byText("Result 2")).isDisplayed());
+    assertThat($(byText("Result 2")).isDisplayed())
+      .isTrue();
   }
 
   @Test
@@ -61,8 +61,8 @@ class LongRunningAjaxRequestTest extends IntegrationTest {
 
   @Test
   void waitingTimeout() {
-    Assertions.assertThrows(AssertionError.class,
-      () -> $("#non-existing-element").should(exist));
+    assertThatThrownBy(() -> $("#non-existing-element").should(exist))
+      .isInstanceOf(AssertionError.class);
   }
 
   @Test

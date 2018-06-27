@@ -13,7 +13,6 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Selenide.$;
 
 class OverrideCommandsTest extends IntegrationTest {
-
   private AtomicInteger clickCounter = new AtomicInteger();
 
   @BeforeEach

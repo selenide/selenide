@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,6 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.page;
 
 class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
-
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -26,7 +24,8 @@ class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
     MyPage page = page(MyPage.class);
 
     page.h1.shouldHave(Condition.text("Page with selects"));
-    Assertions.assertEquals(3, page.h2s.size());
+    assertThat(page.h2s)
+      .hasSize(3);
     page.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     page.h2First.shouldBe(visible).shouldHave(text("Dropdown list"));
   }

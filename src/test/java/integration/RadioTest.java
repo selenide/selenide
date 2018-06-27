@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -17,7 +16,8 @@ class RadioTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
-    Assertions.assertNull(getSelectedRadio(By.name("me")));
+    assertThat(getSelectedRadio(By.name("me")))
+      .isNull();
   }
 
   @AfterEach
@@ -28,39 +28,43 @@ class RadioTest extends IntegrationTest {
   @Test
   void userCanSelectRadioButtonByValue() {
     selectRadio(By.name("me"), "cat");
-    Assertions.assertEquals("cat", getSelectedRadio(By.name("me")).val());
+    assertThat(getSelectedRadio(By.name("me")).val())
+      .isEqualTo("cat");
   }
 
   @Test
   void userCanSelectRadioButtonByValueOldWay() {
     selectRadio(By.name("me"), "cat");
-    Assertions.assertEquals("cat", getSelectedRadio(By.name("me")).getAttribute("value"));
+    assertThat(getSelectedRadio(By.name("me")).getAttribute("value"))
+      .isEqualTo("cat");
   }
 
   @Test
   void userCanSelectRadioButtonUsingSetValue() {
     Configuration.versatileSetValue = true;
     $(byName("me")).setValue("margarita");
-    Assertions.assertEquals("margarita", getSelectedRadio(By.name("me")).val());
+    assertThat(getSelectedRadio(By.name("me")).val())
+      .isEqualTo("margarita");
   }
 
   @Test
   void selenideElement_selectRadio() {
     $(By.name("me")).selectRadio("margarita");
-    Assertions.assertEquals("margarita", getSelectedRadio(By.name("me")).val());
+    assertThat(getSelectedRadio(By.name("me")).val())
+      .isEqualTo("margarita");
   }
 
   @Test
   void selenideElement_selectRadio_elementNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $(By.id("unknownId")).selectRadio("margarita"),
-      "Element not found {By.id: unknownId}\nExpected: value 'margarita'");
+    assertThatThrownBy(() -> $(By.id("unknownId")).selectRadio("margarita"))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessage("Element not found {By.id: unknownId}\nExpected: value 'margarita'");
   }
 
   @Test
   void selenideElement_selectRadio_valueNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $(By.name("me")).selectRadio("unknown-value"),
-      "Element not found {By.name: me}\nExpected: value 'unknown-value'");
+    assertThatThrownBy(() -> $(By.name("me")).selectRadio("unknown-value"))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessage("Element not found {By.name: me}\nExpected: value 'unknown-value'");
   }
 }
