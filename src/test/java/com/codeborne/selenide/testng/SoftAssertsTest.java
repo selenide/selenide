@@ -1,5 +1,6 @@
 package com.codeborne.selenide.testng;
 
+import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import integration.AttributeTest;
@@ -11,10 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.testng.ITestResult;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -25,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.ITestResult.FAILURE;
 
-class SoftAssertsTest {
+class SoftAssertsTest extends UnitTest {
   private SoftAsserts listener = new SoftAsserts();
 
   @AfterEach
@@ -35,26 +32,35 @@ class SoftAssertsTest {
 
   @Test
   void findsListenersAnnotationFromParentClass() {
-    assertNotNull(listener.getListenersAnnotation(SoftAssertTestNGTest1.class));
-    assertNotNull(listener.getListenersAnnotation(SoftAssertTestNGTest2.class));
-    assertNotNull(listener.getListenersAnnotation(ReportsNGTest.class));
-
-    assertNull(listener.getListenersAnnotation(AttributeTest.class));
+    assertThat(listener.getListenersAnnotation(SoftAssertTestNGTest1.class))
+      .isNotNull();
+    assertThat(listener.getListenersAnnotation(SoftAssertTestNGTest2.class))
+      .isNotNull();
+    assertThat(listener.getListenersAnnotation(ReportsNGTest.class))
+      .isNotNull();
+    assertThat(listener.getListenersAnnotation(AttributeTest.class))
+      .isNotNull();
   }
 
   @Test
   void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
-    assertTrue(listener.shouldIntercept(SoftAssertTestNGTest1.class));
-    assertTrue(listener.shouldIntercept(SoftAssertTestNGTest2.class));
+    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class))
+      .isTrue();
+    assertThat(listener.shouldIntercept(SoftAssertTestNGTest2.class))
+      .isTrue();
 
-    assertFalse(listener.shouldIntercept(ReportsNGTest.class));
-    assertFalse(listener.shouldIntercept(AttributeTest.class));
+    assertThat(listener.shouldIntercept(ReportsNGTest.class))
+      .isFalse();
+    assertThat(listener.shouldIntercept(AttributeTest.class))
+      .isFalse();
   }
 
   @Test
   void shouldNotInterceptTestMethod_withDeclaredExceptedExceptions() throws NoSuchMethodException {
-    assertTrue(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("successfulTest1")));
-    assertFalse(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("testWithExpectedExceptions")));
+    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("successfulTest1")))
+      .isTrue();
+    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("testWithExpectedExceptions")))
+      .isFalse();
   }
 
   @Test
@@ -63,7 +69,8 @@ class SoftAssertsTest {
 
     listener.addSelenideErrorListener(result);
 
-    assertTrue(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
+      .isTrue();
   }
 
   private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
@@ -81,7 +88,8 @@ class SoftAssertsTest {
 
     listener.addSelenideErrorListener(result);
 
-    assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
+      .isFalse();
   }
 
   @Test
@@ -99,7 +107,8 @@ class SoftAssertsTest {
     verify(result).setStatus(FAILURE);
     verify(result).setThrowable(softAssertionError);
 
-    assertFalse(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT));
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
+      .isFalse();
   }
 
   @Test
