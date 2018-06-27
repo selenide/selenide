@@ -9,8 +9,6 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class TimeoutTest extends IntegrationTest {
   @BeforeEach
@@ -26,8 +24,9 @@ class TimeoutTest extends IntegrationTest {
       fail("Looking for non-existing element should fail");
     } catch (NoSuchElementException expectedException) {
       long end = System.nanoTime();
-      assertTrue(
-        end - start < 1000000000L, "Looking for non-existing element took more than 1 ms: " + (end - start) / 1000000 + " ms.");
+      assertThat(end - start < 1000000000L)
+        .withFailMessage("Looking for non-existing element took more than 1 ms: " + (end - start) / 1000000 + " ms.")
+        .isTrue();
     }
   }
 
@@ -36,8 +35,9 @@ class TimeoutTest extends IntegrationTest {
     try {
       $(By.xpath("//h16")).waitUntil(visible, 15);
     } catch (ElementNotFound expectedException) {
-      assertTrue(expectedException.toString().contains("15 ms"), "Error message should contain timeout '15 ms', but received: " +
-        expectedException.toString());
+      assertThat(expectedException.toString())
+        .withFailMessage(String.format("Error message should contain timeout '15 ms', but received: %s", expectedException.toString()))
+        .contains("15 ms");
     }
   }
 
@@ -47,8 +47,9 @@ class TimeoutTest extends IntegrationTest {
       $(By.xpath("//h19")).waitUntil(visible, 1500);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expectedException) {
-      assertTrue(expectedException.toString().contains("1.500 s"), "Error message should contain timeout '1.500 s', but received: " +
-        expectedException.toString());
+      assertThat(expectedException.toString())
+        .withFailMessage(String.format("Error message should contain timeout '1.500 s', but received: %s", expectedException.toString()))
+        .contains("1.500 s");
     }
   }
 
@@ -58,8 +59,10 @@ class TimeoutTest extends IntegrationTest {
       $(By.xpath("//h18")).waitUntil(visible, 800);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expectedException) {
-      assertTrue(expectedException.toString().contains("800 ms"), "Error message should contain timeout '800 ms', but received: " +
-        expectedException.toString());
+
+      assertThat(expectedException.toString())
+        .withFailMessage(String.format("Error message should contain timeout '800 ms', but received: %s", expectedException.toString()))
+        .contains("800 ms");
     }
   }
 }

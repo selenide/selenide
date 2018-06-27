@@ -3,9 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -17,7 +15,6 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 class SelectsTest extends IntegrationTest {
 
@@ -37,8 +34,10 @@ class SelectsTest extends IntegrationTest {
     select.selectOptionByValue("myrambler.ru");
 
     select.getSelectedOption().shouldBe(selected);
-    Assertions.assertEquals("myrambler.ru", select.getSelectedValue());
-    Assertions.assertEquals("@myrambler.ru", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("myrambler.ru");
+    assertThat(select.getSelectedText())
+      .isEqualTo("@myrambler.ru");
   }
 
   @Test
@@ -47,8 +46,10 @@ class SelectsTest extends IntegrationTest {
     SelenideElement select = $(byName("domain"));
     select.setValue("myrambler.ru");
 
-    Assertions.assertEquals("myrambler.ru", select.getSelectedValue());
-    Assertions.assertEquals("@myrambler.ru", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("myrambler.ru");
+    assertThat(select.getSelectedText())
+      .isEqualTo("@myrambler.ru");
   }
 
   @Test
@@ -56,30 +57,34 @@ class SelectsTest extends IntegrationTest {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
 
     select.selectOption(0);
-    MatcherAssert.assertThat(select.getSelectedText(), equalTo("@livemail.ru"));
+    assertThat(select.getSelectedText())
+      .isEqualTo("@livemail.ru");
 
     select.selectOption(1);
-    MatcherAssert.assertThat(select.getSelectedText(), equalTo("@myrambler.ru"));
+    assertThat(select.getSelectedText())
+      .isEqualTo("@myrambler.ru");
 
     select.selectOption(2);
-    MatcherAssert.assertThat(select.getSelectedText(), equalTo("@rusmail.ru"));
+    assertThat(select.getSelectedText())
+      .isEqualTo("@rusmail.ru");
 
     select.selectOption(3);
-    MatcherAssert.assertThat(select.getSelectedText(), equalTo("@мыло.ру"));
+    assertThat(select.getSelectedText())
+      .isEqualTo("@мыло.ру");
   }
 
   @Test()
   void throwsElementNotFoundWithOptionsText() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $x("//select[@name='domain']").selectOption("unexisting-option"),
-      "Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\nExpected: exist");
+    assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption("unexisting-option"))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessage("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\nExpected: exist");
   }
 
   @Test()
   void throwsElementNotFoundWithOptionsIndex() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $x("//select[@name='domain']").selectOption(999),
-      "Element not found {By.xpath: //select[@name='domain']/option[index:999]}\nExpected: exist");
+    assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption(999))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessage("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\nExpected: exist");
   }
 
   @Test
@@ -89,8 +94,10 @@ class SelectsTest extends IntegrationTest {
     select.val("myrambler.ru");
 
     select.getSelectedOption().shouldBe(selected);
-    Assertions.assertEquals("myrambler.ru", select.getSelectedValue());
-    Assertions.assertEquals("@myrambler.ru", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("myrambler.ru");
+    assertThat(select.getSelectedText())
+      .isEqualTo("@myrambler.ru");
   }
 
   @Test
@@ -99,8 +106,10 @@ class SelectsTest extends IntegrationTest {
     select.selectOption("@мыло.ру");
 
     select.getSelectedOption().shouldBe(selected);
-    Assertions.assertEquals("мыло.ру", select.getSelectedValue());
-    Assertions.assertEquals("@мыло.ру", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("мыло.ру");
+    assertThat(select.getSelectedText())
+      .isEqualTo("@мыло.ру");
   }
 
   @Test
@@ -108,15 +117,18 @@ class SelectsTest extends IntegrationTest {
     SelenideElement select = $(By.xpath("//select[@name='domain']"));
     select.selectOptionContainingText("ыло.р");
 
-    Assertions.assertEquals("@мыло.ру", select.getSelectedText());
+    assertThat(select.getSelectedText())
+      .isEqualTo("@мыло.ру");
   }
 
   @Test
   void getTextReturnsTextsOfSelectedOptions() {
-    Assertions.assertEquals("-- Select your hero --", $("#hero").getText());
+    assertThat($("#hero").getText())
+      .isEqualTo("-- Select your hero --");
 
     $("#hero").selectOptionByValue("john mc'lain");
-    Assertions.assertEquals("John Mc'Lain", $("#hero").getText());
+    assertThat($("#hero").getText())
+      .isEqualTo("John Mc'Lain");
   }
 
   @Test

@@ -78,7 +78,7 @@ class ErrorsCollectorTest extends UnitTest {
       errorsCollector.failIfErrors(defaultTestName);
     } catch (SoftAssertionError error) {
       assertThat(error)
-        .as("I couldn't find default error message in error message")
+        .withFailMessage("I couldn't find default error message in error message")
         .hasMessageContaining(defaultErrorMessage);
     }
   }

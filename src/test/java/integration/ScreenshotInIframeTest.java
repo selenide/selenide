@@ -6,7 +6,6 @@ import javax.imageio.ImageIO;
 
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 
 class ScreenshotInIframeTest extends IntegrationTest {
-
   @BeforeEach
   void setUp() {
     Assumptions.assumeFalse(isHtmlUnit());
@@ -29,8 +27,10 @@ class ScreenshotInIframeTest extends IntegrationTest {
     SelenideElement element = $("#small_div");
     BufferedImage image = Screenshots.takeScreenShotAsImage(iframe, element);
     switchTo().frame(iframe);
-    Assertions.assertEquals(element.getSize().getWidth(), image.getWidth());
-    Assertions.assertEquals(element.getSize().getHeight(), image.getHeight());
+    assertThat(image.getWidth())
+      .isEqualTo(element.getSize().getWidth());
+    assertThat(image.getHeight())
+      .isEqualTo(element.getSize().getHeight());
     switchTo().defaultContent();
   }
 
@@ -41,8 +41,10 @@ class ScreenshotInIframeTest extends IntegrationTest {
     File file = Screenshots.takeScreenShot(iframe, element);
     BufferedImage image = ImageIO.read(file);
     switchTo().frame(iframe);
-    Assertions.assertEquals(element.getSize().getWidth(), image.getWidth());
-    Assertions.assertEquals(element.getSize().getHeight(), image.getHeight());
+    assertThat(image.getWidth())
+      .isEqualTo(element.getSize().getWidth());
+    assertThat(image.getHeight())
+      .isEqualTo(element.getSize().getHeight());
     switchTo().defaultContent();
   }
 
@@ -52,8 +54,10 @@ class ScreenshotInIframeTest extends IntegrationTest {
     SelenideElement element = $("#wide_div");
     BufferedImage image = Screenshots.takeScreenShotAsImage(iframe, element);
     switchTo().frame(iframe);
-    Assertions.assertNotEquals(element.getSize().getWidth(), image.getWidth());
-    Assertions.assertEquals(element.getSize().getHeight(), image.getHeight());
+    assertThat(image.getWidth())
+      .isNotEqualTo(element.getSize().getWidth());
+    assertThat(image.getHeight())
+      .isEqualTo(element.getSize().getHeight());
     switchTo().defaultContent();
   }
 
@@ -64,8 +68,10 @@ class ScreenshotInIframeTest extends IntegrationTest {
     File file = Screenshots.takeScreenShot(iframe, element);
     BufferedImage image = ImageIO.read(file);
     switchTo().frame(iframe);
-    Assertions.assertNotEquals(element.getSize().getWidth(), image.getWidth());
-    Assertions.assertEquals(element.getSize().getHeight(), image.getHeight());
+    assertThat(image.getWidth())
+      .isNotEqualTo(element.getSize().getWidth());
+    assertThat(image.getHeight())
+      .isEqualTo(element.getSize().getHeight());
     switchTo().defaultContent();
   }
 
@@ -74,7 +80,8 @@ class ScreenshotInIframeTest extends IntegrationTest {
     SelenideElement iframe = $("#iframe_page");
     SelenideElement element = $("#big_div");
     BufferedImage image = Screenshots.takeScreenShotAsImage(iframe, element);
-    Assertions.assertTrue(image == null);
+    assertThat(image)
+      .isNull();
   }
 
   @Test
@@ -82,6 +89,7 @@ class ScreenshotInIframeTest extends IntegrationTest {
     SelenideElement iframe = $("#iframe_page");
     SelenideElement element = $("#big_div");
     File file = Screenshots.takeScreenShot(iframe, element);
-    Assertions.assertTrue(file == null);
+    assertThat(file)
+      .isNull();
   }
 }

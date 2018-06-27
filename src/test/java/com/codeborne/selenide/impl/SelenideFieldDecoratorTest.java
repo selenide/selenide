@@ -65,7 +65,7 @@ class SelenideFieldDecoratorTest extends UnitTest {
   void decoratesVanillaWebElements() throws NoSuchFieldException {
     final Object someDiv = fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv"));
     assertThat(someDiv)
-      .as("someDiv should not be instance of SelenideElement. Actual class: " + someDiv.getClass())
+      .withFailMessage("someDiv should not be instance of SelenideElement. Actual class: " + someDiv.getClass())
       .isInstanceOf(SelenideElement.class);
   }
 

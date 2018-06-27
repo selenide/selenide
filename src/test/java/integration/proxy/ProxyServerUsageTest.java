@@ -51,10 +51,10 @@ class ProxyServerUsageTest extends IntegrationTest {
       .isNotNull();
 
     assertThat(requests)
-      .as("All requests: " + requests)
+      .withFailMessage("All requests: " + requests)
       .hasSize(1);
     assertThat(responses)
-      .as("All responses: " + responses)
+      .withFailMessage("All responses: " + responses)
       .hasSize(1);
 
     assertThat(requests)

@@ -20,8 +20,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScreenshotTest extends IntegrationTest {
   @BeforeEach
@@ -38,10 +36,15 @@ class ScreenshotTest extends IntegrationTest {
     String screenshotPath = IS_OS_WINDOWS ? Configuration.reportsFolder.replace("/", "\\") : Configuration.reportsFolder;
 
     BufferedImage img = ImageIO.read(screenshot);
-    assertEquals(img.getWidth(), element.getSize().getWidth(), "Screenshot doesn't fit width " + info);
-    assertEquals(img.getHeight(), element.getSize().getHeight(), "Screenshot doesn't fit height " + info);
-    assertTrue(screenshot.getPath().startsWith(screenshotPath),
-      String.format("Screenshot file should be located in %s, but was: %s", screenshotPath, screenshot.getPath()));
+    assertThat(element.getSize().getWidth())
+      .withFailMessage("Screenshot doesn't fit width " + info)
+      .isEqualTo(img.getWidth());
+    assertThat(element.getSize().getHeight())
+      .withFailMessage("Screenshot doesn't fit height " + info)
+      .isEqualTo(img.getHeight());
+    assertThat(screenshot.getPath())
+      .withFailMessage(String.format("Screenshot file should be located in %s, but was: %s", screenshotPath, screenshot.getPath()))
+      .startsWith(screenshotPath);
   }
 
   @Test
@@ -50,7 +53,7 @@ class ScreenshotTest extends IntegrationTest {
     SelenideElement element = $("#wide_div");
     BufferedImage img = element.screenshotAsImage();
     assertThat(img.getWidth())
-      .as("Screenshot doesn't fit width")
+      .withFailMessage("Screenshot doesn't fit width")
       .isLessThan(element.getSize().getWidth());
   }
 
@@ -60,7 +63,7 @@ class ScreenshotTest extends IntegrationTest {
     SelenideElement element = $("#big_div");
     BufferedImage img = new ScreenShotLaboratory().takeScreenshotAsImage(element);
     assertThat(img.getHeight())
-      .as("Screenshot doesn't fit height")
+      .withFailMessage("Screenshot doesn't fit height")
       .isLessThan(element.getSize().getHeight());
   }
 
@@ -76,10 +79,10 @@ class ScreenshotTest extends IntegrationTest {
       element.getLocation(), element.getSize(), tmp.getWidth(), tmp.getHeight());
 
     assertThat(img.getWidth())
-      .as("Screenshot doesn't fit width - " + errorDetails)
+      .withFailMessage("Screenshot doesn't fit width - " + errorDetails)
       .isLessThan(element.getSize().getWidth());
     assertThat(img.getHeight())
-      .as("Screenshot doesn't fit height - " + errorDetails)
+      .withFailMessage("Screenshot doesn't fit height - " + errorDetails)
       .isLessThan(element.getSize().getHeight());
   }
 }

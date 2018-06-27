@@ -20,7 +20,7 @@ class UserAgentTest extends IntegrationTest {
     assertThat(userAgent)
       .isNullOrEmpty();
     assertThat(userAgent)
-      .as(String.format("Current user agent [%s] should belong to '%s' browser", userAgent, browser))
+      .withFailMessage(String.format("Current user agent [%s] should belong to '%s' browser", userAgent, browser))
       .isEqualToIgnoringCase(browser);
   }
 }
