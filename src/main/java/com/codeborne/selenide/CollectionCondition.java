@@ -16,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
+  protected String explanation;
+
   public abstract void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs);
 
   public static CollectionCondition empty = size(0);
@@ -104,35 +106,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   /**
    * Should be used for explaining the reason of condition
    */
-  public CollectionCondition because(String message) {
-    return new ExplainedCollectionCondition(this, message);
+  public CollectionCondition because(String explanation) {
+    this.explanation = explanation;
+    return this;
   }
-
-  private static class ExplainedCollectionCondition extends CollectionCondition {
-    private final CollectionCondition delegate;
-    private final String message;
-
-    private ExplainedCollectionCondition(CollectionCondition delegate, String message) {
-      this.delegate = delegate;
-      this.message = message;
-    }
-
-    @Override
-    public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
-      delegate.fail(collection, elements, lastError, timeoutMs);
-    }
-
-    @Override
-    public boolean apply(List<WebElement> element) {
-      return delegate.apply(element);
-    }
-
-    @Override
-    public String toString() {
-      return delegate.toString() + " (because " + message + ")";
-    }
-
-  }
-
-
 }

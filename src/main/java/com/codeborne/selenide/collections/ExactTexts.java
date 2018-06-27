@@ -50,7 +50,7 @@ public class ExactTexts extends CollectionCondition {
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
     } else {
-      throw new TextsMismatch(collection, ElementsCollection.texts(elements), expectedTexts, timeoutMs);
+      throw new TextsMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
     }
   }
 
