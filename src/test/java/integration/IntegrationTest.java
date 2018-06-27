@@ -8,6 +8,7 @@ import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,7 +34,7 @@ import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
-public abstract class IntegrationTest {
+public abstract class IntegrationTest implements WithAssertions {
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
   // http or https
   private static final boolean SSL = false;

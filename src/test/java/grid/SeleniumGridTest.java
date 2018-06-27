@@ -3,7 +3,6 @@ package grid;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.close;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 class SeleniumGridTest extends IntegrationTest {
@@ -43,7 +41,8 @@ class SeleniumGridTest extends IntegrationTest {
   @Test
   void shouldUseLocalFileDetector() {
     RemoteWebDriver webDriver = (RemoteWebDriver) WebDriverRunner.getWebDriver();
-    MatcherAssert.assertThat(webDriver.getFileDetector(), instanceOf(LocalFileDetector.class));
+    assertThat(webDriver.getFileDetector())
+      .isInstanceOf(LocalFileDetector.class);
   }
 
   @AfterEach
