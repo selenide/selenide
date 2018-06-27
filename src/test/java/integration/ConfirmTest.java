@@ -3,7 +3,6 @@ package integration;
 import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,7 +75,7 @@ class ConfirmTest extends IntegrationTest {
       return;
     }
     if (supportsModalDialogs()) {
-      Assertions.fail("Should throw DialogTextMismatch for mismatching text");
+      fail("Should throw DialogTextMismatch for mismatching text");
     }
   }
 
@@ -86,7 +85,8 @@ class ConfirmTest extends IntegrationTest {
     Assumptions.assumeTrue(supportsModalDialogs());
 
     $(byText("Confirm button")).click();
-    Assertions.assertEquals("Get out of this page, " + userName + '?', confirm());
+    assertThat(confirm())
+      .isEqualTo(String.format("Get out of this page, %s?", userName));
   }
 
   @Test
@@ -95,7 +95,8 @@ class ConfirmTest extends IntegrationTest {
     Assumptions.assumeTrue(supportsModalDialogs());
 
     $(byText("Confirm button")).click();
-    Assertions.assertEquals("Get out of this page, " + userName + '?', dismiss());
+    assertThat(dismiss())
+      .isEqualTo(String.format("Get out of this page, %s?", userName));
   }
 
   @Test
@@ -106,7 +107,8 @@ class ConfirmTest extends IntegrationTest {
     String confirmDialogText = confirm();
 
     if (!isHeadless()) {
-      Assertions.assertEquals("Get out of this page, " + userName + '?', confirmDialogText);
+      assertThat(confirmDialogText)
+        .isEqualTo(String.format("Get out of this page, %s?", userName));
     }
   }
 }

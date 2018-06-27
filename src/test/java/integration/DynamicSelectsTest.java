@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -22,8 +21,10 @@ class DynamicSelectsTest extends IntegrationTest {
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    Assertions.assertEquals("'eng'", select.getSelectedValue());
-    Assertions.assertEquals("l'a \"English\"", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("'eng'");
+    assertThat(select.getSelectedText())
+      .isEqualTo("l'a \"English\"");
   }
 
   @Test
@@ -32,14 +33,17 @@ class DynamicSelectsTest extends IntegrationTest {
 
     SelenideElement select = $("#language");
     select.getSelectedOption().shouldBe(selected);
-    Assertions.assertEquals("\"est\"", select.getSelectedValue());
-    Assertions.assertEquals("l'a \"Eesti\"", select.getSelectedText());
+    assertThat(select.getSelectedValue())
+      .isEqualTo("\"est\"");
+    assertThat(select.getSelectedText())
+      .isEqualTo("l'a \"Eesti\"");
   }
 
   @Test
   void selectByXPath() {
     $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).selectOption("l'a \"English\"");
-    Assertions.assertEquals("l'a \"English\"", $(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedText());
+    assertThat($(By.xpath("html/body/div[1]/form[1]/label[1]/select[1]")).getSelectedText())
+      .isEqualTo("l'a \"English\"");
   }
 
   @Test

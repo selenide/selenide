@@ -2,7 +2,6 @@ package integration;
 
 import java.io.File;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,16 +30,25 @@ class FileUploadTest extends IntegrationTest {
     $("#submit").click();
     $("h3").shouldHave(text("Uploaded 2 files"));
 
-    Assertions.assertTrue(f1.exists());
-    Assertions.assertTrue(f2.exists());
-    Assertions.assertEquals("hello_world.txt", f1.getName());
-    Assertions.assertEquals("firebug-1.11.4.xpi", f2.getName());
+    assertThat(f1)
+      .exists();
+    assertThat(f2)
+      .exists();
+    assertThat(f1.getName())
+      .isEqualTo("hello_world.txt");
+    assertThat(f2.getName())
+      .isEqualTo("firebug-1.11.4.xpi");
 
-    Assertions.assertEquals(2, server.uploadedFiles.size());
-    Assertions.assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
-    Assertions.assertTrue(server.uploadedFiles.get(1).getName().endsWith("firebug-1.11.4.xpi"));
+    assertThat(server.uploadedFiles)
+      .hasSize(2);
 
-    Assertions.assertEquals("Hello, WinRar!", server.uploadedFiles.get(0).getString());
+    assertThat(server.uploadedFiles.get(0).getName())
+      .endsWith("hello_world.txt");
+    assertThat(server.uploadedFiles.get(1).getName())
+      .endsWith("firebug-1.11.4.xpi");
+
+    assertThat(server.uploadedFiles.get(0).getString())
+      .isEqualTo("Hello, WinRar!");
   }
 
   @Test
@@ -48,9 +56,11 @@ class FileUploadTest extends IntegrationTest {
     File file = $("#cv").uploadFile(new File("src/test/java/../resources/hello_world.txt"));
     $("#submit").click();
     $("h3").shouldHave(text("Uploaded 1 files"));
-    Assertions.assertTrue(file.exists());
-    Assertions.assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
-    Assertions.assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
+    assertThat(file).exists();
+    assertThat(file.getPath().replace(File.separatorChar, '/'))
+      .endsWith("src/test/resources/hello_world.txt");
+    assertThat(server.uploadedFiles.get(0).getName())
+      .endsWith("hello_world.txt");
   }
 
   @Test
@@ -68,17 +78,26 @@ class FileUploadTest extends IntegrationTest {
     $("#multi-file-upload-form .submit").click();
 
     $("h3").shouldHave(text("Uploaded 9 files"));
-    Assertions.assertEquals(9, server.uploadedFiles.size());
+    assertThat(server.uploadedFiles)
+      .hasSize(9);
 
-    Assertions.assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
-    Assertions.assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery.min.js"));
-    Assertions.assertTrue(server.uploadedFiles.get(2).getName().endsWith("jquery-ui.min.css"));
-    Assertions.assertTrue(server.uploadedFiles.get(3).getName().endsWith("long_ajax_request.html"));
-    Assertions.assertTrue(server.uploadedFiles.get(8).getName().endsWith("selenide-logo-big.png"));
+    assertThat(server.uploadedFiles.get(0).getName())
+      .endsWith("hello_world.txt");
+    assertThat(server.uploadedFiles.get(1).getName())
+      .endsWith("jquery.min.js");
+    assertThat(server.uploadedFiles.get(2).getName())
+      .endsWith("jquery-ui.min.css");
+    assertThat(server.uploadedFiles.get(3).getName())
+      .endsWith("long_ajax_request.html");
+    assertThat(server.uploadedFiles.get(8).getName())
+      .endsWith("selenide-logo-big.png");
 
-    Assertions.assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
-    Assertions.assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library"));
-    Assertions.assertTrue(server.uploadedFiles.get(2).getString().contains("jQuery UI"));
+    assertThat(server.uploadedFiles.get(0).getString())
+      .contains("Hello, WinRar!");
+    assertThat(server.uploadedFiles.get(1).getString())
+      .contains("jQuery JavaScript Library");
+    assertThat(server.uploadedFiles.get(2).getString())
+      .contains("jQuery UI");
   }
 
   @Test
@@ -90,15 +109,22 @@ class FileUploadTest extends IntegrationTest {
     $("#multi-file-upload-form .submit").click();
     $("h3").shouldHave(text("Uploaded 2 files"));
 
-    Assertions.assertTrue(file.exists());
-    Assertions.assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/test/resources/hello_world.txt"));
+    assertThat(file)
+      .exists();
+    assertThat(file.getPath().replace(File.separatorChar, '/'))
+      .endsWith("src/test/resources/hello_world.txt");
 
-    Assertions.assertEquals(2, server.uploadedFiles.size());
+    assertThat(server.uploadedFiles)
+      .hasSize(2);
 
-    Assertions.assertTrue(server.uploadedFiles.get(0).getName().endsWith("hello_world.txt"));
-    Assertions.assertTrue(server.uploadedFiles.get(1).getName().endsWith("jquery.min.js"));
+    assertThat(server.uploadedFiles.get(0).getName())
+      .endsWith("hello_world.txt");
+    assertThat(server.uploadedFiles.get(1).getName())
+      .endsWith("jquery.min.js");
 
-    Assertions.assertTrue(server.uploadedFiles.get(0).getString().contains("Hello, WinRar!"));
-    Assertions.assertTrue(server.uploadedFiles.get(1).getString().contains("jQuery JavaScript Library v1.8.3"));
+    assertThat(server.uploadedFiles.get(0).getString())
+      .contains("Hello, WinRar!");
+    assertThat(server.uploadedFiles.get(1).getString())
+      .contains("jQuery JavaScript Library v1.8.3");
   }
 }

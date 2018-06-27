@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,12 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
     File downloadedFile = $(byText("Download me")).download();
 
-    Assertions.assertEquals("hello_world.txt", downloadedFile.getName());
-    Assertions.assertEquals("Hello, WinRar!", readFileToString(downloadedFile, "UTF-8"));
-    Assertions.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+    assertThat(downloadedFile.getName())
+      .isEqualTo("hello_world.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
   }
 
   @Test
@@ -46,21 +48,25 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
-    Assertions.assertEquals("файл-с-русским-названием.txt", downloadedFile.getName());
-    Assertions.assertEquals("Превед медвед!", readFileToString(downloadedFile, "UTF-8"));
-    Assertions.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+    assertThat(downloadedFile.getName())
+      .isEqualTo("файл-с-русским-названием.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед медвед!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
   }
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("http://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
-    Assertions.assertEquals("some-file.txt", video.getName());
+    assertThat(video.getName())
+      .isEqualTo("some-file.txt");
   }
 
   @Test
   void downloadMissingFile() {
-    Assertions.assertThrows(FileNotFoundException.class,
-      () -> $(byText("Download missing file")).download());
+    assertThatThrownBy(() -> $(byText("Download missing file")).download())
+      .isInstanceOf(FileNotFoundException.class);
   }
 }

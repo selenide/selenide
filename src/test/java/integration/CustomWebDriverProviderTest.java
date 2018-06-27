@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,8 @@ class CustomWebDriverProviderTest extends IntegrationTest {
 
     openFile("autocomplete.html");
 
-    Assertions.assertTrue(WebDriverRunner.getWebDriver() instanceof CustomChromeDriver);
+    assertThat(WebDriverRunner.getWebDriver())
+      .isInstanceOf(CustomChromeDriver.class);
   }
 
   private static class CustomChromeDriver extends ChromeDriver {

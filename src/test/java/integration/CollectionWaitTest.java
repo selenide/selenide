@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -41,8 +40,8 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void failsIfWrongSize() {
-    Assertions.assertThrows(AssertionError.class,
-      () -> $$("#collection li").shouldHave(size(-1)));
+    assertThatThrownBy(() -> $$("#collection li").shouldHave(size(-1)))
+      .isInstanceOf(AssertionError.class);
   }
 
   @Test

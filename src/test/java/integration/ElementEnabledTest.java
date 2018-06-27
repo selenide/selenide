@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +26,8 @@ class ElementEnabledTest extends IntegrationTest {
 
   @Test
   void unexistingElementIsNotEnabled() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $("#unexisting-element").shouldBe(enabled));
+    assertThatThrownBy(() -> $("#unexisting-element").shouldBe(enabled))
+      .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
