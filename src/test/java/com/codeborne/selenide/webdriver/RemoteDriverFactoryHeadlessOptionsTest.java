@@ -50,7 +50,7 @@ class RemoteDriverFactoryHeadlessOptionsTest extends UnitTest {
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
 
     assertThat(launchArguments)
-      .contains("--headless");
+      .doesNotContain("--headless");
   }
 
   @Test
