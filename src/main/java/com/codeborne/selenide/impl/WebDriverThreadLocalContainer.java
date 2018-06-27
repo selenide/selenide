@@ -214,6 +214,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   protected WebDriver createDriver() {
+    if (!reopenBrowserOnFail) {
+      throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
+        ", and cannot create a new webdriver because Configuration.reopenBrowserOnFail=false");
+    }
+
     Proxy userProvidedProxy = proxy;
 
     if (Configuration.fileDownload == PROXY) {
