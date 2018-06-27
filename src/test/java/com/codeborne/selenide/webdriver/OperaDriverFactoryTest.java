@@ -3,10 +3,8 @@ package com.codeborne.selenide.webdriver;
 import java.util.Map;
 
 import com.codeborne.selenide.Configuration;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.InvalidArgumentException;
@@ -16,8 +14,7 @@ import org.openqa.selenium.opera.OperaOptions;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
-class OperaDriverFactoryTest {
-
+class OperaDriverFactoryTest extends UnitTest {
   private Proxy proxy = mock(Proxy.class);
 
   @AfterEach
@@ -31,14 +28,14 @@ class OperaDriverFactoryTest {
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = new OperaDriverFactory().createOperaOptions(proxy);
     Map options = (Map) caps.asMap().get(OperaOptions.CAPABILITY);
-    MatcherAssert.assertThat(options.get("binary"), Matchers.is("c:/browser.exe"));
+    assertThat(options.get("binary"))
+      .isEqualTo("c:/browser.exe");
   }
 
   @Test
   void headlessCanNotBeSet() {
     Configuration.headless = true;
-    Assertions.assertThrows(InvalidArgumentException.class, () -> {
-      Capabilities caps = new OperaDriverFactory().createOperaOptions(proxy);
-    });
+    assertThatThrownBy(() -> new OperaDriverFactory().createOperaOptions(proxy))
+      .isInstanceOf(InvalidArgumentException.class);
   }
 }

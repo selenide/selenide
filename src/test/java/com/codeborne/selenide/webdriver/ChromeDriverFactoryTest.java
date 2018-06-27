@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.codeborne.selenide.Configuration;
-import org.hamcrest.Matchers;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -13,15 +13,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
-class ChromeDriverFactoryTest {
-
+class ChromeDriverFactoryTest extends UnitTest {
   private final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
   private Proxy proxy = mock(Proxy.class);
@@ -40,9 +35,8 @@ class ChromeDriverFactoryTest {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(optionArguments, hasItems("abdd"));
-    assertThat(optionArguments, hasItems("--abcd"));
-    assertThat(optionArguments, hasItems("xcvcd=123"));
+    assertThat(optionArguments)
+      .contains("abdd", "--abcd", "xcvcd=123");
   }
 
   @Test
@@ -51,10 +45,11 @@ class ChromeDriverFactoryTest {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap, hasEntry("key1", "stringval"));
-    assertThat(prefsMap, hasEntry("key2", 1));
-    assertThat(prefsMap, hasEntry("key3", false));
-    assertThat(prefsMap, hasEntry("key4", true));
+    assertThat(prefsMap)
+      .containsEntry("key1", "stringval")
+      .containsEntry("key2", 1)
+      .containsEntry("key3", false)
+      .containsEntry("key4", true);
   }
 
   @Test
@@ -63,8 +58,10 @@ class ChromeDriverFactoryTest {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap.size(), is(1));
-    assertThat(prefsMap, hasEntry("key1", 1));
+    assertThat(prefsMap)
+      .hasSize(1);
+    assertThat(prefsMap)
+      .containsEntry("key1", 1);
   }
 
   @Test
@@ -73,8 +70,10 @@ class ChromeDriverFactoryTest {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap.size(), is(1));
-    assertThat(prefsMap, hasEntry("key1", 1));
+    assertThat(prefsMap)
+      .hasSize(1);
+    assertThat(prefsMap)
+      .containsEntry("key1", 1);
   }
 
   @Test
@@ -86,14 +85,14 @@ class ChromeDriverFactoryTest {
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(optionArguments, hasItems("abdd"));
-    assertThat(optionArguments, hasItems("--abcd"));
-    assertThat(optionArguments, hasItems("xcvcd=123"));
+    assertThat(optionArguments)
+      .contains("abdd", "--abcd", "xcvcd=123");
 
-    assertThat(prefsMap, hasEntry("key1", "stringval"));
-    assertThat(prefsMap, hasEntry("key2", 1));
-    assertThat(prefsMap, hasEntry("key3", false));
-    assertThat(prefsMap, hasEntry("key4", true));
+    assertThat(prefsMap)
+      .containsEntry("key1", "stringval")
+      .containsEntry("key2", 1)
+      .containsEntry("key3", false)
+      .containsEntry("key4", true);
   }
 
   @Test
@@ -101,7 +100,9 @@ class ChromeDriverFactoryTest {
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = new ChromeDriverFactory().createChromeOptions(proxy);
     Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
-    assertThat(options.get("binary"), Matchers.is("c:/browser.exe"));
+
+    assertThat(options.get("binary"))
+      .isEqualTo("c:/browser.exe");
   }
 
   @Test
@@ -110,6 +111,7 @@ class ChromeDriverFactoryTest {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(optionArguments, hasItems("--headless"));
+    assertThat(optionArguments)
+      .contains("--headless");
   }
 }

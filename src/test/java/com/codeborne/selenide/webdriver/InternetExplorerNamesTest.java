@@ -1,22 +1,23 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.UnitTest;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
-class InternetExplorerNamesTest {
+class InternetExplorerNamesTest extends UnitTest {
   @Test
   void internetExplorerShortNameTest() {
     Configuration.browser = "ie";
-    assertThat(isIE(), is(true));
+    assertThat(isIE())
+      .isTrue();
   }
 
   @Test
   void internetExplorerFullNameTest() {
     Configuration.browser = "internet explorer";
-    assertThat(isIE(), is(true));
+    assertThat(isIE())
+      .isTrue();
   }
 }

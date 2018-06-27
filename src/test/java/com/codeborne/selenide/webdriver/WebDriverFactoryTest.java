@@ -15,7 +15,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 class WebDriverFactoryTest {
-
   private WebDriverFactory factory = spy(new WebDriverFactory());
   private WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
 
