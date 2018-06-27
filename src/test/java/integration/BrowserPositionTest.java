@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,8 @@ class BrowserPositionTest extends IntegrationTest {
 
     open("/start_page.html");
 
-    Assertions.assertEquals(new Point(30, 60), getWebDriver().manage().window().getPosition());
+    assertThat(getWebDriver().manage().window().getPosition())
+      .isEqualTo(new Point(30, 60));
   }
 
   @Test
@@ -37,6 +37,7 @@ class BrowserPositionTest extends IntegrationTest {
 
     open("/start_page.html");
 
-    Assertions.assertEquals(new Point(110, 100), getWebDriver().manage().window().getPosition());
+    assertThat(getWebDriver().manage().window().getPosition())
+      .isEqualTo(new Point(110, 100));
   }
 }

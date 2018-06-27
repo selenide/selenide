@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -62,7 +61,7 @@ class AlertTest extends IntegrationTest {
       return;
     }
     if (supportsModalDialogs()) {
-      Assertions.fail("Should throw DialogTextMismatch for mismatching text");
+      fail("Should throw DialogTextMismatch for mismatching text");
     }
   }
 

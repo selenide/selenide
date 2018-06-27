@@ -9,7 +9,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -50,17 +49,22 @@ class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   void invalidSelector() {
-    Assertions.assertThrows(InvalidSelectorException.class,
-      () -> $$(By.xpath("//xxx[@'")).shouldHave(size(0)));
+    assertThatThrownBy(() -> $$(By.xpath("//xxx[@'")).shouldHave(size(0)))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void canUseSizeMethod() {
-    Assertions.assertEquals(1, $$(By.name("domain")).size());
-    Assertions.assertEquals(1, $$("#theHiddenElement").size());
-    Assertions.assertEquals(4, $$("#radioButtons input").size());
-    Assertions.assertEquals(4, $$(By.xpath("//select[@name='domain']/option")).size());
-    Assertions.assertEquals(0, $$(By.name("non-existing-element")).size());
+    assertThat($$(By.name("domain")))
+      .hasSize(1);
+    assertThat($$("#theHiddenElement"))
+      .hasSize(1);
+    assertThat($$("#radioButtons input"))
+      .hasSize(4);
+    assertThat($$(By.xpath("//select[@name='domain']/option")))
+      .hasSize(4);
+    assertThat($$(By.name("non-existing-element")))
+      .hasSize(0);
   }
 
   @Test
@@ -86,8 +90,10 @@ class CollectionMethodsTest extends IntegrationTest {
 
     spans.shouldHave(size(2)); // appears after 2 seconds
 
-    Assertions.assertEquals(2, spans.size());
-    Assertions.assertArrayEquals(new String[]{"dynamic content", "dynamic content2"}, spans.getTexts());
+    assertThat(spans)
+      .hasSize(2);
+    assertThat(spans.getTexts())
+      .isEqualTo(new String[]{"dynamic content", "dynamic content2"});
   }
 
   @Test
@@ -107,32 +113,32 @@ class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   void canCheckThatElementsHaveExactlyCorrectTexts() {
-    Assertions.assertThrows(TextsMismatch.class,
-      () -> $$("#dynamic-content-container span").shouldHave(exactTexts("content", "content2")));
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactTexts("content", "content2")))
+      .isInstanceOf(TextsMismatch.class);
   }
 
   @Test
   void textsCheckThrowsElementNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $$(".non-existing-elements").shouldHave(texts("content1", "content2")));
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(texts("content1", "content2")))
+      .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
   void exactTextsCheckThrowsElementNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2")));
+    assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2")))
+      .isInstanceOf(ElementNotFound.class);
   }
 
   @Test
   void textsCheckThrowsTextsMismatch() {
-    Assertions.assertThrows(TextsMismatch.class,
-      () -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3")));
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3")))
+      .isInstanceOf(TextsMismatch.class);
   }
 
   @Test
   void failsFast_ifNoExpectedTextsAreGiven() {
-    Assertions.assertThrows(IllegalArgumentException.class,
-      () -> $$("#dynamic-content-container span").shouldHave(texts()));
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts()))
+      .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -151,9 +157,11 @@ class CollectionMethodsTest extends IntegrationTest {
 
   @Test
   void errorMessageShouldShow_whichElementInChainWasNotFound() {
-    Assertions.assertThrows(ElementNotFound.class,
-      () -> $$("#multirowTable").findBy(text("INVALID-TEXT")).findAll("valid-selector").shouldHave(texts("foo bar")),
-      "Element not found {#multirowTable.findBy(text 'INVALID-TEXT')}");
+    assertThatThrownBy(() -> $$("#multirowTable").findBy(text("INVALID-TEXT"))
+      .findAll("valid-selector")
+      .shouldHave(texts("foo bar")))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {#multirowTable.findBy(text 'INVALID-TEXT')}");
   }
 
   @Test
@@ -206,38 +214,49 @@ class CollectionMethodsTest extends IntegrationTest {
   @Test
   void canIterateCollection_withIterator() {
     Iterator<SelenideElement> it = $$("[name=domain] option").iterator();
-    Assertions.assertTrue(it.hasNext());
+    assertThat(it.hasNext())
+      .isTrue();
     it.next().shouldHave(text("@livemail.ru"));
 
-    Assertions.assertTrue(it.hasNext());
+    assertThat(it.hasNext())
+      .isTrue();
     it.next().shouldHave(text("@myrambler.ru"));
 
-    Assertions.assertTrue(it.hasNext());
+    assertThat(it.hasNext())
+      .isTrue();
     it.next().shouldHave(text("@rusmail.ru"));
 
-    Assertions.assertTrue(it.hasNext());
+    assertThat(it.hasNext())
+      .isTrue();
     it.next().shouldHave(text("@мыло.ру"));
 
-    Assertions.assertFalse(it.hasNext());
+    assertThat(it.hasNext())
+      .isFalse();
   }
 
   @Test
   void canIterateCollection_withListIterator() {
     ListIterator<SelenideElement> it = $$("[name=domain] option").listIterator(3);
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertTrue(it.hasPrevious());
+    assertThat(it.hasNext())
+      .isTrue();
+    assertThat(it.hasPrevious())
+      .isTrue();
     it.previous().shouldHave(text("@rusmail.ru"));
 
-    Assertions.assertTrue(it.hasPrevious());
+    assertThat(it.hasPrevious())
+      .isTrue();
     it.previous().shouldHave(text("@myrambler.ru"));
 
-    Assertions.assertTrue(it.hasPrevious());
+    assertThat(it.hasPrevious())
+      .isTrue();
     it.previous().shouldHave(text("@livemail.ru"));
 
-    Assertions.assertFalse(it.hasPrevious());
+    assertThat(it.hasPrevious())
+      .isFalse();
 
     it.next().shouldHave(text("@livemail.ru"));
-    Assertions.assertTrue(it.hasPrevious());
+    assertThat(it.hasPrevious())
+      .isTrue();
   }
 
   @Test
@@ -254,7 +273,8 @@ class CollectionMethodsTest extends IntegrationTest {
       .map(SelenideElement::getText)
       .collect(Collectors.toList());
 
-    Assertions.assertEquals(regularSublist, selenideSublist);
+    assertThat(selenideSublist)
+      .isEqualTo(regularSublist);
   }
 
   @Test
@@ -271,7 +291,8 @@ class CollectionMethodsTest extends IntegrationTest {
       .map(SelenideElement::getText)
       .collect(Collectors.toList());
 
-    Assertions.assertEquals(regularSublist, selenideSublist);
+    assertThat(selenideSublist)
+      .isEqualTo(regularSublist);
   }
 
   @Test

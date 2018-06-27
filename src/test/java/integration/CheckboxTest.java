@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ex.InvalidStateException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -25,8 +24,8 @@ class CheckboxTest extends IntegrationTest {
 
     $(By.name("rememberMe")).shouldBe(selected);
     $(By.name("rememberMe")).shouldBe(checked);
-    Assertions.assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>",
-      $(By.name("rememberMe")).toString());
+    assertThat($(By.name("rememberMe")))
+      .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>");
   }
 
   @Test
@@ -54,19 +53,19 @@ class CheckboxTest extends IntegrationTest {
 
   @Test
   void userCannotSetSelectOnTextInput() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $("#username").setSelected(false));
+    assertThatThrownBy(() -> $("#username").setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void userCannotSetSelectOnArbitryElement() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $("#username-mirror").setSelected(false));
+    assertThatThrownBy(() -> $("#username-mirror").setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 
   @Test
   void userCannotCheckInvisibleCheckbox() {
-    Assertions.assertThrows(InvalidStateException.class,
-      () -> $(By.name("invisibleCheckbox")).setSelected(false));
+    assertThatThrownBy(() -> $(By.name("invisibleCheckbox")).setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 }

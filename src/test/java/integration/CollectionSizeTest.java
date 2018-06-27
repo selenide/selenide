@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,9 +33,9 @@ class CollectionSizeTest extends IntegrationTest {
 
   @Test
   void size_greaterThan_failure() {
-    Assertions.assertThrows(ListSizeMismatch.class,
-      () -> $$("#radioButtons input").shouldHave(sizeGreaterThan(4)),
-      "expected: > 4, actual: 4");
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeGreaterThan(4)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("expected: > 4, actual: 4");
   }
 
   @Test
@@ -47,10 +46,9 @@ class CollectionSizeTest extends IntegrationTest {
 
   @Test
   void size_greaterThanOrEqual_failure() {
-    Assertions.assertThrows(ListSizeMismatch.class,
-      () ->
-        $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(5)),
-      "expected: >= 5, actual: 4");
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeGreaterThanOrEqual(5)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("expected: >= 5, actual: 4");
   }
 
   @Test
@@ -62,10 +60,9 @@ class CollectionSizeTest extends IntegrationTest {
 
   @Test
   void size_lessThan_failure() {
-    Assertions.assertThrows(ListSizeMismatch.class,
-      () ->
-        $$("#radioButtons input").shouldHave(sizeLessThan(4)),
-      "expected: < 4, actual: 4");
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeLessThan(4)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("expected: < 4, actual: 4");
   }
 
   @Test
@@ -76,10 +73,9 @@ class CollectionSizeTest extends IntegrationTest {
 
   @Test
   void size_lessThanOrEqual_failure() {
-    Assertions.assertThrows(ListSizeMismatch.class,
-      () ->
-        $$("#radioButtons input").shouldHave(sizeLessThanOrEqual(3)),
-      "expected: <= 3, actual: 4");
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeLessThanOrEqual(3)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("expected: <= 3, actual: 4");
   }
 
   @Test
@@ -90,10 +86,9 @@ class CollectionSizeTest extends IntegrationTest {
 
   @Test
   void size_notEqual_failure() {
-    Assertions.assertThrows(ListSizeMismatch.class,
-      () ->
-        $$("#radioButtons input").shouldHave(sizeNotEqual(4)),
-      "expected: <> 4, actual: 4");
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeNotEqual(4)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageContaining("expected: <> 4, actual: 4");
   }
 
   @Test

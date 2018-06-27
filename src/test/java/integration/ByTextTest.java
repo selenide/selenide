@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -43,10 +42,12 @@ class ByTextTest extends IntegrationTest {
 
   @Test
   void canFindElementByTextInsideParentElement() {
-    Assertions.assertEquals(2, $$($("#multirowTable"), byText("Chack")).size());
-
-    Assertions.assertEquals(1, $$($("#multirowTable tr"), byText("Chack")).size());
-    Assertions.assertEquals("first_row", $("#multirowTable tr").find(byText("Chack")).getAttribute("class"));
+    assertThat($$($("#multirowTable"), byText("Chack")))
+      .hasSize(2);
+    assertThat($$($("#multirowTable tr"), byText("Chack")))
+      .hasSize(1);
+    assertThat($("#multirowTable tr").find(byText("Chack")).getAttribute("class"))
+      .isEqualTo("first_row");
   }
 
   @Test
@@ -58,10 +59,12 @@ class ByTextTest extends IntegrationTest {
 
   @Test
   void canFindElementContainingTextInsideParentElement() {
-    Assertions.assertEquals(2, $$($("#multirowTable"), withText("Cha")).size());
-
-    Assertions.assertEquals(1, $$($("#multirowTable tr"), withText("ack")).size());
-    Assertions.assertEquals("second_row", $("#multirowTable tr", 1).find(withText("hac")).getAttribute("class"));
+    assertThat($$($("#multirowTable"), byText("Cha")))
+      .hasSize(2);
+    assertThat($$($("#multirowTable tr"), byText("ack")))
+      .hasSize(1);
+    assertThat($("#multirowTable tr", 1).find(withText("hac")).getAttribute("class"))
+      .isEqualTo("second_row");
   }
 
   @Test

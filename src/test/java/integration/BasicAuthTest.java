@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Selenide;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -15,10 +14,8 @@ import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.source;
-import static org.hamcrest.CoreMatchers.containsString;
 
 class BasicAuthTest extends IntegrationTest {
-
   @Test
   void canPassBasicAuthInFirefox() {
     Assumptions.assumeTrue(isFirefox());
@@ -27,7 +24,8 @@ class BasicAuthTest extends IntegrationTest {
       "user",
       "passwd");
     $(By.tagName("pre")).waitUntil(visible, 10000);
-    MatcherAssert.assertThat(source(), containsString("\"authenticated\": true,"));
+    assertThat(source())
+      .contains("\"authenticated\": true,");
   }
 
   @Test
@@ -37,7 +35,8 @@ class BasicAuthTest extends IntegrationTest {
       "",
       "user",
       "passwd");
-    MatcherAssert.assertThat(source(), containsString("\"authenticated\":true,"));
+    assertThat(source())
+      .contains("\"authenticated\":true,");
   }
 
   @Test
@@ -49,7 +48,8 @@ class BasicAuthTest extends IntegrationTest {
       "user",
       "passwd");
     $(By.tagName("pre")).waitUntil(visible, 10000);
-    MatcherAssert.assertThat(source(), containsString("\"authenticated\": true,"));
+    assertThat(source())
+      .contains("\"authenticated\": true,");
   }
 
   @Test
@@ -61,7 +61,8 @@ class BasicAuthTest extends IntegrationTest {
       "user",
       "passwd");
     $(By.tagName("pre")).waitUntil(visible, 10000);
-    MatcherAssert.assertThat(source(), containsString("\"authenticated\": true,"));
+    assertThat(source())
+      .contains("\"authenticated\": true,");
   }
 
   @Test
@@ -72,6 +73,7 @@ class BasicAuthTest extends IntegrationTest {
       "",
       "user",
       "passwd");
-    MatcherAssert.assertThat(source(), containsString("WebDriver"));
+    assertThat(source())
+      .contains("WebDriver");
   }
 }

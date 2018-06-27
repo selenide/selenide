@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,7 @@ class ClearCookiesTest extends IntegrationTest {
   void clearCookieTest() {
     clearBrowserCookies();
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
-    Assertions.assertTrue(cookieSet.isEmpty());
+    assertThat(cookieSet)
+      .isEmpty();
   }
 }

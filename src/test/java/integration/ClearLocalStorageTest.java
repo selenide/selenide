@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +17,13 @@ class ClearLocalStorageTest extends IntegrationTest {
 
   @Test
   void clearLocalStorageTest() {
-    Assertions.assertEquals(2L, getLocalStorageLength());
+    assertThat(getLocalStorageLength())
+      .isEqualTo(2L);
 
     clearBrowserLocalStorage();
 
-    Assertions.assertEquals(0L, getLocalStorageLength());
+    assertThat(getLocalStorageLength())
+      .isEqualTo(0L);
   }
 
   private long getLocalStorageLength() {

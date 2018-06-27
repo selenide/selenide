@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,12 +34,14 @@ class BrowserLogsTest extends IntegrationTest {
     assertNoJavascriptErrors();
     $(byText("Generate JS Error")).click();
 
-    Assertions.assertEquals(1, getJavascriptErrors().size());
+    assertThat(getJavascriptErrors())
+      .hasSize(1);
 
     String jsError = getJavascriptErrors().get(0);
-    Assertions.assertTrue(jsError.contains("ReferenceError"), jsError);
-    Assertions.assertTrue(jsError.contains("$"), jsError);
-    Assertions.assertTrue(jsError.contains("/page_with_js_errors.html"), jsError);
+    assertThat(jsError)
+      .contains("ReferenceError")
+      .contains("$")
+      .contains("/page_with_js_errors.html");
   }
 
   @Test
@@ -49,10 +50,12 @@ class BrowserLogsTest extends IntegrationTest {
     $(byText("Generate JS Error")).click();
     try {
       assertNoJavascriptErrors();
-      Assertions.fail("Expected JavaScriptErrorsFound");
+      fail("Expected JavaScriptErrorsFound");
     } catch (JavaScriptErrorsFound expected) {
-      Assertions.assertEquals(1, expected.getJsErrors().size());
-      Assertions.assertTrue(expected.getJsErrors().get(0).contains("ReferenceError"));
+      assertThat(getJavascriptErrors())
+        .hasSize(1);
+      assertThat(expected.getJsErrors().get(0))
+        .contains("ReferenceError");
     }
   }
 
@@ -63,11 +66,13 @@ class BrowserLogsTest extends IntegrationTest {
 
     Assumptions.assumeFalse(isHtmlUnit() || isPhantomjs() || isFirefox() || isSafari() || isChrome());
 
-    Assertions.assertEquals(1, webDriverLogs.size(), "Expected 1 log, but received: " + webDriverLogs);
+    assertThat(webDriverLogs)
+      .hasSize(1);
 
     String logEntry = webDriverLogs.get(0);
-    Assertions.assertTrue(logEntry.contains("ReferenceError"), logEntry);
-    Assertions.assertTrue(logEntry.contains("$"), logEntry);
-    Assertions.assertTrue(logEntry.contains("/page_with_js_errors.html"), logEntry);
+    assertThat(logEntry)
+      .contains("ReferenceError")
+      .contains("$")
+      .contains("/page_with_js_errors.html");
   }
 }
