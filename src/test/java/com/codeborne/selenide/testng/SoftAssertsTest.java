@@ -1,12 +1,12 @@
 package com.codeborne.selenide.testng;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import integration.AttributeTest;
 import integration.testng.ReportsNGTest;
 import integration.testng.SoftAssertTestNGTest1;
 import integration.testng.SoftAssertTestNGTest2;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testng.ITestResult;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.ITestResult.FAILURE;
 
-class SoftAssertsTest extends UnitTest {
+class SoftAssertsTest implements WithAssertions {
   private SoftAsserts listener = new SoftAsserts();
 
   @AfterEach

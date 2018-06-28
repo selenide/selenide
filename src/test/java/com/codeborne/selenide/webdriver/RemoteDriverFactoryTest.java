@@ -3,7 +3,7 @@ package com.codeborne.selenide.webdriver;
 import java.util.Map;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -12,7 +12,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-class RemoteDriverFactoryTest extends UnitTest {
+class RemoteDriverFactoryTest implements WithAssertions {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
 
   @AfterEach

@@ -1,23 +1,22 @@
 package integration.testng;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static integration.errormessages.Helper.assertScreenshot;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTest {
 
@@ -33,7 +32,8 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     $("h22").shouldBe(visible);
     $$("#radioButtons input").shouldHave(size(888));
     testLogListener.getEvents().map(LogEvent::getError).forEach(error -> {
-      assertThat(error, instanceOf(UIAssertionError.class));
+      assertThat(error)
+        .isInstanceOf(UIAssertionError.class);
       assertScreenshot((UIAssertionError) error);
     });
   }

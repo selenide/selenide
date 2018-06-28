@@ -2,10 +2,11 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.Selectors.ByText;
 import com.codeborne.selenide.Selectors.WithText;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-class SelectorsTest extends UnitTest {
+class SelectorsTest implements WithAssertions {
   @Test
   void withTextUsesXPath() {
     By selector = Selectors.withText("john");

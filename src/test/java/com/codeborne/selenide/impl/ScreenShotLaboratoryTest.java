@@ -3,12 +3,12 @@ package com.codeborne.selenide.impl;
 import java.io.File;
 import java.util.List;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static java.io.File.separatorChar;
 
-class ScreenShotLaboratoryTest extends UnitTest {
+class ScreenShotLaboratoryTest implements WithAssertions {
   private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
     public String takeScreenShot(String fileName) {

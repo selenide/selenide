@@ -8,6 +8,14 @@ import org.junit.runners.model.Statement;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 
+/**
+ * Rule for assert selenide verification softly.
+ * <br/>
+ * Using:
+ * 1. Add rule for test class: {@code @Rule public SoftAsserts softAsserts = new SoftAsserts();}
+ * <br/>
+ * 2. Configure selenide to assert softly: {@code Configuration.assertionMode = SOFT;}
+ */
 public class SoftAsserts extends ExternalResource {
   private Description currentTest;
 

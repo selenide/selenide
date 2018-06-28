@@ -3,8 +3,7 @@ package com.codeborne.selenide.webdriver;
 import java.util.List;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
-
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
 
-class RemoteDriverFactoryHeadlessOptionsTest extends UnitTest {
+class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
   private Proxy proxy = mock(Proxy.class);
 

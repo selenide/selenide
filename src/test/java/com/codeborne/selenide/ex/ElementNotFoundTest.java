@@ -3,8 +3,8 @@ package com.codeborne.selenide.ex;
 import java.util.List;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementNotFoundTest extends UnitTest {
+class ElementNotFoundTest implements WithAssertions {
   @Test
   void testElementNotFoundWithByCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(By.id("Hello"), Condition.exist);

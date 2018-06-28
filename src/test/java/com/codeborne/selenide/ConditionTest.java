@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
@@ -9,7 +10,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ConditionTest extends UnitTest {
+class ConditionTest implements WithAssertions {
   @Test
   void displaysHumanReadableName() {
     assertThat(Condition.visible)

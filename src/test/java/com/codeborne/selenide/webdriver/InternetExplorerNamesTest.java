@@ -1,12 +1,12 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 
-class InternetExplorerNamesTest extends UnitTest {
+class InternetExplorerNamesTest implements WithAssertions {
   @Test
   void internetExplorerShortNameTest() {
     Configuration.browser = "ie";

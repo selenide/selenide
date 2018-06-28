@@ -1,9 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class UIAssertionErrorTest extends UnitTest {
+class UIAssertionErrorTest implements WithAssertions {
   @Test
   void testThrowableConstructor() {
     UIAssertionError uiAssertionError = new UIAssertionError(new Throwable("Error message"));

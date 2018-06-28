@@ -6,8 +6,8 @@ import java.util.Collections;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class LastCollectionElementTest extends UnitTest {
+class LastCollectionElementTest implements WithAssertions {
   private WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
   private SelenideElement mockedElement1 = mock(SelenideElement.class);
   private SelenideElement mockedElement2 = mock(SelenideElement.class);

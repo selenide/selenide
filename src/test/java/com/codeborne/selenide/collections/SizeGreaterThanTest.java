@@ -1,8 +1,8 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -12,7 +12,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SizeGreaterThanTest extends UnitTest {
+class SizeGreaterThanTest implements WithAssertions {
   @Test
   void testApplyWithEmptyList() {
     assertThat(new SizeGreaterThan(10).apply(emptyList()))

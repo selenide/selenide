@@ -1,6 +1,6 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextTest extends UnitTest {
+class TextTest implements WithAssertions {
   private final String defaultText = "Hello World";
   private Text text;
   private WebElement mWebElement = mock(WebElement.class);

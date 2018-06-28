@@ -2,8 +2,8 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchesCommandTest extends UnitTest {
+class MatchesCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;

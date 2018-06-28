@@ -3,8 +3,8 @@ package com.codeborne.selenide.logevents;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.SoftAssertionError;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -12,7 +12,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ErrorsCollectorTest extends UnitTest {
+class ErrorsCollectorTest implements WithAssertions {
   private ErrorsCollector errorsCollector;
   private LogEvent mockedLogEvent = mock(LogEvent.class);
   private LogEvent mockedInProgressEvent = mock(LogEvent.class);

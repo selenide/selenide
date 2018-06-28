@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class TextsTest extends UnitTest {
+class TextsTest implements WithAssertions {
   @Test
   void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
     assertThat(Html.text.reduceSpaces("Bruce   \n\t   Willis"))

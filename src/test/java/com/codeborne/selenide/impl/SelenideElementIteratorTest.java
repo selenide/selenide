@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -10,7 +10,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementIteratorTest extends UnitTest {
+class SelenideElementIteratorTest implements WithAssertions {
   @Test
   void testHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);

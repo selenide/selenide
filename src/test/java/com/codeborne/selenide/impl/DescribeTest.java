@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementShould;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DescribeTest extends UnitTest {
+class DescribeTest implements WithAssertions {
   @Test
   void selectorIsReportedAsIs() {
     assertThat(Describe.selector(By.cssSelector("#firstName")))

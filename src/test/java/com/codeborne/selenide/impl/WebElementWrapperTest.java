@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.google.common.collect.ImmutableMap;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockWebDriverExtension.class)
-class WebElementWrapperTest extends UnitTest {
+class WebElementWrapperTest implements WithAssertions {
   private WebElement element = createWebElement();
 
   private WebElement createWebElement() {

@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class WebDriverThreadLocalContainerTest extends UnitTest {
+class WebDriverThreadLocalContainerTest implements WithAssertions {
   private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;

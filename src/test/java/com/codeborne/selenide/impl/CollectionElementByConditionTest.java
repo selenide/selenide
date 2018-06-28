@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -14,7 +14,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CollectionElementByConditionTest extends UnitTest {
+class CollectionElementByConditionTest implements WithAssertions {
   @Test
   void testWrap() {
     WebElement mockedWebElement = mock(WebElement.class);

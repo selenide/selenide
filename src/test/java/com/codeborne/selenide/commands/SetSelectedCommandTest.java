@@ -3,9 +3,9 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SetSelectedCommandTest extends UnitTest {
+class SetSelectedCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SetSelected setSelectedCommand;

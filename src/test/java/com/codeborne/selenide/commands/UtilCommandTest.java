@@ -3,12 +3,12 @@ package com.codeborne.selenide.commands;
 import java.util.List;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 
-class UtilCommandTest extends UnitTest {
+class UtilCommandTest implements WithAssertions {
   @Test
   void testArgsToCondition() {
     List<Condition> conditions = Util.argsToConditions(new Object[]{

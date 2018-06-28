@@ -1,9 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class DialogTextMismatchTest extends UnitTest {
+class DialogTextMismatchTest implements WithAssertions {
   @Test
   void dialogMismatchTextStringTest() {
     DialogTextMismatch dialogTextMismatch = new DialogTextMismatch("Actual text", "Expected text");

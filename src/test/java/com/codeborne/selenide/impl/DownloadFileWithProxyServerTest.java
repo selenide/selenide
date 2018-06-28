@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockWebDriverExtension.class)
-class DownloadFileWithProxyServerTest extends UnitTest {
+class DownloadFileWithProxyServerTest implements WithAssertions {
   private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
   private WebDriver webdriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);

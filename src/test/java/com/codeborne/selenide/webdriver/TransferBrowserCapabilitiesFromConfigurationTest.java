@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.mockito.Mockito.mock;
 
-class TransferBrowserCapabilitiesFromConfigurationTest extends UnitTest {
+class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
   private static final String SOME_CAP = "some.cap";
   private AbstractDriverFactory driverFactory;
   private Proxy proxy = mock(Proxy.class);

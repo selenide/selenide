@@ -1,13 +1,13 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static org.mockito.Mockito.mock;
 
-class ElementShouldTest extends UnitTest {
+class ElementShouldTest implements WithAssertions {
   @Test
   void testToString() {
     String searchCriteria = "by.name: selenide";

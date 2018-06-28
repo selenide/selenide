@@ -1,10 +1,12 @@
 package integration;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,6 @@ import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
-import static org.hamcrest.CoreMatchers.containsString;
 
 class ReadonlyElementsTest extends IntegrationTest {
   @BeforeEach
@@ -31,13 +32,15 @@ class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void cannotSetValueToReadonlyField_slowSetValue() {
+    final List<String> exceptionMessages = Arrays.asList(
+      "Element is read-only and so may not be used for actions",
+      "Element must be user-editable in order to clear it",
+      "You may only edit editable elements");
+
     Configuration.fastSetValue = false;
 
-    MatcherAssert.assertThat(verifySetValueThrowsException(), CoreMatchers.anyOf(
-      containsString("Element is read-only and so may not be used for actions"),
-      containsString("Element must be user-editable in order to clear it"),
-      containsString("You may only edit editable elements")
-    ));
+    assertThat(verifySetValueThrowsException())
+      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
   }
 
   private String verifySetValueThrowsException() {
@@ -52,16 +55,24 @@ class ReadonlyElementsTest extends IntegrationTest {
     }
   }
 
+  private Condition<String> getExceptionMessagesCondition(final List<String> exceptionMessages) {
+    return new Condition<>(exception ->
+      exceptionMessages.stream().anyMatch(exception::contains),
+      "exceptionMessages");
+  }
+
   @Test
   void cannotSetValueToDisabledField_slowSetValue() {
+    final List<String> exceptionMessages = Arrays.asList(
+      "Element must be user-editable in order to clear it",
+      "You may only edit editable elements",
+      "You may only interact with enabled elements",
+      "Element is not currently interactable and may not be manipulated");
+
     Configuration.fastSetValue = false;
 
-    MatcherAssert.assertThat(verifySetValue2ThrowsException(), CoreMatchers.anyOf(
-      containsString("Element must be user-editable in order to clear it"),
-      containsString("You may only edit editable elements"),
-      containsString("You may only interact with enabled elements"),
-      containsString("Element is not currently interactable and may not be manipulated")
-    ));
+    assertThat(verifySetValue2ThrowsException())
+      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
   }
 
   private String verifySetValue2ThrowsException() {
@@ -78,20 +89,26 @@ class ReadonlyElementsTest extends IntegrationTest {
 
   @Test
   void cannotSetValueToReadonlyField_fastSetValue() {
+    final List<String> exceptionMessages = Arrays.asList(
+      "Cannot change value of readonly element",
+      "Element must be user-editable in order to clear it");
+
     Configuration.fastSetValue = true;
-    MatcherAssert.assertThat(verifySetValueThrowsException(), CoreMatchers.anyOf(
-      containsString("Cannot change value of readonly element"),
-      containsString("Element must be user-editable in order to clear it")
-    ));
+
+    assertThat(verifySetValueThrowsException())
+      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
   }
 
   @Test
   void cannotSetValueToDisabledField_fastSetValue() {
+    final List<String> exceptionMessages = Arrays.asList(
+      "Cannot change value of disabled element",
+      "Element is not currently interactable and may not be manipulated");
+
     Configuration.fastSetValue = true;
-    MatcherAssert.assertThat(verifySetValue2ThrowsException(), CoreMatchers.anyOf(
-      containsString("Cannot change value of disabled element"),
-      containsString("Element is not currently interactable and may not be manipulated")
-    ));
+
+    assertThat(verifySetValue2ThrowsException())
+      .is(anyOf(getExceptionMessagesCondition(exceptionMessages)));
   }
 
   @Test

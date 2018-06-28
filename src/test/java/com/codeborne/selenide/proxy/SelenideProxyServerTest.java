@@ -2,8 +2,8 @@ package com.codeborne.selenide.proxy;
 
 import java.net.InetSocketAddress;
 
-import com.codeborne.selenide.UnitTest;
 import net.lightbody.bmp.BrowserMobProxyServer;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideProxyServerTest extends UnitTest {
+class SelenideProxyServerTest implements WithAssertions {
   @Test
   void canInterceptResponses() {
     BrowserMobProxyServer bmp = mock(BrowserMobProxyServer.class);

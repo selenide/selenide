@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
 
-class FirefoxDriverFactoryTest extends UnitTest {
+class FirefoxDriverFactoryTest implements WithAssertions {
   private Proxy proxy = mock(Proxy.class);
   private FirefoxDriverFactory driverFactory;
 

@@ -10,6 +10,7 @@ import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockWebDriverExtension.class)
-class ElementsCollectionTest extends UnitTest {
+class ElementsCollectionTest implements WithAssertions {
   private WebElementsCollection source = mock(WebElementsCollection.class);
   private WebElement element1 = element("h1");
   private WebElement element2 = element("h2");

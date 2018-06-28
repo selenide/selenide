@@ -1,11 +1,11 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 
-class SelenideLogTest extends UnitTest {
+class SelenideLogTest implements WithAssertions {
   @Test
   void testGetSubject() {
     SelenideLog log = new SelenideLog("Element", "Subject");

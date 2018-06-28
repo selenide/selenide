@@ -1,9 +1,9 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelectOptionByTextOrIndexCommandTest extends UnitTest {
+class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource selectField;
   private SelectOptionByTextOrIndex selectOptionByTextOrIndexCommand;

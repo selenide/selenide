@@ -1,12 +1,12 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
-class CleanupTest extends UnitTest {
+class CleanupTest implements WithAssertions {
   @Test
   void cleansWebDriverExceptionMessage() {
     String webDriverException = "org.openqa.selenium.NoSuchElementException: " +

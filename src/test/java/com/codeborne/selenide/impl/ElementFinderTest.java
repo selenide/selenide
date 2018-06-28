@@ -1,14 +1,14 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementFinderTest extends UnitTest {
+class ElementFinderTest implements WithAssertions {
   @Test
   void testToStringForFinderByCssSelectors() {
     SelenideElement parent = mock(SelenideElement.class);

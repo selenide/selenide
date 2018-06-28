@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class NavigatorTest extends UnitTest {
+class NavigatorTest implements WithAssertions {
   private Navigator navigator = new Navigator();
 
   @Test

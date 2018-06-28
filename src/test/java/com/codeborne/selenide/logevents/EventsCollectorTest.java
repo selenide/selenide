@@ -1,9 +1,9 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class EventsCollectorTest extends UnitTest {
+class EventsCollectorTest implements WithAssertions {
   @Test
   void testOnEvent() {
     EventsCollector eventsCollector = new EventsCollector();

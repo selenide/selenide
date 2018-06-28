@@ -3,8 +3,8 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetParentCommandTest extends UnitTest {
+class GetParentCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;

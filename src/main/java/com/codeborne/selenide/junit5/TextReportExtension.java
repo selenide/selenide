@@ -31,7 +31,7 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    *
    * @return current extension instance
    */
-  public TextReportExtension onFailedTest(boolean onFailedTest) {
+  public TextReportExtension onFailedTest(final boolean onFailedTest) {
     this.onFailedTest = onFailedTest;
     return this;
   }
@@ -43,7 +43,7 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    *
    * @return current extension instance
    */
-  public TextReportExtension onSucceededTest(boolean onSucceededTest) {
+  public TextReportExtension onSucceededTest(final boolean onSucceededTest) {
     this.onSucceededTest = onSucceededTest;
     return this;
   }

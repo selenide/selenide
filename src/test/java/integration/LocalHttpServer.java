@@ -24,6 +24,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.api.WithAssertions;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -40,9 +41,8 @@ import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.SEVERE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.junit.Assert.assertTrue;
 
-public class LocalHttpServer {
+public class LocalHttpServer implements WithAssertions {
   private static final Logger log = Logger.getLogger(LocalHttpServer.class.getName());
   private static final String CONTENT_TYPE_HTML_TEXT = "text/html";
   private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
@@ -199,7 +199,8 @@ public class LocalHttpServer {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       long start = System.nanoTime();
       String sessionId = getSessionId(request);
-      assertTrue(sessions.contains(sessionId));
+      assertThat(sessions.contains(sessionId))
+        .isTrue();
 
       String fileName = getFilenameFromRequest(request);
       byte[] fileContent = readFileContent(fileName);

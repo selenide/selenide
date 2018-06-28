@@ -1,7 +1,7 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.WebDriverRunner;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class SelenideLoggerTest extends UnitTest {
+class SelenideLoggerTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
 
   @BeforeEach

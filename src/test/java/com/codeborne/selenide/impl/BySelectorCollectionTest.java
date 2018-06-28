@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import java.util.List;
 
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class BySelectorCollectionTest extends UnitTest {
+class BySelectorCollectionTest implements WithAssertions {
   private SelenideElement mockedWebElement = mock(SelenideElement.class);
 
   @Test

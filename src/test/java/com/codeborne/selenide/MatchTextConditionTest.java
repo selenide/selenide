@@ -1,12 +1,13 @@
 package com.codeborne.selenide;
 
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchTextConditionTest extends UnitTest {
+class MatchTextConditionTest implements WithAssertions {
   @Test
   void displaysHumanReadableName() {
     assertThat(Condition.matchText("abc"))

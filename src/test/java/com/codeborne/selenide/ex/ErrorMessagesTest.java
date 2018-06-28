@@ -3,8 +3,8 @@ package com.codeborne.selenide.ex;
 import java.util.Locale;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-class ErrorMessagesTest extends UnitTest {
+class ErrorMessagesTest implements WithAssertions {
   private static String reportsUrl;
 
   @BeforeAll

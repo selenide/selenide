@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideFieldDecoratorTest extends UnitTest {
+class SelenideFieldDecoratorTest implements WithAssertions {
   private TestPage page = new TestPage();
   private WebDriver webDriver = mock(WebDriver.class);
   private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(webDriver);

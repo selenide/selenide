@@ -2,16 +2,15 @@ package com.codeborne.selenide.ex;
 
 import java.util.List;
 
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementsCollection;
-
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 
-class ListSizeMismatchTest extends UnitTest {
+class ListSizeMismatchTest implements WithAssertions {
   private String operator = "Operator";
   private int expectedSize = 10;
   private WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);

@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ShouldNotCommandTest extends UnitTest {
+class ShouldNotCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private ShouldNot shouldNotCommand;

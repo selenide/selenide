@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.UnitTest;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -16,7 +16,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedOptionsCommandTest extends UnitTest {
+class GetSelectedOptionsCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private GetSelectedOptions getSelectedOptionsCommand;

@@ -4,6 +4,7 @@ import java.net.URL;
 
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockWebDriverExtension.class)
-class WebDriverRunnerTest extends UnitTest {
+class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
 
   private URL url = currentThread().getContextClassLoader().getResource("start_page.html");

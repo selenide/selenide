@@ -9,11 +9,12 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 
-class CollectionConditionTest extends UnitTest {
+class CollectionConditionTest implements WithAssertions {
   @Test
   void testSizeIsEmptyListSize() {
     CollectionCondition collectionCondition = CollectionCondition.size(10);

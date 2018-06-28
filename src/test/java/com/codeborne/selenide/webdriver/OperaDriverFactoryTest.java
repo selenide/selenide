@@ -3,7 +3,7 @@ package com.codeborne.selenide.webdriver;
 import java.util.Map;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -14,7 +14,7 @@ import org.openqa.selenium.opera.OperaOptions;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
-class OperaDriverFactoryTest extends UnitTest {
+class OperaDriverFactoryTest implements WithAssertions {
   private Proxy proxy = mock(Proxy.class);
 
   @AfterEach

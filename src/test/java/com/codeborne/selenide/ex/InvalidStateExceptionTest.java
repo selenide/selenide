@@ -1,9 +1,9 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.UnitTest;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class InvalidStateExceptionTest extends UnitTest {
+class InvalidStateExceptionTest implements WithAssertions {
   @Test
   void testThrowableConstructor() {
     InvalidStateException invalidStateException = new InvalidStateException(new Throwable("Error message"));

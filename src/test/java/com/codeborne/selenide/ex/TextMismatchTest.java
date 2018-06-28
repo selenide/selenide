@@ -1,16 +1,15 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.UnitTest;
-import com.codeborne.selenide.impl.WebElementsCollection;
-
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
+
+import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 
-class TextMismatchTest extends UnitTest {
+class TextMismatchTest implements WithAssertions {
   private WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
   private List<String> actualTexts = asList("One", "Two", "Three");
   private List<String> expectedTexts = asList("Four", "Five", "Six");
