@@ -42,16 +42,17 @@ public abstract class IntegrationTest implements WithAssertions {
   static long averageSeleniumCommandDuration = 100;
   private static String protocol;
   private static int port;
-
-  static {
-    System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
-    Locale.setDefault(Locale.ENGLISH);
-  }
-
   private long defaultTimeout;
 
   @BeforeAll
-  public static void runLocalHttpServer() throws Exception {
+  static void setUpAll() throws Exception {
+    System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
+    Locale.setDefault(Locale.ENGLISH);
+    runLocalHttpServer();
+    setUpVideoRecorder();
+  }
+
+  private static void runLocalHttpServer() throws Exception {
     if (server == null) {
       synchronized (IntegrationTest.class) {
         port = findFreePort();
@@ -67,8 +68,7 @@ public abstract class IntegrationTest implements WithAssertions {
     }
   }
 
-  @BeforeAll
-  public static void setUpVideoRecorder() {
+  private static void setUpVideoRecorder() {
     File videoFolder = new File("build/reports/tests/" + Configuration.browser);
     videoFolder.mkdirs();
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
@@ -84,14 +84,13 @@ public abstract class IntegrationTest implements WithAssertions {
   }
 
   @BeforeEach
-  public void restartReallyUnstableBrowsers() {
-    if (isSafari()) {
-      closeWebDriver();
-    }
+  void setUpEach() {
+    resetSettings();
+    restartReallyUnstableBrowsers();
+    rememberTimeout();
   }
 
-  @BeforeEach
-  public void resetSettings() {
+  private void resetSettings() {
     Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
@@ -101,6 +100,16 @@ public abstract class IntegrationTest implements WithAssertions {
     // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
     Configuration.fileDownload = isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY;
+  }
+
+  private void restartReallyUnstableBrowsers() {
+    if (isSafari()) {
+      closeWebDriver();
+    }
+  }
+
+  private void rememberTimeout() {
+    defaultTimeout = timeout;
   }
 
   protected void openFile(String fileName) {
@@ -113,13 +122,8 @@ public abstract class IntegrationTest implements WithAssertions {
       "&timeout=" + Configuration.timeout, pageObjectClass);
   }
 
-  @BeforeEach
-  public final void rememberTimeout() {
-    defaultTimeout = timeout;
-  }
-
   @AfterEach
-  public final void restoreDefaultProperties() {
+  public void restoreDefaultProperties() {
     timeout = defaultTimeout;
     clickViaJs = false;
   }
