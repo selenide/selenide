@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.ex.TimeoutException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
@@ -77,7 +79,12 @@ public class DownloadFileWithHttpRequest {
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
     configureHttpGet(httpGet, timeout);
     addHttpHeaders(httpGet);
-    return httpClient.execute(httpGet, createHttpContext());
+    try {
+      return httpClient.execute(httpGet, createHttpContext());
+    }
+    catch (SocketTimeoutException timeoutException) {
+      throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
+    }
   }
 
   protected void configureHttpGet(HttpGet httpGet, long timeout) {

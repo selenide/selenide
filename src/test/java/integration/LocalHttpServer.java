@@ -6,7 +6,13 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -21,10 +27,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
 import static java.util.logging.Level.SEVERE;
@@ -153,6 +164,10 @@ public class LocalHttpServer {
         return;
       }
 
+      if (request.getParameter("pause") != null) {
+        sleep(Long.parseLong(request.getParameter("pause")));
+      }
+
       response.setStatus(SC_OK);
       response.setContentLength(fileContent.length);
       response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
@@ -234,7 +249,7 @@ public class LocalHttpServer {
    * @param args not used
    */
   public static void main(String[] args) throws Exception {
-    LocalHttpServer server = new LocalHttpServer(8080, false).start();
+    new LocalHttpServer(8080, false).start();
     Thread.currentThread().join();
   }
 }
