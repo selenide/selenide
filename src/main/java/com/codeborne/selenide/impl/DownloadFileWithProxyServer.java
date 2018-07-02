@@ -18,13 +18,32 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
+
+  private final long timeout;
+
   Waiter waiter = new Waiter();
 
-  public File download(WebElementSource anyClickableElement, 
+  /**
+   * Create new object instance with default download timeout.
+   */
+  public DownloadFileWithProxyServer() {
+    this.timeout = Configuration.timeout;
+  }
+
+  /**
+   * Create new object instance with custom download timeout.
+   *
+   * @param timeout download file timeout.
+   */
+  public DownloadFileWithProxyServer(long timeout) {
+    this.timeout = timeout;
+  }
+
+  public File download(WebElementSource anyClickableElement,
                        WebElement clickable, SelenideProxyServer proxyServer) throws FileNotFoundException {
     return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer);
   }
-  
+
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                           SelenideProxyServer proxyServer) throws FileNotFoundException {
     String currentWindowHandle = getWebDriver().getWindowHandle();
@@ -35,7 +54,7 @@ public class DownloadFileWithProxyServer {
     try {
       clickable.click();
 
-      waiter.wait(filter, new HasDownloads());
+      waiter.wait(filter, new HasDownloads(), timeout, Configuration.pollingInterval);
       return firstDownloadedFile(anyClickableElement, filter);
     }
     finally {
@@ -49,7 +68,7 @@ public class DownloadFileWithProxyServer {
     if (windowHandles.size() != currentWindows.size()) {
       Set<String> newWindows = new HashSet<>(windowHandles);
       newWindows.removeAll(currentWindows);
-      
+
       log.info("File has been opened in a new window, let's close " + newWindows.size() + " new windows");
 
       for (String newWindow : newWindows) {
@@ -68,7 +87,7 @@ public class DownloadFileWithProxyServer {
       getWebDriver().switchTo().window(currentWindowHandle);
     }
   }
-  
+
   private static class HasDownloads implements Predicate<FileDownloadFilter> {
     @Override
     public boolean apply(FileDownloadFilter filter) {
@@ -76,15 +95,14 @@ public class DownloadFileWithProxyServer {
     }
   }
 
-  private File firstDownloadedFile(WebElementSource anyClickableElement, 
+  private File firstDownloadedFile(WebElementSource anyClickableElement,
                                    FileDownloadFilter filter) throws FileNotFoundException {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-          " in " + Configuration.timeout + " ms." + filter.getResponses());
-
+           + timeout + " ms." + filter.getResponses());
     }
-    
+
     log.info("Downloaded file: " + files.get(0).getAbsolutePath());
     log.info("Just in case, all intercepted responses: " + filter.getResponses());
     return files.get(0);
