@@ -47,7 +47,25 @@ public class DownloadFileWithHttpRequest {
 
   public static boolean ignoreSelfSignedCerts = true;
 
+  private final long timeout;
+
   private HttpHelper httpHelper = new HttpHelper();
+
+  /**
+   * Create new object instance with default download timeout.
+   */
+  public DownloadFileWithHttpRequest() {
+    this.timeout = Configuration.timeout;
+  }
+
+  /**
+   * Create new object instance with custom download timeout.
+   *
+   * @param timeout timeout for all download-related actions like connection or request timeouts.
+   */
+  public DownloadFileWithHttpRequest(long timeout) {
+    this.timeout = timeout;
+  }
 
   public File download(WebElement element) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
@@ -81,9 +99,9 @@ public class DownloadFileWithHttpRequest {
 
   protected void configureHttpGet(HttpGet httpGet) {
     httpGet.setConfig(RequestConfig.custom()
-        .setConnectTimeout((int) Configuration.timeout)
-        .setSocketTimeout((int) Configuration.timeout)
-        .setConnectionRequestTimeout((int) Configuration.timeout)
+        .setConnectTimeout((int) timeout)
+        .setSocketTimeout((int) timeout)
+        .setConnectionRequestTimeout((int) timeout)
         .setRedirectsEnabled(true)
         .setCircularRedirectsAllowed(true)
         .setMaxRedirects(20)

@@ -711,6 +711,18 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   File download() throws FileNotFoundException;
 
   /**
+   * Download file linked by "href" attribute of this element or any file to which this element redirects.
+   *
+   * @param timeout download operations timeout.
+   *
+   * @throws RuntimeException      if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server
+   *
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
+  File download(long timeout) throws FileNotFoundException;
+
+  /**
    * Return criteria by which this element is located
    * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
    */
