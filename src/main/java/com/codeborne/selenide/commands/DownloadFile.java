@@ -19,6 +19,8 @@ import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 public class DownloadFile implements Command<File> {
   private static final Logger LOG = Logger.getLogger(DownloadFile.class.getName());
 
+  DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
+  DownloadFileWithProxyServer downloadFileWithProxyServer = new DownloadFileWithProxyServer();
 
   @Override
   public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
@@ -28,14 +30,14 @@ public class DownloadFile implements Command<File> {
 
     if (Configuration.fileDownload == HTTPGET) {
       LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
-      return new DownloadFileWithHttpRequest().download(link, timeout);
+      return downloadFileWithHttpRequest.download(link, timeout);
     }
     else if (webdriverContainer.getProxyServer() == null) {
       LOG.config("Proxy server is not started - download file via http get");
-      return new DownloadFileWithHttpRequest().download(link, timeout);
+      return downloadFileWithHttpRequest.download(link, timeout);
     }
     else {
-      return new DownloadFileWithProxyServer().download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
+      return downloadFileWithProxyServer.download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
     }
   }
 
