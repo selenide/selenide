@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.TimeoutException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -14,17 +13,14 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
 import javax.net.ssl.HostnameVerifier;
@@ -37,10 +33,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Selenide.getUserAgent;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
@@ -140,7 +136,7 @@ public class DownloadFileWithHttpRequest {
 
   protected HttpContext createHttpContext() {
     HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(COOKIE_STORE, mimicCookieState());
+    localContext.setAttribute(COOKIE_STORE, new WebdriverCookieStore(getWebDriver()));
     return localContext;
   }
 
@@ -166,26 +162,6 @@ public class DownloadFileWithHttpRequest {
     }
 
     return new URL(fileToDownloadLocation).getFile().replaceFirst("[/\\\\]", "");
-  }
-
-  protected BasicCookieStore mimicCookieState() {
-    Set<Cookie> seleniumCookieSet = WebDriverRunner.getWebDriver().manage().getCookies();
-    BasicCookieStore mimicWebDriverCookieStore = new BasicCookieStore();
-    for (Cookie seleniumCookie : seleniumCookieSet) {
-      mimicWebDriverCookieStore.addCookie(duplicateCookie(seleniumCookie));
-    }
-
-    return mimicWebDriverCookieStore;
-  }
-
-  protected BasicClientCookie duplicateCookie(Cookie seleniumCookie) {
-    BasicClientCookie duplicateCookie = new BasicClientCookie(seleniumCookie.getName(), seleniumCookie.getValue());
-    duplicateCookie.setDomain(seleniumCookie.getDomain());
-    duplicateCookie.setAttribute(BasicClientCookie.DOMAIN_ATTR, seleniumCookie.getDomain());
-    duplicateCookie.setSecure(seleniumCookie.isSecure());
-    duplicateCookie.setExpiryDate(seleniumCookie.getExpiry());
-    duplicateCookie.setPath(seleniumCookie.getPath());
-    return duplicateCookie;
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
