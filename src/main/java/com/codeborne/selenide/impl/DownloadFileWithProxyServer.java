@@ -100,7 +100,7 @@ public class DownloadFileWithProxyServer {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-           + timeout + " ms." + filter.getResponses());
+        timeout + " ms." + filter.getResponses());
     }
 
     log.info("Downloaded file: " + files.get(0).getAbsolutePath());
