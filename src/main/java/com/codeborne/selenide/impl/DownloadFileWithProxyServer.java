@@ -19,33 +19,15 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 public class DownloadFileWithProxyServer {
   private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
 
-  private final long timeout;
-
   Waiter waiter = new Waiter();
 
-  /**
-   * Create new object instance with default download timeout.
-   */
-  public DownloadFileWithProxyServer() {
-    this.timeout = Configuration.timeout;
-  }
-
-  /**
-   * Create new object instance with custom download timeout.
-   *
-   * @param timeout download file timeout.
-   */
-  public DownloadFileWithProxyServer(long timeout) {
-    this.timeout = timeout;
-  }
-
   public File download(WebElementSource anyClickableElement,
-                       WebElement clickable, SelenideProxyServer proxyServer) throws FileNotFoundException {
-    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer);
+                       WebElement clickable, SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer, timeout);
   }
 
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
-                                          SelenideProxyServer proxyServer) throws FileNotFoundException {
+                                          SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
     String currentWindowHandle = getWebDriver().getWindowHandle();
     Set<String> currentWindows = getWebDriver().getWindowHandles();
 
@@ -55,7 +37,7 @@ public class DownloadFileWithProxyServer {
       clickable.click();
 
       waiter.wait(filter, new HasDownloads(), timeout, Configuration.pollingInterval);
-      return firstDownloadedFile(anyClickableElement, filter);
+      return firstDownloadedFile(anyClickableElement, filter, timeout);
     }
     finally {
       filter.deactivate();
@@ -96,11 +78,11 @@ public class DownloadFileWithProxyServer {
   }
 
   private File firstDownloadedFile(WebElementSource anyClickableElement,
-                                   FileDownloadFilter filter) throws FileNotFoundException {
+                                   FileDownloadFilter filter, long timeout) throws FileNotFoundException {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-           + timeout + " ms." + filter.getResponses());
+        " in " + timeout + " ms." + filter.getResponses());
     }
 
     log.info("Downloaded file: " + files.get(0).getAbsolutePath());

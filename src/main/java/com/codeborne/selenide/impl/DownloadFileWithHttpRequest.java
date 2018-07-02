@@ -11,6 +11,7 @@ import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -47,33 +48,15 @@ public class DownloadFileWithHttpRequest {
 
   public static boolean ignoreSelfSignedCerts = true;
 
-  private final long timeout;
-
   private HttpHelper httpHelper = new HttpHelper();
 
-  /**
-   * Create new object instance with default download timeout.
-   */
-  public DownloadFileWithHttpRequest() {
-    this.timeout = Configuration.timeout;
-  }
-
-  /**
-   * Create new object instance with custom download timeout.
-   *
-   * @param timeout timeout for all download-related actions like connection or request timeouts.
-   */
-  public DownloadFileWithHttpRequest(long timeout) {
-    this.timeout = timeout;
-  }
-
-  public File download(WebElement element) throws IOException {
+  public File download(WebElement element, long timeout) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
       throw new IllegalArgumentException("The element does not have href attribute: " + describe(element));
     }
 
-    HttpResponse response = executeHttpRequest(fileToDownloadLocation);
+    HttpResponse response = executeHttpRequest(fileToDownloadLocation, timeout);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
@@ -89,15 +72,15 @@ public class DownloadFileWithHttpRequest {
     return saveFileContent(response, downloadedFile);
   }
 
-  protected HttpResponse executeHttpRequest(String fileToDownloadLocation) throws IOException {
+  protected HttpResponse executeHttpRequest(String fileToDownloadLocation, long timeout) throws IOException {
     CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
-    configureHttpGet(httpGet);
+    configureHttpGet(httpGet, timeout);
     addHttpHeaders(httpGet);
     return httpClient.execute(httpGet, createHttpContext());
   }
 
-  protected void configureHttpGet(HttpGet httpGet) {
+  protected void configureHttpGet(HttpGet httpGet, long timeout) {
     httpGet.setConfig(RequestConfig.custom()
         .setConnectTimeout((int) timeout)
         .setSocketTimeout((int) timeout)
@@ -131,7 +114,7 @@ public class DownloadFileWithHttpRequest {
       SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy()).build();
       builder.setSSLContext(sslContext);
 
-      HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+      HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
 
       SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
       Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()

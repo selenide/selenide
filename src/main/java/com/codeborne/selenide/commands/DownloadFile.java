@@ -24,29 +24,32 @@ public class DownloadFile implements Command<File> {
   public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
     WebElement link = linkWithHref.findAndAssertElementIsVisible();
 
-    long timeout;
+    long timeout = getTimeout(args);
+
+    if (Configuration.fileDownload == HTTPGET) {
+      LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
+      return new DownloadFileWithHttpRequest().download(link, timeout);
+    }
+    else if (webdriverContainer.getProxyServer() == null) {
+      LOG.config("Proxy server is not started - download file via http get");
+      return new DownloadFileWithHttpRequest().download(link, timeout);
+    }
+    else {
+      return new DownloadFileWithProxyServer().download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
+    }
+  }
+
+  private long getTimeout(Object[] args) {
     try {
       if (Objects.nonNull(args) && args.length > 0) {
-        timeout = (long) args[0];
+        return (long) args[0];
       }
       else {
-        timeout = Configuration.timeout;
+        return Configuration.timeout;
       }
     }
     catch (ClassCastException e) {
       throw new IllegalArgumentException("Unknown target type: " + args[0] + " (only long is supported)");
-    }
-
-    if (Configuration.fileDownload == HTTPGET) {
-      LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
-      return new DownloadFileWithHttpRequest(timeout).download(link);
-    }
-    else if (webdriverContainer.getProxyServer() == null) {
-      LOG.config("Proxy server is not started - download file via http get");
-      return new DownloadFileWithHttpRequest(timeout).download(link);
-    }
-    else {
-      return new DownloadFileWithProxyServer(timeout).download(linkWithHref, link, webdriverContainer.getProxyServer());
     }
   }
 }
