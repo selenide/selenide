@@ -16,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
+  protected String explanation;
+
   public abstract void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs);
 
   public static CollectionCondition empty = size(0);
@@ -99,5 +101,13 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    */
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
+  }
+
+  /**
+   * Should be used for explaining the reason of condition
+   */
+  public CollectionCondition because(String explanation) {
+    this.explanation = explanation;
+    return this;
   }
 }
