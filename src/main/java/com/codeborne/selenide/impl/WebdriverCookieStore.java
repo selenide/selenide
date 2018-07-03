@@ -7,12 +7,11 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Set;
 
-public class WebdriverCookieStore extends BasicCookieStore {
-  public WebdriverCookieStore(WebDriver webDriver) {
+class WebdriverCookieStore extends BasicCookieStore {
+  WebdriverCookieStore(WebDriver webDriver) {
     Set<Cookie> seleniumCookieSet = webDriver.manage().getCookies();
-    BasicCookieStore mimicWebDriverCookieStore = new BasicCookieStore();
     for (Cookie seleniumCookie : seleniumCookieSet) {
-      mimicWebDriverCookieStore.addCookie(duplicateCookie(seleniumCookie));
+      addCookie(duplicateCookie(seleniumCookie));
     }
   }
 
