@@ -18,15 +18,16 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
+
   Waiter waiter = new Waiter();
 
-  public File download(WebElementSource anyClickableElement, 
-                       WebElement clickable, SelenideProxyServer proxyServer) throws FileNotFoundException {
-    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer);
+  public File download(WebElementSource anyClickableElement,
+                       WebElement clickable, SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer, timeout);
   }
-  
+
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
-                                          SelenideProxyServer proxyServer) throws FileNotFoundException {
+                                          SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
     String currentWindowHandle = getWebDriver().getWindowHandle();
     Set<String> currentWindows = getWebDriver().getWindowHandles();
 
@@ -35,8 +36,8 @@ public class DownloadFileWithProxyServer {
     try {
       clickable.click();
 
-      waiter.wait(filter, new HasDownloads());
-      return firstDownloadedFile(anyClickableElement, filter);
+      waiter.wait(filter, new HasDownloads(), timeout, Configuration.pollingInterval);
+      return firstDownloadedFile(anyClickableElement, filter, timeout);
     }
     finally {
       filter.deactivate();
@@ -49,7 +50,7 @@ public class DownloadFileWithProxyServer {
     if (windowHandles.size() != currentWindows.size()) {
       Set<String> newWindows = new HashSet<>(windowHandles);
       newWindows.removeAll(currentWindows);
-      
+
       log.info("File has been opened in a new window, let's close " + newWindows.size() + " new windows");
 
       for (String newWindow : newWindows) {
@@ -68,7 +69,7 @@ public class DownloadFileWithProxyServer {
       getWebDriver().switchTo().window(currentWindowHandle);
     }
   }
-  
+
   private static class HasDownloads implements Predicate<FileDownloadFilter> {
     @Override
     public boolean apply(FileDownloadFilter filter) {
@@ -76,15 +77,14 @@ public class DownloadFileWithProxyServer {
     }
   }
 
-  private File firstDownloadedFile(WebElementSource anyClickableElement, 
-                                   FileDownloadFilter filter) throws FileNotFoundException {
+  private File firstDownloadedFile(WebElementSource anyClickableElement,
+                                   FileDownloadFilter filter, long timeout) throws FileNotFoundException {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-          " in " + Configuration.timeout + " ms." + filter.getResponses());
-
+        " in " + timeout + " ms." + filter.getResponses());
     }
-    
+
     log.info("Downloaded file: " + files.get(0).getAbsolutePath());
     log.info("Just in case, all intercepted responses: " + filter.getResponses());
     return files.get(0);

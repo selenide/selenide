@@ -3,14 +3,11 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.rules.MockWebdriverContainer;
-
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -56,7 +53,7 @@ public class DownloadFileWithProxyServerTest {
   public void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName(), is("report.pdf"));
 
     verify(filter).activate();
@@ -65,12 +62,9 @@ public class DownloadFileWithProxyServerTest {
   }
 
   private void emulateServerResponseWithFiles(final File... files) {
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(final InvocationOnMock invocation) throws Throwable {
-        filter.getDownloadedFiles().addAll(asList(files));
-        return null;
-      }
+    doAnswer(invocation -> {
+      filter.getDownloadedFiles().addAll(asList(files));
+      return null;
     }).when(link).click();
   }
 
@@ -82,7 +76,7 @@ public class DownloadFileWithProxyServerTest {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName(), is("report.pdf"));
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
@@ -103,7 +97,7 @@ public class DownloadFileWithProxyServerTest {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName(), is("report.pdf"));
 
     verify(webdriver.switchTo()).window("tab-with-pdf");
@@ -118,6 +112,6 @@ public class DownloadFileWithProxyServerTest {
 
     thrown.expect(FileNotFoundException.class);
     thrown.expectMessage("Failed to download file <a href='report.pdf'>report</a>");
-    command.download(linkWithHref, link, proxy);
+    command.download(linkWithHref, link, proxy, 3000);
   }
 }
