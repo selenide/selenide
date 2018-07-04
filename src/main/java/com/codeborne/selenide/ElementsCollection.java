@@ -188,6 +188,18 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
+   * Fetches the current collection state from the WebDriver.
+   *
+   * @return element collection object with actual elements
+   *
+   * @see WebElementsCollection#getActualElements
+   */
+  public ElementsCollection actualize() {
+    collection.getActualElements();
+    return this;
+  }
+
+  /**
    * Gets all the texts in elements collection
    * @return array of texts
    */
