@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Proxy;
@@ -27,14 +26,7 @@ public class CollectionElement extends WebElementSource {
 
   @Override
   public WebElement getWebElement() {
-    try {
-      WebElement el = collection.getElements().get(index);
-      el.isEnabled(); // check staleness
-
-      return el;
-    } catch (StaleElementReferenceException | IndexOutOfBoundsException e) {
-      return collection.getActualElements().get(index);
-    }
+    return collection.getElements().get(index);
   }
 
   @Override
@@ -44,7 +36,7 @@ public class CollectionElement extends WebElementSource {
 
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (collection.getActualElements().isEmpty()) {
+    if (collection.getElements().isEmpty()) {
       return new ElementNotFound(collection.description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);

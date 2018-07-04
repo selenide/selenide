@@ -52,7 +52,7 @@ public class ElementsCollectionTest {
 
     collection.shouldHaveSize(0);
 
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     collection.shouldHaveSize(2);
 
     verify(collection, never()).sleep(anyLong());
@@ -65,7 +65,7 @@ public class ElementsCollectionTest {
 
     collection.shouldBe(CollectionCondition.size(0));
 
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     collection.shouldBe(CollectionCondition.size(2));
   }
 
@@ -80,7 +80,7 @@ public class ElementsCollectionTest {
   @Test(expected = RuntimeException.class)
   public void testShouldWithRuntimeException() {
     ElementsCollection collection = new ElementsCollection(source);
-    doThrow(RuntimeException.class).when(source).getActualElements();
+    doThrow(RuntimeException.class).when(source).getElements();
     collection.should("Be size 1", CollectionCondition.size(1));
   }
 
@@ -91,7 +91,7 @@ public class ElementsCollectionTest {
 
   private void checkFilterMethod(boolean useBy) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     ElementsCollection filteredCollection = useBy ?
@@ -113,7 +113,7 @@ public class ElementsCollectionTest {
 
   private void checkExcludeMethod(boolean useWith) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     ElementsCollection filteredCollection = useWith ?
@@ -135,7 +135,7 @@ public class ElementsCollectionTest {
 
   private void checkFindMethod(boolean useBy) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     Condition condition = Condition.text("Hello");
@@ -160,7 +160,7 @@ public class ElementsCollectionTest {
 
   @Test
   public void testStaticGetTexts() {
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
@@ -200,7 +200,7 @@ public class ElementsCollectionTest {
   @Test
   public void testFirstNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -222,7 +222,7 @@ public class ElementsCollectionTest {
   @Test
   public void testLasttNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -235,7 +235,7 @@ public class ElementsCollectionTest {
   @Test
   public void testIteratorMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -248,7 +248,7 @@ public class ElementsCollectionTest {
   @Test
   public void testIteratorListMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -262,7 +262,7 @@ public class ElementsCollectionTest {
   public void doesNotWait_ifConditionAlreadyMatches() {
     WebElementsCollection source = mock(WebElementsCollection.class);
     ElementsCollection collection = spy(new ElementsCollection(source));
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
 
     collection.shouldHave(size(2));
     verify(collection, never()).sleep(anyLong());
@@ -271,7 +271,7 @@ public class ElementsCollectionTest {
   @Test
   public void sleepsAsLessAsPossible_untilConditionGetsMatched() {
     ElementsCollection collection = spy(new ElementsCollection(source));
-    when(source.getActualElements()).thenReturn(
+    when(source.getElements()).thenReturn(
       Collections.singletonList(element1),
       asList(element1, element2),
       asList(element1, element2, element2)
