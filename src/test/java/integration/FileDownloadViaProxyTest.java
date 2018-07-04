@@ -72,6 +72,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   public void download_withCustomTimeout() throws IOException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
-    assertEquals("hello_world.txt", downloadedFile.getName());
+    assertThat(downloadedFile.getName())
+      .isEqualTo("hello_world.txt");
   }
 }

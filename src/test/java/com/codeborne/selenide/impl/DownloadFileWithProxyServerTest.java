@@ -56,7 +56,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -80,7 +80,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -102,7 +102,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy);
+    File file = command.download(linkWithHref, link, proxy, 3000);
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -116,7 +116,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }

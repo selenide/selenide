@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ex.TimeoutException;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,21 +60,22 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  public void download_withCustomTimeout() throws IOException {
+  void downloadWithCustomTimeout() throws IOException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
-    assertEquals("hello_world.txt", downloadedFile.getName());
+    assertThat(downloadedFile.getName())
+      .isEqualTo("hello_world.txt");
   }
 
   @Test
-  public void downloads_getsTimeoutException() throws IOException {
+  void downloadsGetsTimeoutException() throws IOException {
     try {
       $(byText("Download me slowly (2000 ms)")).download(1000);
       fail("expected TimeoutException");
-    }
-    catch (TimeoutException expected) {
-      assertThat(expected.getMessage(), startsWith("Failed to download "));
-      assertThat(expected.getMessage(), endsWith("/files/hello_world.txt?pause=2000 in 1000 ms."));
+    } catch (TimeoutException expected) {
+      assertThat(expected)
+        .hasMessageStartingWith("Failed to download ")
+        .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 1000 ms.");
     }
   }
 }
