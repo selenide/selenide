@@ -21,6 +21,8 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
+    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working in PhantomJS? It's magic for me...
+
     close();
     Configuration.fileDownload = HTTPGET;
     openFile("page_with_uploads.html");
@@ -28,8 +30,6 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() throws IOException {
-    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-
     File downloadedFile = $(byText("Download me")).download();
 
     assertThat(downloadedFile.getName())
@@ -42,8 +42,6 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCyrillicName() throws IOException {
-    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
     assertThat(downloadedFile.getName())
@@ -58,5 +56,24 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadMissingFile() {
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
       .isInstanceOf(FileNotFoundException.class);
+  }
+
+  @Test
+  public void download_withCustomTimeout() throws IOException {
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
+
+    assertEquals("hello_world.txt", downloadedFile.getName());
+  }
+
+  @Test
+  public void downloads_getsTimeoutException() throws IOException {
+    try {
+      $(byText("Download me slowly (2000 ms)")).download(1000);
+      fail("expected TimeoutException");
+    }
+    catch (TimeoutException expected) {
+      assertThat(expected.getMessage(), startsWith("Failed to download "));
+      assertThat(expected.getMessage(), endsWith("/files/hello_world.txt?pause=2000 in 1000 ms."));
+    }
   }
 }
