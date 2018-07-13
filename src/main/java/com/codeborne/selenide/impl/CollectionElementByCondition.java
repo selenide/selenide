@@ -28,7 +28,7 @@ public class CollectionElementByCondition extends WebElementSource {
 
   @Override
   public WebElement getWebElement() {
-    List<WebElement> list = collection.getActualElements();
+    List<WebElement> list = collection.getElements();
 
     for (WebElement element : list) {
       if (condition.apply(element)) {
@@ -47,7 +47,7 @@ public class CollectionElementByCondition extends WebElementSource {
 
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (collection.getActualElements().isEmpty()) {
+    if (collection.getElements().isEmpty()) {
       return new ElementNotFound(collection.description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);

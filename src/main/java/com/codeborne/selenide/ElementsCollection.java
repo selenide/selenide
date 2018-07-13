@@ -11,6 +11,7 @@ import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.TailOfCollection;
 import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.WebDriverException;
@@ -99,7 +100,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     final long startTime = System.currentTimeMillis();
     do {
       try {
-        actualElements = collection.getActualElements();
+        actualElements = collection.getElements();
         if (condition.apply(actualElements)) {
           return;
         }
@@ -321,12 +322,40 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   @Override
   public Iterator<SelenideElement> iterator() {
-    return new SelenideElementIterator(collection);
+    return new SelenideElementIterator(fetch());
   }
 
   @Override
   public ListIterator<SelenideElement> listIterator(int index) {
-    return new SelenideElementListIterator(collection, index);
+    return new SelenideElementListIterator(fetch(), index);
+  }
+
+  private WebElementsCollectionWrapper fetch() {
+    List<WebElement> fetchedElements = collection.getElements();
+    return new WebElementsCollectionWrapper(fetchedElements);
+  }
+
+  @Override
+  public Object[] toArray() {
+    List<WebElement> fetchedElements = collection.getElements();
+    Object[] result = new Object[fetchedElements.size()];
+    Iterator<WebElement> it = fetchedElements.iterator();
+    for (int i = 0; i < result.length; i++) {
+      result[i] = $(it.next());
+    }
+    return result;
+  }
+
+  /**
+   * Takes the snapshot of current state of this collection.
+   * Succeeding calls to this object WILL NOT RELOAD collection element from browser.
+   *
+   * Use it to speed up your tests - but only if you know that collection will not be changed during the test.
+   *
+   * @return current state of this collection
+   */
+  public ElementsCollection snapshot() {
+    return new ElementsCollection(fetch());
   }
 
   @Override

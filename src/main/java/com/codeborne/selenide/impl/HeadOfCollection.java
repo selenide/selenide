@@ -7,7 +7,6 @@ import java.util.List;
 public class HeadOfCollection implements WebElementsCollection {
   private final WebElementsCollection originalCollection;
   private final int size;
-  private List<WebElement> actualElements;
 
   public HeadOfCollection(WebElementsCollection originalCollection, int size) {
     this.originalCollection = originalCollection;
@@ -16,17 +15,8 @@ public class HeadOfCollection implements WebElementsCollection {
 
   @Override
   public List<WebElement> getElements() {
-    if (actualElements == null) {
-      return getActualElements();
-    }
-    return actualElements;
-  }
-
-  @Override
-  public List<WebElement> getActualElements() {
-    List<WebElement> source = originalCollection.getActualElements();
-    this.actualElements = source.subList(0, Math.min(source.size(), size));
-    return this.actualElements;
+    List<WebElement> source = originalCollection.getElements();
+    return source.subList(0, Math.min(source.size(), size));
   }
 
   @Override

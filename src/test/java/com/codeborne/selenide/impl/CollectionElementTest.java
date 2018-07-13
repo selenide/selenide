@@ -35,7 +35,7 @@ public class CollectionElementTest {
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
     List<WebElement> listOfMockedElements = asList(mockedWebElement1, mockedWebElement2);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(listOfMockedElements);
+    when(mockedWebElementCollection.getElements()).thenReturn(listOfMockedElements);
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     assertEquals(mockedWebElement2, collectionElement.getWebElement());
@@ -84,7 +84,7 @@ public class CollectionElementTest {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mock(WebElement.class)));
+    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     Condition mockedCollection = mock(Condition.class);
