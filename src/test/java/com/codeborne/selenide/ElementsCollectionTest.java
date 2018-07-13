@@ -48,7 +48,7 @@ class ElementsCollectionTest implements WithAssertions {
 
     collection.shouldHaveSize(0);
 
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     collection.shouldHaveSize(2);
 
     verify(collection, never()).sleep(anyLong());
@@ -61,7 +61,7 @@ class ElementsCollectionTest implements WithAssertions {
 
     collection.shouldBe(CollectionCondition.size(0));
 
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     collection.shouldBe(CollectionCondition.size(2));
   }
 
@@ -77,7 +77,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void testShouldWithRuntimeException() {
     ElementsCollection collection = new ElementsCollection(source);
-    doThrow(RuntimeException.class).when(source).getActualElements();
+    doThrow(RuntimeException.class).when(source).getElements();
 
     assertThatThrownBy(() -> collection.should("Be size 1", CollectionCondition.size(1)))
       .isInstanceOf(RuntimeException.class);
@@ -90,7 +90,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   private void checkFilterMethod(boolean useBy) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     ElementsCollection filteredCollection = useBy ?
@@ -115,7 +115,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   private void checkExcludeMethod(boolean useWith) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     ElementsCollection filteredCollection = useWith ?
@@ -140,7 +140,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   private void checkFindMethod(boolean useBy) {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     Condition condition = Condition.text("Hello");
@@ -167,7 +167,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void testStaticGetTexts() {
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
@@ -208,7 +208,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void testFirstNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -233,7 +233,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void testLastNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -248,7 +248,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void testIteratorMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -264,7 +264,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void testIteratorListMethod() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
@@ -281,7 +281,7 @@ class ElementsCollectionTest implements WithAssertions {
   void doesNotWait_ifConditionAlreadyMatches() {
     WebElementsCollection source = mock(WebElementsCollection.class);
     ElementsCollection collection = spy(new ElementsCollection(source));
-    when(source.getActualElements()).thenReturn(asList(element1, element2));
+    when(source.getElements()).thenReturn(asList(element1, element2));
 
     collection.shouldHave(size(2));
     verify(collection, never()).sleep(anyLong());
@@ -290,7 +290,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void sleepsAsLessAsPossible_untilConditionGetsMatched() {
     ElementsCollection collection = spy(new ElementsCollection(source));
-    when(source.getActualElements()).thenReturn(
+    when(source.getElements()).thenReturn(
       Collections.singletonList(element1),
       asList(element1, element2),
       asList(element1, element2, element2)

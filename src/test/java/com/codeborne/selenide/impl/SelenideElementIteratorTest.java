@@ -14,7 +14,7 @@ class SelenideElementIteratorTest implements WithAssertions {
   @Test
   void testHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mock(WebElement.class)));
+    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     assertThat(selenideElementIterator.hasNext())
       .isTrue();
@@ -23,7 +23,7 @@ class SelenideElementIteratorTest implements WithAssertions {
   @Test
   void testDoesNotHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(emptyList());
+    when(mockedWebElementCollection.getElements()).thenReturn(emptyList());
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     assertThat(selenideElementIterator.hasNext())
       .isFalse();
@@ -37,7 +37,7 @@ class SelenideElementIteratorTest implements WithAssertions {
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mockedWebElement));
+    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mockedWebElement));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     SelenideElement nextElement = selenideElementIterator.next();
 

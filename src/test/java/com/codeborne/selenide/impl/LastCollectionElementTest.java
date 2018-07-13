@@ -31,7 +31,6 @@ class LastCollectionElementTest implements WithAssertions {
     String element2Text = "World";
     when(mockedElement2.getText()).thenReturn(element2Text);
     when(mockedElementsCollection.getElements()).thenReturn(asList(mockedElement1, mockedElement2));
-    when(mockedElementsCollection.getActualElements()).thenReturn(asList(mockedElement1, mockedElement2));
     String collectionDescription = "Collection description";
     when(mockedElementsCollection.description()).thenReturn(collectionDescription);
 
@@ -53,7 +52,7 @@ class LastCollectionElementTest implements WithAssertions {
 
   private <T extends Throwable> void checkGetElementsMethodWithException(T exception) {
     doThrow(exception).when(mockedElement2).isEnabled();
-    when(mockedElementsCollection.getActualElements()).thenReturn(Collections.singletonList(mockedElement1));
+    when(mockedElementsCollection.getElements()).thenReturn(Collections.singletonList(mockedElement1));
     assertThat(lastCollectionElement.getWebElement())
       .isEqualTo(mockedElement1);
   }
@@ -65,7 +64,7 @@ class LastCollectionElementTest implements WithAssertions {
 
   @Test
   void testCreateElementNotFoundErrorMethodWhenCollectionIsEmpty() {
-    when(mockedElementsCollection.getActualElements()).thenReturn(Collections.emptyList());
+    when(mockedElementsCollection.getElements()).thenReturn(Collections.emptyList());
     ElementNotFound notFoundError = lastCollectionElement
       .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertThat(notFoundError)

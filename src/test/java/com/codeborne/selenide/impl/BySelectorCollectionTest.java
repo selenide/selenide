@@ -11,9 +11,6 @@ import org.openqa.selenium.WebElement;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class BySelectorCollectionTest implements WithAssertions {
@@ -43,14 +40,6 @@ class BySelectorCollectionTest implements WithAssertions {
     String description = bySelectorCollection.description();
     assertThat(description)
       .isEqualTo("By.name: selenide");
-  }
-
-  @Test
-  void testGetElementsMethod() {
-    BySelectorCollection bySelectorCollection = spy(new BySelectorCollection(new NotWebElement(), By.name("selenide")));
-    assertThat(bySelectorCollection.getElements().get(0))
-      .isEqualTo(mockedWebElement);
-    verify(bySelectorCollection, times(1)).getActualElements();
   }
 
   private class NotWebElement implements SearchContext {

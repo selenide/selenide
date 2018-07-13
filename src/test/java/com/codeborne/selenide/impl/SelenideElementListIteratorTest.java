@@ -26,7 +26,7 @@ class SelenideElementListIteratorTest implements WithAssertions {
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mockedWebElement));
+    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mockedWebElement));
 
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
     SelenideElement previous = selenideElementIterator.previous();

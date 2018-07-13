@@ -21,10 +21,10 @@ class FilteringCollectionTest implements WithAssertions {
     when(mockedWebElement2.isDisplayed()).thenReturn(true);
 
     WebElementsCollection mockedCollection = mock(WebElementsCollection.class);
-    when(mockedCollection.getActualElements()).thenReturn(asList(mockedWebElement1, mockedWebElement2));
+    when(mockedCollection.getElements()).thenReturn(asList(mockedWebElement1, mockedWebElement2));
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);
 
-    List<WebElement> actualElements = filteringCollection.getActualElements();
+    List<WebElement> actualElements = filteringCollection.getElements();
     assertThat(actualElements)
       .hasSize(1);
     assertThat(actualElements.get(0))

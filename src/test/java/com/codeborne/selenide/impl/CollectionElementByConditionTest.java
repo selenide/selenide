@@ -36,7 +36,7 @@ class CollectionElementByConditionTest implements WithAssertions {
     WebElement mockedWebElement2 = mock(WebElement.class);
 
     List<WebElement> listOfMockedElements = asList(mockedWebElement1, mockedWebElement2);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(listOfMockedElements);
+    when(mockedWebElementCollection.getElements()).thenReturn(listOfMockedElements);
     when(mockedWebElement2.isDisplayed()).thenReturn(true);
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(mockedWebElementCollection, Condition.visible);
 
@@ -87,7 +87,7 @@ class CollectionElementByConditionTest implements WithAssertions {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
     when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    when(mockedWebElementCollection.getActualElements()).thenReturn(singletonList(mock(WebElement.class)));
+    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(mockedWebElementCollection, Condition.visible);
 
     Condition mockedCollection = mock(Condition.class);

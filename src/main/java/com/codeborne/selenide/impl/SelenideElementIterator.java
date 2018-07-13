@@ -14,7 +14,7 @@ public class SelenideElementIterator implements Iterator<SelenideElement> {
 
   @Override
   public boolean hasNext() {
-    return collection.getElements().size() > index || (collection.getActualElements()).size() > index;
+    return collection.getElements().size() > index;
   }
 
   @Override

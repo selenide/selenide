@@ -11,7 +11,6 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 class CollectionWaitTest extends IntegrationTest {
   @BeforeEach
@@ -29,13 +28,9 @@ class CollectionWaitTest extends IntegrationTest {
     $$("#collection li").last().shouldBe(visible).shouldHave(text("Element #49"));
   }
 
-  @Test
-  void reproduceStaleElementException_priorToSelenide33() {
-    List<SelenideElement> elements = new ArrayList<>($$("h1"));
-
-    executeJavaScript("window.location.reload();");
-
-    elements.get(0).shouldBe(visible).shouldHave(text("Elements will appear soon"));
+  @Test(expected = AssertionError.class)
+  public void failsIfWrongSize() {
+    $$("#collection li").shouldHave(size(-1));
   }
 
   @Test

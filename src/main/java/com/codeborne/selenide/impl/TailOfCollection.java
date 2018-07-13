@@ -7,7 +7,6 @@ import java.util.List;
 public class TailOfCollection implements WebElementsCollection {
   private final WebElementsCollection originalCollection;
   private final int size;
-  private List<WebElement> actualElements;
 
   public TailOfCollection(WebElementsCollection originalCollection, int size) {
     this.originalCollection = originalCollection;
@@ -16,17 +15,8 @@ public class TailOfCollection implements WebElementsCollection {
 
   @Override
   public List<WebElement> getElements() {
-    if (actualElements == null) {
-      return getActualElements();
-    }
-    return actualElements;
-  }
-
-  @Override
-  public List<WebElement> getActualElements() {
-    List<WebElement> source = originalCollection.getActualElements();
-    this.actualElements = source.subList(source.size() - Math.min(source.size(), size), source.size());
-    return this.actualElements;
+    List<WebElement> source = originalCollection.getElements();
+    return source.subList(source.size() - Math.min(source.size(), size), source.size());
   }
 
   @Override
