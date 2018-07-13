@@ -1,17 +1,12 @@
 package integration;
 
-import com.codeborne.selenide.SelenideElement;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 public class CollectionWaitTest extends IntegrationTest {
   @Before
@@ -28,16 +23,6 @@ public class CollectionWaitTest extends IntegrationTest {
     $$("#collection li").first().shouldBe(visible).shouldHave(text("Element #0"));
     $$("#collection li").last().shouldBe(visible).shouldHave(text("Element #49"));
   }
-
-  @Test
-  public void reproduceStaleElementException_priorToSelenide33() {
-    List<SelenideElement> elements = new ArrayList<>($$("h1"));
-    
-    executeJavaScript("window.location.reload();");
-
-    elements.get(0).shouldBe(visible).shouldHave(text("Elements will appear soon"));
-  }
-
 
   @Test(expected = AssertionError.class)
   public void failsIfWrongSize() {
