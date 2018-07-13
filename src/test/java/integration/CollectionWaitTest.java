@@ -1,9 +1,5 @@
 package integration;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,11 +22,6 @@ class CollectionWaitTest extends IntegrationTest {
 
     $$("#collection li").first().shouldBe(visible).shouldHave(text("Element #0"));
     $$("#collection li").last().shouldBe(visible).shouldHave(text("Element #49"));
-  }
-
-  @Test(expected = AssertionError.class)
-  public void failsIfWrongSize() {
-    $$("#collection li").shouldHave(size(-1));
   }
 
   @Test
