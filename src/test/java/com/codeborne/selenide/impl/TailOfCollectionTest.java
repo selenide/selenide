@@ -17,7 +17,7 @@ public class TailOfCollectionTest {
 
   @Before
   public void setUp() {
-    when(originalCollection.getActualElements()).thenReturn(asList(element1, element2, element3));
+    when(originalCollection.getElements()).thenReturn(asList(element1, element2, element3));
   }
 
   @Test

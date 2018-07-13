@@ -32,7 +32,6 @@ public class LastCollectionElementTest {
     String element2Text = "World";
     when(mockedElement2.getText()).thenReturn(element2Text);
     when(mockedElementsCollection.getElements()).thenReturn(asList(mockedElement1, mockedElement2));
-    when(mockedElementsCollection.getActualElements()).thenReturn(asList(mockedElement1, mockedElement2));
     String collectionDescription = "Collection description";
     when(mockedElementsCollection.description()).thenReturn(collectionDescription);
 
@@ -58,13 +57,13 @@ public class LastCollectionElementTest {
 
   private <T extends Throwable> void checkGetElementsMethodWithException(T exception) {
     doThrow(exception).when(mockedElement2).isEnabled();
-    when(mockedElementsCollection.getActualElements()).thenReturn(Collections.singletonList(mockedElement1));
+    when(mockedElementsCollection.getElements()).thenReturn(Collections.singletonList(mockedElement1));
     assertEquals(mockedElement1, lastCollectionElement.getWebElement());
   }
 
   @Test
   public void testCreateElementNotFoundErrorMethodWhenCollectionIsEmpty() {
-    when(mockedElementsCollection.getActualElements()).thenReturn(Collections.emptyList());
+    when(mockedElementsCollection.getElements()).thenReturn(Collections.emptyList());
     ElementNotFound notFoundError = lastCollectionElement
         .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertEquals("Element not found {Collection description}\n" +
