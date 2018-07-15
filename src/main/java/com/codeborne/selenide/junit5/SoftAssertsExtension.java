@@ -11,7 +11,8 @@ import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
 
 /**
- * By using this extension selenide will be ignore failed assert from should and waitUntil methods collect and throw after test finished.
+ * By using this extension selenide will be ignore failed assert from should and waitUntil methods.
+ * Collect all and throw after test finished.
  * <br/>
  * To use extension extend you test class with it:
  * <br/>
@@ -28,13 +29,6 @@ import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
 public class SoftAssertsExtension implements BeforeEachCallback, AfterEachCallback {
   private final ErrorsCollector errorsCollector;
 
-  /**
-   * Create SoftAssertsExtension instance with empty ErrorsCollector object.
-   * <br/>
-   * Used during extension registration.
-   *
-   * @see ErrorsCollector
-   */
   public SoftAssertsExtension() {
     errorsCollector = new ErrorsCollector();
   }
