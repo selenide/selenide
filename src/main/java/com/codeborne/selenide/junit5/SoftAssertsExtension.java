@@ -1,6 +1,7 @@
 package com.codeborne.selenide.junit5;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
+
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -10,6 +11,17 @@ import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
 
 /**
+ * By using this extension selenide will be ignore failed assert from should and waitUntil methods collect and throw after test finished.
+ * <br/>
+ * To use extension extend you test class with it:
+ * <br/>
+ * {@code @ExtendWith({SoftAssertsExtension.class}}
+ * <br/>
+ * Or register extension in test class:
+ * <br/>
+ * {@code @RegisterExtension static SoftAssertsExtension softAsserts = new SoftAssertsExtension();}
+ * <br/>
+ *
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
@@ -27,13 +39,6 @@ public class SoftAssertsExtension implements BeforeEachCallback, AfterEachCallba
     errorsCollector = new ErrorsCollector();
   }
 
-  /**
-   * Return error collector object.
-   *
-   * @return ErrorsCollector instance
-   *
-   * @see ErrorsCollector
-   */
   public ErrorsCollector getErrorsCollector() {
     return errorsCollector;
   }

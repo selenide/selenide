@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
+
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -21,13 +22,10 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallback, AfterAllCallback {
   private static final Logger log = Logger.getLogger(ScreenShooterExtension.class.getName());
 
-  private boolean captureSuccessfulTests;
+  private final boolean captureSuccessfulTests;
 
-  /**
-   * Initialize default screen shooter extension with disabled successful tests capture.
-   */
   public ScreenShooterExtension() {
-    this.captureSuccessfulTests = false;
+    this(false);
   }
 
   /**
