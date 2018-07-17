@@ -1,24 +1,24 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
 import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static org.junit.Assume.assumeFalse;
 
-public class PageWithoutJQuery extends IntegrationTest {
-  @Before
-  public void openTestPageWithOutJQuery() {
+class PageWithoutJQuery extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithOutJQuery() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void setValueTriggersOnChangeEvent() {
-    assumeFalse(isHtmlUnit());
+  void setValueTriggersOnChangeEvent() {
+    Assumptions.assumeFalse(isHtmlUnit());
 
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("john"));
@@ -30,8 +30,8 @@ public class PageWithoutJQuery extends IntegrationTest {
   }
 
   @Test
-  public void setValueDoesNotTriggerOnChangeEvent() {
-    assumeFalse(isHtmlUnit());
+  void setValueDoesNotTriggerOnChangeEvent() {
+    Assumptions.assumeFalse(isHtmlUnit());
 
     Configuration.setValueChangeEvent = false;
 
@@ -44,8 +44,8 @@ public class PageWithoutJQuery extends IntegrationTest {
     $("#username-mirror").shouldHave(text("_"));
   }
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     Configuration.setValueChangeEvent = true;
   }
 }

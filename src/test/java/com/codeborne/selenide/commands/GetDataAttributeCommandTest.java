@@ -2,23 +2,21 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetDataAttributeCommandTest {
+class GetDataAttributeCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
   private GetDataAttribute getDataAttributeCommand;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
     mockedElement = mock(SelenideElement.class);
@@ -27,17 +25,19 @@ public class GetDataAttributeCommandTest {
   }
 
   @Test
-  public void testExecuteMethodWithDataAttribute() {
+  void testExecuteMethodWithDataAttribute() {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(elementAttribute);
-    assertEquals(elementAttribute, getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(elementAttribute);
   }
 
   @Test
-  public void testExecuteMethodWithNoDataAttribute() {
+  void testExecuteMethodWithNoDataAttribute() {
     String argument = "class";
     when(mockedElement.getAttribute("data-" + argument)).thenReturn(null);
-    assertNull(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}));
+    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isNull();
   }
 }

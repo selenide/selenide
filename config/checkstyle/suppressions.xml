@@ -10,6 +10,7 @@
     <suppress checks="JavadocMethod" files=".*[/\\]ex[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]logevents[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]junit[/\\].*.java"/>
+    <suppress checks="JavadocMethod" files=".*[/\\]junit5[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]testng[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]collections[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]conditions[/\\].*.java"/>

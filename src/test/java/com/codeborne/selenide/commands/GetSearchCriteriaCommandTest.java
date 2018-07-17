@@ -2,22 +2,21 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetSearchCriteriaCommandTest {
+class GetSearchCriteriaCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private GetSearchCriteria getSearchCriteriaCommand;
   private String defaultSearchCriteria = "by.xpath";
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     getSearchCriteriaCommand = new GetSearchCriteria();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -25,7 +24,8 @@ public class GetSearchCriteriaCommandTest {
   }
 
   @Test
-  public void testExecuteMethod() {
-    assertEquals(defaultSearchCriteria, getSearchCriteriaCommand.execute(proxy, locator, new Object[]{"something more"}));
+  void testExecuteMethod() {
+    assertThat(getSearchCriteriaCommand.execute(proxy, locator, new Object[]{"something more"}))
+      .isEqualTo(defaultSearchCriteria);
   }
 }

@@ -1,20 +1,16 @@
 package com.codeborne.selenide.logevents;
 
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
-public class EventsCollectorTest {
-
+class EventsCollectorTest implements WithAssertions {
   @Test
-  public void testOnEvent() {
+  void testOnEvent() {
     EventsCollector eventsCollector = new EventsCollector();
     SelenideLog selenideLog = new SelenideLog("Link", "Not Found");
     eventsCollector.onEvent(selenideLog);
 
-    List<LogEvent> events = eventsCollector.events();
-    assertEquals(selenideLog, events.get(0));
+    assertThat(eventsCollector.events())
+      .contains(selenideLog);
   }
 }

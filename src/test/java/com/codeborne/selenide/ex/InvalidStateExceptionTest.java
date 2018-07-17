@@ -1,29 +1,29 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
-
-public class InvalidStateExceptionTest {
-
+class InvalidStateExceptionTest implements WithAssertions {
   @Test
-  public void testThrowableConstructor() {
+  void testThrowableConstructor() {
     InvalidStateException invalidStateException = new InvalidStateException(new Throwable("Error message"));
     String expectedString = "java.lang.Throwable: Error message\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Throwable: Error message";
-    assertEquals(expectedString, invalidStateException.toString());
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Caused by: java.lang.Throwable: Error message";
+    assertThat(invalidStateException)
+      .hasToString(expectedString);
   }
 
   @Test
-  public void testStringConstructor() {
+  void testStringConstructor() {
     InvalidStateException invalidStateException = new InvalidStateException("Error message");
     String expectedString = "InvalidStateException Error message\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.";
-    assertEquals(expectedString, invalidStateException.toString());
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.";
+    assertThat(invalidStateException)
+      .hasToString(expectedString);
   }
 }

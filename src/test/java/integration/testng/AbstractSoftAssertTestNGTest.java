@@ -2,6 +2,7 @@ package integration.testng;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.testng.SoftAsserts;
+import org.assertj.core.api.WithAssertions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -11,7 +12,7 @@ import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Selenide.open;
 
 @Listeners(SoftAsserts.class)
-public abstract class AbstractSoftAssertTestNGTest {
+public abstract class AbstractSoftAssertTestNGTest implements WithAssertions {
   @BeforeMethod
   public void switchToSoftAssertionsMode() {
     open("http://google.com/ncr");

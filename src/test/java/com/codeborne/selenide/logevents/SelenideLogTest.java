@@ -1,41 +1,45 @@
 package com.codeborne.selenide.logevents;
 
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
-import static org.junit.Assert.assertEquals;
 
-public class SelenideLogTest {
-
+class SelenideLogTest implements WithAssertions {
   @Test
-  public void testGetSubject() {
+  void testGetSubject() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals("Subject", log.getSubject());
+    assertThat(log.getSubject())
+      .isEqualTo("Subject");
   }
 
   @Test
-  public void testGetStatus() {
+  void testGetStatus() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals(IN_PROGRESS, log.getStatus());
+    assertThat(log.getStatus())
+      .isEqualTo(IN_PROGRESS);
   }
 
   @Test
-  public void testGetElement() {
+  void testGetElement() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals("Element", log.getElement());
+    assertThat(log.getElement())
+      .isEqualTo("Element");
   }
 
   @Test
-  public void testError() {
+  void testError() {
     SelenideLog log = new SelenideLog("Element", "Subject");
     Throwable error = new Throwable("Error message");
     log.setError(error);
-    assertEquals(error, log.getError());
+    assertThat(log.getError())
+      .isEqualTo(error);
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     SelenideLog log = new SelenideLog("Element", "Subject");
-    assertEquals(String.format("$(%s) %s", log.getElement(), log.getSubject()), log.toString());
+    assertThat(log)
+      .hasToString(String.format("$(%s) %s", log.getElement(), log.getSubject()));
   }
 }

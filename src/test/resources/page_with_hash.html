@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::hash</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
-    <script type="text/javascript">
+<head>
+  <title>Test::hash</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript">
       $(function() {
         $(window).on("hashchange", function() {
           $("#hash-value").text(window.location.hash);
         });
       });
-    </script>
-  </head>
-  <body>
-    <h1>Hash-aware page</h1>
 
-    <br/>
-    <h2>Current hash is: '<span id="hash-value"></span>'</h2>
-  </body>
+  </script>
+</head>
+<body>
+<h1>Hash-aware page</h1>
+
+<br/>
+<h2>Current hash is: '<span id="hash-value"></span>'</h2>
+</body>
 </html>

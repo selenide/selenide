@@ -1,74 +1,82 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byId;
+import static com.codeborne.selenide.Selectors.byLinkText;
+import static com.codeborne.selenide.Selectors.byName;
+import static com.codeborne.selenide.Selectors.byPartialLinkText;
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.$x;
 
-public class SelectorsTest extends IntegrationTest {
-  @Before
-  public void openTestPageWithJQuery() {
+class SelectorsTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void canFindElementByName() {
+  void canFindElementByName() {
     $(byName("domain")).should(exist);
   }
 
   @Test
-  public void canFindElementByXPath() {
+  void canFindElementByXPath() {
     $(byXpath("//h1")).shouldHave(text("Page with selects"));
     $(byXpath("//*[@name='domain']")).shouldBe(visible);
   }
 
   @Test
-  public void canFindElementByLinkText() {
+  void canFindElementByLinkText() {
     $(byLinkText("Options with 'apostrophes' and \"quotes\"")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
   }
 
   @Test
-  public void canFindElementByPartialLinkText() {
+  void canFindElementByPartialLinkText() {
     $(byPartialLinkText("'apostrophes")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     $(byPartialLinkText("quotes\"")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
   }
 
   @Test
-  public void canFindElementById() {
+  void canFindElementById() {
     $(byId("status")).shouldHave(text("Username:"));
   }
 
   @Test
-  public void canFindSelenideElementByXpath() {
+  void canFindSelenideElementByXpath() {
     $x("//h1").shouldHave(text("Page with selects"));
     $x("//*[@id='status']").shouldHave(text("Username:"));
     $x("//*[@name='domain']").shouldBe(visible);
   }
 
   @Test
-  public void canFindElementsCollectionByXpath() {
+  void canFindElementsCollectionByXpath() {
     $$x("//h1").get(0).shouldHave(text("Page with selects"));
     $$x("//*[@id='status']").get(0).shouldHave(text("Username:"));
     $$x("//*[@name='domain']").get(0).shouldBe(visible);
   }
 
   @Test
-  public void canFindChildSelenideElementByXpath() {
+  void canFindChildSelenideElementByXpath() {
     SelenideElement parent = $x("//div[@id='radioButtons']");
     parent.$x("./h2").shouldHave(text("Radio buttons"));
   }
 
   @Test
-  public void canFindChildElementsCollectionByXpath() {
+  void canFindChildElementsCollectionByXpath() {
     SelenideElement parent = $x("//table[@id='multirowTable']");
     parent.$$x(".//tr").shouldHaveSize(2);
   }
 
   @Test
-  public void canFindNthChildSelenideElementByXpath() {
+  void canFindNthChildSelenideElementByXpath() {
     SelenideElement parent = $x("//table[@id='multirowTable']");
     parent.$x(".//tr", 0).shouldHave(text("Chack Norris"));
   }

@@ -1,52 +1,67 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.source;
 
-public class FramesTest extends IntegrationTest {
-  @Before
-  public void openPage() {
+class FramesTest extends IntegrationTest {
+  @AfterAll
+  static void tearDown() {
+    close();
+  }
+
+  @BeforeEach
+  void openPage() {
     openFile("page_with_frames.html");
   }
 
   @Test
-  public void canSwitchIntoInnerFrame() {
-    assertEquals("Test::frames", title());
+  void canSwitchIntoInnerFrame() {
+    assertThat(title())
+      .isEqualTo("Test::frames");
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
-    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_parent_frame.html"));
+    assertThat(currentFrameUrl())
+      .isEqualTo(Configuration.baseUrl + "/page_with_parent_frame.html");
 
     switchTo().innerFrame("parentFrame", "childFrame_1");
-    assertThat(source(), containsString("Hello, WinRar!"));
-    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/hello_world.txt"));
+    assertThat(source())
+      .contains("Hello, WinRar!");
+    assertThat(currentFrameUrl())
+      .isEqualTo(Configuration.baseUrl + "/hello_world.txt");
 
     switchTo().innerFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
-    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_child_frame.html"));
+    assertThat(currentFrameUrl())
+      .isEqualTo(Configuration.baseUrl + "/page_with_child_frame.html");
 
     switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");
-    assertThat(source(), containsString("This is last frame!"));
-    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/child_frame.txt"));
+    assertThat(source())
+      .contains("This is last frame!");
+    assertThat(currentFrameUrl())
+      .isEqualTo(Configuration.baseUrl + "/child_frame.txt");
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
-    assertThat(currentFrameUrl(), equalTo(Configuration.baseUrl + "/page_with_parent_frame.html"));
+    assertThat(currentFrameUrl())
+      .isEqualTo(Configuration.baseUrl + "/page_with_parent_frame.html");
   }
 
   @Test
-  public void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
+  void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
 
@@ -55,11 +70,13 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchBetweenFramesByTitle() {
-    assertEquals("Test::frames", title());
+  void canSwitchBetweenFramesByTitle() {
+    assertThat(title())
+      .isEqualTo("Test::frames");
 
     switchTo().frame("topFrame");
-    assertThat(source(), containsString("Hello, WinRar!"));
+    assertThat(source())
+      .contains("Hello, WinRar!");
 
     switchTo().defaultContent();
     switchTo().frame("leftFrame");
@@ -71,12 +88,14 @@ public class FramesTest extends IntegrationTest {
   }
 
   @Test
-  public void canSwitchBetweenFramesByIndex() {
-    assumeFalse(isChrome());
-    assertEquals("Test::frames", title());
+  void canSwitchBetweenFramesByIndex() {
+    Assumptions.assumeFalse(isChrome());
+    assertThat(title())
+      .isEqualTo("Test::frames");
 
     switchTo().frame(0);
-    assertThat(source(), containsString("Hello, WinRar!"));
+    assertThat(source())
+      .contains("Hello, WinRar!");
 
     switchTo().defaultContent();
     switchTo().frame(1);
@@ -85,10 +104,5 @@ public class FramesTest extends IntegrationTest {
     switchTo().defaultContent();
     switchTo().frame(2);
     $("h1").shouldHave(text("Page with JQuery"));
-  }
-
-  @AfterClass
-  public static void tearDown() {
-    close();
   }
 }

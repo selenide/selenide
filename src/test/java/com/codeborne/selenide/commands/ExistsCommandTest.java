@@ -4,27 +4,25 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExistsCommandTest {
+class ExistsCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private WebElement element;
   private Exists existsCommand;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
     element = mock(WebElement.class);
@@ -32,35 +30,39 @@ public class ExistsCommandTest {
   }
 
   @Test
-  public void testExistExecuteMethod() {
+  void testExistExecuteMethod() {
     when(locator.getWebElement()).thenReturn(null);
-    assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isFalse();
     when(locator.getWebElement()).thenReturn(element);
-    assertTrue(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isTrue();
   }
 
   @Test
-  public void testExistExecuteMethodWithWebDriverException() {
+  void testExistExecuteMethodWithWebDriverException() {
     checkExecuteMethodWithException(new WebDriverException());
   }
 
   private <T extends Throwable> void checkExecuteMethodWithException(T exception) {
     doThrow(exception).when(locator).getWebElement();
-    assertFalse(existsCommand.execute(proxy, locator, new Object[]{}));
+    assertThat(existsCommand.execute(proxy, locator, null))
+      .isFalse();
   }
 
   @Test
-  public void testExistExecuteMethodElementNotFoundException() {
+  void testExistExecuteMethodElementNotFoundException() {
     checkExecuteMethodWithException(new ElementNotFound("", Condition.appear));
   }
 
-  @Test(expected = InvalidSelectorException.class)
-  public void testExistsExecuteMethodInvalidSelectorException() {
-    checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable"));
+  @Test
+  void testExistsExecuteMethodInvalidSelectorException() {
+    assertThatThrownBy(() -> checkExecuteMethodWithException(new InvalidSelectorException("Element is not selectable")))
+      .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
-  public void testExistsExecuteMethodWithIndexOutOfBoundException() {
+  void testExistsExecuteMethodWithIndexOutOfBoundException() {
     checkExecuteMethodWithException(new IndexOutOfBoundsException("Out of bound"));
   }
 }

@@ -1,40 +1,43 @@
 package com.codeborne.selenide.impl;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HeadOfCollectionTest {
+class HeadOfCollectionTest implements WithAssertions {
   private final WebElement element1 = mock(WebElement.class);
   private final WebElement element2 = mock(WebElement.class);
   private final WebElement element3 = mock(WebElement.class);
-  WebElementsCollection originalCollection = mock(WebElementsCollection.class);
+  private WebElementsCollection originalCollection = mock(WebElementsCollection.class);
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     when(originalCollection.getElements()).thenReturn(asList(element1, element2, element3));
   }
 
   @Test
-  public void lessThanOriginalSize() {
+  void lessThanOriginalSize() {
     HeadOfCollection $$ = new HeadOfCollection(originalCollection, 2);
-    assertEquals(asList(element1, element2), $$.getElements());
+    assertThat($$.getElements())
+      .isEqualTo(asList(element1, element2));
   }
 
   @Test
-  public void equalToOriginalSize() {
+  void equalToOriginalSize() {
     HeadOfCollection $$ = new HeadOfCollection(originalCollection, 3);
-    assertEquals(asList(element1, element2, element3), $$.getElements());
+    assertThat($$.getElements())
+      .isEqualTo(asList(element1, element2, element3));
   }
 
   @Test
-  public void greaterThanOriginalSize() {
+  void greaterThanOriginalSize() {
     HeadOfCollection $$ = new HeadOfCollection(originalCollection, 4);
-    assertEquals(asList(element1, element2, element3), $$.getElements());
+    assertThat($$.getElements())
+      .isEqualTo(asList(element1, element2, element3));
   }
 }

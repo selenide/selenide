@@ -1,37 +1,42 @@
 package com.codeborne.selenide.impl;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
-import java.util.logging.Logger;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.same;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.*;
+class EventsTest {
+  private Events events = spy(new Events());
+  private WebElement element = mock(WebElement.class);
 
-public class EventsTest {
-  Events events = spy(new Events());
-  WebElement element = mock(WebElement.class);
-
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     events.log = mock(Logger.class);
   }
 
   @Test
-  public void triggersEventsByExecutingJSCode() {
+  void triggersEventsByExecutingJSCode() {
     doNothing().when(events).executeJavaScript(same(element), any());
-    
+
     events.fireEvent(element, "input", "keyup", "change");
-    
+
     verify(events).executeJavaScript(element, "input", "keyup", "change");
     verifyNoMoreInteractions(events.log);
   }
 
   @Test
-  public void ignoresStaleElementReferenceException() {
+  void ignoresStaleElementReferenceException() {
     doThrow(StaleElementReferenceException.class).when(events).executeJavaScript(same(element), any());
 
     events.fireEvent(element, "change");
@@ -39,16 +44,16 @@ public class EventsTest {
     verify(events).executeJavaScript(element, "change");
     verifyNoMoreInteractions(events.log);
   }
-  
+
   @Test
-  public void ignoresButLogs_anyOtherExceptions() {
+  void ignoresButLogs_anyOtherExceptions() {
     doThrow(new UnsupportedOperationException("webdriver does not support JS"))
-        .when(events).executeJavaScript(same(element), any());
+      .when(events).executeJavaScript(same(element), any());
 
     events.fireEvent(element, "input", "change");
 
     verify(events).executeJavaScript(element, "input", "change");
     verify(events.log).warning("Failed to trigger events [input, change]: " +
-        "java.lang.UnsupportedOperationException: webdriver does not support JS");
+      "java.lang.UnsupportedOperationException: webdriver does not support JS");
   }
 }

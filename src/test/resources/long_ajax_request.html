@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>long ajax request</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
-    <script type="text/javascript" language="JavaScript">
+<head>
+  <title>long ajax request</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript" language="JavaScript">
       var commandDuration = 100;
 
       function runLongAjaxRequest() {
@@ -13,25 +13,26 @@
         setTimeout(function() {$("#results ul").append("<li>Result 2<span id='result-2'>r2</span></li>");}, commandDuration*4);
         setTimeout(function() {$("#loading").remove();}, commandDuration*10);
       }
-    </script>
-  </head>
-  <body>
-    <h1>The long ajax request test</h1>
-    <button onclick="runLongAjaxRequest()">Run long request</button>
-    <div id="results">
-    </div>
 
-    <table id="multirowTable" border="1">
-      <tbody>
-      <tr>
-        <td class="first_row">Chack</td>
-        <td>Norris</td>
-      </tr>
-      <tr>
-        <td class="second_row">Chack</td>
-        <td>Lä Baskerville</td>
-      </tr>
-      </tbody>
-    </table>
-  </body>
+  </script>
+</head>
+<body>
+<h1>The long ajax request test</h1>
+<button onclick="runLongAjaxRequest()">Run long request</button>
+<div id="results">
+</div>
+
+<table id="multirowTable" border="1">
+  <tbody>
+  <tr>
+    <td class="first_row">Chack</td>
+    <td>Norris</td>
+  </tr>
+  <tr>
+    <td class="second_row">Chack</td>
+    <td>Lä Baskerville</td>
+  </tr>
+  </tbody>
+</table>
+</body>
 </html>

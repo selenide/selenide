@@ -1,9 +1,10 @@
 package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,52 +12,62 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
-public class SelenideLoggerTest {
-
+class SelenideLoggerTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     WebDriverRunner.closeWebDriver();
     WebDriverRunner.setWebDriver(webdriver);
   }
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     WebDriverRunner.closeWebDriver();
   }
 
   @Test
-  public void convertsJavaMethodNameToHumanReadableClause() {
-    assertEquals("click", SelenideLogger.readableMethodName("click"));
-    assertEquals("set value", SelenideLogger.readableMethodName("setValue"));
-    assertEquals("should be", SelenideLogger.readableMethodName("shouldBe"));
-    assertEquals("converts java method name to human readable clause", 
-        SelenideLogger.readableMethodName("convertsJavaMethodNameToHumanReadableClause"));
+  void convertsJavaMethodNameToHumanReadableClause() {
+    assertThat(SelenideLogger.readableMethodName("click"))
+      .isEqualTo("click");
+    assertThat(SelenideLogger.readableMethodName("setValue"))
+      .isEqualTo("set value");
+    assertThat(SelenideLogger.readableMethodName("shouldBe"))
+      .isEqualTo("should be");
+    assertThat(SelenideLogger.readableMethodName("convertsJavaMethodNameToHumanReadableClause"))
+      .isEqualTo("converts java method name to human readable clause");
   }
 
   @Test
-  public void printsReadableArgumentsValues() {
-    assertEquals("", SelenideLogger.readableArguments((Object[]) null));
-    assertEquals("111", SelenideLogger.readableArguments(111));
-    assertEquals("[1, 2, 3]", SelenideLogger.readableArguments(1, 2, 3));
-    assertEquals("a", SelenideLogger.readableArguments((Object[]) new String[] {"a"}));
-    assertEquals("[a, bb]", SelenideLogger.readableArguments((Object[]) new String[] {"a", "bb"}));
-    assertEquals("null", SelenideLogger.readableArguments((Object[]) new String[] {null}));
-    assertEquals("[null, a, null]", SelenideLogger.readableArguments((Object[]) new String[] {null, "a", null}));
+  void printsReadableArgumentsValues() {
+    assertThat(SelenideLogger.readableArguments((Object[]) null))
+      .isEqualTo("");
+    assertThat(SelenideLogger.readableArguments(111))
+      .isEqualTo("111");
+    assertThat(SelenideLogger.readableArguments(1, 2, 3))
+      .isEqualTo("[1, 2, 3]");
+    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{"a"}))
+      .isEqualTo("a");
+    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{"a", "bb"}))
+      .isEqualTo("[a, bb]");
+    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{null}))
+      .isEqualTo("null");
+    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{null, "a", null}))
+      .isEqualTo("[null, a, null]");
   }
 
   @Test
-  public void canAddManyListenersPerThread() {
+  void canAddManyListenersPerThread() {
     LogEventListener listener1 = mock(LogEventListener.class);
     LogEventListener listener2 = mock(LogEventListener.class);
     LogEventListener listener3 = mock(LogEventListener.class);
-    
+
     SelenideLogger.addListener("simpleReport", listener1);
     SelenideLogger.addListener("softAsserts", listener2);
     SelenideLogger.addListener("userProvided", listener3);
@@ -64,7 +75,7 @@ public class SelenideLoggerTest {
     WebElement webElement = mock(WebElement.class);
     when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
-    
+
     $("div").click();
 
     verifyEvent(listener1);
@@ -87,8 +98,11 @@ public class SelenideLoggerTest {
     ArgumentCaptor<LogEvent> event = ArgumentCaptor.forClass(LogEvent.class);
     verify(listener1).onEvent(event.capture());
     LogEvent value = event.getValue();
-    assertThat(value.getElement(), equalTo("div"));
-    assertThat(value.getSubject(), equalTo("click()"));
-    assertThat(value.getStatus(), equalTo(PASS));
+    assertThat(value.getElement())
+      .isEqualTo("div");
+    assertThat(value.getSubject())
+      .isEqualTo("click()");
+    assertThat(value.getStatus())
+      .isEqualTo(PASS);
   }
 }

@@ -1,27 +1,27 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.Test;
-import org.openqa.selenium.WebElement;
-
 import java.util.List;
 
+import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
+
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class ListSizeMismatchTest {
-  String operator = "Operator";
-  int expectedSize = 10;
-  WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
-  List<WebElement> actualElementsList = asList(mock(WebElement.class),
+class ListSizeMismatchTest implements WithAssertions {
+  private String operator = "Operator";
+  private int expectedSize = 10;
+  private WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
+  private List<WebElement> actualElementsList = asList(mock(WebElement.class),
     mock(WebElement.class),
     mock(WebElement.class));
-  Exception exception = new Exception("Exception message");
-  long timeoutMs = 1000L;
+  private Exception exception = new Exception("Exception message");
+  private long timeoutMs = 1000L;
 
   @Test
-  public void toString_withoutExplanation() {
+  void toString_withoutExplanation() {
     ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator,
       expectedSize,
       null,
@@ -38,11 +38,12 @@ public class ListSizeMismatchTest {
       "Screenshot: null\n" +
       "Timeout: 1 s.\n" +
       "Caused by: java.lang.Exception: Exception message";
-    assertEquals(expectedString, listSizeMismatch.toString());
+    assertThat(listSizeMismatch)
+      .hasToString(expectedString);
   }
 
   @Test
-  public void toString_withExplanation() {
+  void toString_withExplanation() {
     ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator,
       expectedSize,
       "it's said in customer requirement #12345",
@@ -60,6 +61,7 @@ public class ListSizeMismatchTest {
       "Screenshot: null\n" +
       "Timeout: 1 s.\n" +
       "Caused by: java.lang.Exception: Exception message";
-    assertEquals(expectedString, listSizeMismatch.toString());
+    assertThat(listSizeMismatch)
+      .hasToString(expectedString);
   }
 }

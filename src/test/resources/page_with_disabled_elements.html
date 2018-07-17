@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::disabled elements</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  </head>
-  <body>
-    <h1 disabled="disabled">Page with disabled elements</h1>
+<head>
+  <title>Test::disabled elements</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1 disabled="disabled">Page with disabled elements</h1>
 
-    <br/>
+<br/>
 
-    <div style="width: 400px">
-      <form>
-        <fieldset title="Login form">
-          <label> Username:
-            <input id="username" name="username" value=""/>
-          </label> <br/>
-          
-          <label>Password:
-            <input id="password" name="password" class="masked" disabled="disabled"/>
-          </label>
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username" value=""/>
+      </label> <br/>
 
-          <label>Captcha:
-            <input id="captcha" name="captcha"/>
-          </label>
-        </fieldset>
-        <input type="button" id="login-button" value="don't click me, I'm disabled" disabled/>
-      </form>
-    </div>
-  </body>
+      <label>Password:
+        <input id="password" name="password" class="masked" disabled="disabled"/>
+      </label>
+
+      <label>Captcha:
+        <input id="captcha" name="captcha"/>
+      </label>
+    </fieldset>
+    <input type="button" id="login-button" value="don't click me, I'm disabled" disabled/>
+  </form>
+</div>
+</body>
 </html>

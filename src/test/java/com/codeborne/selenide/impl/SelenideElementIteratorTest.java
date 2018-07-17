@@ -1,34 +1,36 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SelenideElementIteratorTest {
+class SelenideElementIteratorTest implements WithAssertions {
   @Test
-  public void testHasNext() {
+  void testHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
-    assertTrue(selenideElementIterator.hasNext());
+    assertThat(selenideElementIterator.hasNext())
+      .isTrue();
   }
 
   @Test
-  public void testDoesNotHasNext() {
+  void testDoesNotHasNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getElements()).thenReturn(emptyList());
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
-    assertFalse(selenideElementIterator.hasNext());
+    assertThat(selenideElementIterator.hasNext())
+      .isFalse();
   }
 
   @Test
-  public void testNext() {
+  void testNext() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.isDisplayed()).thenReturn(true);
@@ -39,19 +41,23 @@ public class SelenideElementIteratorTest {
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     SelenideElement nextElement = selenideElementIterator.next();
 
-    assertTrue(nextElement != null);
-    assertEquals("<a>selenide</a>", nextElement.toString());
-    assertFalse(selenideElementIterator.hasNext());
+    assertThat(nextElement)
+      .isNotNull();
+    assertThat(nextElement)
+      .hasToString("<a>selenide</a>");
+    assertThat(selenideElementIterator.hasNext())
+      .isFalse();
   }
 
   @Test
-  public void testRemove() {
+  void testRemove() {
     try {
       WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
       SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
       selenideElementIterator.remove();
     } catch (UnsupportedOperationException e) {
-      assertEquals("Cannot remove elements from web page", e.getMessage());
+      assertThat(e)
+        .hasMessage("Cannot remove elements from web page");
     }
   }
 }

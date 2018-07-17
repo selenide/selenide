@@ -1,35 +1,34 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.Cookie;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Cookie;
+
 import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
 
-public class ClearCookiesTest extends IntegrationTest {
-  @Before
-  public void addCookiesBeforeTest() throws MalformedURLException {
+class ClearCookiesTest extends IntegrationTest {
+  @BeforeEach
+  void addCookiesBeforeTest() throws MalformedURLException {
     open("/start_page.html");
 
     String domain = new URL(getWebDriver().getCurrentUrl()).getHost();
     getWebDriver().manage().addCookie(new Cookie("username", "John Doe", domain, "/", null));
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
-    assumeFalse(cookieSet.isEmpty());
+    Assumptions.assumeFalse(cookieSet.isEmpty());
   }
 
-
   @Test
-  public void clearCookieTest() {
+  void clearCookieTest() {
     clearBrowserCookies();
     Set<Cookie> cookieSet = getWebDriver().manage().getCookies();
-    assertTrue(cookieSet.isEmpty());
+    assertThat(cookieSet)
+      .isEmpty();
   }
 }

@@ -1,21 +1,21 @@
 package integration;
 
+import java.io.File;
+
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-import java.io.File;
-
 import static java.lang.Thread.currentThread;
-import static org.junit.Assume.assumeTrue;
 
-public class FirefoxWithProfileTest extends IntegrationTest {
+class FirefoxWithProfileTest extends IntegrationTest {
   @Test
-  public void createFirefoxWithCustomProfile() {
-    assumeTrue(WebDriverRunner.isFirefox());
+  void createFirefoxWithCustomProfile() {
+    Assumptions.assumeTrue(WebDriverRunner.isFirefox());
 
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
     WebDriver driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
@@ -26,8 +26,7 @@ public class FirefoxWithProfileTest extends IntegrationTest {
 
       WebDriverRunner.setWebDriver(driver);
       openFile("page_with_jquery.html");
-    }
-    finally {
+    } finally {
       WebDriverRunner.closeWebDriver();
     }
   }

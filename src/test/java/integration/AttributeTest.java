@@ -1,79 +1,103 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.Selectors.by;
+import static com.codeborne.selenide.Selectors.byAttribute;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byTitle;
+import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 
 public class AttributeTest extends IntegrationTest {
-  @Before
-  public void openTestPage() {
+  @BeforeEach
+  void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void canVerifyAttributeExistence() {
+  void canVerifyAttributeExistence() {
     $("#domain-container").shouldHave(attribute("class"));
     $("#domain-container").shouldNotHave(attribute("foo"));
 //    $("#domain-container").shouldNotHave(attribute("title")); // it's a bug in selenium webdriver
   }
 
   @Test
-  public void canCheckAttributeExistence() {
-    assertTrue($("#domain-container").has(attribute("class")));
-    assertFalse($("#domain-container").has(attribute("foo")));
+  void canCheckAttributeExistence() {
+    assertThat($("#domain-container").has(attribute("class")))
+      .isTrue();
+    assertThat($("#domain-container").has(attribute("foo")))
+      .isFalse();
 //    assertFalse($("#domain-container").has(attribute("title"))); // it's a bug in selenium webdriver
   }
 
   @Test
-  public void userCanFindElementByAttribute() {
-    assertEquals("select", $(byAttribute("name", "domain")).getTagName());
-    assertEquals("@мыло.ру", $(byAttribute("value", "мыло.ру")).getText());
-    assertEquals("div", $(byAttribute("id", "radioButtons")).getTagName());
-    assertEquals(4, $$(byAttribute("type", "radio")).size());
-    assertEquals("username", $(byAttribute("readonly", "readonly")).getAttribute("name"));
-    assertEquals("meta", $(byAttribute("http-equiv", "Content-Type")).getTagName());
+  void userCanFindElementByAttribute() {
+    assertThat($(byAttribute("name", "domain")).getTagName())
+      .isEqualTo("select");
+    assertThat($(byAttribute("value", "мыло.ру")).getText())
+      .isEqualTo("@мыло.ру");
+    assertThat($(byAttribute("id", "radioButtons")).getTagName())
+      .isEqualTo("div");
+    assertThat($$(byAttribute("type", "radio")))
+      .hasSize(4);
+    assertThat($(byAttribute("readonly", "readonly")).getAttribute("name"))
+      .isEqualTo("username");
+    assertThat($(byAttribute("http-equiv", "Content-Type")).getTagName())
+      .isEqualTo("meta");
   }
 
   @Test
-  public void userCanGetAttr() {
-    assertEquals("username", $(by("readonly", "readonly")).attr("name"));
+  void userCanGetAttr() {
+    assertThat($(by("readonly", "readonly")).attr("name"))
+      .isEqualTo("username");
   }
 
   @Test
-  public void userCanGetNameAttribute() {
-    assertEquals("username", $(by("readonly", "readonly")).name());
+  void userCanGetNameAttribute() {
+    assertThat($(by("readonly", "readonly")).name())
+      .isEqualTo("username");
   }
 
   @Test
-  public void userCanGetDataAttributes() {
-    assertEquals("111", $(byValue("livemail.ru")).getAttribute("data-mailServerId"));
-    assertEquals("111", $(byValue("livemail.ru")).data("mailServerId"));
+  void userCanGetDataAttributes() {
+    assertThat($(byValue("livemail.ru")).getAttribute("data-mailServerId"))
+      .isEqualTo("111");
+    assertThat($(byValue("livemail.ru")).data("mailServerId"))
+      .isEqualTo("111");
 
-    assertEquals("222A", $(byText("@myrambler.ru")).data("mailServerId"));
-    assertEquals("33333B", $(byValue("rusmail.ru")).data("mailServerId"));
-    assertEquals("111АБВГД", $(byText("@мыло.ру")).data("mailServerId"));
-  }
-
-
-  @Test
-  public void userCanSearchElementByDataAttribute() {
-    assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
-
-    assertEquals("111", $(by("data-mailServerId", "111")).data("mailServerId"));
-    assertEquals("222A", $(by("data-mailServerId", "222A")).data("mailServerId"));
-    assertEquals("33333B", $(by("data-mailServerId", "33333B")).data("mailServerId"));
-    assertEquals("111АБВГД", $(by("data-mailServerId", "111АБВГД")).data("mailServerId"));
+    assertThat($(byText("@myrambler.ru")).data("mailServerId"))
+      .isEqualTo("222A");
+    assertThat($(byValue("rusmail.ru")).data("mailServerId"))
+      .isEqualTo("33333B");
+    assertThat($(byText("@мыло.ру")).data("mailServerId"))
+      .isEqualTo("111АБВГД");
   }
 
   @Test
-  public void userCanSearchElementByTitleAttribute() {
-    assertEquals("fieldset", $(byTitle("Login form")).getTagName());
+  void userCanSearchElementByDataAttribute() {
+    Assumptions.assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
+
+    assertThat($(by("data-mailServerId", "111")).data("mailServerId"))
+      .isEqualTo("111");
+    assertThat($(by("data-mailServerId", "222A")).data("mailServerId"))
+      .isEqualTo("222A");
+    assertThat($(by("data-mailServerId", "33333B")).data("mailServerId"))
+      .isEqualTo("33333B");
+    assertThat($(by("data-mailServerId", "111АБВГД")).data("mailServerId"))
+      .isEqualTo("111АБВГД");
+  }
+
+  @Test
+  void userCanSearchElementByTitleAttribute() {
+    assertThat($(byTitle("Login form")).getTagName())
+      .isEqualTo("fieldset");
   }
 }

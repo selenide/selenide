@@ -1,28 +1,26 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.openqa.selenium.By;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetParentCommandTest {
+class GetParentCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SelenideElement mockedElement;
   private Find findMock;
   private GetParent getParentCommand;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     findMock = mock(Find.class);
     getParentCommand = new GetParent(findMock);
     proxy = mock(SelenideElement.class);
@@ -33,16 +31,18 @@ public class GetParentCommandTest {
   }
 
   @Test
-  public void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
+  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
     GetParent getParentCommand = new GetParent();
     Field findField = getParentCommand.getClass().getDeclaredField("find");
     findField.setAccessible(true);
     Find find = (Find) findField.get(getParentCommand);
-    assertNotNull(find);
+    assertThat(find)
+      .isNotNull();
   }
 
   @Test
-  public void testExecuteMethod() {
-    assertEquals(mockedElement, getParentCommand.execute(proxy, locator, new Object[]{"..", "something more"}));
+  void testExecuteMethod() {
+    assertThat(getParentCommand.execute(proxy, locator, new Object[]{"..", "something more"}))
+      .isEqualTo(mockedElement);
   }
 }

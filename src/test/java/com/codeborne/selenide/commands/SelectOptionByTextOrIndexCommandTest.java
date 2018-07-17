@@ -3,24 +3,20 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SelectOptionByTextOrIndexCommandTest {
+class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource selectField;
   private SelectOptionByTextOrIndex selectOptionByTextOrIndexCommand;
@@ -29,8 +25,8 @@ public class SelectOptionByTextOrIndexCommandTest {
   private WebElement mockedFoundElement;
   private int defaultIndex = 1;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     selectOptionByTextOrIndexCommand = new SelectOptionByTextOrIndex();
     proxy = mock(SelenideElement.class);
     selectField = mock(WebElementSource.class);
@@ -45,54 +41,55 @@ public class SelectOptionByTextOrIndexCommandTest {
   }
 
   @Test
-  public void testSelectOptionByText() {
+  void testSelectOptionByText() {
     when(mockedElement.findElements(By.xpath(".//option[normalize-space(.) = " + Quotes.escape(defaultElementText) + "]")))
-      .thenReturn(asList(mockedFoundElement));
+      .thenReturn(singletonList(mockedFoundElement));
     selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{this.defaultElementText}});
   }
 
   @Test
-  public void testSelectOptionByTextWhenElementIsNotFound() {
+  void testSelectOptionByTextWhenElementIsNotFound() {
     try {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{this.defaultElementText}});
     } catch (ElementNotFound exception) {
-      assertEquals(String.format("Element not found {null/option[text:%s]}\n" +
-        "Expected: exist", this.defaultElementText), exception.getMessage());
+      assertThat(exception)
+        .hasMessage(String.format("Element not found {null/option[text:%s]}\nExpected: exist", this.defaultElementText));
     }
   }
 
   @Test
-  public void testSelectedOptionByTextWhenNoSuchElementIsThrown() {
+  void testSelectedOptionByTextWhenNoSuchElementIsThrown() {
     doThrow(new NoSuchElementException("no element found"))
       .when(mockedElement)
       .findElements(By.xpath(".//option[normalize-space(.) = " + Quotes.escape(defaultElementText) + "]"));
     try {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{""}});
     } catch (ElementNotFound exception) {
-      assertEquals(String.format("Element not found {null/option[text:%s]}\n" +
-        "Expected: exist", ""), exception.getMessage());
+      assertThat(exception)
+        .hasMessage("Element not found {null/option[text:]}\nExpected: exist");
     }
   }
 
   @Test
-  public void testSelectOptionByIndex() {
-    when(mockedElement.findElements(By.tagName("option"))).thenReturn(Collections.singletonList(mockedFoundElement));
+  void testSelectOptionByIndex() {
+    when(mockedElement.findElements(By.tagName("option"))).thenReturn(singletonList(mockedFoundElement));
     when(mockedFoundElement.getAttribute("index")).thenReturn(String.valueOf(defaultIndex));
     selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new int[]{defaultIndex}});
   }
 
   @Test
-  public void testSelectOptionByIndexWhenNoElementFound() {
+  void testSelectOptionByIndexWhenNoElementFound() {
     try {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new int[]{defaultIndex}});
     } catch (ElementNotFound exception) {
-      assertEquals(String.format("Element not found {null/option[index:%d]}\n" +
-        "Expected: exist", defaultIndex), exception.getMessage());
+      assertThat(exception)
+        .hasMessage(String.format("Element not found {null/option[index:%d]}\nExpected: exist", defaultIndex));
     }
   }
 
   @Test
-  public void testExecuteMethodWhenArgIsNotStringOrInt() {
-    assertNull(selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new Double[]{1.0}}));
+  void testExecuteMethodWhenArgIsNotStringOrInt() {
+    assertThat(selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new Double[]{1.0}}))
+      .isNull();
   }
 }

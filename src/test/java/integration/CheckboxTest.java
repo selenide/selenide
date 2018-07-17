@@ -1,23 +1,22 @@
 package integration;
 
-import com.codeborne.selenide.ex.*;
-import org.junit.Before;
-import org.junit.Test;
+import com.codeborne.selenide.ex.InvalidStateException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.Assert.assertEquals;
 
-public class CheckboxTest extends IntegrationTest {
-  @Before
-  public void openTestPageWithJQuery() {
+class CheckboxTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void userCanSelectCheckbox() {
+  void userCanSelectCheckbox() {
     $(By.name("rememberMe")).shouldNotBe(selected);
     $(By.name("rememberMe")).shouldNotBe(checked);
 
@@ -25,12 +24,12 @@ public class CheckboxTest extends IntegrationTest {
 
     $(By.name("rememberMe")).shouldBe(selected);
     $(By.name("rememberMe")).shouldBe(checked);
-    assertEquals("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>",
-        $(By.name("rememberMe")).toString());
+    assertThat($(By.name("rememberMe")))
+      .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\" selected:true></input>");
   }
 
   @Test
-  public void userCanCheckCheckbox() {
+  void userCanCheckCheckbox() {
     $(By.name("rememberMe")).setSelected(true);
     $(By.name("rememberMe")).shouldBe(selected);
     $(By.name("rememberMe")).shouldBe(checked);
@@ -41,7 +40,7 @@ public class CheckboxTest extends IntegrationTest {
   }
 
   @Test
-  public void userCanUnCheckCheckbox() {
+  void userCanUnCheckCheckbox() {
     $(By.name("rememberMe")).setSelected(true);
     $(By.name("rememberMe")).shouldBe(selected);
 
@@ -52,19 +51,21 @@ public class CheckboxTest extends IntegrationTest {
     $(By.name("rememberMe")).shouldNotBe(selected);
   }
 
-  @Test(expected = InvalidStateException.class)
-  public void userCannotSetSelectOnTextInput() {
-    $("#username").setSelected(false);
+  @Test
+  void userCannotSetSelectOnTextInput() {
+    assertThatThrownBy(() -> $("#username").setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 
-  @Test(expected = InvalidStateException.class)
-  public void userCannotSetSelectOnArbitryElement() {
-    $("#username-mirror").setSelected(false);
+  @Test
+  void userCannotSetSelectOnArbitryElement() {
+    assertThatThrownBy(() -> $("#username-mirror").setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
 
-  @Test(expected = InvalidStateException.class)
-  public void userCannotCheckInvisibleCheckbox() {
-    $(By.name("invisibleCheckbox")).setSelected(false);
+  @Test
+  void userCannotCheckInvisibleCheckbox() {
+    assertThatThrownBy(() -> $(By.name("invisibleCheckbox")).setSelected(false))
+      .isInstanceOf(InvalidStateException.class);
   }
-
 }

@@ -1,23 +1,21 @@
 package com.codeborne.selenide.commands;
 
+import java.util.Collections;
+
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 
-import java.util.Collections;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SelectionOptionByValueCommandTest {
+class SelectionOptionByValueCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource selectField;
   private SelectOptionByValue selectOptionByValueCommand;
@@ -25,8 +23,8 @@ public class SelectionOptionByValueCommandTest {
   private String defaultElementValue = "ElementValue";
   private WebElement mockedFoundElement;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     selectOptionByValueCommand = new SelectOptionByValue();
     proxy = mock(SelenideElement.class);
     selectField = mock(WebElementSource.class);
@@ -40,7 +38,7 @@ public class SelectionOptionByValueCommandTest {
   }
 
   @Test
-  public void testSelectByValueWithStringFromArgs() {
+  void testSelectByValueWithStringFromArgs() {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.singletonList(mockedFoundElement));
@@ -48,7 +46,7 @@ public class SelectionOptionByValueCommandTest {
   }
 
   @Test
-  public void testSelectByValueWithStringArrayFromArgs() {
+  void testSelectByValueWithStringArrayFromArgs() {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.singletonList(mockedFoundElement));
@@ -56,20 +54,21 @@ public class SelectionOptionByValueCommandTest {
   }
 
   @Test
-  public void testSelectByValueWithArgNotString() {
-    assertNull(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}));
+  void testSelectByValueWithArgNotString() {
+    assertThat(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}))
+      .isNull();
   }
 
   @Test
-  public void testSelectByValueWhenElementIsNotFound() {
+  void testSelectByValueWhenElementIsNotFound() {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.emptyList());
     try {
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
     } catch (NoSuchElementException exception) {
-      assertTrue("Value is not present in error message",
-        exception.getMessage().contains(String.format("Cannot locate option with value: %s", defaultElementValue)));
+      assertThat(exception)
+        .hasMessageContaining(String.format("Cannot locate option with value: %s", defaultElementValue));
     }
   }
 }
