@@ -29,8 +29,6 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
   }
 
   /**
-   * Initialize screen shooter extension with specified successful tests capture.
-   *
    * @param captureSuccessfulTests param that indicate if need to capture successful tests
    */
   public ScreenShooterExtension(final boolean captureSuccessfulTests) {

@@ -51,16 +51,16 @@ public class Configuration {
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
    * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".
-   * <p/>
+   * <br>
    * Default value: false.
    */
   public static boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
 
   /**
    * Should Selenide re-spawn browser if it's disappeared (hangs, broken, unexpectedly closed).
-   * <p>
+   * <br>
    * Can be configured either programmatically or by system property "-Dselenide.reopenBrowserOnFail=false".
-   * <p>
+   * <br>
    * Default value: true
    * Set this property to false if you want to disable automatic re-spawning the browser.
    */
@@ -69,7 +69,7 @@ public class Configuration {
 
   /**
    * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
-   * <p/>
+   * <br>
    * Can be configured either programmatically or by system property "-Dselenide.openBrowserTimeout=10000"
    * Default value: 15000 (milliseconds)
    */
@@ -77,9 +77,9 @@ public class Configuration {
 
   /**
    * Timeout (in milliseconds) for closing/killing browser.
-   * <p/>
+   * <br>
    * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long.
-   * <p/>
+   * <br>
    * Can be configured either programmatically or by system property "-Dselenide.closeBrowserTimeout=10000"
    * Default value: 5000 (milliseconds)
    */
@@ -89,7 +89,7 @@ public class Configuration {
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
    * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "htmlunit", "phantomjs", "opera", "safari", "edge", "jbrowser"
-   * <p/>
+   * <br>
    * Default value: "firefox"
    */
   public static String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
@@ -97,7 +97,7 @@ public class Configuration {
   /**
    * Which browser version to use (for Internet Explorer).
    * Can be configured either programmatically or by system property "-Dselenide.browserVersion=8" or "-Dbrowser.version=8".
-   * <p/>
+   * <br>
    * Default value: none
    */
   public static String browserVersion = System.getProperty("selenide.browserVersion",
@@ -156,7 +156,7 @@ public class Configuration {
   /**
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
-   * <p/>
+   * <br>
    * Default value: null
    */
   public static DesiredCapabilities browserCapabilities;

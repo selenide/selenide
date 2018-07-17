@@ -190,7 +190,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
    * todo - hypothesis - error should be according to condition plus caused by ElementNotFound
    * Question - what should the correct error be?
    * now we have different options - exactTexts - Element not found, size - ListSizeMismatch without caused error
-   * <p/>
+   * <br>
    * look at
    * shouldHaveSizeCondition_When$$Collection_WithNotSatisfiedConditionInShould() - correct exception according to condition
    * shouldHaveSizeCondition_When$$Collection_WithNonExistentCollection() - correct exception according to condition,
@@ -198,7 +198,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
    * BUT
    * shouldCondition_When$$Collection_WithNonExistentWebElements() (using exactText) - we have ElementNotFound exception
    * instead error according to condition
-   * <p/>
+   * <br>
    * What is a correct result?
    */
   @Test
