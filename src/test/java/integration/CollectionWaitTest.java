@@ -1,21 +1,21 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class CollectionWaitTest extends IntegrationTest {
-  @Before
-  public void openTestPage() {
+class CollectionWaitTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPage() {
     openFile("collection_with_delays.html");
   }
 
   @Test
-  public void waitsUntilNthElementAppears() {
+  void waitsUntilNthElementAppears() {
     $$("#collection li").get(5).shouldBe(visible);
     $$("#collection li").get(33).shouldBe(visible);
     $$("#collection li").get(49).shouldBe(visible);
@@ -24,13 +24,14 @@ public class CollectionWaitTest extends IntegrationTest {
     $$("#collection li").last().shouldBe(visible).shouldHave(text("Element #49"));
   }
 
-  @Test(expected = AssertionError.class)
-  public void failsIfWrongSize() {
-    $$("#collection li").shouldHave(size(-1));
+  @Test
+  void failsIfWrongSize() {
+    assertThatThrownBy(() -> $$("#collection li").shouldHave(size(-1)))
+      .isInstanceOf(AssertionError.class);
   }
 
   @Test
-  public void canDetermineSize() {
+  void canDetermineSize() {
     $$("#collection li").shouldHave(size(50));
   }
 }

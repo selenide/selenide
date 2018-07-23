@@ -1,19 +1,18 @@
 package com.codeborne.selenide.ex;
 
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
-
-public class DialogTextMismatchTest {
-
+class DialogTextMismatchTest implements WithAssertions {
   @Test
-  public void dialogMismatchTextStringTest() {
+  void dialogMismatchTextStringTest() {
     DialogTextMismatch dialogTextMismatch = new DialogTextMismatch("Actual text", "Expected text");
     String expectedString = "DialogTextMismatch \n" +
-        "Actual: Actual text\n" +
-        "Expected: Expected text\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.";
-    assertEquals(expectedString, dialogTextMismatch.toString());
+      "Actual: Actual text\n" +
+      "Expected: Expected text\n" +
+      "Screenshot: null\n" +
+      "Timeout: 0 ms.";
+    assertThat(dialogTextMismatch)
+      .hasToString(expectedString);
   }
 }

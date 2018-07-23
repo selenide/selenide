@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.12.3 (released 17.07.2018)
+* [#696](https://github.com/codeborne/selenide/issues/696) Reload collection on every method call
+* [#758](https://github.com/codeborne/selenide/issues/758) Timeout for downloading files  --  thanks to Yuri Ivanov @YuriIvanov
+* [#757](https://github.com/codeborne/selenide/pull/757) Add support for JUnit5  --  thanks to Aliaksandr Rasolka @rosolko
+* [#757](https://github.com/codeborne/selenide/pull/757) Upgrade Selenide own tests to JUnit5 and AssertJ  --  thanks to Aliaksandr Rasolka @rosolko
+
 ## 4.12.2
 
 * [#749](https://github.com/codeborne/selenide/pull/749) Added because method to CollectionCondition -- thanks to Mikhail Sidelnikov @sidelnikovmike

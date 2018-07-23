@@ -3,10 +3,10 @@ package com.codeborne.selenide.webdriver;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import org.openqa.selenium.Capabilities;
 
 class SeleniumCapabilitiesHelper {
-
   @SuppressWarnings("unchecked")
   static List<String> getBrowserLaunchArgs(String capability, Capabilities capabilities) {
     // it depends on internal Selenium capabilities structure

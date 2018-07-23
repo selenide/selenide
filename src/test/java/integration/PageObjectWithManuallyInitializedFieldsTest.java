@@ -1,30 +1,31 @@
 package integration;
 
+import java.util.List;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static org.junit.Assert.assertEquals;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.page;
 
-public class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
-
-  @Before
-  public void openTestPage() {
+class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
   }
 
   @Test
-  public void canInitializePageObjectWithoutFindByAnnotation() {
+  void canInitializePageObjectWithoutFindByAnnotation() {
     MyPage page = page(MyPage.class);
 
     page.h1.shouldHave(Condition.text("Page with selects"));
-    assertEquals(3, page.h2s.size());
+    assertThat(page.h2s)
+      .hasSize(3);
     page.h2s.get(0).shouldBe(visible).shouldHave(text("Dropdown list"));
     page.h2First.shouldBe(visible).shouldHave(text("Dropdown list"));
   }

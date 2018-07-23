@@ -2,50 +2,62 @@ package integration;
 
 import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.confirm;
+import static com.codeborne.selenide.Selenide.dismiss;
+import static com.codeborne.selenide.Selenide.onConfirmReturn;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 
-public class ConfirmTest extends IntegrationTest {
+class ConfirmTest extends IntegrationTest {
   private String userName = "John Mc'Clane";
 
-  @Before
-  public void openTestPage() {
-    assumeFalse(isFirefox() || isChrome());
+  @AfterAll
+  static void tearDown() {
+    close();
+  }
+
+  @BeforeEach
+  void openTestPage() {
+    Assumptions.assumeFalse(isFirefox() || isChrome());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
   }
 
-  @Test @Video
-  public void canSubmitConfirmDialogWithoutCheckingText() {
+  @Test
+  @Video
+  void canSubmitConfirmDialogWithoutCheckingText() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm();
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @Test @Video
-  public void canSubmitConfirmDialogAndCheckText() {
+  @Test
+  @Video
+  void canSubmitConfirmDialogAndCheckText() {
     onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, " + userName + '?');
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @Test @Video
-  public void canCancelConfirmDialog() {
+  @Test
+  @Video
+  void canCancelConfirmDialog() {
     onConfirmReturn(false);
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, " + userName + '?');
@@ -53,13 +65,13 @@ public class ConfirmTest extends IntegrationTest {
     $("#container").shouldNotBe(empty);
   }
 
-  @Test @Video
-  public void selenideChecksDialogText() {
+  @Test
+  @Video
+  void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
     try {
       confirm("Get out of this page, Maria?");
-    }
-    catch (DialogTextMismatch expected) {
+    } catch (DialogTextMismatch expected) {
       return;
     }
     if (supportsModalDialogs()) {
@@ -67,35 +79,36 @@ public class ConfirmTest extends IntegrationTest {
     }
   }
 
-  @Test @Video
-  public void confirmReturnsActualDialogText() {
-    assumeTrue(supportsModalDialogs());
+  @Test
+  @Video
+  void confirmReturnsActualDialogText() {
+    Assumptions.assumeTrue(supportsModalDialogs());
 
     $(byText("Confirm button")).click();
-    assertEquals("Get out of this page, " + userName + '?', confirm());
+    assertThat(confirm())
+      .isEqualTo(String.format("Get out of this page, %s?", userName));
   }
 
-  @Test @Video
-  public void dismissReturnsActualDialogText() {
-    assumeTrue(supportsModalDialogs());
+  @Test
+  @Video
+  void dismissReturnsActualDialogText() {
+    Assumptions.assumeTrue(supportsModalDialogs());
 
     $(byText("Confirm button")).click();
-    assertEquals("Get out of this page, " + userName + '?', dismiss());
+    assertThat(dismiss())
+      .isEqualTo(String.format("Get out of this page, %s?", userName));
   }
 
-  @Test @Video
-  public void waitsUntilConfirmDialogAppears() {
+  @Test
+  @Video
+  void waitsUntilConfirmDialogAppears() {
     onConfirmReturn(true);
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
-    
-    if (!isHeadless()) {
-      assertEquals("Get out of this page, " + userName + '?', confirmDialogText);
-    }
-  }
 
-  @AfterClass
-  public static void tearDown() {
-    close();
+    if (!isHeadless()) {
+      assertThat(confirmDialogText)
+        .isEqualTo(String.format("Get out of this page, %s?", userName));
+    }
   }
 }

@@ -787,26 +787,26 @@ public class Selenide {
 
   /**
    * Getting and filtering of the WebDriver logs for specified LogType by specified logging level
-   * <br />
+   * <br>
    * For example to get WebDriver Browser's console output (including JS info, warnings, errors, etc. messages)
    * you can use:
-   * <br />
+   * <br>
    * <pre>
    *   {@code
    *     for(String logEntry : getWebDriverLogs(LogType.BROWSER, Level.ALL)) {
-   *       Reporter.log(logEntry + "<br />");
+   *       Reporter.log(logEntry + "<br>");
    *     }
    *   }
    * </pre>
-   * <br />
+   * <br>
    * Be aware that currently "manage().logs()" is in the Beta stage, but it is beta-then-nothing :)
-   * <br />
+   * <br>
    * List of the unsupported browsers and issues:
-   * <br />
+   * <br>
    * http://bit.ly/RZcmrM
-   * <br />
+   * <br>
    * http://bit.ly/1nZTaqu
-   * <br />
+   * <br>
    *
    * @param logType WebDriver supported log types
    * @param logLevel logging level that will be used to control logging output

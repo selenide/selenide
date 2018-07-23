@@ -1,54 +1,59 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.disappears;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.present;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
  * All checks in this class are equivalent
  */
-public class ElementRemovedTest extends IntegrationTest {
-  @Before
-  public void clickRemovesElement() {
+class ElementRemovedTest extends IntegrationTest {
+  @BeforeEach
+  void clickRemovesElement() {
     openFile("elements_disappear_on_click.html");
     $("#remove").click();
   }
 
   @Test
-  public void shouldBeHidden() {
+  void shouldBeHidden() {
     $("#remove").shouldBe(hidden);
   }
 
   @Test
-  public void shouldDisappear() {
+  void shouldDisappear() {
     $("#remove").should(disappear);
   }
 
   @Test
-  public void waitUntilDisappears() {
+  void waitUntilDisappears() {
     $("#remove").waitUntil(disappears, 2000);
   }
 
   @Test
-  public void shouldNotBeVisible() {
+  void shouldNotBeVisible() {
     $("#remove").shouldNotBe(visible);
   }
 
   @Test
-  public void shouldNotBePresent() {
+  void shouldNotBePresent() {
     $("#remove").shouldNotBe(present);
   }
 
   @Test
-  public void shouldNotExist() {
+  void shouldNotExist() {
     $("#remove").shouldNot(exist);
   }
 
   @Test
-  public void shouldNotAppear() {
+  void shouldNotAppear() {
     $("#remove").shouldNot(appear);
   }
-
 }

@@ -1,27 +1,25 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.SelenideElementIterator;
-import com.codeborne.selenide.impl.SelenideElementListIterator;
-import com.codeborne.selenide.impl.WebElementsCollection;
-import com.codeborne.selenide.rules.MockWebdriverContainer;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.IntStream;
+
+import com.codeborne.selenide.extension.MockWebDriverExtension;
+import com.codeborne.selenide.impl.SelenideElementIterator;
+import com.codeborne.selenide.impl.SelenideElementListIterator;
+import com.codeborne.selenide.impl.WebElementsCollection;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Configuration.browser;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -31,22 +29,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ElementsCollectionTest {
-  @Rule
-  public MockWebdriverContainer mockWebdriverContainer = new MockWebdriverContainer();
-
+@ExtendWith(MockWebDriverExtension.class)
+class ElementsCollectionTest implements WithAssertions {
   private WebElementsCollection source = mock(WebElementsCollection.class);
   private WebElement element1 = element("h1");
   private WebElement element2 = element("h2");
   private WebElement element3 = element("h3");
 
-  @Before
-  public final void mockWebDriver() {
+  @BeforeEach
+  final void mockWebDriver() {
     browser = null;
   }
 
   @Test
-  public void testShouldHaveSize() {
+  void testShouldHaveSize() {
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(Collections.emptyList());
 
@@ -59,7 +55,7 @@ public class ElementsCollectionTest {
   }
 
   @Test
-  public void testShouldBe() {
+  void testShouldBe() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(Collections.emptyList());
 
@@ -69,23 +65,26 @@ public class ElementsCollectionTest {
     collection.shouldBe(CollectionCondition.size(2));
   }
 
-  @Test(expected = Error.class)
-  public void testShouldWithErrorThrown() {
+  @Test
+  void testShouldWithErrorThrown() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(Collections.emptyList());
 
-    collection.should("Size", CollectionCondition.size(1));
-  }
-
-  @Test(expected = RuntimeException.class)
-  public void testShouldWithRuntimeException() {
-    ElementsCollection collection = new ElementsCollection(source);
-    doThrow(RuntimeException.class).when(source).getElements();
-    collection.should("Be size 1", CollectionCondition.size(1));
+    assertThatThrownBy(() -> collection.should("Size", CollectionCondition.size(1)))
+      .isInstanceOf(Error.class);
   }
 
   @Test
-  public void testFilter() {
+  void testShouldWithRuntimeException() {
+    ElementsCollection collection = new ElementsCollection(source);
+    doThrow(RuntimeException.class).when(source).getElements();
+
+    assertThatThrownBy(() -> collection.should("Be size 1", CollectionCondition.size(1)))
+      .isInstanceOf(RuntimeException.class);
+  }
+
+  @Test
+  void testFilter() {
     checkFilterMethod(false);
   }
 
@@ -97,17 +96,20 @@ public class ElementsCollectionTest {
     ElementsCollection filteredCollection = useBy ?
       collection.filterBy(Condition.text("Hello")) :
       collection.filter(Condition.text("Hello"));
-    assertEquals(1, filteredCollection.size());
-    assertEquals("Hello", filteredCollection.get(0).getText());
+    assertThat(filteredCollection)
+      .hasSize(1);
+    assertThat(filteredCollection)
+      .extracting(SelenideElement::getText)
+      .contains("Hello");
   }
 
   @Test
-  public void testFilterBy() {
+  void testFilterBy() {
     checkFilterMethod(true);
   }
 
   @Test
-  public void testExclude() {
+  void testExclude() {
     checkExcludeMethod(false);
   }
 
@@ -119,17 +121,20 @@ public class ElementsCollectionTest {
     ElementsCollection filteredCollection = useWith ?
       collection.excludeWith(Condition.text("Mark")) :
       collection.exclude(Condition.text("Mark"));
-    assertEquals(1, filteredCollection.size());
-    assertEquals("Hello", filteredCollection.get(0).getText());
+    assertThat(filteredCollection)
+      .hasSize(1);
+    assertThat(filteredCollection)
+      .extracting(SelenideElement::getText)
+      .contains("Hello");
   }
 
   @Test
-  public void testExcludeWith() {
+  void testExcludeWith() {
     checkExcludeMethod(true);
   }
 
   @Test
-  public void testFind() {
+  void testFind() {
     checkFindMethod(false);
   }
 
@@ -140,126 +145,140 @@ public class ElementsCollectionTest {
     when(element2.getText()).thenReturn("Mark");
     Condition condition = Condition.text("Hello");
     SelenideElement foundElement = useBy ? collection.findBy(condition) : collection.find(condition);
-    assertEquals("Hello", foundElement.getText());
+    assertThat(foundElement.getText())
+      .isEqualTo("Hello");
   }
 
   @Test
-  public void testFindBy() {
+  void testFindBy() {
     checkFindMethod(true);
   }
 
   @Test
-  public void testTexts() {
+  void testTexts() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     List<String> elementsTexts = collection.texts();
-    assertEquals(asList("Hello", "Mark"), elementsTexts);
+    assertThat(elementsTexts)
+      .contains("Hello", "Mark");
   }
 
   @Test
-  public void testStaticGetTexts() {
+  void testStaticGetTexts() {
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
     String[] expectedTexts = new String[]{"Hello", "Mark"};
-    assertEquals(expectedTexts.length, elementsTexts.length);
-    for (int index = 0; index < expectedTexts.length; index++) {
-      assertEquals(expectedTexts[index], elementsTexts[index]);
-    }
+    assertThat(elementsTexts)
+      .isEqualTo(expectedTexts);
   }
 
   @Test
-  public void testStaticGetTextsWithWebDriverException() {
+  void testStaticGetTextsWithWebDriverException() {
     doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
     when(element2.getText()).thenReturn("Mark");
     String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
     String[] expectedTexts = new String[]{"org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark"};
-    assertEquals(expectedTexts.length, elementsTexts.length);
-    for (int index = 0; index < expectedTexts.length; index++) {
-      assertTrue(elementsTexts[index].contains(expectedTexts[index]));
-    }
+    assertThat(elementsTexts)
+      .hasSameSizeAs(expectedTexts);
+    IntStream.range(0, expectedTexts.length)
+      .forEach(index -> assertThat(elementsTexts[index])
+        .contains(expectedTexts[index]));
   }
 
   @Test
-  public void testElementsToStringOnNullCollection() {
-    assertEquals("[not loaded yet...]", ElementsCollection.elementsToString(null));
+  void testElementsToStringOnNullCollection() {
+    assertThat(ElementsCollection.elementsToString(null))
+      .isEqualTo("[not loaded yet...]");
   }
 
   @Test
-  public void testFirstMethod() {
+  void testFirstMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
-    assertEquals("Hello", collection.first().getText());
+    assertThat(collection.first().getText())
+      .isEqualTo("Hello");
   }
 
   @Test
-  public void testFirstNElementsMethod() {
+  void testFirstNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
     ElementsCollection firstTwoElements = collection.first(2);
-    assertEquals(2, firstTwoElements.size());
-    assertEquals("Hello", firstTwoElements.get(0).getText());
-    assertEquals("Mark", firstTwoElements.get(1).getText());
+    assertThat(firstTwoElements)
+      .hasSize(2);
+    assertThat(firstTwoElements)
+      .extracting(SelenideElement::getText)
+      .contains("Hello", "Mark");
   }
 
   @Test
-  public void testLastMethod() {
+  void testLastMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
-    assertEquals("Mark", collection.last().getText());
+    assertThat(collection.last().getText())
+      .isEqualTo("Mark");
   }
 
   @Test
-  public void testLasttNElementsMethod() {
+  void testLastNElementsMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
     ElementsCollection firstTwoElements = collection.last(2);
-    assertEquals(2, firstTwoElements.size());
-    assertEquals("Mark", firstTwoElements.get(0).getText());
-    assertEquals("Twen", firstTwoElements.get(1).getText());
+    assertThat(firstTwoElements)
+      .hasSize(2);
+    assertThat(firstTwoElements)
+      .extracting(SelenideElement::getText)
+      .contains("Mark", "Twen");
   }
 
   @Test
-  public void testIteratorMethod() {
+  void testIteratorMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
     Iterator<SelenideElement> iterator = collection.iterator();
-    assertNotNull(iterator);
-    assertTrue(iterator instanceof SelenideElementIterator);
-    assertTrue(iterator.hasNext());
+    assertThat(iterator)
+      .isNotNull();
+    assertThat(iterator)
+      .isInstanceOf(SelenideElementIterator.class);
+    assertThat(iterator.hasNext())
+      .isTrue();
   }
 
   @Test
-  public void testIteratorListMethod() {
+  void testIteratorListMethod() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
     ListIterator<SelenideElement> iteratorList = collection.listIterator(1);
-    assertNotNull(iteratorList);
-    assertTrue(iteratorList instanceof SelenideElementListIterator);
-    assertTrue(iteratorList.hasNext());
+    assertThat(iteratorList)
+      .isNotNull();
+    assertThat(iteratorList)
+      .isInstanceOf(SelenideElementListIterator.class);
+    assertThat(iteratorList.hasNext())
+      .isTrue();
   }
 
   @Test
-  public void doesNotWait_ifConditionAlreadyMatches() {
+  void doesNotWait_ifConditionAlreadyMatches() {
     WebElementsCollection source = mock(WebElementsCollection.class);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
@@ -269,7 +288,7 @@ public class ElementsCollectionTest {
   }
 
   @Test
-  public void sleepsAsLessAsPossible_untilConditionGetsMatched() {
+  void sleepsAsLessAsPossible_untilConditionGetsMatched() {
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(
       Collections.singletonList(element1),
@@ -282,16 +301,18 @@ public class ElementsCollectionTest {
   }
 
   @Test
-  public void toStringFetchedCollectionFromWebdriverIfNotFetchedYet() {
+  void toStringFetchedCollectionFromWebdriverIfNotFetchedYet() {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
-    assertEquals("[\n\t<h1></h1>,\n\t<h2></h2>\n]", collection.toString());
+    assertThat(collection)
+      .hasToString("[\n\t<h1></h1>,\n\t<h2></h2>\n]");
   }
 
   @Test
-  public void toStringPrintsErrorIfFailedToFetchElements() {
+  void toStringPrintsErrorIfFailedToFetchElements() {
     when(source.getElements()).thenThrow(new WebDriverException("Failed to fetch elements"));
-    assertEquals("[WebDriverException: Failed to fetch elements]", new ElementsCollection(source).toString());
+    assertThat(new ElementsCollection(source))
+      .hasToString("[WebDriverException: Failed to fetch elements]");
   }
 
   private WebElement element(String tag) {

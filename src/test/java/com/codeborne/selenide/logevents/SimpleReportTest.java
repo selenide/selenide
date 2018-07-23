@@ -1,12 +1,10 @@
 package com.codeborne.selenide.logevents;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimpleReportTest {
-
+class SimpleReportTest {
   @Test
-  public void reportShouldNotThrowNpe() {
+  void reportShouldNotThrowNpe() {
     new SimpleReport().finish("test");
   }
-
 }

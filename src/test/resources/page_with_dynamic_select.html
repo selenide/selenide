@@ -12,14 +12,14 @@
       $("<option/>").val("rus").text("l'a " + '"Русский"').appendTo(select);
       $("<option/>").val('"est"').text("l'a " + '"Eesti"').appendTo(select);
     }
-    
+
     function rebuildBooks() {
       $('#books').remove();
       if ($('#language').val() == 'rus') {
         setTimeout(buildBooks, commandDuration*1.5);
       }
     }
-    
+
     function buildBooks() {
       $('form').append('<select id="books"></select>');
       $('form select').append('<option value="1">книжко</option>');
@@ -30,9 +30,10 @@
         $('h2').text($('#language').val());
         setTimeout(rebuildBooks, commandDuration*1.5); // a little bit longer than average Selenium command like "isDisplayed()".
       });
-      
+
       setTimeout(drawOptions, commandDuration*3);
     });
+
   </script>
 </head>
 <body>

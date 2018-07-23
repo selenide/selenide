@@ -1,27 +1,26 @@
 package com.codeborne.selenide.commands;
 
+import java.lang.reflect.Field;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ShouldHaveCommandTest {
+class ShouldHaveCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private ShouldHave shouldHaveCommand;
   private WebElement mockedFoundElement;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     shouldHaveCommand = new ShouldHave();
     proxy = mock(SelenideElement.class);
     locator = mock(WebElementSource.class);
@@ -30,23 +29,26 @@ public class ShouldHaveCommandTest {
   }
 
   @Test
-  public void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
+  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
     ShouldHave shouldHave = new ShouldHave();
     Field prefixField = shouldHave.getClass().getSuperclass().getDeclaredField("prefix");
     prefixField.setAccessible(true);
     String prefix = (String) prefixField.get(shouldHave);
-    assertEquals("have ", prefix);
+    assertThat(prefix)
+      .isEqualToIgnoringWhitespace("have");
   }
 
   @Test
-  public void testExecuteMethodWithNonStringArgs() {
+  void testExecuteMethodWithNonStringArgs() {
     SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[]{Condition.disabled});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
-  public void testExecuteMethodWithStringArgs() {
+  void testExecuteMethodWithStringArgs() {
     SelenideElement returnedElement = shouldHaveCommand.execute(proxy, locator, new Object[]{"hello"});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 }

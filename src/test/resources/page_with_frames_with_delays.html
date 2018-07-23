@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::frames with delays</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript">
+<head>
+  <title>Test::frames with delays</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript">
       function delayFrames() {
         setTimeout(showFrames, 1000);
       }
-      
+
       function showFrames() {
         window.location = 'page_with_frames.html';
       }
-    </script>
-  </head>
-  <body onload="delayFrames();">
-    <h1>Frames will appear soon</h1>
-  </body>
+
+  </script>
+</head>
+<body onload="delayFrames();">
+<h1>Frames will appear soon</h1>
+</body>
 </html>

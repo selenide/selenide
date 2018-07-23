@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::tabs with delays</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript">
+<head>
+  <title>Test::tabs with delays</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript">
       function openNewTabWithDelay() {
         setTimeout(openNewTab, 1000);
       }
-      
+
       function openNewTab() {
         document.getElementById('open-new-tab').click();
       }
-    </script>
-  </head>
-  <body>
-    <h1>New tab will appear soon</h1>
-  
-    <a id="open-new-tab-with-delay" href="javascript:openNewTabWithDelay();">open new tab after 1 second</a>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <a id="open-new-tab" target="_blank" href="page_with_alerts.html">open new tab</a>
-  </body>
+
+  </script>
+</head>
+<body>
+<h1>New tab will appear soon</h1>
+
+<a id="open-new-tab-with-delay" href="javascript:openNewTabWithDelay();">open new tab after 1 second</a>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<a id="open-new-tab" target="_blank" href="page_with_alerts.html">open new tab</a>
+</body>
 </html>

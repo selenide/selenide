@@ -11,7 +11,7 @@ plugins {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '4.12.3-SNAPSHOT'
+version = '4.12.4-SNAPSHOT'
 
 ext {
   encoding = StandardCharsets.UTF_8.name()
@@ -33,4 +33,3 @@ apply from: rootProject.file('gradle/coverage.gradle')
 apply from: rootProject.file('gradle/tests.gradle')
 apply from: rootProject.file('gradle/deploy.gradle')
 
-wrapper.gradleVersion = '4.8.1'

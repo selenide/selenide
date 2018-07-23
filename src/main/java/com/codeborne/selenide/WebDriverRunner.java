@@ -83,8 +83,7 @@ public class WebDriverRunner {
    *
    * It's recommended not to use implicit wait with this driver, because Selenide handles timing issues explicitly.
    *
-   * <p/>
-   * <p/>
+   * <br>
    *
    * NB! Be sure to call this method before calling <code>open(url)</code>.
    * Otherwise Selenide will create its own WebDriver instance and would not close it.

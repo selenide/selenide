@@ -1,20 +1,21 @@
 package com.codeborne.selenide.proxy;
 
-import net.lightbody.bmp.BrowserMobProxyServer;
-import org.junit.Test;
-import org.openqa.selenium.Proxy;
-
 import java.net.InetSocketAddress;
 
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Proxy;
 
-public class SelenideProxyServerTest {
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class SelenideProxyServerTest implements WithAssertions {
   @Test
-  public void canInterceptResponses() {
+  void canInterceptResponses() {
     BrowserMobProxyServer bmp = mock(BrowserMobProxyServer.class);
     when(bmp.getPort()).thenReturn(8888);
 
@@ -26,25 +27,28 @@ public class SelenideProxyServerTest {
       verify(bmp).setTrustAllServers(true);
       verify(bmp, never()).setChainedProxy(any(InetSocketAddress.class));
       verify(bmp).start();
-      assertThat(proxyServer.createSeleniumProxy().getHttpProxy(), endsWith(":8888"));
-    }
-    finally {
+      assertThat(proxyServer.createSeleniumProxy().getHttpProxy())
+        .endsWith(":8888");
+    } finally {
       proxyServer.shutdown();
     }
     verify(bmp).abort();
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
-    assertThat(filter.getDownloadedFiles().size(), is(0));
+    assertThat(filter.getDownloadedFiles().size())
+      .isEqualTo(0);
   }
 
   @Test
-  public void extractsProxyAddress() {
+  void extractsProxyAddress() {
     Proxy proxy = new Proxy();
     proxy.setHttpProxy("111.22.3.4444:8080");
 
     InetSocketAddress proxyAddress = SelenideProxyServer.getProxyAddress(proxy);
 
-    assertEquals("111.22.3.4444", proxyAddress.getHostName());
-    assertEquals(8080, proxyAddress.getPort());
+    assertThat(proxyAddress.getHostName())
+      .isEqualTo("111.22.3.4444");
+    assertThat(proxyAddress.getPort())
+      .isEqualTo(8080);
   }
 }

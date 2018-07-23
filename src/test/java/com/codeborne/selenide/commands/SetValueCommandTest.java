@@ -1,21 +1,19 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.impl.WebElementSource;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.WebElement;
-
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.WebElementSource;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SetValueCommandTest {
+class SetValueCommandTest implements WithAssertions {
   private SelenideElement proxy;
   private WebElementSource locator;
   private SetValue setValueCommand;
@@ -23,8 +21,8 @@ public class SetValueCommandTest {
   private SelectRadio mockedSelectRadio;
   private WebElement mockedFoundElement;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
     mockedSelectByOption = mock(SelectOptionByValue.class);
     mockedSelectRadio = mock(SelectRadio.class);
@@ -36,7 +34,7 @@ public class SetValueCommandTest {
   }
 
   @Test
-  public void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
+  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
     SetValue setValue = new SetValue();
     Field selectOptionByValueField = setValue.getClass().getDeclaredField("selectOptionByValue");
     Field selectRadioField = setValue.getClass().getDeclaredField("selectRadio");
@@ -44,46 +42,53 @@ public class SetValueCommandTest {
     selectRadioField.setAccessible(true);
     SelectOptionByValue selectOptionByValue = (SelectOptionByValue) selectOptionByValueField.get(setValue);
     SelectRadio selectRadio = (SelectRadio) selectRadioField.get(setValue);
-    assertNotNull(selectOptionByValue);
-    assertNotNull(selectRadio);
+    assertThat(selectOptionByValue)
+      .isNotNull();
+    assertThat(selectRadio)
+      .isNotNull();
   }
 
   @Test
-  public void testExecuteWithSelectTagElement() {
+  void testExecuteWithSelectTagElement() {
     System.setProperty("selenide.versatileSetValue", "true");
     when(mockedFoundElement.getTagName()).thenReturn("select");
     WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"value"});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
-  public void testExecuteWithInputTagElement() {
+  void testExecuteWithInputTagElement() {
     when(mockedFoundElement.getTagName()).thenReturn("input");
     when(mockedFoundElement.getAttribute("type")).thenReturn("radio");
     WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"value"});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
-  public void testElementGetClearedWhenArgsTextIsNull() {
+  void testElementGetClearedWhenArgsTextIsNull() {
     WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{null});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
-  public void testElementGetClearedWhenArgsTextIsEmpty() {
+  void testElementGetClearedWhenArgsTextIsEmpty() {
     WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{""});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
   @Test
-  public void testElementGetClearedWhenArgsTextIsNotEmpty() {
+  void testElementGetClearedWhenArgsTextIsNotEmpty() {
     WebElement returnedElement = setValueCommand.execute(proxy, locator, new Object[]{"text"});
-    assertEquals(proxy, returnedElement);
+    assertThat(returnedElement)
+      .isEqualTo(proxy);
   }
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     System.setProperty("selenide.versatileSetValue", "false");
   }
 }

@@ -1,88 +1,99 @@
 package com.codeborne.selenide.webdriver;
 
+import java.util.Map;
+
 import com.codeborne.selenide.Configuration;
-import org.junit.*;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.*;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Map;
+class RemoteDriverFactoryTest implements WithAssertions {
+  private RemoteDriverFactory factory = new RemoteDriverFactory();
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-
-public class RemoteDriverFactoryTest {
-  RemoteDriverFactory factory = new RemoteDriverFactory();
-
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     Configuration.browser = "";
     Configuration.browserBinary = "";
   }
 
   @Test
-  public void getBrowserNameForGrid_legacy_firefox() {
+  void getBrowserNameForGrid_legacy_firefox() {
     Configuration.browser = "legacy_firefox";
-    assertEquals(BrowserType.FIREFOX, factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo(BrowserType.FIREFOX);
   }
 
   @Test
-  public void getBrowserNameForGrid_internet_explorer() {
+  void getBrowserNameForGrid_internet_explorer() {
     Configuration.browser = "internet explorer";
-    assertEquals(BrowserType.IE, factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo(BrowserType.IE);
   }
 
   @Test
-  public void getBrowserNameForGrid_ie() {
+  void getBrowserNameForGrid_ie() {
     Configuration.browser = "ie";
-    assertEquals(BrowserType.IE, factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo(BrowserType.IE);
   }
 
   @Test
-  public void getBrowserNameForGrid_edge() {
+  void getBrowserNameForGrid_edge() {
     Configuration.browser = "edge";
-    assertEquals(BrowserType.EDGE, factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo(BrowserType.EDGE);
   }
 
   @Test
-  public void getBrowserNameForGrid_opera() {
+  void getBrowserNameForGrid_opera() {
     Configuration.browser = "opera";
-    assertEquals(BrowserType.OPERA_BLINK, factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo(BrowserType.OPERA_BLINK);
   }
 
   @Test
-  public void getBrowserNameForGrid_other_browsers() {
+  void getBrowserNameForGrid_other_browsers() {
     Configuration.browser = "anotherWebdriver";
-    assertEquals("anotherWebdriver", factory.getBrowserNameForGrid());
+    assertThat(factory.getBrowserNameForGrid())
+      .isEqualTo("anotherWebdriver");
   }
 
   @Test
-  public void browserBinaryCanBeSetForFirefox() {
+  void browserBinaryCanBeSetForFirefox() {
     Configuration.browser = "firefox";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
     Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
-    assertThat(options.get("binary"), is("c:/browser.exe"));
+    assertThat(options.get("binary"))
+      .isEqualTo("c:/browser.exe");
   }
 
   @Test
-  public void browserBinaryCanBeSetForChrome() {
+  void browserBinaryCanBeSetForChrome() {
     Configuration.browser = "chrome";
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = factory.getBrowserBinaryCapabilites();
     Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
-    assertThat(options.get("binary"), is("c:/browser.exe"));
+    assertThat(options.get("binary"))
+      .isEqualTo("c:/browser.exe");
   }
 
   @Test
-  public void browserBinaryCanNotBeSetForOtherBrowsers() {
+  void browserBinaryCanNotBeSetForOtherBrowsers() {
     Configuration.browserBinary = "c:/browser.exe";
     Configuration.browser = "opera";
-    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
+    assertThat(factory.getBrowserBinaryCapabilites())
+      .isEqualTo(new DesiredCapabilities());
     Configuration.browser = "edge";
-    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
+    assertThat(factory.getBrowserBinaryCapabilites())
+      .isEqualTo(new DesiredCapabilities());
     Configuration.browser = "ie";
-    assertEquals(new DesiredCapabilities(), factory.getBrowserBinaryCapabilites());
+    assertThat(factory.getBrowserBinaryCapabilites())
+      .isEqualTo(new DesiredCapabilities());
   }
 }

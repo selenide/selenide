@@ -1,39 +1,41 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.*;
-import org.hamcrest.Matchers;
-import org.junit.*;
-import org.openqa.selenium.*;
+import java.util.Map;
+
+import com.codeborne.selenide.Configuration;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.InvalidArgumentException;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.opera.OperaOptions;
 
-import java.util.*;
-
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
-public class OperaDriverFactoryTest {
-
+class OperaDriverFactoryTest implements WithAssertions {
   private Proxy proxy = mock(Proxy.class);
 
-  @After
-  public void tearDown() {
+  @AfterEach
+  void tearDown() {
     Configuration.browserBinary = "";
     Configuration.headless = false;
   }
 
   @Test
-  public void browserBinaryCanBeSet() {
+  void browserBinaryCanBeSet() {
     Configuration.browserBinary = "c:/browser.exe";
     Capabilities caps = new OperaDriverFactory().createOperaOptions(proxy);
     Map options = (Map) caps.asMap().get(OperaOptions.CAPABILITY);
-    assertThat(options.get("binary"), Matchers.is("c:/browser.exe"));
+    assertThat(options.get("binary"))
+      .isEqualTo("c:/browser.exe");
   }
 
-  @Test(expected = InvalidArgumentException.class)
-  public void headlessCanNotBeSet() {
+  @Test
+  void headlessCanNotBeSet() {
     Configuration.headless = true;
-    Capabilities caps = new OperaDriverFactory().createOperaOptions(proxy);
-
+    assertThatThrownBy(() -> new OperaDriverFactory().createOperaOptions(proxy))
+      .isInstanceOf(InvalidArgumentException.class);
   }
 }

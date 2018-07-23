@@ -1,36 +1,37 @@
 package com.codeborne.selenide.conditions;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TextTest {
+class TextTest implements WithAssertions {
   private final String defaultText = "Hello World";
   private Text text;
   private WebElement mWebElement = mock(WebElement.class);
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     text = new Text(defaultText);
   }
 
   @Test
-  public void testApplyForNonSelectText() {
+  void testApplyForNonSelectText() {
     when(mWebElement.getText()).thenReturn(defaultText);
-    assertTrue(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isTrue();
     when(mWebElement.getText()).thenReturn("Hello");
-    assertFalse(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isFalse();
   }
 
   @Test
-  public void testApplyForSelectTagName() {
+  void testApplyForSelectTagName() {
     WebElement element1 = mock(WebElement.class);
     String element1Text = "Hello";
     WebElement element2 = mock(WebElement.class);
@@ -46,10 +47,12 @@ public class TextTest {
 
     when(mWebElement.getTagName()).thenReturn("select");
 
-    assertFalse(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isFalse();
 
     when(element2.getText()).thenReturn(" " + element2Text);
 
-    assertTrue(text.apply(mWebElement));
+    assertThat(text.apply(mWebElement))
+      .isTrue();
   }
 }

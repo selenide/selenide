@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::file upload</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  </head>
-  <body>
-    <h1>File upload form</h1>
+<head>
+  <title>Test::file upload</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>File upload form</h1>
 
-    <br/>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="cv" id="cv" />
-      <input type="file" name="avatar" id="avatar" />
-      <input type="submit" id="submit"/>
-    </form>
+<br/>
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <input type="file" name="cv" id="cv"/>
+  <input type="file" name="avatar" id="avatar"/>
+  <input type="submit" id="submit"/>
+</form>
 
-    <h1>Multi-file upload</h1>
+<h1>Multi-file upload</h1>
 
-    <br/>
-    <form id="multi-file-upload-form" action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" class="file" name="multiFile" multiple />
-      <input type="submit" class="submit"/>
-    </form>
-  </body>
+<br/>
+<form id="multi-file-upload-form" action="/upload" method="post" enctype="multipart/form-data">
+  <input type="file" class="file" name="multiFile" multiple/>
+  <input type="submit" class="submit"/>
+</form>
+</body>
 </html>

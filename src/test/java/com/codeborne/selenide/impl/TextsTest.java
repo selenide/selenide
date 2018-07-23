@@ -1,17 +1,22 @@
 package com.codeborne.selenide.impl;
 
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-
-public class TextsTest {
+class TextsTest implements WithAssertions {
   @Test
-  public void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
-    assertEquals("Bruce Willis", Html.text.reduceSpaces("Bruce   \n\t   Willis"));
-    assertEquals("", Html.text.reduceSpaces(""));
-    assertEquals("", Html.text.reduceSpaces("   "));
-    assertEquals("a", Html.text.reduceSpaces("a"));
-    assertEquals("a", Html.text.reduceSpaces("  a\n"));
-    assertEquals("Bruce Willis", Html.text.reduceSpaces("     Bruce   \n\t   Willis  \n\n\n"));
+  void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
+    assertThat(Html.text.reduceSpaces("Bruce   \n\t   Willis"))
+      .isEqualTo("Bruce Willis");
+    assertThat(Html.text.reduceSpaces(""))
+      .isEqualTo("");
+    assertThat(Html.text.reduceSpaces("   "))
+      .isEqualTo("");
+    assertThat(Html.text.reduceSpaces("a"))
+      .isEqualTo("a");
+    assertThat(Html.text.reduceSpaces("  a\n"))
+      .isEqualTo("a");
+    assertThat(Html.text.reduceSpaces("     Bruce   \n\t   Willis  \n\n\n"))
+      .isEqualTo("Bruce Willis");
   }
 }

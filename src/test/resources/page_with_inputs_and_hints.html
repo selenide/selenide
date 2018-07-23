@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test::inputs with hints</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
-    <script type="text/javascript">
+<head>
+  <title>Test::inputs with hints</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript">
 
         // hints appear on typing and disappear on blur
         function displayUsernameHint() {
@@ -21,24 +21,27 @@
             $("#passwordHint").hide();
         }
 
-    </script>
-  </head>
-  <body>
-    <h1>Page with JQuery</h1>
 
-    <div style="width: 400px">
-      <form>
-        <fieldset title="Login form">
-          <label> Username:
-            <input id="username" name="username" value="" oninput="displayUsernameHint()" onblur="hideUsernameHint()"/>
-          </label>
-          <div id="usernameHint" style="display: none">username hint</div><br/>
-          <label>Password:
-            <input id="password" name="password" value="" oninput="displayPasswordHint()" onblur="hidePasswordHint()"/>
-          </label>
-          <div id="passwordHint" style="display: none">password hint</div><br/>
-        </fieldset>
-      </form>
-    </div>
-  </body>
+  </script>
+</head>
+<body>
+<h1>Page with JQuery</h1>
+
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username:
+        <input id="username" name="username" value="" oninput="displayUsernameHint()" onblur="hideUsernameHint()"/>
+      </label>
+      <div id="usernameHint" style="display: none">username hint</div>
+      <br/>
+      <label>Password:
+        <input id="password" name="password" value="" oninput="displayPasswordHint()" onblur="hidePasswordHint()"/>
+      </label>
+      <div id="passwordHint" style="display: none">password hint</div>
+      <br/>
+    </fieldset>
+  </form>
+</div>
+</body>
 </html>

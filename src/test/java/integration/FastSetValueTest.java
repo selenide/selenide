@@ -1,21 +1,21 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Selenide.$;
 
-public class FastSetValueTest extends IntegrationTest {
-  @Before
-  public void openTestPageWithJQuery() {
+class FastSetValueTest extends IntegrationTest {
+  @BeforeEach
+  void openTestPageWithJQuery() {
     openFile("page_with_inputs_and_hints.html");
   }
 
   @Test
-  public void standardSetValueTriggersBlurCorrectly() {
+  void standardSetValueTriggersBlurCorrectly() {
     Configuration.fastSetValue = false;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
@@ -26,7 +26,7 @@ public class FastSetValueTest extends IntegrationTest {
   }
 
   @Test
-  public void fastSetValueTriggersBlurCorrectly() {
+  void fastSetValueTriggersBlurCorrectly() {
     Configuration.fastSetValue = true;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
@@ -37,7 +37,7 @@ public class FastSetValueTest extends IntegrationTest {
   }
 
   @Test
-  public void fastSetValue_withoutChangeEvent() {
+  void fastSetValue_withoutChangeEvent() {
     Configuration.fastSetValue = true;
     Configuration.setValueChangeEvent = false;
     $("#username").setValue("john");

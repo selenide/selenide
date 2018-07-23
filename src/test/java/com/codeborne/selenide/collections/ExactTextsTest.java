@@ -1,46 +1,43 @@
 package com.codeborne.selenide.collections;
 
+import java.util.List;
+
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import org.junit.Test;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExactTextsTest {
-
+class ExactTextsTest implements WithAssertions {
   @Test
-  public void varArgsConstructor() {
+  void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertEquals("Expected texts list", asList("One", "Two", "Three"), exactTexts.expectedTexts);
+    assertThat(exactTexts.expectedTexts)
+      .as("Expected texts list")
+      .isEqualTo(asList("One", "Two", "Three"));
   }
 
   @Test
-  public void testApplyOnWrongSizeList() {
+  void testApplyOnWrongSizeList() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertFalse(exactTexts.apply(singletonList(mock(WebElement.class))));
+
+    assertThat(exactTexts.apply(singletonList(mock(WebElement.class))))
+      .isFalse();
   }
 
   @Test
-  public void testApplyOnCorrectSizeAndCorrectElementsText() {
-    testApplyMethodOnDifferentCondtions(true);
+  void testApplyOnCorrectSizeAndCorrectElementsText() {
+    testApplyMethodOnDifferentConditions(true);
   }
 
-  @Test
-  public void testApplyOnCorrectListSizeButWrongElementsText() {
-    testApplyMethodOnDifferentCondtions(false);
-  }
-
-  private void testApplyMethodOnDifferentCondtions(boolean shouldMatch) {
+  private void testApplyMethodOnDifferentConditions(boolean shouldMatch) {
     String exactText1 = "One";
     String exactText2 = "Two";
     ExactTexts exactTexts = new ExactTexts(exactText1, exactText2);
@@ -48,17 +45,19 @@ public class ExactTextsTest {
     WebElement mockedWebElement2 = mock(WebElement.class);
     when(mockedWebElement1.getText()).thenReturn(exactText1);
     when(mockedWebElement2.getText()).thenReturn(shouldMatch ? exactText2 : exactText1);
-    assertEquals(shouldMatch, exactTexts.apply(asList(mockedWebElement1, mockedWebElement2)));
+
+    assertThat(exactTexts.apply(asList(mockedWebElement1, mockedWebElement2)))
+      .isEqualTo(shouldMatch);
   }
 
   @Test
-  public void testFailWithNullElementsList() {
+  void testApplyOnCorrectListSizeButWrongElementsText() {
+    testApplyMethodOnDifferentConditions(false);
+  }
+
+  @Test
+  void testFailWithNullElementsList() {
     failOnEmptyOrNullElementsList(null);
-  }
-
-  @Test
-  public void testFailWithEmptyElementsLIst() {
-    failOnEmptyOrNullElementsList(emptyList());
   }
 
   private void failOnEmptyOrNullElementsList(List<WebElement> elements) {
@@ -67,12 +66,18 @@ public class ExactTextsTest {
     try {
       exactTexts.fail(mock(WebElementsCollection.class), elements, exception, 10000);
     } catch (ElementNotFound ex) {
-      assertEquals("Element not found {null}\nExpected: [One]", ex.getMessage());
+      assertThat(ex)
+        .hasMessage("Element not found {null}\nExpected: [One]");
     }
   }
 
   @Test
-  public void failOnTextMismatch() {
+  void testFailWithEmptyElementsLIst() {
+    failOnEmptyOrNullElementsList(emptyList());
+  }
+
+  @Test
+  void failOnTextMismatch() {
     ExactTexts exactTexts = new ExactTexts("One");
     Exception exception = new Exception("Exception method");
 
@@ -84,41 +89,41 @@ public class ExactTextsTest {
 
     try {
       exactTexts.fail(mockedElementsCollection,
-                      singletonList(mockedWebElement),
-                      exception,
-                      10000);
+        singletonList(mockedWebElement),
+        exception,
+        10000);
     } catch (TextsMismatch ex) {
-      assertEquals("\nActual: [Hello]\n" +
-          "Expected: [One]\n" +
-          "Collection: Collection description", ex.getMessage());
+      assertThat(ex)
+        .hasMessage("\nActual: [Hello]\nExpected: [One]\nCollection: Collection description");
     }
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
-    assertEquals("Exact texts [One, Two, Three]", exactTexts.toString());
+    assertThat(exactTexts)
+      .hasToString("Exact texts [One, Two, Three]");
   }
 
   @Test
-  public void emptyArrayIsNotAllowed() {
+  void emptyArrayIsNotAllowed() {
     try {
       new ExactTexts();
       fail("expected IllegalArgumentException");
-    }
-    catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage(), is("No expected texts given"));
+    } catch (IllegalArgumentException expected) {
+      assertThat(expected)
+        .hasMessage("No expected texts given");
     }
   }
 
   @Test
-  public void emptyListIsNotAllowed() {
+  void emptyListIsNotAllowed() {
     try {
       new ExactTexts(emptyList());
       fail("expected IllegalArgumentException");
-    }
-    catch (IllegalArgumentException expected) {
-      assertThat(expected.getMessage(), is("No expected texts given"));
+    } catch (IllegalArgumentException expected) {
+      assertThat(expected)
+        .hasMessage("No expected texts given");
     }
   }
 }
