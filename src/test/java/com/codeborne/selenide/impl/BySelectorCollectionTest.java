@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -12,9 +11,6 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BySelectorCollectionTest {
@@ -41,15 +37,6 @@ public class BySelectorCollectionTest {
     BySelectorCollection bySelectorCollection = new BySelectorCollection(new NotWebElement(), By.name("selenide"));
     String description = bySelectorCollection.description();
     assertEquals("By.name: selenide", description);
-  }
-
-  @Test
-  public void testGetElementsMethod() {
-    BySelectorCollection bySelectorCollection = spy(new BySelectorCollection(new NotWebElement(), By.name("selenide")));
-    assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
-    assertEquals(mockedWebElement, bySelectorCollection.getElements().get(0));
-    verify(bySelectorCollection, times(1)).getActualElements();
-
   }
 
   private class NotWebElement implements SearchContext {

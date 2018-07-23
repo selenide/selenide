@@ -19,11 +19,6 @@ public class WebElementsCollectionWrapper implements WebElementsCollection {
   }
 
   @Override
-  public List<WebElement> getActualElements() {
-    return elements;
-  }
-
-  @Override
   public String description() {
     return "$$(" + elements.size() + " elements)";
   }

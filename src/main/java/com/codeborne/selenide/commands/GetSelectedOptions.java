@@ -16,11 +16,6 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     return new ElementsCollection(new WebElementsCollection() {
       @Override
       public List<WebElement> getElements() {
-        return getActualElements();
-      }
-
-      @Override
-      public List<WebElement> getActualElements() {
         return new Select(selectElement.getWebElement()).getAllSelectedOptions();
       }
 
