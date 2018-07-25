@@ -78,4 +78,12 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
         .hasMessageEndingWith("/files/hello_world.txt?pause=2000 in 1000 ms.");
     }
   }
+
+  @Test
+  void downloadWithQueryParamsWithoutHeaders() throws FileNotFoundException {
+    openFile("download.html");
+    final File downloadedFile = $("#link").download();
+    assertThat(downloadedFile.getName())
+      .isEqualTo("hello_world.txt");
+  }
 }
