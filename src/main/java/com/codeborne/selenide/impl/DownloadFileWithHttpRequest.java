@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.TimeoutException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
@@ -30,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -161,7 +162,10 @@ public class DownloadFileWithHttpRequest {
       log.info(header.getName() + '=' + header.getValue());
     }
 
-    return new URL(fileToDownloadLocation).getFile().replaceFirst("[/\\\\]", "");
+    final String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
+    return fullFileName.contains("?")
+      ? StringUtils.left(fullFileName, fullFileName.indexOf("?"))
+      : fullFileName;
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
