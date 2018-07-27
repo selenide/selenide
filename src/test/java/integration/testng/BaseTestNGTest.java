@@ -1,6 +1,6 @@
 package integration.testng;
 
-import integration.LocalHttpServer;
+import integration.server.LocalHttpServer;
 
 import java.util.logging.Logger;
 

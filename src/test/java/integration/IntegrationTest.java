@@ -8,6 +8,7 @@ import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
+import integration.server.LocalHttpServer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
