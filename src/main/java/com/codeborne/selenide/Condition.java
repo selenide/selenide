@@ -8,6 +8,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.getFocusedElement;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
@@ -428,7 +429,8 @@ public abstract class Condition implements Predicate<WebElement> {
     return new Condition("cssValue") {
       @Override
       public boolean apply(WebElement element) {
-        return expectedValue.equalsIgnoreCase(element.getCssValue(propertyName));
+        String actualValue = element.getCssValue(propertyName);
+        return defaultString(expectedValue).equalsIgnoreCase(defaultString(actualValue));
       }
 
       @Override

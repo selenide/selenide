@@ -1,23 +1,24 @@
 package integration;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotInIframeTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    Assumptions.assumeFalse(isHtmlUnit());
+    assumeFalse(isHtmlUnit() || isPhantomjs());
     openFile("page_with_iframe.html");
   }
 
