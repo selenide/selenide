@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +26,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.WithAssertions;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.SecurityHandler;
+import org.eclipse.jetty.security.UserStore;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -34,11 +41,14 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.SEVERE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -51,12 +61,6 @@ public class LocalHttpServer implements WithAssertions {
   private final Server server;
   private Set<String> sessions = new ConcurrentSkipListSet<>();
 
-  /**
-   * @param port
-   * @param ssl
-   *
-   * @throws IOException
-   */
   public LocalHttpServer(int port, boolean ssl) {
     server = new Server();
 
@@ -70,10 +74,12 @@ public class LocalHttpServer implements WithAssertions {
 
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
+    context.setSecurityHandler(basicAuth("/basic-auth/*", "scott", "tiger", "Private!"));
     server.setHandler(context);
 
     context.addServlet(new ServletHolder(new FileDownloadHandler()), "/files/*");
     context.addServlet(new ServletHolder(new FileUploadHandler()), "/upload");
+    context.addServlet(new ServletHolder(new BasicAuthHandler()), "/basic-auth/*");
     context.addServlet(new ServletHolder(new FileHandler()), "/*");
   }
 
@@ -121,6 +127,31 @@ public class LocalHttpServer implements WithAssertions {
     try (OutputStream os = http.getOutputStream()) {
       os.write(fileContent);
     }
+  }
+
+  private static SecurityHandler basicAuth(String context, String username, String password, String realm) {
+    HashLoginService loginService = new HashLoginService();
+    UserStore userStore = new UserStore();
+    userStore.addUser(username, Credential.getCredential(password), new String[] {"user"});
+    loginService.setUserStore(userStore);
+    loginService.setName(realm);
+
+    Constraint constraint = new Constraint();
+    constraint.setName(Constraint.__BASIC_AUTH);
+    constraint.setRoles(new String[]{"user"});
+    constraint.setAuthenticate(true);
+
+    ConstraintMapping constraintMapping = new ConstraintMapping();
+    constraintMapping.setConstraint(constraint);
+    constraintMapping.setPathSpec(context);
+
+    ConstraintSecurityHandler constraintSecurityHandler = new ConstraintSecurityHandler();
+    constraintSecurityHandler.setAuthenticator(new BasicAuthenticator());
+    constraintSecurityHandler.setRealmName("myrealm");
+    constraintSecurityHandler.addConstraintMapping(constraintMapping);
+    constraintSecurityHandler.setLoginService(loginService);
+
+    return constraintSecurityHandler;
   }
 
   /**
@@ -188,10 +219,22 @@ public class LocalHttpServer implements WithAssertions {
       String sessionId = "" + System.currentTimeMillis();
       Cookie cookie = new Cookie("session_id", sessionId);
       cookie.setMaxAge(-1);
-//      cookie.setDomain("localhost");
       cookie.setPath("/");
       http.addCookie(cookie);
       sessions.add(sessionId);
+    }
+  }
+
+  private class BasicAuthHandler extends HttpServlet {
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String basicAuth = new String(Base64.getDecoder().decode(request.getHeader("Authorization").replace("Basic ", "")), UTF_8);
+      String html = "<html><body>Hello, " + basicAuth + "!</body></html>";
+
+      response.setStatus(SC_OK);
+      response.setContentLength(html.length());
+      response.setContentType("text/html");
+      printResponse(response, html.getBytes(UTF_8));
     }
   }
 
