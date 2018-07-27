@@ -73,15 +73,11 @@ class ChainedProxyTest extends IntegrationTest {
 
     // Assert that files are actually uploaded via 2 proxies
     $("h3").shouldHave(text("Uploaded 2 files"));
-    assertThat(server.uploadedFiles)
-      .hasSize(2);
+    assertThat(server.getUploadedFiles()).hasSize(2);
 
     // Assert that "chained" proxy has intercepted requests
-    assertThat(visitedUrls.size())
-      .isGreaterThanOrEqualTo(2);
-    assertThat(visitedUrls.get(0))
-      .contains("/file_upload_form.html");
-    assertThat(visitedUrls.get(visitedUrls.size() - 1))
-      .contains("/upload");
+    assertThat(visitedUrls.size()).isGreaterThanOrEqualTo(2);
+    assertThat(visitedUrls.get(0)).contains("/file_upload_form.html");
+    assertThat(visitedUrls.get(visitedUrls.size() - 1)).contains("/upload");
   }
 }

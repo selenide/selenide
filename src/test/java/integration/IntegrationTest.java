@@ -1,9 +1,5 @@
 package integration;
 
-import java.io.File;
-import java.util.Locale;
-import java.util.logging.Logger;
-
 import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
@@ -16,22 +12,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.File;
+import java.util.Locale;
+import java.util.logging.Logger;
+
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.browserSize;
-import static com.codeborne.selenide.Configuration.clickViaJs;
-import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isHeadless;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static com.codeborne.selenide.WebDriverRunner.isSafari;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
@@ -59,11 +49,7 @@ public abstract class IntegrationTest implements WithAssertions {
         port = findFreePort();
         log.info("START " + browser + " TESTS");
         server = new LocalHttpServer(port, SSL).start();
-        if (SSL) {
-          protocol = "https://";
-        } else {
-          protocol = "http://";
-        }
+        protocol = SSL ? "https://" : "http://";
         Configuration.baseUrl = protocol + "127.0.0.1:" + port;
       }
     }
@@ -96,7 +82,7 @@ public abstract class IntegrationTest implements WithAssertions {
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
     browserSize = "1024x768";
-    server.uploadedFiles.clear();
+    server.reset();
 
     // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
