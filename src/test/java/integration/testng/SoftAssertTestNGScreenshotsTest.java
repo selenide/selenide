@@ -32,8 +32,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     $("h22").shouldBe(visible);
     $$("#radioButtons input").shouldHave(size(888));
     testLogListener.getEvents().map(LogEvent::getError).forEach(error -> {
-      assertThat(error)
-        .isInstanceOf(UIAssertionError.class);
+      assertThat(error).isInstanceOf(UIAssertionError.class);
       assertScreenshot((UIAssertionError) error);
     });
   }
