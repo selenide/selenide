@@ -1,31 +1,11 @@
 package integration.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.logging.Logger;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.assertj.core.api.WithAssertions;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -45,6 +25,25 @@ import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Logger;
+
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
@@ -52,8 +51,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.SEVERE;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class LocalHttpServer implements WithAssertions {
+public class LocalHttpServer {
   private static final Logger log = Logger.getLogger(LocalHttpServer.class.getName());
   private static final String CONTENT_TYPE_HTML_TEXT = "text/html";
   private static final String CONTENT_TYPE_IMAGE_PNG = "image/png";
@@ -243,8 +243,7 @@ public class LocalHttpServer implements WithAssertions {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       long start = System.nanoTime();
       String sessionId = getSessionId(request);
-      assertThat(sessions)
-        .contains(sessionId);
+      assertThat(sessions).contains(sessionId);
 
       String fileName = getFilenameFromRequest(request);
       byte[] fileContent = readFileContent(fileName);
@@ -286,7 +285,7 @@ public class LocalHttpServer implements WithAssertions {
 
         String message = "<h3>Uploaded " + uploadedFiles.size() + " files</h3>" + items;
         response.setContentType(CONTENT_TYPE_HTML_TEXT);
-        printResponse(response, message.getBytes("UTF-8"));
+        printResponse(response, message.getBytes(UTF_8));
         logRequest(request, message, start);
       } catch (FileUploadException e) {
         logRequest(request, e.getMessage(), start);
