@@ -52,6 +52,8 @@ public class AttributeTest extends IntegrationTest {
       .isEqualTo("username");
     assertThat($(byAttribute("http-equiv", "Content-Type")).getTagName())
       .isEqualTo("meta");
+    assertThat($(byAttribute("maxlength", "25")).getTagName())
+      .isEqualTo("input");
   }
 
   @Test
