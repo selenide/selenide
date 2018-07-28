@@ -67,6 +67,12 @@ public class AttributeTest extends IntegrationTest {
   }
 
   @Test
+  void userCanGetMaxLengthAttribute() {
+    assertThat($(by("readonly", "readonly")).maxLength())
+      .isEqualTo("25");
+  }
+
+  @Test
   void userCanGetDataAttributes() {
     assertThat($(byValue("livemail.ru")).getAttribute("data-mailServerId"))
       .isEqualTo("111");
