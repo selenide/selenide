@@ -66,6 +66,7 @@ public class Commands {
     add("name", new GetName());
     add("text", new GetText());
     add("getValue", new GetValue());
+    add("getMaxLength", new GetMaxLength());
   }
 
   private void addClickCommands() {

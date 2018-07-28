@@ -170,6 +170,13 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   String name();
 
   /**
+   * Get the 'maxlength' attribute of the element
+   * @return attribute 'maxlength' value or null if attribute is missing
+   * @see com.codeborne.selenide.commands.GetMaxLength
+   */
+  String maxLength();
+
+  /**
    * Get the "value" attribute of the element
    * Same as #getValue()
    * @return attribute "value" value or null if attribute is missing
