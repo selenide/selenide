@@ -408,6 +408,13 @@ public interface SelenideElement extends WebElement, FindsByLinkText, FindsById,
   SelenideElement parent();
 
   /**
+   * Get last child element of this element
+   * ATTENTION! this method doesn't start any search yet!
+   * For example, $("tr").lastChild(); could give the last "td".
+   */
+  SelenideElement lastChild();
+
+  /**
    * Locates closes ancestor element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
    * For example, $("td").closest("table") could give some "table".
