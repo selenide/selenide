@@ -1,13 +1,13 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Selenide;
+import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.BuildInfo;
 
 import java.awt.Toolkit;
 import java.util.List;
@@ -126,8 +126,7 @@ public class WebDriverFactory {
     if (remote == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info(
-          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo
-              .getBuildTime());
+          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
     }
   }
 
