@@ -5,8 +5,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
-import org.openqa.selenium.WrapsElement;
-import org.openqa.selenium.interactions.Locatable;
+import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.interactions.internal.Locatable;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

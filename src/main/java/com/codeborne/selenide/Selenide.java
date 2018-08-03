@@ -20,6 +20,8 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
+import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -38,7 +41,6 @@ import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * The main starting point of Selenide.
@@ -671,8 +673,8 @@ public class Selenide {
    */
   public static FluentWait<WebDriver> Wait() {
     return new FluentWait<>(getWebDriver())
-        .withTimeout(timeout, MILLISECONDS)
-        .pollingEvery(Configuration.pollingInterval, MILLISECONDS);
+      .withTimeout(Duration.of(timeout, ChronoUnit.MILLIS))
+      .pollingEvery(Duration.of(pollingInterval, ChronoUnit.MILLIS));
   }
 
   /**
