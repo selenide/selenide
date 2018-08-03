@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.12.4
+* Upgrade to Selenium 3.14.0
+
 ## 4.12.3 (released 17.07.2018)
 * [#696](https://github.com/codeborne/selenide/issues/696) Reload collection on every method call
 * [#758](https://github.com/codeborne/selenide/issues/758) Timeout for downloading files  --  thanks to Yuri Ivanov @YuriIvanov
