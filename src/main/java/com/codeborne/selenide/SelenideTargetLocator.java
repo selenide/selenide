@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
@@ -16,10 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.ex.UIAssertionError.wrapThrowable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
@@ -32,17 +31,29 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public WebDriver frame(int index) {
-    return Wait().until(frameToBeAvailableAndSwitchToIt(index));
+    try {
+      return Wait().until(frameToBeAvailableAndSwitchToIt(index));
+    } catch (NoSuchElementException | TimeoutException e) {
+      throw new NoSuchFrameException("Frame with index not found: " + index, e);
+    }
   }
 
   @Override
   public WebDriver frame(String nameOrId) {
-    return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
+    try {
+      return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
+    } catch (NoSuchElementException | TimeoutException e) {
+      throw new NoSuchFrameException("No frame found with id/name = " + nameOrId, e);
+    }
   }
 
   @Override
   public WebDriver frame(WebElement frameElement) {
-    return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
+    try {
+      return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
+    } catch (NoSuchElementException | TimeoutException e) {
+      throw new NoSuchFrameException("No frame found = " + frameElement, e);
+    }
   }
 
   @Override
@@ -62,7 +73,11 @@ public class SelenideTargetLocator implements TargetLocator {
 
   @Override
   public Alert alert() {
-    return Wait().until(alertIsPresent());
+    try {
+      return Wait().until(alertIsPresent());
+    } catch (TimeoutException e) {
+      throw new NoAlertPresentException();
+    }
   }
 
   /**
@@ -156,7 +171,7 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
     }
     catch (TimeoutException e) {
-      throw wrapThrowable(e, timeout);
+      throw new NoSuchWindowException("Window with index not found: " + index);
     }
   }
 
@@ -168,12 +183,8 @@ public class SelenideTargetLocator implements TargetLocator {
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
-    }
-    catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
+    } catch (NoSuchWindowException | TimeoutException e) {
       return windowByTitle(nameOrHandleOrTitle);
-    }
-    catch (TimeoutException e) {
-      throw wrapThrowable(e, timeout);
     }
   }
 
