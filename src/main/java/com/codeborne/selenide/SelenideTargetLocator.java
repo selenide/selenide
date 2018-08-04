@@ -76,7 +76,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(alertIsPresent());
     } catch (TimeoutException e) {
-      throw new NoAlertPresentException();
+      throw new NoAlertPresentException(e);
     }
   }
 
@@ -171,7 +171,7 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
     }
     catch (TimeoutException e) {
-      throw new NoSuchWindowException("Window with index not found: " + index);
+      throw new NoSuchWindowException("Window with index not found: " + index, e);
     }
   }
 
