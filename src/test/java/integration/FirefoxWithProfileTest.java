@@ -3,6 +3,7 @@ package integration;
 import java.io.File;
 
 import com.codeborne.selenide.WebDriverRunner;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +18,7 @@ class FirefoxWithProfileTest extends IntegrationTest {
   void createFirefoxWithCustomProfile() {
     Assumptions.assumeTrue(WebDriverRunner.isFirefox());
 
+    WebDriverManager.firefoxdriver().setup();
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
     WebDriver driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
     driver.manage().window().maximize();
