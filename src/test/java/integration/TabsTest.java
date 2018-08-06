@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -17,6 +18,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
@@ -145,6 +147,26 @@ class TabsTest extends IntegrationTest {
 //    $("body").shouldHave(text("Secret phrase 3"));
 //
 //    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
+  }
+
+  @Test
+  void throwsNoSuchWindowExceptionWhenSwitchingToAbsentWindowByTitle() {
+    assertThat(title())
+      .isEqualTo("Test::tabs");
+
+    assertThatThrownBy(() -> {
+      switchTo().window("absentWindow");
+    }).isInstanceOf(NoSuchWindowException.class);
+  }
+
+  @Test
+  void throwsNoSuchWindowExceptionWhenSwitchingToAbsentWindowByIndex() {
+    assertThat(title())
+      .isEqualTo("Test::tabs");
+
+    assertThatThrownBy(() -> {
+      switchTo().window(Integer.MAX_VALUE);
+    }).isInstanceOf(NoSuchWindowException.class);
   }
 
   @AfterEach
