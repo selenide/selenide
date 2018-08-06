@@ -34,7 +34,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(index));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("Frame with index not found: " + index, e);
+      throw new NoSuchFrameException("No frame found with index: " + index, e);
     }
   }
 
@@ -43,7 +43,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("No frame found with id/name = " + nameOrId, e);
+      throw new NoSuchFrameException("No frame found with id/name: " + nameOrId, e);
     }
   }
 
@@ -52,7 +52,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("No frame found = " + frameElement, e);
+      throw new NoSuchFrameException("No frame found with element: " + frameElement, e);
     }
   }
 
@@ -76,7 +76,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(alertIsPresent());
     } catch (TimeoutException e) {
-      throw new NoAlertPresentException(e);
+      throw new NoAlertPresentException("Alert not found", e);
     }
   }
 
@@ -171,7 +171,7 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
     }
     catch (TimeoutException e) {
-      throw new NoSuchWindowException("Window with index not found: " + index, e);
+      throw new NoSuchWindowException("No window found with index: " + index, e);
     }
   }
 
@@ -183,8 +183,8 @@ public class SelenideTargetLocator implements TargetLocator {
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
-    } catch (NoSuchWindowException | TimeoutException e) {
-      return windowByTitle(nameOrHandleOrTitle);
+    } catch (TimeoutException e) {
+      throw new NoSuchWindowException("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
     }
   }
 
