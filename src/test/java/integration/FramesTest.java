@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoSuchFrameException;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
@@ -14,6 +15,7 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.WebDriverRunner.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.source;
 
 class FramesTest extends IntegrationTest {
@@ -104,5 +106,38 @@ class FramesTest extends IntegrationTest {
     switchTo().defaultContent();
     switchTo().frame(2);
     $("h1").shouldHave(text("Page with JQuery"));
+  }
+
+
+  @Test
+  void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByElement() {
+    Assumptions.assumeFalse(isHtmlUnit());
+    assertThat(title())
+      .isEqualTo("Test::frames");
+
+    assertThatThrownBy(() -> {
+      switchTo().frame("mainFrame");
+      // $("#log") is present, but not frame.
+      switchTo().frame($("#log"));
+    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with element: <div id=\"log\" displayed:false></div>");
+  }
+
+  @Test
+  void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByTitle() {
+    assertThat(title())
+      .isEqualTo("Test::frames");
+    assertThatThrownBy(() -> {
+      switchTo().frame("absentFrame");
+    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with id/name: absentFrame");
+  }
+
+  @Test
+  void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByIndex() {
+    assertThat(title())
+      .isEqualTo("Test::frames");
+
+    assertThatThrownBy(() -> {
+      switchTo().frame(Integer.MAX_VALUE);
+    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with index: " + Integer.MAX_VALUE);
   }
 }
