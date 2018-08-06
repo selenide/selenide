@@ -156,7 +156,7 @@ class TabsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       switchTo().window("absentWindow");
-    }).isInstanceOf(NoSuchWindowException.class);
+    }).isInstanceOf(NoSuchWindowException.class).hasMessage("No window found with name or handle or title: absentWindow");
   }
 
   @Test
@@ -166,7 +166,7 @@ class TabsTest extends IntegrationTest {
 
     assertThatThrownBy(() -> {
       switchTo().window(Integer.MAX_VALUE);
-    }).isInstanceOf(NoSuchWindowException.class);
+    }).isInstanceOf(NoSuchWindowException.class).hasMessage("No window found with index: " + Integer.MAX_VALUE);
   }
 
   @AfterEach

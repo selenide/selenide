@@ -87,20 +87,20 @@ class AlertTest extends IntegrationTest {
   void alertThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(() -> {
       switchTo().alert();
-    }).isInstanceOf(NoAlertPresentException.class);
+    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
   }
 
   @Test
   void confirmThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(() -> {
       confirm();
-    }).isInstanceOf(NoAlertPresentException.class);
+    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
   }
 
   @Test
   void promptThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
     assertThatThrownBy(() -> {
       prompt();
-    }).isInstanceOf(NoAlertPresentException.class);
+    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
   }
 }
