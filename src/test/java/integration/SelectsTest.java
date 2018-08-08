@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -21,11 +20,6 @@ class SelectsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
-  }
-
-  @AfterEach
-  void resetProperties() {
-    Configuration.versatileSetValue = false;
   }
 
   @Test

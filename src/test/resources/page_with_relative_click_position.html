@@ -29,17 +29,20 @@
 
   </style>
   <script type="text/javascript">
-    function clickRel() {
+    function clickRel(event) {
       var coords = document.getElementById("coords");
       coords.innerText = '(' + event.offsetX + ', ' + event.offsetY + ')';
       coords.style.left = event.offsetX + 'px';
       coords.style.top = event.offsetY + 'px';
+      return false;
     }
-
   </script>
 </head>
 <body>
-<div id="page" onclick="clickRel(this)">THIS IS A TEST</div>
-<span id="coords">(0, 0)</span>
+  <div id="page">THIS IS A TEST</div>
+  <span id="coords">(0, 0)</span>
+  <script type="text/javascript">
+    document.getElementById('page').addEventListener('click', clickRel);
+  </script>
 </body>
 </html>

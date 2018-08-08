@@ -1,7 +1,6 @@
 package integration;
 
 import com.automation.remarks.video.annotations.Video;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +11,7 @@ import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.source;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FrameWaitTest extends IntegrationTest {
   @BeforeEach
@@ -36,11 +36,12 @@ class FrameWaitTest extends IntegrationTest {
   @Test
   @Video
   void waitsUntilFrameAppears_byIndex() {
-    Assumptions.assumeFalse(isHtmlUnit());
+    assumeFalse(isHtmlUnit());
+    sleep(100);
 
     switchTo().frame(2);
     sleep(100);
-    assertThat(source())
-      .contains("Page with JQuery");
+
+    assertThat(source()).contains("Page with JQuery");
   }
 }
