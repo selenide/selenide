@@ -1,14 +1,13 @@
 package integration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
@@ -17,13 +16,14 @@ import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
   private File folder = new File(Configuration.reportsFolder);
 
   @BeforeEach
   void setUp() {
-    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
 
     close();
     Configuration.fileDownload = PROXY;

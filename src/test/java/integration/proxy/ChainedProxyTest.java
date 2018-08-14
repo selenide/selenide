@@ -1,8 +1,5 @@
 package integration.proxy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
@@ -15,10 +12,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 
 /**
@@ -43,7 +42,6 @@ class ChainedProxyTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-    Assumptions.assumeFalse(isHtmlUnit()); // Why it's not working? It's magic for me...
 
     if (chainedProxy == null) {
       close();
@@ -53,7 +51,7 @@ class ChainedProxyTest extends IntegrationTest {
       chainedProxy.start(0);
 
       chainedProxy.addResponseFilter((response, contents, messageInfo) -> {
-        if (messageInfo.getUrl().startsWith(Configuration.baseUrl)) {
+        if (messageInfo.getUrl().startsWith(Configuration.baseUrl) && !messageInfo.getUrl().endsWith("/favicon.ico")) {
           visitedUrls.add(messageInfo.getUrl());
         }
       });

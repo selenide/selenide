@@ -1,21 +1,21 @@
 package integration;
 
-import java.io.File;
-
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FileUploadTest extends IntegrationTest {
   @BeforeEach
   void openFileUploadForm() {
-    Assumptions.assumeFalse(isPhantomjs());
+    assumeFalse(isPhantomjs());
 
     if (isIE()) {
       closeWebDriver();

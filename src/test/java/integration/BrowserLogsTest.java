@@ -1,12 +1,11 @@
 package integration;
 
-import java.util.List;
-import java.util.logging.Level;
-
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.logging.Level;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -24,7 +23,9 @@ import static org.openqa.selenium.logging.LogType.BROWSER;
 class BrowserLogsTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    assumeFalse(isFirefox());  // Firefox says `UnsupportedCommandException: POST /session/b493bc56.../log did not match a known command`
+    // Firefox says `UnsupportedCommandException: POST /session/b493bc56.../log did not match a known command`
+    assumeFalse(isFirefox());
+
     getWebDriverLogs(BROWSER); // clear logs
     openFile("page_with_js_errors.html");
   }

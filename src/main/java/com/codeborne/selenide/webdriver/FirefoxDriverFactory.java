@@ -46,6 +46,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.negotiate-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.http.phishy-userpass-length", 255);
     firefoxOptions.addPreference("security.csp.enable", false);
+    firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
 
     firefoxOptions.merge(createCommonCapabilities(proxy));
     firefoxOptions = transferFirefoxProfileFromSystemProperties(firefoxOptions);
@@ -63,9 +64,11 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
         log.config("Use " + key + "=" + value);
         if (value.equals("true") || value.equals("false")) {
           profile.setPreference(capability, Boolean.valueOf(value));
-        } else if (value.matches("^-?\\d+$")) { //if integer
+        }
+        else if (value.matches("^-?\\d+$")) { //if integer
           profile.setPreference(capability, Integer.parseInt(value));
-        } else {
+        }
+        else {
           profile.setPreference(capability, value);
         }
       }
