@@ -5,7 +5,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -48,14 +47,11 @@ import static com.codeborne.selenide.Selenide.actions;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.title;
-import static com.codeborne.selenide.Selenide.zoom;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.url;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -543,38 +539,6 @@ class SelenideMethodsTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected)
         .hasMessageContaining("because it's sensitive information");
-    }
-  }
-
-  @Test
-  void canZoomInAndOut() {
-    assumeFalse(isPhantomjs());
-    int initialX = $(By.name("domain")).getLocation().getX();
-
-    zoom(1.1);
-    assertBetween("", $(By.name("domain")).getLocation().getY(), 140, 160);
-    assertThat($(By.name("domain")).getLocation().getX())
-      .isEqualTo(initialX);
-
-    zoom(2.0);
-    assertBetween("", $(By.name("domain")).getLocation().getY(), 240, 260);
-    assertThat($(By.name("domain")).getLocation().getX())
-      .isEqualTo(initialX);
-
-    zoom(0.5);
-    assertBetween("", $(By.name("domain")).getLocation().getY(), 70, 80);
-    assertThat($(By.name("domain")).getLocation().getX())
-      .isEqualTo(initialX);
-  }
-
-  private static void assertBetween(String message, int n, int lower, int upper) {
-    if (!isHtmlUnit()) {
-      Assertions.assertThat(n >= lower)
-        .withFailMessage(message + n + " should be between " + lower + " and " + upper)
-        .isTrue();
-      Assertions.assertThat(n <= upper)
-        .withFailMessage(message + n + " should be between " + lower + " and " + upper)
-        .isTrue();
     }
   }
 }
