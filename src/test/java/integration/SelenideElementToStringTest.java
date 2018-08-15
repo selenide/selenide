@@ -3,6 +3,7 @@ package integration;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -70,7 +71,7 @@ public class SelenideElementToStringTest extends IntegrationTest {
     assertThat($("#double-clickable-button").toString())
       .contains("value=\"double click me\"");
 
-    $("#double-clickable-button").doubleClick();
+    $("#double-clickable-button").shouldBe(enabled).doubleClick();
     $("#double-clickable-button").shouldHave(value("do not click me anymore"));
 
     assertThat($("#double-clickable-button").toString())
