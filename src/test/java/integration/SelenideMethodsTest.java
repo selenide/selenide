@@ -21,7 +21,6 @@ import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.empty;
-import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.focused;
@@ -44,7 +43,12 @@ import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.actions;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.Selenide.zoom;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
@@ -115,53 +119,6 @@ class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  void toStringMethodShowsElementDetails() {
-    assertThat($("h1"))
-      .hasToString("<h1>Page with selects</h1>");
-    assertThat($("h2"))
-      .hasToString("<h2>Dropdown list</h2>");
-    assertThat($(By.name("rememberMe")))
-      .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>");
-
-    if (isHtmlUnit()) {
-      assertThat($(By.name("domain")).find("option"))
-        .hasToString("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>");
-    } else {
-      assertThat($(By.name("domain")).find("option"))
-        .hasToString("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>");
-    }
-
-    assertThat($(byText("Want to see ajax in action?")).toString())
-      .contains("<a href=");
-    assertThat($(byText("Want to see ajax in action?")).toString())
-      .contains(">Want to see ajax in action?</a>");
-  }
-
-  @Test
-  void toStringShowsAllAttributesButStyleSortedAlphabetically() {
-    if (isHtmlUnit()) {
-      assertThat($("#gopher"))
-        .hasToString("<div class=\"invisible-with-multiple-attributes\" id=\"gopher\" " +
-          "onclick=\"void(0);\" onchange=\"console.log(this);\" placeholder=\"Животное\" " +
-          "displayed:false></div>");
-    } else {
-      assertThat($("#gopher"))
-        .hasToString("<div class=\"invisible-with-multiple-attributes\" " +
-          "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
-          "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
-          "displayed:false></div>");
-    }
-  }
-
-  @Test
-  void toStringShowsValueAttributeThatHasBeenUpdatedDynamically() {
-    $("#age").clear();
-    $("#age").sendKeys("21");
-    assertThat($("#age"))
-      .hasToString("<input id=\"age\" name=\"age\" type=\"text\" value=\"21\"></input>");
-  }
-
-  @Test
   void userCanGetInnerHtmlOfElement() {
     assertThat($(byValue("livemail.ru")).innerHtml())
       .isEqualTo("@livemail.ru");
@@ -177,7 +134,8 @@ class SelenideMethodsTest extends IntegrationTest {
         .isEqualTo("<span></span> L'a\n      Baskerville");
       assertThat($("#status").innerHtml().trim())
         .isEqualTo("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>");
-    } else {
+    }
+    else {
       assertThat($("#baskerville").innerHtml().trim())
         .isEqualTo("<span></span> L'a\n      Baskerville");
       assertThat($("#status").innerHtml().trim())
@@ -277,7 +235,8 @@ class SelenideMethodsTest extends IntegrationTest {
     if (isHtmlUnit()) {
       assertThat($("#radioButtons").text())
         .isEqualTo("Radio buttons\nuncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland");
-    } else {
+    }
+    else {
       assertThat($("#radioButtons").text())
         .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
     }
@@ -296,7 +255,8 @@ class SelenideMethodsTest extends IntegrationTest {
     if (isHtmlUnit()) {
       $("#radioButtons").shouldHave(text("Radio buttons\n" +
         "uncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland"));
-    } else {
+    }
+    else {
       $("#radioButtons").shouldHave(text("Radio buttons\n" +
         "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
     }
@@ -470,7 +430,8 @@ class SelenideMethodsTest extends IntegrationTest {
     try {
       baseUrl = "http://localhost:8080";
       open("www.yandex.ru");
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       assertThat(e.getAdditionalInformation())
         .contains("selenide.baseUrl: http://localhost:8080");
       assertThat(e.getAdditionalInformation())
@@ -486,33 +447,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
     $(By.name("domain")).find("option").click();
     $(By.name("domain")).find("option").contextClick();
-  }
-
-  @Test
-  void userCanDoubleClickOnElement() {
-    openFile("page_with_jquery.html");
-
-    $("#double-clickable-button")
-      .shouldHave(value("double click me"))
-      .shouldBe(enabled);
-
-    $("#double-clickable-button")
-      .doubleClick()
-      .shouldHave(value("do not click me anymore"))
-      .shouldBe(disabled);
-
-    $("h2").shouldHave(text("Double click worked"));
-  }
-
-  @Test
-  void toStringShowsCurrentValue_evenIfItWasDynamicallyChanged() {
-    openFile("page_with_jquery.html");
-    assertThat($("#double-clickable-button").toString())
-      .contains("value=\"double click me\"");
-
-    $("#double-clickable-button").doubleClick();
-    assertThat($("#double-clickable-button").toString())
-      .contains("value=\"do not click me anymore\"");
   }
 
   @Test
@@ -572,7 +506,8 @@ class SelenideMethodsTest extends IntegrationTest {
     try {
       $("h1").shouldNotHave(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
-    } catch (ElementShouldNot expected) {
+    }
+    catch (ElementShouldNot expected) {
       assertThat(expected)
         .hasMessageContaining("because it's wrong text");
     }
@@ -580,7 +515,8 @@ class SelenideMethodsTest extends IntegrationTest {
     try {
       $("h1").shouldNotBe(text("Page with selects").because("it's wrong text"));
       fail("exception expected");
-    } catch (ElementShouldNot expected) {
+    }
+    catch (ElementShouldNot expected) {
       assertThat(expected)
         .hasMessageContaining("because it's wrong text");
     }
@@ -591,7 +527,8 @@ class SelenideMethodsTest extends IntegrationTest {
     try {
       $("h1").waitWhile(visible.because("we expect it do disappear"), 100);
       fail("exception expected");
-    } catch (ElementShouldNot expected) {
+    }
+    catch (ElementShouldNot expected) {
       assertThat(expected)
         .hasMessageContaining("because we expect it do disappear");
     }
@@ -602,7 +539,8 @@ class SelenideMethodsTest extends IntegrationTest {
     try {
       $("h1").waitUntil(hidden.because("it's sensitive information"), 100);
       fail("exception expected");
-    } catch (ElementShould expected) {
+    }
+    catch (ElementShould expected) {
       assertThat(expected)
         .hasMessageContaining("because it's sensitive information");
     }
