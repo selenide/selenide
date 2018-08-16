@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.source;
@@ -37,11 +36,10 @@ class FrameWaitTest extends IntegrationTest {
   @Video
   void waitsUntilFrameAppears_byIndex() {
     assumeFalse(isHtmlUnit());
-    sleep(100);
 
     switchTo().frame(2);
-    sleep(100);
 
-    assertThat(source()).contains("Page with JQuery");
+    $("h1").shouldHave(text("Page with JQuery"));
+    assertThat(source()).contains("Test::jquery");
   }
 }

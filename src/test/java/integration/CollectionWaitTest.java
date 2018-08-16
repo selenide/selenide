@@ -43,6 +43,7 @@ class CollectionWaitTest extends IntegrationTest {
   void waitsUntilFirstNElementsGetLoaded() {
     $$("#collection li").first(3).shouldHave(texts("Element #0", "Element #1", "Element #2"));
   }
+
   @Test
   void waitsUntilLastNElementsGetLoaded() {
     $$("#collection li").last(2).shouldHave(texts("Element #48", "Element #49"));
