@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -18,11 +17,6 @@ class RadioTest extends IntegrationTest {
     openFile("page_with_selects_without_jquery.html");
     assertThat(getSelectedRadio(By.name("me")))
       .isNull();
-  }
-
-  @AfterEach
-  void resetProperties() {
-    Configuration.versatileSetValue = false;
   }
 
   @Test

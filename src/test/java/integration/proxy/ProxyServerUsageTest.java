@@ -1,5 +1,6 @@
 package integration.proxy;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
@@ -9,8 +10,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ProxyServerUsageTest extends IntegrationTest {
@@ -22,6 +26,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   void setUp() {
     assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     closeWebDriver();
+    Configuration.fileDownload = PROXY;
   }
 
   @Test
@@ -32,14 +37,14 @@ class ProxyServerUsageTest extends IntegrationTest {
 
     selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
       String url = messageInfo.getUrl();
-      if (!isChromeOwnTechnicalRequest(url)) {
+      if (!isBrowserOwnTechnicalRequest(url)) {
         requests.add(url + "\n\n" + contents.getTextContents());
       }
       return null;
     });
     selenideProxy.addResponseFilter("proxy-usages.response", (response, contents, messageInfo) -> {
       String url = messageInfo.getUrl();
-      if (!isChromeOwnTechnicalRequest(url)) {
+      if (!isBrowserOwnTechnicalRequest(url)) {
         responses.add(url + "\n\n" + contents.getTextContents());
       }
     });
@@ -64,7 +69,7 @@ class ProxyServerUsageTest extends IntegrationTest {
     assertThat(responses.get(0)).contains("<h3>Uploaded 1 files</h3>");
   }
 
-  private boolean isChromeOwnTechnicalRequest(String url) {
-    return url.contains("gstatic.com") || url.contains("google.com");
+  private boolean isBrowserOwnTechnicalRequest(String url) {
+    return !url.startsWith(Configuration.baseUrl);
   }
 }

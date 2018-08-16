@@ -76,15 +76,19 @@ public class ScreenShotLaboratory {
 
     WebDriver webdriver = getWebDriver();
 
+    File screenshot = null;
     if (Configuration.savePageSource) {
-      savePageSourceToFile(fileName, webdriver);
+      screenshot = savePageSourceToFile(fileName, webdriver);
     }
 
     File imageFile = savePageImageToFile(fileName, webdriver);
-    if (imageFile == null) {
+    if (imageFile != null) {
+      screenshot = imageFile;
+    }
+    if (screenshot == null) {
       return null;
     }
-    return addToHistory(imageFile).getAbsolutePath();
+    return addToHistory(screenshot).getAbsolutePath();
   }
 
   public File takeScreenshot(WebElement element) {

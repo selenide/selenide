@@ -81,7 +81,8 @@ public abstract class IntegrationTest implements WithAssertions {
     Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
-    browserSize = "1024x768";
+    versatileSetValue = false;
+    browserSize = "1200x960";
     server.reset();
 
     // proxy breaks Firefox/Marionette because of this error:

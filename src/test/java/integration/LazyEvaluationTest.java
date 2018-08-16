@@ -16,7 +16,7 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 class LazyEvaluationTest extends IntegrationTest {
 
   private SelenideElement h1 = $("h1");
-  private SelenideElement button = $("#double-clickable-button");
+  private SelenideElement button = $("#some-button");
   private SelenideElement input1 = $$("input").first();
   private SelenideElement input2 = $$("input").last();
   private SelenideElement input3 = $$("input").get(2);

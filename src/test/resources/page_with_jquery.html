@@ -26,15 +26,6 @@
       function offHover(element) {
         $(element).text("It's not hover.");
       }
-      $(function() {
-        $('#double-clickable-button').on('dblclick', function(e) {
-          $('h2').text('Double click worked');
-          $(this).val("do not click me anymore");
-          $(this).attr('disabled', true);
-          e.stopImmediatePropagation();
-        });
-      });
-
   </script>
 </head>
 <body>
@@ -55,7 +46,7 @@
       </label> <br/>
       <input type="checkbox" id="rememberMe" name="rememberMe" onchange="onRememberMeChanged();">Remember me<br/><br/>
     </fieldset>
-    <input type="button" id="double-clickable-button" value="double click me">
+    <input type="button" id="some-button" value="click me">
   </form>
 </div>
 

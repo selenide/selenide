@@ -2,7 +2,6 @@ package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.UIAssertionError;
 import integration.IntegrationTest;
@@ -18,7 +17,9 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 
@@ -51,35 +52,21 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, "ul .nonexistent");
     }
-        /*
-            caused by - different expression for chrome & ff
-
-            ff
-            Element not found {ul .nonexistent}
-            Expected: text 'Miller'
-
-            Screenshot: file:/..._WithNonExistentWebElement/1471304286016.0.png
-            Timeout: 0 ms.
-            Caused by:
-            NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
-
-            chrome
-            Element not found {ul .nonexistent}
-            Expected: text 'Miller'
-
-            Screenshot: file:/..._WithNonExistentElement/1477036866229.0.png
-            Timeout: 0 ms.
-            Caused by: NoSuchElementException: no such element:
-              Unable to locate element: {"method":"css selector","selector":"ul .nonexistent"}
-
-        */
   }
 
   private void assertCauseMessage(UIAssertionError expected, String selector) {
-    if (WebDriverRunner.isPhantomjs()) {
-      assertThat(expected.getCause())
-        .hasMessageContaining("Unable to find element with css selector '" + selector + "'");
-    } else if (!isHtmlUnit()) {
+    if (isPhantomjs()) {
+      assertThat(expected.getCause()).hasMessageContaining("Unable to find element with css selector '" + selector + "'");
+    }
+    else if (isHtmlUnit()) {
+      if (!expected.getCause().getMessage().contains("Returned node (null) was not a DOM element")) {
+        assertThat(expected.getCause()).hasMessageContaining("Cannot find child element using css: " + selector);
+      }
+    }
+    else if (isFirefox()) {
+      assertThat(expected.getCause()).hasMessageContaining("Unable to locate element: " + selector);
+    }
+    else {
       assertThat(expected.getCause())
         .hasMessageContaining("Unable to locate element: {\"method\":\"css selector\",\"selector\":\"" + selector + "\"}");
     }
@@ -103,16 +90,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 1, Size: 0");
     }
-    //todo - is it OK??
-        /*
-            Element not found {ul .nonexistent}
-            Expected: visible
-
-            Screenshot: file:/..._WithNonExistentCollection/1471345897750.0.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 1, Size: 0
-        */
-
   }
 
   @Test
@@ -133,14 +110,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 10, Size: 2");
     }
-        /*
-            Element not found {ul li[10]}
-            Expected: text 'Miller'
-
-            Screenshot: file:/..._WithIndexOutOfRange/1471346375481.0.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 10, Size: 2
-        */
   }
 
   @Test
@@ -161,14 +130,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 10, Size: 2");
     }
-        /*
-            Element not found {ul li[10]}
-            Expected: visible
-
-            Screenshot: file:/..._WithIndexOutOfRange/1471347320304.0.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 10, Size: 2
-        */
   }
 
   @Test
@@ -189,17 +150,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Element not found {.nonexistent.findBy(css class 'the-expanse')}");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: visible
-
-            Screenshot: file:/..._WithNonExistentCollection/1471347808745.0.png
-            Timeout: 0 ms.
-            Caused by: Element not found {.nonexistent.findBy(css class 'the-expanse')}
-            Expected: css class 'the-expanse'
-            Screenshot: null
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -220,17 +170,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Element not found {li.findBy(css class 'nonexistent')}");
     }
-        /*
-            Element not found {li.findBy(css class 'nonexistent')}
-            Expected: visible
-
-            Screenshot: file:/..._WithNotSatisfiedCondition/1471348458110.0.png
-            Timeout: 0 ms.
-            Caused by: Element not found {li.findBy(css class 'nonexistent')}
-            Expected: css class 'nonexistent'
-            Screenshot: null
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -249,13 +188,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isNull();
     }
-        /*
-            Element not found {li.findBy(css class 'nonexistent')}
-            Expected: css class 'nonexistent'
-
-            Screenshot: file:/..._WithNotSatisfiedCondition/1471348636944.0.png
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -275,14 +207,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: exist
-
-            Screenshot: file:/..._WithNonExistentOuterElement/1471351158103.1.png
-            Timeout: 0 ms.
-            Caused by: NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
-        */
   }
 
   @Test
@@ -302,15 +226,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: visible
-
-            Screenshot: file:/..._WithNonExistentInnerElement/1471352505699.0.png
-            Timeout: 0 ms.
-            Caused by:
-            NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
-        */
   }
 
   @Test
@@ -330,21 +245,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: visible
-
-            Screenshot: file:..._WithNonExistentInnerElement/1471353844670.0.png
-            Timeout: 0 ms.
-            Caused by:
-            NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
-        */
   }
-
-  /******************************************************
-   * More complicated useful options
-   * $$.filterBy(condition).findBy(condition).find
-   ******************************************************/
 
   @Test
   void shouldCondition_WhenInnerElementFromOuterElementByConditionInFilteredCollection_WithNonExistentStartCollection() {
@@ -364,17 +265,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}");
     }
-        /*
-            Element not found {ul .nonexistent.filter(css class 'the-expanse')}
-            Expected: visible
-
-            Screenshot: file:/..._WithNonExistentStartCollection/1471821878793.1.png
-            Timeout: 0 ms.
-            Caused by: Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}
-            Expected: css class 'detective'
-            Screenshot: null
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -395,17 +285,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}");
     }
-        /*
-            Element not found {ul li.filter(css class 'nonexistent')}
-            Expected: visible
-
-            Screenshot: file:/..._WithEmptyFilteredCollection/1471822913839.1.png
-            Timeout: 0 ms.
-            Caused by: Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}
-            Expected: css class 'detective'
-            Screenshot: null
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -426,17 +305,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}");
     }
-        /*
-            Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}
-            Expected: exist
-
-            Screenshot: file:/..._WithNonExistentOuterElement/1471823230953.1.png
-            Timeout: 0 ms.
-            Caused by: Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'nonexistent')}
-            Expected: css class 'nonexistent'
-            Screenshot: null
-            Timeout: 0 ms.
-        */
   }
 
   @Test
@@ -456,21 +324,8 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: exact text 'detective'
-
-            Screenshot: file:/..._WithNonExistentInnerElement/1471823617503.0.png
-            Timeout: 0 ms.
-            Caused by:
-            NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
-        */
   }
 
-  /******************************************************
-   * More complicated useful options
-   * $$.filterBy(condition).get(index).find
-   ******************************************************/
   @Test
   void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithNonExistentStartCollection() {
     SelenideElement element = $$("ul .nonexistent").filterBy(cssClass("the-expanse")).get(0).find("label");
@@ -489,14 +344,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 0, Size: 0");
     }
-        /*
-            Element not found {ul .nonexistent.filter(css class 'the-expanse')}
-            Expected: visible
-
-            Screenshot: file:/..._WithNonExistentStartCollection/1471824227187.1.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
-        */
   }
 
   @Test
@@ -517,14 +364,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 0, Size: 0");
     }
-        /*
-            Element not found {ul li.filter(css class 'nonexistent')}
-            Expected: visible
-
-            Screenshot: file:/..._WithEmptyFilteredCollection/1471824645294.1.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
-        */
   }
 
   @Test
@@ -545,15 +384,6 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageStartingWith("Index: 2, Size: 2");
     }
-        /*
-            Element not found {ul li.filter(css class 'the-expanse')[2]}
-            Expected: exist
-
-            Screenshot: file:/..._WithIndexOutOfRange/1471824926318.1.png
-            Timeout: 0 ms.
-            Caused by: java.lang.IndexOutOfBoundsException: Index: 2, Size: 2
-
-        */
   }
 
   @Test
@@ -573,14 +403,5 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
         .isInstanceOf(NoSuchElementException.class);
       assertCauseMessage(expected, ".nonexistent");
     }
-        /*
-            Element not found {.nonexistent}
-            Expected: exact text 'detective'
-
-            Screenshot: file:/..._WithNonExistentInnerElement/1471825188045.0.png
-            Timeout: 0 ms.
-            Caused by:
-            NoSuchElementException: Unable to locate element: {"method":"css selector","selector":".nonexistent"}
-        */
   }
 }

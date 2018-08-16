@@ -16,18 +16,6 @@
   <!--https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml-->
 
   <module name="TreeWalker">
-    <!--<module name="JavadocVariable"/>-->
-    <!--<module name="JavadocStyle"/>-->
-    <module name="JavadocMethod">
-      <property name="scope" value="public"/>
-      <property name="allowMissingReturnTag" value="true"/>
-      <property name="allowMissingParamTags" value="true"/>
-      <property name="allowMissingThrowsTags" value="true"/>
-      <property name="allowUndeclaredRTE" value="true"/>
-      <property name="allowThrowsTagsForSubclasses" value="false"/>
-      <property name="logLoadErrors" value="true"/>
-      <property name="suppressLoadErrors" value="false"/>
-    </module>
     <module name="PackageName">
       <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
     </module>

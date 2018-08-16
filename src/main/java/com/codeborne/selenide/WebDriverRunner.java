@@ -64,8 +64,6 @@ public class WebDriverRunner {
   /**
    * To use JbrowserDriver, you need to include extra dependency to your project:
    * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
-   *
-   * Note: You need minimum of Java 8.
    */
   public static final String JBROWSER = "jbrowser";
 

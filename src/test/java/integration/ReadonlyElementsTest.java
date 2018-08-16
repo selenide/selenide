@@ -35,7 +35,9 @@ class ReadonlyElementsTest extends IntegrationTest {
     final List<String> exceptionMessages = Arrays.asList(
       "Element is read-only and so may not be used for actions",
       "Element must be user-editable in order to clear it",
-      "You may only edit editable elements");
+      "You may only edit editable elements",
+      "Element is read-only: <input name=\"username\">"
+    );
 
     Configuration.fastSetValue = false;
 
@@ -67,7 +69,8 @@ class ReadonlyElementsTest extends IntegrationTest {
       "Element must be user-editable in order to clear it",
       "You may only edit editable elements",
       "You may only interact with enabled elements",
-      "Element is not currently interactable and may not be manipulated");
+      "Element is not currently interactable and may not be manipulated",
+      "Element is disabled");
 
     Configuration.fastSetValue = false;
 
