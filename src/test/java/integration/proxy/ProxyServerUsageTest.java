@@ -68,6 +68,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
-    return url.contains("/favicon.ico") || url.contains("gstatic.com") || url.contains("google.com") || url.contains("mozilla.com");
+    return url.contains("/favicon.ico") || url.contains("gstatic.com") || url.contains("google.com")
+      || url.contains("mozilla.com")|| url.contains("mozilla.net");
   }
 }
