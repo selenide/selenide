@@ -12,7 +12,9 @@ import java.util.List;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ProxyServerUsageTest extends IntegrationTest {
@@ -68,7 +70,6 @@ class ProxyServerUsageTest extends IntegrationTest {
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
-    return url.contains("/favicon.ico") || url.contains("gstatic.com") || url.contains("google.com")
-      || url.contains("mozilla.com")|| url.contains("mozilla.net");
+    return !url.startsWith(Configuration.baseUrl);
   }
 }
