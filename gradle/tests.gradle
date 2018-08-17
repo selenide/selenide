@@ -79,7 +79,7 @@ tasks.withType(Test) {
   } else {
     maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   }
-  jvmArgs = ['-ea', '-Xmx64m']
+  jvmArgs = ['-ea', '-Xmx128m']
   systemProperties += System.properties
   jacoco {
     enabled = true

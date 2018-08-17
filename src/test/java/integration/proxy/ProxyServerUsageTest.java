@@ -70,6 +70,6 @@ class ProxyServerUsageTest extends IntegrationTest {
   }
 
   private boolean isBrowserOwnTechnicalRequest(String url) {
-    return !url.startsWith(Configuration.baseUrl);
+    return !url.startsWith(Configuration.baseUrl) || url.contains("/favicon.ico");
   }
 }
