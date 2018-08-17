@@ -14,4 +14,4 @@ Selenide adaptor for Appium framework
    > appium
 
 * And finally, run the test:
-   > gradle test
+   > ./gradlew test
