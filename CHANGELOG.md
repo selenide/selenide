@@ -4,6 +4,7 @@
 * Upgrade to Selenium 3.14.0. 
   SelenideElement does not implement the following deprecated interfaces
   anymore: FindsByLinkText, FindsById, FindsByName, FindsByTagName, FindsByClassName, FindsByCssSelector, FindsByXPath, HasIdentity
+* #709 fix a misleading error message $.selectOptionByValue() reports #709  -- thanks to Keita Tsukamoto for PR 780
 
 ## 4.12.3 (released 17.07.2018)
 * [#696](https://github.com/codeborne/selenide/issues/696) Reload collection on every method call

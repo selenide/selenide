@@ -35,6 +35,26 @@ class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void selectOptionByValue_errorMessage() {
+    assertThatThrownBy(() -> {
+      SelenideElement select = $(By.xpath("//select[@name='domain']"));
+      select.selectOptionByValue("wrong-value");
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {By.xpath: //select[@name='domain']/option[value:wrong-value]}");
+  }
+
+  @Test
+  void selectOptionByText_errorMessage() {
+    assertThatThrownBy(() -> {
+      SelenideElement select = $(By.xpath("//select[@name='domain']"));
+      select.selectOption("wrong-text");
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {By.xpath: //select[@name='domain']/option[text:wrong-text]}");
+  }
+
+  @Test
   void userCanSelectValueUsingSetValue() {
     Configuration.versatileSetValue = true;
     SelenideElement select = $(byName("domain"));

@@ -5,7 +5,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
@@ -13,22 +12,25 @@ public class SelectOptionByValue implements Command {
   @Override
   public Object execute(SelenideElement proxy, WebElementSource selectField, Object[] args) {
     Select select = new Select(selectField.getWebElement());
+
     if (args[0] instanceof String) {
-      try {
-        select.selectByValue((String) args[0]);
-      } catch (NoSuchElementException e) {
-        throw new ElementNotFound("Cannot locate option with value: @" + (String) args[0], Condition.exist, e);
-      }
-    } else if (args[0] instanceof String[]) {
+      selectOptionByValue(selectField, select, (String) args[0]);
+    }
+    else if (args[0] instanceof String[]) {
       String[] values = (String[]) args[0];
       for (String value : values) {
-        try {
-          select.selectByValue(value);
-        } catch (NoSuchElementException e) {
-          throw new ElementNotFound("Cannot locate option with value: @" + value, Condition.exist, e);
-        }
+        selectOptionByValue(selectField, select, value);
       }
     }
     return null;
+  }
+
+  private void selectOptionByValue(WebElementSource selectField, Select select, String value) {
+    try {
+      select.selectByValue(value);
+    }
+    catch (NoSuchElementException e) {
+      throw new ElementNotFound(selectField.getSearchCriteria() + "/option[value:" + value + ']', Condition.exist, e);
+    }
   }
 }

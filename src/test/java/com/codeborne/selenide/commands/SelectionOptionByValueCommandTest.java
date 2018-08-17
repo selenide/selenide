@@ -32,6 +32,7 @@ class SelectionOptionByValueCommandTest implements WithAssertions {
     mockedFoundElement = mock(WebElement.class);
 
     when(selectField.getWebElement()).thenReturn(mockedElement);
+    when(selectField.getSearchCriteria()).thenReturn("By.tagName{select}");
     when(mockedElement.getText()).thenReturn(defaultElementValue);
     when(mockedElement.getTagName()).thenReturn("select");
     when(mockedFoundElement.isSelected()).thenReturn(true);
@@ -60,13 +61,13 @@ class SelectionOptionByValueCommandTest implements WithAssertions {
   }
 
   @Test
-  void testSelectByValueWhenElementIsNotFound() {
+  void selectByValueWhenElementIsNotFound() {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.emptyList());
     assertThatThrownBy(() -> {
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
     }).isInstanceOf(ElementNotFound.class)
-      .hasMessage(String.format("Element not found {Cannot locate option with value: @%s}\nExpected: exist", defaultElementValue));
+      .hasMessage(String.format("Element not found {By.tagName{select}/option[value:%s]}\nExpected: exist", defaultElementValue));
   }
 }
