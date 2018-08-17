@@ -1,8 +1,8 @@
 == Changelog
 
 === 1.1 (work in progress)
-* upgrade to selenide:4.11.4
-* upgrade to io.appium:java-client:6.0.0-BETA5˚
+* upgrade to selenide:4.12.3
+* upgrade to io.appium:java-client:6.1.0˚
 
 === 1.0 (Released 31.12.2017)
 * First version
