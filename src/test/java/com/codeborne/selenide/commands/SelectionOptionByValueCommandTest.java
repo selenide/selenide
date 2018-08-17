@@ -3,12 +3,12 @@ package com.codeborne.selenide.commands;
 import java.util.Collections;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 
@@ -64,11 +64,9 @@ class SelectionOptionByValueCommandTest implements WithAssertions {
     when(mockedElement.findElements(By.xpath(
       ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
       .thenReturn(Collections.emptyList());
-    try {
+    assertThatThrownBy(() -> {
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
-    } catch (NoSuchElementException exception) {
-      assertThat(exception)
-        .hasMessageContaining(String.format("Cannot locate option with value: %s", defaultElementValue));
-    }
+    }).isInstanceOf(ElementNotFound.class)
+      .hasMessage(String.format("Element not found {Cannot locate option with value: @%s}\nExpected: exist", defaultElementValue));
   }
 }
