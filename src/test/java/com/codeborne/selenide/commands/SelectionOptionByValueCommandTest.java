@@ -9,12 +9,9 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 
-import static com.codeborne.selenide.Selenide.prompt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
