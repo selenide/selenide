@@ -14,9 +14,7 @@
           <root url="file://$MODULE_DIR$/build/lib" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.ideaLibSources/java-client-5.0.4-sources.jar!/" />
-        </SOURCES>
+        <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/build/lib" recursive="false" />
       </library>
     </orderEntry>
