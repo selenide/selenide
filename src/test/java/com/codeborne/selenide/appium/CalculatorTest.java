@@ -21,7 +21,7 @@ public class CalculatorTest extends BaseTest {
 
   @Test
   public void pageObject() {
-    screen(calculatorPage);
+    CalculatorPage calculatorPage = screen(CalculatorPage.class);
     calculatorPage.number2.click();
     calculatorPage.plus.click();
     calculatorPage.number4.click();
