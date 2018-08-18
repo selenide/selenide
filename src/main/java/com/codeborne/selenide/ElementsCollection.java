@@ -40,46 +40,58 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Asserts if the collection is of given size
-   *
-   * @param expectedSize
-   * @return ElementsCollection
+   * Deprecated. Use {@code $$.shouldHave(size(expectedSize))} instead.
    */
   public ElementsCollection shouldHaveSize(int expectedSize) {
     return shouldHave(CollectionCondition.size(expectedSize));
   }
 
   /**
-   * Asserts conditions
-   * $$(".error").shouldBe(empty)
-   *
+   * For example: {@code $$(".error").shouldBe(empty)}
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", conditions);
+    return should("be", collectionsTimeout, conditions);
+  }
+
+  public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
+    return should("be", timeoutMs, toArray(condition));
   }
 
   /**
-   * Assert conditions
-   * $$(".error").shouldHave(size(3))
-   * $$(".error").shouldHave(texts("Error1", "Error2"))
+   * For example:
+   * {@code $$(".error").shouldHave(size(3))}
+   * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", conditions);
+    return should("have", collectionsTimeout, conditions);
   }
 
-  protected ElementsCollection should(String prefix, CollectionCondition... conditions) {
+  /**
+   * Check if a collection matches given condition within given period
+   *
+   * @param timeoutMs maximum waiting time in milliseconds
+   */
+  public ElementsCollection shouldHave(CollectionCondition condition, long timeoutMs) {
+    return should("have", timeoutMs, toArray(condition));
+  }
+
+  private CollectionCondition[] toArray(CollectionCondition condition) {
+    return new CollectionCondition[]{condition};
+  }
+
+  protected ElementsCollection should(String prefix, long timeoutMs, CollectionCondition... conditions) {
     validateAssertionMode();
 
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
       for (CollectionCondition condition : conditions) {
-        waitUntil(condition, collectionsTimeout);
+        waitUntil(condition, timeoutMs);
       }
       SelenideLogger.commitStep(log, PASS);
       return this;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(error, collectionsTimeout);
+      Error wrappedError = UIAssertionError.wrap(error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       switch (assertionMode) {
         case SOFT:

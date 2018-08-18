@@ -70,7 +70,7 @@ class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(Collections.emptyList());
 
-    assertThatThrownBy(() -> collection.should("Size", CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Size", 1, CollectionCondition.size(1)))
       .isInstanceOf(Error.class);
   }
 
@@ -79,7 +79,7 @@ class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     doThrow(RuntimeException.class).when(source).getElements();
 
-    assertThatThrownBy(() -> collection.should("Be size 1", CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Be size 1", 1, CollectionCondition.size(1)))
       .isInstanceOf(RuntimeException.class);
   }
 
