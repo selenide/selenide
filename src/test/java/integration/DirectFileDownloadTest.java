@@ -14,7 +14,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 public class DirectFileDownloadTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    openFile("/");
+    openFile("page_with_big_divs.html");
   }
 
   @Test

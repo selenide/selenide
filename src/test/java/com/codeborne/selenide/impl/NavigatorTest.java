@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Configuration;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -53,10 +54,8 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void returnsAbsoluteUrl() {
-    String baseUrl = "http://localhost:8080";
-    String relativeUrl = "/users/id=1";
-    String absoluteUrl = navigator.absoluteUrl(relativeUrl);
-    assertThat(absoluteUrl)
-      .isEqualTo(baseUrl + relativeUrl);
+    Configuration.baseUrl = "http://localhost:8080";
+    String absoluteUrl = navigator.absoluteUrl("/users/id=1");
+    assertThat(absoluteUrl).isEqualTo("http://localhost:8080/users/id=1");
   }
 }
