@@ -31,7 +31,8 @@ class CollectionWaitTest extends IntegrationTest {
   @Test
   void failsIfWrongSize() {
     assertThatThrownBy(() -> $$("#collection li").shouldHave(size(-1)))
-      .isInstanceOf(AssertionError.class);
+      .isInstanceOf(AssertionError.class)
+      .hasMessageContaining("expected: = -1, actual: 50, collection: #collection li");
   }
 
   @Test
@@ -51,7 +52,7 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void firstNElements_errorMessage() {
-    Configuration.timeout = 1;
+    Configuration.collectionsTimeout = 4000;
     Assertions.assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #0, Element #1]\n" +
@@ -61,11 +62,17 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void lastNElements_errorMessage() {
-    Configuration.timeout = 1;
+    Configuration.collectionsTimeout = 4000;
     Assertions.assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element #wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #48, Element #49]\n" +
         "Expected: [Element #wrong]\n" +
         "Collection: #collection li.last(2)");
+  }
+
+  @Test
+  void customTimeoutForCollections() {
+    Configuration.collectionsTimeout = 1;
+    $$("#collection li").last(2).shouldHave(texts("Element #48", "Element #49"), 5000);
   }
 }
