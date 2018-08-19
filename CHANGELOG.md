@@ -1,10 +1,20 @@
 # Changelog
 
-## 4.12.4
-* Upgrade to Selenium 3.14.0. 
+## 4.13.0 (released 20.08.2018)
+* #771 Added method `$.lastChild()` for retrieving the last child element of a given element
+* #601 Added collection checks with custom timeout  --  see PR #781
+* #782 Added method `Selenide.download(url)`
+
+* #773 Upgraded to Selenium 3.14.0. 
   SelenideElement does not implement the following deprecated interfaces
   anymore: FindsByLinkText, FindsById, FindsByName, FindsByTagName, FindsByClassName, FindsByCssSelector, FindsByXPath, HasIdentity
-* #709 fix a misleading error message $.selectOptionByValue() reports #709  -- thanks to Keita Tsukamoto for PR 780
+
+* #273 Method `switchTo().alert()` now throws `NoAlertPresentException` instead of `TimeoutException`  -- thanks to @tsukakei for PR #774
+* #709 Fixed a misleading error message $.selectOptionByValue() reports  -- thanks to Keita Tsukamoto for PR #780
+* #734 Fixed incorrect filename of downloaded file  -- thanks to @rosolko for PR 768
+* #783 Upgraded to webdrivermanager 2.2.5   -- see [https://github.com/bonigarcia/webdrivermanager/blob/master/changelog](changelog)
+* #775 Upgrade to htmlunit 2.32.1
+* #778 Fixed Selenide tests for FireFox
 
 ## 4.12.3 (released 17.07.2018)
 * [#696](https://github.com/codeborne/selenide/issues/696) Reload collection on every method call
