@@ -57,7 +57,7 @@
     <module name="UnnecessaryParentheses"/>
     <!--<module name="MutableException"/>-->
     <module name="ClassFanOutComplexity">
-        <property name="max" value="26"/>
+      <property name="max" value="28"/>
     </module>
     <module name="CyclomaticComplexity">
       <property name="max" value="20"/>

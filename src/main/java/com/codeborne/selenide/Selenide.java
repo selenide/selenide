@@ -3,10 +3,12 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.BySelectorCollection;
+import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -18,6 +20,8 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.time.Duration;
@@ -864,6 +868,23 @@ public class Selenide {
    */
   public static boolean atBottom() {
     return Selenide.executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+  }
+
+  /**
+   * Download file using a direct link.
+   * This method download file like it would be done in currently opened browser:
+   * it adds all cookies and "User-Agent" header to the downloading request.
+   *
+   * @param url either relative or absolute url
+   * @return downloaded File in folder `Configuration.reportsFolder`
+   * @throws IOException if failed to download file
+   */
+  public static File download(String url) throws IOException {
+    return download(url, timeout);
+  }
+
+  public static File download(String url, long timeoutMs) throws IOException {
+    return new DownloadFileWithHttpRequest().download(url, timeoutMs);
   }
 
   private static <T> List<String> listToString(List<T> objects) {
