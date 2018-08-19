@@ -50,7 +50,6 @@ public abstract class IntegrationTest implements WithAssertions {
         log.info("START " + browser + " TESTS");
         server = new LocalHttpServer(port, SSL).start();
         protocol = SSL ? "https://" : "http://";
-        Configuration.baseUrl = protocol + "127.0.0.1:" + port;
       }
     }
   }

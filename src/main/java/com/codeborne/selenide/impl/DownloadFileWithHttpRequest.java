@@ -45,7 +45,7 @@ import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 public class DownloadFileWithHttpRequest {
   private static final Logger log = Logger.getLogger(DownloadFileWithHttpRequest.class.getName());
 
-  public static boolean ignoreSelfSignedCerts = true;
+  protected boolean ignoreSelfSignedCerts = true;
 
   private HttpHelper httpHelper = new HttpHelper();
 
@@ -55,20 +55,29 @@ public class DownloadFileWithHttpRequest {
       throw new IllegalArgumentException("The element does not have href attribute: " + describe(element));
     }
 
-    HttpResponse response = executeHttpRequest(fileToDownloadLocation, timeout);
+    return download(fileToDownloadLocation, timeout);
+  }
+
+  public File download(String relativeOrAbsoluteUrl, long timeout) throws IOException {
+    String url = makeAbsoluteUrl(relativeOrAbsoluteUrl);
+    HttpResponse response = executeHttpRequest(url, timeout);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
-          fileToDownloadLocation + ": " + response.getStatusLine());
+        url + ": " + response.getStatusLine());
     }
     if (response.getStatusLine().getStatusCode() >= 400) {
       throw new FileNotFoundException("Failed to download file " +
-          fileToDownloadLocation + ": " + response.getStatusLine());
+        url + ": " + response.getStatusLine());
     }
 
-    File downloadedFile = prepareTargetFile(fileToDownloadLocation, response);
+    File downloadedFile = prepareTargetFile(url, response);
 
     return saveFileContent(response, downloadedFile);
+  }
+
+  String makeAbsoluteUrl(String relativeOrAbsoluteUrl) {
+    return relativeOrAbsoluteUrl.startsWith("/") ? Configuration.baseUrl + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
 
   protected HttpResponse executeHttpRequest(String fileToDownloadLocation, long timeout) throws IOException {
@@ -149,7 +158,7 @@ public class DownloadFileWithHttpRequest {
     return new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
   }
 
-  protected String getFileName(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
+  protected String getFileName(String fileToDownloadLocation, HttpResponse response) {
     for (Header header : response.getAllHeaders()) {
       Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
       if (fileName.isPresent()) {
