@@ -11,7 +11,7 @@ ext {
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-  api('io.github.bonigarcia:webdrivermanager:2.2.3')
+  api('io.github.bonigarcia:webdrivermanager:2.2.5')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
   implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
