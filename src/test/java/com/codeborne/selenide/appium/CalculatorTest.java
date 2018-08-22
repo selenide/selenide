@@ -1,8 +1,10 @@
 package com.codeborne.selenide.appium;
 
+import com.codeborne.selenide.CollectionCondition;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.appium.ScreenObject.screen;
@@ -27,5 +29,15 @@ public class CalculatorTest extends BaseTest {
     calculatorPage.number4.click();
     calculatorPage.equal.click();
     calculatorPage.result.shouldHave(text("6"));
+  }
+
+  @Test
+  public void pageObjectWithCollection() {
+    CalculatorPageWithCollection calculatorPage = screen(CalculatorPageWithCollection.class);
+    calculatorPage.selectDigit2();
+    calculatorPage.plus.shouldHave(size(1)).get(0).click();
+    calculatorPage.number4.shouldHave(size(1)).get(0).click();
+    calculatorPage.equal.shouldHave(size(1)).get(0).click();
+    calculatorPage.result.shouldHave(size(1)).get(0).shouldHave(text("6"));
   }
 }

@@ -8,11 +8,13 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenideElementListProxy;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
+import io.appium.java_client.HasSessionDetails;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.DefaultElementByBuilder;
+import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -32,20 +34,37 @@ import static java.util.stream.Collectors.toList;
 public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   private final SearchContext searchContext;
   private final ElementLocatorFactory factory;
+  private final AppiumByBuilder builder;
 
   public SelenideAppiumFieldDecorator(SearchContext context) {
     super(context);
     this.searchContext = context;
     this.factory = new DefaultElementLocatorFactory(searchContext);
+    this.builder = byBuilder(context);
+  }
+
+  private DefaultElementByBuilder byBuilder(SearchContext driver) {
+    if (driver == null
+      || !HasSessionDetails.class.isAssignableFrom(driver.getClass())) {
+      return new DefaultElementByBuilder(null, null);
+    } else {
+      HasSessionDetails d = HasSessionDetails.class.cast(driver);
+      return new DefaultElementByBuilder(d.getPlatformName(), d.getAutomationName());
+    }
   }
 
   @Override
   public Object decorate(ClassLoader loader, Field field) {
-    By selector = new Annotations(field).buildBy();
+    builder.setAnnotated(field);
+    By selector = builder.buildBy();
+
+    if (selector == null) {
+      selector = new Annotations(field).buildBy();
+    }
+
     if (selector instanceof ByIdOrName) {
-      // throw new IllegalArgumentException("Please define locator for " + field);
       return decorateWithAppium(loader, field);
-    } else if (WebElement.class.isAssignableFrom(field.getType())) {
+    } else if (SelenideElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(searchContext, selector, 0);
     } else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return new ElementsCollection(new BySelectorCollection(searchContext, selector));
@@ -57,13 +76,13 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
 
-    return decorateWithAppium(loader, field);
+    return super.decorate(loader, field);
   }
 
   private Object decorateWithAppium(ClassLoader loader, Field field) {
     Object appiumElement = super.decorate(loader, field);
     if (appiumElement instanceof MobileElement) {
-      return Selenide.$((WebElement) appiumElement);
+      return Selenide.$((MobileElement) appiumElement);
     }
     return appiumElement;
   }
