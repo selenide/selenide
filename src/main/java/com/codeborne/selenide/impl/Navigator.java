@@ -1,7 +1,10 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import io.netty.handler.codec.http.HttpHeaders;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -12,6 +15,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -37,6 +41,19 @@ public class Navigator {
 
   public void open(URL url, String domain, String login, String password) {
     navigateToAbsoluteUrl(url.toExternalForm());
+  }
+
+  public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, String login, String password) {
+    getAndCheckWebDriver();
+    Credentials credentials = new Credentials(login, password);
+    String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
+    getSelenideProxy().addRequestFilter("headers.request", (request, contents, messageInfo) -> {
+      final HttpHeaders headers = request.headers();
+      headers.add("Authorization", authorization);
+      headers.add("Proxy-Authorization", authorization);
+      return null;
+    });
+    open(relativeOrAbsoluteUrl);
   }
 
   protected String absoluteUrl(String relativeUrl) {

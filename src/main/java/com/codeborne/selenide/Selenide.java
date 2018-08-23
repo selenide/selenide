@@ -9,7 +9,6 @@ import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 
-import net.lightbody.bmp.BrowserMobProxy;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -39,8 +38,6 @@ import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
@@ -122,15 +119,8 @@ public class Selenide {
    * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization">Web HTTP reference</a>
    * @see AuthenticationType
    */
-  public static void open(final String relativeOrAbsoluteUrl, final AuthenticationType authenticationType,
-                          final String login, final String password) {
-    getAndCheckWebDriver();
-    final BrowserMobProxy proxy = getSelenideProxy().getProxy();
-    final Credentials credentials = new Credentials(login, password);
-    final String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
-    proxy.addHeader("Authorization", authorization);
-    proxy.addHeader("Proxy-Authorization", authorization);
-    navigator.open(relativeOrAbsoluteUrl);
+  public static void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, String login, String password) {
+    navigator.open(relativeOrAbsoluteUrl, authenticationType, login, password);
   }
 
   /**

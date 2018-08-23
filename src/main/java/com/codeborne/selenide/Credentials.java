@@ -4,11 +4,11 @@ import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-final class Credentials {
+public final class Credentials {
   private String login;
   private String password;
 
-  Credentials(final String login, final String password) {
+  public Credentials(final String login, final String password) {
     this.login = login;
     this.password = password;
   }
@@ -18,7 +18,7 @@ final class Credentials {
    *
    * @return encoded string
    */
-  String encode() {
+  public String encode() {
     final byte[] credentialsBytes = combine().getBytes(UTF_8);
     return Base64.getEncoder().encodeToString(credentialsBytes);
   }
