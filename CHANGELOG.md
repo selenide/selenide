@@ -1,5 +1,7 @@
 # Changelog
 
+## 4.13.1 (planned to xx.09.2018)
+
 ## 4.13.0 (released 20.08.2018)
 * #771 Added method `$.lastChild()` for retrieving the last child element of a given element
 * #601 Added collection checks with custom timeout  --  see PR #781
