@@ -4,6 +4,7 @@ import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import io.netty.handler.codec.http.HttpHeaders;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -43,17 +44,18 @@ public class Navigator {
     navigateToAbsoluteUrl(url.toExternalForm());
   }
 
-  public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, String login, String password) {
+  public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
     getAndCheckWebDriver();
-    Credentials credentials = new Credentials(login, password);
     String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
-    getSelenideProxy().addRequestFilter("headers.request", (request, contents, messageInfo) -> {
-      final HttpHeaders headers = request.headers();
+    SelenideProxyServer selenideProxy = getSelenideProxy();
+    selenideProxy.addRequestFilter("headers.request", (request, contents, messageInfo) -> {
+      HttpHeaders headers = request.headers();
       headers.add("Authorization", authorization);
       headers.add("Proxy-Authorization", authorization);
       return null;
     });
     open(relativeOrAbsoluteUrl);
+    selenideProxy.removeRequestFilter("headers.request");
   }
 
   protected String absoluteUrl(String relativeUrl) {

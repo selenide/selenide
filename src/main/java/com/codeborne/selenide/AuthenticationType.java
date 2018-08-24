@@ -13,9 +13,9 @@ public enum AuthenticationType {
   MUTUAL("Mutual"),
   AWS4_HMAC_SHA256("AWS4-HMAC-SHA256");
 
-  private String value;
+  private final String value;
 
-  AuthenticationType(final String value) {
+  AuthenticationType(String value) {
     this.value = value;
   }
 
