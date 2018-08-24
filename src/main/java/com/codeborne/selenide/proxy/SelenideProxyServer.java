@@ -77,7 +77,6 @@ public class SelenideProxyServer {
     port = proxy.getPort();
   }
 
-
   /**
    * Add a custom request filter which allows to track/modify all requests from browser to server
    *
@@ -85,12 +84,28 @@ public class SelenideProxyServer {
    * @param requestFilter the filter
    */
   public void addRequestFilter(String name, RequestFilter requestFilter) {
-    if (requestFilters.containsKey(name)) {
+    if (isRequestFilterAdded(name)) {
       throw new IllegalArgumentException("Duplicate request filter: " + name);
     }
-
     proxy.addRequestFilter(requestFilter);
     requestFilters.put(name, requestFilter);
+  }
+
+  private boolean isRequestFilterAdded(String name) {
+    return requestFilters.containsKey(name);
+  }
+
+  /**
+   * Remove a custom request filter by name
+   *
+   * @param name unique name of filter
+   */
+  public void removeRequestFilter(String name) {
+    if (isRequestFilterAdded(name)) {
+      requestFilters.remove(name);
+    } else {
+      throw new IllegalArgumentException("Missing request filter: " + name);
+    }
   }
 
   /**
