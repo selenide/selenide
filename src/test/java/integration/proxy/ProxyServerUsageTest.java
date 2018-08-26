@@ -26,7 +26,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   void setUp() {
     assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     closeWebDriver();
-    Configuration.fileDownload = PROXY;
+    switchToDownloadMode(PROXY);
   }
 
   @Test

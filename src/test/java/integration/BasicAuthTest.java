@@ -7,6 +7,7 @@ import com.codeborne.selenide.Credentials;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
@@ -19,14 +20,14 @@ class BasicAuthTest extends IntegrationTest {
 
   @Test
   void canAuthUsingProxyWithLoginAndPassword() {
-    Configuration.fileDownload = FileDownloadMode.PROXY;
+    switchToDownloadMode(PROXY);
     open("/basic-auth/hello", AuthenticationType.BASIC, "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canAuthUsingProxyWithCredentials() {
-    Configuration.fileDownload = FileDownloadMode.PROXY;
+    switchToDownloadMode(PROXY);
     Credentials credentials = new Credentials("scott", "tiger");
     open("/basic-auth/hello", AuthenticationType.BASIC, credentials);
     $("body").shouldHave(text("Hello, scott:tiger!"));
