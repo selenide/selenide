@@ -34,6 +34,7 @@ public abstract class IntegrationTest implements WithAssertions {
   private static String protocol;
   private static int port;
   private long defaultTimeout;
+  private long defaultCollectionsTimeout;
 
   @BeforeAll
   static void setUpAll() throws Exception {
@@ -97,6 +98,7 @@ public abstract class IntegrationTest implements WithAssertions {
 
   private void rememberTimeout() {
     defaultTimeout = timeout;
+    defaultCollectionsTimeout = collectionsTimeout;
   }
 
   protected void openFile(String fileName) {
@@ -112,6 +114,7 @@ public abstract class IntegrationTest implements WithAssertions {
   @AfterEach
   public void restoreDefaultProperties() {
     timeout = defaultTimeout;
+    collectionsTimeout = defaultCollectionsTimeout;
     clickViaJs = false;
   }
 }
