@@ -30,7 +30,10 @@ public class LocalHttpServer {
 
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
     context.setContextPath("/");
-    context.setSecurityHandler(new BasicAuthSecurityHandler("/basic-auth/*", "scott", "tiger", "Private!"));
+    BasicAuthSecurityHandler basicAuthSecurityHandler = new BasicAuthSecurityHandler("/basic-auth/*", "Private!");
+    basicAuthSecurityHandler.addUser("scott", "tiger");
+    basicAuthSecurityHandler.addUser("scott2", "tiger2");
+    context.setSecurityHandler(basicAuthSecurityHandler);
     server.setHandler(context);
 
     context.addServlet(new ServletHolder(new FileDownloadHandler(sessions)), "/files/*");

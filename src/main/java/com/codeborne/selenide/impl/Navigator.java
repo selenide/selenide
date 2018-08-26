@@ -1,11 +1,12 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import io.netty.handler.codec.http.HttpHeaders;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -13,6 +14,7 @@ import org.openqa.selenium.WebDriverException;
 import java.net.URL;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
@@ -25,61 +27,58 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "", "");
+    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
   }
 
   public void open(URL url) {
-    open(url, "", "", "");
+    navigateToAbsoluteUrl(url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    if (isAbsoluteUrl(relativeOrAbsoluteUrl)) {
-      navigateToAbsoluteUrl(relativeOrAbsoluteUrl, domain, login, password);
-    } else {
-      navigateToAbsoluteUrl(absoluteUrl(relativeOrAbsoluteUrl), domain, login, password);
-    }
+    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
   }
 
   public void open(URL url, String domain, String login, String password) {
-    navigateToAbsoluteUrl(url.toExternalForm());
+    navigateToAbsoluteUrl(url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
   }
 
   public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
+    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
+  }
+
+  private AuthenticationFilter basicAuthRequestFilter() {
     getAndCheckWebDriver();
-    String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
     SelenideProxyServer selenideProxy = getSelenideProxy();
-    selenideProxy.addRequestFilter("headers.request", (request, contents, messageInfo) -> {
-      HttpHeaders headers = request.headers();
-      headers.add("Authorization", authorization);
-      headers.add("Proxy-Authorization", authorization);
-      return null;
-    });
-    open(relativeOrAbsoluteUrl);
-    selenideProxy.removeRequestFilter("headers.request");
+    return selenideProxy.requestFilter("authentication");
   }
 
-  protected String absoluteUrl(String relativeUrl) {
-    return baseUrl + relativeUrl;
+  String absoluteUrl(String relativeOrAbsoluteUrl) {
+    return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : baseUrl + relativeOrAbsoluteUrl;
   }
 
-  protected void navigateToAbsoluteUrl(String url) {
-    navigateToAbsoluteUrl(url, "", "", "");
-  }
+  private void navigateToAbsoluteUrl(String url, AuthenticationType authenticationType, String domain, String login, String password) {
+    url = absoluteUrl(url);
 
-  protected void navigateToAbsoluteUrl(String url, String domain, String login, String password) {
     if (isIE() && !isLocalFile(url)) {
       url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
     }
+
+    boolean hasAuthentication = !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
+    if (hasAuthentication) {
+      if (Configuration.fileDownload == PROXY) {
+        basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
+      }
+      else if (authenticationType == AuthenticationType.BASIC) {
+        url = appendBasicAuthToURL(url, domain, login, password);
+      }
+      else {
+        throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
+      }
+    }
     else {
-      if (!domain.isEmpty()) domain += "%5C";
-      if (!login.isEmpty()) login += ":";
-      if (!password.isEmpty()) password += "@";
-      int idx1 = url.indexOf("://") + 3;
-      url = (idx1 < 3 ? "" : (url.substring(0, idx1 - 3) + "://"))
-              + domain
-              + login
-              + password
-              + (idx1 < 3 ? url : url.substring(idx1));
+      if (Configuration.fileDownload == PROXY) {
+        basicAuthRequestFilter().removeAuthentication();
+      }
     }
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
@@ -102,6 +101,20 @@ public class Navigator {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
+  }
+
+  private String appendBasicAuthToURL(String url, String domain, String login, String password) {
+    if (!domain.isEmpty()) domain += "%5C";
+    if (!login.isEmpty()) login += ":";
+    if (!password.isEmpty()) password += "@";
+    int index = url.indexOf("://") + 3;
+    if (index < 3) return domain + login + password + url;
+
+    return url.substring(0, index - 3) + "://"
+      + domain
+      + login
+      + password
+      + url.substring(index);
   }
 
   protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
@@ -144,7 +157,7 @@ public class Navigator {
         isLocalFile(relativeOrAbsoluteUrl);
   }
 
-  protected boolean isLocalFile(String url) {
+  private boolean isLocalFile(String url) {
     return url.toLowerCase().startsWith("file:");
   }
 

@@ -5,8 +5,8 @@ import java.util.Base64;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public final class Credentials {
-  private final String login;
-  private final String password;
+  public final String login;
+  public final String password;
 
   public Credentials(String login, String password) {
     this.login = login;
@@ -25,5 +25,10 @@ public final class Credentials {
 
   private String combine() {
     return String.format("%s:%s", login, password);
+  }
+
+  @Override
+  public String toString() {
+    return combine();
   }
 }

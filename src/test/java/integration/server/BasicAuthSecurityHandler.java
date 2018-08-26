@@ -10,11 +10,13 @@ import org.eclipse.jetty.util.security.Constraint;
 import static org.eclipse.jetty.util.security.Credential.getCredential;
 
 public class BasicAuthSecurityHandler extends ConstraintSecurityHandler {
-  public BasicAuthSecurityHandler(String context, String username, String password, String realm) {
+  private UserStore userStore = new UserStore();
+
+  public BasicAuthSecurityHandler(String context, String realm) {
     setAuthenticator(new BasicAuthenticator());
     setRealmName("myrealm");
     addConstraintMapping(constraintMapping(context));
-    setLoginService(loginService(username, password, realm));
+    setLoginService(loginService(realm));
   }
 
   private ConstraintMapping constraintMapping(String context) {
@@ -32,16 +34,14 @@ public class BasicAuthSecurityHandler extends ConstraintSecurityHandler {
     return constraint;
   }
 
-  private HashLoginService loginService(String username, String password, String realm) {
+  private HashLoginService loginService(String realm) {
     HashLoginService loginService = new HashLoginService();
-    loginService.setUserStore(userStore(username, password));
+    loginService.setUserStore(userStore);
     loginService.setName(realm);
     return loginService;
   }
 
-  private UserStore userStore(String username, String password) {
-    UserStore userStore = new UserStore();
-    userStore.addUser(username, getCredential(password), new String[]{"user" });
-    return userStore;
+  public void addUser(String username, String password) {
+    userStore.addUser(username, getCredential(password), new String[]{"user"});
   }
 }

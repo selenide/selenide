@@ -69,6 +69,7 @@ public class SelenideProxyServer {
       proxy.setChainedProxy(getProxyAddress(outsideProxy));
     }
 
+    addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
     addResponseFilter("download", new FileDownloadFilter());
@@ -93,19 +94,6 @@ public class SelenideProxyServer {
 
   private boolean isRequestFilterAdded(String name) {
     return requestFilters.containsKey(name);
-  }
-
-  /**
-   * Remove a custom request filter by name
-   *
-   * @param name unique name of filter
-   */
-  public void removeRequestFilter(String name) {
-    if (isRequestFilterAdded(name)) {
-      requestFilters.remove(name);
-    } else {
-      throw new IllegalArgumentException("Missing request filter: " + name);
-    }
   }
 
   /**

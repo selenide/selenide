@@ -1,8 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.AuthenticationType;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Configuration.FileDownloadMode;
 import com.codeborne.selenide.Credentials;
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +29,16 @@ class BasicAuthTest extends IntegrationTest {
     Credentials credentials = new Credentials("scott", "tiger");
     open("/basic-auth/hello", AuthenticationType.BASIC, credentials);
     $("body").shouldHave(text("Hello, scott:tiger!"));
+    $("#bye").click();
+    $("body").shouldHave(text("bye, scott:tiger!"));
+  }
+
+  @Test
+  void canSwitchToAnotherBasicAuth() {
+    switchToDownloadMode(PROXY);
+    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+    $("body").shouldHave(text("Hello, scott:tiger!"));
+    open("/basic-auth/hello2", AuthenticationType.BASIC, new Credentials("scott2", "tiger2"));
+    $("body").shouldHave(text("Hello2, scott2:tiger2!"));
   }
 }
