@@ -2,14 +2,12 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
-import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.Modals;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.WebDriverLogs;
-import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -297,7 +295,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), 0);
+    return ElementFinder.wrap(parent, cssSelector);
   }
 
   /**
@@ -308,7 +306,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return ElementFinder.wrap(null, By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap(cssSelector, index);
   }
 
   /**
@@ -325,7 +323,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return ElementFinder.wrap($(parent), By.cssSelector(cssSelector), index);
+    return ElementFinder.wrap(parent, cssSelector, index);
   }
 
   /**
@@ -365,7 +363,7 @@ public class Selenide {
    * Initialize collection with Elements
    */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
-    return new ElementsCollection(new WebElementsCollectionWrapper(elements));
+    return new ElementsCollection(elements);
   }
 
   /**
@@ -379,7 +377,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(new BySelectorCollection(By.cssSelector(cssSelector)));
+    return new ElementsCollection(cssSelector);
   }
 
   /**
@@ -392,7 +390,7 @@ public class Selenide {
    * @return ElementsCollection which locates elements via XPath
    */
   public static ElementsCollection $$x(String xpathExpression) {
-    return new ElementsCollection(new BySelectorCollection(By.xpath(xpathExpression)));
+    return $$(By.xpath(xpathExpression));
   }
 
   /**
@@ -406,7 +404,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(By seleniumSelector) {
-    return new ElementsCollection(new BySelectorCollection(seleniumSelector));
+    return new ElementsCollection(seleniumSelector);
   }
 
   /**
@@ -426,7 +424,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(new BySelectorCollection(parent, By.cssSelector(cssSelector)));
+    return new ElementsCollection(parent, cssSelector);
   }
 
   /**
@@ -440,7 +438,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return new ElementsCollection(new BySelectorCollection(parent, seleniumSelector));
+    return new ElementsCollection(parent, seleniumSelector);
   }
 
   /**

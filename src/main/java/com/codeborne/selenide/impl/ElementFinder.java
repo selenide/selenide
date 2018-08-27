@@ -17,6 +17,18 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.lang.Thread.currentThread;
 
 public class ElementFinder extends WebElementSource {
+  public static SelenideElement wrap(WebElement parent, String cssSelector) {
+    return wrap($(parent), By.cssSelector(cssSelector), 0);
+  }
+
+  public static SelenideElement wrap(String cssSelector, int index) {
+    return wrap(null, By.cssSelector(cssSelector), index);
+  }
+
+  public static SelenideElement wrap(WebElement parent, String cssSelector, int index) {
+    return wrap($(parent), By.cssSelector(cssSelector), index);
+  }
+
   public static SelenideElement wrap(By criteria) {
     return wrap(null, criteria, 0);
   }
