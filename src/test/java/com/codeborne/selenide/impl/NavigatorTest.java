@@ -70,21 +70,6 @@ class NavigatorTest implements WithAssertions {
   }
 
   @Test
-  void addsRandomNumbersToEveryUrlToAvoidIECaching() {
-    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com", 666))
-      .isEqualTo("http://chuck-norris.com?timestamp=666");
-
-    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789", 666))
-      .isEqualTo("http://chuck-norris.com?timestamp=666");
-
-    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789#", 666))
-      .isEqualTo("http://chuck-norris.com?timestamp=666");
-
-    assertThat(navigator.makeUniqueUrlToAvoidIECaching("http://chuck-norris.com?timestamp=123456789&abc=def", 666))
-      .isEqualTo("http://chuck-norris.com?timestamp=666");
-  }
-
-  @Test
   void returnsAbsoluteUrl() {
     Configuration.baseUrl = "http://localhost:8080";
     assertThat(navigator.absoluteUrl("/users/id=1")).isEqualTo("http://localhost:8080/users/id=1");

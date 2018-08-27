@@ -17,7 +17,6 @@ import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
@@ -55,10 +54,6 @@ public class Navigator {
 
   private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
     url = absoluteUrl(url);
-
-    if (isIE() && !isLocalFile(url)) {
-      url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
-    }
 
     boolean hasAuthentication = !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
     if (hasAuthentication) {
@@ -108,17 +103,6 @@ public class Navigator {
       + login
       + password
       + url.substring(index);
-  }
-
-  protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    if (url.contains("timestamp=")) {
-      return url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    } else {
-      return url.contains("?") ?
-          url + "&timestamp=" + unique :
-          url + "?timestamp=" + unique;
-    }
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
