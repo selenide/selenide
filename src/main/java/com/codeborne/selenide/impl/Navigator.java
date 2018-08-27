@@ -44,7 +44,6 @@ public class Navigator {
   }
 
   private AuthenticationFilter basicAuthRequestFilter() {
-    getAndCheckWebDriver();
     SelenideProxyServer selenideProxy = getSelenideProxy();
     return selenideProxy.requestFilter("authentication");
   }
@@ -55,28 +54,12 @@ public class Navigator {
 
   private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
     url = absoluteUrl(url);
-
-    boolean hasAuthentication = !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
-    if (hasAuthentication) {
-      if (Configuration.fileDownload == PROXY) {
-        basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
-      }
-      else if (authenticationType == AuthenticationType.BASIC) {
-        url = basicAuthUrl.appendBasicAuthToURL(url, domain, login, password);
-      }
-      else {
-        throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
-      }
-    }
-    else {
-      if (Configuration.fileDownload == PROXY) {
-        basicAuthRequestFilter().removeAuthentication();
-      }
-    }
+    url = appendBasicAuthIfNeeded(url, authenticationType, domain, login, password);
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
       WebDriver webdriver = getAndCheckWebDriver();
+      beforeNavigateTo(authenticationType, domain, login, password);
       webdriver.navigate().to(url);
       javascriptErrorsCollector.collectJavascriptErrors(webdriver);
       SelenideLogger.commitStep(log, PASS);
@@ -90,6 +73,46 @@ public class Navigator {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
+  }
+
+  private void beforeNavigateTo(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (Configuration.fileDownload == PROXY) {
+      beforeNavigateToWithProxy(authenticationType, domain, login, password);
+    }
+    else {
+      beforeNavigateToWithoutProxy(authenticationType, domain, login, password);
+    }
+  }
+
+  private void beforeNavigateToWithProxy(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (hasAuthentication(domain, login, password)) {
+      basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
+    }
+    else {
+      basicAuthRequestFilter().removeAuthentication();
+    }
+  }
+
+  private void beforeNavigateToWithoutProxy(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (hasAuthentication(domain, login, password) && authenticationType != AuthenticationType.BASIC) {
+      throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
+    }
+  }
+
+  private boolean hasAuthentication(String domain, String login, String password) {
+    return !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
+  }
+
+  private String appendBasicAuthIfNeeded(String url, AuthenticationType authType, String domain, String login, String password) {
+    return passBasicAuthThroughUrl(authType, domain, login, password)
+      ? basicAuthUrl.appendBasicAuthToURL(url, domain, login, password)
+      : url;
+  }
+
+  private boolean passBasicAuthThroughUrl(AuthenticationType authenticationType, String domain, String login, String password) {
+    return hasAuthentication(domain, login, password) &&
+      Configuration.fileDownload != PROXY &&
+      authenticationType == AuthenticationType.BASIC;
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
