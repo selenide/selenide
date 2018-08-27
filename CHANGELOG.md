@@ -1,6 +1,7 @@
 # Changelog
 
-## 4.13.1 (planned to xx.09.2018)
+## 4.14.0 (planned to xx.09.2018)
+* Fix #784 Enable BasicAuth through Selenide proxy server  -- see https://github.com/codeborne/selenide/pull/785
 
 ## 4.13.0 (released 20.08.2018)
 * #771 Added method `$.lastChild()` for retrieving the last child element of a given element
