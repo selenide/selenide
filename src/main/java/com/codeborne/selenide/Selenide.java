@@ -7,24 +7,20 @@ import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.Modals;
 import com.codeborne.selenide.impl.Navigator;
+import com.codeborne.selenide.impl.SelenideWait;
 import com.codeborne.selenide.impl.WebDriverLogs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -42,6 +38,7 @@ public class Selenide {
   private static WebDriverLogs webDriverLogs = new WebDriverLogs();
   private static Modals modals = new Modals();
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();
+  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
   /**
    * The main starting point in your tests.
@@ -627,10 +624,8 @@ public class Selenide {
    *
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
-  public static FluentWait<WebDriver> Wait() {
-    return new FluentWait<>(getWebDriver())
-      .withTimeout(Duration.of(timeout, ChronoUnit.MILLIS))
-      .pollingEvery(Duration.of(pollingInterval, ChronoUnit.MILLIS));
+  public static SelenideWait Wait() {
+    return new SelenideWait(getWebDriver());
   }
 
   /**
@@ -761,7 +756,7 @@ public class Selenide {
    * Useful if you need to scroll down by x pixels unknown number of times.
    */
   public static boolean atBottom() {
-    return Selenide.executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
   }
 
   /**
@@ -778,6 +773,6 @@ public class Selenide {
   }
 
   public static File download(String url, long timeoutMs) throws IOException {
-    return new DownloadFileWithHttpRequest().download(url, timeoutMs);
+    return downloadFileWithHttpRequest.download(url, timeoutMs);
   }
 }
