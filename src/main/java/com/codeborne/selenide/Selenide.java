@@ -5,15 +5,14 @@ import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntry;
@@ -29,21 +28,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 /**
@@ -56,6 +50,7 @@ public class Selenide {
   private static final Logger log = Logger.getLogger(Selenide.class.getName());
 
   public static Navigator navigator = new Navigator();
+  private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
 
 
   /**
@@ -397,8 +392,6 @@ public class Selenide {
 
   /**
    * Initialize collection with Elements
-   * @param elements
-   * @return
    */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
     return new ElementsCollection(new WebElementsCollectionWrapper(elements));
@@ -533,8 +526,7 @@ public class Selenide {
 
   /**
    * Returns selected element in radio group
-   * @param radioField
-   * @return null, if nothing selected
+   * @return null if nothing selected
    */
   public static SelenideElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField)) {
@@ -742,60 +734,11 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    if (!captureJavascriptErrors) {
-      return emptyList();
-    }
-    else if (!hasWebDriverStarted()) {
-      return emptyList();
-    }
-    else if (!supportsJavascript()) {
-      return emptyList();
-    }
-    try {
-      Object errors = executeJavaScript("return window._selenide_jsErrors");
-      if (errors == null) {
-        return emptyList();
-      }
-      else if (errors instanceof List) {
-        return errorsFromList((List<Object>) errors);
-      }
-      else if (errors instanceof Map) {
-        return errorsFromMap((Map<Object, Object>) errors);
-      }
-      else {
-        return asList(errors.toString());
-      }
-    } catch (WebDriverException | UnsupportedOperationException cannotExecuteJs) {
-      log.warning(cannotExecuteJs.toString());
-      return emptyList();
-    }
-  }
-
-  private static List<String> errorsFromList(List<Object> errors) {
-    if (errors.isEmpty()) {
-      return emptyList();
-    }
-    List<String> result = new ArrayList<>(errors.size());
-    for (Object error : errors) {
-      result.add(error.toString());
-    }
-    return result;
-  }
-
-  private static List<String> errorsFromMap(Map<Object, Object> errors) {
-    if (errors.isEmpty()) {
-      return emptyList();
-    }
-    List<String> result = new ArrayList<>(errors.size());
-    for (Map.Entry error : errors.entrySet()) {
-      result.add(error.getKey() + ": " + error.getValue());
-    }
-    return result;
+    return javascriptErrorsCollector.getJavascriptErrors();
   }
 
   /**
    * Check if there is not JS errors on the page
-   * @throws JavaScriptErrorsFound
    */
   public static void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
     List<String> jsErrors = getJavascriptErrors();

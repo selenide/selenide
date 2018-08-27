@@ -7,16 +7,13 @@ import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -24,7 +21,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
-  private static final Logger log = Logger.getLogger(Navigator.class.getName());
+  private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
 
   public void open(String relativeOrAbsoluteUrl) {
     navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
@@ -85,9 +82,7 @@ public class Navigator {
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
-      if (webdriver instanceof JavascriptExecutor) {
-        collectJavascriptErrors((JavascriptExecutor) webdriver);
-      }
+      javascriptErrorsCollector.collectJavascriptErrors(webdriver);
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
@@ -95,11 +90,7 @@ public class Navigator {
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
-    catch (RuntimeException e) {
-      SelenideLogger.commitStep(log, e);
-      throw e;
-    }
-    catch (Error e) {
+    catch (RuntimeException | Error e) {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
@@ -117,29 +108,6 @@ public class Navigator {
       + login
       + password
       + url.substring(index);
-  }
-
-  protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
-    if (!captureJavascriptErrors) return;
-
-    try {
-      webdriver.executeScript(
-          "if (!window._selenide_jsErrors) {\n" +
-              "  window._selenide_jsErrors = [];\n" +
-              "}\n" +
-              "if (!window.onerror) {\n" +
-              "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
-              "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
-              "    window._selenide_jsErrors.push(message);\n" +
-              "    return false;\n" +
-              "  };\n" +
-              "}\n"
-      );
-    } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
-      log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
-    } catch (WebDriverException cannotExecuteJs) {
-      log.severe(cannotExecuteJs.toString());
-    }
   }
 
   protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
