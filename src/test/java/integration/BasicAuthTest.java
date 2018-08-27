@@ -11,7 +11,14 @@ import static com.codeborne.selenide.Selenide.open;
 
 class BasicAuthTest extends IntegrationTest {
   @Test
-  void canPassBasicAuth() {
+  void canPassBasicAuth_via_URL() {
+    open("/basic-auth/hello", "", "scott", "tiger");
+    $("body").shouldHave(text("Hello, scott:tiger!"));
+  }
+
+  @Test
+  void canPassBasicAuth_via_proxy() {
+    switchToDownloadMode(PROXY);
     open("/basic-auth/hello", "", "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
@@ -40,5 +47,16 @@ class BasicAuthTest extends IntegrationTest {
     $("body").shouldHave(text("Hello, scott:tiger!"));
     open("/basic-auth/hello2", AuthenticationType.BASIC, new Credentials("scott2", "tiger2"));
     $("body").shouldHave(text("Hello2, scott2:tiger2!"));
+  }
+
+  @Test
+  void removesPreviousBasicAuthHeaders() {
+    switchToDownloadMode(PROXY);
+    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+    $("body").shouldHave(text("Hello, scott:tiger!"));
+    open("/headers/hello3");
+    $("body")
+      .shouldHave(text("Hello3"), text("Accept="), text("User-Agent="))
+      .shouldNotHave(text("Authorization="));
   }
 }

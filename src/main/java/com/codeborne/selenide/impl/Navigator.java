@@ -27,23 +27,23 @@ public class Navigator {
   private static final Logger log = Logger.getLogger(Navigator.class.getName());
 
   public void open(String relativeOrAbsoluteUrl) {
-    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
+    navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
   }
 
   public void open(URL url) {
-    navigateToAbsoluteUrl(url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
+    navigateTo(url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
   }
 
   public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
+    navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
   }
 
   public void open(URL url, String domain, String login, String password) {
-    navigateToAbsoluteUrl(url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
+    navigateTo(url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
   }
 
   public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
-    navigateToAbsoluteUrl(relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
+    navigateTo(relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
   }
 
   private AuthenticationFilter basicAuthRequestFilter() {
@@ -56,7 +56,7 @@ public class Navigator {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : baseUrl + relativeOrAbsoluteUrl;
   }
 
-  private void navigateToAbsoluteUrl(String url, AuthenticationType authenticationType, String domain, String login, String password) {
+  private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
     url = absoluteUrl(url);
 
     if (isIE() && !isLocalFile(url)) {
@@ -85,7 +85,9 @@ public class Navigator {
     try {
       WebDriver webdriver = getAndCheckWebDriver();
       webdriver.navigate().to(url);
-      collectJavascriptErrors((JavascriptExecutor) webdriver);
+      if (webdriver instanceof JavascriptExecutor) {
+        collectJavascriptErrors((JavascriptExecutor) webdriver);
+      }
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
@@ -103,7 +105,7 @@ public class Navigator {
     }
   }
 
-  private String appendBasicAuthToURL(String url, String domain, String login, String password) {
+  String appendBasicAuthToURL(String url, String domain, String login, String password) {
     if (!domain.isEmpty()) domain += "%5C";
     if (!login.isEmpty()) login += ":";
     if (!password.isEmpty()) password += "@";
