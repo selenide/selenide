@@ -1,6 +1,6 @@
 package integration.server;
 
-import org.assertj.core.api.Assertions;
+import com.google.common.collect.ImmutableMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +13,7 @@ import java.util.Set;
 import static com.codeborne.selenide.Selenide.sleep;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 class FileDownloadHandler extends BaseHandler {
   private final Set<String> sessions;
@@ -22,30 +23,24 @@ class FileDownloadHandler extends BaseHandler {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long start = System.nanoTime();
+  public Result get(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String sessionId = getSessionId(request);
-    Assertions.assertThat(sessions).contains(sessionId);
+    if (!sessions.contains(sessionId)) {
+      return new Result(SC_UNAUTHORIZED, CONTENT_TYPE_HTML_TEXT, "Unknown session: " + sessionId + ", known sessions: " + sessions);
+    }
 
     String fileName = getFilenameFromRequest(request);
     byte[] fileContent = readFileContent(fileName);
     if (fileContent == null) {
-      response.setStatus(SC_NOT_FOUND);
-      logRequest(request, "NOT_FOUND", start);
-      return;
+      return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND: " + fileName);
     }
 
     if (request.getParameter("pause") != null) {
       sleep(Long.parseLong(request.getParameter("pause")));
     }
 
-    response.setStatus(SC_OK);
-    response.setContentLength(fileContent.length);
-    response.setHeader("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-    response.setContentType(getContentType(fileName));
-
-    printResponse(response, fileContent);
-    logRequest(request, "ok", start);
+    return new Result(SC_OK, getContentType(fileName), fileContent,
+      ImmutableMap.of("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8")));
   }
 
   private String getSessionId(HttpServletRequest request) {

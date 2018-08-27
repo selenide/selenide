@@ -2,6 +2,7 @@ package integration;
 
 import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import integration.server.LocalHttpServer;
@@ -34,6 +35,7 @@ public abstract class IntegrationTest implements WithAssertions {
   private static String protocol;
   private static int port;
   private long defaultTimeout;
+  private long defaultCollectionsTimeout;
 
   @BeforeAll
   static void setUpAll() throws Exception {
@@ -86,7 +88,7 @@ public abstract class IntegrationTest implements WithAssertions {
 
     // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
-    Configuration.fileDownload = isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY;
+    switchToDownloadMode(isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY);
   }
 
   private void restartReallyUnstableBrowsers() {
@@ -97,6 +99,7 @@ public abstract class IntegrationTest implements WithAssertions {
 
   private void rememberTimeout() {
     defaultTimeout = timeout;
+    defaultCollectionsTimeout = collectionsTimeout;
   }
 
   protected void openFile(String fileName) {
@@ -109,9 +112,17 @@ public abstract class IntegrationTest implements WithAssertions {
       "&timeout=" + Configuration.timeout, pageObjectClass);
   }
 
+  protected void switchToDownloadMode(FileDownloadMode mode) {
+    if (Configuration.fileDownload != mode) {
+      Selenide.close();
+    }
+    Configuration.fileDownload = mode;
+  }
+
   @AfterEach
   public void restoreDefaultProperties() {
     timeout = defaultTimeout;
+    collectionsTimeout = defaultCollectionsTimeout;
     clickViaJs = false;
   }
 }

@@ -69,6 +69,7 @@ public class SelenideProxyServer {
       proxy.setChainedProxy(getProxyAddress(outsideProxy));
     }
 
+    addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
     addResponseFilter("download", new FileDownloadFilter());
@@ -77,7 +78,6 @@ public class SelenideProxyServer {
     port = proxy.getPort();
   }
 
-
   /**
    * Add a custom request filter which allows to track/modify all requests from browser to server
    *
@@ -85,12 +85,15 @@ public class SelenideProxyServer {
    * @param requestFilter the filter
    */
   public void addRequestFilter(String name, RequestFilter requestFilter) {
-    if (requestFilters.containsKey(name)) {
+    if (isRequestFilterAdded(name)) {
       throw new IllegalArgumentException("Duplicate request filter: " + name);
     }
-
     proxy.addRequestFilter(requestFilter);
     requestFilters.put(name, requestFilter);
+  }
+
+  private boolean isRequestFilterAdded(String name) {
+    return requestFilters.containsKey(name);
   }
 
   /**

@@ -12,7 +12,6 @@ import java.io.IOException;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -25,8 +24,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   void setUp() {
     assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
 
-    close();
-    Configuration.fileDownload = PROXY;
+    switchToDownloadMode(PROXY);
     openFile("page_with_uploads.html");
   }
 

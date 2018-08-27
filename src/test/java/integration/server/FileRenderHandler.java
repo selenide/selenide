@@ -17,29 +17,20 @@ class FileRenderHandler extends BaseHandler {
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    doGet(request, response);
+  public Result post(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    return get(request, response);
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long start = System.nanoTime();
-
+  public Result get(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String fileName = getFilenameFromRequest(request);
     byte[] fileContent = readFileContent(fileName);
     if (fileContent == null) {
-      response.setStatus(SC_NOT_FOUND);
-      logRequest(request, "NOT_FOUND", start);
-      return;
+      return new Result(SC_NOT_FOUND, CONTENT_TYPE_HTML_TEXT, "NOT_FOUND");
     }
 
     generateSessionId(response);
-    response.setStatus(SC_OK);
-    response.setContentLength(fileContent.length);
-
-    response.setContentType(getContentType(fileName));
-    printResponse(response, fileContent);
-    logRequest(request, "ok", start);
+    return new Result(SC_OK, getContentType(fileName), fileContent);
   }
 
   private void generateSessionId(HttpServletResponse http) {
