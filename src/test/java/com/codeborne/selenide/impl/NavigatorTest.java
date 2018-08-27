@@ -77,24 +77,6 @@ class NavigatorTest implements WithAssertions {
   }
 
   @Test
-  void appendBasicAuthToURL_absoluteUrl() {
-    assertThat(navigator.appendBasicAuthToURL("https://company.com/login", "domain-01", "login-01", "password-01"))
-      .isEqualTo("https://domain-01%5Clogin-01:password-01@company.com/login");
-  }
-
-  @Test
-  void appendBasicAuthToURL_relativeUrl() {
-    assertThat(navigator.appendBasicAuthToURL("/login", "domain-01", "login-01", "password-01"))
-      .isEqualTo("domain-01%5Clogin-01:password-01@/login");
-  }
-
-  @Test
-  void appendBasicAuthToURL_emptyDomain() {
-    assertThat(navigator.appendBasicAuthToURL("https://company.com/login", "", "login-01", "password-01"))
-      .isEqualTo("https://login-01:password-01@company.com/login");
-  }
-
-  @Test
   void open_withoutAuthentication() {
     navigator.open("https://some.com/login");
 

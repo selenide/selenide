@@ -21,6 +21,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
   private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
+  private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(String relativeOrAbsoluteUrl) {
     navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
@@ -61,7 +62,7 @@ public class Navigator {
         basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
       }
       else if (authenticationType == AuthenticationType.BASIC) {
-        url = appendBasicAuthToURL(url, domain, login, password);
+        url = basicAuthUrl.appendBasicAuthToURL(url, domain, login, password);
       }
       else {
         throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
@@ -89,20 +90,6 @@ public class Navigator {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
-  }
-
-  String appendBasicAuthToURL(String url, String domain, String login, String password) {
-    if (!domain.isEmpty()) domain += "%5C";
-    if (!login.isEmpty()) login += ":";
-    if (!password.isEmpty()) password += "@";
-    int index = url.indexOf("://") + 3;
-    if (index < 3) return domain + login + password + url;
-
-    return url.substring(0, index - 3) + "://"
-      + domain
-      + login
-      + password
-      + url.substring(index);
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
