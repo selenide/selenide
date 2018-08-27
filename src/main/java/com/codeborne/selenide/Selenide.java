@@ -6,16 +6,16 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
+import com.codeborne.selenide.impl.Modals;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
+import com.codeborne.selenide.impl.WebDriverLogs;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
@@ -25,20 +25,15 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.dismissModalDialogs;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
-import static java.util.Collections.emptyList;
 
 /**
  * The main starting point of Selenide.
@@ -47,11 +42,10 @@ import static java.util.Collections.emptyList;
  * {@link #$(String)} for searching web elements.
  */
 public class Selenide {
-  private static final Logger log = Logger.getLogger(Selenide.class.getName());
-
   public static Navigator navigator = new Navigator();
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
-
+  private static WebDriverLogs webDriverLogs = new WebDriverLogs();
+  private static Modals modals = new Modals();
 
   /**
    * The main starting point in your tests.
@@ -91,7 +85,7 @@ public class Selenide {
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     navigator.open(relativeOrAbsoluteUrl, domain, login, password);
-    mockModalDialogs();
+    modals.mockModalDialogs();
   }
 
   /**
@@ -133,7 +127,7 @@ public class Selenide {
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
     navigator.open(absoluteUrl, domain, login, password);
-    mockModalDialogs();
+    modals.mockModalDialogs();
   }
 
   /**
@@ -145,27 +139,6 @@ public class Selenide {
   public static void updateHash(String hash) {
     String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
     executeJavaScript("window.location.hash='" + localHash + "'");
-  }
-
-  private static boolean doDismissModalDialogs() {
-    return !supportsModalDialogs() || dismissModalDialogs;
-  }
-
-  private static void mockModalDialogs() {
-    if (doDismissModalDialogs()) {
-      String jsCode =
-          "  window._selenide_modalDialogReturnValue = true;\n" +
-          "  window.alert = function(message) {};\n" +
-          "  window.confirm = function(message) {\n" +
-          "    return window._selenide_modalDialogReturnValue;\n" +
-          "  };";
-      try {
-        executeJavaScript(jsCode);
-      }
-      catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
-        log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
-      }
-    }
   }
 
   /**
@@ -542,9 +515,7 @@ public class Selenide {
    * @param confirmReturnValue true = OK, false = CANCEL
    */
   public static void onConfirmReturn(boolean confirmReturnValue) {
-    if (doDismissModalDialogs()) {
-      executeJavaScript("window._selenide_modalDialogReturnValue = " + confirmReturnValue + ';');
-    }
+    modals.onConfirmReturn(confirmReturnValue);
   }
 
   /**
@@ -552,7 +523,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm() {
-    return confirm(null);
+    return modals.confirm();
   }
 
   /**
@@ -563,14 +534,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm(String expectedDialogText) {
-    if (!doDismissModalDialogs()) {
-      Alert alert = switchTo().alert();
-      String actualDialogText = alert.getText();
-      alert.accept();
-      checkDialogText(expectedDialogText, actualDialogText);
-      return actualDialogText;
-    }
-    return null;
+    return modals.confirm(expectedDialogText);
   }
 
   /**
@@ -578,7 +542,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt() {
-    return prompt(null, null);
+    return modals.prompt();
   }
 
   /**
@@ -587,7 +551,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String inputText) {
-    return prompt(null, inputText);
+    return modals.prompt(inputText);
   }
 
   /**
@@ -599,16 +563,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String expectedDialogText, String inputText) {
-    if (!doDismissModalDialogs()) {
-      Alert alert = switchTo().alert();
-      String actualDialogText = alert.getText();
-      if (inputText != null)
-        alert.sendKeys(inputText);
-      alert.accept();
-      checkDialogText(expectedDialogText, actualDialogText);
-      return actualDialogText;
-    }
-    return null;
+    return modals.prompt(expectedDialogText, inputText);
   }
 
 
@@ -617,7 +572,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss() {
-    return dismiss(null);
+    return modals.dismiss();
   }
 
   /**
@@ -628,21 +583,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss(String expectedDialogText) {
-    if (!doDismissModalDialogs()) {
-      Alert alert = switchTo().alert();
-      String actualDialogText = alert.getText();
-      alert.dismiss();
-      checkDialogText(expectedDialogText, actualDialogText);
-      return actualDialogText;
-    }
-    return null;
-  }
-
-  private static void checkDialogText(String expectedDialogText, String actualDialogText) {
-    if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
-      Screenshots.takeScreenShot(Selenide.class.getName(), Thread.currentThread().getName());
-      throw new DialogTextMismatch(actualDialogText, expectedDialogText);
-    }
+    return modals.dismiss(expectedDialogText);
   }
 
   /**
@@ -796,7 +737,7 @@ public class Selenide {
    * @see java.util.logging.Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
-    return listToString(getLogEntries(logType, logLevel));
+    return webDriverLogs.getWebDriverLogs(getWebDriver(), logType, logLevel);
   }
 
   /**
@@ -827,15 +768,6 @@ public class Selenide {
     return executeJavaScript("return navigator.userAgent;");
   }
 
-  private static List<LogEntry> getLogEntries(String logType, Level logLevel) {
-    try {
-      return getWebDriver().manage().logs().get(logType).filter(logLevel);
-    }
-    catch (UnsupportedOperationException ignore) {
-      return emptyList();
-    }
-  }
-
   /**
    * Return true if bottom of the page is reached
    *
@@ -860,16 +792,5 @@ public class Selenide {
 
   public static File download(String url, long timeoutMs) throws IOException {
     return new DownloadFileWithHttpRequest().download(url, timeoutMs);
-  }
-
-  private static <T> List<String> listToString(List<T> objects) {
-    if (objects == null || objects.isEmpty()) {
-      return emptyList();
-    }
-    List<String> result = new ArrayList<>(objects.size());
-    for (T object : objects) {
-      result.add(object.toString());
-    }
-    return result;
   }
 }
