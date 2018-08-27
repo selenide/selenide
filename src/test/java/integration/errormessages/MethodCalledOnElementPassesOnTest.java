@@ -12,7 +12,6 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
-    Given.openedPageWithBody(
+    givenHtml(
       "<ul>Hello to:",
       "<li class='the-expanse detective'>Miller <label>detective</label></li>",
       "<li class='the-expanse missing'>Julie Mao</li>",

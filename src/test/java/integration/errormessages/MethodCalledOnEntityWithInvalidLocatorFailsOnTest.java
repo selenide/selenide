@@ -5,7 +5,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import integration.IntegrationTest;
-import integration.helpers.HTMLBuilderForTestPreconditions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import static com.codeborne.selenide.Selenide.$$;
 class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
-    HTMLBuilderForTestPreconditions.Given.openedPageWithBody(
+    givenHtml(
       "<ul>Hello to:",
       "<li class='the-expanse detective'>Miller <label>detective</label></li>",
       "<li class='the-expanse missing'>Julie Mao</li>",
