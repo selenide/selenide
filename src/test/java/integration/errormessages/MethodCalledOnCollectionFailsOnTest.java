@@ -29,7 +29,8 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       "<li class='the-expanse missing'>Julie Mao</li>",
       "</ul>"
     );
-    Configuration.timeout = 0;
+    Configuration.timeout = 1;
+    Configuration.collectionsTimeout = 1;
   }
 
   @Test
