@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelenideFieldDecorator extends DefaultFieldDecorator {
+  private final SelenidePageFactory pageFactory;
   private final SearchContext searchContext;
 
-  public SelenideFieldDecorator(SearchContext searchContext) {
+  public SelenideFieldDecorator(SelenidePageFactory pageFactory, SearchContext searchContext) {
     super(new DefaultElementLocatorFactory(searchContext));
+    this.pageFactory = pageFactory;
     this.searchContext = searchContext;
   }
 
@@ -79,7 +81,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    SelenidePageFactory.initElements(new SelenideFieldDecorator(self), result);
+    pageFactory.initElements(new SelenideFieldDecorator(pageFactory, self), result);
     result.setSelf(self);
     return result;
   }

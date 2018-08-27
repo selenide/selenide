@@ -8,7 +8,6 @@ import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.Modals;
 import com.codeborne.selenide.impl.Navigator;
-import com.codeborne.selenide.impl.SelenideFieldDecorator;
 import com.codeborne.selenide.impl.WebDriverLogs;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import org.openqa.selenium.By;
@@ -16,12 +15,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -46,6 +43,7 @@ public class Selenide {
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static WebDriverLogs webDriverLogs = new WebDriverLogs();
   private static Modals modals = new Modals();
+  private static SelenidePageFactory pageFactory = new SelenidePageFactory();
 
   /**
    * The main starting point in your tests.
@@ -608,26 +606,17 @@ public class Selenide {
   }
 
   /**
-   * Create a Page Object instance.
-   * @see PageFactory#initElements(WebDriver, Class)
+   * Create a Page Object instance
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    try {
-      Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
-      constructor.setAccessible(true);
-      return page(constructor.newInstance());
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
-    }
+    return pageFactory.page(getWebDriver(), pageObjectClass);
   }
 
   /**
-   * Create a Page Object instance.
-   * @see PageFactory#initElements(WebDriver, Class)
+   * Initialize a given Page Object instance
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    SelenidePageFactory.initElements(new SelenideFieldDecorator(getWebDriver()), pageObject);
-    return pageObject;
+    return pageFactory.page(getWebDriver(), pageObject);
   }
 
   /**

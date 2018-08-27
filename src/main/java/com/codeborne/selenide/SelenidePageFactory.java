@@ -1,8 +1,10 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.support.PageFactory;
+import com.codeborne.selenide.impl.SelenideFieldDecorator;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 /**
@@ -10,7 +12,23 @@ import java.lang.reflect.Field;
  *
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
-public class SelenidePageFactory extends PageFactory {
+public class SelenidePageFactory {
+  public <PageObjectClass> PageObjectClass page(WebDriver webDriver, Class<PageObjectClass> pageObjectClass) {
+    try {
+      Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      return page(webDriver, constructor.newInstance());
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
+    }
+  }
+
+  public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(WebDriver webDriver, T pageObject) {
+    initElements(new SelenideFieldDecorator(this, webDriver), pageObject);
+    return pageObject;
+  }
+
   /**
    * Similar to the other "initElements" methods, but takes an {@link FieldDecorator} which is used
    * for decorating each of the fields.
@@ -18,7 +36,7 @@ public class SelenidePageFactory extends PageFactory {
    * @param decorator the decorator to use
    * @param page      The object to decorate the fields of
    */
-  public static void initElements(FieldDecorator decorator, Object page) {
+  public void initElements(FieldDecorator decorator, Object page) {
     Class<?> proxyIn = page.getClass();
     while (proxyIn != Object.class) {
       proxyFields(decorator, page, proxyIn);
@@ -26,7 +44,7 @@ public class SelenidePageFactory extends PageFactory {
     }
   }
 
-  private static void proxyFields(FieldDecorator decorator, Object page, Class<?> proxyIn) {
+  private void proxyFields(FieldDecorator decorator, Object page, Class<?> proxyIn) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
       if (isInitialized(page, field)) {
@@ -37,18 +55,20 @@ public class SelenidePageFactory extends PageFactory {
         try {
           field.setAccessible(true);
           field.set(page, value);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
           throw new RuntimeException(e);
         }
       }
     }
   }
 
-  private static boolean isInitialized(Object page, Field field) {
+  private boolean isInitialized(Object page, Field field) {
     try {
       field.setAccessible(true);
       return field.get(page) != null;
-    } catch (IllegalAccessException e) {
+    }
+    catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }

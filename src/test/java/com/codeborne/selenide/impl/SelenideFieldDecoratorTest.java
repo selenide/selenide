@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SelenidePageFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -22,11 +23,12 @@ import static org.mockito.Mockito.when;
 class SelenideFieldDecoratorTest implements WithAssertions {
   private TestPage page = new TestPage();
   private WebDriver webDriver = mock(WebDriver.class);
-  private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(webDriver);
+  private SelenidePageFactory pageFactory = new SelenidePageFactory();
+  private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, webDriver);
 
   @Test
   void usesDefaultElementLocatorFactory() throws NoSuchFieldException {
-    SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(mock(WebDriver.class));
+    SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, mock(WebDriver.class));
     Field factoryField = fieldDecorator.getClass().getSuperclass().getDeclaredField("factory");
     assertThat(factoryField.getType())
       .isAssignableFrom(DefaultElementLocatorFactory.class);
