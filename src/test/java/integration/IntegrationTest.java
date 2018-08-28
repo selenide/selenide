@@ -29,6 +29,7 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
@@ -91,6 +92,7 @@ public abstract class IntegrationTest implements WithAssertions {
   }
 
   private void resetSettings() {
+    Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
     Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     fastSetValue = false;
@@ -99,7 +101,7 @@ public abstract class IntegrationTest implements WithAssertions {
     server.reset();
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    toggleProxy(true);
+    toggleProxy(!isPhantomjs());
   }
 
   private void restartReallyUnstableBrowsers() {
