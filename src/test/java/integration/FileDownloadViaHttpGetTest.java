@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
@@ -23,7 +22,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   void setUp() {
     Assumptions.assumeFalse(isPhantomjs()); // Why it's not working in PhantomJS? It's magic for me...
 
-    switchToDownloadMode(HTTPGET);
+    toggleProxy(false);
     openFile("page_with_uploads.html");
   }
 

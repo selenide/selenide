@@ -21,7 +21,6 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.close;
 import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.any;
@@ -78,18 +77,6 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
 
     container.createDriver();
 
-    assertThat(container.getProxyServer()).isNotNull();
-    verify(container.factory).createWebDriver(container.getProxyServer().createSeleniumProxy());
-  }
-
-  @Test
-  void startsProxyServer_evenIfProxyIsNotEnabled_butFileDownloadModeIsProxy() {
-    Configuration.proxyEnabled = false;
-    Configuration.fileDownload = PROXY;
-
-    container.createDriver();
-
-    assertThat(Configuration.proxyEnabled).isTrue();
     assertThat(container.getProxyServer()).isNotNull();
     verify(container.factory).createWebDriver(container.getProxyServer().createSeleniumProxy());
   }

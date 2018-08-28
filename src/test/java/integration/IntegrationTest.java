@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
-import static com.codeborne.selenide.Configuration.FileDownloadMode;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.browser;
@@ -104,7 +103,7 @@ public abstract class IntegrationTest implements WithAssertions {
 
     // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
-    switchToDownloadMode(isFirefox() || isLegacyFirefox() ? HTTPGET : PROXY);
+    toggleProxy(!isFirefox() && !isLegacyFirefox());
   }
 
   private void restartReallyUnstableBrowsers() {
@@ -128,11 +127,12 @@ public abstract class IntegrationTest implements WithAssertions {
       "&timeout=" + Configuration.timeout, pageObjectClass);
   }
 
-  protected void switchToDownloadMode(FileDownloadMode mode) {
-    if (Configuration.fileDownload != mode) {
+  protected void toggleProxy(boolean proxyEnabled) {
+    if (Configuration.proxyEnabled != proxyEnabled) {
       Selenide.close();
     }
-    Configuration.fileDownload = mode;
+    Configuration.proxyEnabled = proxyEnabled;
+    Configuration.fileDownload = proxyEnabled ? PROXY : HTTPGET;
   }
 
   protected void givenHtml(String... html) {

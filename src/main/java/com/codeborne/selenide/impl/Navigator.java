@@ -11,7 +11,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
@@ -19,6 +21,8 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
+  private static final Logger log = Logger.getLogger(Navigator.class.getName());
+
   private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
@@ -52,6 +56,8 @@ public class Navigator {
   }
 
   private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
+    forceProxyIfNeeded();
+
     url = absoluteUrl(url);
     url = appendBasicAuthIfNeeded(url, authenticationType, domain, login, password);
 
@@ -71,6 +77,14 @@ public class Navigator {
     catch (RuntimeException | Error e) {
       SelenideLogger.commitStep(log, e);
       throw e;
+    }
+  }
+
+  private void forceProxyIfNeeded() {
+    if (!Configuration.proxyEnabled && Configuration.fileDownload == PROXY) {
+      log.warning("Configuration.proxyEnabled == false but Configuration.fileDownload == PROXY. " +
+        "We will enable proxy server automatically.");
+      Configuration.proxyEnabled = true;
     }
   }
 

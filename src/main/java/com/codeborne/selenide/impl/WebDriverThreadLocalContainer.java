@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
 import static com.codeborne.selenide.Configuration.holdBrowserOpen;
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
@@ -220,12 +219,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     }
 
     Proxy userProvidedProxy = proxy;
-
-    if (!Configuration.proxyEnabled && Configuration.fileDownload == PROXY) {
-      log.warning("Configuration.proxyEnabled == false but Configuration.fileDownload == PROXY. " +
-        "We will enable proxy server automatically.");
-      Configuration.proxyEnabled = true;
-    }
 
     if (Configuration.proxyEnabled) {
       SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
