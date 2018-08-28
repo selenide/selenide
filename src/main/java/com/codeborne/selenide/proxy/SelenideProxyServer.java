@@ -1,12 +1,10 @@
 package com.codeborne.selenide.proxy;
 
+import com.codeborne.selenide.Configuration;
 import net.lightbody.bmp.BrowserMobProxy;
-import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.filters.RequestFilter;
-import net.lightbody.bmp.filters.RequestFilterAdapter;
 import net.lightbody.bmp.filters.ResponseFilter;
-import net.lightbody.bmp.filters.ResponseFilterAdapter;
 import org.openqa.selenium.Proxy;
 
 import java.net.InetSocketAddress;
@@ -14,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Integer.parseInt;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Selenide own proxy server to intercept server responses
@@ -21,32 +20,12 @@ import static java.lang.Integer.parseInt;
  * It holds map of request and response filters by name.
  */
 public class SelenideProxyServer {
-  protected final Proxy outsideProxy;
-
-  protected BrowserMobProxy proxy = new BrowserMobProxyServer() {
-    int maxSize = 64 * 1024 * 1024; // 64 MB
-    @Override
-    public void addRequestFilter(RequestFilter filter) {
-      addFirstHttpFilterFactory(new RequestFilterAdapter.FilterSource(filter, maxSize));
-    }
-
-    @Override public void addResponseFilter(ResponseFilter filter) {
-      addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter, maxSize));
-    }
-  };
-
-  /**
-   * Method return current instance of browser mob proxy
-   *
-   * @return browser mob proxy instance
-   */
-  public BrowserMobProxy getProxy() {
-    return proxy;
-  }
-
-  protected int port;
-  protected Map<String, RequestFilter> requestFilters = new HashMap<>();
-  protected Map<String, ResponseFilter> responseFilters = new HashMap<>();
+  private final InetAddressResolver inetAddressResolver;
+  private final Proxy outsideProxy;
+  private final BrowserMobProxy proxy;
+  private final Map<String, RequestFilter> requestFilters = new HashMap<>();
+  private final Map<String, ResponseFilter> responseFilters = new HashMap<>();
+  private int port;
 
   /**
    * Create server
@@ -55,7 +34,13 @@ public class SelenideProxyServer {
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
   public SelenideProxyServer(Proxy outsideProxy) {
+    this(outsideProxy, new InetAddressResolver(), new BrowserMobProxyServerUnlimited());
+  }
+
+  protected SelenideProxyServer(Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserMobProxy proxy) {
     this.outsideProxy = outsideProxy;
+    this.inetAddressResolver = inetAddressResolver;
+    this.proxy = proxy;
   }
 
   /**
@@ -74,7 +59,7 @@ public class SelenideProxyServer {
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
     addResponseFilter("download", new FileDownloadFilter());
 
-    proxy.start();
+    proxy.start(Configuration.proxyPort);
     port = proxy.getPort();
   }
 
@@ -121,7 +106,9 @@ public class SelenideProxyServer {
    * Converts this proxy to a "selenium" proxy that can be used by webdriver
    */
   public Proxy createSeleniumProxy() {
-    return ClientUtil.createSeleniumProxy(proxy);
+    return isEmpty(Configuration.proxyHost)
+      ? ClientUtil.createSeleniumProxy(proxy)
+      : ClientUtil.createSeleniumProxy(proxy, inetAddressResolver.getInetAddressByName(Configuration.proxyHost));
   }
 
   /**
@@ -129,6 +116,15 @@ public class SelenideProxyServer {
    */
   public void shutdown() {
     proxy.abort();
+  }
+
+  /**
+   * Method return current instance of browser mob proxy
+   *
+   * @return browser mob proxy instance
+   */
+  public BrowserMobProxy getProxy() {
+    return proxy;
   }
 
   @Override

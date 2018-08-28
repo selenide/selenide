@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
@@ -19,8 +18,17 @@ import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 public class DownloadFile implements Command<File> {
   private static final Logger LOG = Logger.getLogger(DownloadFile.class.getName());
 
-  DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
-  DownloadFileWithProxyServer downloadFileWithProxyServer = new DownloadFileWithProxyServer();
+  private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
+  private final DownloadFileWithProxyServer downloadFileWithProxyServer;
+
+  public DownloadFile() {
+    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer());
+  }
+
+  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy) {
+    downloadFileWithHttpRequest = httpget;
+    downloadFileWithProxyServer = proxy;
+  }
 
   @Override
   public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
@@ -32,18 +40,19 @@ public class DownloadFile implements Command<File> {
       LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
       return downloadFileWithHttpRequest.download(link, timeout);
     }
-    else if (webdriverContainer.getProxyServer() == null) {
-      LOG.config("Proxy server is not started - download file via http get");
-      return downloadFileWithHttpRequest.download(link, timeout);
+    if (!Configuration.proxyEnabled) {
+      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup Configuration.proxyEnabled");
     }
-    else {
-      return downloadFileWithProxyServer.download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
+    if (webdriverContainer.getProxyServer() == null) {
+      throw new IllegalStateException("Cannot download file: proxy server is not started");
     }
+
+    return downloadFileWithProxyServer.download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
   }
 
-  private long getTimeout(Object[] args) {
+  long getTimeout(Object[] args) {
     try {
-      if (Objects.nonNull(args) && args.length > 0) {
+      if (args != null && args.length > 0) {
         return (long) args[0];
       }
       else {

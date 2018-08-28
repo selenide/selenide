@@ -98,7 +98,7 @@ class NavigatorTest implements WithAssertions {
   @Test
   void open_withoutAuthentication_resetsPreviousAuthentication() {
     Configuration.browser = "opera";
-    enableProxy();
+    Configuration.proxyEnabled = true;
 
     navigator.open("https://some.com/login");
 
@@ -109,7 +109,7 @@ class NavigatorTest implements WithAssertions {
   @Test
   void open_withBasicAuth_noProxy() {
     Configuration.browser = "opera";
-    disableProxy();
+    Configuration.proxyEnabled = false;
 
     navigator.open("https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
@@ -119,20 +119,12 @@ class NavigatorTest implements WithAssertions {
   @Test
   void open_withBasicAuth_withProxy() {
     Configuration.browser = "opera";
-    enableProxy();
+    Configuration.proxyEnabled = true;
 
     navigator.open("https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
     verify(navigation).to("https://some.com/login");
     verify(authenticationFilter)
       .setAuthentication(eq(AuthenticationType.BASIC), refEq(new Credentials("basic-auth-login", "basic-auth-password")));
-  }
-
-  private void enableProxy() {
-    Configuration.fileDownload = Configuration.FileDownloadMode.PROXY;
-  }
-
-  private void disableProxy() {
-    Configuration.fileDownload = Configuration.FileDownloadMode.HTTPGET;
   }
 }

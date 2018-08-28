@@ -12,7 +12,6 @@ import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
@@ -76,7 +75,7 @@ public class Navigator {
   }
 
   private void beforeNavigateTo(AuthenticationType authenticationType, String domain, String login, String password) {
-    if (Configuration.fileDownload == PROXY) {
+    if (Configuration.proxyEnabled) {
       beforeNavigateToWithProxy(authenticationType, domain, login, password);
     }
     else {
@@ -111,7 +110,7 @@ public class Navigator {
 
   private boolean passBasicAuthThroughUrl(AuthenticationType authenticationType, String domain, String login, String password) {
     return hasAuthentication(domain, login, password) &&
-      Configuration.fileDownload != PROXY &&
+      !Configuration.proxyEnabled &&
       authenticationType == AuthenticationType.BASIC;
   }
 

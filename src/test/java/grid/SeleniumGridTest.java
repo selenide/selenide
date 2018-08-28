@@ -14,7 +14,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.util.Optional;
 
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -39,7 +38,7 @@ class SeleniumGridTest extends IntegrationTest {
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
     Configuration.browser = "chrome";
     Configuration.headless = true;
-    Configuration.fileDownload = PROXY;
+    Configuration.proxyEnabled = true;
     new WebDriverBinaryManager().setupBinaryPath();
   }
 

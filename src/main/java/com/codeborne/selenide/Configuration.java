@@ -381,6 +381,35 @@ public class Configuration {
           System.getProperty("selenide.fileDownload", HTTPGET.name()));
 
   /**
+   * If Selenide should run browser through its own proxy server.
+   * It allows some additional features which are not possible with plain Selenium.
+   * But it's not enabled by default because sometimes it would not work (more exactly, if tests and browser and
+   * executed on different machines, and "test machine" is not accessible from "browser machine"). If it's not your
+   * case, I recommend to enable proxy.
+   *
+   * Default: false
+   */
+  public static boolean proxyEnabled = Boolean.parseBoolean(System.getProperty("selenide.proxyEnabled", "false"));
+
+  /**
+   * Host of Selenide proxy server.
+   * Used only if proxyEnabled == true.
+   *
+   * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
+   *
+   * @see net.lightbody.bmp.client.ClientUtil#getConnectableAddress()
+   */
+  public static String proxyHost = System.getProperty("selenide.proxyHost", "");
+
+  /**
+   * Port of Selenide proxy server.
+   * Used only if proxyEnabled == true.
+   *
+   * Default: 0 (meaning that Selenide will choose a random free port on current machine)
+   */
+  public static int proxyPort = Integer.parseInt(System.getProperty("selenide.proxyPort", "0"));
+
+  /**
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
    * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
