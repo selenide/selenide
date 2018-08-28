@@ -12,17 +12,46 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class WebDriverBinaryManager {
   public void setupBinaryPath() {
-    if (isChrome() && !isSystemPropertySet("webdriver.chrome.driver")) {
+    if (isChrome()) setupChrome();
+    if (isEdge()) setupEdge();
+    if (isIE()) setupIE();
+    if (isOpera()) setupOpera();
+    if (isPhantomjs()) setupPhantomjs();
+    if (isFirefox()) setupFirefox();
+  }
+
+  private void setupChrome() {
+    if (!isSystemPropertySet("webdriver.chrome.driver")) {
       WebDriverManager.chromedriver().setup();
-    } else if (isEdge() && !isSystemPropertySet("webdriver.edge.driver")) {
+    }
+  }
+
+  private void setupEdge() {
+    if (!isSystemPropertySet("webdriver.edge.driver")) {
       WebDriverManager.edgedriver().setup();
-    } else if (isIE() && !isSystemPropertySet("webdriver.ie.driver")) {
+    }
+  }
+
+  private void setupIE() {
+    if (!isSystemPropertySet("webdriver.ie.driver")) {
       WebDriverManager.iedriver().setup();
-    } else if (isOpera() && !isSystemPropertySet("webdriver.opera.driver")) {
+    }
+  }
+
+  private void setupOpera() {
+    if (!isSystemPropertySet("webdriver.opera.driver")) {
       WebDriverManager.operadriver().setup();
-    } else if (isPhantomjs() && !isSystemPropertySet("phantomjs.binary.path")) {
+    }
+  }
+
+  private void setupPhantomjs() {
+    if (!isSystemPropertySet("phantomjs.binary.path")) {
       WebDriverManager.phantomjs().setup();
-    } else if (isFirefox() && !isSystemPropertySet("webdriver.gecko.driver")) {
+    }
+  }
+
+  private void setupFirefox() {
+    if (!isSystemPropertySet("webdriver.gecko.driver")) {
       WebDriverManager.firefoxdriver().setup();
     }
   }

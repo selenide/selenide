@@ -7,24 +7,21 @@ import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
 import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
-  private static final Logger log = Logger.getLogger(Navigator.class.getName());
+  private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
+  private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(String relativeOrAbsoluteUrl) {
     navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
@@ -47,7 +44,6 @@ public class Navigator {
   }
 
   private AuthenticationFilter basicAuthRequestFilter() {
-    getAndCheckWebDriver();
     SelenideProxyServer selenideProxy = getSelenideProxy();
     return selenideProxy.requestFilter("authentication");
   }
@@ -58,36 +54,14 @@ public class Navigator {
 
   private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
     url = absoluteUrl(url);
-
-    if (isIE() && !isLocalFile(url)) {
-      url = makeUniqueUrlToAvoidIECaching(url, System.nanoTime());
-    }
-
-    boolean hasAuthentication = !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
-    if (hasAuthentication) {
-      if (Configuration.fileDownload == PROXY) {
-        basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
-      }
-      else if (authenticationType == AuthenticationType.BASIC) {
-        url = appendBasicAuthToURL(url, domain, login, password);
-      }
-      else {
-        throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
-      }
-    }
-    else {
-      if (Configuration.fileDownload == PROXY) {
-        basicAuthRequestFilter().removeAuthentication();
-      }
-    }
+    url = appendBasicAuthIfNeeded(url, authenticationType, domain, login, password);
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
       WebDriver webdriver = getAndCheckWebDriver();
+      beforeNavigateTo(authenticationType, domain, login, password);
       webdriver.navigate().to(url);
-      if (webdriver instanceof JavascriptExecutor) {
-        collectJavascriptErrors((JavascriptExecutor) webdriver);
-      }
+      javascriptErrorsCollector.collectJavascriptErrors(webdriver);
       SelenideLogger.commitStep(log, PASS);
     } catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
@@ -95,62 +69,50 @@ public class Navigator {
       e.addInfo("selenide.baseUrl", baseUrl);
       throw e;
     }
-    catch (RuntimeException e) {
-      SelenideLogger.commitStep(log, e);
-      throw e;
-    }
-    catch (Error e) {
+    catch (RuntimeException | Error e) {
       SelenideLogger.commitStep(log, e);
       throw e;
     }
   }
 
-  String appendBasicAuthToURL(String url, String domain, String login, String password) {
-    if (!domain.isEmpty()) domain += "%5C";
-    if (!login.isEmpty()) login += ":";
-    if (!password.isEmpty()) password += "@";
-    int index = url.indexOf("://") + 3;
-    if (index < 3) return domain + login + password + url;
-
-    return url.substring(0, index - 3) + "://"
-      + domain
-      + login
-      + password
-      + url.substring(index);
-  }
-
-  protected void collectJavascriptErrors(JavascriptExecutor webdriver) {
-    if (!captureJavascriptErrors) return;
-
-    try {
-      webdriver.executeScript(
-          "if (!window._selenide_jsErrors) {\n" +
-              "  window._selenide_jsErrors = [];\n" +
-              "}\n" +
-              "if (!window.onerror) {\n" +
-              "  window.onerror = function (errorMessage, url, lineNumber) {\n" +
-              "    var message = errorMessage + ' at ' + url + ':' + lineNumber;\n" +
-              "    window._selenide_jsErrors.push(message);\n" +
-              "    return false;\n" +
-              "  };\n" +
-              "}\n"
-      );
-    } catch (UnsupportedOperationException cannotExecuteJsAgainstPlainTextPage) {
-      log.warning(cannotExecuteJsAgainstPlainTextPage.toString());
-    } catch (WebDriverException cannotExecuteJs) {
-      log.severe(cannotExecuteJs.toString());
+  private void beforeNavigateTo(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (Configuration.fileDownload == PROXY) {
+      beforeNavigateToWithProxy(authenticationType, domain, login, password);
+    }
+    else {
+      beforeNavigateToWithoutProxy(authenticationType, domain, login, password);
     }
   }
 
-  protected String makeUniqueUrlToAvoidIECaching(String url, long unique) {
-    if (url.contains("timestamp=")) {
-      return url.replaceFirst("(.*)(timestamp=)(.*)([&#].*)", "$1$2" + unique + "$4")
-          .replaceFirst("(.*)(timestamp=)(.*)$", "$1$2" + unique);
-    } else {
-      return url.contains("?") ?
-          url + "&timestamp=" + unique :
-          url + "?timestamp=" + unique;
+  private void beforeNavigateToWithProxy(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (hasAuthentication(domain, login, password)) {
+      basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
     }
+    else {
+      basicAuthRequestFilter().removeAuthentication();
+    }
+  }
+
+  private void beforeNavigateToWithoutProxy(AuthenticationType authenticationType, String domain, String login, String password) {
+    if (hasAuthentication(domain, login, password) && authenticationType != AuthenticationType.BASIC) {
+      throw new UnsupportedOperationException("Cannot use " + authenticationType + " authentication without proxy server");
+    }
+  }
+
+  private boolean hasAuthentication(String domain, String login, String password) {
+    return !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
+  }
+
+  private String appendBasicAuthIfNeeded(String url, AuthenticationType authType, String domain, String login, String password) {
+    return passBasicAuthThroughUrl(authType, domain, login, password)
+      ? basicAuthUrl.appendBasicAuthToURL(url, domain, login, password)
+      : url;
+  }
+
+  private boolean passBasicAuthThroughUrl(AuthenticationType authenticationType, String domain, String login, String password) {
+    return hasAuthentication(domain, login, password) &&
+      Configuration.fileDownload != PROXY &&
+      authenticationType == AuthenticationType.BASIC;
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {

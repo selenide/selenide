@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
@@ -14,6 +15,7 @@ import com.codeborne.selenide.impl.WebElementsCollection;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -37,6 +39,26 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   public ElementsCollection(WebElementsCollection collection) {
     this.collection = collection;
+  }
+
+  public ElementsCollection(Collection<? extends WebElement> elements) {
+    this(new WebElementsCollectionWrapper(elements));
+  }
+
+  public ElementsCollection(String cssSelector) {
+    this(By.cssSelector(cssSelector));
+  }
+
+  public ElementsCollection(By seleniumSelector) {
+    this(new BySelectorCollection(seleniumSelector));
+  }
+
+  public ElementsCollection(WebElement parent, String cssSelector) {
+    this(parent, By.cssSelector(cssSelector));
+  }
+
+  public ElementsCollection(WebElement parent, By seleniumSelector) {
+    this(new BySelectorCollection(parent, seleniumSelector));
   }
 
   /**

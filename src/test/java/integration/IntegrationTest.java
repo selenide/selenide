@@ -18,11 +18,25 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
+import static com.codeborne.selenide.Configuration.FileDownloadMode;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.Configuration.*;
+import static com.codeborne.selenide.Configuration.browser;
+import static com.codeborne.selenide.Configuration.browserSize;
+import static com.codeborne.selenide.Configuration.clickViaJs;
+import static com.codeborne.selenide.Configuration.collectionsTimeout;
+import static com.codeborne.selenide.Configuration.fastSetValue;
+import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Configuration.versatileSetValue;
+import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
+import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
@@ -117,6 +131,14 @@ public abstract class IntegrationTest implements WithAssertions {
       Selenide.close();
     }
     Configuration.fileDownload = mode;
+  }
+
+  protected void givenHtml(String... html) {
+    open("/empty.html");
+    executeJavaScript(
+      "document.querySelector('body').innerHTML = arguments[0];",
+      String.join(" ", html)
+    );
   }
 
   @AfterEach

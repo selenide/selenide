@@ -21,12 +21,11 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
-import static integration.helpers.HTMLBuilderForTestPreconditions.Given;
 
 class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
-    Given.openedPageWithBody(
+    givenHtml(
       "<ul>Hello to:",
       "<li class='the-expanse detective'>Miller <label>detective</label></li>",
       "<li class='the-expanse missing'>Julie Mao</li>",
