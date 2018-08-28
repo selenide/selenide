@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
+import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -32,6 +34,7 @@ class NavigatorTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
+    Configuration.fileDownload = HTTPGET;
     WebDriverRunner.webdriverContainer = mock(WebDriverThreadLocalContainer.class);
     doReturn(driver).when(WebDriverRunner.webdriverContainer).getAndCheckWebDriver();
     doReturn(selenideProxy).when(WebDriverRunner.webdriverContainer).getProxyServer();
@@ -126,5 +129,15 @@ class NavigatorTest implements WithAssertions {
     verify(navigation).to("https://some.com/login");
     verify(authenticationFilter)
       .setAuthentication(eq(AuthenticationType.BASIC), refEq(new Credentials("basic-auth-login", "basic-auth-password")));
+  }
+
+  @Test
+  void startsProxyServer_evenIfProxyIsNotEnabled_butFileDownloadModeIsProxy() {
+    Configuration.proxyEnabled = false;
+    Configuration.fileDownload = PROXY;
+
+    navigator.open("https://some.com/login");
+
+    assertThat(Configuration.proxyEnabled).isTrue();
   }
 }
