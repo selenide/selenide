@@ -13,8 +13,6 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ProxyServerUsageTest extends IntegrationTest {
   private List<String> requests = new ArrayList<>();
@@ -23,7 +21,6 @@ class ProxyServerUsageTest extends IntegrationTest {
   @BeforeEach
   @AfterEach
   void setUp() {
-    assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     closeWebDriver();
     toggleProxy(true);
   }
