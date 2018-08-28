@@ -36,6 +36,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.isSafari;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
@@ -128,6 +129,10 @@ public abstract class IntegrationTest implements WithAssertions {
   }
 
   protected void toggleProxy(boolean proxyEnabled) {
+    if (proxyEnabled) {
+      assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
+    }
+
     if (Configuration.proxyEnabled != proxyEnabled) {
       Selenide.close();
     }

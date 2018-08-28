@@ -12,17 +12,13 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
   private File folder = new File(Configuration.reportsFolder);
 
   @BeforeEach
   void setUp() {
-    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-
     toggleProxy(true);
     openFile("page_with_uploads.html");
   }
