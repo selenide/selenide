@@ -99,6 +99,8 @@ public abstract class IntegrationTest implements WithAssertions {
     versatileSetValue = false;
     browserSize = "1200x960";
     server.reset();
+    Configuration.proxyPort = 0;
+    Configuration.proxyHost = "";
 
     // proxy breaks Firefox/Marionette because of this error:
     // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"

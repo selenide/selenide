@@ -2,6 +2,7 @@
 
 ## 4.14.0 (planned to xx.09.2018)
 * #784 Enable BasicAuth through Selenide proxy server  -- see https://github.com/codeborne/selenide/pull/785
+* #788 Add setting to enable/disable proxy server
 * #789 Remove `?timestamp` parameter for IE
 
 ## 4.13.0 (released 20.08.2018)

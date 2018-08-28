@@ -221,7 +221,13 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
     Proxy userProvidedProxy = proxy;
 
-    if (Configuration.fileDownload == PROXY) {
+    if (!Configuration.proxyEnabled && Configuration.fileDownload == PROXY) {
+      log.warning("Configuration.proxyEnabled == false but Configuration.fileDownload == PROXY. " +
+        "We will enable proxy server automatically.");
+      Configuration.proxyEnabled = true;
+    }
+
+    if (Configuration.proxyEnabled) {
       SelenideProxyServer selenideProxyServer = new SelenideProxyServer(proxy);
       selenideProxyServer.start();
       THREAD_PROXY_SERVER.put(currentThread().getId(), selenideProxyServer);

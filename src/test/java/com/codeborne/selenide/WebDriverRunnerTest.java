@@ -16,7 +16,6 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.net.URL;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
@@ -43,7 +42,6 @@ class WebDriverRunnerTest implements WithAssertions {
 
     WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
     doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
-    Configuration.fileDownload = HTTPGET;
   }
 
   @AfterEach

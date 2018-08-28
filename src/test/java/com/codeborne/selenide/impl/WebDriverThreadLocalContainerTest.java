@@ -1,11 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -13,7 +7,6 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
@@ -22,7 +15,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
+
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.close;
 import static java.lang.Thread.currentThread;
@@ -67,7 +65,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
 
   @Test
   void createWebDriverWithoutProxy() {
-    Configuration.fileDownload = HTTPGET;
+    Configuration.proxyEnabled = false;
 
     container.createDriver();
 
@@ -76,16 +74,24 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
 
   @Test
   void createWebDriverWithSelenideProxyServer() {
+    Configuration.proxyEnabled = true;
+
+    container.createDriver();
+
+    assertThat(container.getProxyServer()).isNotNull();
+    verify(container.factory).createWebDriver(container.getProxyServer().createSeleniumProxy());
+  }
+
+  @Test
+  void startsProxyServer_evenIfProxyIsNotEnabled_butFileDownloadModeIsProxy() {
+    Configuration.proxyEnabled = false;
     Configuration.fileDownload = PROXY;
 
     container.createDriver();
 
-    ArgumentCaptor<Proxy> captor = ArgumentCaptor.forClass(Proxy.class);
-    verify(container.factory).createWebDriver(captor.capture());
-    assertThat(captor.getValue().getHttpProxy())
-      .isNotNull();
-    assertThat(captor.getValue().getSslProxy())
-      .isNotNull();
+    assertThat(Configuration.proxyEnabled).isTrue();
+    assertThat(container.getProxyServer()).isNotNull();
+    verify(container.factory).createWebDriver(container.getProxyServer().createSeleniumProxy());
   }
 
   @Test
@@ -94,8 +100,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
 
-    assertThat(container.getAndCheckWebDriver())
-      .isEqualTo(webdriver);
+    assertThat(container.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(container).isBrowserStillOpen(any());
   }
 
@@ -105,8 +110,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     container.THREAD_WEB_DRIVER.put(currentThread().getId(), webdriver);
 
-    assertThat(container.getAndCheckWebDriver())
-      .isEqualTo(webdriver);
+    assertThat(container.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(container, never()).isBrowserStillOpen(any());
   }
 
@@ -115,8 +119,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     doReturn("blah").when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver))
-      .isTrue();
+    assertThat(container.isBrowserStillOpen(webdriver)).isTrue();
   }
 
   @Test
@@ -124,8 +127,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(UnreachableBrowserException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver))
-      .isFalse();
+    assertThat(container.isBrowserStillOpen(webdriver)).isFalse();
   }
 
   @Test
@@ -133,8 +135,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchWindowException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver))
-      .isFalse();
+    assertThat(container.isBrowserStillOpen(webdriver)).isFalse();
   }
 
   @Test
@@ -142,14 +143,13 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     WebDriver webdriver = mock(WebDriver.class);
     doThrow(NoSuchSessionException.class).when(webdriver).getTitle();
 
-    assertThat(container.isBrowserStillOpen(webdriver))
-      .isFalse();
+    assertThat(container.isBrowserStillOpen(webdriver)).isFalse();
   }
 
   @Test
   void closeWebDriverLoggingWhenProxyIsAdded() {
     Configuration.holdBrowserOpen = false;
-    Configuration.fileDownload = PROXY;
+    Configuration.proxyEnabled = true;
 
     Proxy mockedProxy = Mockito.mock(Proxy.class);
     when(mockedProxy.getHttpProxy()).thenReturn("selenide:0");
@@ -181,7 +181,8 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     try {
       container.getWebDriver();
       fail("expected IllegalStateException");
-    } catch (IllegalStateException expected) {
+    }
+    catch (IllegalStateException expected) {
       assertThat(expected)
         .hasMessageContaining("reopenBrowserOnFail=false");
     }
