@@ -30,10 +30,8 @@ import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.isSafari;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -101,10 +99,7 @@ public abstract class IntegrationTest implements WithAssertions {
     server.reset();
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-
-    // proxy breaks Firefox/Marionette because of this error:
-    // "InvalidArgumentError: Expected [object Undefined] undefined to be an integer"
-    toggleProxy(!isFirefox() && !isLegacyFirefox());
+    toggleProxy(true);
   }
 
   private void restartReallyUnstableBrowsers() {
