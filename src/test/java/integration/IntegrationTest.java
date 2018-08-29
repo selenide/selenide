@@ -95,6 +95,7 @@ public abstract class IntegrationTest implements WithAssertions {
     Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
     Configuration.baseUrl = protocol + "127.0.0.1:" + port;
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
+    Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     fastSetValue = false;
     versatileSetValue = false;
     browserSize = "1200x960";
