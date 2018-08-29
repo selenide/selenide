@@ -156,60 +156,64 @@ public class WebDriverRunner {
     return webdriverContainer.hasWebDriverStarted();
   }
 
+  private static Browser browser() {
+    return new Browser(browser, headless);
+  }
+
   /**
    * Is Selenide configured to use Firefox browser
    */
   public static boolean isFirefox() {
-    return FIREFOX.equalsIgnoreCase(browser);
+    return browser().isFirefox();
   }
 
   /**
    * Is Selenide configured to use legacy Firefox driver
    */
   public static boolean isLegacyFirefox() {
-    return LEGACY_FIREFOX.equalsIgnoreCase(browser);
+    return browser().isLegacyFirefox();
   }
 
   /**
    * Is Selenide configured to use Chrome browser
    */
   public static boolean isChrome() {
-    return CHROME.equalsIgnoreCase(browser);
+    return browser().isChrome();
   }
 
   /**
    * Is Selenide configured to use Internet Explorer browser
    */
   public static boolean isIE() {
-    return INTERNET_EXPLORER.equalsIgnoreCase(browser) || IE.equalsIgnoreCase(browser);
+    return browser().isIE();
   }
 
   /**
    * Is Selenide configured to use Microsoft EDGE browser
    */
   public static boolean isEdge() {
-    return EDGE.equalsIgnoreCase(browser);
+    return browser().isEdge();
   }
 
   /**
    * Is Selenide configured to user Safari browser
    */
   public static boolean isSafari() {
-    return SAFARI.equalsIgnoreCase(browser);
+    return browser().isSafari();
   }
 
   /**
    * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
    */
   public static boolean isHeadless() {
-    return isHtmlUnit() || isPhantomjs() || headless;
+    return browser().isHeadless();
   }
 
   /**
    * Does this browser support "alert" and "confirm" dialogs.
    */
   public static boolean supportsModalDialogs() {
-    return !isPhantomjs() && !isSafari();
+    return browser().supportsModalDialogs();
   }
 
   /**
@@ -223,28 +227,28 @@ public class WebDriverRunner {
    * Is Selenide configured to use HtmlUnit browser
    */
   public static boolean isHtmlUnit() {
-    return browser != null && browser.startsWith(HTMLUNIT);
+    return browser().isHtmlUnit();
   }
 
   /**
    * Is Selenide configured to use PhantomJS browser
    */
   public static boolean isPhantomjs() {
-    return PHANTOMJS.equalsIgnoreCase(browser);
+    return browser().isPhantomjs();
   }
 
   /**
    * Is Selenide configured to use Opera browser
    */
   public static boolean isOpera() {
-    return OPERA.equalsIgnoreCase(browser);
+    return browser().isOpera();
   }
 
   /**
    * Is Selenide configured to use JBrowser browser
    */
   public static boolean isJBrowser() {
-    return JBROWSER.equalsIgnoreCase(browser);
+    return browser().isJBrowser();
   }
 
   /**
