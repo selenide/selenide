@@ -264,16 +264,6 @@ public class Configuration {
   }
 
   /**
-   * Mock "alert" and "confirm" javascript dialogs.
-   * Can be configured either programmatically or by system property "-Dselenide.dismissModalDialogs=true".
-   *
-   * Default value: false
-   *        (true for headless browsers like HtmlUnit and PhantomJS because they do not support alert/confirm anyway)
-   */
-  public static boolean dismissModalDialogs =
-      Boolean.parseBoolean(System.getProperty("selenide.dismissModalDialogs", "false"));
-
-  /**
    * If set to true, sets value by javascript instead of using Selenium built-in "sendKey" function
    * (that is quite slow because it sends every character separately).
    *

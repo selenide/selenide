@@ -3,7 +3,6 @@ package integration;
 import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,11 +14,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.dismiss;
-import static com.codeborne.selenide.Selenide.onConfirmReturn;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ConfirmTest extends IntegrationTest {
   private String userName = "John Mc'Clane";
@@ -31,7 +27,7 @@ class ConfirmTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
-    Assumptions.assumeFalse(isFirefox() || isChrome());
+    assumeTrue(supportsModalDialogs());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
@@ -40,7 +36,6 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void canSubmitConfirmDialogWithoutCheckingText() {
-    onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm();
     $("h1").shouldHave(text("Page with JQuery"));
@@ -49,7 +44,6 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void canSubmitConfirmDialogAndCheckText() {
-    onConfirmReturn(true);
     $(byText("Confirm button")).click();
     confirm("Get out of this page, " + userName + '?');
     $("h1").shouldHave(text("Page with JQuery"));
@@ -58,7 +52,6 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void canCancelConfirmDialog() {
-    onConfirmReturn(false);
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, " + userName + '?');
     $("#message").shouldHave(text("Stay here, " + userName));
@@ -69,21 +62,15 @@ class ConfirmTest extends IntegrationTest {
   @Video
   void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
-    try {
-      confirm("Get out of this page, Maria?");
-    } catch (DialogTextMismatch expected) {
-      return;
-    }
-    if (supportsModalDialogs()) {
-      fail("Should throw DialogTextMismatch for mismatching text");
-    }
+    assertThatThrownBy(() -> confirm("Get out of this page, Maria?"))
+      .isInstanceOf(DialogTextMismatch.class)
+      .hasMessageContaining("Actual: Get out of this page, John Mc'Clane?")
+      .hasMessageContaining("Expected: Get out of this page, Maria?");
   }
 
   @Test
   @Video
   void confirmReturnsActualDialogText() {
-    Assumptions.assumeTrue(supportsModalDialogs());
-
     $(byText("Confirm button")).click();
     assertThat(confirm())
       .isEqualTo(String.format("Get out of this page, %s?", userName));
@@ -92,8 +79,6 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void dismissReturnsActualDialogText() {
-    Assumptions.assumeTrue(supportsModalDialogs());
-
     $(byText("Confirm button")).click();
     assertThat(dismiss())
       .isEqualTo(String.format("Get out of this page, %s?", userName));
@@ -102,13 +87,10 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void waitsUntilConfirmDialogAppears() {
-    onConfirmReturn(true);
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
 
-    if (!isHeadless()) {
-      assertThat(confirmDialogText)
-        .isEqualTo(String.format("Get out of this page, %s?", userName));
-    }
+    assertThat(confirmDialogText)
+      .isEqualTo(String.format("Get out of this page, %s?", userName));
   }
 }
