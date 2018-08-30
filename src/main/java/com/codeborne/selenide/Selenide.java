@@ -78,7 +78,6 @@ public class Selenide {
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
     navigator.open(relativeOrAbsoluteUrl, domain, login, password);
-    modals.mockModalDialogs();
   }
 
   /**
@@ -120,7 +119,6 @@ public class Selenide {
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
     navigator.open(absoluteUrl, domain, login, password);
-    modals.mockModalDialogs();
   }
 
   /**
@@ -501,14 +499,6 @@ public class Selenide {
       }
     }
     return null;
-  }
-
-  /**
-   * Mock confirm dialog that return given value
-   * @param confirmReturnValue true = OK, false = CANCEL
-   */
-  public static void onConfirmReturn(boolean confirmReturnValue) {
-    modals.onConfirmReturn(confirmReturnValue);
   }
 
   /**
