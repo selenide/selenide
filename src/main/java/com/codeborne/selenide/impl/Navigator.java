@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
@@ -15,9 +16,6 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.WebDriverRunner.getAndCheckWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
@@ -26,28 +24,28 @@ public class Navigator {
   private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
-  public void open(String relativeOrAbsoluteUrl) {
-    navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
+  public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
+    navigateTo(driver, relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
   }
 
-  public void open(URL url) {
-    navigateTo(url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
+  public void open(SelenideDriver driver, URL url) {
+    navigateTo(driver, url.toExternalForm(), AuthenticationType.BASIC, "", "", "");
   }
 
-  public void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    navigateTo(relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
+  public void open(SelenideDriver driver, String relativeOrAbsoluteUrl, String domain, String login, String password) {
+    navigateTo(driver, relativeOrAbsoluteUrl, AuthenticationType.BASIC, domain, login, password);
   }
 
-  public void open(URL url, String domain, String login, String password) {
-    navigateTo(url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
+  public void open(SelenideDriver driver, URL url, String domain, String login, String password) {
+    navigateTo(driver, url.toExternalForm(), AuthenticationType.BASIC, domain, login, password);
   }
 
-  public void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
-    navigateTo(relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
+  public void open(SelenideDriver driver, String relativeOrAbsoluteUrl,
+                   AuthenticationType authenticationType, Credentials credentials) {
+    navigateTo(driver, relativeOrAbsoluteUrl, authenticationType, "", credentials.login, credentials.password);
   }
 
-  private AuthenticationFilter basicAuthRequestFilter() {
-    SelenideProxyServer selenideProxy = getSelenideProxy();
+  private AuthenticationFilter basicAuthRequestFilter(SelenideProxyServer selenideProxy) {
     return selenideProxy.requestFilter("authentication");
   }
 
@@ -55,7 +53,8 @@ public class Navigator {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : baseUrl + relativeOrAbsoluteUrl;
   }
 
-  private void navigateTo(String url, AuthenticationType authenticationType, String domain, String login, String password) {
+  private void navigateTo(SelenideDriver driver, String url,
+                          AuthenticationType authenticationType, String domain, String login, String password) {
     forceProxyIfNeeded();
 
     url = absoluteUrl(url);
@@ -63,12 +62,13 @@ public class Navigator {
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
-      WebDriver webdriver = getAndCheckWebDriver();
-      beforeNavigateTo(authenticationType, domain, login, password);
-      webdriver.navigate().to(url);
-      javascriptErrorsCollector.collectJavascriptErrors(webdriver);
+      WebDriver webDriver = driver.getAndCheckWebDriver();
+      beforeNavigateTo(driver.getProxyServer(), authenticationType, domain, login, password);
+      webDriver.navigate().to(url);
+      javascriptErrorsCollector.collectJavascriptErrors(driver.getWebDriver());
       SelenideLogger.commitStep(log, PASS);
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", baseUrl);
@@ -88,21 +88,23 @@ public class Navigator {
     }
   }
 
-  private void beforeNavigateTo(AuthenticationType authenticationType, String domain, String login, String password) {
+  private void beforeNavigateTo(SelenideProxyServer selenideProxy,
+                                AuthenticationType authenticationType, String domain, String login, String password) {
     if (Configuration.proxyEnabled) {
-      beforeNavigateToWithProxy(authenticationType, domain, login, password);
+      beforeNavigateToWithProxy(selenideProxy, authenticationType, domain, login, password);
     }
     else {
       beforeNavigateToWithoutProxy(authenticationType, domain, login, password);
     }
   }
 
-  private void beforeNavigateToWithProxy(AuthenticationType authenticationType, String domain, String login, String password) {
+  private void beforeNavigateToWithProxy(SelenideProxyServer selenideProxy,
+                                         AuthenticationType authenticationType, String domain, String login, String password) {
     if (hasAuthentication(domain, login, password)) {
-      basicAuthRequestFilter().setAuthentication(authenticationType, new Credentials(login, password));
+      basicAuthRequestFilter(selenideProxy).setAuthentication(authenticationType, new Credentials(login, password));
     }
     else {
-      basicAuthRequestFilter().removeAuthentication();
+      basicAuthRequestFilter(selenideProxy).removeAuthentication();
     }
   }
 
@@ -130,23 +132,23 @@ public class Navigator {
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
     return relativeOrAbsoluteUrl.toLowerCase().startsWith("http:") ||
-        relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
-        isLocalFile(relativeOrAbsoluteUrl);
+      relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
+      isLocalFile(relativeOrAbsoluteUrl);
   }
 
   private boolean isLocalFile(String url) {
     return url.toLowerCase().startsWith("file:");
   }
 
-  public void back() {
-    getWebDriver().navigate().back();
+  public void back(SelenideDriver driver) {
+    driver.getWebDriver().navigate().back();
   }
 
-  public void forward() {
-    getWebDriver().navigate().forward();
+  public void forward(SelenideDriver driver) {
+    driver.getWebDriver().navigate().forward();
   }
 
-  public void refresh() {
-    getWebDriver().navigate().refresh();
+  public void refresh(SelenideDriver driver) {
+    driver.getWebDriver().navigate().refresh();
   }
 }

@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockWebDriverExtension.class)
 class NavigatorTest implements WithAssertions {
   private Navigator navigator = new Navigator();
+  SelenideDriver selenideDriver = mock(SelenideDriver.class);
   WebDriver driver = mock(WebDriver.class);
   WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
   SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
@@ -35,9 +36,8 @@ class NavigatorTest implements WithAssertions {
   @BeforeEach
   void setUp() {
     Configuration.fileDownload = HTTPGET;
-    WebDriverRunner.webdriverContainer = mock(WebDriverThreadLocalContainer.class);
-    doReturn(driver).when(WebDriverRunner.webdriverContainer).getAndCheckWebDriver();
-    doReturn(selenideProxy).when(WebDriverRunner.webdriverContainer).getProxyServer();
+    doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
+    doReturn(selenideProxy).when(selenideDriver).getProxyServer();
     doReturn(navigation).when(driver).navigate();
     doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
   }
@@ -81,7 +81,7 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withoutAuthentication() {
-    navigator.open("https://some.com/login");
+    navigator.open(selenideDriver, "https://some.com/login");
 
     verify(navigation).to("https://some.com/login");
   }
@@ -91,7 +91,7 @@ class NavigatorTest implements WithAssertions {
     LogEventListener listener = mock(LogEventListener.class);
     SelenideLogger.addListener("listener-01", listener);
 
-    navigator.open("https://some.com/login");
+    navigator.open(selenideDriver, "https://some.com/login");
 
     verify(navigation).to("https://some.com/login");
     verify(listener).onEvent(argThat(log ->
@@ -103,7 +103,7 @@ class NavigatorTest implements WithAssertions {
     Configuration.browser = "opera";
     Configuration.proxyEnabled = true;
 
-    navigator.open("https://some.com/login");
+    navigator.open(selenideDriver, "https://some.com/login");
 
     verify(navigation).to("https://some.com/login");
     verify(authenticationFilter).removeAuthentication();
@@ -114,7 +114,7 @@ class NavigatorTest implements WithAssertions {
     Configuration.browser = "opera";
     Configuration.proxyEnabled = false;
 
-    navigator.open("https://some.com/login", "", "basic-auth-login", "basic-auth-password");
+    navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
     verify(navigation).to("https://basic-auth-login:basic-auth-password@some.com/login");
   }
@@ -124,7 +124,7 @@ class NavigatorTest implements WithAssertions {
     Configuration.browser = "opera";
     Configuration.proxyEnabled = true;
 
-    navigator.open("https://some.com/login", "", "basic-auth-login", "basic-auth-password");
+    navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
     verify(navigation).to("https://some.com/login");
     verify(authenticationFilter)
@@ -136,7 +136,7 @@ class NavigatorTest implements WithAssertions {
     Configuration.proxyEnabled = false;
     Configuration.fileDownload = PROXY;
 
-    navigator.open("https://some.com/login");
+    navigator.open(selenideDriver, "https://some.com/login");
 
     assertThat(Configuration.proxyEnabled).isTrue();
   }

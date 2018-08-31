@@ -23,6 +23,7 @@ import java.util.logging.Level;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 
@@ -53,14 +54,14 @@ public class Selenide {
    *   In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl) {
-    open(relativeOrAbsoluteUrl, "", "", "");
+    getSelenideDriver().open(relativeOrAbsoluteUrl);
   }
 
   /**
    * @see Selenide#open(String)
    */
   public static void open(URL absoluteUrl) {
-    open(absoluteUrl, "", "", "");
+    getSelenideDriver().open(absoluteUrl);
   }
 
   /**
@@ -77,7 +78,7 @@ public class Selenide {
    * In this case, it's prepended by baseUrl
    */
   public static void open(String relativeOrAbsoluteUrl, String domain, String login, String password) {
-    navigator.open(relativeOrAbsoluteUrl, domain, login, password);
+    getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password);
   }
 
   /**
@@ -111,14 +112,14 @@ public class Selenide {
    * @see Credentials
    */
   public static void open(String relativeOrAbsoluteUrl, AuthenticationType authenticationType, Credentials credentials) {
-    navigator.open(relativeOrAbsoluteUrl, authenticationType, credentials);
+    getSelenideDriver().open(relativeOrAbsoluteUrl, authenticationType, credentials);
   }
 
   /**
    * @see Selenide#open(URL, String, String, String)
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
-    navigator.open(absoluteUrl, domain, login, password);
+    getSelenideDriver().open(absoluteUrl, domain, login, password);
   }
 
   /**
@@ -182,21 +183,21 @@ public class Selenide {
    * Reload current page
    */
   public static void refresh() {
-    navigator.refresh();
+    navigator.refresh(getSelenideDriver());
   }
 
   /**
    * Navigate browser back to previous page
    */
   public static void back() {
-    navigator.back();
+    navigator.back(getSelenideDriver());
   }
 
   /**
    * Navigate browser forward to next page
    */
   public static void forward() {
-    navigator.forward();
+    navigator.forward(getSelenideDriver());
   }
 
   /**
