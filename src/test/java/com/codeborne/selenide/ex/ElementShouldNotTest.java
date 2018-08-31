@@ -1,12 +1,15 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.extension.MockWebDriverExtension;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebElement;
 
 import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockWebDriverExtension.class)
 class ElementShouldNotTest implements WithAssertions {
   @Test
   void testToString() {
