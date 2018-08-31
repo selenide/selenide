@@ -68,14 +68,6 @@ public class Configuration {
       System.getProperty("selenide.reopenBrowserOnFail", "true"));
 
   /**
-   * Timeout (in milliseconds) for opening (creating) a browser (webdriver).
-   * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.openBrowserTimeout=10000"
-   * Default value: 15000 (milliseconds)
-   */
-  public static long openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "15000"));
-
-  /**
    * Timeout (in milliseconds) for closing/killing browser.
    * <br>
    * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long.
