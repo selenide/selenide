@@ -12,8 +12,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.WebDriverRunner.CHROME;
-import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
+import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;

@@ -1,16 +1,16 @@
 package com.codeborne.selenide;
 
-import static com.codeborne.selenide.WebDriverRunner.CHROME;
-import static com.codeborne.selenide.WebDriverRunner.EDGE;
-import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
-import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
-import static com.codeborne.selenide.WebDriverRunner.INTERNET_EXPLORER;
-import static com.codeborne.selenide.WebDriverRunner.JBROWSER;
-import static com.codeborne.selenide.WebDriverRunner.LEGACY_FIREFOX;
-import static com.codeborne.selenide.WebDriverRunner.OPERA;
-import static com.codeborne.selenide.WebDriverRunner.PHANTOMJS;
-import static com.codeborne.selenide.WebDriverRunner.SAFARI;
-import static com.codeborne.selenide.WebDriverRunner.IE;
+import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.EDGE;
+import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
+import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
+import static com.codeborne.selenide.Browsers.JBROWSER;
+import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
+import static com.codeborne.selenide.Browsers.OPERA;
+import static com.codeborne.selenide.Browsers.PHANTOMJS;
+import static com.codeborne.selenide.Browsers.SAFARI;
+import static com.codeborne.selenide.Browsers.IE;
 
 public class Browser {
   public final String name;

@@ -6,7 +6,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
-import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
+import static com.codeborne.selenide.Browsers.FIREFOX;
 
 public class Configuration {
   private static final Logger LOG = Logger.getLogger(Configuration.class.getName());

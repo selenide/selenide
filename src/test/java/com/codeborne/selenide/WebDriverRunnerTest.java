@@ -18,8 +18,8 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
-import static com.codeborne.selenide.WebDriverRunner.HTMLUNIT;
+import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;

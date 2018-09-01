@@ -29,7 +29,7 @@ import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.FIREFOX;
+import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
