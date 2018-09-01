@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-class WebDriverFactoryTest {
-  private WebDriverFactory factory = spy(new WebDriverFactory());
+class BrowserResizerTest {
+  private BrowserResizer factory = spy(new BrowserResizer());
   private WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
+  private Browser browser = new Browser("firefox", true);
 
   @BeforeEach
   void setUp() {
@@ -28,7 +30,7 @@ class WebDriverFactoryTest {
 
   @Test
   void doesNotChangeWindowSizeByDefault() {
-    factory.adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(browser, webdriver);
     verifyNoMoreInteractions(webdriver);
   }
 
@@ -36,7 +38,7 @@ class WebDriverFactoryTest {
   void canConfigureBrowserWindowSize() {
     Configuration.browserSize = "1600x800";
 
-    factory.adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(browser, webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 800));
   }
@@ -45,7 +47,7 @@ class WebDriverFactoryTest {
   void canMaximizeBrowserWindow() {
     Configuration.startMaximized = true;
 
-    factory.adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(browser, webdriver);
 
     verify(webdriver.manage().window()).maximize();
   }
@@ -53,10 +55,9 @@ class WebDriverFactoryTest {
   @Test
   void canMaximizeBrowserWindow_chrome() {
     Configuration.startMaximized = true;
-    Configuration.browser = "chrome";
     doReturn(new Dimension(1600, 1200)).when(factory).getScreenSize();
 
-    factory.adjustBrowserSize(webdriver);
+    factory.adjustBrowserSize(new Browser("chrome", true), webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 1200));
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));

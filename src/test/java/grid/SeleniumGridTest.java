@@ -1,5 +1,6 @@
 package grid;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.webdriver.WebDriverBinaryManager;
 import integration.IntegrationTest;
@@ -39,7 +40,7 @@ class SeleniumGridTest extends IntegrationTest {
     Configuration.browser = "chrome";
     Configuration.headless = true;
     Configuration.proxyEnabled = true;
-    new WebDriverBinaryManager().setupBinaryPath();
+    new WebDriverBinaryManager().setupBinaryPath(new Browser(Configuration.browser, Configuration.headless));
   }
 
   @Test

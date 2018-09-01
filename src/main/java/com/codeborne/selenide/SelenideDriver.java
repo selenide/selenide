@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
 import static com.codeborne.selenide.Configuration.holdBrowserOpen;
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
-import static com.codeborne.selenide.impl.Describe.describe;
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 import static java.util.logging.Level.FINE;
@@ -120,7 +119,7 @@ public class SelenideDriver {
     WebDriver webdriver = factory.createWebDriver(browserProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
-      describe(webdriver) + " -> " + webdriver);
+      webdriver.getClass().getSimpleName() + " -> " + webdriver);
 
     return addListeners(webdriver);
   }

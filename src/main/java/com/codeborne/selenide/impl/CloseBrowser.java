@@ -7,7 +7,6 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.impl.Describe.describe;
 import static java.util.logging.Level.FINE;
 
 public class CloseBrowser implements Runnable {
@@ -24,7 +23,7 @@ public class CloseBrowser implements Runnable {
   @Override
   public void run() {
     try {
-      log.info("Trying to close the browser " + describe(webdriver) + " ...");
+      log.info("Trying to close the browser " + webdriver.getClass().getSimpleName() + " ...");
       webdriver.quit();
     }
     catch (UnreachableBrowserException e) {

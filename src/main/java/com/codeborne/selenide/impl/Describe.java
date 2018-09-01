@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -171,9 +170,5 @@ public class Describe {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
-  }
-
-  public static String describe(WebDriver webDriver) {
-    return webDriver.getClass().getSimpleName();
   }
 }
