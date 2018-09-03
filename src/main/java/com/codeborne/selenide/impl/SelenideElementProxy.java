@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
@@ -22,10 +23,8 @@ import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
 import static com.codeborne.selenide.Configuration.assertionMode;
 import static com.codeborne.selenide.Configuration.pollingInterval;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
 
 class SelenideElementProxy implements InvocationHandler {
@@ -68,7 +67,7 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(webElementSource.context(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
@@ -82,8 +81,9 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
-                                    Object proxy, Method method, Object[] args) throws Throwable, Error {
-    final long startTime = currentTimeMillis();
+                                    Object proxy, Method method, Object[] args) throws Throwable {
+    Stopwatch stopwatch = new Stopwatch(timeoutMs);
+
     Throwable lastError;
     do {
       try {
@@ -106,9 +106,9 @@ class SelenideElementProxy implements InvocationHandler {
       else if (!shouldRetryAfterError(lastError)) {
         throw lastError;
       }
-      sleep(pollingIntervalMs);
+      stopwatch.sleep(pollingIntervalMs);
     }
-    while (currentTimeMillis() - startTime <= timeoutMs);
+    while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof UIAssertionError) {
       throw lastError;

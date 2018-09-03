@@ -1,6 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -22,6 +23,11 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
       @Override
       public String description() {
         return selectElement.getSearchCriteria() + " selected options";
+      }
+
+      @Override
+      public Context context() {
+        return selectElement.context();
       }
     });
   }

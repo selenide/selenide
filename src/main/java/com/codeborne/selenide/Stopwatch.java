@@ -13,4 +13,13 @@ public class Stopwatch {
   public boolean isTimeoutReached() {
     return nanoTime() > endTimeNano;
   }
+
+  public void sleep(long milliseconds) {
+    try {
+      Thread.sleep(milliseconds);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
+    }
+  }
 }

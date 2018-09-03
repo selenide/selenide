@@ -14,7 +14,7 @@ public class Append implements Command<WebElement> {
     WebElement input = locator.getWebElement();
     input.sendKeys((String) args[0]);
     if (setValueChangeEvent) {
-      events.fireChangeEvent(input);
+      events.fireChangeEvent(locator.context(), input);
     }
     return proxy;
   }

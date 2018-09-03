@@ -1,8 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SelenidePageFactory;
@@ -14,6 +12,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -22,13 +23,14 @@ import static org.mockito.Mockito.when;
 
 class SelenideFieldDecoratorTest implements WithAssertions {
   private TestPage page = new TestPage();
+  private Context context = mock(Context.class);
   private WebDriver webDriver = mock(WebDriver.class);
   private SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, webDriver);
+  private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, context, webDriver);
 
   @Test
   void usesDefaultElementLocatorFactory() throws NoSuchFieldException {
-    SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, mock(WebDriver.class));
+    SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, context, webDriver);
     Field factoryField = fieldDecorator.getClass().getSuperclass().getDeclaredField("factory");
     assertThat(factoryField.getType())
       .isAssignableFrom(DefaultElementLocatorFactory.class);

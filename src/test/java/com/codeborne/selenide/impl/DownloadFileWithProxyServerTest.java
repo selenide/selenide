@@ -1,23 +1,22 @@
 package com.codeborne.selenide.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import com.codeborne.selenide.extension.MockWebDriverExtension;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -31,7 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockWebDriverExtension.class)
 class DownloadFileWithProxyServerTest implements WithAssertions {
   private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
   private WebDriver webdriver = mock(WebDriver.class);
@@ -44,10 +42,10 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void setUp() {
     command.waiter = spy(new Waiter());
     doNothing().when(command.waiter).sleep(anyLong());
-    when(webdriverContainer.getWebDriver()).thenReturn(webdriver);
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
 
     when(proxy.responseFilter("download")).thenReturn(filter);
+    when(linkWithHref.context()).thenReturn(new Context(new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }

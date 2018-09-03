@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -11,8 +11,8 @@ import static com.codeborne.selenide.Configuration.browser;
 class HtmlUnitDriverFactory extends AbstractDriverFactory {
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isHtmlUnit();
+  boolean supports(Browser browser) {
+    return browser.isHtmlUnit();
   }
 
   @Override

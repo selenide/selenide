@@ -2,6 +2,8 @@ package com.codeborne.selenide.commands;
 
 import java.lang.reflect.Field;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -14,23 +16,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SetValueCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private SetValue setValueCommand;
-  private SelectOptionByValue mockedSelectByOption;
-  private SelectRadio mockedSelectRadio;
-  private WebElement mockedFoundElement;
+  private SelenideElement proxy = mock(SelenideElement.class);
+  private WebElementSource locator = mock(WebElementSource.class);
+  private SelectOptionByValue mockedSelectByOption = mock(SelectOptionByValue.class);
+  private SelectRadio mockedSelectRadio = mock(SelectRadio.class);
+  private SetValue setValueCommand = new SetValue(mockedSelectByOption, mockedSelectRadio);
+  private WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
-    mockedSelectByOption = mock(SelectOptionByValue.class);
-    mockedSelectRadio = mock(SelectRadio.class);
-    setValueCommand = new SetValue(mockedSelectByOption, mockedSelectRadio);
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedFoundElement = mock(WebElement.class);
     when(locator.findAndAssertElementIsVisible()).thenReturn(mockedFoundElement);
+    when(locator.context()).thenReturn(new Context(new Browser("opera", false), null, null));
   }
 
   @Test

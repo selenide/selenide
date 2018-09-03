@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -11,6 +12,11 @@ public class HeadOfCollection implements WebElementsCollection {
   public HeadOfCollection(WebElementsCollection originalCollection, int size) {
     this.originalCollection = originalCollection;
     this.size = size;
+  }
+
+  @Override
+  public Context context() {
+    return originalCollection.context();
   }
 
   @Override

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 
 public class DownloadFile implements Command<File> {
   private static final Logger LOG = Logger.getLogger(DownloadFile.class.getName());
@@ -38,16 +37,16 @@ public class DownloadFile implements Command<File> {
 
     if (Configuration.fileDownload == HTTPGET) {
       LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
-      return downloadFileWithHttpRequest.download(link, timeout);
+      return downloadFileWithHttpRequest.download(linkWithHref.context(), link, timeout);
     }
     if (!Configuration.proxyEnabled) {
       throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup Configuration.proxyEnabled");
     }
-    if (webdriverContainer.getProxyServer() == null) {
+    if (linkWithHref.context().getProxy() == null) {
       throw new IllegalStateException("Cannot download file: proxy server is not started");
     }
 
-    return downloadFileWithProxyServer.download(linkWithHref, link, webdriverContainer.getProxyServer(), timeout);
+    return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.context().getProxy(), timeout);
   }
 
   long getTimeout(Object[] args) {

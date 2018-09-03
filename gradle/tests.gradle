@@ -19,6 +19,7 @@ task edge(type: Test) {
 
 task chrome(type: Test) {
   systemProperties['selenide.browser'] = 'chrome'
+  systemProperties['selenide.headless'] = 'true'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -50,6 +51,7 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
+  systemProperties['selenide.headless'] = 'true'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }

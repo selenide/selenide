@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
@@ -11,9 +12,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
+import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.browserVersion;
+import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.pageLoadStrategy;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
@@ -24,7 +26,7 @@ abstract class AbstractDriverFactory {
 
   private static final Logger log = Logger.getLogger(AbstractDriverFactory.class.getName());
 
-  abstract boolean supports();
+  abstract boolean supports(Browser browser);
 
   abstract WebDriver create(Proxy proxy);
 
@@ -34,7 +36,7 @@ abstract class AbstractDriverFactory {
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
-      if (isPhantomjs()) {
+      if (new Browser(browser, headless).isPhantomjs()) {
         capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
                 new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
       }

@@ -1,0 +1,15 @@
+sourceSets {
+  staticFacade {
+    java {
+      srcDir 'statics/src/main/java'
+    }
+    resources {
+      srcDir 'statics/src/main/java'
+    }
+  }
+}
+
+sourceSets.staticFacade.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.staticFacade.compileClasspath += sourceSets.main.output
+sourceSets.test.compileClasspath += sourceSets.staticFacade.output
+sourceSets.test.runtimeClasspath += sourceSets.staticFacade.output

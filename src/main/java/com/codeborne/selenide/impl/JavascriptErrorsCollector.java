@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -10,9 +11,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
-import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
@@ -48,18 +46,18 @@ public class JavascriptErrorsCollector {
     }
   }
 
-  public List<String> getJavascriptErrors() {
+  public List<String> getJavascriptErrors(Context context) {
     if (!captureJavascriptErrors) {
       return emptyList();
     }
-    else if (!hasWebDriverStarted()) {
+    else if (!context.hasWebDriverStarted()) {
       return emptyList();
     }
-    else if (!supportsJavascript()) {
+    else if (!context.supportsJavascript()) {
       return emptyList();
     }
     try {
-      Object errors = executeJavaScript("return window._selenide_jsErrors");
+      Object errors = context.executeJavaScript("return window._selenide_jsErrors");
       if (errors == null) {
         return emptyList();
       }

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -12,11 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.browserBinary;
 import static com.codeborne.selenide.Configuration.chromeSwitches;
 import static com.codeborne.selenide.Configuration.headless;
-import static com.codeborne.selenide.Browsers.CHROME;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
 
@@ -28,8 +27,8 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  boolean supports() {
-    return CHROME.equalsIgnoreCase(browser);
+  boolean supports(Browser browser) {
+    return browser.isChrome();
   }
 
   ChromeOptions createChromeOptions(Proxy proxy) {

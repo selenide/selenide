@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.Context;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.when;
 class TextTest implements WithAssertions {
   private final String defaultText = "Hello World";
   private Text text;
+  private Context context = mock(Context.class);
   private WebElement mWebElement = mock(WebElement.class);
 
   @BeforeEach
@@ -23,11 +25,10 @@ class TextTest implements WithAssertions {
   @Test
   void testApplyForNonSelectText() {
     when(mWebElement.getText()).thenReturn(defaultText);
-    assertThat(text.apply(mWebElement))
-      .isTrue();
+    assertThat(text.apply(context, mWebElement)).isTrue();
+
     when(mWebElement.getText()).thenReturn("Hello");
-    assertThat(text.apply(mWebElement))
-      .isFalse();
+    assertThat(text.apply(context, mWebElement)).isFalse();
   }
 
   @Test
@@ -46,13 +47,9 @@ class TextTest implements WithAssertions {
     when(element2.getText()).thenReturn(element2Text);
 
     when(mWebElement.getTagName()).thenReturn("select");
-
-    assertThat(text.apply(mWebElement))
-      .isFalse();
+    assertThat(text.apply(context, mWebElement)).isFalse();
 
     when(element2.getText()).thenReturn(" " + element2Text);
-
-    assertThat(text.apply(mWebElement))
-      .isTrue();
+    assertThat(text.apply(context, mWebElement)).isTrue();
   }
 }

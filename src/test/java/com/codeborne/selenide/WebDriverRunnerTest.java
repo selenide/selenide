@@ -1,12 +1,10 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
@@ -16,10 +14,11 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.net.URL;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.HTMLUNIT;
+import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.lang.Thread.currentThread;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockWebDriverExtension.class)
 class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
 
@@ -52,6 +50,7 @@ class WebDriverRunnerTest implements WithAssertions {
     WebDriverRunner.closeWebDriver();
     driver = null;
     Configuration.browser = System.getProperty("browser", FIREFOX);
+    webdriverContainer = new WebDriverThreadLocalContainer();
   }
 
   @Test

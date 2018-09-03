@@ -6,8 +6,10 @@ import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideDriverFinalCleanupThread;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
@@ -181,5 +183,14 @@ public class SelenideDriver {
 
     webDriver = null;
     selenideProxyServer = null;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> T executeJavaScript(String jsCode, Object... arguments) {
+    return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
+  }
+
+  public WebElement getFocusedElement() {
+    return (WebElement) executeJavaScript("return document.activeElement");
   }
 }

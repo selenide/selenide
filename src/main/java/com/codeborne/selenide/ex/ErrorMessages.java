@@ -2,14 +2,17 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
 public class ErrorMessages {
+  static ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
+
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
       return "\nTimeout: " + timeoutMs + " ms.";
@@ -21,9 +24,9 @@ public class ErrorMessages {
     return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
   }
 
-  public static String actualValue(Condition condition, WebElement element) {
+  public static String actualValue(Condition condition, Context context, WebElement element) {
     if (element != null) {
-      String actualValue = condition.actualValue(element);
+      String actualValue = condition.actualValue(context, element);
       if (actualValue != null) {
         return "\nActual value: " + actualValue;
       }
@@ -31,8 +34,8 @@ public class ErrorMessages {
     return "";
   }
 
-  public static String screenshot() {
-    return screenshot(Screenshots.screenshots.formatScreenShotPath());
+  public static String screenshot(Context context) {
+    return screenshot(screenshots.formatScreenShotPath(context));
   }
   
   public static String screenshot(String screenshotPath) {

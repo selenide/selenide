@@ -1,13 +1,14 @@
 package integration;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.commands.Commands;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -35,8 +36,8 @@ class OverrideCommandsTest extends IntegrationTest {
 
   private class MyClick extends Click {
     @Override
-    protected void click(WebElement element) {
-      super.click(element);
+    protected void click(Context context, WebElement element) {
+      super.click(context, element);
       clickCounter.incrementAndGet();
     }
   }

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -22,5 +23,10 @@ public class TailOfCollection implements WebElementsCollection {
   @Override
   public String description() {
     return originalCollection.description() + ".last(" + size + ')';
+  }
+
+  @Override
+  public Context context() {
+    return originalCollection.context();
   }
 }

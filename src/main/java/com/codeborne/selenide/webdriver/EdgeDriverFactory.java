@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -21,8 +21,8 @@ class EdgeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isEdge();
+  boolean supports(Browser browser) {
+    return browser.isEdge();
   }
 
   private WebDriver createEdgeDriver(final Proxy proxy) {

@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -13,8 +13,8 @@ class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   private static final Logger log = Logger.getLogger(LegacyFirefoxDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isLegacyFirefox();
+  boolean supports(Browser browser) {
+    return browser.isLegacyFirefox();
   }
 
   @Override

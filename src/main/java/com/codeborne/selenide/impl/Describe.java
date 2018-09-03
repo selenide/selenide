@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
@@ -10,15 +11,13 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
-
 public class Describe {
-  private WebElement element;
-  private StringBuilder sb = new StringBuilder();
+  private final Context context;
+  private final WebElement element;
+  private final StringBuilder sb = new StringBuilder();
 
-  private Describe(WebElement element) {
+  private Describe(Context context, WebElement element) {
+    this.context = context;
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
@@ -35,7 +34,7 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
-    Map<String, String> map = executeJavaScript(
+    Map<String, String> map = context.executeJavaScript(
         "var s = {};" +
             "var attrs = arguments[0].attributes;" +
             "for (var i = 0; i < attrs.length; i++) {" +
@@ -68,7 +67,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return supportsJavascript() && !isHtmlUnit();
+    return context.supportsJavascript() && !context.browser.isHtmlUnit();
   }
 
   private Describe attr(String attributeName) {
@@ -98,12 +97,12 @@ public class Describe {
     return sb.append('>').toString();
   }
 
-  public static String describe(WebElement element) {
+  public static String describe(Context context, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
-      return new Describe(element)
+      return new Describe(context, element)
           .appendAttributes()
           .isSelected(element)
           .isDisplayed(element)
@@ -116,15 +115,15 @@ public class Describe {
     }
   }
 
-  static String shortly(WebElement element) {
+  static String shortly(Context context, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
       if (element instanceof SelenideElement) {
-        return shortly(((SelenideElement) element).toWebElement());
+        return shortly(context, ((SelenideElement) element).toWebElement());
       }
-      return new Describe(element).attr("id").attr("name").flush();
+      return new Describe(context, element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     }

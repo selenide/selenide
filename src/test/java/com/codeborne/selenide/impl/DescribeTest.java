@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
 import org.assertj.core.api.WithAssertions;
@@ -28,14 +29,15 @@ class DescribeTest implements WithAssertions {
 
   @Test
   void shortlyForSelenideElementShouldDelegateToOriginalWebElement() {
+    Context context = mock(Context.class);
     WebElement webElement = mock(WebElement.class);
     when(webElement.getTagName()).thenThrow(new StaleElementReferenceException("disappeared"));
 
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(null, null, visible, webElement, null)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(null, null, visible, context, webElement, null)).when(selenideElement).getTagName();
 
-    assertThat(Describe.shortly(selenideElement))
+    assertThat(Describe.shortly(context, selenideElement))
       .isEqualTo("StaleElementReferenceException: disappeared");
   }
 }

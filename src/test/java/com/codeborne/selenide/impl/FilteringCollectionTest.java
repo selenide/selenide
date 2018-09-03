@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 class FilteringCollectionTest implements WithAssertions {
   @Test
-  void testGetActualElement() {
+  void getActualElement() {
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
 
@@ -32,7 +32,7 @@ class FilteringCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testDescription() {
+  void description() {
     WebElementsCollection mockedCollection = mock(WebElementsCollection.class);
     when(mockedCollection.description()).thenReturn("Collection description");
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);

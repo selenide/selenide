@@ -1,17 +1,18 @@
 package com.codeborne.selenide.impl;
 
-import java.io.File;
-import java.util.List;
-
+import com.codeborne.selenide.Context;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.List;
 
 import static java.io.File.separatorChar;
 
 class ScreenShotLaboratoryTest implements WithAssertions {
   private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
-    public String takeScreenShot(String fileName) {
+    public String takeScreenShot(Context context, String fileName) {
       addToHistory(new File(fileName));
       return fileName;
     }
@@ -25,12 +26,13 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void composesScreenshotNameFromTestClassAndMethod() {
     String expected = "MyTest/helloWorldTest.12356789".replace('/', separatorChar);
-    assertThat(screenshots.takeScreenShot("MyTest", "helloWorldTest"))
+    assertThat(screenshots.takeScreenShot(null, "MyTest", "helloWorldTest"))
       .isEqualTo(expected);
 
     String expectedFileName = ("com/codeborne/selenide/integrationtests/SelenideMethodsTest/" +
       "userCanListMatchingSubElements.12356789").replace('/', separatorChar);
     assertThat(screenshots.takeScreenShot(
+      null,
       "com.codeborne.selenide.integrationtests.SelenideMethodsTest",
       "userCanListMatchingSubElements"))
       .isEqualTo(expectedFileName);
@@ -38,22 +40,22 @@ class ScreenShotLaboratoryTest implements WithAssertions {
 
   @Test
   void composesScreenshotNameAsTimestampPlusCounter() {
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("12356789.0");
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("12356789.1");
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("12356789.2");
   }
 
   @Test
   void screenshotsCanByGroupedByTests() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("ui/MyTest/test_some_method/12356789.0");
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("ui/MyTest/test_some_method/12356789.1");
-    assertThat(screenshots.takeScreenShot())
+    assertThat(screenshots.takeScreenShot(null))
       .isEqualTo("ui/MyTest/test_some_method/12356789.2");
 
     List<File> contextScreenshots = screenshots.finishContext();
@@ -70,14 +72,14 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void collectsAllScreenshots() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot();
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
     screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
     screenshots.finishContext();
-    screenshots.takeScreenShot();
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
 
     List<File> allScreenshots = screenshots.getScreenshots();
     assertThat(allScreenshots)
@@ -99,15 +101,15 @@ class ScreenShotLaboratoryTest implements WithAssertions {
     assertThat(screenshots.getLastScreenshot())
       .isNull();
 
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastScreenshot())
       .hasToString("12356789.0");
 
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastScreenshot())
       .hasToString("12356789.1");
 
-    screenshots.takeScreenShot();
+    screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastScreenshot())
       .hasToString("12356789.2");
   }

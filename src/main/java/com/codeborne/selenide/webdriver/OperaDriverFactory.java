@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -17,8 +17,8 @@ class OperaDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(OperaDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isOpera();
+  boolean supports(Browser browser) {
+    return browser.isOpera();
   }
 
   @Override

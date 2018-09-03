@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import java.util.List;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +32,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
     Configuration.headless = true;
     Configuration.browser = "chrome";
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
+    Capabilities headlessCapabilities = factory.getDriverCapabilities(new Browser("chrome", true), proxy);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
 
     assertThat(launchArguments)
@@ -45,7 +46,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
     Configuration.headless = true;
     Configuration.browser = "firefox";
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
+    Capabilities headlessCapabilities = factory.getDriverCapabilities(new Browser("firefox", true), proxy);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
 
     assertThat(launchArguments)
@@ -56,7 +57,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldAddChromeHeadlessOptions() {
     Configuration.browser = "chrome";
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
+    Capabilities headlessCapabilities = factory.getDriverCapabilities(new Browser("chrome", false), proxy);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
 
     assertThat(launchArguments)
@@ -69,7 +70,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldAddFirefoxHeadlessOptions() {
     Configuration.browser = "firefox";
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(proxy);
+    Capabilities headlessCapabilities = factory.getDriverCapabilities(new Browser("firefox", false), proxy);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
 
     assertThat(launchArguments)

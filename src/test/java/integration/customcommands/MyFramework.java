@@ -1,10 +1,12 @@
 package integration.customcommands;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.impl.ElementFinder;
 import org.openqa.selenium.By;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.codeborne.selenide.WebDriverRunner.context;
 
 public class MyFramework {
   static AtomicInteger tripleClickCounter = new AtomicInteger();
@@ -23,6 +25,6 @@ public class MyFramework {
    * @return MySelenideElement - an "advanced" version of `SelenideElement` with more custom methods
    */
   public static MySelenideElement $_(String selector) {
-    return ElementFinder.wrap(MySelenideElement.class, null, By.cssSelector(selector), 0);
+    return ElementFinder.wrap(context(), MySelenideElement.class, null, By.cssSelector(selector), 0);
   }
 }

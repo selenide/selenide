@@ -10,7 +10,6 @@ import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideWait;
 import com.codeborne.selenide.impl.WebDriverLogs;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -23,6 +22,7 @@ import java.util.logging.Level;
 
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.context;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
@@ -238,7 +238,7 @@ public class Selenide {
    * @return given WebElement wrapped into SelenideElement
    */
   public static SelenideElement $(WebElement webElement) {
-    return wrap(webElement);
+    return wrap(context(), webElement);
   }
 
   /**
@@ -291,7 +291,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return ElementFinder.wrap(parent, cssSelector);
+    return ElementFinder.wrap(context(), parent, cssSelector);
   }
 
   /**
@@ -302,7 +302,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return ElementFinder.wrap(cssSelector, index);
+    return ElementFinder.wrap(context(), cssSelector, index);
   }
 
   /**
@@ -319,7 +319,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return ElementFinder.wrap(parent, cssSelector, index);
+    return ElementFinder.wrap(context(), parent, cssSelector, index);
   }
 
   /**
@@ -335,7 +335,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
-    return ElementFinder.wrap($(parent), seleniumSelector, 0);
+    return ElementFinder.wrap(context(), $(parent), seleniumSelector, 0);
   }
 
   /**
@@ -352,14 +352,14 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
-    return ElementFinder.wrap($(parent), seleniumSelector, index);
+    return ElementFinder.wrap(context(), $(parent), seleniumSelector, index);
   }
 
   /**
    * Initialize collection with Elements
    */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
-    return new ElementsCollection(elements);
+    return new ElementsCollection(context(), elements);
   }
 
   /**
@@ -373,7 +373,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(cssSelector);
+    return new ElementsCollection(context(), cssSelector);
   }
 
   /**
@@ -400,7 +400,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(By seleniumSelector) {
-    return new ElementsCollection(seleniumSelector);
+    return new ElementsCollection(context(), seleniumSelector);
   }
 
   /**
@@ -420,7 +420,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(parent, cssSelector);
+    return new ElementsCollection(context(), parent, cssSelector);
   }
 
   /**
@@ -434,7 +434,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return new ElementsCollection(parent, seleniumSelector);
+    return new ElementsCollection(context(), parent, seleniumSelector);
   }
 
   /**
@@ -444,7 +444,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement getElement(By criteria) {
-    return ElementFinder.wrap(null, criteria, 0);
+    return ElementFinder.wrap(context(), null, criteria, 0);
   }
 
   /**
@@ -455,7 +455,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement getElement(By criteria, int index) {
-    return ElementFinder.wrap(null, criteria, index);
+    return ElementFinder.wrap(context(), null, criteria, index);
   }
 
   /**
@@ -468,12 +468,8 @@ public class Selenide {
     return $$(criteria);
   }
 
-  /**
-   * Executes JavaScript
-   */
-  @SuppressWarnings("unchecked")
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
-    return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
+    return getSelenideDriver().executeJavaScript(jsCode, arguments);
   }
 
   /**
@@ -496,7 +492,7 @@ public class Selenide {
   public static SelenideElement getSelectedRadio(By radioField) {
     for (WebElement radio : $$(radioField)) {
       if (radio.getAttribute("checked") != null) {
-        return wrap(radio);
+        return wrap(context(), radio);
       }
     }
     return null;
@@ -507,7 +503,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm() {
-    return modals.confirm();
+    return modals.confirm(context());
   }
 
   /**
@@ -518,7 +514,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm(String expectedDialogText) {
-    return modals.confirm(expectedDialogText);
+    return modals.confirm(context(), expectedDialogText);
   }
 
   /**
@@ -526,7 +522,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt() {
-    return modals.prompt();
+    return modals.prompt(context());
   }
 
   /**
@@ -535,7 +531,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String inputText) {
-    return modals.prompt(inputText);
+    return modals.prompt(context(), inputText);
   }
 
   /**
@@ -547,7 +543,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String expectedDialogText, String inputText) {
-    return modals.prompt(expectedDialogText, inputText);
+    return modals.prompt(context(), expectedDialogText, inputText);
   }
 
 
@@ -556,7 +552,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss() {
-    return modals.dismiss();
+    return modals.dismiss(context());
   }
 
   /**
@@ -567,7 +563,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss(String expectedDialogText) {
-    return modals.dismiss(expectedDialogText);
+    return modals.dismiss(context(), expectedDialogText);
   }
 
   /**
@@ -580,7 +576,7 @@ public class Selenide {
    * @return SelenideTargetLocator
    */
   public static SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(getWebDriver().switchTo());
+    return context().switchTo();
   }
 
   /**
@@ -588,21 +584,21 @@ public class Selenide {
    * @return WebElement, not SelenideElement! which has focus on it
    */
   public static WebElement getFocusedElement() {
-    return (WebElement) executeJavaScript("return document.activeElement");
+    return getSelenideDriver().getFocusedElement();
   }
 
   /**
    * Create a Page Object instance
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return pageFactory.page(getWebDriver(), pageObjectClass);
+    return pageFactory.page(context(), pageObjectClass);
   }
 
   /**
    * Initialize a given Page Object instance
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    return pageFactory.page(getWebDriver(), pageObject);
+    return pageFactory.page(context(), pageObject);
   }
 
   /**
@@ -648,7 +644,7 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    return javascriptErrorsCollector.getJavascriptErrors();
+    return javascriptErrorsCollector.getJavascriptErrors(context());
   }
 
   /**
@@ -764,6 +760,6 @@ public class Selenide {
   }
 
   public static File download(String url, long timeoutMs) throws IOException {
-    return downloadFileWithHttpRequest.download(url, timeoutMs);
+    return downloadFileWithHttpRequest.download(context(), url, timeoutMs);
   }
 }

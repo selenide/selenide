@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.impl.Describe;
@@ -12,9 +13,6 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.Selenide.sleep;
 
 public class UploadFile implements Command<File> {
   @Override
@@ -31,11 +29,11 @@ public class UploadFile implements Command<File> {
     }
 
     WebElement inputField = locator.getWebElement();
-    File uploadedFile = uploadFile(inputField, file[0]);
+    File uploadedFile = uploadFile(locator.context(), inputField, file[0]);
 
     if (file.length > 1) {
       SelenideElement form = proxy.closest("form");
-      List<WebElement> newInputs = cloneInputField(form, inputField, file.length - 1);
+      List<WebElement> newInputs = cloneInputField(locator.context(), form, inputField, file.length - 1);
 
       Stopwatch stopwatch = new Stopwatch(Configuration.timeout);
 
@@ -59,14 +57,14 @@ public class UploadFile implements Command<File> {
         if (stopwatch.isTimeoutReached()) {
           throw notInteractable;
         }
-        sleep(Configuration.pollingInterval);
+        stopwatch.sleep(Configuration.pollingInterval);
       }
     } while (!stopwatch.isTimeoutReached());
   }
 
-  protected File uploadFile(WebElement inputField, File file) throws IOException {
+  protected File uploadFile(Context context, WebElement inputField, File file) throws IOException {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
-      throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(inputField) + " is not an INPUT");
+      throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(context, inputField) + " is not an INPUT");
     }
 
     if (!file.exists()) {
@@ -78,8 +76,8 @@ public class UploadFile implements Command<File> {
     return new File(canonicalPath);
   }
 
-  protected List<WebElement> cloneInputField(SelenideElement form, WebElement inputField, int count) {
-    return executeJavaScript(String.format("" +
+  protected List<WebElement> cloneInputField(Context context, SelenideElement form, WebElement inputField, int count) {
+    return context.executeJavaScript(String.format("" +
         "var newInputs = [];" +
         "for (var i = 1; i <= arguments[2]; i++) {" +
         "  var id = '___selenide___id___' + arguments[1].getAttribute('name') + '___' + i + '___%s';" +

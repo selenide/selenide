@@ -1,7 +1,8 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.extension.MockWebDriverExtension;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -10,7 +11,7 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -18,16 +19,13 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockWebDriverExtension.class)
 class DownloadFileTest implements WithAssertions {
   private DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
   private DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
@@ -52,13 +50,14 @@ class DownloadFileTest implements WithAssertions {
   void canDownloadFile_withHttpGetRequest() throws IOException {
     Configuration.proxyEnabled = false;
     Configuration.fileDownload = HTTPGET;
-
-    when(httpget.download(any(WebElement.class), anyLong())).thenReturn(file);
+    Context context = new Context(null, null, null);
+    when(linkWithHref.context()).thenReturn(context);
+    when(httpget.download(any(), any(WebElement.class), anyLong())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{8000L});
 
     assertThat(f).isSameAs(file);
-    verify(httpget).download(link, 8000L);
+    verify(httpget).download(context, link, 8000L);
     verifyNoMoreInteractions(proxy);
   }
 
@@ -67,7 +66,7 @@ class DownloadFileTest implements WithAssertions {
     Configuration.proxyEnabled = true;
     Configuration.fileDownload = PROXY;
     SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-    doReturn(selenideProxy).when(webdriverContainer).getProxyServer();
+    when(linkWithHref.context()).thenReturn(new Context(null, null, selenideProxy));
     when(proxy.download(any(), any(), any(), anyLong())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{9000L});
@@ -91,7 +90,7 @@ class DownloadFileTest implements WithAssertions {
   void proxyServerShouldBeStarted() {
     Configuration.proxyEnabled = true;
     Configuration.fileDownload = PROXY;
-    doReturn(null).when(webdriverContainer).getProxyServer();
+    when(linkWithHref.context()).thenReturn(new Context(mock(Browser.class), mock(WebDriver.class), null));
 
     assertThatThrownBy(() -> command.execute(null, linkWithHref, new Object[0]))
       .isInstanceOf(IllegalStateException.class)

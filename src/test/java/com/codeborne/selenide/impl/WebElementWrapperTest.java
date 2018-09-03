@@ -1,27 +1,27 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.extension.MockWebDriverExtension;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Context;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Browsers.CHROME;
-import static com.codeborne.selenide.Browsers.HTMLUNIT;
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import static com.codeborne.selenide.Configuration.browser;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockWebDriverExtension.class)
 class WebElementWrapperTest implements WithAssertions {
+  private WebDriver webDriver = mock(FirefoxDriver.class);
+  private Context context = new Context(new Browser("firefox", false), webDriver, null);
   private WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -43,35 +43,30 @@ class WebElementWrapperTest implements WithAssertions {
   @Test
   void toStringPrintsTagNameWithAllAttributes() {
     browser = CHROME;
-    when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
-    when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
-    when(((JavascriptExecutor) webdriverContainer.getWebDriver())
+    when(((JavascriptExecutor) webDriver)
       .executeScript(anyString(), any()))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
-    assertThat(new WebElementWrapper(element))
+    assertThat(new WebElementWrapper(context, element))
       .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
   }
 
   @Test
   void toStringPrintsTagNameWithSomeAttributes() {
-    browser = HTMLUNIT;
-    when(webdriverContainer.getWebDriver()).thenReturn(mock(HtmlUnitDriver.class));
+    webDriver = mock(HtmlUnitDriver.class);
+    context = new Context(new Browser("htmlunit", false), webDriver, null);
 
-    assertThat(new WebElementWrapper(element))
+    assertThat(new WebElementWrapper(context, element))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 
   @Test
   void toStringFallbacksToMinimalImplementation_ifFailedToCallJavaScript() {
-    browser = CHROME;
-    when(webdriverContainer.hasWebDriverStarted()).thenReturn(true);
-    when(webdriverContainer.getWebDriver()).thenReturn(mock(FirefoxDriver.class));
-    when(((JavascriptExecutor) webdriverContainer.getWebDriver())
+    when(((JavascriptExecutor) webDriver)
       .executeScript(anyString(), any()))
       .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
 
-    assertThat(new WebElementWrapper(element))
+    assertThat(new WebElementWrapper(context, element))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 }

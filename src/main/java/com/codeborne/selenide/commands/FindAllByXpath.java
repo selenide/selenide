@@ -11,7 +11,7 @@ public class FindAllByXpath implements Command<ElementsCollection> {
 
   @Override
   public ElementsCollection execute(SelenideElement parent, WebElementSource locator, Object... args) {
-    return new ElementsCollection(new BySelectorCollection(parent, By.xpath((String) args[0])));
+    return new ElementsCollection(new BySelectorCollection(locator.context(), parent, By.xpath((String) args[0])));
   }
 
 }

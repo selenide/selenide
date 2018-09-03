@@ -3,6 +3,7 @@ package integration;
 import java.io.File;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
@@ -34,7 +35,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     Configuration.reportsUrl = "http://ci.org/";
     Screenshots.screenshots = new ScreenShotLaboratory() {
       @Override
-      public String takeScreenShot() {
+      public String takeScreenShot(Context context) {
         return new File(reportsFolder, "1.jpg").getAbsolutePath();
       }
     };

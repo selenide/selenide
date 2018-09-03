@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
@@ -21,6 +22,11 @@ public class LastCollectionElement extends WebElementSource {
 
   private LastCollectionElement(WebElementsCollection collection) {
     this.collection = collection;
+  }
+
+  @Override
+  public Context context() {
+    return collection.context();
   }
 
   @Override

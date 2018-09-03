@@ -1,6 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -16,17 +17,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ToStringCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private ToString toStringCommand;
-  private WebElement mockedFoundElement;
+  private SelenideElement proxy = mock(SelenideElement.class);
+  private Context context = mock(Context.class);
+  private WebElementSource locator = mock(WebElementSource.class);
+  private WebElement mockedFoundElement = mock(WebElement.class);
+  private ToString toStringCommand = new ToString();
 
   @BeforeEach
   void setup() {
-    toStringCommand = new ToString();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedFoundElement = mock(WebElement.class);
+    when(locator.context()).thenReturn(context);
     when(locator.getWebElement()).thenReturn(mockedFoundElement);
   }
 

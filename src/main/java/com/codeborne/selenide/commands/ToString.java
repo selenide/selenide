@@ -12,7 +12,7 @@ public class ToString implements Command<String> {
   @Override
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     try {
-      return Describe.describe(locator.getWebElement());
+      return Describe.describe(locator.context(), locator.getWebElement());
     } catch (WebDriverException | ElementNotFound elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     } catch (IndexOutOfBoundsException invalidElementIndex) {

@@ -3,7 +3,6 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -16,6 +15,7 @@ public class WebDriverRunner implements Browsers {
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
+   *
    * @param listener your listener of webdriver events
    */
   public static void addListener(WebDriverEventListener listener) {
@@ -25,30 +25,30 @@ public class WebDriverRunner implements Browsers {
   /**
    * Tell Selenide use your provided WebDriver instance.
    * Use it if you need a custom logic for creating WebDriver.
-   *
+   * <p>
    * It's recommended not to use implicit wait with this driver, because Selenide handles timing issues explicitly.
    *
    * <br>
-   *
+   * <p>
    * NB! Be sure to call this method before calling <code>open(url)</code>.
    * Otherwise Selenide will create its own WebDriver instance and would not close it.
    *
    * <p>
    * NB! When using your custom webdriver, you are responsible for closing it.
-   *     Selenide will not take care of it.
+   * Selenide will not take care of it.
    * </p>
    *
    * <p>
    * NB! Webdriver instance should be created and used in the same thread.
-   *     A typical error is to create webdriver instance in one thread and use it in another.
-   *     Selenide does not support it.
-   *     If you really need using multiple threads, please use #com.codeborne.selenide.WebDriverProvider
+   * A typical error is to create webdriver instance in one thread and use it in another.
+   * Selenide does not support it.
+   * If you really need using multiple threads, please use #com.codeborne.selenide.WebDriverProvider
    * </p>
    *
    * <p>
    * P.S. Alternatively, you can run tests with system property
    * <pre>  -Dbrowser=com.my.WebDriverFactory</pre>
-   *
+   * <p>
    * which should implement interface #com.codeborne.selenide.WebDriverProvider
    * </p>
    */
@@ -73,6 +73,7 @@ public class WebDriverRunner implements Browsers {
 
   /**
    * Get the underlying instance of Selenium WebDriver, and assert that it's still alive.
+   *
    * @return new instance of WebDriver if the previous one has been closed meanwhile.
    */
   public static WebDriver getAndCheckWebDriver() {
@@ -81,6 +82,7 @@ public class WebDriverRunner implements Browsers {
 
   /**
    * Get selenide proxy. It's activated only if Configuration.proxyEnabled == true
+   *
    * @return null if proxy server is not started
    */
   public static SelenideProxyServer getSelenideProxy() {
@@ -89,6 +91,10 @@ public class WebDriverRunner implements Browsers {
 
   static SelenideDriver getSelenideDriver() {
     return webdriverContainer.getSelenideDriver();
+  }
+
+  public static Context context() {
+    return new Context(browser(), getWebDriver(), getSelenideProxy());
   }
 
   /**
@@ -169,7 +175,7 @@ public class WebDriverRunner implements Browsers {
    * Does this browser support javascript
    */
   public static boolean supportsJavascript() {
-    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
+    return context().supportsJavascript();
   }
 
   /**

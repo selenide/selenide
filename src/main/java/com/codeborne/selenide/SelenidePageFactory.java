@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Constructor;
@@ -13,19 +12,19 @@ import java.lang.reflect.Field;
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
 public class SelenidePageFactory {
-  public <PageObjectClass> PageObjectClass page(WebDriver webDriver, Class<PageObjectClass> pageObjectClass) {
+  public <PageObjectClass> PageObjectClass page(Context context, Class<PageObjectClass> pageObjectClass) {
     try {
       Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
       constructor.setAccessible(true);
-      return page(webDriver, constructor.newInstance());
+      return page(context, constructor.newInstance());
     }
     catch (Exception e) {
       throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
     }
   }
 
-  public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(WebDriver webDriver, T pageObject) {
-    initElements(new SelenideFieldDecorator(this, webDriver), pageObject);
+  public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Context context, T pageObject) {
+    initElements(new SelenideFieldDecorator(this, context, context.getWebDriver()), pageObject);
     return pageObject;
   }
 

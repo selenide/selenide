@@ -1,12 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Context;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static java.util.Arrays.asList;
 
 public class Events {
@@ -28,18 +27,18 @@ public class Events {
           "  }\n" +
           '}';
 
-  public void fireChangeEvent(WebElement element) {
-    if (supportsJavascript()) {
-      fireEvent(element, "change");
+  public void fireChangeEvent(Context context, WebElement element) {
+    if (context.supportsJavascript()) {
+      fireEvent(context, element, "change");
     }
     else {
       log.fine("Cannot trigger change event: browser does not support javascript");
     }
   }
 
-  public void fireEvent(WebElement element, final String... event) {
+  public void fireEvent(Context context, WebElement element, final String... event) {
     try {
-      executeJavaScript(element, event);
+      executeJavaScript(context, element, event);
     }
     catch (StaleElementReferenceException ignore) {
     }
@@ -48,7 +47,7 @@ public class Events {
     }
   }
 
-  void executeJavaScript(WebElement element, String... event) {
-    Selenide.executeJavaScript(jsCodeToTriggerEvent, element, event);
+  void executeJavaScript(Context context, WebElement element, String... event) {
+    context.executeJavaScript(jsCodeToTriggerEvent, element, event);
   }
 }

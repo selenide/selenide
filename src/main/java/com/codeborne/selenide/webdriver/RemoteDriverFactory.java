@@ -1,5 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -18,12 +20,6 @@ import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.browserBinary;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.remote;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isOpera;
 
 class RemoteDriverFactory extends AbstractDriverFactory {
 
@@ -31,7 +27,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(RemoteDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
+  boolean supports(Browser browser) {
     return remote != null;
   }
 
@@ -42,7 +38,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createRemoteDriver(final String remote, final String browser, final Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = getDriverCapabilities(proxy);
+      DesiredCapabilities capabilities = getDriverCapabilities(new Browser(browser, false), proxy);
       RemoteWebDriver webDriver = new RemoteWebDriver(new URL(remote), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
@@ -51,25 +47,25 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  DesiredCapabilities getDriverCapabilities(Proxy proxy) {
+  DesiredCapabilities getDriverCapabilities(Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    capabilities.setBrowserName(getBrowserNameForGrid());
+    capabilities.setBrowserName(getBrowserNameForGrid(browser));
     if (headless) {
-      capabilities.merge(getHeadlessCapabilities());
+      capabilities.merge(getHeadlessCapabilities(browser));
     }
     if (!browserBinary.isEmpty()) {
-      capabilities.merge(getBrowserBinaryCapabilites());
+      capabilities.merge(getBrowserBinaryCapabilites(browser));
     }
     return capabilities;
   }
 
-  Capabilities getBrowserBinaryCapabilites() {
+  Capabilities getBrowserBinaryCapabilites(Browser browser) {
     log.info("Using browser binary: " + browserBinary);
-    if (isChrome()) {
+    if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
       options.setBinary(browserBinary);
       return options;
-    } else if (isFirefox()) {
+    } else if (browser.isFirefox()) {
       FirefoxOptions options = new FirefoxOptions();
       options.setBinary(browserBinary);
       return options;
@@ -79,13 +75,13 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  Capabilities getHeadlessCapabilities() {
+  Capabilities getHeadlessCapabilities(Browser browser) {
     log.info("Starting in headless mode");
-    if (isChrome()) {
+    if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(headless);
       return options;
-    } else if (isFirefox()) {
+    } else if (browser.isFirefox()) {
       FirefoxOptions options = new FirefoxOptions();
       options.setHeadless(headless);
       return options;
@@ -95,21 +91,21 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  String getBrowserNameForGrid() {
-    if (isLegacyFirefox()) {
+  String getBrowserNameForGrid(Browser browser) {
+    if (browser.isLegacyFirefox()) {
       return BrowserType.FIREFOX;
     }
-    else if (isIE()) {
+    else if (browser.isIE()) {
       return BrowserType.IE;
     }
-    else if (isEdge()) {
+    else if (browser.isEdge()) {
       return BrowserType.EDGE;
     }
-    else if (isOpera()) {
+    else if (browser.isOpera()) {
       return BrowserType.OPERA_BLINK;
     }
     else {
-      return browser;
+      return Configuration.browser;
     }
   }
 }

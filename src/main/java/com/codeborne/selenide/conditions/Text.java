@@ -1,6 +1,7 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -15,7 +16,7 @@ public class Text extends Condition {
   }
 
   @Override
-  public boolean apply(WebElement element) {
+  public boolean apply(Context context, WebElement element) {
     String elementText = "select".equalsIgnoreCase(element.getTagName()) ?
         getSelectedOptionsTexts(element) :
         element.getText();

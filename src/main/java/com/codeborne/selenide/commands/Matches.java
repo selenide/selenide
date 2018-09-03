@@ -15,7 +15,7 @@ public class Matches implements Command<Boolean> {
     Condition condition = (Condition) args[0];
     WebElement element = getElementOrNull(locator);
     if (element != null) {
-      return condition.apply(element);
+      return condition.apply(locator.context(), element);
     }
 
     return condition.applyNull();

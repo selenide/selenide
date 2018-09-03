@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -17,8 +17,8 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(FirefoxDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isFirefox();
+  boolean supports(Browser browser) {
+    return browser.isFirefox();
   }
 
   @Override

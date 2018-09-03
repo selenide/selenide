@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class MatchTextConditionTest implements WithAssertions {
+  private Context context = mock(Context.class);
+
   @Test
   void displaysHumanReadableName() {
     assertThat(Condition.matchText("abc"))
@@ -17,11 +19,11 @@ class MatchTextConditionTest implements WithAssertions {
   @Test
   void matchesWholeString() {
     assertThat(Condition.matchText("Chuck Norris' gmail account is gmail@chuck.norris")
-      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .apply(context, element("Chuck Norris' gmail account is gmail@chuck.norris")))
       .isTrue();
 
     assertThat(Condition.matchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
-      .apply(element("Chuck Norris' gmail    account is gmail@chuck.norris")))
+      .apply(context, element("Chuck Norris' gmail    account is gmail@chuck.norris")))
       .isTrue();
   }
 
@@ -34,13 +36,13 @@ class MatchTextConditionTest implements WithAssertions {
   @Test
   void matchesSubstring() {
     assertThat(Condition.matchText("Chuck")
-      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .apply(context, element("Chuck Norris' gmail account is gmail@chuck.norris")))
       .isTrue();
     assertThat(Condition.matchText("Chuck\\s*Norris")
-      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .apply(context, element("Chuck Norris' gmail account is gmail@chuck.norris")))
       .isTrue();
     assertThat(Condition.matchText("gmail account")
-      .apply(element("Chuck Norris' gmail account is gmail@chuck.norris")))
+      .apply(context, element("Chuck Norris' gmail account is gmail@chuck.norris")))
       .isTrue();
   }
 }

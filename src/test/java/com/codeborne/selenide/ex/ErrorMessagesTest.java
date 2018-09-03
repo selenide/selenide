@@ -1,8 +1,7 @@
 package com.codeborne.selenide.ex;
 
-import java.util.Locale;
-
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
@@ -10,8 +9,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Screenshots.screenshots;
+import java.util.Locale;
+
+import static com.codeborne.selenide.ex.ErrorMessages.screenshots;
 import static java.io.File.separatorChar;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -26,6 +28,8 @@ class ErrorMessagesTest implements WithAssertions {
     reportsUrl = Configuration.reportsUrl;
   }
 
+  private Context context = mock(Context.class);
+
   @AfterAll
   static void restoreOldValues() {
     Configuration.screenshots = true;
@@ -38,7 +42,7 @@ class ErrorMessagesTest implements WithAssertions {
   void setUp() {
     Configuration.screenshots = true;
     screenshots = mock(ScreenShotLaboratory.class);
-    doCallRealMethod().when(screenshots).formatScreenShotPath();
+    doCallRealMethod().when(screenshots).formatScreenShotPath(any());
     Configuration.savePageSource = false;
   }
 
@@ -65,9 +69,9 @@ class ErrorMessagesTest implements WithAssertions {
   void convertsScreenshotFileNameToCIUrl() {
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     String currentDir = System.getProperty("user.dir");
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot(context);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(context);
     assertThat(screenshot)
       .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png");
   }
@@ -80,9 +84,9 @@ class ErrorMessagesTest implements WithAssertions {
       currentDir = '/' + currentDir.replace('\\', '/');
     }
 
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot(context);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(context);
     assertThat(screenshot)
       .isEqualToIgnoringNewLines("Screenshot: file:" + currentDir + "/test-result/12345.png");
   }
@@ -91,10 +95,10 @@ class ErrorMessagesTest implements WithAssertions {
   void doesNotAddScreenshot_if_screenshotsAreDisabled() {
     Configuration.screenshots = false;
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(context);
     assertThat(screenshot)
       .isNullOrEmpty();
-    verify(screenshots, never()).takeScreenShot();
+    verify(screenshots, never()).takeScreenShot(context);
   }
 
   @Test
@@ -102,9 +106,9 @@ class ErrorMessagesTest implements WithAssertions {
     Configuration.savePageSource = true;
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     String currentDir = System.getProperty("user.dir");
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot(context);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(context);
     assertThat(screenshot)
       .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
         + "Page source: http://ci.mycompany.com/job/666/artifact/test-result/12345.html");

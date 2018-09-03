@@ -31,8 +31,8 @@ public class SelectRadio implements Command<SelenideElement> {
       if (value.equals(radio.getAttribute("value"))) {
         if (radio.getAttribute("readonly") != null)
           throw new InvalidStateException("Cannot select readonly radio button");
-        click.click(radio);
-        return wrap(radio);
+        click.click(locator.context(), radio);
+        return wrap(locator.context(), radio);
       }
     }
     throw new ElementNotFound(locator.getSearchCriteria(), value(value));

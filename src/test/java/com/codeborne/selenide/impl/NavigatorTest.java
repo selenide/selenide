@@ -4,7 +4,6 @@ import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.SelenideDriver;
-import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
@@ -12,7 +11,6 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
@@ -24,7 +22,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockWebDriverExtension.class)
 class NavigatorTest implements WithAssertions {
   private Navigator navigator = new Navigator();
   SelenideDriver selenideDriver = mock(SelenideDriver.class);

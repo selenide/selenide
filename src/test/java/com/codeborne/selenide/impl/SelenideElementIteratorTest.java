@@ -1,7 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Context;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -11,9 +13,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelenideElementIteratorTest implements WithAssertions {
+  private Context context = mock(Context.class);
+  private WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
+
+  @BeforeEach
+  void setUp() {
+    when(mockedWebElementCollection.context()).thenReturn(context);
+  }
+
   @Test
   void testHasNext() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     assertThat(selenideElementIterator.hasNext())
@@ -22,7 +31,6 @@ class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void testDoesNotHasNext() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     when(mockedWebElementCollection.getElements()).thenReturn(emptyList());
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     assertThat(selenideElementIterator.hasNext())
@@ -31,12 +39,12 @@ class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void testNext() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
 
+    when(mockedWebElementCollection.context()).thenReturn(context);
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mockedWebElement));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     SelenideElement nextElement = selenideElementIterator.next();
@@ -52,7 +60,6 @@ class SelenideElementIteratorTest implements WithAssertions {
   @Test
   void testRemove() {
     try {
-      WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
       SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
       selenideElementIterator.remove();
     } catch (UnsupportedOperationException e) {

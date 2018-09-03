@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
 import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
@@ -56,7 +56,7 @@ public class WebDriverFactory {
     }
 
     WebDriver webdriver = factories.stream()
-        .filter(AbstractDriverFactory::supports)
+        .filter(factory -> factory.supports(browzer))
         .findAny()
         .map(driverFactory -> driverFactory.create(proxy))
         .orElseGet(() -> new DefaultDriverFactory().create(proxy));
@@ -65,7 +65,7 @@ public class WebDriverFactory {
     webdriver = browserResizer.adjustBrowserPosition(webdriver);
 
     logBrowserVersion(webdriver);
-    log.info("Selenide v. " + Selenide.class.getPackage().getImplementationVersion());
+    log.info("Selenide v. " + SelenideDriver.class.getPackage().getImplementationVersion());
     logSeleniumInfo();
     return webdriver;
   }

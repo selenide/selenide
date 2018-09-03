@@ -25,5 +25,6 @@
     <suppress checks="JavadocMethod" files=".*[/\\]CollectionCondition.java"/>
     <suppress checks="JavadocMethod" files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="AvoidStarImport" files="src[/\\]test[/\\]java[/\\].*"/>
-    <suppress checks="ClassFanOutComplexity" files=".*[/\\]Commands.java"/>
+    <suppress checks="ClassFanOutComplexity" files=".*[/\\]Commands.java|.*[/\\]DownloadFileWithHttpRequest.java"/>
+    <suppress checks="RedundantModifier" files=".*[/\\]Browsers.java"/>
 </suppressions>
