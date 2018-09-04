@@ -1,7 +1,5 @@
 package integration;
 
-import java.io.File;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Context;
 import com.codeborne.selenide.Screenshots;
@@ -10,6 +8,8 @@ import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
@@ -74,7 +74,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {thead}");
       assertThat(e.getScreenshot())
-        .isEqualTo("http://ci.org/build/reports/tests/" + browser + "/1.jpg");
+        .matches("http://ci\\.org/build/reports/tests/" + browser + "/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
@@ -91,7 +91,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       assertThat(e.getScreenshot())
-        .isEqualTo("http://ci.org/build/reports/tests/" + browser + "/1.jpg");
+        .matches("http://ci\\.org/build/reports/tests/" + browser + "/\\d+\\.\\d+\\.(png|html)");
     }
   }
 

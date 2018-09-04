@@ -70,8 +70,8 @@ class SelenideDriverTest implements WithAssertions {
 
     driver.createDriver();
 
-    assertThat(driver.getProxyServer()).isNotNull();
-    verify(factory).createWebDriver(driver.getProxyServer().createSeleniumProxy());
+    assertThat(driver.getProxy()).isNotNull();
+    verify(factory).createWebDriver(driver.getProxy().createSeleniumProxy());
   }
 
   @Test

@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Context;
+import com.codeborne.selenide.ContextStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -27,7 +28,7 @@ class GetInnerHtmlCommandTest implements WithAssertions {
 
   @Test
   void uses_innerHTML_attribute_if_not_htmlUnit() {
-    when(locator.context()).thenReturn(new Context(new Browser("firefox", false), null, null));
+    when(locator.context()).thenReturn(new ContextStub("firefox"));
 
     when(mockedElement.getAttribute("innerHTML")).thenReturn("hello");
     assertThat(getInnerHtmlCommand.execute(proxy, locator, null)).isEqualTo("hello");

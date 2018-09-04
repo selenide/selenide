@@ -47,10 +47,14 @@ public class ErrorMessages {
       return "\nScreenshot: " + screenshotPath;
     }
 
-    if (Configuration.savePageSource) {
+    if (Configuration.savePageSource && !screenshotPath.endsWith(".html")) {
       String htmlFilePath = getHtmlFilePath(screenshotPath);
       return "\nScreenshot: " + screenshotPath + "\nPage source: " + htmlFilePath;
-    } else {
+    }
+    else if (screenshotPath.endsWith(".html")) {
+      return "\nPage source: " + screenshotPath;
+    }
+    else {
       return "\nScreenshot: " + screenshotPath;
     }
   }

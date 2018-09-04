@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
+import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
@@ -39,7 +41,9 @@ class WebDriverRunnerTest implements WithAssertions {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
-    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
+    WebDriverFactory factory = mock(WebDriverFactory.class);
+    when(factory.createWebDriver(any())).thenReturn(driver);
+    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer(factory));
     doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
     Configuration.proxyEnabled = false;
     Configuration.fileDownload = HTTPGET;
@@ -50,7 +54,7 @@ class WebDriverRunnerTest implements WithAssertions {
     WebDriverRunner.closeWebDriver();
     driver = null;
     Configuration.browser = System.getProperty("browser", FIREFOX);
-    webdriverContainer = new WebDriverThreadLocalContainer();
+    webdriverContainer = new WebDriverThreadLocalContainer(new WebDriverFactory());
   }
 
   @Test
@@ -75,11 +79,11 @@ class WebDriverRunnerTest implements WithAssertions {
 
   @Test
   void userCanAddWebDriverListeners() {
-    WebDriverEventListener listener1 = mock(WebDriverEventListener.class);
-    WebDriverRunner.addListener(listener1);
+    WebDriverEventListener listener = mock(WebDriverEventListener.class);
+    WebDriverRunner.addListener(listener);
     Configuration.browser = HTMLUNIT;
     open(url);
-    verify(listener1).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
+    verify(listener).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
   }
 
   @Test

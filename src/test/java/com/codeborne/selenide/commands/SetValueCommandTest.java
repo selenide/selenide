@@ -1,9 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import java.lang.reflect.Field;
-
-import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.ContextStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -11,6 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import java.lang.reflect.Field;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,7 +26,7 @@ class SetValueCommandTest implements WithAssertions {
   void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
     when(locator.findAndAssertElementIsVisible()).thenReturn(mockedFoundElement);
-    when(locator.context()).thenReturn(new Context(new Browser("opera", false), null, null));
+    when(locator.context()).thenReturn(new ContextStub("opera"));
   }
 
   @Test

@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -14,19 +15,25 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
 
 import static java.lang.Thread.currentThread;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
-  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
-
+  private final WebDriverFactory factory;
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
   private final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   private final Map<Long, SelenideDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private Proxy userProvidedProxy;
 
   private final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+
+  public WebDriverThreadLocalContainer() {
+    this(new WebDriverFactory());
+  }
+
+  public WebDriverThreadLocalContainer(WebDriverFactory factory) {
+    this.factory = factory;
+  }
 
   @Override
   public void addListener(WebDriverEventListener listener) {
@@ -39,7 +46,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (previous != null) {
       previous.close();
     }
-    threadWebDriver.put(currentThread().getId(), new SelenideDriver(webDriver));
+    threadWebDriver.put(currentThread().getId(), new SelenideDriver(webDriver, factory));
   }
 
   @Override
@@ -52,13 +59,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    */
   @Override
   public boolean hasWebDriverStarted() {
-    return threadWebDriver.containsKey(currentThread().getId());
+    SelenideDriver selenideDriver = threadWebDriver.get(currentThread().getId());
+    return selenideDriver != null && selenideDriver.hasWebDriverStarted();
   }
 
   @Override
   public SelenideDriver getSelenideDriver() {
     return threadWebDriver.computeIfAbsent(currentThread().getId(),
-      threadId -> markForAutoClose(currentThread(), new SelenideDriver(userProvidedProxy, listeners)));
+      threadId -> markForAutoClose(currentThread(), new SelenideDriver(userProvidedProxy, listeners, factory)));
   }
 
   @Override
@@ -73,13 +81,14 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public SelenideProxyServer getProxyServer() {
-    return getSelenideDriver().getProxyServer();
+    return getSelenideDriver().getProxy();
   }
 
   @Override
   public void closeWebDriver() {
-    if (hasWebDriverStarted()) {
-      getSelenideDriver().close();
+    SelenideDriver driver = threadWebDriver.remove(currentThread().getId());
+    if (driver != null) {
+      driver.close();
     }
   }
 

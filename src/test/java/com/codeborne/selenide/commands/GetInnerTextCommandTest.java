@@ -1,7 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.ContextStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -24,7 +23,7 @@ class GetInnerTextCommandTest implements WithAssertions {
 
   @Test
   void uses_innerText_attribute_if_IE() {
-    when(locator.context()).thenReturn(new Context(new Browser("ie", false), null, null));
+    when(locator.context()).thenReturn(new ContextStub("ie"));
 
     when(mockedElement.getAttribute("innerText")).thenReturn("hello");
     assertThat(getInnerTextCommand.execute(proxy, locator, null)).isEqualTo("hello");
@@ -32,7 +31,7 @@ class GetInnerTextCommandTest implements WithAssertions {
 
   @Test
   void uses_textContent_attribute_if_not_IE() {
-    when(locator.context()).thenReturn(new Context(new Browser("firefox", false), null, null));
+    when(locator.context()).thenReturn(new ContextStub("firefox"));
 
     when(mockedElement.getAttribute("textContent")).thenReturn("hello");
     assertThat(getInnerTextCommand.execute(proxy, locator, null)).isEqualTo("hello");

@@ -94,7 +94,7 @@ public class WebDriverRunner implements Browsers {
   }
 
   public static Context context() {
-    return new Context(browser(), getWebDriver(), getSelenideProxy());
+    return getSelenideDriver();
   }
 
   /**

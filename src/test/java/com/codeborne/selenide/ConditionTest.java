@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 class ConditionTest {
   private WebDriver webDriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private Context context = new Context(new Browser("opera", false), webDriver, proxy);
+  private Context context = new ContextStub(new Browser("opera", false), webDriver, proxy);
   
   @Test
   void displaysHumanReadableName() {

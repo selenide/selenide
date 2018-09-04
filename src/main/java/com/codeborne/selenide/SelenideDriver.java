@@ -10,6 +10,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
@@ -25,12 +26,14 @@ import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 import static java.util.logging.Level.FINE;
 
-public class SelenideDriver {
+public class SelenideDriver implements Context {
   private static final Logger log = Logger.getLogger(SelenideDriver.class.getName());
 
   private final Navigator navigator = new Navigator();
   private final WebDriverFactory factory;
   private final BrowserHealthChecker browserHealthChecker;
+
+  private final Browser browser = new Browser(Configuration.browser, Configuration.headless);
 
   // TODO split to 2 different classes:
 
@@ -51,12 +54,16 @@ public class SelenideDriver {
     Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
   }
 
-  public SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
-    this(userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker());
+  public SelenideDriver() {
+    this(null, emptyList(), new WebDriverFactory(), new BrowserHealthChecker());
   }
 
-  public SelenideDriver(WebDriver webDriver) {
-    this(webDriver, new WebDriverFactory(), new BrowserHealthChecker());
+  public SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners, WebDriverFactory factory) {
+    this(userProvidedProxy, listeners, factory, new BrowserHealthChecker());
+  }
+
+  public SelenideDriver(WebDriver webDriver, WebDriverFactory factory) {
+    this(webDriver, factory, new BrowserHealthChecker());
   }
 
   SelenideDriver(WebDriver webDriver, WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
@@ -84,7 +91,15 @@ public class SelenideDriver {
     navigator.open(this, absoluteUrl, domain, login, password);
   }
 
-  public SelenideProxyServer getProxyServer() {
+  public Browser getBrowser() {
+    return browser;
+  }
+
+  public boolean hasWebDriverStarted() {
+    return webDriver != null;
+  }
+
+  public SelenideProxyServer getProxy() {
     return selenideProxyServer;
   }
 
@@ -185,6 +200,10 @@ public class SelenideDriver {
     selenideProxyServer = null;
   }
 
+  public boolean supportsJavascript() {
+    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
+  }
+
   @SuppressWarnings("unchecked")
   public <T> T executeJavaScript(String jsCode, Object... arguments) {
     return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
@@ -192,5 +211,13 @@ public class SelenideDriver {
 
   public WebElement getFocusedElement() {
     return (WebElement) executeJavaScript("return document.activeElement");
+  }
+
+  public SelenideTargetLocator switchTo() {
+    return new SelenideTargetLocator(getWebDriver());
+  }
+
+  public Actions actions() {
+    return new Actions(getWebDriver());
   }
 }

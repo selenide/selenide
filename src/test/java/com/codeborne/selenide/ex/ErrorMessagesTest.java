@@ -1,13 +1,16 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Context;
+import com.codeborne.selenide.ContextStub;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Locale;
 
@@ -28,7 +31,7 @@ class ErrorMessagesTest implements WithAssertions {
     reportsUrl = Configuration.reportsUrl;
   }
 
-  private Context context = mock(Context.class);
+  private Context context = new ContextStub(new Browser("chrome", false), mock(ChromeDriver.class), null);
 
   @AfterAll
   static void restoreOldValues() {

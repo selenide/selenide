@@ -63,7 +63,7 @@ public class Navigator {
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
       WebDriver webDriver = driver.getAndCheckWebDriver();
-      beforeNavigateTo(driver.getProxyServer(), authenticationType, domain, login, password);
+      beforeNavigateTo(driver.getProxy(), authenticationType, domain, login, password);
       webDriver.navigate().to(url);
       javascriptErrorsCollector.collectJavascriptErrors(driver.getWebDriver());
       SelenideLogger.commitStep(log, PASS);

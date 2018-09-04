@@ -67,7 +67,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return context.supportsJavascript() && !context.browser.isHtmlUnit();
+    return context.supportsJavascript() && !context.getBrowser().isHtmlUnit();
   }
 
   private Describe attr(String attributeName) {

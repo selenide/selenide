@@ -6,8 +6,7 @@ import integration.IntegrationTest;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
@@ -19,6 +18,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 /**
  * Selenide runs its own proxy server.
@@ -27,13 +27,13 @@ import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
  * This test verifies that both these proxies work well together.
  */
 class ChainedProxyTest extends IntegrationTest {
-  private static BrowserMobProxy chainedProxy;
+  private BrowserMobProxy chainedProxy;
   private List<String> visitedUrls = new ArrayList<>();
 
-  @AfterAll
-  static void tearDown() {
-    WebDriverRunner.setProxy(null);
+  @AfterEach
+  void tearDown() {
     close();
+    WebDriverRunner.setProxy(null);
     if (chainedProxy != null) {
       chainedProxy.stop();
     }
@@ -41,24 +41,22 @@ class ChainedProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
+    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
 
-    if (chainedProxy == null) {
-      close();
+    close();
 
-      chainedProxy = new BrowserMobProxyServer();
-      chainedProxy.setTrustAllServers(true);
-      chainedProxy.start(0);
+    chainedProxy = new BrowserMobProxyServer();
+    chainedProxy.setTrustAllServers(true);
+    chainedProxy.start(0);
 
-      chainedProxy.addResponseFilter((response, contents, messageInfo) -> {
-        if (messageInfo.getUrl().startsWith(Configuration.baseUrl) && !messageInfo.getUrl().endsWith("/favicon.ico")) {
-          visitedUrls.add(messageInfo.getUrl());
-        }
-      });
+    chainedProxy.addResponseFilter((response, contents, messageInfo) -> {
+      if (messageInfo.getUrl().startsWith(Configuration.baseUrl) && !messageInfo.getUrl().endsWith("/favicon.ico")) {
+        visitedUrls.add(messageInfo.getUrl());
+      }
+    });
 
-      Proxy seleniumProxy = ClientUtil.createSeleniumProxy(chainedProxy);
-      WebDriverRunner.setProxy(seleniumProxy);
-    }
+    Proxy seleniumProxy = ClientUtil.createSeleniumProxy(chainedProxy);
+    WebDriverRunner.setProxy(seleniumProxy);
     visitedUrls.clear();
   }
 
