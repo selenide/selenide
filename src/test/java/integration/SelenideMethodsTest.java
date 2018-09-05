@@ -307,7 +307,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFollowLinks() {
-    $(By.linkText("Want to see ajax in action?")).scrollTo().followLink();
+    $(By.linkText("Want to see ajax in action?")).scrollTo().click();
     assertThat(url())
       .withFailMessage("Actual URL is: " + url())
       .contains("long_ajax_request.html");
@@ -315,7 +315,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewBoolean() {
-    $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).followLink();
+    $(By.linkText("Want to see ajax in action?")).scrollIntoView(false).click();
     assertThat(url())
       .withFailMessage("Actual URL is: " + url())
       .contains("long_ajax_request.html");
@@ -323,7 +323,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanFollowLinksUsingScrollIntoViewOptions() {
-    $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").followLink();
+    $(By.linkText("Want to see ajax in action?")).scrollIntoView("{behavior: \"smooth\", inline: \"center\"}").click();
     assertThat(url())
       .withFailMessage("Actual URL is: " + url())
       .contains("long_ajax_request.html");

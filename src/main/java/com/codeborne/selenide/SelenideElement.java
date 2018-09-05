@@ -19,24 +19,6 @@ import java.io.FileNotFoundException;
 public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
   /**
    *
-   * @Deprecated this is a very legacy method with strange implementation. Don't use it. Use #click on links too
-   *
-   * <p>
-   * Actual for &lt;a href&gt; elements. Navigates browser by clicking this link.
-   * </p>
-   *
-   * <p>
-   * In some situations just clicking is not enough: $.click() doesn't take effect for &lt;a href&gt;.
-   * In these cases use #followLink that actually navigates browser to @href value.
-   * </p>
-   *
-   * @see com.codeborne.selenide.commands.FollowLink
-   */
-  @Deprecated
-  void followLink();
-
-  /**
-   *
    * <b>Implementation details:</b>
    *
    * <p>If Configuration.versatileSetValue is true, can work as 'selectOptionByValue', 'selectRadio'</p>

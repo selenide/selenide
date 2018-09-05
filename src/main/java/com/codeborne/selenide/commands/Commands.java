@@ -72,7 +72,6 @@ public class Commands {
     add("click", new Click());
     add("contextClick", new ContextClick());
     add("doubleClick", new DoubleClick());
-    add("followLink", new FollowLink());
   }
 
   private void addModifyCommands() {
