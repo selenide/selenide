@@ -6,12 +6,12 @@ ext {
   testngVersion = '6.9.10'
   htmlunitDriverVersion = '2.32.1'
   seleniumVersion = '3.14.0'
-  junitVersion = '5.2.0'
+  junitVersion = '5.3.0'
 }
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-  api('io.github.bonigarcia:webdrivermanager:2.2.5')
+  api('io.github.bonigarcia:webdrivermanager:3.0.0')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
   implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
