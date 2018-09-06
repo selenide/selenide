@@ -23,6 +23,13 @@ task chrome(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
+task chrome_headless(type: Test) {
+  systemProperties['selenide.browser'] = 'chrome'
+  systemProperties['selenide.headless'] = 'true'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
 task safari(type: Test) {
   systemProperties['selenide.browser'] = 'safari'
   include 'integration/**/*'
@@ -43,6 +50,13 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
+  include 'integration/**/*'
+  exclude 'com/codeborne/selenide/**/*'
+}
+
+task firefox_headless(type: Test) {
+  systemProperties['selenide.browser'] = 'firefox'
+  systemProperties['selenide.headless'] = 'true'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -79,7 +93,7 @@ tasks.withType(Test) {
   } else {
     maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   }
-  jvmArgs = ['-ea', '-Xmx128m']
+  jvmArgs = ['-ea', '-Xmx256m']
   systemProperties += System.properties
   jacoco {
     enabled = true
