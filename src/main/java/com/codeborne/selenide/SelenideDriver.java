@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
+import com.codeborne.selenide.drivercommands.CreateDriverCommand;
 import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.SelenideDriverFinalCleanupThread;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
@@ -17,7 +18,6 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.io.File;
@@ -166,7 +166,7 @@ public class SelenideDriver implements Context {
   public synchronized WebDriver getWebDriver() {
     if (webDriver == null) {
       log.info("No webdriver is bound to current thread: " + currentThread().getId() + " - let's create a new webdriver");
-      webDriver = createDriver();
+      createDriver();
     }
     return webDriver;
   }
@@ -179,39 +179,10 @@ public class SelenideDriver implements Context {
     return getWebDriver();
   }
 
-  WebDriver createDriver() {
-    if (!reopenBrowserOnFail) {
-      throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
-        ", and cannot create a new webdriver because Configuration.reopenBrowserOnFail=false");
-    }
-
-    Proxy browserProxy = userProvidedProxy;
-
-    if (Configuration.proxyEnabled) {
-      selenideProxyServer = new SelenideProxyServer(userProvidedProxy);
-      selenideProxyServer.start();
-      browserProxy = selenideProxyServer.createSeleniumProxy();
-    }
-
-    WebDriver webdriver = factory.createWebDriver(browserProxy);
-
-    log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
-      webdriver.getClass().getSimpleName() + " -> " + webdriver);
-
-    return addListeners(webdriver);
-  }
-
-  private WebDriver addListeners(WebDriver webdriver) {
-    if (listeners.isEmpty()) {
-      return webdriver;
-    }
-
-    EventFiringWebDriver wrapper = new EventFiringWebDriver(webdriver);
-    for (WebDriverEventListener listener : listeners) {
-      log.info("Add listener to webdriver: " + listener);
-      wrapper.register(listener);
-    }
-    return wrapper;
+  void createDriver() {
+    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(factory, userProvidedProxy, listeners);
+    this.webDriver = result.webDriver;
+    this.selenideProxyServer = result.selenideProxyServer;
   }
 
   public void clearCookies() {
