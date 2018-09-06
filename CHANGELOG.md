@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.14.1 (released 06.09.2018)
+* Upgrade to WebDriverManager 3.0.0
+* #794 Removed unused setting `Configuration.dismissModalDialogs`  -- see PR https://github.com/codeborne/selenide/pull/795
+* Removed unused setting Configuration.openBrowserTimeoutMs
+* #798 Remove deprecated method $.followLink()  -- see PR https://github.com/codeborne/selenide/pull/799
+
 ## 4.14.0 (released 29.08.2018)
 * #784 Enable BasicAuth through Selenide proxy server  -- see https://github.com/codeborne/selenide/pull/785
 * #788 Add setting to enable/disable proxy server
