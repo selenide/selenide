@@ -478,7 +478,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm() {
-    return getSelenideDriver().confirm();
+    return getSelenideDriver().modal().confirm();
   }
 
   /**
@@ -489,7 +489,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm(String expectedDialogText) {
-    return getSelenideDriver().confirm(expectedDialogText);
+    return getSelenideDriver().modal().confirm(expectedDialogText);
   }
 
   /**
@@ -497,7 +497,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt() {
-    return getSelenideDriver().prompt();
+    return getSelenideDriver().modal().prompt();
   }
 
   /**
@@ -506,7 +506,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String inputText) {
-    return getSelenideDriver().prompt(inputText);
+    return getSelenideDriver().modal().prompt(inputText);
   }
 
   /**
@@ -518,7 +518,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String expectedDialogText, String inputText) {
-    return getSelenideDriver().prompt(expectedDialogText, inputText);
+    return getSelenideDriver().modal().prompt(expectedDialogText, inputText);
   }
 
   /**
@@ -526,7 +526,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss() {
-    return getSelenideDriver().dismiss();
+    return getSelenideDriver().modal().dismiss();
   }
 
   /**
@@ -537,7 +537,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss(String expectedDialogText) {
-    return getSelenideDriver().dismiss(expectedDialogText);
+    return getSelenideDriver().modal().dismiss(expectedDialogText);
   }
 
   /**

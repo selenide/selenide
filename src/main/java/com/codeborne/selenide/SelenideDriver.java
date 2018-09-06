@@ -6,7 +6,7 @@ import com.codeborne.selenide.impl.CloseBrowser;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
-import com.codeborne.selenide.impl.Modals;
+import com.codeborne.selenide.impl.Modal;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideDriverFinalCleanupThread;
 import com.codeborne.selenide.impl.SelenideWait;
@@ -47,7 +47,6 @@ public class SelenideDriver implements Context {
   private final WebDriverFactory factory;
   private final BrowserHealthChecker browserHealthChecker;
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static Modals modals = new Modals();
   private static WebDriverLogs webDriverLogs = new WebDriverLogs();
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
@@ -380,32 +379,8 @@ public class SelenideDriver implements Context {
     return null;
   }
 
-  public String confirm() {
-    return modals.confirm(this);
-  }
-
-  public String confirm(String expectedDialogText) {
-    return modals.confirm(this, expectedDialogText);
-  }
-
-  public String prompt() {
-    return modals.prompt(this);
-  }
-
-  public String prompt(String inputText) {
-    return modals.prompt(this, inputText);
-  }
-
-  public String prompt(String expectedDialogText, String inputText) {
-    return modals.prompt(this, expectedDialogText, inputText);
-  }
-
-  public String dismiss() {
-    return modals.dismiss(this);
-  }
-
-  public String dismiss(String expectedDialogText) {
-    return modals.dismiss(this, expectedDialogText);
+  public Modal modal() {
+    return new Modal(this);
   }
 
   public List<String> getWebDriverLogs(String logType) {

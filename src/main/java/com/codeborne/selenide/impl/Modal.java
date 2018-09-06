@@ -4,13 +4,18 @@ import com.codeborne.selenide.Context;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.Alert;
 
-public class Modals {
+public class Modal {
+  private final Context context;
 
-  public String confirm(Context context) {
-    return confirm(context, null);
+  public Modal(Context context) {
+    this.context = context;
   }
 
-  public String confirm(Context context, String expectedDialogText) {
+  public String confirm() {
+    return confirm(null);
+  }
+
+  public String confirm(String expectedDialogText) {
     Alert alert = context.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.accept();
@@ -18,15 +23,15 @@ public class Modals {
     return actualDialogText;
   }
 
-  public String prompt(Context context) {
-    return prompt(context, null, null);
+  public String prompt() {
+    return prompt(null, null);
   }
 
-  public String prompt(Context context, String inputText) {
-    return prompt(context, null, inputText);
+  public String prompt(String inputText) {
+    return prompt(null, inputText);
   }
 
-  public String prompt(Context context, String expectedDialogText, String inputText) {
+  public String prompt(String expectedDialogText, String inputText) {
     Alert alert = context.switchTo().alert();
     String actualDialogText = alert.getText();
     if (inputText != null)
@@ -36,11 +41,11 @@ public class Modals {
     return actualDialogText;
   }
 
-  public String dismiss(Context context) {
-    return dismiss(context, null);
+  public String dismiss() {
+    return dismiss(null);
   }
 
-  public String dismiss(Context context, String expectedDialogText) {
+  public String dismiss(String expectedDialogText) {
     Alert alert = context.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.dismiss();
