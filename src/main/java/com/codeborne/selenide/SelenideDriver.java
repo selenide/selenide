@@ -28,7 +28,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
@@ -47,7 +46,6 @@ public class SelenideDriver implements Context {
   private final WebDriverFactory factory;
   private final BrowserHealthChecker browserHealthChecker;
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static WebDriverLogs webDriverLogs = new WebDriverLogs();
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
@@ -383,12 +381,8 @@ public class SelenideDriver implements Context {
     return new Modal(this);
   }
 
-  public List<String> getWebDriverLogs(String logType) {
-    return getWebDriverLogs(logType, Level.ALL);
-  }
-
-  public List<String> getWebDriverLogs(String logType, Level logLevel) {
-    return webDriverLogs.getWebDriverLogs(getWebDriver(), logType, logLevel);
+  public WebDriverLogs getWebDriverLogs() {
+    return new WebDriverLogs(this);
   }
 
   public void clearBrowserLocalStorage() {

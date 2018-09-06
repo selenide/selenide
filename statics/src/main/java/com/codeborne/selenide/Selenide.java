@@ -640,7 +640,7 @@ public class Selenide {
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
    */
   public static List<String> getWebDriverLogs(String logType) {
-    return getSelenideDriver().getWebDriverLogs(logType);
+    return getSelenideDriver().getWebDriverLogs().logs(logType);
   }
 
   /**
@@ -673,7 +673,7 @@ public class Selenide {
    * @see java.util.logging.Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
-    return getSelenideDriver().getWebDriverLogs(logType, logLevel);
+    return getSelenideDriver().getWebDriverLogs().logs(logType, logLevel);
   }
 
   /**
