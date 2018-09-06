@@ -2,13 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
-import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
-import com.codeborne.selenide.impl.ElementFinder;
-import com.codeborne.selenide.impl.JavascriptErrorsCollector;
-import com.codeborne.selenide.impl.Modals;
-import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideWait;
-import com.codeborne.selenide.impl.WebDriverLogs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -20,12 +14,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.context;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 
 /**
  * The main starting point of Selenide.
@@ -34,13 +24,6 @@ import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
  * {@link #$(String)} for searching web elements.
  */
 public class Selenide {
-  public static Navigator navigator = new Navigator();
-  private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
-  private static WebDriverLogs webDriverLogs = new WebDriverLogs();
-  private static Modals modals = new Modals();
-  private static SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
-
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
@@ -129,8 +112,7 @@ public class Selenide {
    * @param hash value for window.location.hash - Accept either "#hash" or "hash".
    */
   public static void updateHash(String hash) {
-    String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
-    executeJavaScript("window.location.hash='" + localHash + "'");
+    getSelenideDriver().updateHash(hash);
   }
 
   /**
@@ -139,7 +121,7 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    return open(relativeOrAbsoluteUrl, "", "", "", pageObjectClassClass);
+    return getSelenideDriver().open(relativeOrAbsoluteUrl, pageObjectClassClass);
   }
 
   /**
@@ -148,7 +130,7 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    return open(absoluteUrl, "", "", "", pageObjectClassClass);
+    return getSelenideDriver().open(absoluteUrl, pageObjectClassClass);
   }
 
   /**
@@ -158,8 +140,7 @@ public class Selenide {
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    open(relativeOrAbsoluteUrl, domain, login, password);
-    return page(pageObjectClassClass);
+    return getSelenideDriver().open(relativeOrAbsoluteUrl, domain, login, password, pageObjectClassClass);
   }
 
   /**
@@ -168,8 +149,7 @@ public class Selenide {
    */
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
-    open(absoluteUrl, domain, login, password);
-    return page(pageObjectClassClass);
+    return getSelenideDriver().open(absoluteUrl, domain, login, password, pageObjectClassClass);
   }
 
   /**
@@ -183,21 +163,21 @@ public class Selenide {
    * Reload current page
    */
   public static void refresh() {
-    navigator.refresh(getSelenideDriver());
+    getSelenideDriver().refresh();
   }
 
   /**
    * Navigate browser back to previous page
    */
   public static void back() {
-    navigator.back(getSelenideDriver());
+    getSelenideDriver().back();
   }
 
   /**
    * Navigate browser forward to next page
    */
   public static void forward() {
-    navigator.forward(getSelenideDriver());
+    getSelenideDriver().forward();
   }
 
   /**
@@ -205,7 +185,7 @@ public class Selenide {
    * @return title of the page
    */
   public static String title() {
-    return getWebDriver().getTitle();
+    return getSelenideDriver().title();
   }
 
   /**
@@ -238,7 +218,7 @@ public class Selenide {
    * @return given WebElement wrapped into SelenideElement
    */
   public static SelenideElement $(WebElement webElement) {
-    return wrap(context(), webElement);
+    return getSelenideDriver().$(webElement);
   }
 
   /**
@@ -248,7 +228,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector) {
-    return getElement(By.cssSelector(cssSelector));
+    return getSelenideDriver().find(cssSelector);
   }
 
   /**
@@ -258,7 +238,7 @@ public class Selenide {
    * @return SelenideElement which locates elements via XPath
    */
   public static SelenideElement $x(String xpathExpression) {
-    return getElement(By.xpath(xpathExpression));
+    return getSelenideDriver().$x(xpathExpression);
   }
 
   /**
@@ -268,14 +248,14 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(By seleniumSelector) {
-    return getElement(seleniumSelector);
+    return getSelenideDriver().find(seleniumSelector);
   }
 
   /**
    * @see #getElement(By, int)
    */
   public static SelenideElement $(By seleniumSelector, int index) {
-    return getElement(seleniumSelector, index);
+    return getSelenideDriver().find(seleniumSelector, index);
   }
 
   /**
@@ -291,7 +271,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector) {
-    return ElementFinder.wrap(context(), parent, cssSelector);
+    return getSelenideDriver().$(parent).find(cssSelector);
   }
 
   /**
@@ -302,7 +282,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement $(String cssSelector, int index) {
-    return ElementFinder.wrap(context(), cssSelector, index);
+    return getSelenideDriver().$(cssSelector, index);
   }
 
   /**
@@ -319,7 +299,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return ElementFinder.wrap(context(), parent, cssSelector, index);
+    return getSelenideDriver().$(parent).find(cssSelector, index);
   }
 
   /**
@@ -335,7 +315,7 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
-    return ElementFinder.wrap(context(), $(parent), seleniumSelector, 0);
+    return getSelenideDriver().$(parent).find(seleniumSelector);
   }
 
   /**
@@ -352,14 +332,14 @@ public class Selenide {
    */
   @Deprecated
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
-    return ElementFinder.wrap(context(), $(parent), seleniumSelector, index);
+    return getSelenideDriver().$(parent).find(seleniumSelector, index);
   }
 
   /**
    * Initialize collection with Elements
    */
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
-    return new ElementsCollection(context(), elements);
+    return getSelenideDriver().$$(elements);
   }
 
   /**
@@ -373,7 +353,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(context(), cssSelector);
+    return getSelenideDriver().$$(cssSelector);
   }
 
   /**
@@ -386,7 +366,7 @@ public class Selenide {
    * @return ElementsCollection which locates elements via XPath
    */
   public static ElementsCollection $$x(String xpathExpression) {
-    return $$(By.xpath(xpathExpression));
+    return getSelenideDriver().$$x(xpathExpression);
   }
 
   /**
@@ -400,7 +380,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection $$(By seleniumSelector) {
-    return new ElementsCollection(context(), seleniumSelector);
+    return getSelenideDriver().$$(seleniumSelector);
   }
 
   /**
@@ -420,7 +400,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return new ElementsCollection(context(), parent, cssSelector);
+    return getSelenideDriver().$(parent).findAll(cssSelector);
   }
 
   /**
@@ -434,7 +414,7 @@ public class Selenide {
    */
   @Deprecated
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return new ElementsCollection(context(), parent, seleniumSelector);
+    return getSelenideDriver().$(parent).findAll(seleniumSelector);
   }
 
   /**
@@ -444,7 +424,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement getElement(By criteria) {
-    return ElementFinder.wrap(context(), null, criteria, 0);
+    return getSelenideDriver().find(criteria);
   }
 
   /**
@@ -455,7 +435,7 @@ public class Selenide {
    * @return SelenideElement
    */
   public static SelenideElement getElement(By criteria, int index) {
-    return ElementFinder.wrap(context(), null, criteria, index);
+    return getSelenideDriver().find(criteria, index);
   }
 
   /**
@@ -465,7 +445,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection getElements(By criteria) {
-    return $$(criteria);
+    return getSelenideDriver().findAll(criteria);
   }
 
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
@@ -490,12 +470,7 @@ public class Selenide {
    * @return null if nothing selected
    */
   public static SelenideElement getSelectedRadio(By radioField) {
-    for (WebElement radio : $$(radioField)) {
-      if (radio.getAttribute("checked") != null) {
-        return wrap(context(), radio);
-      }
-    }
-    return null;
+    return getSelenideDriver().getSelectedRadio(radioField);
   }
 
   /**
@@ -503,7 +478,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm() {
-    return modals.confirm(context());
+    return getSelenideDriver().confirm();
   }
 
   /**
@@ -514,7 +489,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String confirm(String expectedDialogText) {
-    return modals.confirm(context(), expectedDialogText);
+    return getSelenideDriver().confirm(expectedDialogText);
   }
 
   /**
@@ -522,7 +497,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt() {
-    return modals.prompt(context());
+    return getSelenideDriver().prompt();
   }
 
   /**
@@ -531,7 +506,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String inputText) {
-    return modals.prompt(context(), inputText);
+    return getSelenideDriver().prompt(inputText);
   }
 
   /**
@@ -543,16 +518,15 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String prompt(String expectedDialogText, String inputText) {
-    return modals.prompt(context(), expectedDialogText, inputText);
+    return getSelenideDriver().prompt(expectedDialogText, inputText);
   }
-
 
   /**
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
    * @return actual dialog text
    */
   public static String dismiss() {
-    return modals.dismiss(context());
+    return getSelenideDriver().dismiss();
   }
 
   /**
@@ -563,7 +537,7 @@ public class Selenide {
    * @return actual dialog text
    */
   public static String dismiss(String expectedDialogText) {
-    return modals.dismiss(context(), expectedDialogText);
+    return getSelenideDriver().dismiss(expectedDialogText);
   }
 
   /**
@@ -576,7 +550,7 @@ public class Selenide {
    * @return SelenideTargetLocator
    */
   public static SelenideTargetLocator switchTo() {
-    return context().switchTo();
+    return getSelenideDriver().switchTo();
   }
 
   /**
@@ -591,14 +565,14 @@ public class Selenide {
    * Create a Page Object instance
    */
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return pageFactory.page(context(), pageObjectClass);
+    return getSelenideDriver().page(pageObjectClass);
   }
 
   /**
    * Initialize a given Page Object instance
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    return pageFactory.page(context(), pageObject);
+    return getSelenideDriver().page(pageObject);
   }
 
   /**
@@ -612,7 +586,7 @@ public class Selenide {
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
   public static SelenideWait Wait() {
-    return new SelenideWait(getWebDriver());
+    return getSelenideDriver().Wait();
   }
 
   /**
@@ -629,7 +603,7 @@ public class Selenide {
    * </pre>
    */
   public static Actions actions() {
-    return new Actions(getWebDriver());
+    return getSelenideDriver().actions();
   }
 
   /**
@@ -644,17 +618,14 @@ public class Selenide {
    * @return list of error messages. Returns empty list if webdriver is not started properly.
    */
   public static List<String> getJavascriptErrors() {
-    return javascriptErrorsCollector.getJavascriptErrors(context());
+    return getSelenideDriver().getJavascriptErrors();
   }
 
   /**
    * Check if there is not JS errors on the page
    */
   public static void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
-    List<String> jsErrors = getJavascriptErrors();
-    if (jsErrors != null && !jsErrors.isEmpty()) {
-      throw new JavaScriptErrorsFound(jsErrors);
-    }
+    getSelenideDriver().assertNoJavascriptErrors();
   }
 
   /**
@@ -662,18 +633,14 @@ public class Selenide {
    * @param factor e.g. 1.1 or 2.0 or 0.5
    */
   public static void zoom(double factor) {
-    executeJavaScript(
-        "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
-        "document.body.style.transformOrigin = '0 0';",
-        factor
-    );
+    getSelenideDriver().zoom(factor);
   }
 
   /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
    */
   public static List<String> getWebDriverLogs(String logType) {
-    return getWebDriverLogs(logType, Level.ALL);
+    return getSelenideDriver().getWebDriverLogs(logType);
   }
 
   /**
@@ -706,17 +673,16 @@ public class Selenide {
    * @see java.util.logging.Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
-    return webDriverLogs.getWebDriverLogs(getWebDriver(), logType, logLevel);
+    return getSelenideDriver().getWebDriverLogs(logType, logLevel);
   }
 
   /**
    * Clear browser cookies.
    *
-   * In case if you are trying to avoid restarting browser
-   *
+   * It can be useful e.g. if you are trying to avoid restarting browser between tests
    */
   public static void clearBrowserCookies() {
-    getWebDriver().manage().deleteAllCookies();
+    getSelenideDriver().clearCookies();
   }
 
   /**
@@ -725,7 +691,7 @@ public class Selenide {
    *  In case if you need to be sure that browser's localStorage is empty
    */
   public static void clearBrowserLocalStorage() {
-    executeJavaScript("localStorage.clear();");
+    getSelenideDriver().clearBrowserLocalStorage();
   }
 
   /**
@@ -734,7 +700,7 @@ public class Selenide {
    * @return browser user agent
    */
   public static String getUserAgent() {
-    return executeJavaScript("return navigator.userAgent;");
+    return getSelenideDriver().getUserAgent();
   }
 
   /**
@@ -743,7 +709,7 @@ public class Selenide {
    * Useful if you need to scroll down by x pixels unknown number of times.
    */
   public static boolean atBottom() {
-    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+    return getSelenideDriver().atBottom();
   }
 
   /**
@@ -756,10 +722,10 @@ public class Selenide {
    * @throws IOException if failed to download file
    */
   public static File download(String url) throws IOException {
-    return download(url, timeout);
+    return getSelenideDriver().download(url);
   }
 
   public static File download(String url, long timeoutMs) throws IOException {
-    return downloadFileWithHttpRequest.download(context(), url, timeoutMs);
+    return getSelenideDriver().download(url, timeoutMs);
   }
 }

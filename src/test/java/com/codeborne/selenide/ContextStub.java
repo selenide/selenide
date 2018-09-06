@@ -49,6 +49,11 @@ public class ContextStub implements Context {
     return (T) ((JavascriptExecutor) webDriver).executeScript(jsCode, arguments);
   }
 
+  @Override
+  public String getUserAgent() {
+    return "zhopera";
+  }
+
   public SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(getWebDriver());
   }

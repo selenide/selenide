@@ -150,7 +150,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected void addHttpHeaders(Context context, HttpGet httpGet) {
-    httpGet.setHeader("User-Agent", context.executeJavaScript("return navigator.userAgent;"));
+    httpGet.setHeader("User-Agent", context.getUserAgent());
   }
 
   protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) {

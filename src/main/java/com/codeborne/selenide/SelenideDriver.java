@@ -1,11 +1,19 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.BrowserHealthChecker;
 import com.codeborne.selenide.impl.CloseBrowser;
+import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
+import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.JavascriptErrorsCollector;
+import com.codeborne.selenide.impl.Modals;
 import com.codeborne.selenide.impl.Navigator;
 import com.codeborne.selenide.impl.SelenideDriverFinalCleanupThread;
+import com.codeborne.selenide.impl.SelenideWait;
+import com.codeborne.selenide.impl.WebDriverLogs;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -14,14 +22,20 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
 import static com.codeborne.selenide.Configuration.holdBrowserOpen;
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
+import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 import static java.util.logging.Level.FINE;
@@ -32,6 +46,11 @@ public class SelenideDriver implements Context {
   private final Navigator navigator = new Navigator();
   private final WebDriverFactory factory;
   private final BrowserHealthChecker browserHealthChecker;
+  private static SelenidePageFactory pageFactory = new SelenidePageFactory();
+  private static Modals modals = new Modals();
+  private static WebDriverLogs webDriverLogs = new WebDriverLogs();
+  private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
+  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
   private final Browser browser = new Browser(Configuration.browser, Configuration.headless);
 
@@ -89,6 +108,54 @@ public class SelenideDriver implements Context {
 
   public void open(URL absoluteUrl, String domain, String login, String password) {
     navigator.open(this, absoluteUrl, domain, login, password);
+  }
+
+  public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
+                                                Class<PageObjectClass> pageObjectClassClass) {
+    return open(relativeOrAbsoluteUrl, "", "", "", pageObjectClassClass);
+  }
+
+  public <PageObjectClass> PageObjectClass open(URL absoluteUrl,
+                                                Class<PageObjectClass> pageObjectClassClass) {
+    return open(absoluteUrl, "", "", "", pageObjectClassClass);
+  }
+
+  public <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
+                                                String domain, String login, String password,
+                                                Class<PageObjectClass> pageObjectClassClass) {
+    open(relativeOrAbsoluteUrl, domain, login, password);
+    return page(pageObjectClassClass);
+  }
+
+  public <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
+                                                Class<PageObjectClass> pageObjectClassClass) {
+    open(absoluteUrl, domain, login, password);
+    return page(pageObjectClassClass);
+  }
+
+  public <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
+    return pageFactory.page(this, pageObjectClass);
+  }
+
+  public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
+    return pageFactory.page(this, pageObject);
+  }
+
+  public void refresh() {
+    navigator.refresh(this);
+  }
+
+  public void back() {
+    navigator.back(this);
+  }
+
+  public void forward() {
+    navigator.forward(this);
+  }
+
+  public void updateHash(String hash) {
+    String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
+    executeJavaScript("window.location.hash='" + localHash + "'");
   }
 
   public Browser getBrowser() {
@@ -217,7 +284,155 @@ public class SelenideDriver implements Context {
     return new SelenideTargetLocator(getWebDriver());
   }
 
+  public SelenideWait Wait() {
+    return new SelenideWait(getWebDriver());
+  }
+
   public Actions actions() {
     return new Actions(getWebDriver());
+  }
+
+  public List<String> getJavascriptErrors() {
+    return javascriptErrorsCollector.getJavascriptErrors(this);
+  }
+
+  public void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
+    List<String> jsErrors = getJavascriptErrors();
+    if (jsErrors != null && !jsErrors.isEmpty()) {
+      throw new JavaScriptErrorsFound(jsErrors);
+    }
+  }
+
+  public void zoom(double factor) {
+    executeJavaScript(
+      "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
+        "document.body.style.transformOrigin = '0 0';",
+      factor
+    );
+  }
+
+  public String title() {
+    return getWebDriver().getTitle();
+  }
+
+  public SelenideElement $(WebElement webElement) {
+    return wrap(this, webElement);
+  }
+
+  public SelenideElement $(String cssSelector) {
+    return find(cssSelector);
+  }
+
+  public SelenideElement find(String cssSelector) {
+    return find(By.cssSelector(cssSelector));
+  }
+
+  public SelenideElement $x(String xpathExpression) {
+    return find(By.xpath(xpathExpression));
+  }
+
+  public SelenideElement $(By seleniumSelector) {
+    return find(seleniumSelector);
+  }
+
+  public SelenideElement $(By seleniumSelector, int index) {
+    return find(seleniumSelector, index);
+  }
+
+  public SelenideElement $(String cssSelector, int index) {
+    return ElementFinder.wrap(this, cssSelector, index);
+  }
+
+  public SelenideElement find(By criteria) {
+    return ElementFinder.wrap(this, null, criteria, 0);
+  }
+
+  public SelenideElement find(By criteria, int index) {
+    return ElementFinder.wrap(this, null, criteria, index);
+  }
+
+  public ElementsCollection $$(Collection<? extends WebElement> elements) {
+    return new ElementsCollection(this, elements);
+  }
+
+  public ElementsCollection $$(String cssSelector) {
+    return new ElementsCollection(this, cssSelector);
+  }
+
+  public ElementsCollection $$x(String xpathExpression) {
+    return $$(By.xpath(xpathExpression));
+  }
+
+  public ElementsCollection findAll(By seleniumSelector) {
+    return new ElementsCollection(this, seleniumSelector);
+  }
+
+  public ElementsCollection $$(By criteria) {
+    return findAll(criteria);
+  }
+
+  public SelenideElement getSelectedRadio(By radioField) {
+    for (WebElement radio : $$(radioField)) {
+      if (radio.getAttribute("checked") != null) {
+        return $(radio);
+      }
+    }
+    return null;
+  }
+
+  public String confirm() {
+    return modals.confirm(this);
+  }
+
+  public String confirm(String expectedDialogText) {
+    return modals.confirm(this, expectedDialogText);
+  }
+
+  public String prompt() {
+    return modals.prompt(this);
+  }
+
+  public String prompt(String inputText) {
+    return modals.prompt(this, inputText);
+  }
+
+  public String prompt(String expectedDialogText, String inputText) {
+    return modals.prompt(this, expectedDialogText, inputText);
+  }
+
+  public String dismiss() {
+    return modals.dismiss(this);
+  }
+
+  public String dismiss(String expectedDialogText) {
+    return modals.dismiss(this, expectedDialogText);
+  }
+
+  public List<String> getWebDriverLogs(String logType) {
+    return getWebDriverLogs(logType, Level.ALL);
+  }
+
+  public List<String> getWebDriverLogs(String logType, Level logLevel) {
+    return webDriverLogs.getWebDriverLogs(getWebDriver(), logType, logLevel);
+  }
+
+  public void clearBrowserLocalStorage() {
+    executeJavaScript("localStorage.clear();");
+  }
+
+  public String getUserAgent() {
+    return executeJavaScript("return navigator.userAgent;");
+  }
+
+  public boolean atBottom() {
+    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+  }
+
+  public File download(String url) throws IOException {
+    return download(url, timeout);
+  }
+
+  public File download(String url, long timeoutMs) throws IOException {
+    return downloadFileWithHttpRequest.download(this, url, timeoutMs);
   }
 }

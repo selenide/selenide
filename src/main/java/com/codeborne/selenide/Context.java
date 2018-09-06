@@ -12,6 +12,7 @@ public interface Context {
   boolean supportsJavascript();
 
   <T> T executeJavaScript(String jsCode, Object... arguments);
+  String getUserAgent();
   SelenideTargetLocator switchTo();
   Actions actions();
 }
