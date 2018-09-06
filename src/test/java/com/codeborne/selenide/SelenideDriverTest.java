@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.BrowserHealthChecker;
+import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
+import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SelenideDriverTest implements WithAssertions {
-  private static final Logger log = Logger.getLogger(SelenideDriver.class.getName());
+  private static final Logger log = Logger.getLogger(CloseDriverCommand.class.getName());
 
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
@@ -41,6 +42,11 @@ class SelenideDriverTest implements WithAssertions {
     Handler[] handlers = log.getParent().getHandlers();
     customLogHandler = new StreamHandler(logCapturingStream, handlers[0].getFormatter());
     log.addHandler(customLogHandler);
+  }
+
+  @AfterEach
+  void undoLoggingMock() {
+    log.removeHandler(customLogHandler);
   }
 
   @BeforeEach

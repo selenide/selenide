@@ -1,6 +1,6 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.impl.SelenideFieldDecorator;
+import com.codeborne.selenide.Context;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Constructor;

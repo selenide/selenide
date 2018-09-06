@@ -1,6 +1,6 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.drivercommands;
 
-public class BasicAuthUrl {
+class BasicAuthUrl {
   String appendBasicAuthToURL(String url, String domain, String login, String password) {
     if (!domain.isEmpty()) domain += "%5C";
     if (!login.isEmpty()) login += ":";

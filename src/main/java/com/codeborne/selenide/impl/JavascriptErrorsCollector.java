@@ -17,7 +17,7 @@ import static java.util.Collections.emptyList;
 public class JavascriptErrorsCollector {
   private static final Logger log = Logger.getLogger(JavascriptErrorsCollector.class.getName());
 
-  void collectJavascriptErrors(WebDriver webdriver) {
+  public void collectJavascriptErrors(WebDriver webdriver) {
     if (webdriver instanceof JavascriptExecutor && captureJavascriptErrors) {
       collectJavascriptErrors((JavascriptExecutor) webdriver);
     }

@@ -1,5 +1,6 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -9,13 +10,13 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Level.FINE;
 
-public class CloseBrowser implements Runnable {
+class CloseBrowser implements Runnable {
   private static final Logger log = Logger.getLogger(CloseBrowser.class.getName());
 
   private final WebDriver webdriver;
   private final SelenideProxyServer proxy;
 
-  public CloseBrowser(WebDriver webdriver, SelenideProxyServer proxy) {
+  CloseBrowser(WebDriver webdriver, SelenideProxyServer proxy) {
     this.webdriver = webdriver;
     this.proxy = proxy;
   }

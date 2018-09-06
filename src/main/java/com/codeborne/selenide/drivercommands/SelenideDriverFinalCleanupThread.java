@@ -1,4 +1,4 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.SelenideDriver;
 

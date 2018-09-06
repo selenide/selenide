@@ -1,4 +1,4 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
@@ -11,16 +11,15 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class NavigatorTest implements WithAssertions {
   private Navigator navigator = new Navigator();
@@ -33,10 +32,10 @@ class NavigatorTest implements WithAssertions {
   @BeforeEach
   void setUp() {
     Configuration.fileDownload = HTTPGET;
-    doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
-    doReturn(selenideProxy).when(selenideDriver).getProxy();
-    doReturn(navigation).when(driver).navigate();
-    doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
+    Mockito.doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
+    Mockito.doReturn(selenideProxy).when(selenideDriver).getProxy();
+    Mockito.doReturn(navigation).when(driver).navigate();
+    Mockito.doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
   }
 
   @Test
@@ -80,7 +79,7 @@ class NavigatorTest implements WithAssertions {
   void open_withoutAuthentication() {
     navigator.open(selenideDriver, "https://some.com/login");
 
-    verify(navigation).to("https://some.com/login");
+    Mockito.verify(navigation).to("https://some.com/login");
   }
 
   @Test
@@ -90,8 +89,8 @@ class NavigatorTest implements WithAssertions {
 
     navigator.open(selenideDriver, "https://some.com/login");
 
-    verify(navigation).to("https://some.com/login");
-    verify(listener).onEvent(argThat(log ->
+    Mockito.verify(navigation).to("https://some.com/login");
+    Mockito.verify(listener).onEvent(ArgumentMatchers.argThat(log ->
       "open".equals(log.getElement()) && "https://some.com/login".equals(log.getSubject())));
   }
 
@@ -102,8 +101,8 @@ class NavigatorTest implements WithAssertions {
 
     navigator.open(selenideDriver, "https://some.com/login");
 
-    verify(navigation).to("https://some.com/login");
-    verify(authenticationFilter).removeAuthentication();
+    Mockito.verify(navigation).to("https://some.com/login");
+    Mockito.verify(authenticationFilter).removeAuthentication();
   }
 
   @Test
@@ -113,7 +112,7 @@ class NavigatorTest implements WithAssertions {
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
-    verify(navigation).to("https://basic-auth-login:basic-auth-password@some.com/login");
+    Mockito.verify(navigation).to("https://basic-auth-login:basic-auth-password@some.com/login");
   }
 
   @Test
@@ -123,8 +122,8 @@ class NavigatorTest implements WithAssertions {
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
-    verify(navigation).to("https://some.com/login");
-    verify(authenticationFilter)
+    Mockito.verify(navigation).to("https://some.com/login");
+    Mockito.verify(authenticationFilter)
       .setAuthentication(eq(AuthenticationType.BASIC), refEq(new Credentials("basic-auth-login", "basic-auth-password")));
   }
 

@@ -1,4 +1,4 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide.drivercommands;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;

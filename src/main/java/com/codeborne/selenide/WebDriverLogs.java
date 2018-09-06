@@ -1,6 +1,5 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.Context;
 import org.openqa.selenium.logging.LogEntry;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import static java.util.Collections.emptyList;
 public class WebDriverLogs {
   private final Context context;
 
-  public WebDriverLogs(Context context) {
+  WebDriverLogs(Context context) {
     this.context = context;
   }
 

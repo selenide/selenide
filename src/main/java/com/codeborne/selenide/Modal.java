@@ -1,6 +1,5 @@
-package com.codeborne.selenide.impl;
+package com.codeborne.selenide;
 
-import com.codeborne.selenide.Context;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.Alert;
 

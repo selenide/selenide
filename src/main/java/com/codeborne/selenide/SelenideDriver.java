@@ -1,16 +1,14 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
+import com.codeborne.selenide.drivercommands.CloseDriverCommand;
+import com.codeborne.selenide.drivercommands.Navigator;
+import com.codeborne.selenide.drivercommands.SelenideDriverFinalCleanupThread;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
-import com.codeborne.selenide.impl.BrowserHealthChecker;
-import com.codeborne.selenide.impl.CloseBrowser;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
-import com.codeborne.selenide.impl.Modal;
-import com.codeborne.selenide.impl.Navigator;
-import com.codeborne.selenide.impl.SelenideDriverFinalCleanupThread;
-import com.codeborne.selenide.impl.SelenideWait;
-import com.codeborne.selenide.impl.WebDriverLogs;
+import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.By;
@@ -30,14 +28,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
 import static com.codeborne.selenide.Configuration.holdBrowserOpen;
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
-import static java.util.logging.Level.FINE;
 
 public class SelenideDriver implements Context {
   private static final Logger log = Logger.getLogger(SelenideDriver.class.getName());
@@ -225,43 +221,11 @@ public class SelenideDriver implements Context {
   }
 
   public void close() {
-    if (holdBrowserOpen) return;
-
-    long threadId = Thread.currentThread().getId();
-    if (webDriver != null) {
-      log.info("Close webdriver: " + threadId + " -> " + webDriver);
-      if (selenideProxyServer != null) {
-        log.info("Close proxy server: " + threadId + " -> " + selenideProxyServer);
-      }
-
-      long start = System.currentTimeMillis();
-
-      Thread t = new Thread(new CloseBrowser(webDriver, selenideProxyServer));
-      t.setDaemon(true);
-      t.start();
-
-      try {
-        t.join(closeBrowserTimeoutMs);
-      }
-      catch (InterruptedException e) {
-        log.log(FINE, "Failed to close webdriver " + threadId + " in " + closeBrowserTimeoutMs + " milliseconds", e);
-      }
-
-      long duration = System.currentTimeMillis() - start;
-      if (duration >= closeBrowserTimeoutMs) {
-        log.severe("Failed to close webdriver " + threadId + " in " + closeBrowserTimeoutMs + " milliseconds");
-      }
-      else {
-        log.info("Closed webdriver " + threadId + " in " + duration + " ms");
-      }
+    if (!holdBrowserOpen) {
+      new CloseDriverCommand(webDriver, selenideProxyServer).run();
+      webDriver = null;
+      selenideProxyServer = null;
     }
-    else if (selenideProxyServer != null) {
-      log.info("Close proxy server: " + threadId + " -> " + selenideProxyServer);
-      selenideProxyServer.shutdown();
-    }
-
-    webDriver = null;
-    selenideProxyServer = null;
   }
 
   public boolean supportsJavascript() {
