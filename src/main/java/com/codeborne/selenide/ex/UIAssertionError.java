@@ -15,7 +15,6 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 public class UIAssertionError extends AssertionError {
   private static final JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
-  private static final ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
 
   private String screenshot;
   protected List<String> jsErrors;
@@ -70,7 +69,7 @@ public class UIAssertionError extends AssertionError {
   private static Error wrapThrowable(Context context, Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
-    uiError.screenshot = screenshots.formatScreenShotPath(context);
+    uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(context);
     uiError.jsErrors = javascriptErrorsCollector.getJavascriptErrors(context);
     return uiError;
   }

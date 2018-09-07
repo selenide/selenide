@@ -8,10 +8,8 @@ import com.codeborne.selenide.impl.WebElementSource;
 import java.awt.image.BufferedImage;
 
 public class TakeScreenshotAsImage implements Command<BufferedImage> {
-  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-
   @Override
   public BufferedImage execute(SelenideElement proxy, WebElementSource element, Object[] args) {
-    return screenshots.takeScreenshotAsImage(element.context(), element.getWebElement());
+    return ScreenShotLaboratory.getInstance().takeScreenshotAsImage(element.context(), element.getWebElement());
   }
 }

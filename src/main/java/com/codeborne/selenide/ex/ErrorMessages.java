@@ -11,8 +11,6 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class ErrorMessages {
-  static ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
       return "\nTimeout: " + timeoutMs + " ms.";
@@ -24,7 +22,7 @@ public class ErrorMessages {
     return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
   }
 
-  public static String actualValue(Condition condition, Context context, WebElement element) {
+  static String actualValue(Condition condition, Context context, WebElement element) {
     if (element != null) {
       String actualValue = condition.actualValue(context, element);
       if (actualValue != null) {
@@ -35,7 +33,7 @@ public class ErrorMessages {
   }
 
   public static String screenshot(Context context) {
-    return screenshot(screenshots.formatScreenShotPath(context));
+    return screenshot(ScreenShotLaboratory.getInstance().formatScreenShotPath(context));
   }
   
   public static String screenshot(String screenshotPath) {
@@ -59,7 +57,7 @@ public class ErrorMessages {
     }
   }
 
-  public static String causedBy(Throwable cause) {
+  static String causedBy(Throwable cause) {
     if (cause == null) {
       return "";
     }
@@ -69,7 +67,7 @@ public class ErrorMessages {
     return "\nCaused by: " + cause;
   }
 
-  public static String jsErrors(List<String> jsErrors) {
+  static String jsErrors(List<String> jsErrors) {
     if (jsErrors == null || jsErrors.isEmpty()) {
       return "";
     }

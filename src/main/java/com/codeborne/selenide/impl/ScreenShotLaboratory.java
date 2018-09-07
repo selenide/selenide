@@ -40,6 +40,12 @@ import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
   private static final Logger log = Logger.getLogger(ScreenShotLaboratory.class.getName());
+  private static final ScreenShotLaboratory instance = new ScreenShotLaboratory();
+
+  public static ScreenShotLaboratory getInstance() {
+    return instance;
+  }
+
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");

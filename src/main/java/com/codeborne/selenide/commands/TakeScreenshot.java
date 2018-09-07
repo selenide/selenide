@@ -8,10 +8,8 @@ import com.codeborne.selenide.impl.WebElementSource;
 import java.io.File;
 
 public class TakeScreenshot implements Command<File> {
-  private ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-
   @Override
   public File execute(SelenideElement proxy, WebElementSource element, Object[] args) {
-    return screenshots.takeScreenshot(element.context(), element.getWebElement());
+    return ScreenShotLaboratory.getInstance().takeScreenshot(element.context(), element.getWebElement());
   }
 }
