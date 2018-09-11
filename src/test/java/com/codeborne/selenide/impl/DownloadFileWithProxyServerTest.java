@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static java.util.Arrays.asList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -31,7 +32,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class DownloadFileWithProxyServerTest implements WithAssertions {
-  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
+  private Waiter waiter = mock(Waiter.class);
+  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
   private WebDriver webdriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private WebElementSource linkWithHref = mock(WebElementSource.class);
@@ -40,8 +42,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
-    command.waiter = spy(new Waiter());
-    doNothing().when(command.waiter).sleep(anyLong());
+    doNothing().when(waiter).wait(any(), any(), anyLong(), anyLong());
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
 
     when(proxy.responseFilter("download")).thenReturn(filter);

@@ -18,7 +18,15 @@ import java.util.logging.Logger;
 public class DownloadFileWithProxyServer {
   private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
 
-  Waiter waiter = new Waiter();
+  private final Waiter waiter;
+
+  DownloadFileWithProxyServer(Waiter waiter) {
+    this.waiter = waiter;
+  }
+
+  public DownloadFileWithProxyServer() {
+    this(new Waiter());
+  }
 
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
