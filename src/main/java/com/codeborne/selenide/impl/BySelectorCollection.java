@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -10,24 +10,24 @@ import java.util.List;
 
 public class BySelectorCollection implements WebElementsCollection {
 
-  private final Context context;
+  private final Driver driver;
   private final SearchContext parent;
   private final By selector;
 
-  public BySelectorCollection(Context context, By selector) {
-    this(context, null, selector);
+  public BySelectorCollection(Driver driver, By selector) {
+    this(driver, null, selector);
   }
 
-  public BySelectorCollection(Context context, SearchContext parent, By selector) {
-    this.context = context;
+  public BySelectorCollection(Driver driver, SearchContext parent, By selector) {
+    this.driver = driver;
     this.parent = parent;
     this.selector = selector;
   }
 
   @Override
   public List<WebElement> getElements() {
-    SearchContext searchContext = parent == null ? context.getWebDriver() : parent;
-    return WebElementSelector.instance.findElements(context, searchContext, selector);
+    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
+    return WebElementSelector.instance.findElements(driver, searchContext, selector);
   }
 
   @Override
@@ -39,7 +39,7 @@ public class BySelectorCollection implements WebElementsCollection {
   }
 
   @Override
-  public Context context() {
-    return context;
+  public Driver driver() {
+    return driver;
   }
 }

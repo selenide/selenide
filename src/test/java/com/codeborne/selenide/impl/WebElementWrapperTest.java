@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Context;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 class WebElementWrapperTest implements WithAssertions {
   private WebDriver webDriver = mock(FirefoxDriver.class);
-  private Context context = new ContextStub(new Browser("firefox", false), webDriver, null);
+  private Driver driver = new DriverStub(new Browser("firefox", false), webDriver, null);
   private WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -48,16 +48,16 @@ class WebElementWrapperTest implements WithAssertions {
       .executeScript(anyString(), any()))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));
 
-    assertThat(new WebElementWrapper(context, element))
+    assertThat(new WebElementWrapper(driver, element))
       .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
   }
 
   @Test
   void toStringPrintsTagNameWithSomeAttributes() {
     webDriver = mock(HtmlUnitDriver.class);
-    context = new ContextStub(new Browser("htmlunit", false), webDriver, null);
+    driver = new DriverStub(new Browser("htmlunit", false), webDriver, null);
 
-    assertThat(new WebElementWrapper(context, element))
+    assertThat(new WebElementWrapper(driver, element))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 
@@ -67,7 +67,7 @@ class WebElementWrapperTest implements WithAssertions {
       .executeScript(anyString(), any()))
       .thenThrow(new UnsupportedOperationException("You must be using WebDriver that supports executing javascript"));
 
-    assertThat(new WebElementWrapper(context, element))
+    assertThat(new WebElementWrapper(driver, element))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 }

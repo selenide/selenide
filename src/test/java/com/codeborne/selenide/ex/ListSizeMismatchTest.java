@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Context;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 class ListSizeMismatchTest implements WithAssertions {
   private String operator = "Operator";
   private int expectedSize = 10;
-  private Context context = new ContextStub("opera");
+  private Driver driver = new DriverStub("opera");
   private WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
   private List<WebElement> actualElementsList = asList(mock(WebElement.class),
     mock(WebElement.class),
@@ -27,7 +27,7 @@ class ListSizeMismatchTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
-    when(webElementsCollection.context()).thenReturn(context);
+    when(webElementsCollection.driver()).thenReturn(driver);
   }
 
   @Test

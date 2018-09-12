@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
@@ -26,8 +26,8 @@ public class CollectionElement extends WebElementSource {
   }
 
   @Override
-  public Context context() {
-    return collection.context();
+  public Driver driver() {
+    return collection.driver();
   }
 
   @Override

@@ -10,6 +10,6 @@ import java.awt.image.BufferedImage;
 public class TakeScreenshotAsImage implements Command<BufferedImage> {
   @Override
   public BufferedImage execute(SelenideElement proxy, WebElementSource element, Object[] args) {
-    return ScreenShotLaboratory.getInstance().takeScreenshotAsImage(element.context(), element.getWebElement());
+    return ScreenShotLaboratory.getInstance().takeScreenshotAsImage(element.driver(), element.getWebElement());
   }
 }

@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
@@ -12,12 +12,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class Describe {
-  private final Context context;
+  private final Driver driver;
   private final WebElement element;
   private final StringBuilder sb = new StringBuilder();
 
-  private Describe(Context context, WebElement element) {
-    this.context = context;
+  private Describe(Driver driver, WebElement element) {
+    this.driver = driver;
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
@@ -34,7 +34,7 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
-    Map<String, String> map = context.executeJavaScript(
+    Map<String, String> map = driver.executeJavaScript(
         "var s = {};" +
             "var attrs = arguments[0].attributes;" +
             "for (var i = 0; i < attrs.length; i++) {" +
@@ -67,7 +67,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return context.supportsJavascript() && !context.getBrowser().isHtmlUnit();
+    return driver.supportsJavascript() && !driver.browser().isHtmlUnit();
   }
 
   private Describe attr(String attributeName) {
@@ -97,12 +97,12 @@ public class Describe {
     return sb.append('>').toString();
   }
 
-  public static String describe(Context context, WebElement element) {
+  public static String describe(Driver driver, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
-      return new Describe(context, element)
+      return new Describe(driver, element)
           .appendAttributes()
           .isSelected(element)
           .isDisplayed(element)
@@ -115,15 +115,15 @@ public class Describe {
     }
   }
 
-  static String shortly(Context context, WebElement element) {
+  static String shortly(Driver driver, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
       if (element instanceof SelenideElement) {
-        return shortly(context, ((SelenideElement) element).toWebElement());
+        return shortly(driver, ((SelenideElement) element).toWebElement());
       }
-      return new Describe(context, element).attr("id").attr("name").flush();
+      return new Describe(driver, element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     }

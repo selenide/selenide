@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.context;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -63,11 +63,11 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
   @Override
   public void afterEach(final ExtensionContext context) {
     if (captureSuccessfulTests) {
-      log.info(screenshot(context()));
+      log.info(screenshot(driver()));
     } else {
       final Optional<Throwable> executionException = context.getExecutionException();
       if (executionException.isPresent() && executionException.get() instanceof UIAssertionError) {
-        log.info(screenshot(context()));
+        log.info(screenshot(driver()));
       }
     }
   }

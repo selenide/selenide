@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public class HeadOfCollection implements WebElementsCollection {
   }
 
   @Override
-  public Context context() {
-    return originalCollection.context();
+  public Driver driver() {
+    return originalCollection.driver();
   }
 
   @Override

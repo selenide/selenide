@@ -2,7 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -42,33 +42,33 @@ public class SetValue implements Command<WebElement> {
       return proxy;
     }
 
-    setValueForTextInput(locator.context(), element, text);
+    setValueForTextInput(locator.driver(), element, text);
     return proxy;
   }
 
-  private void setValueForTextInput(Context context, WebElement element, String text) {
+  private void setValueForTextInput(Driver driver, WebElement element, String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
     } else if (fastSetValue) {
-      String error = setValueByJs(context, element, text);
+      String error = setValueByJs(driver, element, text);
       if (error != null) throw new InvalidStateException(error);
       if (setValueChangeEvent) {
-        events.fireEvent(context, element, "keydown", "keypress", "input", "keyup", "change");
+        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
       else {
-        events.fireEvent(context, element, "keydown", "keypress", "input", "keyup");
+        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup");
       }
     } else {
       element.clear();
       element.sendKeys(text);
       if (setValueChangeEvent) {
-        events.fireChangeEvent(context, element);
+        events.fireChangeEvent(driver, element);
       }
     }
   }
 
-  private String setValueByJs(Context context, WebElement element, String text) {
-    return context.executeJavaScript(
+  private String setValueByJs(Driver driver, WebElement element, String text) {
+    return driver.executeJavaScript(
         "return (function(webelement, text) {" +
             "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
             "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +

@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;import com.codeborne.selenide.SelenideTargetLocator;
+import com.codeborne.selenide.Driver;import com.codeborne.selenide.SelenideTargetLocator;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -52,8 +52,8 @@ public class ScreenShotLaboratory {
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
   protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
-  public String takeScreenShot(Context context, String className, String methodName) {
-    return takeScreenShot(context, getScreenshotFileName(className, methodName));
+  public String takeScreenShot(Driver driver, String className, String methodName) {
+    return takeScreenShot(driver, getScreenshotFileName(className, methodName));
   }
 
   protected String getScreenshotFileName(String className, String methodName) {
@@ -61,8 +61,8 @@ public class ScreenShotLaboratory {
       methodName + '.' + timestamp();
   }
 
-  public String takeScreenShot(Context context) {
-    return takeScreenShot(context, generateScreenshotFileName());
+  public String takeScreenShot(Driver driver) {
+    return takeScreenShot(driver, generateScreenshotFileName());
   }
 
   /**
@@ -73,8 +73,8 @@ public class ScreenShotLaboratory {
    *
    * @return the name of last saved screenshot or null if failed to create screenshot
    */
-  public String takeScreenShot(Context context, String fileName) {
-    if (!context.hasWebDriverStarted()) {
+  public String takeScreenShot(Driver driver, String fileName) {
+    if (!driver.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
@@ -85,10 +85,10 @@ public class ScreenShotLaboratory {
 
     File screenshot = null;
     if (Configuration.savePageSource) {
-      screenshot = savePageSourceToFile(fileName, context.getWebDriver());
+      screenshot = savePageSourceToFile(fileName, driver.getWebDriver());
     }
 
-    File imageFile = savePageImageToFile(fileName, context.getWebDriver());
+    File imageFile = savePageImageToFile(fileName, driver.getWebDriver());
     if (imageFile != null) {
       screenshot = imageFile;
     }
@@ -98,9 +98,9 @@ public class ScreenShotLaboratory {
     return addToHistory(screenshot).getAbsolutePath();
   }
 
-  public File takeScreenshot(Context context, WebElement element) {
+  public File takeScreenshot(Driver driver, WebElement element) {
     try {
-      BufferedImage destination = takeScreenshotAsImage(context, element);
+      BufferedImage destination = takeScreenshotAsImage(driver, element);
       if (destination == null) {
         return null;
       }
@@ -115,13 +115,13 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public BufferedImage takeScreenshotAsImage(Context context, WebElement element) {
-    if (!context.hasWebDriverStarted()) {
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement element) {
+    if (!driver.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
-    WebDriver webdriver = context.getWebDriver();
+    WebDriver webdriver = driver.getWebDriver();
     if (!(webdriver instanceof TakesScreenshot)) {
       log.warning("Cannot take screenshot because browser does not support screenshots");
       return null;
@@ -180,9 +180,9 @@ public class ScreenShotLaboratory {
     return System.currentTimeMillis();
   }
 
-  public File takeScreenshot(Context context, WebElement iframe, WebElement element) {
+  public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
     try {
-      BufferedImage dest = takeScreenshotAsImage(context, iframe, element);
+      BufferedImage dest = takeScreenshotAsImage(driver, iframe, element);
       if (dest == null) {
         return null;
       }
@@ -197,8 +197,8 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public BufferedImage takeScreenshotAsImage(Context context, WebElement iframe, WebElement element) {
-    WebDriver webdriver = checkIfFullyValidDriver(context);
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
+    WebDriver webdriver = checkIfFullyValidDriver(driver);
     if (webdriver == null) {
       return null;
     }
@@ -217,7 +217,7 @@ public class ScreenShotLaboratory {
       return null;
     }
     int iframeHeight = iframe.getSize().getHeight();
-    SelenideTargetLocator switchTo = new SelenideTargetLocator(context.getWebDriver());
+    SelenideTargetLocator switchTo = new SelenideTargetLocator(driver.getWebDriver());
     switchTo.frame(iframe);
     int iframeWidth = ((Long) ((JavascriptExecutor) webdriver).executeScript("return document.body.clientWidth")).intValue();
     if (iframeHeight > img.getHeight()) {
@@ -247,13 +247,13 @@ public class ScreenShotLaboratory {
     return img;
   }
 
-  private WebDriver checkIfFullyValidDriver(Context context) {
-    if (!context.hasWebDriverStarted()) {
+  private WebDriver checkIfFullyValidDriver(Driver driver) {
+    if (!driver.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
-    WebDriver webdriver = context.getWebDriver();
+    WebDriver webdriver = driver.getWebDriver();
     if (!(webdriver instanceof TakesScreenshot)) {
       log.warning("Cannot take screenshot because browser does not support screenshots");
       return null;
@@ -264,13 +264,13 @@ public class ScreenShotLaboratory {
     return webdriver;
   }
 
-  public File takeScreenShotAsFile(Context context) {
-    if (!context.hasWebDriverStarted()) {
+  public File takeScreenShotAsFile(Driver driver) {
+    if (!driver.hasWebDriverStarted()) {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
 
-    WebDriver webdriver = context.getWebDriver();
+    WebDriver webdriver = driver.getWebDriver();
     //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
     File scrFile = getPageImage(webdriver);
     addToHistory(scrFile);
@@ -420,13 +420,13 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public String formatScreenShotPath(Context context) {
+  public String formatScreenShotPath(Driver driver) {
     if (!Configuration.screenshots) {
       log.config("Automatic screenshots are disabled.");
       return "";
     }
 
-    String screenshot = takeScreenShot(context);
+    String screenshot = takeScreenShot(driver);
     if (screenshot == null) {
       return "";
     }

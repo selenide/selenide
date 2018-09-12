@@ -9,7 +9,7 @@ public class ScrollIntoView implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String param = args[0].toString();
-    locator.context().executeJavaScript("arguments[0].scrollIntoView(" + param + ")", proxy);
+    locator.driver().executeJavaScript("arguments[0].scrollIntoView(" + param + ")", proxy);
     return proxy;
   }
 }

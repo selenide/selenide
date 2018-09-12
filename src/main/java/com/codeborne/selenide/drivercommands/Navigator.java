@@ -2,8 +2,8 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
 import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -142,15 +142,15 @@ public class Navigator {
     return url.toLowerCase().startsWith("file:");
   }
 
-  public void back(Context driver) {
+  public void back(Driver driver) {
     driver.getWebDriver().navigate().back();
   }
 
-  public void forward(Context driver) {
+  public void forward(Driver driver) {
     driver.getWebDriver().navigate().forward();
   }
 
-  public void refresh(Context driver) {
+  public void refresh(Driver driver) {
     driver.getWebDriver().navigate().refresh();
   }
 }

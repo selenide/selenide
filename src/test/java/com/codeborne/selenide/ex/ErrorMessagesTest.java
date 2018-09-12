@@ -2,8 +2,8 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +31,7 @@ class ErrorMessagesTest implements WithAssertions {
   }
 
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
-  private final Context context = new ContextStub(new Browser("chrome", false), webDriver, null);
+  private final Driver driver = new DriverStub(new Browser("chrome", false), webDriver, null);
 
   @AfterAll
   static void restoreOldValues() {
@@ -70,7 +70,7 @@ class ErrorMessagesTest implements WithAssertions {
     Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot(context);
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
       .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
       .endsWith(".png");
@@ -86,7 +86,7 @@ class ErrorMessagesTest implements WithAssertions {
 
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot(context);
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
       .startsWith("\nScreenshot: file:" + currentDir + "/build/reports/tests/")
       .endsWith(".png");
@@ -96,7 +96,7 @@ class ErrorMessagesTest implements WithAssertions {
   void doesNotAddScreenshot_if_screenshotsAreDisabled() {
     Configuration.screenshots = false;
 
-    String screenshot = ErrorMessages.screenshot(context);
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot).isNullOrEmpty();
     verify(webDriver, never()).getScreenshotAs(any());
   }
@@ -108,7 +108,7 @@ class ErrorMessagesTest implements WithAssertions {
     doReturn("<html>blah</html>").when(webDriver).getPageSource();
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot(context);
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
       .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
       .contains(".png\nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")

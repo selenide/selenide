@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,18 +48,18 @@ public class DownloadFileWithHttpRequest {
 
   private HttpHelper httpHelper = new HttpHelper();
 
-  public File download(Context context, WebElement element, long timeout) throws IOException {
+  public File download(Driver driver, WebElement element, long timeout) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
-      throw new IllegalArgumentException("The element does not have href attribute: " + describe(context, element));
+      throw new IllegalArgumentException("The element does not have href attribute: " + describe(driver, element));
     }
 
-    return download(context, fileToDownloadLocation, timeout);
+    return download(driver, fileToDownloadLocation, timeout);
   }
 
-  public File download(Context context, String relativeOrAbsoluteUrl, long timeout) throws IOException {
+  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout) throws IOException {
     String url = makeAbsoluteUrl(relativeOrAbsoluteUrl);
-    HttpResponse response = executeHttpRequest(context, url, timeout);
+    HttpResponse response = executeHttpRequest(driver, url, timeout);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
@@ -79,13 +79,13 @@ public class DownloadFileWithHttpRequest {
     return relativeOrAbsoluteUrl.startsWith("/") ? Configuration.baseUrl + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
 
-  protected HttpResponse executeHttpRequest(Context context, String fileToDownloadLocation, long timeout) throws IOException {
+  protected HttpResponse executeHttpRequest(Driver driver, String fileToDownloadLocation, long timeout) throws IOException {
     CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
     configureHttpGet(httpGet, timeout);
-    addHttpHeaders(context, httpGet);
+    addHttpHeaders(driver, httpGet);
     try {
-      return httpClient.execute(httpGet, createHttpContext(context.getWebDriver()));
+      return httpClient.execute(httpGet, createHttpContext(driver.getWebDriver()));
     }
     catch (SocketTimeoutException timeoutException) {
       throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
@@ -149,8 +149,8 @@ public class DownloadFileWithHttpRequest {
     return localContext;
   }
 
-  protected void addHttpHeaders(Context context, HttpGet httpGet) {
-    httpGet.setHeader("User-Agent", context.getUserAgent());
+  protected void addHttpHeaders(Driver driver, HttpGet httpGet) {
+    httpGet.setHeader("User-Agent", driver.getUserAgent());
   }
 
   protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) {

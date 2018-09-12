@@ -2,8 +2,8 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -51,14 +51,14 @@ class DownloadFileTest implements WithAssertions {
   void canDownloadFile_withHttpGetRequest() throws IOException {
     Configuration.proxyEnabled = false;
     Configuration.fileDownload = HTTPGET;
-    Context context = new ContextStub(null, null, null);
-    when(linkWithHref.context()).thenReturn(context);
+    Driver driver = new DriverStub(null, null, null);
+    when(linkWithHref.driver()).thenReturn(driver);
     when(httpget.download(any(), any(WebElement.class), anyLong())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{8000L});
 
     assertThat(f).isSameAs(file);
-    verify(httpget).download(context, link, 8000L);
+    verify(httpget).download(driver, link, 8000L);
     verifyNoMoreInteractions(proxy);
   }
 
@@ -67,7 +67,7 @@ class DownloadFileTest implements WithAssertions {
     Configuration.proxyEnabled = true;
     Configuration.fileDownload = PROXY;
     SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-    when(linkWithHref.context()).thenReturn(new ContextStub(null, null, selenideProxy));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(null, null, selenideProxy));
     when(proxy.download(any(), any(), any(), anyLong())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{9000L});
@@ -91,7 +91,7 @@ class DownloadFileTest implements WithAssertions {
   void proxyServerShouldBeStarted() {
     Configuration.proxyEnabled = true;
     Configuration.fileDownload = PROXY;
-    when(linkWithHref.context()).thenReturn(new ContextStub(mock(Browser.class), mock(WebDriver.class), null));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(mock(Browser.class), mock(WebDriver.class), null));
 
     assertThatThrownBy(() -> command.execute(null, linkWithHref, new Object[0]))
       .isInstanceOf(IllegalStateException.class)

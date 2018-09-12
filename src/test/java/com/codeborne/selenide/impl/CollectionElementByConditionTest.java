@@ -1,14 +1,14 @@
 package com.codeborne.selenide.impl;
 
-import java.util.List;
-
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -18,14 +18,14 @@ import static org.mockito.Mockito.when;
 class CollectionElementByConditionTest implements WithAssertions {
   @Test
   void testWrap() {
-    Context context = mock(Context.class);
+    Driver driver = mock(Driver.class);
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getText()).thenReturn("selenide");
 
     SelenideElement selenideElement = CollectionElementByCondition.wrap(
-      new WebElementsCollectionWrapper(context, singletonList(mockedWebElement)), Condition.visible);
+      new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement)), Condition.visible);
     assertThat(selenideElement)
       .hasToString("<a>selenide</a>");
   }

@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -16,13 +16,13 @@ import static com.codeborne.selenide.Condition.visible;
 import static java.util.Collections.singletonList;
 
 public abstract class WebElementSource {
-  public abstract Context context();
+  public abstract Driver driver();
   public abstract WebElement getWebElement();
 
   public abstract String getSearchCriteria();
 
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
-    return ElementFinder.wrap(context(), proxy, getSelector(arg), index);
+    return ElementFinder.wrap(driver(), proxy, getSelector(arg), index);
   }
 
   public List<WebElement> findAll() throws IndexOutOfBoundsException {
@@ -44,7 +44,7 @@ public abstract class WebElementSource {
     WebElement element = null;
     try {
       element = getWebElement();
-      if (element != null && check.apply(context(), element)) {
+      if (element != null && check.apply(driver(), element)) {
         return element;
       }
     }
@@ -62,10 +62,10 @@ public abstract class WebElementSource {
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, context(), element, lastError);
+      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, driver(), element, lastError);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, message, condition, context(), element, lastError);
+      throw new ElementShould(getSearchCriteria(), prefix, message, condition, driver(), element, lastError);
     }
     return null;
   }

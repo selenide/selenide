@@ -7,13 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
-import static com.codeborne.selenide.WebDriverRunner.context;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 
 public class Screenshots {
   public static ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
 
   public static String takeScreenShot(String className, String methodName) {
-    return screenshots.takeScreenShot(context(), className, methodName);
+    return screenshots.takeScreenShot(driver(), className, methodName);
   }
 
   /**
@@ -22,7 +22,7 @@ public class Screenshots {
    * @return absolute path of the screenshot taken
    */
   public static String takeScreenShot(String fileName) {
-    return screenshots.takeScreenShot(context(), fileName);
+    return screenshots.takeScreenShot(driver(), fileName);
   }
 
   /**
@@ -30,7 +30,7 @@ public class Screenshots {
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */
   public static File takeScreenShotAsFile() {
-    return screenshots.takeScreenShotAsFile(context());
+    return screenshots.takeScreenShotAsFile(driver());
   }
 
   /**
@@ -38,7 +38,7 @@ public class Screenshots {
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */
   public static File takeScreenShot(WebElement element) {
-    return screenshots.takeScreenshot(context(), element);
+    return screenshots.takeScreenshot(driver(), element);
   }
 
   /**
@@ -47,7 +47,7 @@ public class Screenshots {
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */
   public static File takeScreenShot(WebElement iframe, WebElement element) {
-    return screenshots.takeScreenshot(context(), iframe, element);
+    return screenshots.takeScreenshot(driver(), iframe, element);
   }
 
   /**
@@ -56,7 +56,7 @@ public class Screenshots {
    * @return buffered image
    */
   public static BufferedImage takeScreenShotAsImage(WebElement iframe, WebElement element) {
-    return screenshots.takeScreenshotAsImage(context(), iframe, element);
+    return screenshots.takeScreenshotAsImage(driver(), iframe, element);
   }
 
   /**
@@ -64,7 +64,7 @@ public class Screenshots {
    * @return buffered image
    */
   public static BufferedImage takeScreenShotAsImage(WebElement element) {
-    return screenshots.takeScreenshotAsImage(context(), element);
+    return screenshots.takeScreenshotAsImage(driver(), element);
   }
 
   public static void startContext(String className, String methodName) {

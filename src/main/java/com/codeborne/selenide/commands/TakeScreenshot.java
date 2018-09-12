@@ -10,6 +10,6 @@ import java.io.File;
 public class TakeScreenshot implements Command<File> {
   @Override
   public File execute(SelenideElement proxy, WebElementSource element, Object[] args) {
-    return ScreenShotLaboratory.getInstance().takeScreenshot(element.context(), element.getWebElement());
+    return ScreenShotLaboratory.getInstance().takeScreenshot(element.driver(), element.getWebElement());
   }
 }

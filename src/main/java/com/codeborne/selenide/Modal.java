@@ -4,10 +4,10 @@ import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.Alert;
 
 public class Modal {
-  private final Context context;
+  private final Driver driver;
 
-  public Modal(Context context) {
-    this.context = context;
+  public Modal(Driver driver) {
+    this.driver = driver;
   }
 
   public String confirm() {
@@ -15,7 +15,7 @@ public class Modal {
   }
 
   public String confirm(String expectedDialogText) {
-    Alert alert = context.switchTo().alert();
+    Alert alert = driver.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.accept();
     checkDialogText(expectedDialogText, actualDialogText);
@@ -31,7 +31,7 @@ public class Modal {
   }
 
   public String prompt(String expectedDialogText, String inputText) {
-    Alert alert = context.switchTo().alert();
+    Alert alert = driver.switchTo().alert();
     String actualDialogText = alert.getText();
     if (inputText != null)
       alert.sendKeys(inputText);
@@ -45,7 +45,7 @@ public class Modal {
   }
 
   public String dismiss(String expectedDialogText) {
-    Alert alert = context.switchTo().alert();
+    Alert alert = driver.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.dismiss();
     checkDialogText(expectedDialogText, actualDialogText);

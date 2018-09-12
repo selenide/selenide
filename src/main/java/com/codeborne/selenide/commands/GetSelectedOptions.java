@@ -1,7 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -26,8 +26,8 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
       }
 
       @Override
-      public Context context() {
-        return selectElement.context();
+      public Driver driver() {
+        return selectElement.driver();
       }
     });
   }

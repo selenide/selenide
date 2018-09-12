@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.assertj.core.api.WithAssertions;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CollectionElementTest implements WithAssertions {
-  private Context context = mock(Context.class);
+  private Driver driver = mock(Driver.class);
 
   @Test
   void testWrap() {
@@ -25,7 +25,7 @@ class CollectionElementTest implements WithAssertions {
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    WebElementsCollection collection = new WebElementsCollectionWrapper(context, singletonList(mockedWebElement));
+    WebElementsCollection collection = new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement));
     SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
     assertThat(selenideElement)
       .hasToString("<a>selenide</a>");

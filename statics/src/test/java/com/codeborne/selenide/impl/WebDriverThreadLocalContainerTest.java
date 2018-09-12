@@ -1,31 +1,30 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Selenide.close;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 class WebDriverThreadLocalContainerTest implements WithAssertions {
-  private WebDriverFactory factory = mock(WebDriverFactory.class);
-  private final WebDriverThreadLocalContainer container = spy(new WebDriverThreadLocalContainer(factory));
+  private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer();
 
   @BeforeEach
-  void setUp() {
+  void mockWebDriver() {
     WebDriverRunner.setProxy(null);
-    when(factory.createWebDriver(any())).thenReturn(mock(WebDriver.class));
+    Configuration.reopenBrowserOnFail = true;
+    Configuration.browserSize = null;
+    Configuration.startMaximized = false;
+    Configuration.browser = DummyProvider.class.getName();
   }
 
-  @BeforeEach
   @AfterEach
   void resetSetting() {
     Configuration.reopenBrowserOnFail = true;
@@ -43,7 +42,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     Configuration.reopenBrowserOnFail = false;
 
     try {
-      container.getWebDriver();
+      container.getAndCheckWebDriver();
       fail("expected IllegalStateException");
     }
     catch (IllegalStateException expected) {
@@ -83,5 +82,12 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     container.closeWebDriver();
 
     assertThat(container.hasWebDriverStarted()).isFalse();
+  }
+
+  private static class DummyProvider implements WebDriverProvider {
+    @Override
+    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+      return mock(WebDriver.class);
+    }
   }
 }

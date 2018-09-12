@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,10 +13,10 @@ class ElementShouldTest implements WithAssertions {
   void testToString() {
     String searchCriteria = "by.name: selenide";
     String prefix = "be ";
-    Context context = mock(Context.class);
+    Driver driver = mock(Driver.class);
     WebElement webElementMock = mock(WebElement.class);
     Exception exception = new Exception("Error message");
-    ElementShould elementShould = new ElementShould(searchCriteria, prefix, Condition.appear, context, webElementMock, exception);
+    ElementShould elementShould = new ElementShould(searchCriteria, prefix, Condition.appear, driver, webElementMock, exception);
     String expectedString = "Element should be visible {by.name: selenide}\n" +
       "Element: '<null displayed:false></null>'\n" +
       "Screenshot: null\n" +

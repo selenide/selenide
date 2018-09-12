@@ -8,7 +8,7 @@ import org.junit.runner.Description;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.context;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -47,14 +47,14 @@ public class ScreenShooter extends TestWatcher {
   @Override
   protected void succeeded(Description test) {
     if (captureSuccessfulTests) {
-      log.info(screenshot(context()));
+      log.info(screenshot(driver()));
     }
   }
 
   @Override
   protected void failed(Throwable e, Description description) {
     if (!(e instanceof UIAssertionError)) {
-      log.info(screenshot(context()));
+      log.info(screenshot(driver()));
     }
   }
 

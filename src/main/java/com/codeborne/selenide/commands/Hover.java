@@ -10,7 +10,7 @@ public class Hover implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement element = locator.getWebElement();
-    new Actions(locator.context().getWebDriver()).moveToElement(element).perform();
+    new Actions(locator.driver().getWebDriver()).moveToElement(element).perform();
     return proxy;
   }
 }

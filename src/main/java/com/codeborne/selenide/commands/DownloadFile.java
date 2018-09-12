@@ -37,16 +37,16 @@ public class DownloadFile implements Command<File> {
 
     if (Configuration.fileDownload == HTTPGET) {
       LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
-      return downloadFileWithHttpRequest.download(linkWithHref.context(), link, timeout);
+      return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout);
     }
     if (!Configuration.proxyEnabled) {
       throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup Configuration.proxyEnabled");
     }
-    if (linkWithHref.context().getProxy() == null) {
+    if (linkWithHref.driver().getProxy() == null) {
       throw new IllegalStateException("Cannot download file: proxy server is not started");
     }
 
-    return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.context().getProxy(), timeout);
+    return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.driver().getProxy(), timeout);
   }
 
   long getTimeout(Object[] args) {

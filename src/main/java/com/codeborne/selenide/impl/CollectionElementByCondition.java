@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
@@ -28,8 +28,8 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
-  public Context context() {
-    return collection.context();
+  public Driver driver() {
+    return collection.driver();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class CollectionElementByCondition extends WebElementSource {
     List<WebElement> list = collection.getElements();
 
     for (WebElement element : list) {
-      if (condition.apply(context(), element)) {
+      if (condition.apply(driver(), element)) {
         return element;
       }
     }

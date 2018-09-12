@@ -10,7 +10,7 @@ public class ScrollTo implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     Point location = locator.getWebElement().getLocation();
-    locator.context().executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
+    locator.driver().executeJavaScript("window.scrollTo(" + location.getX() + ", " + location.getY() + ')');
     return proxy;
   }
 }

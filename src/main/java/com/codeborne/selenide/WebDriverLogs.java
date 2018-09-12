@@ -9,10 +9,10 @@ import java.util.logging.Level;
 import static java.util.Collections.emptyList;
 
 public class WebDriverLogs {
-  private final Context context;
+  private final Driver driver;
 
-  WebDriverLogs(Context context) {
-    this.context = context;
+  WebDriverLogs(Driver driver) {
+    this.driver = driver;
   }
 
   public List<String> logs(String logType) {
@@ -25,7 +25,7 @@ public class WebDriverLogs {
 
   private List<LogEntry> getLogEntries(String logType, Level logLevel) {
     try {
-      return context.getWebDriver().manage().logs().get(logType).filter(logLevel);
+      return driver.getWebDriver().manage().logs().get(logType).filter(logLevel);
     }
     catch (UnsupportedOperationException ignore) {
       return emptyList();

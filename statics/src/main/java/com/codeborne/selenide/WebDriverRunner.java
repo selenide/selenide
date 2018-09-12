@@ -93,8 +93,8 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.getSelenideDriver();
   }
 
-  public static Context context() {
-    return getSelenideDriver();
+  public static Driver driver() {
+    return getSelenideDriver().driver();
   }
 
   /**
@@ -175,7 +175,7 @@ public class WebDriverRunner implements Browsers {
    * Does this browser support javascript
    */
   public static boolean supportsJavascript() {
-    return context().supportsJavascript();
+    return driver().supportsJavascript();
   }
 
   /**

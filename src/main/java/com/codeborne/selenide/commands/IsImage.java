@@ -12,7 +12,7 @@ public class IsImage implements Command<Boolean> {
     if (!"img".equalsIgnoreCase(img.getTagName())) {
       throw new IllegalArgumentException("Method isImage() is only applicable for img elements");
     }
-    return locator.context().executeJavaScript("return arguments[0].complete && " +
+    return locator.driver().executeJavaScript("return arguments[0].complete && " +
         "typeof arguments[0].naturalWidth != 'undefined' && " +
         "arguments[0].naturalWidth > 0", img);
   }

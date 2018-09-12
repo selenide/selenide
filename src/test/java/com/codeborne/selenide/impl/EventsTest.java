@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class EventsTest {
   private Events events = spy(new Events());
   private WebElement element = mock(WebElement.class);
-  private Context context = mock(Context.class);
+  private Driver driver = mock(Driver.class);
 
   @BeforeEach
   void setUp() {
@@ -31,9 +31,9 @@ class EventsTest {
   void triggersEventsByExecutingJSCode() {
     doNothing().when(events).executeJavaScript(any(), same(element), any());
 
-    events.fireEvent(context, element, "input", "keyup", "change");
+    events.fireEvent(driver, element, "input", "keyup", "change");
 
-    verify(events).executeJavaScript(context, element, "input", "keyup", "change");
+    verify(events).executeJavaScript(driver, element, "input", "keyup", "change");
     verifyNoMoreInteractions(events.log);
   }
 
@@ -41,9 +41,9 @@ class EventsTest {
   void ignoresStaleElementReferenceException() {
     doThrow(StaleElementReferenceException.class).when(events).executeJavaScript(any(), same(element), any());
 
-    events.fireEvent(context, element, "change");
+    events.fireEvent(driver, element, "change");
 
-    verify(events).executeJavaScript(context, element, "change");
+    verify(events).executeJavaScript(driver, element, "change");
     verifyNoMoreInteractions(events.log);
   }
 
@@ -52,9 +52,9 @@ class EventsTest {
     doThrow(new UnsupportedOperationException("webdriver does not support JS"))
       .when(events).executeJavaScript(any(), same(element), any());
 
-    events.fireEvent(context, element, "input", "change");
+    events.fireEvent(driver, element, "input", "change");
 
-    verify(events).executeJavaScript(context, element, "input", "change");
+    verify(events).executeJavaScript(driver, element, "input", "change");
     verify(events.log).warning("Failed to trigger events [input, change]: " +
       "java.lang.UnsupportedOperationException: webdriver does not support JS");
   }

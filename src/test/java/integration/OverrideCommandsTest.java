@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.commands.Commands;
 import org.junit.jupiter.api.AfterEach;
@@ -36,8 +36,8 @@ class OverrideCommandsTest extends IntegrationTest {
 
   private class MyClick extends Click {
     @Override
-    protected void click(Context context, WebElement element) {
-      super.click(context, element);
+    protected void click(Driver driver, WebElement element) {
+      super.click(driver, element);
       clickCounter.incrementAndGet();
     }
   }

@@ -2,7 +2,7 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
@@ -22,9 +22,9 @@ public class ErrorMessages {
     return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
   }
 
-  static String actualValue(Condition condition, Context context, WebElement element) {
+  static String actualValue(Condition condition, Driver driver, WebElement element) {
     if (element != null) {
-      String actualValue = condition.actualValue(context, element);
+      String actualValue = condition.actualValue(driver, element);
       if (actualValue != null) {
         return "\nActual value: " + actualValue;
       }
@@ -32,8 +32,8 @@ public class ErrorMessages {
     return "";
   }
 
-  public static String screenshot(Context context) {
-    return screenshot(ScreenShotLaboratory.getInstance().formatScreenShotPath(context));
+  public static String screenshot(Driver driver) {
+    return screenshot(ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
   }
   
   public static String screenshot(String screenshotPath) {

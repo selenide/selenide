@@ -42,24 +42,24 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this.collection = collection;
   }
 
-  public ElementsCollection(Context context, Collection<? extends WebElement> elements) {
-    this(new WebElementsCollectionWrapper(context, elements));
+  public ElementsCollection(Driver driver, Collection<? extends WebElement> elements) {
+    this(new WebElementsCollectionWrapper(driver, elements));
   }
 
-  public ElementsCollection(Context context, String cssSelector) {
-    this(context, By.cssSelector(cssSelector));
+  public ElementsCollection(Driver driver, String cssSelector) {
+    this(driver, By.cssSelector(cssSelector));
   }
 
-  public ElementsCollection(Context context, By seleniumSelector) {
-    this(new BySelectorCollection(context, seleniumSelector));
+  public ElementsCollection(Driver driver, By seleniumSelector) {
+    this(new BySelectorCollection(driver, seleniumSelector));
   }
 
-  public ElementsCollection(Context context, WebElement parent, String cssSelector) {
-    this(context, parent, By.cssSelector(cssSelector));
+  public ElementsCollection(Driver driver, WebElement parent, String cssSelector) {
+    this(driver, parent, By.cssSelector(cssSelector));
   }
 
-  public ElementsCollection(Context context, WebElement parent, By seleniumSelector) {
-    this(new BySelectorCollection(context, parent, seleniumSelector));
+  public ElementsCollection(Driver driver, WebElement parent, By seleniumSelector) {
+    this(new BySelectorCollection(driver, parent, seleniumSelector));
   }
 
   /**
@@ -114,7 +114,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(collection.context(), error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(collection.driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       switch (assertionMode) {
         case SOFT:
@@ -284,7 +284,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @param elements
    * @return String
    */
-  public static String elementsToString(Context context, Collection<WebElement> elements) {
+  public static String elementsToString(Driver driver, Collection<WebElement> elements) {
     if (elements == null) {
       return "[not loaded yet...]";
     }
@@ -299,7 +299,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       if (sb.length() > 4) {
         sb.append(",\n\t");
       }
-      sb.append(Describe.describe(context, element));
+      sb.append(Describe.describe(driver, element));
     }
     sb.append("\n]");
     return sb.toString();
@@ -376,7 +376,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   private WebElementsCollectionWrapper fetch() {
     List<WebElement> fetchedElements = collection.getElements();
-    return new WebElementsCollectionWrapper(collection.context(), fetchedElements);
+    return new WebElementsCollectionWrapper(collection.driver(), fetchedElements);
   }
 
   @Override
@@ -385,7 +385,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     Object[] result = new Object[fetchedElements.size()];
     Iterator<WebElement> it = fetchedElements.iterator();
     for (int i = 0; i < result.length; i++) {
-      result[i] = Describe.describe(collection.context(), it.next());
+      result[i] = Describe.describe(collection.driver(), it.next());
     }
     return result;
   }
@@ -405,7 +405,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public String toString() {
     try {
-      return elementsToString(collection.context(), getElements());
+      return elementsToString(collection.driver(), getElements());
     } catch (Exception e) {
       return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
     }

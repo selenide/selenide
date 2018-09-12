@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static java.io.File.separatorChar;
 class ScreenShotLaboratoryTest implements WithAssertions {
   private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
-    public String takeScreenShot(Context context, String fileName) {
+    public String takeScreenShot(Driver driver, String fileName) {
       addToHistory(new File(fileName));
       return fileName;
     }

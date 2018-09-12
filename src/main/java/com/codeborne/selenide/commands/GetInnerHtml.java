@@ -9,8 +9,8 @@ public class GetInnerHtml implements Command<String> {
   @Override
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement element = locator.getWebElement();
-    if (locator.context().getBrowser().isHtmlUnit()) {
-      return locator.context().executeJavaScript("return arguments[0].innerHTML", element);
+    if (locator.driver().browser().isHtmlUnit()) {
+      return locator.driver().executeJavaScript("return arguments[0].innerHTML", element);
     }
     return element.getAttribute("innerHTML");
   }

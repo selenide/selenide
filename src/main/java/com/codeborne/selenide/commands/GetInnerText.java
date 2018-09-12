@@ -9,7 +9,7 @@ public class GetInnerText implements Command<String> {
   @Override
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement element = locator.getWebElement();
-    if (locator.context().getBrowser().isIE()) {
+    if (locator.driver().browser().isIE()) {
       return element.getAttribute("innerText");
     }
     return element.getAttribute("textContent");

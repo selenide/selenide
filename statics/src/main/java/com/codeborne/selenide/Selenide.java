@@ -448,7 +448,7 @@ public class Selenide {
   }
 
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
-    return getSelenideDriver().executeJavaScript(jsCode, arguments);
+    return getSelenideDriver().driver().executeJavaScript(jsCode, arguments);
   }
 
   /**
@@ -549,7 +549,7 @@ public class Selenide {
    * @return SelenideTargetLocator
    */
   public static SelenideTargetLocator switchTo() {
-    return getSelenideDriver().switchTo();
+    return getSelenideDriver().driver().switchTo();
   }
 
   /**
@@ -602,7 +602,7 @@ public class Selenide {
    * </pre>
    */
   public static Actions actions() {
-    return getSelenideDriver().actions();
+    return getSelenideDriver().driver().actions();
   }
 
   /**
@@ -699,7 +699,7 @@ public class Selenide {
    * @return browser user agent
    */
   public static String getUserAgent() {
-    return getSelenideDriver().getUserAgent();
+    return getSelenideDriver().driver().getUserAgent();
   }
 
   /**

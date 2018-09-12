@@ -1,86 +1,52 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
-import com.codeborne.selenide.drivercommands.CloseDriverCommand;
-import com.codeborne.selenide.drivercommands.CreateDriverCommand;
+import com.codeborne.selenide.drivercommands.LazyDriver;
 import com.codeborne.selenide.drivercommands.Navigator;
-import com.codeborne.selenide.drivercommands.SelenideDriverFinalCleanupThread;
+import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.holdBrowserOpen;
-import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
-import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 
-public class SelenideDriver implements Context {
-  private static final Logger log = Logger.getLogger(SelenideDriver.class.getName());
-
+public class SelenideDriver {
   private final Navigator navigator = new Navigator();
-  private final WebDriverFactory factory;
-  private final BrowserHealthChecker browserHealthChecker;
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
-  private final Browser browser = new Browser(Configuration.browser, Configuration.headless);
+  private final Driver driver;
 
-  // TODO split to 2 different classes:
-
-  // Class 1:
-  private final Proxy userProvidedProxy;
-  private final List<WebDriverEventListener> listeners = new ArrayList<>();
-  private SelenideProxyServer selenideProxyServer;
-
-  // Class 2:
-  private WebDriver webDriver;
-
-  SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
-                 WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
-    this.userProvidedProxy = userProvidedProxy;
-    this.listeners.addAll(listeners);
-    this.factory = factory;
-    this.browserHealthChecker = browserHealthChecker;
-    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
+  public SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+    this.driver = new LazyDriver(userProvidedProxy, listeners);
   }
 
   public SelenideDriver() {
-    this(null, emptyList(), new WebDriverFactory(), new BrowserHealthChecker());
+    this(null, emptyList());
   }
 
-  public SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners, WebDriverFactory factory) {
-    this(userProvidedProxy, listeners, factory, new BrowserHealthChecker());
+  public SelenideDriver(WebDriver webDriver) {
+    this.driver = new WebDriverWrapper(webDriver);
   }
 
-  public SelenideDriver(WebDriver webDriver, WebDriverFactory factory) {
-    this(webDriver, factory, new BrowserHealthChecker());
-  }
-
-  SelenideDriver(WebDriver webDriver, WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
-    this(null, emptyList(), factory, browserHealthChecker);
-    this.webDriver = webDriver;
+  Driver driver() {
+    return driver;
   }
 
   public void open(String relativeOrAbsoluteUrl) {
@@ -127,105 +93,72 @@ public class SelenideDriver implements Context {
   }
 
   public <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return pageFactory.page(this, pageObjectClass);
+    return pageFactory.page(driver(), pageObjectClass);
   }
 
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    return pageFactory.page(this, pageObject);
+    return pageFactory.page(driver(), pageObject);
   }
 
   public void refresh() {
-    navigator.refresh(this);
+    navigator.refresh(driver());
   }
 
   public void back() {
-    navigator.back(this);
+    navigator.back(driver());
   }
 
   public void forward() {
-    navigator.forward(this);
+    navigator.forward(driver());
   }
 
   public void updateHash(String hash) {
     String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
-    executeJavaScript("window.location.hash='" + localHash + "'");
+    driver().executeJavaScript("window.location.hash='" + localHash + "'");
   }
 
-  public Browser getBrowser() {
-    return browser;
-  }
-
-  public boolean hasWebDriverStarted() {
-    return webDriver != null;
+  public Browser browser() {
+    return driver().browser();
   }
 
   public SelenideProxyServer getProxy() {
-    return selenideProxyServer;
+    return driver().getProxy();
   }
 
-  public synchronized WebDriver getWebDriver() {
-    if (webDriver == null) {
-      log.info("No webdriver is bound to current thread: " + currentThread().getId() + " - let's create a new webdriver");
-      createDriver();
-    }
-    return webDriver;
+  public boolean hasWebDriverStarted() {
+    return driver().hasWebDriverStarted();
+  }
+
+  public WebDriver getWebDriver() {
+    return driver.getWebDriver();
   }
 
   public WebDriver getAndCheckWebDriver() {
-    if (webDriver != null && reopenBrowserOnFail && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
-      log.info("Webdriver has been closed meanwhile. Let's re-create it.");
-      close();
-    }
-    return getWebDriver();
-  }
-
-  void createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(factory, userProvidedProxy, listeners);
-    this.webDriver = result.webDriver;
-    this.selenideProxyServer = result.selenideProxyServer;
+    return driver.getAndCheckWebDriver();
   }
 
   public void clearCookies() {
-    if (webDriver != null) {
-      webDriver.manage().deleteAllCookies();
+    if (driver().hasWebDriverStarted()) {
+      driver().getWebDriver().manage().deleteAllCookies();
     }
   }
 
   public void close() {
-    if (!holdBrowserOpen) {
-      new CloseDriverCommand(webDriver, selenideProxyServer).run();
-      webDriver = null;
-      selenideProxyServer = null;
-    }
-  }
-
-  public boolean supportsJavascript() {
-    return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T> T executeJavaScript(String jsCode, Object... arguments) {
-    return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
+    driver.close();
   }
 
   public WebElement getFocusedElement() {
-    return (WebElement) executeJavaScript("return document.activeElement");
+    return (WebElement) driver.executeJavaScript("return document.activeElement");
   }
 
-  public SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(getWebDriver());
-  }
 
   public SelenideWait Wait() {
     return new SelenideWait(getWebDriver());
   }
 
-  public Actions actions() {
-    return new Actions(getWebDriver());
-  }
 
   public List<String> getJavascriptErrors() {
-    return javascriptErrorsCollector.getJavascriptErrors(this);
+    return javascriptErrorsCollector.getJavascriptErrors(driver());
   }
 
   public void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
@@ -236,7 +169,7 @@ public class SelenideDriver implements Context {
   }
 
   public void zoom(double factor) {
-    executeJavaScript(
+    driver().executeJavaScript(
       "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
         "document.body.style.transformOrigin = '0 0';",
       factor
@@ -248,7 +181,7 @@ public class SelenideDriver implements Context {
   }
 
   public SelenideElement $(WebElement webElement) {
-    return wrap(this, webElement);
+    return wrap(driver(), webElement);
   }
 
   public SelenideElement $(String cssSelector) {
@@ -272,23 +205,23 @@ public class SelenideDriver implements Context {
   }
 
   public SelenideElement $(String cssSelector, int index) {
-    return ElementFinder.wrap(this, cssSelector, index);
+    return ElementFinder.wrap(driver(), cssSelector, index);
   }
 
   public SelenideElement find(By criteria) {
-    return ElementFinder.wrap(this, null, criteria, 0);
+    return ElementFinder.wrap(driver(), null, criteria, 0);
   }
 
   public SelenideElement find(By criteria, int index) {
-    return ElementFinder.wrap(this, null, criteria, index);
+    return ElementFinder.wrap(driver(), null, criteria, index);
   }
 
   public ElementsCollection $$(Collection<? extends WebElement> elements) {
-    return new ElementsCollection(this, elements);
+    return new ElementsCollection(driver(), elements);
   }
 
   public ElementsCollection $$(String cssSelector) {
-    return new ElementsCollection(this, cssSelector);
+    return new ElementsCollection(driver(), cssSelector);
   }
 
   public ElementsCollection $$x(String xpathExpression) {
@@ -296,7 +229,7 @@ public class SelenideDriver implements Context {
   }
 
   public ElementsCollection findAll(By seleniumSelector) {
-    return new ElementsCollection(this, seleniumSelector);
+    return new ElementsCollection(driver(), seleniumSelector);
   }
 
   public ElementsCollection $$(By criteria) {
@@ -313,23 +246,20 @@ public class SelenideDriver implements Context {
   }
 
   public Modal modal() {
-    return new Modal(this);
+    return new Modal(driver());
   }
 
   public WebDriverLogs getWebDriverLogs() {
-    return new WebDriverLogs(this);
+    return new WebDriverLogs(driver());
   }
 
   public void clearBrowserLocalStorage() {
-    executeJavaScript("localStorage.clear();");
+    driver().executeJavaScript("localStorage.clear();");
   }
 
-  public String getUserAgent() {
-    return executeJavaScript("return navigator.userAgent;");
-  }
 
   public boolean atBottom() {
-    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+    return driver().executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
   }
 
   public File download(String url) throws IOException {
@@ -337,6 +267,6 @@ public class SelenideDriver implements Context {
   }
 
   public File download(String url, long timeoutMs) throws IOException {
-    return downloadFileWithHttpRequest.download(this, url, timeoutMs);
+    return downloadFileWithHttpRequest.download(driver(), url, timeoutMs);
   }
 }

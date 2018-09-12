@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
@@ -46,7 +46,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
 
     when(proxy.responseFilter("download")).thenReturn(filter);
-    when(linkWithHref.context()).thenReturn(new ContextStub(new Browser("opera", false), webdriver, proxy));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }

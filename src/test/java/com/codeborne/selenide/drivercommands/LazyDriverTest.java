@@ -1,7 +1,6 @@
-package com.codeborne.selenide;
+package com.codeborne.selenide.drivercommands;
 
-import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
-import com.codeborne.selenide.drivercommands.CloseDriverCommand;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -25,16 +24,16 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideDriverTest implements WithAssertions {
+class LazyDriverTest implements WithAssertions {
   private static final Logger log = Logger.getLogger(CloseDriverCommand.class.getName());
 
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
 
-  WebDriver webdriver = mock(WebDriver.class);
-  WebDriverFactory factory = mock(WebDriverFactory.class);
-  BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
-  SelenideDriver driver = new SelenideDriver(null, emptyList(), factory, browserHealthChecker);
+  private WebDriver webdriver = mock(WebDriver.class);
+  private WebDriverFactory factory = mock(WebDriverFactory.class);
+  private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private LazyDriver holder = new LazyDriver(null, emptyList(), factory, browserHealthChecker);
 
   @BeforeEach
   void mockLogging() {
@@ -65,7 +64,7 @@ class SelenideDriverTest implements WithAssertions {
   void createWebDriverWithoutProxy() {
     Configuration.proxyEnabled = false;
 
-    driver.createDriver();
+    holder.createDriver();
 
     verify(factory).createWebDriver(null);
   }
@@ -74,27 +73,27 @@ class SelenideDriverTest implements WithAssertions {
   void createWebDriverWithSelenideProxyServer() {
     Configuration.proxyEnabled = true;
 
-    driver.createDriver();
+    holder.createDriver();
 
-    assertThat(driver.getProxy()).isNotNull();
-    verify(factory).createWebDriver(driver.getProxy().createSeleniumProxy());
+    assertThat(holder.getProxy()).isNotNull();
+    verify(factory).createWebDriver(holder.getProxy().createSeleniumProxy());
   }
 
   @Test
   void checksIfBrowserIsStillAlive() {
+    givenOpenedBrowser();
     Configuration.reopenBrowserOnFail = true;
-    driver = new SelenideDriver(webdriver, factory, browserHealthChecker);
 
-    assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
+    assertThat(holder.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(browserHealthChecker).isBrowserStillOpen(any());
   }
 
   @Test
   void doesNotReopenBrowserIfItFailed() {
-    driver.getWebDriver();
+    givenOpenedBrowser();
     Configuration.reopenBrowserOnFail = false;
 
-    assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
+    assertThat(holder.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(browserHealthChecker, never()).isBrowserStillOpen(any());
   }
 
@@ -102,13 +101,10 @@ class SelenideDriverTest implements WithAssertions {
   void closeWebDriverLoggingWhenProxyIsAdded() {
     Configuration.holdBrowserOpen = false;
     Configuration.proxyEnabled = true;
+    holder = new LazyDriver(mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
+    givenOpenedBrowser();
 
-    Proxy mockedProxy = mock(Proxy.class);
-    when(mockedProxy.getHttpProxy()).thenReturn("selenide:0");
-    driver = new SelenideDriver(mockedProxy, emptyList(), factory, browserHealthChecker);
-    driver.getWebDriver();
-
-    driver.close();
+    holder.close();
 
     String capturedLog = getTestCapturedLog();
     String currentThreadId = String.valueOf(currentThread().getId());
@@ -116,6 +112,16 @@ class SelenideDriverTest implements WithAssertions {
       .contains(String.format("Close webdriver: %s -> %s", currentThreadId, webdriver.toString()));
     assertThat(capturedLog)
       .contains(String.format("Close proxy server: %s ->", currentThreadId));
+  }
+
+  private Proxy mockProxy(String httpProxy) {
+    Proxy mockedProxy = mock(Proxy.class);
+    when(mockedProxy.getHttpProxy()).thenReturn(httpProxy);
+    return mockedProxy;
+  }
+
+  private void givenOpenedBrowser() {
+    assertThat(holder.getAndCheckWebDriver()).isSameAs(webdriver);
   }
 
   private static String getTestCapturedLog() {

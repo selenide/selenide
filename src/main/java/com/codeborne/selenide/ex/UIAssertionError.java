@@ -1,6 +1,6 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
@@ -59,18 +59,18 @@ public class UIAssertionError extends AssertionError {
     return jsErrors;
   }
 
-  public static Error wrap(Context context, Error error, long timeoutMs) {
+  public static Error wrap(Driver driver, Error error, long timeoutMs) {
     if (Cleanup.of.isInvalidSelectorError(error))
       return error;
 
-    return wrapThrowable(context, error, timeoutMs);
+    return wrapThrowable(driver, error, timeoutMs);
   }
 
-  private static Error wrapThrowable(Context context, Throwable error, long timeoutMs) {
+  private static Error wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
-    uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(context);
-    uiError.jsErrors = javascriptErrorsCollector.getJavascriptErrors(context);
+    uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(driver);
+    uiError.jsErrors = javascriptErrorsCollector.getJavascriptErrors(driver);
     return uiError;
   }
 }

@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 public class DoubleClick implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    locator.context().actions().doubleClick(locator.findAndAssertElementIsVisible()).perform();
+    locator.driver().actions().doubleClick(locator.findAndAssertElementIsVisible()).perform();
     return proxy;
   }
 }

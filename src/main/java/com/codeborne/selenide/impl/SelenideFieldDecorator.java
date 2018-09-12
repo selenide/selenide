@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
@@ -23,13 +23,13 @@ import java.util.List;
 
 public class SelenideFieldDecorator extends DefaultFieldDecorator {
   private final SelenidePageFactory pageFactory;
-  private final Context context;
+  private final Driver driver;
   private final SearchContext searchContext;
 
-  public SelenideFieldDecorator(SelenidePageFactory pageFactory, Context context, SearchContext searchContext) {
+  public SelenideFieldDecorator(SelenidePageFactory pageFactory, Driver driver, SearchContext searchContext) {
     super(new DefaultElementLocatorFactory(searchContext));
     this.pageFactory = pageFactory;
-    this.context = context;
+    this.driver = driver;
     this.searchContext = searchContext;
   }
 
@@ -37,10 +37,10 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   public Object decorate(ClassLoader loader, Field field) {
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
-      return ElementFinder.wrap(context, searchContext, selector, 0);
+      return ElementFinder.wrap(driver, searchContext, selector, 0);
     }
     if (ElementsCollection.class.isAssignableFrom(field.getType())) {
-      return new ElementsCollection(new BySelectorCollection(context, searchContext, selector));
+      return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
@@ -49,7 +49,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
       return createElementsContainerList(field);
     }
     else if (isDecoratableList(field, SelenideElement.class)) {
-      return SelenideElementListProxy.wrap(context, factory.createLocator(field));
+      return SelenideElementListProxy.wrap(driver, factory.createLocator(field));
     }
 
     return super.decorate(loader, field);
@@ -59,7 +59,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     try {
       List<ElementsContainer> result = new ArrayList<>();
       Class<?> listType = getListGenericType(field);
-      List<SelenideElement> selfList = SelenideElementListProxy.wrap(context, factory.createLocator(field));
+      List<SelenideElement> selfList = SelenideElementListProxy.wrap(driver, factory.createLocator(field));
       for (SelenideElement element : selfList) {
         result.add(initElementsContainer(listType, element));
       }
@@ -71,7 +71,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = ElementFinder.wrap(context, searchContext, selector, 0);
+      SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
       return initElementsContainer(field.getType(), self);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
@@ -83,7 +83,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    pageFactory.initElements(new SelenideFieldDecorator(pageFactory, context, self), result);
+    pageFactory.initElements(new SelenideFieldDecorator(pageFactory, driver, self), result);
     result.setSelf(self);
     return result;
   }

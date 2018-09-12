@@ -7,7 +7,7 @@ import org.testng.reporters.ExitCodeListener;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.context;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
@@ -31,7 +31,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestFailure(ITestResult result) {
     super.onTestFailure(result);
     if (!(result.getThrowable() instanceof UIAssertionError)) {
-      log.info(screenshot(context()));
+      log.info(screenshot(driver()));
     }
 
     Screenshots.finishContext();
@@ -41,7 +41,7 @@ public class ScreenShooter extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     super.onTestSuccess(result);
     if (captureSuccessfulTests) {
-      log.info(screenshot(context()));
+      log.info(screenshot(driver()));
     }
     Screenshots.finishContext();
   }

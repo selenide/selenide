@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -15,12 +15,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class BySelectorCollectionTest implements WithAssertions {
-  private Context context = mock(Context.class);
+  private Driver driver = mock(Driver.class);
   private SelenideElement mockedWebElement = mock(SelenideElement.class);
 
   @Test
   void testNoParentConstructor() {
-    BySelectorCollection bySelectorCollection = new BySelectorCollection(context, By.id("selenide"));
+    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, By.id("selenide"));
     String description = bySelectorCollection.description();
     assertThat(description)
       .isEqualTo("By.id: selenide");
@@ -30,7 +30,7 @@ class BySelectorCollectionTest implements WithAssertions {
   void testWithWebElementParentConstructor() {
     when(mockedWebElement.getSearchCriteria()).thenReturn("By.tagName: a");
 
-    BySelectorCollection bySelectorCollection = new BySelectorCollection(context, mockedWebElement, By.name("selenide"));
+    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, mockedWebElement, By.name("selenide"));
     String description = bySelectorCollection.description();
     assertThat(description)
       .isEqualTo("By.tagName: a/By.name: selenide");
@@ -38,7 +38,7 @@ class BySelectorCollectionTest implements WithAssertions {
 
   @Test
   void testWithNotWebElementParentConstructor() {
-    BySelectorCollection bySelectorCollection = new BySelectorCollection(context, new NotWebElement(), By.name("selenide"));
+    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, new NotWebElement(), By.name("selenide"));
     String description = bySelectorCollection.description();
     assertThat(description)
       .isEqualTo("By.name: selenide");

@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -19,21 +18,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.lang.Thread.currentThread;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
-  private final WebDriverFactory factory;
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
   private final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   private final Map<Long, SelenideDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private Proxy userProvidedProxy;
 
   private final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
-
-  public WebDriverThreadLocalContainer() {
-    this(new WebDriverFactory());
-  }
-
-  public WebDriverThreadLocalContainer(WebDriverFactory factory) {
-    this.factory = factory;
-  }
 
   @Override
   public void addListener(WebDriverEventListener listener) {
@@ -46,7 +36,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (previous != null) {
       previous.close();
     }
-    threadWebDriver.put(currentThread().getId(), new SelenideDriver(webDriver, factory));
+    threadWebDriver.put(currentThread().getId(), new SelenideDriver(webDriver));
   }
 
   @Override
@@ -66,7 +56,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public SelenideDriver getSelenideDriver() {
     return threadWebDriver.computeIfAbsent(currentThread().getId(),
-      threadId -> markForAutoClose(currentThread(), new SelenideDriver(userProvidedProxy, listeners, factory)));
+      threadId -> markForAutoClose(currentThread(), new SelenideDriver(userProvidedProxy, listeners)));
   }
 
   @Override

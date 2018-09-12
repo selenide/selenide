@@ -41,9 +41,9 @@ class WebDriverRunnerTest implements WithAssertions {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
-    WebDriverFactory factory = mock(WebDriverFactory.class);
-    when(factory.createWebDriver(any())).thenReturn(driver);
-    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer(factory));
+//    WebDriverFactory factory = mock(WebDriverFactory.class);
+//    when(factory.createWebDriver(any())).thenReturn(driver);
+    WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
     doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
     Configuration.proxyEnabled = false;
     Configuration.fileDownload = HTTPGET;
@@ -54,7 +54,7 @@ class WebDriverRunnerTest implements WithAssertions {
     WebDriverRunner.closeWebDriver();
     driver = null;
     Configuration.browser = System.getProperty("browser", FIREFOX);
-    webdriverContainer = new WebDriverThreadLocalContainer(new WebDriverFactory());
+    webdriverContainer = new WebDriverThreadLocalContainer();
   }
 
   @Test
@@ -62,7 +62,7 @@ class WebDriverRunnerTest implements WithAssertions {
     WebDriverRunner.closeWebDriver();
     Configuration.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
 
-    assertThat(WebDriverRunner.getWebDriver())
+    assertThat(WebDriverRunner.getAndCheckWebDriver())
       .isEqualTo(driver);
   }
 

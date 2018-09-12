@@ -1,7 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.google.common.base.Predicate;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.openqa.selenium.WebElement;
@@ -22,7 +22,7 @@ public class FilteringCollection implements WebElementsCollection {
 
   public FilteringCollection(WebElementsCollection originalCollection, Condition filter) {
     this.originalCollection = originalCollection;
-    this.filter = new ConditionPredicate(context(), filter);
+    this.filter = new ConditionPredicate(driver(), filter);
   }
 
   @Override
@@ -36,22 +36,22 @@ public class FilteringCollection implements WebElementsCollection {
   }
 
   @Override
-  public Context context() {
-    return originalCollection.context();
+  public Driver driver() {
+    return originalCollection.driver();
   }
 
   private static class ConditionPredicate implements Predicate<WebElement> {
-    private final Context context;
+    private final Driver driver;
     private final Condition filter;
 
-    private ConditionPredicate(Context context, Condition filter) {
-      this.context = context;
+    private ConditionPredicate(Driver driver, Condition filter) {
+      this.driver = driver;
       this.filter = filter;
     }
 
     @Override
     public boolean apply(@NullableDecl WebElement webElement) {
-      return filter.apply(context, webElement);
+      return filter.apply(driver, webElement);
     }
 
     @Override

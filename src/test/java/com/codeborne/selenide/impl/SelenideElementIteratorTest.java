@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +13,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelenideElementIteratorTest implements WithAssertions {
-  private Context context = mock(Context.class);
+  private Driver driver = mock(Driver.class);
   private WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
 
   @BeforeEach
   void setUp() {
-    when(mockedWebElementCollection.context()).thenReturn(context);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
   }
 
   @Test
@@ -44,7 +44,7 @@ class SelenideElementIteratorTest implements WithAssertions {
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    when(mockedWebElementCollection.context()).thenReturn(context);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mockedWebElement));
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(mockedWebElementCollection);
     SelenideElement nextElement = selenideElementIterator.next();

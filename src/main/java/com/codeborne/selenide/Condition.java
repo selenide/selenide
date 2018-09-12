@@ -19,7 +19,7 @@ public abstract class Condition {
    */
   public static final Condition visible = new Condition("visible") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       return element.isDisplayed();
     }
   };
@@ -31,7 +31,7 @@ public abstract class Condition {
    */
   public static final Condition exist = new Condition("exist") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       try {
         element.isDisplayed();
         return true;
@@ -61,7 +61,7 @@ public abstract class Condition {
    */
   public static final Condition hidden = new Condition("hidden", true) {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       try {
         return !element.isDisplayed();
       }
@@ -133,7 +133,7 @@ public abstract class Condition {
   public static Condition attribute(final String attributeName) {
     return new Condition("attribute") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return element.getAttribute(attributeName) != null;
       }
 
@@ -153,7 +153,7 @@ public abstract class Condition {
   public static Condition attribute(final String attributeName, final String expectedAttributeValue) {
     return new Condition("attribute") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
       }
 
@@ -180,7 +180,7 @@ public abstract class Condition {
   public static Condition value(final String expectedValue) {
     return new Condition("value") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return Html.text.contains(getAttributeValue(element, "value"), expectedValue);
       }
 
@@ -265,7 +265,7 @@ public abstract class Condition {
   public static Condition matchText(final String regex) {
     return new Condition("match text") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return Html.text.matches(element.getText(), regex);
       }
 
@@ -313,7 +313,7 @@ public abstract class Condition {
   public static Condition textCaseSensitive(final String text) {
     return new Condition("textCaseSensitive") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return Html.text.containsCaseSensitive(element.getText(), text);
       }
 
@@ -335,7 +335,7 @@ public abstract class Condition {
   public static Condition exactText(final String text) {
     return new Condition("exact text") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return Html.text.equals(element.getText(), text);
       }
 
@@ -356,7 +356,7 @@ public abstract class Condition {
   public static Condition exactTextCaseSensitive(final String text) {
     return new Condition("exact text case sensitive") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return Html.text.equalsCaseSensitive(element.getText(), text);
       }
 
@@ -403,7 +403,7 @@ public abstract class Condition {
   public static Condition cssClass(final String cssClass) {
     return new Condition("css class") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         return hasClass(element, cssClass);
       }
 
@@ -436,13 +436,13 @@ public abstract class Condition {
   public static Condition cssValue(final String propertyName, final String expectedValue) {
     return new Condition("cssValue") {
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         String actualValue = element.getCssValue(propertyName);
         return defaultString(expectedValue).equalsIgnoreCase(defaultString(actualValue));
       }
 
       @Override
-      public String actualValue(Context context, WebElement element) {
+      public String actualValue(Driver driver, WebElement element) {
         return element.getCssValue(propertyName);
       }
 
@@ -457,22 +457,22 @@ public abstract class Condition {
    * Check if browser focus is currently in given element.
    */
   public static final Condition focused = new Condition("focused") {
-    private WebElement getFocusedElement(Context context) {
-      return (WebElement) context.executeJavaScript("return document.activeElement");
+    private WebElement getFocusedElement(Driver driver) {
+      return (WebElement) driver.executeJavaScript("return document.activeElement");
     }
 
     @Override
-    public boolean apply(Context context, WebElement webElement) {
-      WebElement focusedElement = getFocusedElement(context);
+    public boolean apply(Driver driver, WebElement webElement) {
+      WebElement focusedElement = getFocusedElement(driver);
       return focusedElement != null && focusedElement.equals(webElement);
     }
 
     @Override
-    public String actualValue(Context context, WebElement webElement) {
-      WebElement focusedElement = getFocusedElement(context);
+    public String actualValue(Driver driver, WebElement webElement) {
+      WebElement focusedElement = getFocusedElement(driver);
       return focusedElement == null ? "No focused focusedElement found " :
-        "Focused focusedElement: " + Describe.describe(context, focusedElement) +
-          ", current focusedElement: " + Describe.describe(context, webElement);
+        "Focused focusedElement: " + Describe.describe(driver, focusedElement) +
+          ", current focusedElement: " + Describe.describe(driver, webElement);
     }
   };
 
@@ -483,12 +483,12 @@ public abstract class Condition {
    */
   public static final Condition enabled = new Condition("enabled") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       return element.isEnabled();
     }
 
     @Override
-    public String actualValue(Context context, WebElement element) {
+    public String actualValue(Driver driver, WebElement element) {
       return element.isEnabled() ? "enabled" : "disabled";
     }
   };
@@ -500,12 +500,12 @@ public abstract class Condition {
    */
   public static final Condition disabled = new Condition("disabled") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       return !element.isEnabled();
     }
 
     @Override
-    public String actualValue(Context context, WebElement element) {
+    public String actualValue(Driver driver, WebElement element) {
       return element.isEnabled() ? "enabled" : "disabled";
     }
   };
@@ -517,12 +517,12 @@ public abstract class Condition {
    */
   public static final Condition selected = new Condition("selected") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       return element.isSelected();
     }
 
     @Override
-    public String actualValue(Context context, WebElement element) {
+    public String actualValue(Driver driver, WebElement element) {
       return String.valueOf(element.isSelected());
     }
   };
@@ -534,12 +534,12 @@ public abstract class Condition {
    */
   public static final Condition checked = new Condition("checked") {
     @Override
-    public boolean apply(Context context, WebElement element) {
+    public boolean apply(Driver driver, WebElement element) {
       return element.isSelected();
     }
 
     @Override
-    public String actualValue(Context context, WebElement element) {
+    public String actualValue(Driver driver, WebElement element) {
       return String.valueOf(element.isSelected());
     }
   };
@@ -554,13 +554,13 @@ public abstract class Condition {
   public static Condition not(final Condition condition) {
     return new Condition("not " + condition.name, !condition.nullIsAllowed) {
       @Override
-      public boolean apply(Context context, WebElement element) {
-        return !condition.apply(context, element);
+      public boolean apply(Driver driver, WebElement element) {
+        return !condition.apply(driver, element);
       }
 
       @Override
-      public String actualValue(Context context, WebElement element) {
-        return condition.actualValue(context, element);
+      public String actualValue(Driver driver, WebElement element) {
+        return condition.actualValue(driver, element);
       }
     };
   }
@@ -577,9 +577,9 @@ public abstract class Condition {
       private Condition lastFailedCondition;
 
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         for (Condition c : condition) {
-          if (!c.apply(context, element)) {
+          if (!c.apply(driver, element)) {
             lastFailedCondition = c;
             return false;
           }
@@ -588,8 +588,8 @@ public abstract class Condition {
       }
 
       @Override
-      public String actualValue(Context context, WebElement element) {
-        return lastFailedCondition == null ? null : lastFailedCondition.actualValue(context, element);
+      public String actualValue(Driver driver, WebElement element) {
+        return lastFailedCondition == null ? null : lastFailedCondition.actualValue(driver, element);
       }
 
       @Override
@@ -611,9 +611,9 @@ public abstract class Condition {
       private Condition firstFailedCondition;
 
       @Override
-      public boolean apply(Context context, WebElement element) {
+      public boolean apply(Driver driver, WebElement element) {
         for (Condition c : condition) {
-          if (c.apply(context, element)) {
+          if (c.apply(driver, element)) {
             return true;
           }
           else if (firstFailedCondition == null) {
@@ -624,8 +624,8 @@ public abstract class Condition {
       }
 
       @Override
-      public String actualValue(Context context, WebElement element) {
-        return firstFailedCondition == null ? null : firstFailedCondition.actualValue(context, element);
+      public String actualValue(Driver driver, WebElement element) {
+        return firstFailedCondition == null ? null : firstFailedCondition.actualValue(driver, element);
       }
 
       @Override
@@ -660,13 +660,13 @@ public abstract class Condition {
   private static Condition wrap(final String prefix, final Condition delegate) {
     return new Condition(delegate.name, delegate.applyNull()) {
       @Override
-      public boolean apply(Context context, WebElement element) {
-        return delegate.apply(context, element);
+      public boolean apply(Driver driver, WebElement element) {
+        return delegate.apply(driver, element);
       }
 
       @Override
-      public String actualValue(Context context, WebElement element) {
-        return delegate.actualValue(context, element);
+      public String actualValue(Driver driver, WebElement element) {
+        return delegate.actualValue(driver, element);
       }
 
       @Override
@@ -687,13 +687,13 @@ public abstract class Condition {
     }
 
     @Override
-    public boolean apply(Context context, WebElement element) {
-      return delegate.apply(context, element);
+    public boolean apply(Driver driver, WebElement element) {
+      return delegate.apply(driver, element);
     }
 
     @Override
-    public String actualValue(Context context, WebElement element) {
-      return delegate.actualValue(context, element);
+    public String actualValue(Driver driver, WebElement element) {
+      return delegate.actualValue(driver, element);
     }
 
     @Override
@@ -720,7 +720,7 @@ public abstract class Condition {
    * @param element given WebElement
    * @return true if element matches condition
    */
-  public abstract boolean apply(Context context, WebElement element);
+  public abstract boolean apply(Driver driver, WebElement element);
 
   public final boolean applyNull() {
     return nullIsAllowed;
@@ -731,11 +731,11 @@ public abstract class Condition {
    * Used in error reporting.
    * Optional. Makes sense only if you need to add some additional important info to error message.
    *
-   * @param context
+   * @param driver
    * @param element given WebElement
    * @return any string that needs to be appended to error message.
    */
-  public String actualValue(Context context, WebElement element) {
+  public String actualValue(Driver driver, WebElement element) {
     return null;
   }
 

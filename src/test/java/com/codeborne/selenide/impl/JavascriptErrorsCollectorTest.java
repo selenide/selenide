@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,11 @@ class JavascriptErrorsCollectorTest implements WithAssertions {
 
   @Test
   void getJavascriptErrors_returnsEmptyListIfWebdriverIsNotStarted() {
-    Context context = mock(Context.class);
-    when(context.hasWebDriverStarted()).thenReturn(false);
+    Driver driver = mock(Driver.class);
+    when(driver.hasWebDriverStarted()).thenReturn(false);
 
-    assertThat(collector.getJavascriptErrors(context)).hasSize(0);
+    assertThat(collector.getJavascriptErrors(driver)).hasSize(0);
 
-    verify(context, never()).executeJavaScript(anyString(), any());
+    verify(driver, never()).executeJavaScript(anyString(), any());
   }
 }

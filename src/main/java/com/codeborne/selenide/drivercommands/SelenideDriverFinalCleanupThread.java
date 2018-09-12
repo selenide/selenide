@@ -1,16 +1,14 @@
 package com.codeborne.selenide.drivercommands;
 
-import com.codeborne.selenide.SelenideDriver;
-
 public class SelenideDriverFinalCleanupThread extends Thread {
-  private final SelenideDriver selenideDriver;
+  private final LazyDriver driver;
 
-  public SelenideDriverFinalCleanupThread(SelenideDriver selenideDriver) {
-    this.selenideDriver = selenideDriver;
+  SelenideDriverFinalCleanupThread(LazyDriver driver) {
+    this.driver = driver;
   }
 
   @Override
   public void run() {
-    selenideDriver.close();
+    driver.close();
   }
 }

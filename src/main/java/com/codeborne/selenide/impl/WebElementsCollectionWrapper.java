@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class WebElementsCollectionWrapper implements WebElementsCollection {
   private final List<WebElement> elements;
-  private final Context context;
+  private final Driver driver;
 
-  public WebElementsCollectionWrapper(Context context, Collection<? extends WebElement> elements) {
-    this.context = context;
+  public WebElementsCollectionWrapper(Driver driver, Collection<? extends WebElement> elements) {
+    this.driver = driver;
     this.elements = new ArrayList<>(elements);
   }
 
@@ -27,7 +27,7 @@ public class WebElementsCollectionWrapper implements WebElementsCollection {
   }
 
   @Override
-  public Context context() {
-    return context;
+  public Driver driver() {
+    return driver;
   }
 }

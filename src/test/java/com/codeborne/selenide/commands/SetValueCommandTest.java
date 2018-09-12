@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -26,7 +26,7 @@ class SetValueCommandTest implements WithAssertions {
   void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
     when(locator.findAndAssertElementIsVisible()).thenReturn(mockedFoundElement);
-    when(locator.context()).thenReturn(new ContextStub("opera"));
+    when(locator.driver()).thenReturn(new DriverStub("opera"));
   }
 
   @Test

@@ -35,7 +35,7 @@ public class DownloadFileWithProxyServer {
 
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                           SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
-    WebDriver webDriver = anyClickableElement.context().getWebDriver();
+    WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     String currentWindowHandle = webDriver.getWindowHandle();
     Set<String> currentWindows = webDriver.getWindowHandles();
 

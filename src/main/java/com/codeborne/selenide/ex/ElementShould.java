@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Describe;
 import org.openqa.selenium.WebElement;
 
@@ -9,16 +9,16 @@ import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
 
 public class ElementShould extends UIAssertionError {
   public ElementShould(String searchCriteria, String prefix, Condition expectedCondition,
-                       Context context, WebElement element, Exception lastError) {
-    this(searchCriteria, prefix, null, expectedCondition, context, element, lastError);
+                       Driver driver, WebElement element, Exception lastError) {
+    this(searchCriteria, prefix, null, expectedCondition, driver, element, lastError);
   }
 
   public ElementShould(String searchCriteria, String prefix, String message, Condition expectedCondition,
-                       Context context, WebElement element, Throwable lastError) {
+                       Driver driver, WebElement element, Throwable lastError) {
     super("Element should " + prefix + expectedCondition + " {" + searchCriteria + "}" +
         (message != null ? " because " + message : "") +
-        "\nElement: '" + Describe.describe(context, element) + '\'' +
-        actualValue(expectedCondition, context, element), lastError);
+        "\nElement: '" + Describe.describe(driver, element) + '\'' +
+        actualValue(expectedCondition, driver, element), lastError);
   }
 
   @Override

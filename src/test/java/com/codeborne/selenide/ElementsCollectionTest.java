@@ -37,7 +37,7 @@ class ElementsCollectionTest implements WithAssertions {
   @BeforeEach
   final void mockWebDriver() {
     browser = null;
-    when(source.context()).thenReturn(new ContextStub("opera"));
+    when(source.driver()).thenReturn(new DriverStub("opera"));
   }
 
   @Test

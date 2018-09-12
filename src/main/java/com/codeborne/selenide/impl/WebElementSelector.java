@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Context;
+import com.codeborne.selenide.Driver;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
@@ -24,51 +24,51 @@ public class WebElementSelector {
 
   protected String sizzleSource;
 
-  public WebElement findElement(Context selenideContext, SearchContext context, By selector) {
+  public WebElement findElement(Driver driver, SearchContext context, By selector) {
     if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElement(selector);
     }
 
-    List<WebElement> webElements = evaluateSizzleSelector(selenideContext, context, (ByCssSelector) selector);
+    List<WebElement> webElements = evaluateSizzleSelector(driver, context, (ByCssSelector) selector);
     return webElements.isEmpty() ? null : webElements.get(0);
   }
 
-  public List<WebElement> findElements(Context selenideContext, SearchContext context, By selector) {
+  public List<WebElement> findElements(Driver driver, SearchContext context, By selector) {
     if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElements(selector);
     }
 
-    return evaluateSizzleSelector(selenideContext, context, (ByCssSelector) selector);
+    return evaluateSizzleSelector(driver, context, (ByCssSelector) selector);
   }
 
-  protected List<WebElement> evaluateSizzleSelector(Context selenideContext, SearchContext context, ByCssSelector sizzleCssSelector) {
-    injectSizzleIfNeeded(selenideContext);
+  protected List<WebElement> evaluateSizzleSelector(Driver driver, SearchContext context, ByCssSelector sizzleCssSelector) {
+    injectSizzleIfNeeded(driver);
 
     String sizzleSelector = sizzleCssSelector.toString()
         .replace("By.selector: ", "")
         .replace("By.cssSelector: ", "");
 
     if (context instanceof WebElement)
-      return selenideContext.executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
+      return driver.executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
     else
-      return selenideContext.executeJavaScript("return Sizzle(arguments[0])", sizzleSelector);
+      return driver.executeJavaScript("return Sizzle(arguments[0])", sizzleSelector);
   }
 
-  protected void injectSizzleIfNeeded(Context selenideContext) {
-    if (!sizzleLoaded(selenideContext)) {
-      injectSizzle(selenideContext);
+  protected void injectSizzleIfNeeded(Driver driver) {
+    if (!sizzleLoaded(driver)) {
+      injectSizzle(driver);
     }
   }
 
-  protected Boolean sizzleLoaded(Context selenideContext) {
+  protected Boolean sizzleLoaded(Driver driver) {
     try {
-      return selenideContext.executeJavaScript("return typeof Sizzle != 'undefined'");
+      return driver.executeJavaScript("return typeof Sizzle != 'undefined'");
     } catch (WebDriverException e) {
       return false;
     }
   }
 
-  protected synchronized void injectSizzle(Context selenideContext) {
+  protected synchronized void injectSizzle(Driver driver) {
     if (sizzleSource == null) {
       try {
         sizzleSource = IOUtils.toString(currentThread().getContextClassLoader().getResource("sizzle.js"), StandardCharsets.UTF_8);
@@ -76,6 +76,6 @@ public class WebElementSelector {
         throw new RuntimeException("Cannot load sizzle.js from classpath", e);
       }
     }
-    selenideContext.executeJavaScript(sizzleSource);
+    driver.executeJavaScript(sizzleSource);
   }
 }

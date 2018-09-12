@@ -1,8 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Context;
-import com.codeborne.selenide.ContextStub;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -28,7 +28,7 @@ class GetInnerHtmlCommandTest implements WithAssertions {
 
   @Test
   void uses_innerHTML_attribute_if_not_htmlUnit() {
-    when(locator.context()).thenReturn(new ContextStub("firefox"));
+    when(locator.driver()).thenReturn(new DriverStub("firefox"));
 
     when(mockedElement.getAttribute("innerHTML")).thenReturn("hello");
     assertThat(getInnerHtmlCommand.execute(proxy, locator, null)).isEqualTo("hello");
@@ -36,14 +36,14 @@ class GetInnerHtmlCommandTest implements WithAssertions {
 
   @Test
   void callsJavaScript_innerHTML_attribute_if_htmlUnit() {
-    Context context = mock(Context.class);
-    when(context.getBrowser()).thenReturn(new Browser("htmlunit", false), null, null);
-    when(context.executeJavaScript(anyString(), any())).thenReturn("hello");
-    when(locator.context()).thenReturn(context);
+    Driver driver = mock(Driver.class);
+    when(driver.browser()).thenReturn(new Browser("htmlunit", false), null, null);
+    when(driver.executeJavaScript(anyString(), any())).thenReturn("hello");
+    when(locator.driver()).thenReturn(driver);
     when(mockedElement.getAttribute("innerHTML")).thenReturn("not supported");
 
     assertThat(getInnerHtmlCommand.execute(proxy, locator, null)).isEqualTo("hello");
 
-    verify(context).executeJavaScript("return arguments[0].innerHTML", mockedElement);
+    verify(driver).executeJavaScript("return arguments[0].innerHTML", mockedElement);
   }
 }

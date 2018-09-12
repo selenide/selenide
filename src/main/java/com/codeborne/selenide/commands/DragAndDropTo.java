@@ -16,17 +16,17 @@ public class DragAndDropTo implements Command<SelenideElement> {
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     SelenideElement target;
     if (args[0] instanceof String) {
-      target = ElementFinder.wrap(locator.context(), By.cssSelector((String) args[0]));
+      target = ElementFinder.wrap(locator.driver(), By.cssSelector((String) args[0]));
     }
     else if (args[0] instanceof WebElement) {
-      target = WebElementWrapper.wrap(locator.context(), (WebElement) args[0]);
+      target = WebElementWrapper.wrap(locator.driver(), (WebElement) args[0]);
     }
     else {
       throw new IllegalArgumentException("Unknown target type: " + args[0] +
         " (only String or WebElement are supported)");
     }
     target.shouldBe(visible);
-    new Actions(locator.context().getWebDriver()).dragAndDrop(locator.getWebElement(), target).perform();
+    new Actions(locator.driver().getWebDriver()).dragAndDrop(locator.getWebElement(), target).perform();
     return proxy;
   }
 }
