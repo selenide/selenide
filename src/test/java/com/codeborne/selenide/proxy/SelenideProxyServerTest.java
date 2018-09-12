@@ -41,8 +41,16 @@ class SelenideProxyServerTest implements WithAssertions {
 
   @Test
   void canShutdownProxyServer() {
+    when(bmp.isStarted()).thenReturn(true);
     proxyServer.shutdown();
     verify(bmp).abort();
+  }
+
+  @Test
+  void shouldNotShutdownProxyServer_ifItIsAlreadyStopped() {
+    when(bmp.isStarted()).thenReturn(false);
+    proxyServer.shutdown();
+    verify(bmp, never()).abort();
   }
 
   @Test

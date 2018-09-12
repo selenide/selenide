@@ -115,7 +115,13 @@ public class SelenideProxyServer {
    * Stop the server
    */
   public void shutdown() {
-    proxy.abort();
+    if (proxy.isStarted()) {
+      try {
+        proxy.abort();
+      }
+      catch (IllegalStateException ignore) {
+      }
+    }
   }
 
   /**
