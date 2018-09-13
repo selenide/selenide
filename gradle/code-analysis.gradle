@@ -5,7 +5,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.1"
+    classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.3"
   }
 }
 
