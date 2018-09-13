@@ -51,9 +51,10 @@ class SeleniumGridTest extends IntegrationTest {
 
   @Test
   void shouldUseLocalFileDetector() {
+    openFile("page_with_selects_without_jquery.html");
     RemoteWebDriver webDriver = (RemoteWebDriver) getWebDriver();
-    assertThat(webDriver.getFileDetector())
-      .isInstanceOf(LocalFileDetector.class);
+
+    assertThat(webDriver.getFileDetector()).isInstanceOf(LocalFileDetector.class);
   }
 
   @AfterEach
