@@ -95,7 +95,7 @@ tasks.withType(Test) {
   } else {
     maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   }
-  jvmArgs = ['-ea', '-Xmx256m']
+  jvmArgs = ['-ea', '-Xmx512m']
   systemProperties += System.properties
   jacoco {
     enabled = true
@@ -106,4 +106,4 @@ tasks.withType(Test) {
   }
 }
 
-task allTests(dependsOn: ['clean', 'test', 'chrome', 'htmlunit', 'phantomjs']) {}
+task allTests(dependsOn: ['clean', 'check', 'test', 'grid', 'firefox_headless', 'chrome_headless', 'htmlunit', 'phantomjs']) {}
