@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -10,8 +9,8 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -36,7 +35,9 @@ import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.io.File.separatorChar;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
@@ -73,6 +74,10 @@ public class ScreenShotLaboratory {
       log.warning("Cannot take screenshot because browser is not started");
       return null;
     }
+    else if (reportsFolder == null) {
+      log.severe("Cannot take screenshot because Configuration.reportsFolder is null");
+      return null;
+    }
 
     WebDriver webdriver = getWebDriver();
 
@@ -93,13 +98,17 @@ public class ScreenShotLaboratory {
 
   public File takeScreenshot(WebElement element) {
     try {
-      BufferedImage dest = takeScreenshotAsImage(element);
+      BufferedImage destination = takeScreenshotAsImage(element);
+      if (destination == null) {
+        return null;
+      }
       File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
       ensureFolderExists(screenshotOfElement);
-      ImageIO.write(dest, "png", screenshotOfElement);
+      ImageIO.write(destination, "png", screenshotOfElement);
       return screenshotOfElement;
-    } catch (IOException e) {
-      printOnce("takeScreenshot", e);
+    }
+    catch (IOException e) {
+      log.log(SEVERE, "Failed to take screenshot of " + element, e);
       return null;
     }
   }
@@ -130,10 +139,12 @@ public class ScreenShotLaboratory {
         elementHeight = img.getHeight() - elementLocation.getY();
       }
       return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
-    } catch (IOException e) {
-      printOnce("takeScreenshotImage", e);
+    }
+    catch (IOException e) {
+      log.log(SEVERE, "Failed to take screenshot of " + element, e);
       return null;
-    } catch (RasterFormatException e) {
+    }
+    catch (RasterFormatException e) {
       log.warning("Cannot take screenshot because element is not displayed on current screen position");
       return null;
     }
@@ -177,8 +188,9 @@ public class ScreenShotLaboratory {
       ensureFolderExists(screenshotOfElement);
       ImageIO.write(dest, "png", screenshotOfElement);
       return screenshotOfElement;
-    } catch (IOException e) {
-      printOnce("takeScreenshot", e);
+    }
+    catch (IOException e) {
+      log.log(SEVERE, "Failed to take screenshot of " + element + " inside frame " + iframe, e);
       return null;
     }
   }
@@ -193,10 +205,12 @@ public class ScreenShotLaboratory {
     BufferedImage img;
     try {
       img = ImageIO.read(new ByteArrayInputStream(screen));
-    } catch (IOException e) {
-      printOnce("takeScreenshotImage", e);
+    }
+    catch (IOException e) {
+      log.log(SEVERE, "Failed to take screenshot of " + element + " inside frame " + iframe, e);
       return null;
-    } catch (RasterFormatException ex) {
+    }
+    catch (RasterFormatException ex) {
       log.warning("Cannot take screenshot because iframe is not displayed");
       return null;
     }
@@ -222,7 +236,8 @@ public class ScreenShotLaboratory {
     try {
       img = img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
         elementWidth, elementHeight);
-    } catch (RasterFormatException ex) {
+    }
+    catch (RasterFormatException ex) {
       log.warning("Cannot take screenshot because element is not displayed in iframe");
       return null;
     }
@@ -280,8 +295,9 @@ public class ScreenShotLaboratory {
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
     try {
       return driver.getScreenshotAs(FILE);
-    } catch (Exception e) {
-      printOnce("takeScreenshotAsFile", e);
+    }
+    catch (Exception e) {
+      log.log(SEVERE, "Failed to take screenshot in memory", e);
       return null;
     }
   }
@@ -316,12 +332,13 @@ public class ScreenShotLaboratory {
       } else {
         printOnce("savePageSourceToFile", e);
       }
-    } catch (UnreachableBrowserException e) {
+    } catch (WebDriverException e) {
+      log.log(WARNING, "Failed to save page source to " + fileName + " because of " + e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
+      log.log(SEVERE, "Failed to save page source to " + fileName, e);
       writeToFile(e.toString(), pageSource);
-      printOnce("savePageSourceToFile", e);
     }
     return pageSource;
   }
@@ -330,10 +347,16 @@ public class ScreenShotLaboratory {
     try {
       File scrFile = driver.getScreenshotAs(FILE);
       File imageFile = new File(reportsFolder, fileName + ".png");
-      copyFile(scrFile, imageFile);
+      try {
+        copyFile(scrFile, imageFile);
+      }
+      catch (IOException e) {
+        log.log(SEVERE, "Failed to save screenshot to " + imageFile, e);
+      }
       return imageFile;
-    } catch (Exception e) {
-      printOnce("takeScreenshotImage", e);
+    }
+    catch (WebDriverException e) {
+      log.log(SEVERE, "Failed to take screenshot to " + fileName + " because of " + e);
       return null;
     }
   }
@@ -357,9 +380,10 @@ public class ScreenShotLaboratory {
   }
 
   protected void writeToFile(String content, File targetFile) {
-    try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"))) {
+    try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       copyFile(in, targetFile);
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       log.log(SEVERE, "Failed to write file " + targetFile.getAbsolutePath(), e);
     }
   }
