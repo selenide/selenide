@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
 public interface Driver {
+  Config config();
   Browser browser();
   WebDriver getWebDriver();
   SelenideProxyServer getProxy();

@@ -18,7 +18,10 @@ import static java.lang.Thread.currentThread;
 public class CreateDriverCommand {
   private static final Logger log = Logger.getLogger(CreateDriverCommand.class.getName());
 
-  public Result createDriver(BrowserConfig config, WebDriverFactory factory, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+  public Result createDriver(BrowserConfig config,
+                             WebDriverFactory factory,
+                             Proxy userProvidedProxy,
+                             List<WebDriverEventListener> listeners) {
     if (!reopenBrowserOnFail) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
         ", and cannot create a new webdriver because Configuration.reopenBrowserOnFail=false");

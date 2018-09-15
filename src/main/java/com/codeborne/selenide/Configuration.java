@@ -152,6 +152,7 @@ public class Configuration {
    * Default value: null
    */
   public static DesiredCapabilities browserCapabilities;
+
   /**
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".

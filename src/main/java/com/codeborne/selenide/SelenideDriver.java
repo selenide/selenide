@@ -35,7 +35,7 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this.config = config;
-    this.driver = new LazyDriver(config.browser(), userProvidedProxy, listeners);
+    this.driver = new LazyDriver(config, userProvidedProxy, listeners);
   }
 
   public SelenideDriver(Config config) {
@@ -44,7 +44,7 @@ public class SelenideDriver {
 
   public SelenideDriver(Config config, WebDriver webDriver) {
     this.config = config;
-    this.driver = new WebDriverWrapper(webDriver);
+    this.driver = new WebDriverWrapper(config, webDriver);
   }
 
   Driver driver() {

@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;

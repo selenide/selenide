@@ -25,6 +25,11 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  public Config config() {
+    return null;
+  }
+
+  @Override
   public boolean hasWebDriverStarted() {
     return webDriver != null;
   }

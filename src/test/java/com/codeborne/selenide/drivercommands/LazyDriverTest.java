@@ -1,5 +1,6 @@
 package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Config.BrowserConfig;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -32,7 +33,8 @@ class LazyDriverTest implements WithAssertions {
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
 
-  private BrowserConfig config = mock(BrowserConfig.class);
+  private Config config = mock(Config.class);
+  private BrowserConfig browserConfig = mock(BrowserConfig.class);
   private WebDriver webdriver = mock(WebDriver.class);
   private WebDriverFactory factory = mock(WebDriverFactory.class);
   private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
@@ -40,6 +42,7 @@ class LazyDriverTest implements WithAssertions {
 
   @BeforeEach
   void mockLogging() {
+    when(config.browser()).thenReturn(browserConfig);
     logCapturingStream = new ByteArrayOutputStream();
     Handler[] handlers = log.getParent().getHandlers();
     customLogHandler = new StreamHandler(logCapturingStream, handlers[0].getFormatter());
@@ -69,7 +72,7 @@ class LazyDriverTest implements WithAssertions {
 
     holder.createDriver();
 
-    verify(factory).createWebDriver(config, null);
+    verify(factory).createWebDriver(browserConfig, null);
   }
 
   @Test
@@ -79,7 +82,7 @@ class LazyDriverTest implements WithAssertions {
     holder.createDriver();
 
     assertThat(holder.getProxy()).isNotNull();
-    verify(factory).createWebDriver(config, holder.getProxy().createSeleniumProxy());
+    verify(factory).createWebDriver(browserConfig, holder.getProxy().createSeleniumProxy());
   }
 
   @Test

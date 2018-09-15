@@ -1,7 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -21,7 +21,7 @@ import static java.lang.Thread.currentThread;
 public class LazyDriver implements Driver {
   private static final Logger log = Logger.getLogger(LazyDriver.class.getName());
 
-  private final BrowserConfig config;
+  private final Config config;
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory;
   private final Proxy userProvidedProxy;
@@ -31,17 +31,22 @@ public class LazyDriver implements Driver {
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
 
-  public LazyDriver(BrowserConfig config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+  public LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker());
   }
 
-  LazyDriver(BrowserConfig config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
+  LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
     this.config = config;
     this.userProvidedProxy = userProvidedProxy;
     this.listeners.addAll(listeners);
     this.factory = factory;
     this.browserHealthChecker = browserHealthChecker;
+  }
+
+  @Override
+  public Config config() {
+    return config;
   }
 
   @Override
@@ -74,7 +79,7 @@ public class LazyDriver implements Driver {
   }
 
   void createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config, factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config.browser(), factory, userProvidedProxy, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));

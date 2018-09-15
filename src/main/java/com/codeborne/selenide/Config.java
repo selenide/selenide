@@ -18,6 +18,28 @@ public interface Config {
     DesiredCapabilities browserCapabilities();
   }
 
+  String baseUrl();
   BrowserConfig browser();
   long timeout();
+  long collectionsTimeout();
+  long pollingInterval();
+  long collectionsPollingInterval();
+  boolean holdBrowserOpen();
+  boolean reopenBrowserOnFail();
+  long closeBrowserTimeoutMs();
+  boolean clickViaJs();
+  boolean captureJavascriptErrors();
+  boolean screenshots();
+  boolean savePageSource();
+  String reportsFolder();
+  String reportsUrl();
+  boolean fastSetValue();
+  boolean versatileSetValue();
+  boolean setValueChangeEvent();
+  Configuration.SelectorMode selectorMode();
+  Configuration.AssertionMode assertionMode();
+  Configuration.FileDownloadMode fileDownload();
+  boolean proxyEnabled();
+  String proxyHost();
+  int proxyPort();
 }
