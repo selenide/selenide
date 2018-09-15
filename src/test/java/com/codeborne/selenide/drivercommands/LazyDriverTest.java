@@ -1,5 +1,6 @@
 package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.Config.BrowserConfig;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
@@ -18,6 +19,7 @@ import java.util.logging.StreamHandler;
 import static java.lang.Thread.currentThread;
 import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -30,10 +32,11 @@ class LazyDriverTest implements WithAssertions {
   private static OutputStream logCapturingStream;
   private static StreamHandler customLogHandler;
 
+  private BrowserConfig config = mock(BrowserConfig.class);
   private WebDriver webdriver = mock(WebDriver.class);
   private WebDriverFactory factory = mock(WebDriverFactory.class);
   private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
-  private LazyDriver holder = new LazyDriver(null, emptyList(), factory, browserHealthChecker);
+  private LazyDriver holder = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker);
 
   @BeforeEach
   void mockLogging() {
@@ -50,8 +53,8 @@ class LazyDriverTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
-    doReturn(webdriver).when(factory).createWebDriver(any());
-    doReturn(webdriver).when(factory).createWebDriver(null);
+    doReturn(webdriver).when(factory).createWebDriver(any(), any());
+    doReturn(webdriver).when(factory).createWebDriver(any(), isNull());
   }
 
   @BeforeEach
@@ -66,7 +69,7 @@ class LazyDriverTest implements WithAssertions {
 
     holder.createDriver();
 
-    verify(factory).createWebDriver(null);
+    verify(factory).createWebDriver(config, null);
   }
 
   @Test
@@ -76,7 +79,7 @@ class LazyDriverTest implements WithAssertions {
     holder.createDriver();
 
     assertThat(holder.getProxy()).isNotNull();
-    verify(factory).createWebDriver(holder.getProxy().createSeleniumProxy());
+    verify(factory).createWebDriver(config, holder.getProxy().createSeleniumProxy());
   }
 
   @Test
@@ -101,7 +104,7 @@ class LazyDriverTest implements WithAssertions {
   void closeWebDriverLoggingWhenProxyIsAdded() {
     Configuration.holdBrowserOpen = false;
     Configuration.proxyEnabled = true;
-    holder = new LazyDriver(mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
+    holder = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
     givenOpenedBrowser();
 
     holder.close();

@@ -1,6 +1,9 @@
 package integration;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
 import com.codeborne.selenide.SelenideDriver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +20,19 @@ import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class SelenideDriverITest extends IntegrationTest {
-  private SelenideDriver browser1 = new SelenideDriver();
-  private SelenideDriver browser2 = new SelenideDriver();
+  private SelenideDriver browser1;
+  private SelenideDriver browser2;
 
   @BeforeEach
   void setUp() {
     close();
+    SelenideConfig config1 = new SelenideConfig();
+    config1.browser(new SelenideBrowserConfig().browser("chrome"));
+    browser1 = new SelenideDriver(config1);
+
+    SelenideConfig config2 = new SelenideConfig();
+    config2.browser(new SelenideBrowserConfig().browser("firefox"));
+    browser2 = new SelenideDriver(config2);
   }
 
   @AfterEach

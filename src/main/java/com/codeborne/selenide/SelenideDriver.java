@@ -21,7 +21,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 
@@ -31,17 +30,20 @@ public class SelenideDriver {
   private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
+  private final Config config;
   private final Driver driver;
 
-  public SelenideDriver(Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
-    this.driver = new LazyDriver(userProvidedProxy, listeners);
+  public SelenideDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+    this.config = config;
+    this.driver = new LazyDriver(config.browser(), userProvidedProxy, listeners);
   }
 
-  public SelenideDriver() {
-    this(null, emptyList());
+  public SelenideDriver(Config config) {
+    this(config, null, emptyList());
   }
 
-  public SelenideDriver(WebDriver webDriver) {
+  public SelenideDriver(Config config, WebDriver webDriver) {
+    this.config = config;
     this.driver = new WebDriverWrapper(webDriver);
   }
 
@@ -263,7 +265,7 @@ public class SelenideDriver {
   }
 
   public File download(String url) throws IOException {
-    return download(url, timeout);
+    return download(url, config.timeout());
   }
 
   public File download(String url, long timeoutMs) throws IOException {

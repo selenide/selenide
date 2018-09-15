@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +14,10 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
   private static final String SOME_CAP = "some.cap";
   private AbstractDriverFactory driverFactory;
   private Proxy proxy = mock(Proxy.class);
+  private SelenideBrowserConfig config = new SelenideBrowserConfig();
 
   @AfterEach
   void clearConfiguration() {
-    Configuration.browserCapabilities = null;
     System.clearProperty(SOME_CAP);
   }
 
@@ -26,14 +26,14 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
     driverFactory = new ChromeDriverFactory();
     DesiredCapabilities configurationCapabilities = new DesiredCapabilities();
     configurationCapabilities.setCapability(SOME_CAP, "SOME_VALUE_FROM_CONFIGURATION");
-    Configuration.browserCapabilities = configurationCapabilities;
+    config.browserCapabilities(configurationCapabilities);
   }
 
   @Test
   void transferCapabilitiesFromConfiguration() {
     DesiredCapabilities someCapabilities = new DesiredCapabilities();
     someCapabilities.setCapability(SOME_CAP, "SOME_VALUE");
-    DesiredCapabilities mergedCapabilities = driverFactory.mergeCapabilitiesFromConfiguration(someCapabilities);
+    DesiredCapabilities mergedCapabilities = driverFactory.mergeCapabilitiesFromConfiguration(config, someCapabilities);
 
     assertThat(mergedCapabilities.getCapability(SOME_CAP))
       .isEqualTo("SOME_VALUE_FROM_CONFIGURATION");
@@ -42,7 +42,7 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
   @Test
   void overrideCapabilitiesFromConfiguration() {
     System.setProperty(SOME_CAP, "SOME_VALUE_FROM_ENV_VARIABLE");
-    assertThat(driverFactory.createCommonCapabilities(proxy).getCapability(SOME_CAP))
+    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability(SOME_CAP))
       .isEqualTo("SOME_VALUE_FROM_CONFIGURATION");
   }
 }

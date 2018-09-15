@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config.BrowserConfig;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -8,17 +9,13 @@ import org.openqa.selenium.WebDriver;
 import java.awt.Toolkit;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browserPosition;
-import static com.codeborne.selenide.Configuration.browserSize;
-import static com.codeborne.selenide.Configuration.startMaximized;
-
 class BrowserResizer {
   private static final Logger log = Logger.getLogger(BrowserResizer.class.getName());
 
-  WebDriver adjustBrowserPosition(WebDriver driver) {
-    if (browserPosition != null) {
-      log.info("Set browser position to " + browserPosition);
-      String[] coordinates = browserPosition.split("x");
+  WebDriver adjustBrowserPosition(BrowserConfig config, WebDriver driver) {
+    if (config.browserPosition() != null) {
+      log.info("Set browser position to " + config.browserPosition());
+      String[] coordinates = config.browserPosition().split("x");
       int x = Integer.parseInt(coordinates[0]);
       int y = Integer.parseInt(coordinates[1]);
       Point target = new Point(x, y);
@@ -30,15 +27,15 @@ class BrowserResizer {
     return driver;
   }
 
-  WebDriver adjustBrowserSize(Browser browser, WebDriver driver) {
-    if (browserSize != null) {
-      log.info("Set browser size to " + browserSize);
-      String[] dimension = browserSize.split("x");
+  WebDriver adjustBrowserSize(BrowserConfig config, Browser browser, WebDriver driver) {
+    if (config.browserSize() != null) {
+      log.info("Set browser size to " + config.browserSize());
+      String[] dimension = config.browserSize().split("x");
       int width = Integer.parseInt(dimension[0]);
       int height = Integer.parseInt(dimension[1]);
       driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
     }
-    else if (startMaximized) {
+    else if (config.startMaximized()) {
       try {
         if (browser.isChrome()) {
           maximizeChromeBrowser(driver.manage().window());

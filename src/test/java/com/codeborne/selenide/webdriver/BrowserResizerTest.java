@@ -1,8 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeEach;
+import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -19,45 +18,39 @@ class BrowserResizerTest {
   private BrowserResizer factory = spy(new BrowserResizer());
   private WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
   private Browser browser = new Browser("firefox", true);
-
-  @BeforeEach
-  void setUp() {
-    Configuration.browser = "";
-    Configuration.browserSize = null;
-    Configuration.browserPosition = null;
-    Configuration.startMaximized = false;
-  }
+  private SelenideBrowserConfig config = new SelenideBrowserConfig();
 
   @Test
   void doesNotChangeWindowSizeByDefault() {
-    factory.adjustBrowserSize(browser, webdriver);
+    factory.adjustBrowserSize(config, browser, webdriver);
     verifyNoMoreInteractions(webdriver);
   }
 
   @Test
   void canConfigureBrowserWindowSize() {
-    Configuration.browserSize = "1600x800";
+    config.browserSize("1600x800");
 
-    factory.adjustBrowserSize(browser, webdriver);
+    factory.adjustBrowserSize(config, browser, webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 800));
   }
 
   @Test
   void canMaximizeBrowserWindow() {
-    Configuration.startMaximized = true;
+    config.startMaximized(true);
 
-    factory.adjustBrowserSize(browser, webdriver);
+    factory.adjustBrowserSize(config, browser, webdriver);
 
     verify(webdriver.manage().window()).maximize();
   }
 
   @Test
   void canMaximizeBrowserWindow_chrome() {
-    Configuration.startMaximized = true;
+    config.startMaximized(true);
+
     doReturn(new Dimension(1600, 1200)).when(factory).getScreenSize();
 
-    factory.adjustBrowserSize(new Browser("chrome", true), webdriver);
+    factory.adjustBrowserSize(config, new Browser("chrome", true), webdriver);
 
     verify(webdriver.manage().window()).setSize(new Dimension(1600, 1200));
     verify(webdriver.manage().window()).setPosition(new Point(0, 0));
@@ -65,9 +58,9 @@ class BrowserResizerTest {
 
   @Test
   void canConfigureBrowserWindowPosition() {
-    Configuration.browserPosition = "20x40";
+    config.browserPosition("20x40");
 
-    factory.adjustBrowserPosition(webdriver);
+    factory.adjustBrowserPosition(config, webdriver);
 
     verify(webdriver.manage().window()).setPosition(new Point(20, 40));
   }

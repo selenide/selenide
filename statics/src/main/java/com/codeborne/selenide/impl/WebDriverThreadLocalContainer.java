@@ -36,7 +36,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (previous != null) {
       previous.close();
     }
-    threadWebDriver.put(currentThread().getId(), new SelenideDriver(webDriver));
+    threadWebDriver.put(currentThread().getId(), new SelenideDriver(new StaticConfig(), webDriver));
   }
 
   @Override
@@ -56,7 +56,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public SelenideDriver getSelenideDriver() {
     return threadWebDriver.computeIfAbsent(currentThread().getId(),
-      threadId -> markForAutoClose(currentThread(), new SelenideDriver(userProvidedProxy, listeners)));
+      threadId -> markForAutoClose(currentThread(), new SelenideDriver(new StaticConfig(), userProvidedProxy, listeners)));
   }
 
   @Override

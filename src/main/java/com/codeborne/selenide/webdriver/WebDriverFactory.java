@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config.BrowserConfig;
 import com.codeborne.selenide.SelenideDriver;
 import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Capabilities;
@@ -11,13 +12,6 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.browserSize;
-import static com.codeborne.selenide.Configuration.browserVersion;
-import static com.codeborne.selenide.Configuration.driverManagerEnabled;
-import static com.codeborne.selenide.Configuration.headless;
-import static com.codeborne.selenide.Configuration.remote;
-import static com.codeborne.selenide.Configuration.startMaximized;
 import static java.util.Arrays.asList;
 
 public class WebDriverFactory {
@@ -42,36 +36,36 @@ public class WebDriverFactory {
 
   protected BrowserResizer browserResizer = new BrowserResizer();
 
-  public WebDriver createWebDriver(Proxy proxy) {
-    log.config("Configuration.browser=" + browser);
-    log.config("Configuration.browser.version=" + browserVersion);
-    log.config("Configuration.remote=" + remote);
-    log.config("Configuration.browserSize=" + browserSize);
-    log.config("Configuration.startMaximized=" + startMaximized);
+  public WebDriver createWebDriver(BrowserConfig config, Proxy proxy) {
+    log.config("browser=" + config.browser());
+    log.config("browser.version=" + config.browserVersion());
+    log.config("remote=" + config.remote());
+    log.config("browserSize=" + config.browserSize());
+    log.config("startMaximized=" + config.startMaximized());
 
-    Browser browzer = new Browser(browser, headless);
+    Browser browser = new Browser(config.browser(), config.headless());
 
-    if (driverManagerEnabled && remote == null) {
-      webDriverBinaryManager.setupBinaryPath(browzer);
+    if (config.driverManagerEnabled() && config.remote() == null) {
+      webDriverBinaryManager.setupBinaryPath(browser);
     }
 
     WebDriver webdriver = factories.stream()
-        .filter(factory -> factory.supports(browzer))
+        .filter(factory -> factory.supports(config, browser))
         .findAny()
-        .map(driverFactory -> driverFactory.create(proxy))
-        .orElseGet(() -> new DefaultDriverFactory().create(proxy));
+        .map(driverFactory -> driverFactory.create(config, proxy))
+        .orElseGet(() -> new DefaultDriverFactory().create(config, proxy));
 
-    webdriver = browserResizer.adjustBrowserSize(browzer, webdriver);
-    webdriver = browserResizer.adjustBrowserPosition(webdriver);
+    webdriver = browserResizer.adjustBrowserSize(config, browser, webdriver);
+    webdriver = browserResizer.adjustBrowserPosition(config, webdriver);
 
     logBrowserVersion(webdriver);
     log.info("Selenide v. " + SelenideDriver.class.getPackage().getImplementationVersion());
-    logSeleniumInfo();
+    logSeleniumInfo(config);
     return webdriver;
   }
 
-  protected void logSeleniumInfo() {
-    if (remote == null) {
+  protected void logSeleniumInfo(BrowserConfig config) {
+    if (config.remote() == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info(
           "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());

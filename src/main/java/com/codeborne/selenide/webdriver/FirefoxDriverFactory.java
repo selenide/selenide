@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config.BrowserConfig;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -9,36 +10,32 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browserBinary;
-import static com.codeborne.selenide.Configuration.headless;
-
 class FirefoxDriverFactory extends AbstractDriverFactory {
-
   private static final Logger log = Logger.getLogger(FirefoxDriverFactory.class.getName());
 
   @Override
-  boolean supports(Browser browser) {
+  boolean supports(BrowserConfig config, Browser browser) {
     return browser.isFirefox();
   }
 
   @Override
-  WebDriver create(final Proxy proxy) {
+  WebDriver create(BrowserConfig config, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return createFirefoxDriver(proxy);
+    return createFirefoxDriver(config, proxy);
   }
 
-  private WebDriver createFirefoxDriver(final Proxy proxy) {
-    FirefoxOptions options = createFirefoxOptions(proxy);
+  private WebDriver createFirefoxDriver(BrowserConfig config, Proxy proxy) {
+    FirefoxOptions options = createFirefoxOptions(config, proxy);
     return new FirefoxDriver(options);
   }
 
-  FirefoxOptions createFirefoxOptions(Proxy proxy) {
+  FirefoxOptions createFirefoxOptions(BrowserConfig config, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
-    firefoxOptions.setHeadless(headless);
-    if (!browserBinary.isEmpty()) {
-      log.info("Using browser binary: " + browserBinary);
-      firefoxOptions.setBinary(browserBinary);
+    firefoxOptions.setHeadless(config.headless());
+    if (!config.browserBinary().isEmpty()) {
+      log.info("Using browser binary: " + config.browserBinary());
+      firefoxOptions.setBinary(config.browserBinary());
     }
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
@@ -48,7 +45,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("security.csp.enable", false);
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
 
-    firefoxOptions.merge(createCommonCapabilities(proxy));
+    firefoxOptions.merge(createCommonCapabilities(config, proxy));
     firefoxOptions = transferFirefoxProfileFromSystemProperties(firefoxOptions);
 
     return firefoxOptions;

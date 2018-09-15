@@ -1,5 +1,6 @@
 package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.Config.BrowserConfig;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -17,7 +18,7 @@ import static java.lang.Thread.currentThread;
 public class CreateDriverCommand {
   private static final Logger log = Logger.getLogger(CreateDriverCommand.class.getName());
 
-  public Result createDriver(WebDriverFactory factory, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+  public Result createDriver(BrowserConfig config, WebDriverFactory factory, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     if (!reopenBrowserOnFail) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
         ", and cannot create a new webdriver because Configuration.reopenBrowserOnFail=false");
@@ -33,7 +34,7 @@ public class CreateDriverCommand {
       browserProxy = selenideProxyServer.createSeleniumProxy();
     }
 
-    WebDriver webdriver = factory.createWebDriver(browserProxy);
+    WebDriver webdriver = factory.createWebDriver(config, browserProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
       webdriver.getClass().getSimpleName() + " -> " + webdriver);

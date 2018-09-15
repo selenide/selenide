@@ -1,22 +1,22 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config.BrowserConfig;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
 class PhantomJsDriverFactory extends AbstractDriverFactory {
-
   @Override
-  boolean supports(Browser browser) {
+  boolean supports(BrowserConfig config, Browser browser) {
     return browser.isPhantomjs();
   }
 
   @Override
-  WebDriver create(final Proxy proxy) {
-    return createPhantomJsDriver(proxy);
+  WebDriver create(BrowserConfig config, Proxy proxy) {
+    return createPhantomJsDriver(config, proxy);
   }
 
-  private WebDriver createPhantomJsDriver(final Proxy proxy) {
-    return createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver", proxy);
+  private WebDriver createPhantomJsDriver(BrowserConfig config, Proxy proxy) {
+    return createInstanceOf("org.openqa.selenium.phantomjs.PhantomJSDriver", config, proxy);
   }
 }
