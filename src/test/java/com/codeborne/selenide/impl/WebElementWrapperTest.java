@@ -6,7 +6,6 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,8 +13,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import static com.codeborne.selenide.Browsers.CHROME;
-import static com.codeborne.selenide.Configuration.browser;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -38,14 +35,9 @@ class WebElementWrapperTest implements WithAssertions {
     return element;
   }
 
-  @BeforeEach
-  final void mockWebDriver() {
-    browser = null;
-  }
-
   @Test
   void toStringPrintsTagNameWithAllAttributes() {
-    browser = CHROME;
+    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("chrome"));
     when(((JavascriptExecutor) webDriver)
       .executeScript(anyString(), any()))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));

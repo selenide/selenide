@@ -17,7 +17,6 @@ import java.util.ListIterator;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Configuration.browser;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -37,7 +36,6 @@ class ElementsCollectionTest implements WithAssertions {
 
   @BeforeEach
   final void mockWebDriver() {
-    browser = null;
     when(source.driver()).thenReturn(driver);
   }
 
