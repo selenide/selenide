@@ -26,7 +26,7 @@ class SetValueCommandTest implements WithAssertions {
   void setup() {
     System.setProperty("selenide.versatileSetValue", "true");
     when(locator.findAndAssertElementIsVisible()).thenReturn(mockedFoundElement);
-    when(locator.driver()).thenReturn(new DriverStub("opera"));
+    when(locator.driver()).thenReturn(new DriverStub());
   }
 
   @Test

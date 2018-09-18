@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
@@ -22,8 +24,9 @@ import static org.mockito.Mockito.when;
 
 class SelenideFieldDecoratorTest implements WithAssertions {
   private TestPage page = new TestPage();
-  private Driver driver = mock(Driver.class);
+  private Config config = mock(Config.class);
   private WebDriver webDriver = mock(WebDriver.class);
+  private Driver driver = new DriverStub(config, null, webDriver, null);
   private SelenidePageFactory pageFactory = new SelenidePageFactory();
   private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, driver, webDriver);
 

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.Driver;
@@ -17,7 +18,6 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
@@ -51,29 +51,29 @@ public class Navigator {
     return selenideProxy.requestFilter("authentication");
   }
 
-  String absoluteUrl(String relativeOrAbsoluteUrl) {
-    return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : baseUrl + relativeOrAbsoluteUrl;
+  String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
+    return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
 
   private void navigateTo(SelenideDriver driver, String url,
                           AuthenticationType authenticationType, String domain, String login, String password) {
-    forceProxyIfNeeded();
+    forceProxyIfNeeded(driver.config());
 
-    url = absoluteUrl(url);
-    url = appendBasicAuthIfNeeded(url, authenticationType, domain, login, password);
+    url = absoluteUrl(driver.config(), url);
+    url = appendBasicAuthIfNeeded(driver.config(), url, authenticationType, domain, login, password);
 
     SelenideLog log = SelenideLogger.beginStep("open", url);
     try {
       WebDriver webDriver = driver.getAndCheckWebDriver();
-      beforeNavigateTo(driver.getProxy(), authenticationType, domain, login, password);
+      beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, domain, login, password);
       webDriver.navigate().to(url);
-      javascriptErrorsCollector.collectJavascriptErrors(driver.getWebDriver());
+      javascriptErrorsCollector.collectJavascriptErrors(driver.config(), driver.getWebDriver());
       SelenideLogger.commitStep(log, PASS);
     }
     catch (WebDriverException e) {
       SelenideLogger.commitStep(log, e);
       e.addInfo("selenide.url", url);
-      e.addInfo("selenide.baseUrl", baseUrl);
+      e.addInfo("selenide.baseUrl", driver.config().baseUrl());
       throw e;
     }
     catch (RuntimeException | Error e) {
@@ -82,17 +82,17 @@ public class Navigator {
     }
   }
 
-  private void forceProxyIfNeeded() {
-    if (!Configuration.proxyEnabled && Configuration.fileDownload == PROXY) {
-      log.warning("Configuration.proxyEnabled == false but Configuration.fileDownload == PROXY. " +
+  private void forceProxyIfNeeded(Config config) {
+    if (!config.proxyEnabled() && config.fileDownload() == PROXY) {
+      log.warning("config.proxyEnabled == false but config.fileDownload == PROXY. " +
         "We will enable proxy server automatically.");
       Configuration.proxyEnabled = true;
     }
   }
 
-  private void beforeNavigateTo(SelenideProxyServer selenideProxy,
+  private void beforeNavigateTo(Config config, SelenideProxyServer selenideProxy,
                                 AuthenticationType authenticationType, String domain, String login, String password) {
-    if (Configuration.proxyEnabled) {
+    if (config.proxyEnabled()) {
       beforeNavigateToWithProxy(selenideProxy, authenticationType, domain, login, password);
     }
     else {
@@ -120,15 +120,17 @@ public class Navigator {
     return !domain.isEmpty() || !login.isEmpty() || !password.isEmpty();
   }
 
-  private String appendBasicAuthIfNeeded(String url, AuthenticationType authType, String domain, String login, String password) {
-    return passBasicAuthThroughUrl(authType, domain, login, password)
+  private String appendBasicAuthIfNeeded(Config config, String url,
+                                         AuthenticationType authType, String domain, String login, String password) {
+    return passBasicAuthThroughUrl(config, authType, domain, login, password)
       ? basicAuthUrl.appendBasicAuthToURL(url, domain, login, password)
       : url;
   }
 
-  private boolean passBasicAuthThroughUrl(AuthenticationType authenticationType, String domain, String login, String password) {
+  private boolean passBasicAuthThroughUrl(Config config,
+                                          AuthenticationType authenticationType, String domain, String login, String password) {
     return hasAuthentication(domain, login, password) &&
-      !Configuration.proxyEnabled &&
+      !config.proxyEnabled() &&
       authenticationType == AuthenticationType.BASIC;
   }
 

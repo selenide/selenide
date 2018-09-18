@@ -3,6 +3,7 @@ package com.codeborne.selenide.commands;
 import java.lang.reflect.Field;
 import java.util.Collections;
 
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
@@ -16,20 +17,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelectRadioCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private SelectRadio selectRadioCommand;
+  private SelenideElement proxy = mock(SelenideElement.class);
+  private WebElementSource locator = mock(WebElementSource.class);
+  private SelectRadio selectRadioCommand = new SelectRadio(mock(Click.class));
+  private WebElement mockedFoundElement = mock(WebElement.class);
   private String defaultElementValue = "ElementValue";
-  private WebElement mockedFoundElement;
 
   @BeforeEach
   void setup() {
-    Click mockedClick = mock(Click.class);
-    selectRadioCommand = new SelectRadio(mockedClick);
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedFoundElement = mock(WebElement.class);
-
+    when(locator.driver()).thenReturn(new DriverStub());
     when(mockedFoundElement.getAttribute("value")).thenReturn(defaultElementValue);
   }
 

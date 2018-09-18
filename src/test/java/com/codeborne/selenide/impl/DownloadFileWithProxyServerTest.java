@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
@@ -34,11 +35,12 @@ import static org.mockito.Mockito.when;
 class DownloadFileWithProxyServerTest implements WithAssertions {
   private Waiter waiter = mock(Waiter.class);
   private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
+  private final SelenideConfig config = new SelenideConfig();
   private WebDriver webdriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private WebElementSource linkWithHref = mock(WebElementSource.class);
   private WebElement link = mock(WebElement.class);
-  private FileDownloadFilter filter = spy(new FileDownloadFilter());
+  private FileDownloadFilter filter = spy(new FileDownloadFilter("build/downloads"));
 
   @BeforeEach
   void setUp() {
@@ -46,7 +48,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
 
     when(proxy.responseFilter("download")).thenReturn(filter);
-    when(linkWithHref.driver()).thenReturn(new DriverStub(new Browser("opera", false), webdriver, proxy));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }

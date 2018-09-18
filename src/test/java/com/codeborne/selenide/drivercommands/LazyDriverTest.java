@@ -2,7 +2,6 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Config.BrowserConfig;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -38,11 +37,15 @@ class LazyDriverTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
   private WebDriverFactory factory = mock(WebDriverFactory.class);
   private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
-  private LazyDriver holder = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker);
+  private LazyDriver driver;
 
   @BeforeEach
   void mockLogging() {
     when(config.browser()).thenReturn(browserConfig);
+    when(config.reopenBrowserOnFail()).thenReturn(true);
+    when(config.proxyEnabled()).thenReturn(true);
+    driver = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker);
+
     logCapturingStream = new ByteArrayOutputStream();
     Handler[] handlers = log.getParent().getHandlers();
     customLogHandler = new StreamHandler(logCapturingStream, handlers[0].getFormatter());
@@ -60,57 +63,52 @@ class LazyDriverTest implements WithAssertions {
     doReturn(webdriver).when(factory).createWebDriver(any(), isNull());
   }
 
-  @BeforeEach
-  @AfterEach
-  void resetSettings() {
-    Configuration.reopenBrowserOnFail = true;
-  }
-
   @Test
   void createWebDriverWithoutProxy() {
-    Configuration.proxyEnabled = false;
+    when(config.proxyEnabled()).thenReturn(false);
 
-    holder.createDriver();
+    driver.createDriver();
 
     verify(factory).createWebDriver(browserConfig, null);
   }
 
   @Test
   void createWebDriverWithSelenideProxyServer() {
-    Configuration.proxyEnabled = true;
+    when(config.proxyEnabled()).thenReturn(true);
 
-    holder.createDriver();
+    driver.createDriver();
 
-    assertThat(holder.getProxy()).isNotNull();
-    verify(factory).createWebDriver(browserConfig, holder.getProxy().createSeleniumProxy());
+    assertThat(driver.getProxy()).isNotNull();
+    verify(factory).createWebDriver(browserConfig, driver.getProxy().createSeleniumProxy());
   }
 
   @Test
   void checksIfBrowserIsStillAlive() {
     givenOpenedBrowser();
-    Configuration.reopenBrowserOnFail = true;
+    when(config.reopenBrowserOnFail()).thenReturn(true);
 
-    assertThat(holder.getAndCheckWebDriver()).isEqualTo(webdriver);
+    assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(browserHealthChecker).isBrowserStillOpen(any());
   }
 
   @Test
   void doesNotReopenBrowserIfItFailed() {
     givenOpenedBrowser();
-    Configuration.reopenBrowserOnFail = false;
+    when(config.reopenBrowserOnFail()).thenReturn(false);
 
-    assertThat(holder.getAndCheckWebDriver()).isEqualTo(webdriver);
+    assertThat(driver.getAndCheckWebDriver()).isEqualTo(webdriver);
     verify(browserHealthChecker, never()).isBrowserStillOpen(any());
   }
 
   @Test
   void closeWebDriverLoggingWhenProxyIsAdded() {
-    Configuration.holdBrowserOpen = false;
-    Configuration.proxyEnabled = true;
-    holder = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
+    when(config.holdBrowserOpen()).thenReturn(false);
+    when(config.proxyEnabled()).thenReturn(true);
+
+    driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
     givenOpenedBrowser();
 
-    holder.close();
+    driver.close();
 
     String capturedLog = getTestCapturedLog();
     String currentThreadId = String.valueOf(currentThread().getId());
@@ -127,7 +125,7 @@ class LazyDriverTest implements WithAssertions {
   }
 
   private void givenOpenedBrowser() {
-    assertThat(holder.getAndCheckWebDriver()).isSameAs(webdriver);
+    assertThat(driver.getAndCheckWebDriver()).isSameAs(webdriver);
   }
 
   private static String getTestCapturedLog() {

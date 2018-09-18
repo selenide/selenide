@@ -28,9 +28,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Configuration.assertionMode;
-import static com.codeborne.selenide.Configuration.collectionsPollingInterval;
-import static com.codeborne.selenide.Configuration.collectionsTimeout;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.toList;
@@ -73,7 +70,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", collectionsTimeout, conditions);
+    return should("be", driver().config().collectionsTimeout(), conditions);
   }
 
   public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
@@ -86,7 +83,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", collectionsTimeout, conditions);
+    return should("have", driver().config().collectionsTimeout(), conditions);
   }
 
   /**
@@ -103,7 +100,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected ElementsCollection should(String prefix, long timeoutMs, CollectionCondition... conditions) {
-    validateAssertionMode();
+    validateAssertionMode(driver().config());
 
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
@@ -114,9 +111,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(collection.driver(), error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
-      switch (assertionMode) {
+      switch (driver().config().assertionMode()) {
         case SOFT:
           return this;
         default:
@@ -150,7 +147,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(collectionsPollingInterval);
+      sleep(driver().config().collectionsPollingInterval());
     }
     while (!stopwatch.isTimeoutReached());
     condition.fail(collection, actualElements, lastError, timeoutMs);
@@ -376,7 +373,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   private WebElementsCollectionWrapper fetch() {
     List<WebElement> fetchedElements = collection.getElements();
-    return new WebElementsCollectionWrapper(collection.driver(), fetchedElements);
+    return new WebElementsCollectionWrapper(driver(), fetchedElements);
   }
 
   @Override
@@ -385,7 +382,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     Object[] result = new Object[fetchedElements.size()];
     Iterator<WebElement> it = fetchedElements.iterator();
     for (int i = 0; i < result.length; i++) {
-      result[i] = Describe.describe(collection.driver(), it.next());
+      result[i] = Describe.describe(driver(), it.next());
     }
     return result;
   }
@@ -405,9 +402,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public String toString() {
     try {
-      return elementsToString(collection.driver(), getElements());
+      return elementsToString(driver(), getElements());
     } catch (Exception e) {
       return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
     }
+  }
+
+  private Driver driver() {
+    return collection.driver();
   }
 }

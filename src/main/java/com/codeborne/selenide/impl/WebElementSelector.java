@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
-import static com.codeborne.selenide.Configuration.selectorMode;
 import static java.lang.Thread.currentThread;
 
 /**
@@ -25,7 +24,7 @@ public class WebElementSelector {
   protected String sizzleSource;
 
   public WebElement findElement(Driver driver, SearchContext context, By selector) {
-    if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
+    if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElement(selector);
     }
 
@@ -34,7 +33,7 @@ public class WebElementSelector {
   }
 
   public List<WebElement> findElements(Driver driver, SearchContext context, By selector) {
-    if (selectorMode == CSS || !(selector instanceof ByCssSelector)) {
+    if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElements(selector);
     }
 

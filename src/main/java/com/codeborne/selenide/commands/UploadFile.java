@@ -1,7 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
@@ -35,11 +35,12 @@ public class UploadFile implements Command<File> {
       SelenideElement form = proxy.closest("form");
       List<WebElement> newInputs = cloneInputField(locator.driver(), form, inputField, file.length - 1);
 
-      Stopwatch stopwatch = new Stopwatch(Configuration.timeout);
+      Config config = locator.driver().config();
+      Stopwatch stopwatch = new Stopwatch(config.timeout());
 
       for (int i = 1; i < file.length; i++) {
         WebElement newInput = newInputs.get(i - 1);
-        uploadSingleFile(file[i], stopwatch, newInput);
+        uploadSingleFile(config, file[i], stopwatch, newInput);
       }
     }
 
@@ -47,7 +48,7 @@ public class UploadFile implements Command<File> {
 
   }
 
-  private void uploadSingleFile(File file, Stopwatch stopwatch, WebElement newInput) throws IOException {
+  private void uploadSingleFile(Config config, File file, Stopwatch stopwatch, WebElement newInput) throws IOException {
     do {
       try {
         newInput.sendKeys(file.getCanonicalPath());
@@ -57,7 +58,7 @@ public class UploadFile implements Command<File> {
         if (stopwatch.isTimeoutReached()) {
           throw notInteractable;
         }
-        stopwatch.sleep(Configuration.pollingInterval);
+        stopwatch.sleep(config.pollingInterval());
       }
     } while (!stopwatch.isTimeoutReached());
   }

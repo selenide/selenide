@@ -31,7 +31,7 @@ public interface Driver {
   }
 
   default SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(getWebDriver());
+    return new SelenideTargetLocator(config(), getWebDriver());
   }
 
   default Actions actions() {

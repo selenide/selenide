@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ElementsCollectionTest implements WithAssertions {
+  private DriverStub driver = new DriverStub();
   private WebElementsCollection source = mock(WebElementsCollection.class);
   private WebElement element1 = element("h1");
   private WebElement element2 = element("h2");
@@ -37,7 +38,7 @@ class ElementsCollectionTest implements WithAssertions {
   @BeforeEach
   final void mockWebDriver() {
     browser = null;
-    when(source.driver()).thenReturn(new DriverStub("opera"));
+    when(source.driver()).thenReturn(driver);
   }
 
   @Test
@@ -279,6 +280,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
     WebElementsCollection source = mock(WebElementsCollection.class);
+    when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
 
@@ -289,6 +291,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
     WebElementsCollection source = mock(WebElementsCollection.class);
+    when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
 

@@ -47,6 +47,10 @@ public class SelenideDriver {
     this.driver = new WebDriverWrapper(config, webDriver);
   }
 
+  public Config config() {
+    return config;
+  }
+
   Driver driver() {
     return driver;
   }
@@ -155,7 +159,7 @@ public class SelenideDriver {
 
 
   public SelenideWait Wait() {
-    return new SelenideWait(getWebDriver());
+    return new SelenideWait(getWebDriver(), config().timeout(), config().pollingInterval());
   }
 
 

@@ -6,8 +6,6 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 
-import static com.codeborne.selenide.Configuration.holdBrowserOpen;
-
 public class WebDriverWrapper implements Driver {
   private final WebDriver webDriver;
   private final Config config;
@@ -44,8 +42,8 @@ public class WebDriverWrapper implements Driver {
 
   @Override
   public void close() {
-    if (!holdBrowserOpen) {
-      new CloseDriverCommand(webDriver, null).run();
+    if (!config().holdBrowserOpen()) {
+      new CloseDriverCommand(webDriver, null, config.closeBrowserTimeoutMs()).run();
     }
   }
 }

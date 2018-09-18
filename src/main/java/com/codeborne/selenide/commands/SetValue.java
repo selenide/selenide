@@ -1,15 +1,12 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.setValueChangeEvent;
 import static com.codeborne.selenide.impl.Events.events;
 
 public class SetValue implements Command<WebElement> {
@@ -31,12 +28,12 @@ public class SetValue implements Command<WebElement> {
     String text = (String) args[0];
     WebElement element = locator.findAndAssertElementIsVisible();
 
-    if (Configuration.versatileSetValue
+    if (locator.driver().config().versatileSetValue()
             && "select".equalsIgnoreCase(element.getTagName())) {
       selectOptionByValue.execute(proxy, locator, args);
       return proxy;
     }
-    if (Configuration.versatileSetValue
+    if (locator.driver().config().versatileSetValue()
             && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
       selectRadio.execute(proxy, locator, args);
       return proxy;
@@ -49,10 +46,10 @@ public class SetValue implements Command<WebElement> {
   private void setValueForTextInput(Driver driver, WebElement element, String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
-    } else if (fastSetValue) {
+    } else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
       if (error != null) throw new InvalidStateException(error);
-      if (setValueChangeEvent) {
+      if (driver.config().setValueChangeEvent()) {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
       else {
@@ -61,7 +58,7 @@ public class SetValue implements Command<WebElement> {
     } else {
       element.clear();
       element.sendKeys(text);
-      if (setValueChangeEvent) {
+      if (driver.config().setValueChangeEvent()) {
         events.fireChangeEvent(driver, element);
       }
     }

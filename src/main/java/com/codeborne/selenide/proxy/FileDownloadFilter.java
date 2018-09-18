@@ -1,6 +1,5 @@
 package com.codeborne.selenide.proxy;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -21,11 +20,16 @@ import java.util.logging.Logger;
 
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
+  private final String reportsFolder;
 
   private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
   private final List<File> downloadedFiles = new ArrayList<>();
   private final List<Response> responses = new ArrayList<>();
+
+  public FileDownloadFilter(String reportsFolder) {
+    this.reportsFolder = reportsFolder;
+  }
 
   /**
    * Activate this filter.
@@ -89,7 +93,7 @@ public class FileDownloadFilter implements ResponseFilter {
   }
 
   protected File prepareTargetFile(String fileName) {
-    return new File(Configuration.reportsFolder, fileName);
+    return new File(reportsFolder, fileName);
   }
 
   String getFileName(HttpResponse response) {

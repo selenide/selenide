@@ -1,10 +1,8 @@
 package com.codeborne.selenide.proxy;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
@@ -18,14 +16,8 @@ import static org.mockito.Mockito.when;
 
 class SelenideProxyServerTest implements WithAssertions {
   private BrowserMobProxyServer bmp = mock(BrowserMobProxyServer.class);
-  private SelenideProxyServer proxyServer = new SelenideProxyServer(null, new InetAddressResolverStub(), bmp);
-
-  @BeforeEach
-  @AfterEach
-  void resetProxySettings() {
-    Configuration.proxyPort = 0;
-    Configuration.proxyHost = "";
-  }
+  private Config config = mock(Config.class);
+  private SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
 
   @Test
   void canInterceptResponses() {
@@ -62,7 +54,7 @@ class SelenideProxyServerTest implements WithAssertions {
 
   @Test
   void createSeleniumProxy_withConfiguredHostname() {
-    Configuration.proxyHost = "my.megahost";
+    when(config.proxyHost()).thenReturn("my.megahost");
     when(bmp.getPort()).thenReturn(9999);
     assertThat(proxyServer.createSeleniumProxy().getHttpProxy()).isEqualTo("my.megahost:9999");
   }
@@ -80,7 +72,7 @@ class SelenideProxyServerTest implements WithAssertions {
 
   @Test
   void canStartProxyServerOnConfiguredPort() {
-    Configuration.proxyPort = 666;
+    when(config.proxyPort()).thenReturn(666);
 
     proxyServer.start();
 

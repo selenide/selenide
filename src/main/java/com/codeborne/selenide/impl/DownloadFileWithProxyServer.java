@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
@@ -35,6 +35,7 @@ public class DownloadFileWithProxyServer {
 
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                           SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
+    Config config = anyClickableElement.driver().config();
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     String currentWindowHandle = webDriver.getWindowHandle();
     Set<String> currentWindows = webDriver.getWindowHandles();
@@ -44,7 +45,7 @@ public class DownloadFileWithProxyServer {
     try {
       clickable.click();
 
-      waiter.wait(filter, new HasDownloads(), timeout, Configuration.pollingInterval);
+      waiter.wait(filter, new HasDownloads(), timeout, config.pollingInterval());
       return firstDownloadedFile(anyClickableElement, filter, timeout);
     }
     finally {

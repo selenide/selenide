@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 class ListSizeMismatchTest implements WithAssertions {
   private String operator = "Operator";
   private int expectedSize = 10;
-  private Driver driver = new DriverStub("opera");
+  private Driver driver = new DriverStub();
   private WebElementsCollection webElementsCollection = mock(WebElementsCollection.class);
   private List<WebElement> actualElementsList = asList(mock(WebElement.class),
     mock(WebElement.class),

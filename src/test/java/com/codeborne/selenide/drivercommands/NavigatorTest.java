@@ -3,12 +3,14 @@ package com.codeborne.selenide.drivercommands;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -19,23 +21,25 @@ import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 class NavigatorTest implements WithAssertions {
   private Navigator navigator = new Navigator();
-  SelenideDriver selenideDriver = mock(SelenideDriver.class);
-  WebDriver driver = mock(WebDriver.class);
-  WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
-  SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-  AuthenticationFilter authenticationFilter = mock(AuthenticationFilter.class);
+  private SelenideDriver selenideDriver = mock(SelenideDriver.class);
+  private WebDriver driver = mock(WebDriver.class);
+  private WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
+  private SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
+  private AuthenticationFilter authenticationFilter = mock(AuthenticationFilter.class);
+  private SelenideConfig config = new SelenideConfig().fileDownload(HTTPGET);
 
   @BeforeEach
   void setUp() {
-    Configuration.fileDownload = HTTPGET;
-    Mockito.doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
-    Mockito.doReturn(selenideProxy).when(selenideDriver).getProxy();
-    Mockito.doReturn(navigation).when(driver).navigate();
-    Mockito.doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
+    doReturn(config).when(selenideDriver).config();
+    doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
+    doReturn(selenideProxy).when(selenideDriver).getProxy();
+    doReturn(navigation).when(driver).navigate();
+    doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
   }
 
   @Test
@@ -70,9 +74,9 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void returnsAbsoluteUrl() {
-    Configuration.baseUrl = "http://localhost:8080";
-    assertThat(navigator.absoluteUrl("/users/id=1")).isEqualTo("http://localhost:8080/users/id=1");
-    assertThat(navigator.absoluteUrl("http://host:port/users/id=1")).isEqualTo("http://host:port/users/id=1");
+    config.baseUrl("http://localhost:8080");
+    assertThat(navigator.absoluteUrl(config, "/users/id=1")).isEqualTo("http://localhost:8080/users/id=1");
+    assertThat(navigator.absoluteUrl(config, "http://host:port/users/id=1")).isEqualTo("http://host:port/users/id=1");
   }
 
   @Test
@@ -96,8 +100,8 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withoutAuthentication_resetsPreviousAuthentication() {
-    Configuration.browser = "opera";
-    Configuration.proxyEnabled = true;
+    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.proxyEnabled(true);
 
     navigator.open(selenideDriver, "https://some.com/login");
 
@@ -107,8 +111,8 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withBasicAuth_noProxy() {
-    Configuration.browser = "opera";
-    Configuration.proxyEnabled = false;
+    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.proxyEnabled(false);
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
@@ -117,8 +121,8 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withBasicAuth_withProxy() {
-    Configuration.browser = "opera";
-    Configuration.proxyEnabled = true;
+    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.proxyEnabled(true);
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
 
@@ -129,11 +133,17 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void startsProxyServer_evenIfProxyIsNotEnabled_butFileDownloadModeIsProxy() {
-    Configuration.proxyEnabled = false;
-    Configuration.fileDownload = PROXY;
+    config.proxyEnabled(false);
+    config.fileDownload(PROXY);
 
     navigator.open(selenideDriver, "https://some.com/login");
 
     assertThat(Configuration.proxyEnabled).isTrue();
+  }
+
+  @AfterEach
+  void tearDown() {
+    Configuration.proxyEnabled = false;
+    Configuration.fileDownload = HTTPGET;
   }
 }

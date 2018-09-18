@@ -2,7 +2,6 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -14,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.holdBrowserOpen;
-import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static java.lang.Thread.currentThread;
 
 public class LazyDriver implements Driver {
@@ -26,7 +23,7 @@ public class LazyDriver implements Driver {
   private final WebDriverFactory factory;
   private final Proxy userProvidedProxy;
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
-  private final Browser browser = new Browser(Configuration.browser, Configuration.headless);
+  private final Browser browser;
 
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
@@ -38,6 +35,7 @@ public class LazyDriver implements Driver {
   LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
     this.config = config;
+    this.browser = new Browser(config.browser().browser(), config.browser().headless());
     this.userProvidedProxy = userProvidedProxy;
     this.listeners.addAll(listeners);
     this.factory = factory;
@@ -66,7 +64,7 @@ public class LazyDriver implements Driver {
 
   @Override
   public synchronized WebDriver getAndCheckWebDriver() {
-    if (webDriver != null && reopenBrowserOnFail && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
+    if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
       log.info("Webdriver has been closed meanwhile. Let's re-create it.");
       close();
       createDriver();
@@ -79,7 +77,7 @@ public class LazyDriver implements Driver {
   }
 
   void createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config.browser(), factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config, factory, userProvidedProxy, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
@@ -87,8 +85,8 @@ public class LazyDriver implements Driver {
 
   @Override
   public void close() {
-    if (!holdBrowserOpen) {
-      new CloseDriverCommand(webDriver, selenideProxyServer).run();
+    if (!config.holdBrowserOpen()) {
+      new CloseDriverCommand(webDriver, selenideProxyServer, config.closeBrowserTimeoutMs()).run();
       webDriver = null;
       selenideProxyServer = null;
     }

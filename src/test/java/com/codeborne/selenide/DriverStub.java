@@ -6,19 +6,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
 public class DriverStub implements Driver {
+  private final Config config;
   private final Browser browser;
   private final WebDriver webDriver;
   private final SelenideProxyServer proxy;
 
+  public DriverStub() {
+    this("zopera");
+  }
+
   public DriverStub(String browser) {
-    this(new Browser(browser, false), null, null);
+    this(new SelenideConfig(), new Browser(browser, false), null, null);
   }
 
-  public DriverStub(Browser browser) {
-    this(browser, null, null);
-  }
-
-  public DriverStub(Browser browser, WebDriver webDriver, SelenideProxyServer proxy) {
+  public DriverStub(Config config, Browser browser, WebDriver webDriver, SelenideProxyServer proxy) {
+    this.config = config;
     this.browser = browser;
     this.webDriver = webDriver;
     this.proxy = proxy;
@@ -26,7 +28,7 @@ public class DriverStub implements Driver {
 
   @Override
   public Config config() {
-    return null;
+    return config;
   }
 
   @Override
@@ -77,7 +79,7 @@ public class DriverStub implements Driver {
 
   @Override
   public SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(getWebDriver());
+    return new SelenideTargetLocator(config(), getWebDriver());
   }
 
   @Override

@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.closeBrowserTimeoutMs;
 import static java.util.logging.Level.FINE;
 
 public class CloseDriverCommand {
@@ -13,10 +12,12 @@ public class CloseDriverCommand {
 
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxyServer;
+  private final long closeBrowserTimeoutMs;
 
-  public CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+  CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer, long closeBrowserTimeoutMs) {
     this.webDriver = webDriver;
     this.selenideProxyServer = selenideProxyServer;
+    this.closeBrowserTimeoutMs = closeBrowserTimeoutMs;
   }
 
   public void run() {

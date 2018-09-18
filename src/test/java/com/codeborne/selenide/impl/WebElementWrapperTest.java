@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class WebElementWrapperTest implements WithAssertions {
+  private SelenideConfig config = new SelenideConfig();
   private WebDriver webDriver = mock(FirefoxDriver.class);
-  private Driver driver = new DriverStub(new Browser("firefox", false), webDriver, null);
+  private Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);
   private WebElement element = createWebElement();
 
   private WebElement createWebElement() {
@@ -55,7 +57,7 @@ class WebElementWrapperTest implements WithAssertions {
   @Test
   void toStringPrintsTagNameWithSomeAttributes() {
     webDriver = mock(HtmlUnitDriver.class);
-    driver = new DriverStub(new Browser("htmlunit", false), webDriver, null);
+    driver = new DriverStub(config, new Browser("htmlunit", false), webDriver, null);
 
     assertThat(new WebElementWrapper(driver, element))
       .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");

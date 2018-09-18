@@ -23,9 +23,11 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailab
 
 public class SelenideTargetLocator implements TargetLocator {
   private final WebDriver webDriver;
+  private final Config config;
   private final TargetLocator delegate;
 
-  public SelenideTargetLocator(WebDriver webDriver) {
+  public SelenideTargetLocator(Config config, WebDriver webDriver) {
+    this.config = config;
     this.webDriver = webDriver;
     this.delegate = webDriver.switchTo();
   }
@@ -215,6 +217,6 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private SelenideWait Wait() {
-    return new SelenideWait(webDriver);
+    return new SelenideWait(webDriver, config.timeout(), config.pollingInterval());
   }
 }

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
@@ -13,16 +14,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GetSelectedOptionCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
+  private SelenideElement proxy = mock(SelenideElement.class);
+  private WebElementSource locator = mock(WebElementSource.class);
   private String mockedElement1Text = "Element text2";
-  private GetSelectedOption getSelectedOptionCommand;
+  private GetSelectedOption getSelectedOptionCommand = new GetSelectedOption();
 
   @BeforeEach
   void setup() {
-    getSelectedOptionCommand = new GetSelectedOption();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
+    when(locator.driver()).thenReturn(new DriverStub());
     SelenideElement mockedElement = mock(SelenideElement.class);
     WebElement mockedElement1 = mock(WebElement.class);
     WebElement mockedElement2 = mock(WebElement.class);

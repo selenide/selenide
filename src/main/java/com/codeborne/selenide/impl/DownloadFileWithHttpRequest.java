@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
 import org.apache.commons.io.FilenameUtils;
@@ -58,7 +58,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout) throws IOException {
-    String url = makeAbsoluteUrl(relativeOrAbsoluteUrl);
+    String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
     HttpResponse response = executeHttpRequest(driver, url, timeout);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
@@ -70,13 +70,13 @@ public class DownloadFileWithHttpRequest {
         url + ": " + response.getStatusLine());
     }
 
-    File downloadedFile = prepareTargetFile(url, response);
+    File downloadedFile = prepareTargetFile(driver.config(), url, response);
 
     return saveFileContent(response, downloadedFile);
   }
 
-  String makeAbsoluteUrl(String relativeOrAbsoluteUrl) {
-    return relativeOrAbsoluteUrl.startsWith("/") ? Configuration.baseUrl + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
+  String makeAbsoluteUrl(Config config, String relativeOrAbsoluteUrl) {
+    return relativeOrAbsoluteUrl.startsWith("/") ? config.baseUrl() + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
 
   protected HttpResponse executeHttpRequest(Driver driver, String fileToDownloadLocation, long timeout) throws IOException {
@@ -153,8 +153,8 @@ public class DownloadFileWithHttpRequest {
     httpGet.setHeader("User-Agent", driver.getUserAgent());
   }
 
-  protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) {
-    return new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
+  protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
+    return new File(config.reportsFolder(), getFileName(fileToDownloadLocation, response));
   }
 
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {

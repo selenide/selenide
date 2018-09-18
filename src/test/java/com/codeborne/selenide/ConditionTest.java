@@ -40,7 +40,8 @@ import static org.mockito.Mockito.when;
 class ConditionTest {
   private WebDriver webDriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private Driver driver = new DriverStub(new Browser("opera", false), webDriver, proxy);
+  private SelenideConfig config = new SelenideConfig();
+  private Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
   
   @Test
   void displaysHumanReadableName() {
