@@ -170,7 +170,7 @@ public class SelenideDriver {
   public void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
     List<String> jsErrors = getJavascriptErrors();
     if (jsErrors != null && !jsErrors.isEmpty()) {
-      throw new JavaScriptErrorsFound(jsErrors);
+      throw new JavaScriptErrorsFound(driver(), jsErrors);
     }
   }
 

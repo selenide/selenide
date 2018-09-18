@@ -1,13 +1,10 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,28 +22,14 @@ import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.FILE;
 
 class ErrorMessagesTest implements WithAssertions {
-  private static String reportsUrl;
-
-  @BeforeAll
-  static void rememberOldValues() {
-    reportsUrl = Configuration.reportsUrl;
-  }
-
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
   private final SelenideConfig config = new SelenideConfig().reportsFolder("build/reports/tests");
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
 
-  @AfterAll
-  static void restoreOldValues() {
-    Configuration.screenshots = true;
-    Configuration.savePageSource = true;
-    Configuration.reportsUrl = reportsUrl;
-  }
-
   @BeforeEach
   void setUp() {
-    Configuration.screenshots = true;
-    Configuration.savePageSource = false;
+    config.screenshots(true);
+    config.savePageSource(false);
     when(webDriver.getPageSource()).thenReturn("<html></html>");
   }
 
@@ -98,7 +81,6 @@ class ErrorMessagesTest implements WithAssertions {
 
   @Test
   void doesNotAddScreenshot_if_screenshotsAreDisabled() {
-    Configuration.screenshots = false;
     config.screenshots(false);
 
     String screenshot = ErrorMessages.screenshot(driver);
@@ -108,7 +90,7 @@ class ErrorMessagesTest implements WithAssertions {
 
   @Test
   void printHtmlPath_if_savePageSourceIsEnabled() {
-    Configuration.savePageSource = true;
+    config.savePageSource(true);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
     doReturn("<html>blah</html>").when(webDriver).getPageSource();
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);

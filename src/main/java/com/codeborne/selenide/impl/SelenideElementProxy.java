@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
@@ -65,7 +66,7 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(webElementSource.driver(), error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
@@ -78,8 +79,12 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
+  private Driver driver() {
+    return webElementSource.driver();
+  }
+
   private Config config() {
-    return webElementSource.driver().config();
+    return driver().config();
   }
 
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
@@ -116,7 +121,7 @@ class SelenideElementProxy implements InvocationHandler {
       throw lastError;
     }
     else if (lastError instanceof InvalidElementStateException) {
-      throw new InvalidStateException(lastError);
+      throw new InvalidStateException(driver(), lastError);
     }
     else if (lastError instanceof WebDriverException) {
       throw webElementSource.createElementNotFoundError(exist, lastError);
@@ -135,7 +140,7 @@ class SelenideElementProxy implements InvocationHandler {
 
   private long getTimeoutMs(Method method, Object[] args) {
     return isWaitCommand(method) ?
-        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
+      args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
       config().timeout();
   }
 

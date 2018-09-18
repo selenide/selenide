@@ -35,7 +35,7 @@ class DescribeTest implements WithAssertions {
 
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(null, null, visible, driver, webElement, null)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(driver, null, null, visible, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(Describe.shortly(driver, selenideElement))
       .isEqualTo("StaleElementReferenceException: disappeared");

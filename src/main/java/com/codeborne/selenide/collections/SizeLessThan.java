@@ -21,7 +21,7 @@ public class SizeLessThan extends CollectionCondition {
 
   @Override
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
-    throw new ListSizeMismatch("<", expectedSize, explanation, collection, elements, lastError, timeoutMs);
+    throw new ListSizeMismatch(collection.driver(), "<", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 
   @Override

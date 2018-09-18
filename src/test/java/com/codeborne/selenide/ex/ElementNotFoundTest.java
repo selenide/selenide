@@ -1,21 +1,25 @@
 package com.codeborne.selenide.ex;
 
-import java.util.List;
-
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ElementNotFoundTest implements WithAssertions {
+  private Driver driver = new DriverStub();
+
   @Test
   void testElementNotFoundWithByCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(By.id("Hello"), Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, By.id("Hello"), Condition.exist);
     String expectedMessage = "Element not found {By.id: Hello}\n" +
       "Expected: exist\n" +
       "Screenshot: null\n" +
@@ -26,7 +30,7 @@ class ElementNotFoundTest implements WithAssertions {
 
   @Test
   void testElementNotFoundWithStringCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist);
     String expectedMessage = "Element not found {Hello}\n" +
       "Expected: exist\n" +
       "Screenshot: null\n" +
@@ -37,7 +41,7 @@ class ElementNotFoundTest implements WithAssertions {
 
   @Test
   void testElementNotFoundWithStringCriteriaAndThrowableError() {
-    ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist, new Throwable("Error message"));
+    ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist, new Throwable("Error message"));
     String expectedMessage = "Element not found {Hello}\n" +
       "Expected: exist\n" +
       "Screenshot: null\n" +
@@ -50,6 +54,7 @@ class ElementNotFoundTest implements WithAssertions {
   @Test
   void testElementNotFoundWithWebElementCollectionAndThrowableError() {
     WebElementsCollection webElementCollectionMock = mock(WebElementsCollection.class);
+    when(webElementCollectionMock.driver()).thenReturn(driver);
     when(webElementCollectionMock.description()).thenReturn("mock collection description");
     List<String> expectedStrings = asList("One", "Two", "Three");
 

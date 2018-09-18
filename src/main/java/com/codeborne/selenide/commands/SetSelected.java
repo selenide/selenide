@@ -4,7 +4,6 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
-
 import org.openqa.selenium.WebElement;
 
 public class SetSelected implements Command<WebElement> {
@@ -23,21 +22,22 @@ public class SetSelected implements Command<WebElement> {
     boolean selected = (Boolean) args[0];
     WebElement element = locator.getWebElement();
     if (!element.isDisplayed()) {
-      throw new InvalidStateException("Cannot change invisible element");
+      throw new InvalidStateException(locator.driver(), "Cannot change invisible element");
     }
     String tag = element.getTagName();
     if (!tag.equals("option")) {
       if (tag.equals("input")) {
         String type = element.getAttribute("type");
         if (!type.equals("checkbox") && !type.equals("radio")) {
-          throw new InvalidStateException("Only use setSelected on checkbox/option/radio");
+          throw new InvalidStateException(locator.driver(), "Only use setSelected on checkbox/option/radio");
         }
-      } else {
-        throw new InvalidStateException("Only use setSelected on checkbox/option/radio");
+      }
+      else {
+        throw new InvalidStateException(locator.driver(), "Only use setSelected on checkbox/option/radio");
       }
     }
     if (element.getAttribute("readonly") != null || element.getAttribute("disabled") != null) {
-      throw new InvalidStateException("Cannot change value of readonly/disabled element");
+      throw new InvalidStateException(locator.driver(), "Cannot change value of readonly/disabled element");
     }
     if (element.isSelected() != selected) {
       click.execute(proxy, locator, NO_ARGS);

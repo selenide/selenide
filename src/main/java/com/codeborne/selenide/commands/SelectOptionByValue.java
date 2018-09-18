@@ -1,12 +1,13 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
+
+import static com.codeborne.selenide.Condition.exist;
 
 public class SelectOptionByValue implements Command {
   @Override
@@ -30,7 +31,7 @@ public class SelectOptionByValue implements Command {
       select.selectByValue(value);
     }
     catch (NoSuchElementException e) {
-      throw new ElementNotFound(selectField.getSearchCriteria() + "/option[value:" + value + ']', Condition.exist, e);
+      throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[value:" + value + ']', exist, e);
     }
   }
 }

@@ -18,7 +18,7 @@ public class Modal {
     Alert alert = driver.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.accept();
-    checkDialogText(expectedDialogText, actualDialogText);
+    checkDialogText(driver, expectedDialogText, actualDialogText);
     return actualDialogText;
   }
 
@@ -36,7 +36,7 @@ public class Modal {
     if (inputText != null)
       alert.sendKeys(inputText);
     alert.accept();
-    checkDialogText(expectedDialogText, actualDialogText);
+    checkDialogText(driver, expectedDialogText, actualDialogText);
     return actualDialogText;
   }
 
@@ -48,13 +48,13 @@ public class Modal {
     Alert alert = driver.switchTo().alert();
     String actualDialogText = alert.getText();
     alert.dismiss();
-    checkDialogText(expectedDialogText, actualDialogText);
+    checkDialogText(driver, expectedDialogText, actualDialogText);
     return actualDialogText;
   }
 
-  private static void checkDialogText(String expectedDialogText, String actualDialogText) {
+  private static void checkDialogText(Driver driver, String expectedDialogText, String actualDialogText) {
     if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
-      throw new DialogTextMismatch(actualDialogText, expectedDialogText);
+      throw new DialogTextMismatch(driver, actualDialogText, expectedDialogText);
     }
   }
 }

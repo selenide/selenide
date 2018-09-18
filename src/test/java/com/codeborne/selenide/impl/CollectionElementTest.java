@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.assertj.core.api.WithAssertions;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CollectionElementTest implements WithAssertions {
-  private Driver driver = mock(Driver.class);
+  private Driver driver = new DriverStub();
 
   @Test
   void testWrap() {
@@ -69,8 +70,8 @@ class CollectionElementTest implements WithAssertions {
   @Test
   void testCreateElementNotFoundErrorWithEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    String collectionDescription = "Collection description";
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
+    when(mockedWebElementCollection.description()).thenReturn("Collection description");
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     Condition mockedCollection = mock(Condition.class);
@@ -87,8 +88,8 @@ class CollectionElementTest implements WithAssertions {
   @Test
   void testCreateElementNotFoundErrorWithNonEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    String collectionDescription = "Collection description";
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
+    when(mockedWebElementCollection.description()).thenReturn("Collection description");
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 

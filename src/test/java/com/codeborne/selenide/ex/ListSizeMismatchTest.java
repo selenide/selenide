@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ class ListSizeMismatchTest implements WithAssertions {
 
   @Test
   void toString_withoutExplanation() {
-    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator,
+    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(driver, operator,
       expectedSize,
       null,
       webElementsCollection,
@@ -54,7 +54,7 @@ class ListSizeMismatchTest implements WithAssertions {
 
   @Test
   void toString_withExplanation() {
-    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(operator,
+    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(driver, operator,
       expectedSize,
       "it's said in customer requirement #12345",
       webElementsCollection,

@@ -1,6 +1,8 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -52,7 +54,8 @@ class ExistsCommandTest implements WithAssertions {
 
   @Test
   void testExistExecuteMethodElementNotFoundException() {
-    checkExecuteMethodWithException(new ElementNotFound("", Condition.appear));
+    Driver driver = new DriverStub();
+    checkExecuteMethodWithException(new ElementNotFound(driver, "", Condition.appear));
   }
 
   @Test

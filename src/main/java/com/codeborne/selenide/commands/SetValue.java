@@ -29,12 +29,12 @@ public class SetValue implements Command<WebElement> {
     WebElement element = locator.findAndAssertElementIsVisible();
 
     if (locator.driver().config().versatileSetValue()
-            && "select".equalsIgnoreCase(element.getTagName())) {
+      && "select".equalsIgnoreCase(element.getTagName())) {
       selectOptionByValue.execute(proxy, locator, args);
       return proxy;
     }
     if (locator.driver().config().versatileSetValue()
-            && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
+      && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
       selectRadio.execute(proxy, locator, args);
       return proxy;
     }
@@ -46,16 +46,18 @@ public class SetValue implements Command<WebElement> {
   private void setValueForTextInput(Driver driver, WebElement element, String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
-    } else if (driver.config().fastSetValue()) {
+    }
+    else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
-      if (error != null) throw new InvalidStateException(error);
+      if (error != null) throw new InvalidStateException(driver, error);
       if (driver.config().setValueChangeEvent()) {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup");
       }
-    } else {
+    }
+    else {
       element.clear();
       element.sendKeys(text);
       if (driver.config().setValueChangeEvent()) {

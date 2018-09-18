@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 class ToStringCommandTest implements WithAssertions {
   private SelenideElement proxy = mock(SelenideElement.class);
-  private Driver driver = mock(Driver.class);
+  private Driver driver = new DriverStub();
   private WebElementSource locator = mock(WebElementSource.class);
   private WebElement mockedFoundElement = mock(WebElement.class);
   private ToString toStringCommand = new ToString();
@@ -50,7 +51,7 @@ class ToStringCommandTest implements WithAssertions {
 
   @Test
   void testExecuteMethodWhenElementNotFoundIsThrown() {
-    doThrow(new ElementNotFound(By.name(""), Condition.visible)).when(locator).getWebElement();
+    doThrow(new ElementNotFound(driver, By.name(""), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
       .isEqualTo("Element not found {By.name: }");

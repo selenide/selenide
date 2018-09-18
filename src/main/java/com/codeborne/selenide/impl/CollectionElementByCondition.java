@@ -42,7 +42,7 @@ public class CollectionElementByCondition extends WebElementSource {
       }
     }
 
-    throw new ElementNotFound(getSearchCriteria(), condition);
+    throw new ElementNotFound(driver(), getSearchCriteria(), condition);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class CollectionElementByCondition extends WebElementSource {
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.description(), visible, lastError);
+      return new ElementNotFound(driver(), collection.description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
   }

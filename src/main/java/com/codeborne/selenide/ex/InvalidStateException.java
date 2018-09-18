@@ -1,12 +1,14 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Driver;
+
 public class InvalidStateException extends UIAssertionError {
-  public InvalidStateException(Throwable cause) {
-    super(cause);
+  public InvalidStateException(Driver driver, Throwable cause) {
+    super(driver, cause);
   }
 
-  public InvalidStateException(String message) {
-    super(message);
+  public InvalidStateException(Driver driver, String message) {
+    super(driver, message);
   }
 
   @Override

@@ -30,7 +30,7 @@ public abstract class WebElementSource {
   }
 
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    return new ElementNotFound(getSearchCriteria(), condition, lastError);
+    return new ElementNotFound(driver(), getSearchCriteria(), condition, lastError);
   }
 
   public static By getSelector(Object arg) {
@@ -62,10 +62,10 @@ public abstract class WebElementSource {
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(getSearchCriteria(), prefix, message, condition, driver(), element, lastError);
+      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, message, condition, element, lastError);
     }
     else {
-      throw new ElementShould(getSearchCriteria(), prefix, message, condition, driver(), element, lastError);
+      throw new ElementShould(driver(), getSearchCriteria(), prefix, message, condition, element, lastError);
     }
     return null;
   }

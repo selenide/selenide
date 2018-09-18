@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
@@ -33,11 +33,11 @@ public class ErrorMessages {
   }
 
   public static String screenshot(Driver driver) {
-    return screenshot(ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
+    return screenshot(driver.config(), ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
   }
   
-  public static String screenshot(String screenshotPath) {
-    if (!Configuration.screenshots) {
+  public static String screenshot(Config config, String screenshotPath) {
+    if (!config.screenshots()) {
       return "";
     }
 
@@ -45,7 +45,7 @@ public class ErrorMessages {
       return "\nScreenshot: " + screenshotPath;
     }
 
-    if (Configuration.savePageSource && !screenshotPath.endsWith(".html")) {
+    if (config.savePageSource() && !screenshotPath.endsWith(".html")) {
       String htmlFilePath = getHtmlFilePath(screenshotPath);
       return "\nScreenshot: " + screenshotPath + "\nPage source: " + htmlFilePath;
     }
