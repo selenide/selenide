@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
@@ -35,6 +36,8 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(frameToBeAvailableAndSwitchToIt(index));
     } catch (NoSuchElementException | TimeoutException e) {
       throw new NoSuchFrameException("No frame found with index: " + index, e);
+    } catch (InvalidArgumentException e) {
+      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with index: " + index, e) : e;
     }
   }
 
@@ -44,6 +47,8 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
     } catch (NoSuchElementException | TimeoutException e) {
       throw new NoSuchFrameException("No frame found with id/name: " + nameOrId, e);
+    } catch (InvalidArgumentException e) {
+      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with id/name: " + nameOrId, e) : e;
     }
   }
 
@@ -53,7 +58,13 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
     } catch (NoSuchElementException | TimeoutException e) {
       throw new NoSuchFrameException("No frame found with element: " + frameElement, e);
+    } catch (InvalidArgumentException e) {
+      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with element: " + frameElement, e) : e;
     }
+  }
+
+  private boolean isFirefox62Bug(InvalidArgumentException e) {
+    return e.getMessage().contains("untagged enum FrameId");
   }
 
   @Override
