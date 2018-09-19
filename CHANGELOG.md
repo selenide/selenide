@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.14.2
+* Upgrade to Sizzle 2.3.4-pre
+* #804 avoid throwing NPE when `Configuration.reportFolder` is null
+
 ## 4.14.1 (released 06.09.2018)
 * Upgrade to WebDriverManager 3.0.0
 * #794 Removed unused setting `Configuration.dismissModalDialogs`  -- see PR https://github.com/codeborne/selenide/pull/795
