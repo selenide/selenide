@@ -14,6 +14,7 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -284,6 +285,17 @@ class ElementsCollectionTest implements WithAssertions {
     when(source.getElements()).thenReturn(asList(element1, element2));
 
     collection.shouldHave(size(2));
+    verify(collection, never()).sleep(anyLong());
+  }
+
+  @Test
+  void doesNotWait_ifJavascriptExceptionHappened() {
+    WebElementsCollection source = mock(WebElementsCollection.class);
+    ElementsCollection collection = spy(new ElementsCollection(source));
+    when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
+
+    assertThatThrownBy(() -> collection.shouldHave(size(0))).isInstanceOf(JavascriptException.class);
+
     verify(collection, never()).sleep(anyLong());
   }
 

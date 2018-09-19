@@ -16,6 +16,7 @@ import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -139,6 +140,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           return;
         }
       }
+      catch (JavascriptException e) {
+        throw e;
+      }
       catch (WebDriverException elementNotFound) {
         lastError = elementNotFound;
 
@@ -151,6 +155,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     while (System.currentTimeMillis() - startTime < timeoutMs);
     condition.fail(collection, actualElements, lastError, timeoutMs);
   }
+
   void sleep(long ms) {
     Selenide.sleep(ms);
   }

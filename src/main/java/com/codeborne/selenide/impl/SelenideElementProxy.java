@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 
 import java.io.FileNotFoundException;
@@ -125,6 +126,7 @@ class SelenideElementProxy implements InvocationHandler {
     if (e instanceof FileNotFoundException) return false;
     if (e instanceof IllegalArgumentException) return false;
     if (e instanceof ReflectiveOperationException) return false;
+    if (e instanceof JavascriptException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }

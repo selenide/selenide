@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -244,6 +245,12 @@ class SelenideElementProxyTest implements WithAssertions {
   @Test
   void shouldNotRetry_onClassDefLoadingException() {
     assertThat(shouldRetryAfterError(new NoClassDefFoundError("bla")))
+      .isFalse();
+  }
+
+  @Test
+  void shouldNotRetry_onJavaScriptException() {
+    assertThat(shouldRetryAfterError(new JavascriptException("bla")))
       .isFalse();
   }
 
