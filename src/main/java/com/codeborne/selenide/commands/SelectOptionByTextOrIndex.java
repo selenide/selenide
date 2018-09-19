@@ -33,7 +33,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
 
   private void selectOptionsByIndexes(WebElementSource selectField, int[] indexes) {
     Select select = new Select(selectField.getWebElement());
-    for (Integer index : indexes) {
+    for (int index : indexes) {
       try {
         select.selectByIndex(index);
       } catch (NoSuchElementException e) {
