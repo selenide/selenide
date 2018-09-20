@@ -33,7 +33,7 @@ public interface Config {
   boolean fastSetValue();
   boolean versatileSetValue();
   boolean setValueChangeEvent();
-  Configuration.SelectorMode selectorMode();
+  SelectorMode selectorMode();
   Configuration.AssertionMode assertionMode();
   Configuration.FileDownloadMode fileDownload();
   boolean proxyEnabled();

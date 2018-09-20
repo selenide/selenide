@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelectorMode;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 class StaticConfig implements Config {
@@ -91,7 +92,7 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public Configuration.SelectorMode selectorMode() {
+  public SelectorMode selectorMode() {
     return Configuration.selectorMode;
   }
 

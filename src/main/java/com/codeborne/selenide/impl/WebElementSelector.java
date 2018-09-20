@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
+import static com.codeborne.selenide.SelectorMode.CSS;
 import static java.lang.Thread.currentThread;
 
 /**

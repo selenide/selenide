@@ -5,7 +5,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
+import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 
 public class Configuration {
@@ -300,21 +300,6 @@ public class Configuration {
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)
    */
   public static SelectorMode selectorMode = CSS;
-
-  public enum SelectorMode {
-    /**
-     * Default Selenium behavior
-     */
-    CSS,
-
-    /**
-     * Use Sizzle for CSS selectors.
-     * It allows powerful CSS3 selectors - ":input", ":not", ":nth", ":first", ":last", ":contains('text')"
-     *
-     * For other selectors (XPath, ID etc.) uses default Selenium mechanism.
-     */
-    Sizzle
-  }
 
 
   /**

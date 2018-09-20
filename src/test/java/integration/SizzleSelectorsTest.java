@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Configuration.SelectorMode.CSS;
-import static com.codeborne.selenide.Configuration.SelectorMode.Sizzle;
+import static com.codeborne.selenide.SelectorMode.CSS;
+import static com.codeborne.selenide.SelectorMode.Sizzle;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
