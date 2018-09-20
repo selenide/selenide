@@ -17,8 +17,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doReturn;

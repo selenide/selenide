@@ -18,8 +18,8 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;

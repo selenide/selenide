@@ -17,7 +17,7 @@ import org.openqa.selenium.WebDriverException;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {

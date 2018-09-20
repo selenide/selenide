@@ -35,7 +35,7 @@ public interface Config {
   boolean setValueChangeEvent();
   SelectorMode selectorMode();
   AssertionMode assertionMode();
-  Configuration.FileDownloadMode fileDownload();
+  FileDownloadMode fileDownload();
   boolean proxyEnabled();
   String proxyHost();
   int proxyPort();

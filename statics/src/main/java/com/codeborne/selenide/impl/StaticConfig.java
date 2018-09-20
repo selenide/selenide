@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.AssertionMode;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelectorMode;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -103,7 +104,7 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public Configuration.FileDownloadMode fileDownload() {
+  public FileDownloadMode fileDownload() {
     return Configuration.fileDownload;
   }
 

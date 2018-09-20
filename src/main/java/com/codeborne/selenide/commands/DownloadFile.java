@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 
 public class DownloadFile implements Command<File> {
   private static final Logger LOG = Logger.getLogger(DownloadFile.class.getName());

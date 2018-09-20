@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 
@@ -309,22 +309,6 @@ public class Configuration {
    * @see AssertionMode
    */
   public static AssertionMode assertionMode = STRICT;
-
-  public enum FileDownloadMode {
-    /**
-     * Download files via direct http request.
-     * Works only for <a href></a> elements.
-     * Sends GET request to "href" with all cookies from current browser session.
-     */
-    HTTPGET,
-
-    /**
-     * Download files via selenide embedded proxy server.
-     * Works for any elements (e.g. form submission).
-     * Doesn't work if you are using custom webdriver without selenide proxy server.
-     */
-    PROXY
-  }
 
   /**
    * Defines if files are downloaded via direct HTTP or vie selenide emebedded proxy server

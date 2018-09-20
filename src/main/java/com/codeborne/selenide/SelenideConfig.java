@@ -35,7 +35,7 @@ public class SelenideConfig implements Config {
   private boolean setValueChangeEvent = Configuration.setValueChangeEvent;
   private SelectorMode selectorMode = Configuration.selectorMode;
   private AssertionMode assertionMode = Configuration.assertionMode;
-  private Configuration.FileDownloadMode fileDownload = Configuration.fileDownload;
+  private FileDownloadMode fileDownload = Configuration.fileDownload;
   private boolean proxyEnabled = Configuration.proxyEnabled;
   private String proxyHost = Configuration.proxyHost;
   private int proxyPort = Configuration.proxyPort;
@@ -231,11 +231,11 @@ public class SelenideConfig implements Config {
   }
 
   @Override
-  public Configuration.FileDownloadMode fileDownload() {
+  public FileDownloadMode fileDownload() {
     return fileDownload;
   }
 
-  public SelenideConfig fileDownload(Configuration.FileDownloadMode fileDownload) {
+  public SelenideConfig fileDownload(FileDownloadMode fileDownload) {
     this.fileDownload = fileDownload;
     return this;
   }

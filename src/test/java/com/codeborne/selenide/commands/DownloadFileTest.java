@@ -18,8 +18,8 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;

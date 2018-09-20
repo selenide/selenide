@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
-import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +16,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.HTMLUNIT;
-import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
 import static java.lang.Thread.currentThread;
@@ -29,7 +28,6 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
@@ -41,8 +39,6 @@ class WebDriverRunnerTest implements WithAssertions {
     driver = mock(RemoteWebDriver.class, RETURNS_DEEP_STUBS);
     doReturn(mock(Navigation.class)).when(driver).navigate();
 
-//    WebDriverFactory factory = mock(WebDriverFactory.class);
-//    when(factory.createWebDriver(any())).thenReturn(driver);
     WebDriverRunner.webdriverContainer = spy(new WebDriverThreadLocalContainer());
     doReturn(null).when((JavascriptExecutor) driver).executeScript(anyString(), any());
     Configuration.proxyEnabled = false;
