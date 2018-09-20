@@ -35,7 +35,7 @@ public class CreateDriverCommand {
       browserProxy = selenideProxyServer.createSeleniumProxy();
     }
 
-    WebDriver webdriver = factory.createWebDriver(config.browser(), browserProxy);
+    WebDriver webdriver = factory.createWebDriver(config, browserProxy);
 
     log.info("Create webdriver in current thread " + currentThread().getId() + ": " +
       webdriver.getClass().getSimpleName() + " -> " + webdriver);

@@ -37,7 +37,7 @@ class WebElementWrapperTest implements WithAssertions {
 
   @Test
   void toStringPrintsTagNameWithAllAttributes() {
-    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("chrome"));
+    config.browser("chrome");
     when(((JavascriptExecutor) webDriver)
       .executeScript(anyString(), any()))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1 class2", "data-binding", "to-name"));

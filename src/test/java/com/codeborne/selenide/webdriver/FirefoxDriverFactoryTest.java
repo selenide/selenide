@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 class FirefoxDriverFactoryTest implements WithAssertions {
   private Proxy proxy = mock(Proxy.class);
   private FirefoxDriverFactory driverFactory = new FirefoxDriverFactory();
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @AfterEach
   void tearDown() {

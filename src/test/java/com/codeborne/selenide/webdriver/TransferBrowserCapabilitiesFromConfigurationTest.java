@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
   private static final String SOME_CAP = "some.cap";
   private AbstractDriverFactory driverFactory;
   private Proxy proxy = mock(Proxy.class);
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @AfterEach
   void clearConfiguration() {

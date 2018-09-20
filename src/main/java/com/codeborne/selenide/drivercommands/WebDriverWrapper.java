@@ -22,7 +22,7 @@ public class WebDriverWrapper implements Driver {
 
   @Override
   public Browser browser() {
-    return new Browser(config.browser().browser(), config.browser().headless());
+    return new Browser(config.browser(), config.headless());
   }
 
   @Override

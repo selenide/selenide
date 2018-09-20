@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -18,7 +18,7 @@ class BrowserResizerTest {
   private BrowserResizer factory = spy(new BrowserResizer());
   private WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
   private Browser browser = new Browser("firefox", true);
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @Test
   void doesNotChangeWindowSizeByDefault() {

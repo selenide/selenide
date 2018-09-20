@@ -35,7 +35,7 @@ public class LazyDriver implements Driver {
   LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
     this.config = config;
-    this.browser = new Browser(config.browser().browser(), config.browser().headless());
+    this.browser = new Browser(config.browser(), config.headless());
     this.userProvidedProxy = userProvidedProxy;
     this.listeners.addAll(listeners);
     this.factory = factory;

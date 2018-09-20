@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideDriver;
 import org.openqa.selenium.BuildInfo;
 import org.openqa.selenium.Capabilities;
@@ -36,7 +36,7 @@ public class WebDriverFactory {
 
   protected BrowserResizer browserResizer = new BrowserResizer();
 
-  public WebDriver createWebDriver(BrowserConfig config, Proxy proxy) {
+  public WebDriver createWebDriver(Config config, Proxy proxy) {
     log.config("browser=" + config.browser());
     log.config("browser.version=" + config.browserVersion());
     log.config("remote=" + config.remote());
@@ -64,7 +64,7 @@ public class WebDriverFactory {
     return webdriver;
   }
 
-  protected void logSeleniumInfo(BrowserConfig config) {
+  protected void logSeleniumInfo(Config config) {
     if (config.remote() == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info(

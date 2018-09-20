@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
   private Proxy proxy = mock(Proxy.class);
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @Test
   void shouldNotAddChromeHeadlessOptions() {

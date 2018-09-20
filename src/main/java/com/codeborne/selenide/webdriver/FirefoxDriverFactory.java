@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -14,23 +14,23 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(FirefoxDriverFactory.class.getName());
 
   @Override
-  boolean supports(BrowserConfig config, Browser browser) {
+  boolean supports(Config config, Browser browser) {
     return browser.isFirefox();
   }
 
   @Override
-  WebDriver create(BrowserConfig config, Proxy proxy) {
+  WebDriver create(Config config, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
     return createFirefoxDriver(config, proxy);
   }
 
-  private WebDriver createFirefoxDriver(BrowserConfig config, Proxy proxy) {
+  private WebDriver createFirefoxDriver(Config config, Proxy proxy) {
     FirefoxOptions options = createFirefoxOptions(config, proxy);
     return new FirefoxDriver(options);
   }
 
-  FirefoxOptions createFirefoxOptions(BrowserConfig config, Proxy proxy) {
+  FirefoxOptions createFirefoxOptions(Config config, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {

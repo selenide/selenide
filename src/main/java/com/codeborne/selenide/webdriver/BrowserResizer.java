@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 class BrowserResizer {
   private static final Logger log = Logger.getLogger(BrowserResizer.class.getName());
 
-  WebDriver adjustBrowserPosition(BrowserConfig config, WebDriver driver) {
+  WebDriver adjustBrowserPosition(Config config, WebDriver driver) {
     if (config.browserPosition() != null) {
       log.info("Set browser position to " + config.browserPosition());
       String[] coordinates = config.browserPosition().split("x");
@@ -27,7 +27,7 @@ class BrowserResizer {
     return driver;
   }
 
-  WebDriver adjustBrowserSize(BrowserConfig config, Browser browser, WebDriver driver) {
+  WebDriver adjustBrowserSize(Config config, Browser browser, WebDriver driver) {
     if (config.browserSize() != null) {
       log.info("Set browser size to " + config.browserSize());
       String[] dimension = config.browserSize().split("x");

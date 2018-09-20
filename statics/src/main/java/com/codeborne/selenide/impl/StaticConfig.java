@@ -11,11 +11,6 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public BrowserConfig browser() {
-    return new StaticBrowserConfig();
-  }
-
-  @Override
   public long timeout() {
     return Configuration.timeout;
   }
@@ -125,65 +120,63 @@ class StaticConfig implements Config {
     return Configuration.proxyPort;
   }
 
-  private class StaticBrowserConfig implements BrowserConfig {
-    @Override
-    public String browser() {
-      return Configuration.browser;
-    }
+  @Override
+  public String browser() {
+    return Configuration.browser;
+  }
 
-    @Override
-    public boolean headless() {
-      return Configuration.headless;
-    }
+  @Override
+  public boolean headless() {
+    return Configuration.headless;
+  }
 
-    @Override
-    public String remote() {
-      return Configuration.remote;
-    }
+  @Override
+  public String remote() {
+    return Configuration.remote;
+  }
 
-    @Override
-    public String browserSize() {
-      return Configuration.browserSize;
-    }
+  @Override
+  public String browserSize() {
+    return Configuration.browserSize;
+  }
 
-    @Override
-    public String browserVersion() {
-      return Configuration.browserVersion;
-    }
+  @Override
+  public String browserVersion() {
+    return Configuration.browserVersion;
+  }
 
-    @Override
-    public String browserPosition() {
-      return Configuration.browserPosition;
-    }
+  @Override
+  public String browserPosition() {
+    return Configuration.browserPosition;
+  }
 
-    @Override
-    public boolean startMaximized() {
-      return Configuration.startMaximized;
-    }
+  @Override
+  public boolean startMaximized() {
+    return Configuration.startMaximized;
+  }
 
-    @Override
-    public boolean driverManagerEnabled() {
-      return Configuration.driverManagerEnabled;
-    }
+  @Override
+  public boolean driverManagerEnabled() {
+    return Configuration.driverManagerEnabled;
+  }
 
-    @Override
-    public String browserBinary() {
-      return Configuration.browserBinary;
-    }
+  @Override
+  public String browserBinary() {
+    return Configuration.browserBinary;
+  }
 
-    @Override
-    public String chromeSwitches() {
-      return Configuration.chromeSwitches;
-    }
+  @Override
+  public String chromeSwitches() {
+    return Configuration.chromeSwitches;
+  }
 
-    @Override
-    public String pageLoadStrategy() {
-      return Configuration.pageLoadStrategy;
-    }
+  @Override
+  public String pageLoadStrategy() {
+    return Configuration.pageLoadStrategy;
+  }
 
-    @Override
-    public DesiredCapabilities browserCapabilities() {
-      return Configuration.browserCapabilities;
-    }
+  @Override
+  public DesiredCapabilities browserCapabilities() {
+    return Configuration.browserCapabilities;
   }
 }

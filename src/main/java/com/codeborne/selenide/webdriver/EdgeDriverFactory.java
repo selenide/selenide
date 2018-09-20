@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -14,16 +14,16 @@ class EdgeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(EdgeDriverFactory.class.getName());
 
   @Override
-  WebDriver create(BrowserConfig config, Proxy proxy) {
+  WebDriver create(Config config, Proxy proxy) {
     return createEdgeDriver(config, proxy);
   }
 
   @Override
-  boolean supports(BrowserConfig config, Browser browser) {
+  boolean supports(Config config, Browser browser) {
     return browser.isEdge();
   }
 
-  private WebDriver createEdgeDriver(BrowserConfig config, Proxy proxy) {
+  private WebDriver createEdgeDriver(Config config, Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);

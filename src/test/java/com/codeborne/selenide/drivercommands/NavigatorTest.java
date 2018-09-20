@@ -100,7 +100,7 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withoutAuthentication_resetsPreviousAuthentication() {
-    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.browser("opera");
     config.proxyEnabled(true);
 
     navigator.open(selenideDriver, "https://some.com/login");
@@ -111,7 +111,7 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withBasicAuth_noProxy() {
-    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.browser("opera");
     config.proxyEnabled(false);
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");
@@ -121,7 +121,7 @@ class NavigatorTest implements WithAssertions {
 
   @Test
   void open_withBasicAuth_withProxy() {
-    config.browser(new SelenideConfig.SelenideBrowserConfig().browser("opera"));
+    config.browser("opera");
     config.proxyEnabled(true);
 
     navigator.open(selenideDriver, "https://some.com/login", "", "basic-auth-login", "basic-auth-password");

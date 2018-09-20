@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -14,16 +14,16 @@ class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(InternetExplorerDriverFactory.class.getName());
 
   @Override
-  boolean supports(BrowserConfig config, Browser browser) {
+  boolean supports(Config config, Browser browser) {
     return browser.isIE();
   }
 
   @Override
-  WebDriver create(BrowserConfig config, Proxy proxy) {
+  WebDriver create(Config config, Proxy proxy) {
     return createInternetExplorerDriver(config, proxy);
   }
 
-  private WebDriver createInternetExplorerDriver(BrowserConfig config, Proxy proxy) {
+  private WebDriver createInternetExplorerDriver(Config config, Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {

@@ -5,7 +5,19 @@ import com.codeborne.selenide.Configuration.SelectorMode;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class SelenideConfig implements Config {
-  private BrowserConfig browserConfig = new SelenideBrowserConfig();
+  private String browser;
+  private boolean headless;
+  private String remote;
+  private String browserSize;
+  private String browserVersion;
+  private String browserPosition;
+  private boolean startMaximized = false;
+  private boolean driverManagerEnabled = true;
+  private String browserBinary = "";
+  private String chromeSwitches;
+  private String pageLoadStrategy = "normal";
+  private DesiredCapabilities browserCapabilities;
+
   private String baseUrl = Configuration.baseUrl;
   private long timeout = Configuration.timeout;
   private long collectionsTimeout = Configuration.collectionsTimeout;
@@ -37,16 +49,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig baseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
-    return this;
-  }
-
-  @Override
-  public BrowserConfig browser() {
-    return browserConfig;
-  }
-
-  public SelenideConfig browser(BrowserConfig browserConfig) {
-    this.browserConfig = browserConfig;
     return this;
   }
 
@@ -270,138 +272,123 @@ public class SelenideConfig implements Config {
     return this;
   }
 
-  public static class SelenideBrowserConfig implements BrowserConfig {
-    private String browser;
-    private boolean headless;
-    private String remote;
-    private String browserSize;
-    private String browserVersion;
-    private String browserPosition;
-    private boolean startMaximized = false;
-    private boolean driverManagerEnabled = true;
-    private String browserBinary = "";
-    private String chromeSwitches;
-    private String pageLoadStrategy = "normal";
-    private DesiredCapabilities browserCapabilities;
+  @Override
+  public String browser() {
+    return browser;
+  }
 
-    @Override
-    public String browser() {
-      return browser;
-    }
+  public SelenideConfig browser(String browser) {
+    this.browser = browser;
+    return this;
+  }
 
-    public SelenideBrowserConfig browser(String browser) {
-      this.browser = browser;
-      return this;
-    }
+  @Override
+  public boolean headless() {
+    return headless;
+  }
 
-    @Override
-    public boolean headless() {
-      return headless;
-    }
+  public SelenideConfig headless(boolean headless) {
+    this.headless = headless;
+    return this;
+  }
 
-    public SelenideBrowserConfig headless(boolean headless) {
-      this.headless = headless;
-      return this;
-    }
+  @Override
+  public String remote() {
+    return remote;
+  }
 
-    @Override
-    public String remote() {
-      return remote;
-    }
+  public SelenideConfig remote(String remote) {
+    this.remote = remote;
+    return this;
+  }
 
-    public SelenideBrowserConfig remote(String remote) {
-      this.remote = remote;
-      return this;
-    }
+  @Override
+  public String browserSize() {
+    return browserSize;
+  }
 
-    @Override
-    public String browserSize() {
-      return browserSize;
-    }
+  public SelenideConfig browserSize(String browserSize) {
+    this.browserSize = browserSize;
+    return this;
+  }
 
-    public SelenideBrowserConfig browserSize(String browserSize) {
-      this.browserSize = browserSize;
-      return this;
-    }
+  @Override
+  public String browserVersion() {
+    return browserVersion;
+  }
 
-    @Override
-    public String browserVersion() {
-      return browserVersion;
-    }
+  public SelenideConfig browserVersion(String browserVersion) {
+    this.browserVersion = browserVersion;
+    return this;
+  }
 
-    public SelenideBrowserConfig browserVersion(String browserVersion) {
-      this.browserVersion = browserVersion;
-      return this;
-    }
+  @Override
+  public String browserPosition() {
+    return browserPosition;
+  }
 
-    @Override
-    public String browserPosition() {
-      return browserPosition;
-    }
+  public SelenideConfig browserPosition(String browserPosition) {
+    this.browserPosition = browserPosition;
+    return this;
+  }
 
-    public SelenideBrowserConfig browserPosition(String browserPosition) {
-      this.browserPosition = browserPosition;
-      return this;
-    }
+  @Override
+  public boolean startMaximized() {
+    return startMaximized;
+  }
 
-    @Override
-    public boolean startMaximized() {
-      return startMaximized;
-    }
+  public SelenideConfig startMaximized(boolean startMaximized) {
+    this.startMaximized = startMaximized;
+    return this;
+  }
 
-    public SelenideBrowserConfig startMaximized(boolean startMaximized) {
-      this.startMaximized = startMaximized;
-      return this;
-    }
+  @Override
+  public boolean driverManagerEnabled() {
+    return driverManagerEnabled;
+  }
 
-    @Override
-    public boolean driverManagerEnabled() {
-      return driverManagerEnabled;
-    }
+  public SelenideConfig driverManagerEnabled(boolean driverManagerEnabled) {
+    this.driverManagerEnabled = driverManagerEnabled;
+    return this;
+  }
 
-    public SelenideBrowserConfig driverManagerEnabled(boolean driverManagerEnabled) {
-      this.driverManagerEnabled = driverManagerEnabled;
-      return this;
-    }
+  @Override
+  public String browserBinary() {
+    return browserBinary;
+  }
 
-    @Override
-    public String browserBinary() {
-      return browserBinary;
-    }
+  public SelenideConfig browserBinary(String browserBinary) {
+    this.browserBinary = browserBinary;
+    return this;
+  }
 
-    public SelenideBrowserConfig browserBinary(String browserBinary) {
-      this.browserBinary = browserBinary;
-      return this;
-    }
+  @Override
+  public String chromeSwitches() {
+    return chromeSwitches;
+  }
 
-    @Override
-    public String chromeSwitches() {
-      return chromeSwitches;
-    }
+  public SelenideConfig chromeSwitches(String chromeSwitches) {
+    this.chromeSwitches = chromeSwitches;
+    return this;
+  }
 
-    public SelenideBrowserConfig chromeSwitches(String chromeSwitches) {
-      this.chromeSwitches = chromeSwitches;
-      return this;
-    }
+  @Override
+  public String pageLoadStrategy() {
+    return pageLoadStrategy;
+  }
 
-    @Override
-    public String pageLoadStrategy() {
-      return pageLoadStrategy;
-    }
+  public SelenideConfig pageLoadStrategy(String pageLoadStrategy) {
+    this.pageLoadStrategy = pageLoadStrategy;
+    return this;
+  }
 
-    public SelenideBrowserConfig pageLoadStrategy(String pageLoadStrategy) {
-      this.pageLoadStrategy = pageLoadStrategy;
-      return this;
-    }
+  @Override
+  public DesiredCapabilities browserCapabilities() {
+    return browserCapabilities;
+  }
 
-    @Override
-    public DesiredCapabilities browserCapabilities() {
-      return browserCapabilities;
-    }
-
-    public SelenideBrowserConfig browserCapabilities(DesiredCapabilities browserCapabilities) {
-      this.browserCapabilities = browserCapabilities;
-      return this;
-    }
+  public SelenideConfig browserCapabilities(DesiredCapabilities browserCapabilities) {
+    this.browserCapabilities = browserCapabilities;
+    return this;
   }
 }

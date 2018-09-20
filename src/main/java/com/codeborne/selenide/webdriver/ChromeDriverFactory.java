@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -18,17 +18,17 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
 
   @Override
-  WebDriver create(BrowserConfig config, Proxy proxy) {
+  WebDriver create(Config config, Proxy proxy) {
     ChromeOptions options = createChromeOptions(config, proxy);
     return new ChromeDriver(options);
   }
 
   @Override
-  boolean supports(BrowserConfig config, Browser browser) {
+  boolean supports(Config config, Browser browser) {
     return browser.isChrome();
   }
 
-  ChromeOptions createChromeOptions(BrowserConfig config, Proxy proxy) {
+  ChromeOptions createChromeOptions(Config config, Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {

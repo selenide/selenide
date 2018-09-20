@@ -1,6 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +21,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   private final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
   private Proxy proxy = mock(Proxy.class);
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @AfterEach
   void tearDown() {

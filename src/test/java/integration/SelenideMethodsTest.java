@@ -371,7 +371,7 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void userCanGetPageTitle() {
     assertThat(title())
-      .isEqualTo("Test page :: with selects, but withour JQuery");
+      .isEqualTo("Test page :: with selects, but without JQuery");
   }
 
   @Test

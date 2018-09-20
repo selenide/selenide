@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Config.BrowserConfig;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -22,11 +22,11 @@ abstract class AbstractDriverFactory {
 
   private static final Logger log = Logger.getLogger(AbstractDriverFactory.class.getName());
 
-  abstract boolean supports(BrowserConfig config, Browser browser);
+  abstract boolean supports(Config config, Browser browser);
 
-  abstract WebDriver create(BrowserConfig config, Proxy proxy);
+  abstract WebDriver create(Config config, Proxy proxy);
 
-  WebDriver createInstanceOf(String className, BrowserConfig config, Proxy proxy) {
+  WebDriver createInstanceOf(String className, Config config, Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
       capabilities.setJavascriptEnabled(true);
@@ -57,7 +57,7 @@ abstract class AbstractDriverFactory {
     return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
   }
 
-  DesiredCapabilities createCommonCapabilities(BrowserConfig config, Proxy proxy) {
+  DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
@@ -73,7 +73,7 @@ abstract class AbstractDriverFactory {
     return browserCapabilities;
   }
 
-  DesiredCapabilities mergeCapabilitiesFromConfiguration(BrowserConfig config, DesiredCapabilities currentCapabilities) {
+  DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
     return currentCapabilities.merge(config.browserCapabilities());
   }
 

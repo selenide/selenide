@@ -1,7 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.SelenideConfig.SelenideBrowserConfig;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 class RemoteDriverFactoryTest implements WithAssertions {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
-  private SelenideBrowserConfig config = new SelenideBrowserConfig();
+  private SelenideConfig config = new SelenideConfig();
 
   @Test
   void getBrowserNameForGrid_legacy_firefox() {
