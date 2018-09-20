@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
+import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;

@@ -7,8 +7,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 
-import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
-import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
+import static com.codeborne.selenide.AssertionMode.SOFT;
+import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Selenide.open;
 
 @Listeners(SoftAsserts.class)

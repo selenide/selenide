@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.AssertionMode;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelectorMode;
@@ -97,7 +98,7 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public Configuration.AssertionMode assertionMode() {
+  public AssertionMode assertionMode() {
     return Configuration.assertionMode;
   }
 

@@ -6,7 +6,7 @@ import com.codeborne.selenide.ex.SoftAssertionError;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
+import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {

@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.Configuration.AssertionMode;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class SelenideConfig implements Config {

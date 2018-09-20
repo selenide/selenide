@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 import java.util.logging.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Configuration.AssertionMode.STRICT;
+import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Configuration.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -301,20 +301,6 @@ public class Configuration {
    */
   public static SelectorMode selectorMode = CSS;
 
-
-  /**
-   * Assertion modes available
-   */
-  public enum AssertionMode {
-    /**
-     * Default mode - tests are failing immediately
-     */
-    STRICT,
-    /**
-     * Test are failing only at the end of the methods.
-     */
-    SOFT
-  }
 
   /**
    * Assertion mode - STRICT or SOFT Asserts
