@@ -25,8 +25,8 @@ public class SelenideDriverITest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     close();
-    browser1 = new SelenideDriver(new SelenideConfig().browser("chrome"));
-    browser2 = new SelenideDriver(new SelenideConfig().browser("firefox"));
+    browser1 = new SelenideDriver(new SelenideConfig().browser("chrome").baseUrl(getBaseUrl()));
+    browser2 = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()));
   }
 
   @AfterEach

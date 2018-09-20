@@ -93,7 +93,7 @@ public abstract class IntegrationTest implements WithAssertions {
 
   private void resetSettings() {
     Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
-    Configuration.baseUrl = protocol + "127.0.0.1:" + port;
+    Configuration.baseUrl = getBaseUrl();
     Configuration.reportsFolder = "build/reports/tests/" + Configuration.browser;
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     fastSetValue = false;
@@ -103,6 +103,10 @@ public abstract class IntegrationTest implements WithAssertions {
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     toggleProxy(!isPhantomjs());
+  }
+
+  protected String getBaseUrl() {
+    return protocol + "127.0.0.1:" + port;
   }
 
   private void restartReallyUnstableBrowsers() {

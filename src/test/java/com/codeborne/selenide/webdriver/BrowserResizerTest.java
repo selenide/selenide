@@ -21,8 +21,11 @@ class BrowserResizerTest {
   private SelenideConfig config = new SelenideConfig();
 
   @Test
-  void doesNotChangeWindowSizeByDefault() {
+  void doesNotChangeWindowSize_ifStartMaximizedIsFalse() {
+    config.startMaximized(false);
+
     factory.adjustBrowserSize(config, browser, webdriver);
+
     verifyNoMoreInteractions(webdriver);
   }
 
