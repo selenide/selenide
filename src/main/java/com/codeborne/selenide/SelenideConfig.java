@@ -1,44 +1,56 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.JenkinsReportUrl;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.codeborne.selenide.AssertionMode.STRICT;
+import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.SelectorMode.CSS;
+
 public class SelenideConfig implements Config {
-  private String browser;
-  private boolean headless;
-  private String remote;
-  private String browserSize;
-  private String browserVersion;
-  private String browserPosition;
-  private boolean startMaximized = false;
-  private boolean driverManagerEnabled = true;
-  private String browserBinary = "";
-  private String chromeSwitches;
-  private String pageLoadStrategy = "normal";
+  private String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
+  private boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
+  private String remote = System.getProperty("selenide.remote", System.getProperty("remote"));
+  private String browserSize = System.getProperty("selenide.browserSize", System.getProperty("selenide.browser-size"));
+  private String browserVersion = System.getProperty("selenide.browserVersion",
+    System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
+  private String browserPosition = System.getProperty("selenide.browserPosition");
+  private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized",
+    System.getProperty("selenide.start-maximized", "true")));
+  private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
+  private String browserBinary = System.getProperty("selenide.browserBinary", "");
+  private String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
+  private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
+    System.getProperty("selenide.page-load-strategy", "normal"));
   private DesiredCapabilities browserCapabilities;
 
-  private String baseUrl = Configuration.baseUrl;
-  private long timeout = Configuration.timeout;
-  private long collectionsTimeout = Configuration.collectionsTimeout;
-  private long pollingInterval = Configuration.pollingInterval;
-  private long collectionsPollingInterval = Configuration.collectionsPollingInterval;
-  private boolean holdBrowserOpen = Configuration.holdBrowserOpen;
-  private boolean reopenBrowserOnFail = Configuration.reopenBrowserOnFail;
-  private long closeBrowserTimeoutMs = Configuration.closeBrowserTimeoutMs;
-  private boolean clickViaJs = Configuration.clickViaJs;
-  private boolean captureJavascriptErrors = Configuration.captureJavascriptErrors;
-  private boolean screenshots = Configuration.screenshots;
-  private boolean savePageSource = Configuration.savePageSource;
-  private String reportsFolder = Configuration.reportsFolder;
-  private String reportsUrl = Configuration.reportsUrl;
-  private boolean fastSetValue = Configuration.fastSetValue;
-  private boolean versatileSetValue = Configuration.versatileSetValue;
-  private boolean setValueChangeEvent = Configuration.setValueChangeEvent;
-  private SelectorMode selectorMode = Configuration.selectorMode;
-  private AssertionMode assertionMode = Configuration.assertionMode;
-  private FileDownloadMode fileDownload = Configuration.fileDownload;
-  private boolean proxyEnabled = Configuration.proxyEnabled;
-  private String proxyHost = Configuration.proxyHost;
-  private int proxyPort = Configuration.proxyPort;
+  private String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
+  private long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
+  private long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectionsTimeout", "6000"));
+  private long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
+  private long collectionsPollingInterval = Long.parseLong(System.getProperty("selenide.collectionsPollingInterval", "200"));
+  private boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
+  private boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
+  private long closeBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.closeBrowserTimeout", "5000"));
+  private boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs",
+    System.getProperty("selenide.click-via-js", "false")));
+  private boolean captureJavascriptErrors = Boolean.parseBoolean(System.getProperty("selenide.captureJavascriptErrors", "true"));
+  private boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
+
+  private boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
+  private String reportsFolder = System.getProperty("selenide.reportsFolder",
+    System.getProperty("selenide.reports", "build/reports/tests"));
+  private String reportsUrl = new JenkinsReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
+  private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
+  private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
+  private boolean setValueChangeEvent = Boolean.parseBoolean(System.getProperty("selenide.setValueChangeEvent", "true"));
+  private SelectorMode selectorMode = CSS;
+  private AssertionMode assertionMode = STRICT;
+  private FileDownloadMode fileDownload = FileDownloadMode.valueOf(System.getProperty("selenide.fileDownload", HTTPGET.name()));
+  private boolean proxyEnabled = Boolean.parseBoolean(System.getProperty("selenide.proxyEnabled", "false"));
+  private String proxyHost = System.getProperty("selenide.proxyHost", "");
+  private int proxyPort = Integer.parseInt(System.getProperty("selenide.proxyPort", "0"));
 
   @Override
   public String baseUrl() {
