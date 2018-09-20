@@ -136,9 +136,9 @@ class NavigatorTest implements WithAssertions {
     config.proxyEnabled(false);
     config.fileDownload(PROXY);
 
-    navigator.open(selenideDriver, "https://some.com/login");
-
-    assertThat(Configuration.proxyEnabled).isTrue();
+    assertThatThrownBy(() -> navigator.open(selenideDriver, "https://some.com/login"))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessage("config.proxyEnabled == false but config.fileDownload == PROXY. You need to enable proxy server automatically.");
   }
 
   @AfterEach

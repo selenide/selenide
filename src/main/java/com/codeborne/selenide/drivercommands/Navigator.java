@@ -2,7 +2,6 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Config;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
@@ -57,7 +56,7 @@ public class Navigator {
 
   private void navigateTo(SelenideDriver driver, String url,
                           AuthenticationType authenticationType, String domain, String login, String password) {
-    forceProxyIfNeeded(driver.config());
+    checkThatProxyIsEnabled(driver.config());
 
     url = absoluteUrl(driver.config(), url);
     url = appendBasicAuthIfNeeded(driver.config(), url, authenticationType, domain, login, password);
@@ -82,11 +81,10 @@ public class Navigator {
     }
   }
 
-  private void forceProxyIfNeeded(Config config) {
+  private void checkThatProxyIsEnabled(Config config) {
     if (!config.proxyEnabled() && config.fileDownload() == PROXY) {
-      log.warning("config.proxyEnabled == false but config.fileDownload == PROXY. " +
-        "We will enable proxy server automatically.");
-      Configuration.proxyEnabled = true;
+      throw new IllegalStateException("config.proxyEnabled == false but config.fileDownload == PROXY. " +
+        "You need to enable proxy server automatically.");
     }
   }
 
