@@ -15,7 +15,8 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class SelenideDriverITest extends IntegrationTest {
@@ -24,6 +25,7 @@ public class SelenideDriverITest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
+    assumeThat(isFirefox() || isChrome()).isTrue();
     close();
     browser1 = new SelenideDriver(new SelenideConfig().browser("chrome").baseUrl(getBaseUrl()));
     browser2 = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()));
@@ -50,8 +52,6 @@ public class SelenideDriverITest extends IntegrationTest {
 
   @Test
   void canDownloadFilesInDifferentBrowsersViaDifferentProxies() throws FileNotFoundException {
-    assumeThat(isPhantomjs()).isFalse();
-
     browser1.open("/page_with_uploads.html?browser=" + browser1.config().browser());
     browser2.open("/page_with_uploads.html?browser=" + browser2.config().browser());
     assertThat(hasWebDriverStarted()).isFalse();
