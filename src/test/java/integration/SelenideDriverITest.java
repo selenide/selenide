@@ -33,6 +33,7 @@ public class SelenideDriverITest extends IntegrationTest {
 
   @AfterEach
   void tearDown() {
+    assumeThat(isFirefox() || isChrome()).isTrue();
     browser1.close();
     browser2.close();
   }

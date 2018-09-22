@@ -12,6 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.assertNoJavascriptErrors;
 import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 import static com.codeborne.selenide.Selenide.getWebDriverLogs;
+import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
@@ -26,7 +27,9 @@ class BrowserLogsTest extends IntegrationTest {
     // Firefox says `UnsupportedCommandException: POST /session/b493bc56.../log did not match a known command`
     assumeFalse(isFirefox());
 
-    getWebDriverLogs(BROWSER); // clear logs
+    if (hasWebDriverStarted()) {
+      getWebDriverLogs(BROWSER); // clear logs
+    }
     openFile("page_with_js_errors.html");
   }
 
