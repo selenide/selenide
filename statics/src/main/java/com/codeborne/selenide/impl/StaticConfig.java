@@ -7,6 +7,14 @@ import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelectorMode;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+/**
+ * A non-static facade for static fields in {@link com.codeborne.selenide.Configuration}
+ *
+ * It was created only to keep backward compatibility in Selenide 5.0.0: every time when somebody modifies, say,
+ * {@link com.codeborne.selenide.Configuration#timeout}, it will immediately reflect in {@link StaticConfig#timeout()}
+ *
+ * This class should not be normally used in end user's code.
+ */
 class StaticConfig implements Config {
   @Override
   public String baseUrl() {

@@ -10,6 +10,9 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 
+/**
+ * A static facade for accessing WebDriver instance for current threads
+ */
 public class WebDriverRunner implements Browsers {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
 

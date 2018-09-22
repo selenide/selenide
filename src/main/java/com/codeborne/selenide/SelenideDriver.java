@@ -24,6 +24,9 @@ import java.util.List;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 
+/**
+ * "Selenide driver" is a container for WebDriver + proxy server + settings
+ */
 public class SelenideDriver {
   private final Navigator navigator = new Navigator();
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();

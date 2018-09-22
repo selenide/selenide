@@ -2,6 +2,14 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+/**
+ * Settings for all Selenide functionality
+ *
+ * This class is designed so that every setting can be set either via system property or programmatically.
+ *
+ * Please note that all fields are static, meaning that
+ * every change will immediately reflect in all threads (if you run tests in parallel).
+ */
 public class Configuration {
   private static SelenideConfig defaults = new SelenideConfig();
 
