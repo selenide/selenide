@@ -1,6 +1,7 @@
 # Changelog
 
-## 4.14.2
+## 4.14.2 (released 22.09.2018)
+* Upgrade to htmlunit 2.33
 * Upgrade to Sizzle 2.3.4-pre
 * #804 avoid throwing NPE when `Configuration.reportFolder` is null
 
