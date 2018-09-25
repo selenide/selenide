@@ -4,25 +4,22 @@ import com.codeborne.selenide.impl.JenkinsReportUrl;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
-import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 
 public class SelenideConfig implements Config {
-  private String browser = System.getProperty("selenide.browser", System.getProperty("browser", FIREFOX));
+  private String browser = System.getProperty("selenide.browser", System.getProperty("browser", CHROME));
   private boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
   private String remote = System.getProperty("selenide.remote", System.getProperty("remote"));
-  private String browserSize = System.getProperty("selenide.browserSize", System.getProperty("selenide.browser-size"));
-  private String browserVersion = System.getProperty("selenide.browserVersion",
-    System.getProperty("selenide.browser.version", System.getProperty("browser.version")));
-  private String browserPosition = System.getProperty("selenide.browserPosition");
-  private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized",
-    System.getProperty("selenide.start-maximized", "true")));
+  private String browserSize = System.getProperty("selenide.browserSize", "1024x768");
+  private String browserVersion = System.getProperty("selenide.browserVersion");
+  private String browserPosition = System.getProperty("selenide.browserPosition", "30x30");
+  private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
   private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
-  private String chromeSwitches = System.getProperty("selenide.chrome.switches", System.getProperty("chrome.switches"));
-  private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy",
-    System.getProperty("selenide.page-load-strategy", "normal"));
+  private String chromeSwitches = System.getProperty("selenide.chromeSwitches");
+  private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy", "normal");
   private DesiredCapabilities browserCapabilities;
 
   private String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
@@ -33,14 +30,12 @@ public class SelenideConfig implements Config {
   private boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
   private long closeBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.closeBrowserTimeout", "5000"));
-  private boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs",
-    System.getProperty("selenide.click-via-js", "false")));
+  private boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs", "false"));
   private boolean captureJavascriptErrors = Boolean.parseBoolean(System.getProperty("selenide.captureJavascriptErrors", "true"));
   private boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   private boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
-  private String reportsFolder = System.getProperty("selenide.reportsFolder",
-    System.getProperty("selenide.reports", "build/reports/tests"));
+  private String reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
   private String reportsUrl = new JenkinsReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
   private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
