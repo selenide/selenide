@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
 
-class DynamicSelectsTest extends IntegrationTest {
+class DynamicSelectsTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_dynamic_select.html");

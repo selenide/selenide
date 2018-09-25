@@ -1,19 +1,18 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Driver;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static java.util.Arrays.asList;
 
 public class Events {
   public static Events events = new Events();
 
   Logger log = Logger.getLogger(Events.class.getName());
-  final String jsCodeToTriggerEvent =
+  private final String jsCodeToTriggerEvent =
       "var webElement = arguments[0];\n" +
           "var eventNames = arguments[1];\n" +
           "for (var i = 0; i < eventNames.length; i++) {" +
@@ -28,18 +27,18 @@ public class Events {
           "  }\n" +
           '}';
 
-  public void fireChangeEvent(WebElement element) {
-    if (supportsJavascript()) {
-      fireEvent(element, "change");
+  public void fireChangeEvent(Driver driver, WebElement element) {
+    if (driver.supportsJavascript()) {
+      fireEvent(driver, element, "change");
     }
     else {
       log.fine("Cannot trigger change event: browser does not support javascript");
     }
   }
 
-  public void fireEvent(WebElement element, final String... event) {
+  public void fireEvent(Driver driver, WebElement element, final String... event) {
     try {
-      executeJavaScript(element, event);
+      executeJavaScript(driver, element, event);
     }
     catch (StaleElementReferenceException ignore) {
     }
@@ -48,7 +47,7 @@ public class Events {
     }
   }
 
-  void executeJavaScript(WebElement element, String... event) {
-    Selenide.executeJavaScript(jsCodeToTriggerEvent, element, event);
+  void executeJavaScript(Driver driver, WebElement element, String... event) {
+    driver.executeJavaScript(jsCodeToTriggerEvent, element, event);
   }
 }

@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -11,15 +11,13 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
-
 public class Describe {
-  private WebElement element;
-  private StringBuilder sb = new StringBuilder();
+  private final Driver driver;
+  private final WebElement element;
+  private final StringBuilder sb = new StringBuilder();
 
-  private Describe(WebElement element) {
+  private Describe(Driver driver, WebElement element) {
+    this.driver = driver;
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
@@ -36,7 +34,7 @@ public class Describe {
   }
 
   private Describe appendAllAttributes() {
-    Map<String, String> map = executeJavaScript(
+    Map<String, String> map = driver.executeJavaScript(
         "var s = {};" +
             "var attrs = arguments[0].attributes;" +
             "for (var i = 0; i < attrs.length; i++) {" +
@@ -69,7 +67,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return supportsJavascript() && !isHtmlUnit();
+    return driver.supportsJavascript() && !driver.browser().isHtmlUnit();
   }
 
   private Describe attr(String attributeName) {
@@ -99,12 +97,12 @@ public class Describe {
     return sb.append('>').toString();
   }
 
-  public static String describe(WebElement element) {
+  public static String describe(Driver driver, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
-      return new Describe(element)
+      return new Describe(driver, element)
           .appendAttributes()
           .isSelected(element)
           .isDisplayed(element)
@@ -117,15 +115,15 @@ public class Describe {
     }
   }
 
-  static String shortly(WebElement element) {
+  static String shortly(Driver driver, WebElement element) {
     try {
       if (element == null) {
         return "null";
       }
       if (element instanceof SelenideElement) {
-        return shortly(((SelenideElement) element).toWebElement());
+        return shortly(driver, ((SelenideElement) element).toWebElement());
       }
-      return new Describe(element).attr("id").attr("name").flush();
+      return new Describe(driver, element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
     }
@@ -171,9 +169,5 @@ public class Describe {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
-  }
-
-  public static String describe(WebDriver webDriver) {
-    return webDriver.getClass().getSimpleName();
   }
 }

@@ -10,6 +10,6 @@ import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 public class GetSelectedOption implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource selectElement, Object[] args) {
-    return wrap(new Select(selectElement.getWebElement()).getFirstSelectedOption());
+    return wrap(selectElement.driver(), new Select(selectElement.getWebElement()).getFirstSelectedOption());
   }
 }

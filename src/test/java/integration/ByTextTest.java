@@ -4,15 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-class ByTextTest extends IntegrationTest {
+class ByTextTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -42,9 +42,9 @@ class ByTextTest extends IntegrationTest {
 
   @Test
   void canFindElementByTextInsideParentElement() {
-    assertThat($$($("#multirowTable"), byText("Chack")))
+    assertThat($("#multirowTable").findAll(byText("Chack")))
       .hasSize(2);
-    assertThat($$($("#multirowTable tr"), byText("Chack")))
+    assertThat($("#multirowTable tr").findAll(byText("Chack")))
       .hasSize(1);
     assertThat($("#multirowTable tr").find(byText("Chack")).getAttribute("class"))
       .isEqualTo("first_row");
@@ -59,12 +59,9 @@ class ByTextTest extends IntegrationTest {
 
   @Test
   void canFindElementContainingTextInsideParentElement() {
-    assertThat($$($("#multirowTable"), withText("Cha")))
-      .hasSize(2);
-    assertThat($$($("#multirowTable tr"), withText("ack")))
-      .hasSize(1);
-    assertThat($("#multirowTable tr", 1).find(withText("hac")).getAttribute("class"))
-      .isEqualTo("second_row");
+    $("#multirowTable").findAll(withText("Cha")).shouldHave(size(2));
+    $("#multirowTable tr").findAll(withText("ack")).shouldHave(size(1));
+    $("#multirowTable tr", 1).find(withText("hac")).shouldHave(cssClass("second_row"));
   }
 
   @Test

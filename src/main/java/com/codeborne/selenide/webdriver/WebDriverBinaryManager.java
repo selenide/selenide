@@ -1,23 +1,18 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isOpera;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class WebDriverBinaryManager {
-  public void setupBinaryPath() {
-    if (isChrome()) setupChrome();
-    if (isEdge()) setupEdge();
-    if (isIE()) setupIE();
-    if (isOpera()) setupOpera();
-    if (isPhantomjs()) setupPhantomjs();
-    if (isFirefox()) setupFirefox();
+  public void setupBinaryPath(Browser browser) {
+    if (browser.isChrome()) setupChrome();
+    if (browser.isEdge()) setupEdge();
+    if (browser.isIE()) setupIE();
+    if (browser.isOpera()) setupOpera();
+    if (browser.isPhantomjs()) setupPhantomjs();
+    if (browser.isFirefox()) setupFirefox();
   }
 
   private void setupChrome() {

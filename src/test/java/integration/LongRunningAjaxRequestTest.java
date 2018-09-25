@@ -8,15 +8,12 @@ import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 
-class LongRunningAjaxRequestTest extends IntegrationTest {
+class LongRunningAjaxRequestTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("long_ajax_request.html");
-    timeout = averageSeleniumCommandDuration * 30;
     $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
   }
@@ -40,10 +37,8 @@ class LongRunningAjaxRequestTest extends IntegrationTest {
 
   @Test
   void userCanWaitUntilConditionIsMet() {
-    timeout = 10;
     $(byText("Result 2")).waitUntil(visible, 3000);
-    assertThat($(byText("Result 2")).isDisplayed())
-      .isTrue();
+    assertThat($(byText("Result 2")).isDisplayed()).isTrue();
   }
 
   @Test

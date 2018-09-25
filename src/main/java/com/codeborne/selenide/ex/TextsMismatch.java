@@ -7,7 +7,8 @@ import java.util.List;
 public class TextsMismatch extends UIAssertionError {
   public TextsMismatch(WebElementsCollection collection, List<String> actualTexts,
                        List<String> expectedTexts, String explanation, long timeoutMs) {
-    super("\nActual: " + actualTexts +
+    super(collection.driver(),
+      "\nActual: " + actualTexts +
         "\nExpected: " + expectedTexts +
         (explanation == null ? "" : "\nBecause: " + explanation) +
         "\nCollection: " + collection.description());

@@ -1,33 +1,62 @@
 package com.codeborne.selenide;
 
-import org.assertj.core.api.WithAssertions;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.checked;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.hasAttribute;
+import static com.codeborne.selenide.Condition.hasClass;
+import static com.codeborne.selenide.Condition.hasText;
+import static com.codeborne.selenide.Condition.hasValue;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.id;
+import static com.codeborne.selenide.Condition.matchesText;
+import static com.codeborne.selenide.Condition.name;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.textCaseSensitive;
+import static com.codeborne.selenide.Condition.type;
+import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ConditionTest implements WithAssertions {
+class ConditionTest {
+  private WebDriver webDriver = mock(WebDriver.class);
+  private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private SelenideConfig config = new SelenideConfig();
+  private Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
+  
   @Test
   void displaysHumanReadableName() {
-    assertThat(Condition.visible)
-      .hasToString("visible");
-    assertThat(Condition.hidden)
-      .hasToString("hidden");
-    assertThat(Condition.hasAttribute("lastName", "Malkovich"))
-      .hasToString("attribute lastName=Malkovich");
+    assertThat(visible).hasToString("visible");
+    assertThat(hidden).hasToString("hidden");
+    assertThat(hasAttribute("lastName", "Malkovich")).hasToString("attribute lastName=Malkovich");
   }
 
   @Test
   void textConditionChecksForSubstring() {
-    assertThat(Condition.text("John Malkovich The First").apply(elementWithText("John Malkovich The First")))
+    assertThat(text("John Malkovich The First").apply(driver, elementWithText("John Malkovich The First")))
       .isTrue();
-    assertThat(Condition.text("John Malkovich First").apply(elementWithText("John Malkovich The First")))
+    assertThat(text("John Malkovich First").apply(driver, elementWithText("John Malkovich The First")))
       .isFalse();
-    assertThat(Condition.text("john bon jovi").apply(elementWithText("John Malkovich The First")))
+    assertThat(text("john bon jovi").apply(driver, elementWithText("John Malkovich The First")))
       .isFalse();
   }
 
@@ -40,89 +69,71 @@ class ConditionTest implements WithAssertions {
   @Test
   void textConditionIsCaseInsensitive() {
     WebElement element = elementWithText("John Malkovich The First");
-    assertThat(Condition.text("john malkovich").apply(element))
-      .isTrue();
+    assertThat(text("john malkovich").apply(driver, element)).isTrue();
   }
 
   @Test
   void textConditionIgnoresWhitespaces() {
-    assertThat(Condition.text("john the malkovich").apply(elementWithText("John  the\n Malkovich")))
+    assertThat(text("john the malkovich").apply(driver, elementWithText("John  the\n Malkovich")))
       .isTrue();
-    assertThat(Condition.text("This is nonbreakable space").apply(elementWithText("This is nonbreakable\u00a0space")))
+    assertThat(text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
       .isTrue();
   }
 
   @Test
-  void textCaseSensitive() {
+  void testTextCaseSensitive() {
     WebElement element = elementWithText("John Malkovich The First");
-    assertThat(Condition.textCaseSensitive("john malkovich").apply(element))
-      .isFalse();
-    assertThat(Condition.textCaseSensitive("John Malkovich").apply(element))
-      .isTrue();
+    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
+    assertThat(textCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
   }
 
   @Test
   void textCaseSensitiveIgnoresWhitespaces() {
     WebElement element = elementWithText("John Malkovich\t The   \n First");
-    assertThat(Condition.textCaseSensitive("john malkovich").apply(element))
-      .isFalse();
-    assertThat(Condition.textCaseSensitive("John        Malkovich The   ").apply(element))
-      .isTrue();
+    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
+    assertThat(textCaseSensitive("John        Malkovich The   ").apply(driver, element)).isTrue();
   }
 
   @Test
-  void textCaseSencitiveToString() {
-    assertThat(Condition.textCaseSensitive("John Malcovich"))
-      .hasToString("textCaseSensitive 'John Malcovich'");
+  void textCaseSensitiveToString() {
+    assertThat(textCaseSensitive("John Malcovich")).hasToString("textCaseSensitive 'John Malcovich'");
   }
 
   @Test
   void exactTextIsCaseInsensitive() {
     WebElement element = elementWithText("John Malkovich");
-    assertThat(Condition.exactText("john malkovich").apply(element))
-      .isTrue();
-    assertThat(Condition.exactText("john").apply(element))
-      .isFalse();
+    assertThat(exactText("john malkovich").apply(driver, element)).isTrue();
+    assertThat(exactText("john").apply(driver, element)).isFalse();
   }
 
   @Test
   void exactTextToString() {
-    assertThat(Condition.exactText("John Malcovich"))
-      .hasToString("exact text 'John Malcovich'");
+    assertThat(exactText("John Malcovich")).hasToString("exact text 'John Malcovich'");
   }
 
   @Test
-  void exactTextCaseSensitive() {
+  void testExactTextCaseSensitive() {
     WebElement element = elementWithText("John Malkovich");
-    assertThat(Condition.exactTextCaseSensitive("john malkovich").apply(element))
-      .isFalse();
-    assertThat(Condition.exactTextCaseSensitive("John Malkovich").apply(element))
-      .isTrue();
-    assertThat(Condition.exactTextCaseSensitive("John").apply(element))
-      .isFalse();
+    assertThat(exactTextCaseSensitive("john malkovich").apply(driver, element)).isFalse();
+    assertThat(exactTextCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
+    assertThat(exactTextCaseSensitive("John").apply(driver, element)).isFalse();
   }
 
   @Test
   void exactTextCaseSensitiveToString() {
-    assertThat(Condition.exactTextCaseSensitive("John Malcovich"))
+    assertThat(exactTextCaseSensitive("John Malcovich"))
       .hasToString("exact text case sensitive 'John Malcovich'");
   }
 
   @Test
   void value() {
     WebElement element = elementWithAttribute("value", "John Malkovich");
-    assertThat(Condition.value("Peter").apply(element))
-      .isFalse();
-    assertThat(Condition.value("john").apply(element))
-      .isTrue();
-    assertThat(Condition.value("john malkovich").apply(element))
-      .isTrue();
-    assertThat(Condition.value("John").apply(element))
-      .isTrue();
-    assertThat(Condition.value("John Malkovich").apply(element))
-      .isTrue();
-    assertThat(Condition.value("malko").apply(element))
-      .isTrue();
+    assertThat(Condition.value("Peter").apply(driver, element)).isFalse();
+    assertThat(Condition.value("john").apply(driver, element)).isTrue();
+    assertThat(Condition.value("john malkovich").apply(driver, element)).isTrue();
+    assertThat(Condition.value("John").apply(driver, element)).isTrue();
+    assertThat(Condition.value("John Malkovich").apply(driver, element)).isTrue();
+    assertThat(Condition.value("malko").apply(driver, element)).isTrue();
   }
 
   private WebElement elementWithAttribute(String name, String value) {
@@ -139,10 +150,8 @@ class ConditionTest implements WithAssertions {
 
   @Test
   void elementIsVisible() {
-    assertThat(Condition.visible.apply(elementWithVisibility(true)))
-      .isTrue();
-    assertThat(Condition.visible.apply(elementWithVisibility(false)))
-      .isFalse();
+    assertThat(visible.apply(driver, elementWithVisibility(true))).isTrue();
+    assertThat(visible.apply(driver, elementWithVisibility(false))).isFalse();
   }
 
   private WebElement elementWithVisibility(boolean isVisible) {
@@ -153,144 +162,107 @@ class ConditionTest implements WithAssertions {
 
   @Test
   void elementExists() {
-    assertThat(Condition.exist.apply(elementWithVisibility(true)))
-      .isTrue();
-    assertThat(Condition.exist.apply(elementWithVisibility(false)))
-      .isTrue();
+    assertThat(exist.apply(driver, elementWithVisibility(true))).isTrue();
+    assertThat(exist.apply(driver, elementWithVisibility(false))).isTrue();
   }
 
   @Test
   void elementExists_returnsFalse_ifItThrowsException() {
     WebElement element = mock(WebElement.class);
     when(element.isDisplayed()).thenThrow(new StaleElementReferenceException("ups"));
-    assertThat(Condition.exist.apply(element))
-      .isFalse();
+    assertThat(exist.apply(driver, element)).isFalse();
   }
 
   @Test
   void elementIsHidden() {
-    assertThat(Condition.hidden.apply(elementWithVisibility(false)))
-      .isTrue();
-    assertThat(Condition.hidden.apply(elementWithVisibility(true)))
-      .isFalse();
+    assertThat(hidden.apply(driver, elementWithVisibility(false))).isTrue();
+    assertThat(hidden.apply(driver, elementWithVisibility(true))).isFalse();
   }
 
   @Test
   void elementIsHiddenWithStaleElementException() {
     WebElement element = mock(WebElement.class);
     doThrow(new StaleElementReferenceException("Oooops")).when(element).isDisplayed();
-    assertThat(Condition.hidden.apply(element))
-      .isTrue();
+    assertThat(hidden.apply(driver, element)).isTrue();
   }
 
   @Test
   void elementHasAttribute() {
-    assertThat(Condition.attribute("name").apply(elementWithAttribute("name", "selenide")))
-      .isTrue();
-    assertThat(Condition.attribute("name").apply(elementWithAttribute("name", "")))
-      .isTrue();
-    assertThat(Condition.attribute("name").apply(elementWithAttribute("id", "id3")))
-      .isFalse();
+    assertThat(attribute("name").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
+    assertThat(attribute("name").apply(driver, elementWithAttribute("name", ""))).isTrue();
+    assertThat(attribute("name").apply(driver, elementWithAttribute("id", "id3"))).isFalse();
   }
 
   @Test
   void elementHasAttributeWithGivenValue() {
-    assertThat(Condition.attribute("name", "selenide").apply(elementWithAttribute("name", "selenide")))
-      .isTrue();
-    assertThat(Condition.attribute("name", "selenide").apply(elementWithAttribute("name", "selenide is great")))
-      .isFalse();
-    assertThat(Condition.attribute("name", "selenide").apply(elementWithAttribute("id", "id2")))
-      .isFalse();
+    assertThat(attribute("name", "selenide").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
+    assertThat(attribute("name", "selenide").apply(driver, elementWithAttribute("name", "selenide is great"))).isFalse();
+    assertThat(attribute("name", "selenide").apply(driver, elementWithAttribute("id", "id2"))).isFalse();
   }
 
   @Test
   void elementHasValue() {
-    assertThat(Condition.value("selenide").apply(elementWithAttribute("value", "selenide")))
-      .isTrue();
-    assertThat(Condition.value("selenide").apply(elementWithAttribute("value", "selenide is great")))
-      .isTrue();
-    assertThat(Condition.value("selenide").apply(elementWithAttribute("value", "is great")))
-      .isFalse();
+    assertThat(Condition.value("selenide").apply(driver, elementWithAttribute("value", "selenide"))).isTrue();
+    assertThat(Condition.value("selenide").apply(driver, elementWithAttribute("value", "selenide is great"))).isTrue();
+    assertThat(Condition.value("selenide").apply(driver, elementWithAttribute("value", "is great"))).isFalse();
   }
 
   @Test
   void elementHasValueMethod() {
-    assertThat(Condition.hasValue("selenide").apply(elementWithAttribute("value", "selenide")))
-      .isTrue();
-    assertThat(Condition.hasValue("selenide").apply(elementWithAttribute("value", "selenide is great")))
-      .isTrue();
-    assertThat(Condition.hasValue("selenide").apply(elementWithAttribute("value", "is great")))
-      .isFalse();
+    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "selenide"))).isTrue();
+    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "selenide is great"))).isTrue();
+    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "is great"))).isFalse();
   }
 
   @Test
   void elementHasName() {
-    assertThat(Condition.name("selenide").apply(elementWithAttribute("name", "selenide")))
-      .isTrue();
-    assertThat(Condition.name("selenide").apply(elementWithAttribute("name", "selenide is great")))
-      .isFalse();
+    assertThat(name("selenide").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
+    assertThat(name("selenide").apply(driver, elementWithAttribute("name", "selenide is great"))).isFalse();
   }
 
   @Test
   void elementHasType() {
-    assertThat(Condition.type("selenide").apply(elementWithAttribute("type", "selenide")))
-      .isTrue();
-    assertThat(Condition.type("selenide").apply(elementWithAttribute("type", "selenide is great")))
-      .isFalse();
+    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide"))).isTrue();
+    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide is great"))).isFalse();
   }
 
   @Test
   void elementHasId() {
-    assertThat(Condition.id("selenide").apply(elementWithAttribute("id", "selenide")))
-      .isTrue();
-    assertThat(Condition.id("selenide").apply(elementWithAttribute("id", "selenide is great")))
-      .isFalse();
+    assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide"))).isTrue();
+    assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide is great"))).isFalse();
   }
 
   @Test
   void elementMatchesText() {
-    assertThat(Condition.matchesText("selenide").apply(elementWithText("selenidehello")))
-      .isTrue();
-    assertThat(Condition.matchesText("selenide").apply(elementWithText("  this is  selenide  the great ")))
-      .isTrue();
-    assertThat(Condition.matchesText("selenide\\s+hello\\s*").apply(elementWithText("selenide    hello")))
-      .isTrue();
-    assertThat(Condition.matchesText("selenide").apply(elementWithText("selenite")))
-      .isFalse();
+    assertThat(matchesText("selenide").apply(driver, elementWithText("selenidehello"))).isTrue();
+    assertThat(matchesText("selenide").apply(driver, elementWithText("  this is  selenide  the great "))).isTrue();
+    assertThat(matchesText("selenide\\s+hello\\s*").apply(driver, elementWithText("selenide    hello"))).isTrue();
+    assertThat(matchesText("selenide").apply(driver, elementWithText("selenite"))).isFalse();
   }
 
   @Test
   void elementMatchTextToString() {
-    assertThat(Condition.matchesText("John Malcovich"))
-      .hasToString("match text 'John Malcovich'");
+    assertThat(matchesText("John Malcovich")).hasToString("match text 'John Malcovich'");
   }
 
   @Test
   void elementHasText() {
-    assertThat(Condition.hasText("selenide").apply(elementWithText("selenidehello")))
-      .isTrue();
-    assertThat(Condition.hasText("hello").apply(elementWithText("selenidehello")))
-      .isTrue();
-    assertThat(Condition.hasText("selenide, hello").apply(elementWithText("selenidehello")))
-      .isFalse();
+    assertThat(hasText("selenide").apply(driver, elementWithText("selenidehello"))).isTrue();
+    assertThat(hasText("hello").apply(driver, elementWithText("selenidehello"))).isTrue();
+    assertThat(hasText("selenide, hello").apply(driver, elementWithText("selenidehello"))).isFalse();
   }
 
   @Test
   void elementHasClass() {
-    assertThat(Condition.hasClass("btn").apply(elementWithAttribute("class", "btn btn-warning")))
-      .isTrue();
-    assertThat(Condition.hasClass("btn-warning").apply(elementWithAttribute("class", "btn btn-warning")))
-      .isTrue();
-    assertThat(Condition.hasClass("active").apply(elementWithAttribute("class", "btn btn-warning")))
-      .isFalse();
+    assertThat(hasClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
+    assertThat(hasClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
+    assertThat(hasClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();
   }
 
   @Test
   void elementHasCssValue() {
-    assertThat(Condition.cssValue("display", "none").apply(elementWithCssStyle("display", "none")))
-      .isTrue();
-    assertThat(Condition.cssValue("font-size", "24").apply(elementWithCssStyle("font-size", "20")))
-      .isFalse();
+    assertThat(cssValue("display", "none").apply(driver, elementWithCssStyle("display", "none"))).isTrue();
+    assertThat(cssValue("font-size", "24").apply(driver, elementWithCssStyle("font-size", "20"))).isFalse();
   }
 
   private WebElement elementWithCssStyle(String propertyName, String value) {
@@ -301,26 +273,20 @@ class ConditionTest implements WithAssertions {
 
   @Test
   void elementHasClassToString() {
-    assertThat(Condition.hasClass("Foo"))
-      .hasToString("css class 'Foo'");
+    assertThat(hasClass("Foo")).hasToString("css class 'Foo'");
   }
 
   @Test
   void elementHasClassForElement() {
-    assertThat(Condition.hasClass(elementWithAttribute("class", "btn btn-warning"), "btn"))
-      .isTrue();
-    assertThat(Condition.hasClass(elementWithAttribute("class", "btn btn-warning"), "btn-warning"))
-      .isTrue();
-    assertThat(Condition.hasClass(elementWithAttribute("class", "btn btn-warning"), "form-horizontal"))
-      .isFalse();
+    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "btn")).isTrue();
+    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "btn-warning")).isTrue();
+    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "form-horizontal")).isFalse();
   }
 
   @Test
   void elementEnabled() {
-    assertThat(Condition.enabled.apply(elementWithEnabled(true)))
-      .isTrue();
-    assertThat(Condition.enabled.apply(elementWithEnabled(false)))
-      .isFalse();
+    assertThat(enabled.apply(driver, elementWithEnabled(true))).isTrue();
+    assertThat(enabled.apply(driver, elementWithEnabled(false))).isFalse();
   }
 
   private WebElement elementWithEnabled(boolean isEnabled) {
@@ -331,34 +297,26 @@ class ConditionTest implements WithAssertions {
 
   @Test
   void elementEnabledActualValue() {
-    assertThat(Condition.enabled.actualValue(elementWithEnabled(true)))
-      .isEqualTo("enabled");
-    assertThat(Condition.enabled.actualValue(elementWithEnabled(false)))
-      .isEqualTo("disabled");
+    assertThat(enabled.actualValue(driver, elementWithEnabled(true))).isEqualTo("enabled");
+    assertThat(enabled.actualValue(driver, elementWithEnabled(false))).isEqualTo("disabled");
   }
 
   @Test
   void elementDisabled() {
-    assertThat(Condition.disabled.apply(elementWithEnabled(false)))
-      .isTrue();
-    assertThat(Condition.disabled.apply(elementWithEnabled(true)))
-      .isFalse();
+    assertThat(disabled.apply(driver, elementWithEnabled(false))).isTrue();
+    assertThat(disabled.apply(driver, elementWithEnabled(true))).isFalse();
   }
 
   @Test
   void elementDisabledActualValue() {
-    assertThat(Condition.disabled.actualValue(elementWithEnabled(true)))
-      .isEqualTo("enabled");
-    assertThat(Condition.disabled.actualValue(elementWithEnabled(false)))
-      .isEqualTo("disabled");
+    assertThat(disabled.actualValue(driver, elementWithEnabled(true))).isEqualTo("enabled");
+    assertThat(disabled.actualValue(driver, elementWithEnabled(false))).isEqualTo("disabled");
   }
 
   @Test
   void elementSelected() {
-    assertThat(Condition.selected.apply(elementWithSelected(true)))
-      .isTrue();
-    assertThat(Condition.selected.apply(elementWithSelected(false)))
-      .isFalse();
+    assertThat(selected.apply(driver, elementWithSelected(true))).isTrue();
+    assertThat(selected.apply(driver, elementWithSelected(false))).isFalse();
   }
 
   private WebElement elementWithSelected(boolean isSelected) {
@@ -369,53 +327,43 @@ class ConditionTest implements WithAssertions {
 
   @Test
   void elementSelectedActualValue() {
-    assertThat(Condition.selected.actualValue(elementWithSelected(true)))
-      .isEqualTo("true");
-    assertThat(Condition.selected.actualValue(elementWithSelected(false)))
-      .isEqualTo("false");
+    assertThat(selected.actualValue(driver, elementWithSelected(true))).isEqualTo("true");
+    assertThat(selected.actualValue(driver, elementWithSelected(false))).isEqualTo("false");
   }
 
   @Test
   void elementChecked() {
-    assertThat(Condition.checked.apply(elementWithSelected(true)))
-      .isTrue();
-    assertThat(Condition.checked.apply(elementWithSelected(false)))
-      .isFalse();
+    assertThat(checked.apply(driver, elementWithSelected(true))).isTrue();
+    assertThat(checked.apply(driver, elementWithSelected(false))).isFalse();
   }
 
   @Test
   void elementCheckedActualValue() {
-    assertThat(Condition.checked.actualValue(elementWithSelected(true)))
-      .isEqualTo("true");
-    assertThat(Condition.checked.actualValue(elementWithSelected(false)))
-      .isEqualTo("false");
+    assertThat(checked.actualValue(driver, elementWithSelected(true))).isEqualTo("true");
+    assertThat(checked.actualValue(driver, elementWithSelected(false))).isEqualTo("false");
   }
 
   @Test
   void elementNotCondition() {
-    assertThat(Condition.not(Condition.checked).apply(elementWithSelected(false)))
-      .isTrue();
-    assertThat(Condition.not(Condition.checked).apply(elementWithSelected(true)))
-      .isFalse();
+    assertThat(not(checked).apply(driver, elementWithSelected(false))).isTrue();
+    assertThat(not(checked).apply(driver, elementWithSelected(true))).isFalse();
   }
 
   @Test
-  void elementNotCondtionActualValue() {
-    assertThat(Condition.not(Condition.checked).actualValue(elementWithSelected(false)))
-      .isEqualTo("false");
-    assertThat(Condition.not(Condition.checked).actualValue(elementWithSelected(true)))
-      .isEqualTo("true");
+  void elementNotConditionActualValue() {
+    assertThat(not(checked).actualValue(driver, elementWithSelected(false))).isEqualTo("false");
+    assertThat(not(checked).actualValue(driver, elementWithSelected(true))).isEqualTo("true");
   }
 
   @Test
   void elementAndCondition() {
     WebElement element = elementWithSelectedAndText(true, "text");
-    assertThat(Condition.and("selected with text", be(Condition.selected), Condition.have(Condition.text("text"))).apply(element))
+    assertThat(and("selected with text", be(selected), have(text("text"))).apply(driver, element))
       .isTrue();
-    assertThat(Condition.and("selected with text", Condition.not(be(Condition.selected)), Condition.have(Condition.text("text")))
-      .apply(element))
+    assertThat(and("selected with text", not(be(selected)), have(text("text")))
+      .apply(driver, element))
       .isFalse();
-    assertThat(Condition.and("selected with text", be(Condition.selected), Condition.have(Condition.text("incorrect"))).apply(element))
+    assertThat(and("selected with text", be(selected), have(text("incorrect"))).apply(driver, element))
       .isFalse();
   }
 
@@ -429,90 +377,68 @@ class ConditionTest implements WithAssertions {
   @Test
   void elementAndConditionActualValue() {
     WebElement element = elementWithSelectedAndText(false, "text");
-    Condition condition = Condition.and("selected with text", be(Condition.selected),
-      Condition.have(Condition.text("text")));
-    assertThat(condition.actualValue(element))
-      .isNullOrEmpty();
-    assertThat(condition.apply(element))
-      .isFalse();
-    assertThat(condition.actualValue(element))
-      .isEqualTo("false");
+    Condition condition = and("selected with text", be(selected), have(text("text")));
+    assertThat(condition.actualValue(driver, element)).isNullOrEmpty();
+    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition.actualValue(driver, element)).isEqualTo("false");
   }
 
   @Test
   void elementAndConditionToString() {
     WebElement element = elementWithSelectedAndText(false, "text");
-    Condition condition = Condition.and("selected with text", be(Condition.selected),
-      Condition.have(Condition.text("text")));
-    assertThat(condition)
-      .hasToString("selected with text");
-    assertThat(condition.apply(element))
-      .isFalse();
-    assertThat(condition)
-      .hasToString("be selected");
+    Condition condition = and("selected with text", be(selected), have(text("text")));
+    assertThat(condition).hasToString("selected with text");
+    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition).hasToString("be selected");
   }
 
   @Test
   void elementOrCondition() {
     WebElement element = elementWithSelectedAndText(false, "text");
     when(element.isDisplayed()).thenReturn(true);
-    assertThat(Condition.or("Visible, not Selected", Condition.visible, Condition.checked).apply(element))
-      .isTrue();
-    assertThat(Condition.or("Selected with text", Condition.checked, Condition.text("incorrect")).apply(element))
-      .isFalse();
+    assertThat(or("Visible, not Selected", visible, checked).apply(driver, element)).isTrue();
+    assertThat(or("Selected with text", checked, text("incorrect")).apply(driver, element)).isFalse();
   }
 
   @Test
   void elementOrConditionActualValue() {
     WebElement element = elementWithSelectedAndText(false, "text");
-    Condition condition = Condition.or("selected with text", be(Condition.selected),
-      Condition.have(Condition.text("text")));
-    assertThat(condition.actualValue(element))
-      .isNullOrEmpty();
-    assertThat(condition.apply(element))
-      .isTrue();
-    assertThat(condition.actualValue(element))
-      .isEqualTo("false");
+    Condition condition = or("selected with text", be(selected), have(text("text")));
+    assertThat(condition.actualValue(driver, element)).isNullOrEmpty();
+    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition.actualValue(driver, element)).isEqualTo("false");
   }
 
   @Test
   void elementOrConditionToString() {
     WebElement element = elementWithSelectedAndText(false, "text");
-    Condition condition = Condition.or("selected with text", be(Condition.selected),
-      Condition.have(Condition.text("text")));
-    assertThat(condition)
-      .hasToString("selected with text");
-    assertThat(condition.apply(element))
-      .isTrue();
-    assertThat(condition)
-      .hasToString("be selected");
+    Condition condition = or("selected with text", be(selected), have(text("text")));
+    assertThat(condition).hasToString("selected with text");
+    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition).hasToString("be selected");
   }
 
   @Test
   void conditionBe() {
-    Condition condition = be(Condition.visible);
-    assertThat(condition)
-      .hasToString("be visible");
+    Condition condition = be(visible);
+    assertThat(condition).hasToString("be visible");
   }
 
   @Test
   void conditionHave() {
-    Condition condition = Condition.have(Condition.attribute("name"));
-    assertThat(condition)
-      .hasToString("have attribute name");
+    Condition condition = have(attribute("name"));
+    assertThat(condition).hasToString("have attribute name");
   }
 
   @Test
   void conditionApplyNull() {
-    Condition condition = Condition.attribute("name");
-    assertThat(condition.applyNull())
-      .isFalse();
+    Condition condition = attribute("name");
+    assertThat(condition.applyNull()).isFalse();
   }
 
   @Test
   void conditionToString() {
-    Condition condition = Condition.attribute("name").because("it's awesome");
-    assertThat(condition)
-      .hasToString("attribute name (because it's awesome)");
+    Condition condition = attribute("name").because("it's awesome");
+    assertThat(condition).hasToString("attribute name (because it's awesome)");
   }
 }

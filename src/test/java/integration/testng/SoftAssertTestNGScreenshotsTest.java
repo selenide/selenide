@@ -1,9 +1,5 @@
 package integration.testng;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
@@ -12,11 +8,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static integration.errormessages.Helper.assertScreenshot;
 
 public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTest {
 
@@ -54,5 +51,10 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     public void onEvent(LogEvent currentLog) {
       events.add(currentLog);
     }
+  }
+
+  private void assertScreenshot(UIAssertionError expected) {
+    assertThat(expected.getScreenshot())
+      .contains(driver.config().reportsFolder());
   }
 }

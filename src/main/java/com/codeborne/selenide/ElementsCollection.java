@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
+import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
@@ -27,10 +28,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Configuration.assertionMode;
-import static com.codeborne.selenide.Configuration.collectionsPollingInterval;
-import static com.codeborne.selenide.Configuration.collectionsTimeout;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.toList;
@@ -42,24 +39,24 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this.collection = collection;
   }
 
-  public ElementsCollection(Collection<? extends WebElement> elements) {
-    this(new WebElementsCollectionWrapper(elements));
+  public ElementsCollection(Driver driver, Collection<? extends WebElement> elements) {
+    this(new WebElementsCollectionWrapper(driver, elements));
   }
 
-  public ElementsCollection(String cssSelector) {
-    this(By.cssSelector(cssSelector));
+  public ElementsCollection(Driver driver, String cssSelector) {
+    this(driver, By.cssSelector(cssSelector));
   }
 
-  public ElementsCollection(By seleniumSelector) {
-    this(new BySelectorCollection(seleniumSelector));
+  public ElementsCollection(Driver driver, By seleniumSelector) {
+    this(new BySelectorCollection(driver, seleniumSelector));
   }
 
-  public ElementsCollection(WebElement parent, String cssSelector) {
-    this(parent, By.cssSelector(cssSelector));
+  public ElementsCollection(Driver driver, WebElement parent, String cssSelector) {
+    this(driver, parent, By.cssSelector(cssSelector));
   }
 
-  public ElementsCollection(WebElement parent, By seleniumSelector) {
-    this(new BySelectorCollection(parent, seleniumSelector));
+  public ElementsCollection(Driver driver, WebElement parent, By seleniumSelector) {
+    this(new BySelectorCollection(driver, parent, seleniumSelector));
   }
 
   /**
@@ -73,7 +70,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", collectionsTimeout, conditions);
+    return should("be", driver().config().collectionsTimeout(), conditions);
   }
 
   public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
@@ -86,7 +83,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", collectionsTimeout, conditions);
+    return should("have", driver().config().collectionsTimeout(), conditions);
   }
 
   /**
@@ -103,7 +100,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected ElementsCollection should(String prefix, long timeoutMs, CollectionCondition... conditions) {
-    validateAssertionMode();
+    validateAssertionMode(driver().config());
 
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
@@ -114,9 +111,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return this;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
-      switch (assertionMode) {
+      switch (driver().config().assertionMode()) {
         case SOFT:
           return this;
         default:
@@ -132,7 +129,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
     Exception lastError = null;
     List<WebElement> actualElements = null;
-    final long startTime = System.currentTimeMillis();
+    Stopwatch stopwatch = new Stopwatch(timeoutMs);
     do {
       try {
         actualElements = collection.getElements();
@@ -150,14 +147,19 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(collectionsPollingInterval);
+      sleep(driver().config().collectionsPollingInterval());
     }
-    while (System.currentTimeMillis() - startTime < timeoutMs);
+    while (!stopwatch.isTimeoutReached());
     condition.fail(collection, actualElements, lastError, timeoutMs);
   }
 
   void sleep(long ms) {
-    Selenide.sleep(ms);
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -279,7 +281,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * @param elements
    * @return String
    */
-  public static String elementsToString(Collection<WebElement> elements) {
+  public static String elementsToString(Driver driver, Collection<WebElement> elements) {
     if (elements == null) {
       return "[not loaded yet...]";
     }
@@ -294,7 +296,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       if (sb.length() > 4) {
         sb.append(",\n\t");
       }
-      sb.append($(element));
+      sb.append(Describe.describe(driver, element));
     }
     sb.append("\n]");
     return sb.toString();
@@ -371,7 +373,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   private WebElementsCollectionWrapper fetch() {
     List<WebElement> fetchedElements = collection.getElements();
-    return new WebElementsCollectionWrapper(fetchedElements);
+    return new WebElementsCollectionWrapper(driver(), fetchedElements);
   }
 
   @Override
@@ -380,7 +382,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     Object[] result = new Object[fetchedElements.size()];
     Iterator<WebElement> it = fetchedElements.iterator();
     for (int i = 0; i < result.length; i++) {
-      result[i] = $(it.next());
+      result[i] = Describe.describe(driver(), it.next());
     }
     return result;
   }
@@ -400,9 +402,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Override
   public String toString() {
     try {
-      return elementsToString(getElements());
+      return elementsToString(driver(), getElements());
     } catch (Exception e) {
       return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
     }
+  }
+
+  private Driver driver() {
+    return collection.driver();
   }
 }

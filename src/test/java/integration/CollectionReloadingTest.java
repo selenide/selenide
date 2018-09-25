@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.ElementsCollection;
-
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,10 +8,8 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 
-class CollectionReloadingTest extends IntegrationTest {
+class CollectionReloadingTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("collection_with_delays.html");
@@ -20,7 +17,7 @@ class CollectionReloadingTest extends IntegrationTest {
 
   @Test
   void reloadsCollectionOnEveryCall() {
-    Assumptions.assumeFalse(isPhantomjs());
+    Assumptions.assumeFalse(browser().isPhantomjs());
 
     ElementsCollection collection = $$("#collection li");
     collection.get(0).shouldHave(text("Element #0"));

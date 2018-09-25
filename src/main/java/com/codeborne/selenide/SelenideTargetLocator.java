@@ -18,16 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.codeborne.selenide.Selenide.Wait;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
 public class SelenideTargetLocator implements TargetLocator {
+  private final WebDriver webDriver;
+  private final Config config;
   private final TargetLocator delegate;
 
-  SelenideTargetLocator(TargetLocator delegate) {
-    this.delegate = delegate;
+  public SelenideTargetLocator(Config config, WebDriver webDriver) {
+    this.config = config;
+    this.webDriver = webDriver;
+    this.delegate = webDriver.switchTo();
   }
 
   @Override
@@ -95,7 +97,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * Switch to the inner frame (last child frame in given sequence)
    */
   public WebDriver innerFrame(String... frames) {
-    WebDriver driver = getWebDriver();
     delegate.defaultContent();
 
     for (String frame : frames) {
@@ -108,7 +109,7 @@ public class SelenideTargetLocator implements TargetLocator {
       }
     }
 
-    return driver;
+    return webDriver;
   }
 
   private static ExpectedCondition<WebDriver> frameToBeAvailableAndSwitchToIt_fixed(final By locator) {
@@ -131,7 +132,7 @@ public class SelenideTargetLocator implements TargetLocator {
     };
   }
 
-  private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final String nameOrHandleOrTitle) {
+  private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(String nameOrHandleOrTitle) {
     return new ExpectedCondition<WebDriver>() {
       @Override
       public WebDriver apply(WebDriver driver) {
@@ -139,7 +140,7 @@ public class SelenideTargetLocator implements TargetLocator {
           return driver.switchTo().window(nameOrHandleOrTitle);
         } catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
           try {
-            return windowByTitle(nameOrHandleOrTitle);
+            return windowByTitle(driver, nameOrHandleOrTitle);
           } catch (NoSuchWindowException e) {
             return null;
           }
@@ -203,9 +204,7 @@ public class SelenideTargetLocator implements TargetLocator {
    * Switch to window/tab by name/handle/title except some windows handles
    * @param title title of window/tab
    */
-  protected static WebDriver windowByTitle(String title) {
-    WebDriver driver = getWebDriver();
-
+  protected static WebDriver windowByTitle(WebDriver driver, String title) {
     Set<String> windowHandles = driver.getWindowHandles();
 
     for (String windowHandle : windowHandles) {
@@ -215,5 +214,9 @@ public class SelenideTargetLocator implements TargetLocator {
       }
     }
     throw new NoSuchWindowException("Window with title not found: " + title);
+  }
+
+  private SelenideWait Wait() {
+    return new SelenideWait(webDriver, config.timeout(), config.pollingInterval());
   }
 }

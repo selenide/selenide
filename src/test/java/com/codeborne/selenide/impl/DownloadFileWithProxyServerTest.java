@@ -1,24 +1,25 @@
 package com.codeborne.selenide.impl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import com.codeborne.selenide.extension.MockWebDriverExtension;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import static java.util.Arrays.asList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -31,23 +32,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockWebDriverExtension.class)
 class DownloadFileWithProxyServerTest implements WithAssertions {
-  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer();
+  private Waiter waiter = mock(Waiter.class);
+  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
+  private final SelenideConfig config = new SelenideConfig();
   private WebDriver webdriver = mock(WebDriver.class);
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private WebElementSource linkWithHref = mock(WebElementSource.class);
   private WebElement link = mock(WebElement.class);
-  private FileDownloadFilter filter = spy(new FileDownloadFilter());
+  private FileDownloadFilter filter = spy(new FileDownloadFilter("build/downloads"));
 
   @BeforeEach
   void setUp() {
-    command.waiter = spy(new Waiter());
-    doNothing().when(command.waiter).sleep(anyLong());
-    when(webdriverContainer.getWebDriver()).thenReturn(webdriver);
+    doNothing().when(waiter).wait(any(), any(), anyLong(), anyLong());
     when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
 
     when(proxy.responseFilter("download")).thenReturn(filter);
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsVisible()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }

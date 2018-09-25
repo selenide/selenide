@@ -5,13 +5,11 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-
 public class GetInnerText implements Command<String> {
   @Override
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement element = locator.getWebElement();
-    if (isIE()) {
+    if (locator.driver().browser().isIE()) {
       return element.getAttribute("innerText");
     }
     return element.getAttribute("textContent");

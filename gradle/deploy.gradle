@@ -6,15 +6,19 @@ jar {
       "Implementation-Version": version,
       "Implementation-Vendor": "Codeborne")
   }
+  from sourceSets.main.output
+  from sourceSets.staticFacade.output
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
   from sourceSets.main.allSource
+  from sourceSets.staticFacade.allSource
 }
 
 javadoc {
   failOnError = false
+  source = sourceSets.main.allJava + sourceSets.staticFacade.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

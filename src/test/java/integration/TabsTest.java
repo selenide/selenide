@@ -1,29 +1,21 @@
 package integration;
 
-import java.util.Set;
-
 import com.automation.remarks.video.annotations.Video;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.Set;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.Wait;
-import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.Selenide.title;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class TabsTest extends IntegrationTest {
+class TabsTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs.html");
@@ -34,10 +26,10 @@ class TabsTest extends IntegrationTest {
   void userCanBrowseTabs_webdriver_api() {
     openFile("page_with_tabs.html");
 
-    WebDriver driver = WebDriverRunner.getWebDriver();
+    WebDriver driver = driver().getWebDriver();
 
     $(byText("Page1: uploads")).click();
-    Wait().until(ExpectedConditions.numberOfWindowsToBe(2));
+    driver().Wait().until(ExpectedConditions.numberOfWindowsToBe(2));
 
     $("h1").shouldHave(text("Tabs"));
 
@@ -79,7 +71,7 @@ class TabsTest extends IntegrationTest {
   @Test
   @Video
   void canSwitchToWindowByIndex_chrome() {
-    Assumptions.assumeTrue(isChrome());
+    assumeTrue(browser().isChrome());
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
@@ -99,7 +91,7 @@ class TabsTest extends IntegrationTest {
   @Test
   @Video
   void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
-    Assumptions.assumeFalse(isChrome() || isHtmlUnit());
+    assumeFalse(browser().isChrome() || browser().isHtmlUnit());
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
@@ -119,13 +111,13 @@ class TabsTest extends IntegrationTest {
   @Test
   @Video
   void canSwitchBetweenWindowsWithSameTitles() {
-    Assumptions.assumeFalse(isHtmlUnit());
+    assumeFalse(browser().isHtmlUnit());
     $(byText("Page4: same title")).click();
     $("h1").shouldHave(text("Tabs"));
 
     switchTo().window("Test::tabs::title");
     $("body").shouldHave(text("Secret phrase 1"));
-    String firstHandle = getWebDriver().getWindowHandle();
+    String firstHandle = driver().getWebDriver().getWindowHandle();
 
     switchTo().window(0);
     $("h1").shouldHave(text("Tabs"));
@@ -151,7 +143,7 @@ class TabsTest extends IntegrationTest {
 
   @Test
   void throwsNoSuchWindowExceptionWhenSwitchingToAbsentWindowByTitle() {
-    assertThat(title())
+    assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> {
@@ -161,7 +153,7 @@ class TabsTest extends IntegrationTest {
 
   @Test
   void throwsNoSuchWindowExceptionWhenSwitchingToAbsentWindowByIndex() {
-    assertThat(title())
+    assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> {
@@ -171,6 +163,6 @@ class TabsTest extends IntegrationTest {
 
   @AfterEach
   void tearDown() {
-    close();
+    driver().close();
   }
 }

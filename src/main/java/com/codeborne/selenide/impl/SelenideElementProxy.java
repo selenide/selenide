@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
@@ -18,14 +21,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
-import static com.codeborne.selenide.Configuration.assertionMode;
-import static com.codeborne.selenide.Configuration.pollingInterval;
-import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
-import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
 
 class SelenideElementProxy implements InvocationHandler {
@@ -57,7 +55,7 @@ class SelenideElementProxy implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
-    validateAssertionMode();
+    validateAssertionMode(config());
 
     long timeoutMs = getTimeoutMs(method, args);
     long pollingIntervalMs = getPollingIntervalMs(method, args);
@@ -68,9 +66,9 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
-      if (assertionMode == SOFT && methodsForSoftAssertion.contains(method.getName()))
+      if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else
         throw wrappedError;
@@ -81,9 +79,18 @@ class SelenideElementProxy implements InvocationHandler {
     }
   }
 
+  private Driver driver() {
+    return webElementSource.driver();
+  }
+
+  private Config config() {
+    return driver().config();
+  }
+
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
-                                    Object proxy, Method method, Object[] args) throws Throwable, Error {
-    final long startTime = currentTimeMillis();
+                                    Object proxy, Method method, Object[] args) throws Throwable {
+    Stopwatch stopwatch = new Stopwatch(timeoutMs);
+
     Throwable lastError;
     do {
       try {
@@ -106,15 +113,15 @@ class SelenideElementProxy implements InvocationHandler {
       else if (!shouldRetryAfterError(lastError)) {
         throw lastError;
       }
-      sleep(pollingIntervalMs);
+      stopwatch.sleep(pollingIntervalMs);
     }
-    while (currentTimeMillis() - startTime <= timeoutMs);
+    while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof UIAssertionError) {
       throw lastError;
     }
     else if (lastError instanceof InvalidElementStateException) {
-      throw new InvalidStateException(lastError);
+      throw new InvalidStateException(driver(), lastError);
     }
     else if (lastError instanceof WebDriverException) {
       throw webElementSource.createElementNotFoundError(exist, lastError);
@@ -133,12 +140,12 @@ class SelenideElementProxy implements InvocationHandler {
 
   private long getTimeoutMs(Method method, Object[] args) {
     return isWaitCommand(method) ?
-        args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
-        timeout;
+      args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
+      config().timeout();
   }
 
   private long getPollingIntervalMs(Method method, Object[] args) {
-    return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : pollingInterval;
+    return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : config().pollingInterval();
   }
 
   private boolean isWaitCommand(Method method) {

@@ -4,9 +4,9 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import org.testng.annotations.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 
 public class SoftAssertTestNGTest1 extends AbstractSoftAssertTestNGTest {
   @Test
@@ -24,6 +24,6 @@ public class SoftAssertTestNGTest1 extends AbstractSoftAssertTestNGTest {
 
   @Test(expectedExceptions = ElementNotFound.class)
   public void testWithExpectedExceptions() {
-    $("h22").shouldBe(visible).shouldHave(text("Selenide"));
+    driver.$("h22").shouldBe(visible).shouldHave(text("Selenide"));
   }
 }

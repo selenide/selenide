@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -9,18 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.captureJavascriptErrors;
-import static com.codeborne.selenide.Selenide.executeJavaScript;
-import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
-import static com.codeborne.selenide.WebDriverRunner.supportsJavascript;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 public class JavascriptErrorsCollector {
   private static final Logger log = Logger.getLogger(JavascriptErrorsCollector.class.getName());
 
-  void collectJavascriptErrors(WebDriver webdriver) {
-    if (webdriver instanceof JavascriptExecutor && captureJavascriptErrors) {
+  public void collectJavascriptErrors(Config config, WebDriver webdriver) {
+    if (webdriver instanceof JavascriptExecutor && config.captureJavascriptErrors()) {
       collectJavascriptErrors((JavascriptExecutor) webdriver);
     }
   }
@@ -48,18 +46,18 @@ public class JavascriptErrorsCollector {
     }
   }
 
-  public List<String> getJavascriptErrors() {
-    if (!captureJavascriptErrors) {
+  public List<String> getJavascriptErrors(Driver driver) {
+    if (!driver.config().captureJavascriptErrors()) {
       return emptyList();
     }
-    else if (!hasWebDriverStarted()) {
+    else if (!driver.hasWebDriverStarted()) {
       return emptyList();
     }
-    else if (!supportsJavascript()) {
+    else if (!driver.supportsJavascript()) {
       return emptyList();
     }
     try {
-      Object errors = executeJavaScript("return window._selenide_jsErrors");
+      Object errors = driver.executeJavaScript("return window._selenide_jsErrors");
       if (errors == null) {
         return emptyList();
       }

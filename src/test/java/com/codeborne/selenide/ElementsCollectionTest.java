@@ -1,25 +1,22 @@
 package com.codeborne.selenide;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.IntStream;
-
-import com.codeborne.selenide.extension.MockWebDriverExtension;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.IntStream;
+
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Configuration.browser;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -30,8 +27,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockWebDriverExtension.class)
 class ElementsCollectionTest implements WithAssertions {
+  private DriverStub driver = new DriverStub();
   private WebElementsCollection source = mock(WebElementsCollection.class);
   private WebElement element1 = element("h1");
   private WebElement element2 = element("h2");
@@ -39,7 +36,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   @BeforeEach
   final void mockWebDriver() {
-    browser = null;
+    when(source.driver()).thenReturn(driver);
   }
 
   @Test
@@ -192,7 +189,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void testElementsToStringOnNullCollection() {
-    assertThat(ElementsCollection.elementsToString(null))
+    assertThat(ElementsCollection.elementsToString(null, null))
       .isEqualTo("[not loaded yet...]");
   }
 
@@ -281,6 +278,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
     WebElementsCollection source = mock(WebElementsCollection.class);
+    when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
 
@@ -291,6 +289,7 @@ class ElementsCollectionTest implements WithAssertions {
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
     WebElementsCollection source = mock(WebElementsCollection.class);
+    when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
 

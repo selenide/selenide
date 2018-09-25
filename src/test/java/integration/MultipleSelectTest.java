@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Selenide.$;
 
-class MultipleSelectTest extends IntegrationTest {
+class MultipleSelectTest extends ITest {
   private SelenideElement select = $("#character");
 
   @BeforeEach

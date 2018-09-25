@@ -10,13 +10,8 @@ import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.byValue;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 
-public class AttributeTest extends IntegrationTest {
+public class AttributeTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -26,7 +21,6 @@ public class AttributeTest extends IntegrationTest {
   void canVerifyAttributeExistence() {
     $("#domain-container").shouldHave(attribute("class"));
     $("#domain-container").shouldNotHave(attribute("foo"));
-//    $("#domain-container").shouldNotHave(attribute("title")); // it's a bug in selenium webdriver
   }
 
   @Test
@@ -35,7 +29,6 @@ public class AttributeTest extends IntegrationTest {
       .isTrue();
     assertThat($("#domain-container").has(attribute("foo")))
       .isFalse();
-//    assertFalse($("#domain-container").has(attribute("title"))); // it's a bug in selenium webdriver
   }
 
   @Test
@@ -83,7 +76,7 @@ public class AttributeTest extends IntegrationTest {
 
   @Test
   void userCanSearchElementByDataAttribute() {
-    Assumptions.assumeFalse(isChrome() || isHtmlUnit() || isPhantomjs());
+    Assumptions.assumeFalse(browser().isChrome() || browser().isHtmlUnit() || browser().isPhantomjs());
 
     assertThat($(by("data-mailServerId", "111")).data("mailServerId"))
       .isEqualTo("111");

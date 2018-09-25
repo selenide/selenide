@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class FileDownloadFilterTest implements WithAssertions {
-  private FileDownloadFilter filter = new FileDownloadFilter();
+  private FileDownloadFilter filter = new FileDownloadFilter("build/downloads");
   private HttpResponse response = mock(HttpResponse.class);
   private HttpMessageContents contents = mock(HttpMessageContents.class);
   private HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);

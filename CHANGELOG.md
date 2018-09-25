@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0
+* Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
+* Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package com.codeborne.selenide
+
 ## 4.14.2 (released 22.09.2018)
 * Upgrade to htmlunit 2.33
 * Upgrade to Sizzle 2.3.4-pre

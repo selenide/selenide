@@ -8,9 +8,8 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
-class NotExistingElementTest extends IntegrationTest {
+class NotExistingElementTest extends ITest {
   @BeforeEach
   void openPage() {
     openFile("elements_disappear_on_click.html");

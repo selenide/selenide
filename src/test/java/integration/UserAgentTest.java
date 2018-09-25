@@ -1,21 +1,15 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Selenide.getUserAgent;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-
-class UserAgentTest extends IntegrationTest {
+class UserAgentTest extends ITest {
   @Test
   void currentUserAgentTest() {
-    Assumptions.assumeFalse(isHtmlUnit());
+    Assumptions.assumeFalse(browser().isHtmlUnit());
 
-    open("/start_page.html");
-    String userAgent = getUserAgent();
-    String browser = Configuration.browser;
+    driver().open("/start_page.html");
+    String userAgent = driver().getUserAgent();
 
     assertThat(userAgent)
       .isNotBlank();

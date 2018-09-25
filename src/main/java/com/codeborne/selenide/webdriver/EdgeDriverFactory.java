@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -9,28 +10,25 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browserBinary;
-
 class EdgeDriverFactory extends AbstractDriverFactory {
-
   private static final Logger log = Logger.getLogger(EdgeDriverFactory.class.getName());
 
   @Override
-  WebDriver create(final Proxy proxy) {
-    return createEdgeDriver(proxy);
+  WebDriver create(Config config, Proxy proxy) {
+    return createEdgeDriver(config, proxy);
   }
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isEdge();
+  boolean supports(Config config, Browser browser) {
+    return browser.isEdge();
   }
 
-  private WebDriver createEdgeDriver(final Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+  private WebDriver createEdgeDriver(Config config, Proxy proxy) {
+    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
-    if (!browserBinary.isEmpty()) {
-      log.info("Using browser binary: " + browserBinary);
+    if (!config.browserBinary().isEmpty()) {
+      log.info("Using browser binary: " + config.browserBinary());
       log.warning("Changing browser binary not supported in Edge, setting will be ignored.");
     }
     return new EdgeDriver(options);

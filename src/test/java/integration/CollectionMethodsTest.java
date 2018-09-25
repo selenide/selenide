@@ -1,10 +1,5 @@
 package integration;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Collectors;
-
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -13,6 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
@@ -24,13 +24,9 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.getElements;
 import static java.util.Arrays.asList;
 
-class CollectionMethodsTest extends IntegrationTest {
+class CollectionMethodsTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
@@ -39,7 +35,7 @@ class CollectionMethodsTest extends IntegrationTest {
   @Test
   void useTwoDollarsToGetListOfElements() {
     $$("#radioButtons input").shouldHave(size(4));
-    getElements(By.cssSelector("#radioButtons input")).shouldHave(size(4));
+    $$(By.cssSelector("#radioButtons input")).shouldHave(size(4));
 
     $("#radioButtons").$$("input").shouldHave(size(4));
     $("#radioButtons").$$(By.tagName("input")).shouldHave(size(4));

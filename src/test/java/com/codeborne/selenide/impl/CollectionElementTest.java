@@ -1,13 +1,15 @@
 package com.codeborne.selenide.impl;
 
-import java.util.List;
-
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -15,6 +17,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CollectionElementTest implements WithAssertions {
+  private Driver driver = new DriverStub();
+
   @Test
   void testWrap() {
     WebElement mockedWebElement = mock(WebElement.class);
@@ -22,7 +26,7 @@ class CollectionElementTest implements WithAssertions {
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    WebElementsCollection collection = new WebElementsCollectionWrapper(singletonList(mockedWebElement));
+    WebElementsCollection collection = new WebElementsCollectionWrapper(driver, singletonList(mockedWebElement));
     SelenideElement selenideElement = CollectionElement.wrap(collection, 0);
     assertThat(selenideElement)
       .hasToString("<a>selenide</a>");
@@ -66,8 +70,8 @@ class CollectionElementTest implements WithAssertions {
   @Test
   void testCreateElementNotFoundErrorWithEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    String collectionDescription = "Collection description";
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
+    when(mockedWebElementCollection.description()).thenReturn("Collection description");
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 
     Condition mockedCollection = mock(Condition.class);
@@ -84,8 +88,8 @@ class CollectionElementTest implements WithAssertions {
   @Test
   void testCreateElementNotFoundErrorWithNonEmptyCollection() {
     WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    String collectionDescription = "Collection description";
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
+    when(mockedWebElementCollection.driver()).thenReturn(driver);
+    when(mockedWebElementCollection.description()).thenReturn("Collection description");
     when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
 

@@ -1,15 +1,12 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.setValueChangeEvent;
-import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.impl.Events.events;
 
 public class SetValue implements Command<WebElement> {
@@ -31,44 +28,46 @@ public class SetValue implements Command<WebElement> {
     String text = (String) args[0];
     WebElement element = locator.findAndAssertElementIsVisible();
 
-    if (Configuration.versatileSetValue
-            && "select".equalsIgnoreCase(element.getTagName())) {
+    if (locator.driver().config().versatileSetValue()
+      && "select".equalsIgnoreCase(element.getTagName())) {
       selectOptionByValue.execute(proxy, locator, args);
       return proxy;
     }
-    if (Configuration.versatileSetValue
-            && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
+    if (locator.driver().config().versatileSetValue()
+      && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
       selectRadio.execute(proxy, locator, args);
       return proxy;
     }
 
-    setValueForTextInput(element, text);
+    setValueForTextInput(locator.driver(), element, text);
     return proxy;
   }
 
-  private void setValueForTextInput(WebElement element, String text) {
+  private void setValueForTextInput(Driver driver, WebElement element, String text) {
     if (text == null || text.isEmpty()) {
       element.clear();
-    } else if (fastSetValue) {
-      String error = setValueByJs(element, text);
-      if (error != null) throw new InvalidStateException(error);
-      if (setValueChangeEvent) {
-        events.fireEvent(element, "keydown", "keypress", "input", "keyup", "change");
+    }
+    else if (driver.config().fastSetValue()) {
+      String error = setValueByJs(driver, element, text);
+      if (error != null) throw new InvalidStateException(driver, error);
+      if (driver.config().setValueChangeEvent()) {
+        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
       else {
-        events.fireEvent(element, "keydown", "keypress", "input", "keyup");
+        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup");
       }
-    } else {
+    }
+    else {
       element.clear();
       element.sendKeys(text);
-      if (setValueChangeEvent) {
-        events.fireChangeEvent(element);
+      if (driver.config().setValueChangeEvent()) {
+        events.fireChangeEvent(driver, element);
       }
     }
   }
 
-  private String setValueByJs(WebElement element, String text) {
-    return executeJavaScript(
+  private String setValueByJs(Driver driver, WebElement element, String text) {
+    return driver.executeJavaScript(
         "return (function(webelement, text) {" +
             "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
             "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +

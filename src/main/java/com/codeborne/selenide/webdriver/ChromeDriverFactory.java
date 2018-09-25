@@ -1,5 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -12,37 +14,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.browserBinary;
-import static com.codeborne.selenide.Configuration.chromeSwitches;
-import static com.codeborne.selenide.Configuration.headless;
-import static com.codeborne.selenide.WebDriverRunner.CHROME;
-
 class ChromeDriverFactory extends AbstractDriverFactory {
-
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
 
-  WebDriver create(final Proxy proxy) {
-    ChromeOptions options = createChromeOptions(proxy);
+  @Override
+  WebDriver create(Config config, Proxy proxy) {
+    ChromeOptions options = createChromeOptions(config, proxy);
     return new ChromeDriver(options);
   }
 
   @Override
-  boolean supports() {
-    return CHROME.equalsIgnoreCase(browser);
+  boolean supports(Config config, Browser browser) {
+    return browser.isChrome();
   }
 
-  ChromeOptions createChromeOptions(Proxy proxy) {
+  ChromeOptions createChromeOptions(Config config, Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
-    options.setHeadless(headless);
-    if (!browserBinary.isEmpty()) {
-      log.info("Using browser binary: " + browserBinary);
-      options.setBinary(browserBinary);
+    options.setHeadless(config.headless());
+    if (!config.browserBinary().isEmpty()) {
+      log.info("Using browser binary: " + config.browserBinary());
+      options.setBinary(config.browserBinary());
     }
-    if (chromeSwitches != null) {
-      options.addArguments(chromeSwitches);
+    if (config.chromeSwitches() != null) {
+      options.addArguments(config.chromeSwitches());
     }
-    options.merge(createCommonCapabilities(proxy));
+    options.merge(createCommonCapabilities(config, proxy));
     options = transferChromeOptionsFromSystemProperties(options);
     log.config("Chrome options:" + options.toString());
     return options;

@@ -36,9 +36,9 @@ before_script:
 
 script:
   - ./gradlew check --no-daemon --console=plain
-  - ./gradlew chrome_headless --no-daemon --console=plain
-  - ./gradlew firefox_headless --no-daemon --console=plain
   - ./gradlew grid --no-daemon --console=plain
+  - ./gradlew firefox_headless --no-daemon --console=plain
+  - ./gradlew chrome_headless --no-daemon --console=plain
   - ./gradlew htmlunit --no-daemon --console=plain
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
 

@@ -1,9 +1,10 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -21,9 +22,9 @@ public class ErrorMessages {
     return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
   }
 
-  public static String actualValue(Condition condition, WebElement element) {
+  static String actualValue(Condition condition, Driver driver, WebElement element) {
     if (element != null) {
-      String actualValue = condition.actualValue(element);
+      String actualValue = condition.actualValue(driver, element);
       if (actualValue != null) {
         return "\nActual value: " + actualValue;
       }
@@ -31,12 +32,12 @@ public class ErrorMessages {
     return "";
   }
 
-  public static String screenshot() {
-    return screenshot(Screenshots.screenshots.formatScreenShotPath());
+  public static String screenshot(Driver driver) {
+    return screenshot(driver.config(), ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
   }
   
-  public static String screenshot(String screenshotPath) {
-    if (!Configuration.screenshots) {
+  public static String screenshot(Config config, String screenshotPath) {
+    if (!config.screenshots()) {
       return "";
     }
 
@@ -44,15 +45,19 @@ public class ErrorMessages {
       return "\nScreenshot: " + screenshotPath;
     }
 
-    if (Configuration.savePageSource) {
+    if (config.savePageSource() && !screenshotPath.endsWith(".html")) {
       String htmlFilePath = getHtmlFilePath(screenshotPath);
       return "\nScreenshot: " + screenshotPath + "\nPage source: " + htmlFilePath;
-    } else {
+    }
+    else if (screenshotPath.endsWith(".html")) {
+      return "\nPage source: " + screenshotPath;
+    }
+    else {
       return "\nScreenshot: " + screenshotPath;
     }
   }
 
-  public static String causedBy(Throwable cause) {
+  static String causedBy(Throwable cause) {
     if (cause == null) {
       return "";
     }
@@ -62,7 +67,7 @@ public class ErrorMessages {
     return "\nCaused by: " + cause;
   }
 
-  public static String jsErrors(List<String> jsErrors) {
+  static String jsErrors(List<String> jsErrors) {
     if (jsErrors == null || jsErrors.isEmpty()) {
       return "";
     }

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -9,27 +10,24 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browserBinary;
-
 class InternetExplorerDriverFactory extends AbstractDriverFactory {
-
   private static final Logger log = Logger.getLogger(InternetExplorerDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
-    return WebDriverRunner.isIE();
+  boolean supports(Config config, Browser browser) {
+    return browser.isIE();
   }
 
   @Override
-  WebDriver create(final Proxy proxy) {
-    return createInternetExplorerDriver(proxy);
+  WebDriver create(Config config, Proxy proxy) {
+    return createInternetExplorerDriver(config, proxy);
   }
 
-  private WebDriver createInternetExplorerDriver(final Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+  private WebDriver createInternetExplorerDriver(Config config, Proxy proxy) {
+    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
-    if (!browserBinary.isEmpty()) {
-      log.info("Using browser binary: " + browserBinary);
+    if (!config.browserBinary().isEmpty()) {
+      log.info("Using browser binary: " + config.browserBinary());
       log.warning("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }
     return new InternetExplorerDriver(options);

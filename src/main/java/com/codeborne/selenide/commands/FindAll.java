@@ -9,6 +9,6 @@ import com.codeborne.selenide.impl.WebElementSource;
 public class FindAll implements Command<ElementsCollection> {
   @Override
   public ElementsCollection execute(SelenideElement parent, WebElementSource locator, Object[] args) {
-    return new ElementsCollection(new BySelectorCollection(parent, WebElementSource.getSelector(args[0])));
+    return new ElementsCollection(new BySelectorCollection(locator.driver(), parent, WebElementSource.getSelector(args[0])));
   }
 }

@@ -1,45 +1,36 @@
 package com.codeborne.selenide.ex;
 
-import java.util.Locale;
-
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-import static com.codeborne.selenide.Screenshots.screenshots;
+import java.io.File;
+import java.util.Locale;
+
 import static java.io.File.separatorChar;
-import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.openqa.selenium.OutputType.FILE;
 
 class ErrorMessagesTest implements WithAssertions {
-  private static String reportsUrl;
-
-  @BeforeAll
-  static void rememberOldValues() {
-    reportsUrl = Configuration.reportsUrl;
-  }
-
-  @AfterAll
-  static void restoreOldValues() {
-    Configuration.screenshots = true;
-    Configuration.savePageSource = true;
-    Configuration.reportsUrl = reportsUrl;
-    screenshots = new ScreenShotLaboratory();
-  }
+  private final ChromeDriver webDriver = mock(ChromeDriver.class);
+  private final SelenideConfig config = new SelenideConfig().reportsFolder("build/reports/tests");
+  private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
 
   @BeforeEach
   void setUp() {
-    Configuration.screenshots = true;
-    screenshots = mock(ScreenShotLaboratory.class);
-    doCallRealMethod().when(screenshots).formatScreenShotPath();
-    Configuration.savePageSource = false;
+    config.screenshots(true);
+    config.savePageSource(false);
+    when(webDriver.getPageSource()).thenReturn("<html></html>");
   }
 
   @Test
@@ -63,50 +54,51 @@ class ErrorMessagesTest implements WithAssertions {
 
   @Test
   void convertsScreenshotFileNameToCIUrl() {
-    Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
-    String currentDir = System.getProperty("user.dir");
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png");
+      .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
+      .endsWith(".png");
   }
 
   @Test
   void returnsScreenshotFileName() {
-    Configuration.reportsUrl = null;
+    config.reportsUrl(null);
     String currentDir = System.getProperty("user.dir");
     if (separatorChar == '\\') {
       currentDir = '/' + currentDir.replace('\\', '/');
     }
 
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .isEqualToIgnoringNewLines("Screenshot: file:" + currentDir + "/test-result/12345.png");
+      .startsWith("\nScreenshot: file:" + currentDir + "/build/reports/tests/")
+      .endsWith(".png");
   }
 
   @Test
   void doesNotAddScreenshot_if_screenshotsAreDisabled() {
-    Configuration.screenshots = false;
+    config.screenshots(false);
 
-    String screenshot = ErrorMessages.screenshot();
-    assertThat(screenshot)
-      .isNullOrEmpty();
-    verify(screenshots, never()).takeScreenShot();
+    String screenshot = ErrorMessages.screenshot(driver);
+    assertThat(screenshot).isNullOrEmpty();
+    verify(webDriver, never()).getScreenshotAs(any());
   }
 
   @Test
   void printHtmlPath_if_savePageSourceIsEnabled() {
-    Configuration.savePageSource = true;
-    Configuration.reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
-    String currentDir = System.getProperty("user.dir");
-    doReturn(currentDir + "/test-result/12345.png").when(screenshots).takeScreenShot();
+    config.savePageSource(true);
+    config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
+    doReturn("<html>blah</html>").when(webDriver).getPageSource();
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
-    String screenshot = ErrorMessages.screenshot();
+    String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .isEqualToIgnoringNewLines("Screenshot: http://ci.mycompany.com/job/666/artifact/test-result/12345.png"
-        + "Page source: http://ci.mycompany.com/job/666/artifact/test-result/12345.html");
+      .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
+      .contains(".png\nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
+      .endsWith(".html");
   }
 }

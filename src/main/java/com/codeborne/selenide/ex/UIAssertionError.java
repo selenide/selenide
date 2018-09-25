@@ -1,11 +1,12 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Screenshots;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.JavascriptErrorsCollector;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
 import static com.codeborne.selenide.ex.ErrorMessages.jsErrors;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
@@ -13,20 +14,25 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
 public class UIAssertionError extends AssertionError {
+  private static final JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
+  private final Driver driver;
+
   private String screenshot;
-  protected List<String> jsErrors;
+  List<String> jsErrors;
   public long timeoutMs;
 
-  public UIAssertionError(Throwable cause) {
-    this(cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
+  public UIAssertionError(Driver driver, Throwable cause) {
+    this(driver, cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
   }
 
-  protected UIAssertionError(String message) {
+  protected UIAssertionError(Driver driver, String message) {
     super(message);
+    this.driver = driver;
   }
 
-  protected UIAssertionError(String message, Throwable cause) {
+  protected UIAssertionError(Driver driver, String message, Throwable cause) {
     super(message, cause);
+    this.driver = driver;
   }
 
   @Override
@@ -35,7 +41,7 @@ public class UIAssertionError extends AssertionError {
   }
 
   protected String uiDetails() {
-    return screenshot(screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(getCause());
+    return screenshot(driver.config(), screenshot) + jsErrors(jsErrors) + timeout(timeoutMs) + causedBy(getCause());
   }
 
   /**
@@ -56,18 +62,18 @@ public class UIAssertionError extends AssertionError {
     return jsErrors;
   }
 
-  public static Error wrap(Error error, long timeoutMs) {
+  public static Error wrap(Driver driver, Error error, long timeoutMs) {
     if (Cleanup.of.isInvalidSelectorError(error))
       return error;
 
-    return wrapThrowable(error, timeoutMs);
+    return wrapThrowable(driver, error, timeoutMs);
   }
 
-  public static Error wrapThrowable(Throwable error, long timeoutMs) {
-    UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(error);
+  private static Error wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
+    UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
-    uiError.screenshot = Screenshots.screenshots.formatScreenShotPath();
-    uiError.jsErrors = getJavascriptErrors();
+    uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(driver);
+    uiError.jsErrors = javascriptErrorsCollector.getJavascriptErrors(driver);
     return uiError;
   }
 }

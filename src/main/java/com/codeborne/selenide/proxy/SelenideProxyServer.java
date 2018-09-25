@@ -1,6 +1,6 @@
 package com.codeborne.selenide.proxy;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.filters.RequestFilter;
@@ -20,6 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * It holds map of request and response filters by name.
  */
 public class SelenideProxyServer {
+  private final Config config;
   private final InetAddressResolver inetAddressResolver;
   private final Proxy outsideProxy;
   private final BrowserMobProxy proxy;
@@ -33,11 +34,12 @@ public class SelenideProxyServer {
    *
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
-  public SelenideProxyServer(Proxy outsideProxy) {
-    this(outsideProxy, new InetAddressResolver(), new BrowserMobProxyServerUnlimited());
+  public SelenideProxyServer(Config config, Proxy outsideProxy) {
+    this(config, outsideProxy, new InetAddressResolver(), new BrowserMobProxyServerUnlimited());
   }
 
-  protected SelenideProxyServer(Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserMobProxy proxy) {
+  protected SelenideProxyServer(Config config, Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserMobProxy proxy) {
+    this.config = config;
     this.outsideProxy = outsideProxy;
     this.inetAddressResolver = inetAddressResolver;
     this.proxy = proxy;
@@ -57,9 +59,9 @@ public class SelenideProxyServer {
     addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
-    addResponseFilter("download", new FileDownloadFilter());
+    addResponseFilter("download", new FileDownloadFilter(config.reportsFolder()));
 
-    proxy.start(Configuration.proxyPort);
+    proxy.start(config.proxyPort());
     port = proxy.getPort();
   }
 
@@ -106,16 +108,22 @@ public class SelenideProxyServer {
    * Converts this proxy to a "selenium" proxy that can be used by webdriver
    */
   public Proxy createSeleniumProxy() {
-    return isEmpty(Configuration.proxyHost)
+    return isEmpty(config.proxyHost())
       ? ClientUtil.createSeleniumProxy(proxy)
-      : ClientUtil.createSeleniumProxy(proxy, inetAddressResolver.getInetAddressByName(Configuration.proxyHost));
+      : ClientUtil.createSeleniumProxy(proxy, inetAddressResolver.getInetAddressByName(config.proxyHost()));
   }
 
   /**
    * Stop the server
    */
   public void shutdown() {
-    proxy.abort();
+    if (proxy.isStarted()) {
+      try {
+        proxy.abort();
+      }
+      catch (IllegalStateException ignore) {
+      }
+    }
   }
 
   /**

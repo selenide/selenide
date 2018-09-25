@@ -11,7 +11,7 @@ plugins {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '4.14.2'
+version = '5.0.0-SNAPSHOT'
 
 ext {
   encoding = StandardCharsets.UTF_8.name()
@@ -27,6 +27,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 defaultTasks 'check', 'test', 'install'
 
+apply from: rootProject.file('gradle/source-sets.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
 apply from: rootProject.file('gradle/code-analysis.gradle')
 apply from: rootProject.file('gradle/coverage.gradle')

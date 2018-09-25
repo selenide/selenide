@@ -1,5 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -14,64 +16,51 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.browserBinary;
-import static com.codeborne.selenide.Configuration.headless;
-import static com.codeborne.selenide.Configuration.remote;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
-import static com.codeborne.selenide.WebDriverRunner.isEdge;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isLegacyFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isOpera;
-
 class RemoteDriverFactory extends AbstractDriverFactory {
-
-
   private static final Logger log = Logger.getLogger(RemoteDriverFactory.class.getName());
 
   @Override
-  boolean supports() {
-    return remote != null;
+  boolean supports(Config config, Browser browser) {
+    return config.remote() != null;
   }
 
   @Override
-  WebDriver create(Proxy proxy) {
-    return createRemoteDriver(remote, browser, proxy);
+  WebDriver create(Config config, Proxy proxy) {
+    return createRemoteDriver(config, proxy);
   }
 
-  private WebDriver createRemoteDriver(final String remote, final String browser, final Proxy proxy) {
+  private WebDriver createRemoteDriver(Config config, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = getDriverCapabilities(proxy);
-      RemoteWebDriver webDriver = new RemoteWebDriver(new URL(remote), capabilities);
+      DesiredCapabilities capabilities = getDriverCapabilities(config, new Browser(config.browser(), false), proxy);
+      RemoteWebDriver webDriver = new RemoteWebDriver(new URL(config.remote()), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
     } catch (MalformedURLException e) {
-      throw new IllegalArgumentException("Invalid 'remote' parameter: " + remote, e);
+      throw new IllegalArgumentException("Invalid 'remote' parameter: " + config.remote(), e);
     }
   }
 
-  DesiredCapabilities getDriverCapabilities(Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(proxy);
-    capabilities.setBrowserName(getBrowserNameForGrid());
-    if (headless) {
-      capabilities.merge(getHeadlessCapabilities());
+  DesiredCapabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
+    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+    capabilities.setBrowserName(getBrowserNameForGrid(config, browser));
+    if (config.headless()) {
+      capabilities.merge(getHeadlessCapabilities(config, browser));
     }
-    if (!browserBinary.isEmpty()) {
-      capabilities.merge(getBrowserBinaryCapabilites());
+    if (!config.browserBinary().isEmpty()) {
+      capabilities.merge(getBrowserBinaryCapabilities(config, browser));
     }
     return capabilities;
   }
 
-  Capabilities getBrowserBinaryCapabilites() {
-    log.info("Using browser binary: " + browserBinary);
-    if (isChrome()) {
+  Capabilities getBrowserBinaryCapabilities(Config config, Browser browser) {
+    log.info("Using browser binary: " + config.browserBinary());
+    if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
-      options.setBinary(browserBinary);
+      options.setBinary(config.browserBinary());
       return options;
-    } else if (isFirefox()) {
+    } else if (browser.isFirefox()) {
       FirefoxOptions options = new FirefoxOptions();
-      options.setBinary(browserBinary);
+      options.setBinary(config.browserBinary());
       return options;
     } else {
       log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
@@ -79,15 +68,15 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  Capabilities getHeadlessCapabilities() {
+  private Capabilities getHeadlessCapabilities(Config config, Browser browser) {
     log.info("Starting in headless mode");
-    if (isChrome()) {
+    if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
-      options.setHeadless(headless);
+      options.setHeadless(config.headless());
       return options;
-    } else if (isFirefox()) {
+    } else if (browser.isFirefox()) {
       FirefoxOptions options = new FirefoxOptions();
-      options.setHeadless(headless);
+      options.setHeadless(config.headless());
       return options;
     } else {
       log.warning("Headless mode on remote server is only supported for Chrome/Firefox, setting will be ignored.");
@@ -95,21 +84,21 @@ class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  String getBrowserNameForGrid() {
-    if (isLegacyFirefox()) {
+  String getBrowserNameForGrid(Config config, Browser browser) {
+    if (browser.isLegacyFirefox()) {
       return BrowserType.FIREFOX;
     }
-    else if (isIE()) {
+    else if (browser.isIE()) {
       return BrowserType.IE;
     }
-    else if (isEdge()) {
+    else if (browser.isEdge()) {
       return BrowserType.EDGE;
     }
-    else if (isOpera()) {
+    else if (browser.isOpera()) {
       return BrowserType.OPERA_BLINK;
     }
     else {
-      return browser;
+      return config.browser();
     }
   }
 }

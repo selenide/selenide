@@ -1,10 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -14,12 +15,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-
 public class DownloadFileWithProxyServer {
   private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
 
-  Waiter waiter = new Waiter();
+  private final Waiter waiter;
+
+  DownloadFileWithProxyServer(Waiter waiter) {
+    this.waiter = waiter;
+  }
+
+  public DownloadFileWithProxyServer() {
+    this(new Waiter());
+  }
 
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
@@ -28,25 +35,27 @@ public class DownloadFileWithProxyServer {
 
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                           SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
-    String currentWindowHandle = getWebDriver().getWindowHandle();
-    Set<String> currentWindows = getWebDriver().getWindowHandles();
+    Config config = anyClickableElement.driver().config();
+    WebDriver webDriver = anyClickableElement.driver().getWebDriver();
+    String currentWindowHandle = webDriver.getWindowHandle();
+    Set<String> currentWindows = webDriver.getWindowHandles();
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     filter.activate();
     try {
       clickable.click();
 
-      waiter.wait(filter, new HasDownloads(), timeout, Configuration.pollingInterval);
+      waiter.wait(filter, new HasDownloads(), timeout, config.pollingInterval());
       return firstDownloadedFile(anyClickableElement, filter, timeout);
     }
     finally {
       filter.deactivate();
-      closeNewWindows(currentWindowHandle, currentWindows);
+      closeNewWindows(webDriver, currentWindowHandle, currentWindows);
     }
   }
 
-  private void closeNewWindows(String currentWindowHandle, Set<String> currentWindows) {
-    Set<String> windowHandles = getWebDriver().getWindowHandles();
+  private void closeNewWindows(WebDriver webDriver, String currentWindowHandle, Set<String> currentWindows) {
+    Set<String> windowHandles = webDriver.getWindowHandles();
     if (windowHandles.size() != currentWindows.size()) {
       Set<String> newWindows = new HashSet<>(windowHandles);
       newWindows.removeAll(currentWindows);
@@ -56,8 +65,8 @@ public class DownloadFileWithProxyServer {
       for (String newWindow : newWindows) {
         log.info("  Let's close " + newWindow);
         try {
-          getWebDriver().switchTo().window(newWindow);
-          getWebDriver().close();
+          webDriver.switchTo().window(newWindow);
+          webDriver.close();
         }
         catch (NoSuchWindowException windowHasBeenClosedMeanwhile) {
           log.info("  Failed to close " + newWindow + ": " + Cleanup.of.webdriverExceptionMessage(windowHasBeenClosedMeanwhile));
@@ -66,7 +75,7 @@ public class DownloadFileWithProxyServer {
           log.warning("  Failed to close " + newWindow + ": " + e);
         }
       }
-      getWebDriver().switchTo().window(currentWindowHandle);
+      webDriver.switchTo().window(currentWindowHandle);
     }
   }
 

@@ -4,9 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
 
-class HoverTest extends IntegrationTest {
+class HoverTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_jquery.html");

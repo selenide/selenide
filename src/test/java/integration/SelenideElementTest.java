@@ -9,12 +9,11 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SelenideElementTest extends IntegrationTest {
+class SelenideElementTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

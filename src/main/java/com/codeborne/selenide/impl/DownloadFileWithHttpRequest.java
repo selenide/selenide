@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.net.ssl.HostnameVerifier;
@@ -30,14 +32,11 @@ import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Selenide.getUserAgent;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
@@ -49,18 +48,18 @@ public class DownloadFileWithHttpRequest {
 
   private HttpHelper httpHelper = new HttpHelper();
 
-  public File download(WebElement element, long timeout) throws IOException {
+  public File download(Driver driver, WebElement element, long timeout) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
-      throw new IllegalArgumentException("The element does not have href attribute: " + describe(element));
+      throw new IllegalArgumentException("The element does not have href attribute: " + describe(driver, element));
     }
 
-    return download(fileToDownloadLocation, timeout);
+    return download(driver, fileToDownloadLocation, timeout);
   }
 
-  public File download(String relativeOrAbsoluteUrl, long timeout) throws IOException {
-    String url = makeAbsoluteUrl(relativeOrAbsoluteUrl);
-    HttpResponse response = executeHttpRequest(url, timeout);
+  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout) throws IOException {
+    String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
+    HttpResponse response = executeHttpRequest(driver, url, timeout);
 
     if (response.getStatusLine().getStatusCode() >= 500) {
       throw new RuntimeException("Failed to download file " +
@@ -71,22 +70,22 @@ public class DownloadFileWithHttpRequest {
         url + ": " + response.getStatusLine());
     }
 
-    File downloadedFile = prepareTargetFile(url, response);
+    File downloadedFile = prepareTargetFile(driver.config(), url, response);
 
     return saveFileContent(response, downloadedFile);
   }
 
-  String makeAbsoluteUrl(String relativeOrAbsoluteUrl) {
-    return relativeOrAbsoluteUrl.startsWith("/") ? Configuration.baseUrl + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
+  String makeAbsoluteUrl(Config config, String relativeOrAbsoluteUrl) {
+    return relativeOrAbsoluteUrl.startsWith("/") ? config.baseUrl() + relativeOrAbsoluteUrl : relativeOrAbsoluteUrl;
   }
 
-  protected HttpResponse executeHttpRequest(String fileToDownloadLocation, long timeout) throws IOException {
+  protected HttpResponse executeHttpRequest(Driver driver, String fileToDownloadLocation, long timeout) throws IOException {
     CloseableHttpClient httpClient = ignoreSelfSignedCerts ? createTrustingHttpClient() : createDefaultHttpClient();
     HttpGet httpGet = new HttpGet(fileToDownloadLocation);
     configureHttpGet(httpGet, timeout);
-    addHttpHeaders(httpGet);
+    addHttpHeaders(driver, httpGet);
     try {
-      return httpClient.execute(httpGet, createHttpContext());
+      return httpClient.execute(httpGet, createHttpContext(driver.getWebDriver()));
     }
     catch (SocketTimeoutException timeoutException) {
       throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
@@ -144,18 +143,18 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  protected HttpContext createHttpContext() {
+  protected HttpContext createHttpContext(WebDriver webDriver) {
     HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(COOKIE_STORE, new WebdriverCookieStore(getWebDriver()));
+    localContext.setAttribute(COOKIE_STORE, new WebdriverCookieStore(webDriver));
     return localContext;
   }
 
-  protected void addHttpHeaders(HttpGet httpGet) {
-    httpGet.setHeader("User-Agent", getUserAgent());
+  protected void addHttpHeaders(Driver driver, HttpGet httpGet) {
+    httpGet.setHeader("User-Agent", driver.getUserAgent());
   }
 
-  protected File prepareTargetFile(String fileToDownloadLocation, HttpResponse response) throws MalformedURLException {
-    return new File(Configuration.reportsFolder, getFileName(fileToDownloadLocation, response));
+  protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
+    return new File(config.reportsFolder(), getFileName(fileToDownloadLocation, response));
   }
 
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {

@@ -1,12 +1,12 @@
 package com.codeborne.selenide.logevents;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.ex.SoftAssertionError;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.Configuration.AssertionMode.SOFT;
-import static com.codeborne.selenide.Configuration.assertionMode;
+import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {
@@ -43,8 +43,8 @@ public class ErrorsCollector implements LogEventListener {
     }
   }
 
-  public static void validateAssertionMode() {
-    if (assertionMode == SOFT) {
+  public static void validateAssertionMode(Config config) {
+    if (config.assertionMode() == SOFT) {
       if (!SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)) {
         throw new IllegalStateException("Using soft asserts, but without @SoftAsserts annotation");
       }

@@ -6,13 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.source;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class FrameWaitTest extends IntegrationTest {
+class FrameWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_frames_with_delays.html");
@@ -35,11 +31,11 @@ class FrameWaitTest extends IntegrationTest {
   @Test
   @Video
   void waitsUntilFrameAppears_byIndex() {
-    assumeFalse(isHtmlUnit());
+    assumeFalse(browser().isHtmlUnit());
 
     switchTo().frame(2);
 
     $("h1").shouldHave(text("Page with JQuery"));
-    assertThat(source()).contains("Test::jquery");
+    assertThat(driver().source()).contains("Test::jquery");
   }
 }

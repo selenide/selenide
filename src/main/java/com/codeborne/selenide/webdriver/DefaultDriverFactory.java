@@ -1,19 +1,18 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
-import static com.codeborne.selenide.Configuration.browser;
-
 public class DefaultDriverFactory extends AbstractDriverFactory {
-
   @Override
-  boolean supports() {
+  boolean supports(Config config, Browser browser) {
     return true;
   }
 
   @Override
-  WebDriver create(final Proxy proxy) {
-    return createInstanceOf(browser, proxy);
+  WebDriver create(Config config, Proxy proxy) {
+    return createInstanceOf(config.browser(), config, proxy);
   }
 }

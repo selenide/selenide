@@ -7,10 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-class TimeoutTest extends IntegrationTest {
+class TimeoutTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
@@ -20,7 +18,7 @@ class TimeoutTest extends IntegrationTest {
   void lookingForNonExistingElementShouldFailFast() {
     long start = System.nanoTime();
     try {
-      getWebDriver().findElement(By.id("nonExistingElement"));
+      driver().getWebDriver().findElement(By.id("nonExistingElement"));
       fail("Looking for non-existing element should fail");
     } catch (NoSuchElementException expectedException) {
       long end = System.nanoTime();

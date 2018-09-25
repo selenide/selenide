@@ -1,7 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.SelenideTargetLocator;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -29,11 +30,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.reportsFolder;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static java.io.File.separatorChar;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.SEVERE;
@@ -42,14 +41,20 @@ import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
   private static final Logger log = Logger.getLogger(ScreenShotLaboratory.class.getName());
+  private static final ScreenShotLaboratory instance = new ScreenShotLaboratory();
+
+  public static ScreenShotLaboratory getInstance() {
+    return instance;
+  }
+
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
   protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
-  public String takeScreenShot(String className, String methodName) {
-    return takeScreenShot(getScreenshotFileName(className, methodName));
+  public String takeScreenShot(Driver driver, String className, String methodName) {
+    return takeScreenShot(driver, getScreenshotFileName(className, methodName));
   }
 
   protected String getScreenshotFileName(String className, String methodName) {
@@ -57,8 +62,8 @@ public class ScreenShotLaboratory {
       methodName + '.' + timestamp();
   }
 
-  public String takeScreenShot() {
-    return takeScreenShot(generateScreenshotFileName());
+  public String takeScreenShot(Driver driver) {
+    return takeScreenShot(driver, generateScreenshotFileName());
   }
 
   /**
@@ -66,43 +71,36 @@ public class ScreenShotLaboratory {
    * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
    *
    * @param fileName name of file (without extension) to store screenshot to.
-   *
    * @return the name of last saved screenshot or null if failed to create screenshot
    */
-  public String takeScreenShot(String fileName) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
-    else if (reportsFolder == null) {
-      log.severe("Cannot take screenshot because Configuration.reportsFolder is null");
-      return null;
-    }
+  public String takeScreenShot(Driver driver, String fileName) {
+    Config config = driver.config();
 
-    WebDriver webdriver = getWebDriver();
+    return ifWebDriverStarted(driver, () ->
+      ifReportsFolderNotNull(config, () -> {
+        File screenshot = null;
+        if (config.savePageSource()) {
+          screenshot = savePageSourceToFile(config, fileName, driver.getWebDriver());
+        }
 
-    File screenshot = null;
-    if (Configuration.savePageSource) {
-      screenshot = savePageSourceToFile(fileName, webdriver);
-    }
-
-    File imageFile = savePageImageToFile(fileName, webdriver);
-    if (imageFile != null) {
-      screenshot = imageFile;
-    }
-    if (screenshot == null) {
-      return null;
-    }
-    return addToHistory(screenshot).getAbsolutePath();
+        File imageFile = savePageImageToFile(config, fileName, driver.getWebDriver());
+        if (imageFile != null) {
+          screenshot = imageFile;
+        }
+        if (screenshot == null) {
+          return null;
+        }
+        return addToHistory(screenshot).getAbsolutePath();
+      }));
   }
 
-  public File takeScreenshot(WebElement element) {
+  public File takeScreenshot(Driver driver, WebElement element) {
     try {
-      BufferedImage destination = takeScreenshotAsImage(element);
+      BufferedImage destination = takeScreenshotAsImage(driver, element);
       if (destination == null) {
         return null;
       }
-      File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
       ensureFolderExists(screenshotOfElement);
       ImageIO.write(destination, "png", screenshotOfElement);
       return screenshotOfElement;
@@ -113,41 +111,40 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public BufferedImage takeScreenshotAsImage(WebElement element) {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement element) {
+    Config config = driver.config();
+    return ifWebDriverStarted(driver, () ->
+      ifReportsFolderNotNull(config, () -> {
+        WebDriver webdriver = driver.getWebDriver();
+        if (!(webdriver instanceof TakesScreenshot)) {
+          log.warning("Cannot take screenshot because browser does not support screenshots");
+          return null;
+        }
 
-    WebDriver webdriver = getWebDriver();
-    if (!(webdriver instanceof TakesScreenshot)) {
-      log.warning("Cannot take screenshot because browser does not support screenshots");
-      return null;
-    }
+        byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
 
-    byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
-
-    Point elementLocation = element.getLocation();
-    try {
-      BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
-      int elementWidth = element.getSize().getWidth();
-      int elementHeight = element.getSize().getHeight();
-      if (elementWidth > img.getWidth()) {
-        elementWidth = img.getWidth() - elementLocation.getX();
-      }
-      if (elementHeight > img.getHeight()) {
-        elementHeight = img.getHeight() - elementLocation.getY();
-      }
-      return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
-    }
-    catch (IOException e) {
-      log.log(SEVERE, "Failed to take screenshot of " + element, e);
-      return null;
-    }
-    catch (RasterFormatException e) {
-      log.warning("Cannot take screenshot because element is not displayed on current screen position");
-      return null;
-    }
+        Point elementLocation = element.getLocation();
+        try {
+          BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
+          int elementWidth = element.getSize().getWidth();
+          int elementHeight = element.getSize().getHeight();
+          if (elementWidth > img.getWidth()) {
+            elementWidth = img.getWidth() - elementLocation.getX();
+          }
+          if (elementHeight > img.getHeight()) {
+            elementHeight = img.getHeight() - elementLocation.getY();
+          }
+          return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
+        }
+        catch (IOException e) {
+          log.log(SEVERE, "Failed to take screenshot of " + element, e);
+          return null;
+        }
+        catch (RasterFormatException e) {
+          log.warning("Cannot take screenshot because element is not displayed on current screen position");
+          return null;
+        }
+      }));
   }
 
   protected String generateScreenshotFileName() {
@@ -169,7 +166,8 @@ public class ScreenShotLaboratory {
     if (!printedErrors.contains(action)) {
       log.log(SEVERE, error.getMessage(), error);
       printedErrors.add(action);
-    } else {
+    }
+    else {
       log.severe("Failed to " + action + ": " + error);
     }
   }
@@ -178,13 +176,13 @@ public class ScreenShotLaboratory {
     return System.currentTimeMillis();
   }
 
-  public File takeScreenshot(WebElement iframe, WebElement element) {
+  public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
     try {
-      BufferedImage dest = takeScreenshotAsImage(iframe, element);
+      BufferedImage dest = takeScreenshotAsImage(driver, iframe, element);
       if (dest == null) {
         return null;
       }
-      File screenshotOfElement = new File(reportsFolder, generateScreenshotFileName() + ".png");
+      File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
       ensureFolderExists(screenshotOfElement);
       ImageIO.write(dest, "png", screenshotOfElement);
       return screenshotOfElement;
@@ -195,8 +193,8 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public BufferedImage takeScreenshotAsImage(WebElement iframe, WebElement element) {
-    WebDriver webdriver = checkIfFullyValidDriver();
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
+    WebDriver webdriver = checkIfFullyValidDriver(driver);
     if (webdriver == null) {
       return null;
     }
@@ -215,7 +213,8 @@ public class ScreenShotLaboratory {
       return null;
     }
     int iframeHeight = iframe.getSize().getHeight();
-    switchTo().frame(iframe);
+    SelenideTargetLocator switchTo = new SelenideTargetLocator(driver.config(), driver.getWebDriver());
+    switchTo.frame(iframe);
     int iframeWidth = ((Long) ((JavascriptExecutor) webdriver).executeScript("return document.body.clientWidth")).intValue();
     if (iframeHeight > img.getHeight()) {
       iframeHeight = img.getHeight() - iframeLocation.getY();
@@ -232,7 +231,7 @@ public class ScreenShotLaboratory {
     if (elementHeight > iframeHeight) {
       elementHeight = iframeHeight - elementLocation.getY();
     }
-    switchTo().defaultContent();
+    switchTo.defaultContent();
     try {
       img = img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
         elementWidth, elementHeight);
@@ -244,34 +243,29 @@ public class ScreenShotLaboratory {
     return img;
   }
 
-  private WebDriver checkIfFullyValidDriver() {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
-
-    WebDriver webdriver = getWebDriver();
-    if (!(webdriver instanceof TakesScreenshot)) {
-      log.warning("Cannot take screenshot because browser does not support screenshots");
-      return null;
-    } else if (!(webdriver instanceof JavascriptExecutor)) {
-      log.warning("Cannot take screenshot as driver is not supporting javascript execution");
-      return null;
-    }
-    return webdriver;
+  private WebDriver checkIfFullyValidDriver(Driver driver) {
+    return ifWebDriverStarted(driver, () -> {
+      WebDriver webdriver = driver.getWebDriver();
+      if (!(webdriver instanceof TakesScreenshot)) {
+        log.warning("Cannot take screenshot because browser does not support screenshots");
+        return null;
+      }
+      else if (!(webdriver instanceof JavascriptExecutor)) {
+        log.warning("Cannot take screenshot as driver is not supporting javascript execution");
+        return null;
+      }
+      return webdriver;
+    });
   }
 
-  public File takeScreenShotAsFile() {
-    if (!WebDriverRunner.hasWebDriverStarted()) {
-      log.warning("Cannot take screenshot because browser is not started");
-      return null;
-    }
-
-    WebDriver webdriver = getWebDriver();
-    //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
-    File scrFile = getPageImage(webdriver);
-    addToHistory(scrFile);
-    return scrFile;
+  public File takeScreenShotAsFile(Driver driver) {
+    return ifWebDriverStarted(driver, () -> {
+      WebDriver webdriver = driver.getWebDriver();
+      //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
+      File scrFile = getPageImage(webdriver);
+      addToHistory(scrFile);
+      return scrFile;
+    });
   }
 
   protected File getPageImage(WebDriver webdriver) {
@@ -302,51 +296,56 @@ public class ScreenShotLaboratory {
     }
   }
 
-  protected File savePageImageToFile(String fileName, WebDriver webdriver) {
+  protected File savePageImageToFile(Config config, String fileName, WebDriver webdriver) {
     File imageFile = null;
     if (webdriver instanceof TakesScreenshot) {
-      imageFile = takeScreenshotImage((TakesScreenshot) webdriver, fileName);
+      imageFile = takeScreenshotImage(config, (TakesScreenshot) webdriver, fileName);
     }
     return imageFile;
   }
 
-  protected File savePageSourceToFile(String fileName, WebDriver webdriver) {
-    return savePageSourceToFile(fileName, webdriver, true);
+  protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver) {
+    return savePageSourceToFile(config, fileName, webdriver, true);
   }
 
-  protected File savePageSourceToFile(String fileName, WebDriver webdriver, boolean retryIfAlert) {
-    File pageSource = new File(reportsFolder, fileName + ".html");
+  protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver, boolean retryIfAlert) {
+    File pageSource = new File(config.reportsFolder(), fileName + ".html");
 
     try {
       writeToFile(webdriver.getPageSource(), pageSource);
-    } catch (UnhandledAlertException e) {
+    }
+    catch (UnhandledAlertException e) {
       if (retryIfAlert) {
         try {
           Alert alert = webdriver.switchTo().alert();
           log.severe(e + ": " + alert.getText());
           alert.accept();
-          savePageSourceToFile(fileName, webdriver, false);
-        } catch (Exception unableToCloseAlert) {
+          savePageSourceToFile(config, fileName, webdriver, false);
+        }
+        catch (Exception unableToCloseAlert) {
           log.severe("Failed to close alert: " + unableToCloseAlert);
         }
-      } else {
+      }
+      else {
         printOnce("savePageSourceToFile", e);
       }
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       log.log(WARNING, "Failed to save page source to " + fileName + " because of " + e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
-    } catch (RuntimeException e) {
+    }
+    catch (RuntimeException e) {
       log.log(SEVERE, "Failed to save page source to " + fileName, e);
       writeToFile(e.toString(), pageSource);
     }
     return pageSource;
   }
 
-  protected File takeScreenshotImage(TakesScreenshot driver, String fileName) {
+  protected File takeScreenshotImage(Config config, TakesScreenshot driver, String fileName) {
     try {
       File scrFile = driver.getScreenshotAs(FILE);
-      File imageFile = new File(reportsFolder, fileName + ".png");
+      File imageFile = new File(config.reportsFolder(), fileName + ".png");
       try {
         copyFile(scrFile, imageFile);
       }
@@ -417,23 +416,24 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public String formatScreenShotPath() {
-    if (!Configuration.screenshots) {
+  public String formatScreenShotPath(Driver driver) {
+    if (!driver.config().screenshots()) {
       log.config("Automatic screenshots are disabled.");
       return "";
     }
 
-    String screenshot = takeScreenShot();
+    String screenshot = takeScreenShot(driver);
     if (screenshot == null) {
       return "";
     }
 
-    if (Configuration.reportsUrl != null) {
+    if (driver.config().reportsUrl() != null) {
       String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
-      String screenshotUrl = Configuration.reportsUrl + screenshotRelativePath.replace('\\', '/');
+      String screenshotUrl = driver.config().reportsUrl() + screenshotRelativePath.replace('\\', '/');
       try {
         screenshotUrl = new URL(screenshotUrl).toExternalForm();
-      } catch (MalformedURLException ignore) {
+      }
+      catch (MalformedURLException ignore) {
         // ignored exception
       }
       log.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
@@ -443,8 +443,25 @@ public class ScreenShotLaboratory {
     log.config("reportsUrl is not configured. Returning screenshot file name '" + screenshot + "'");
     try {
       return new File(screenshot).toURI().toURL().toExternalForm();
-    } catch (MalformedURLException e) {
+    }
+    catch (MalformedURLException e) {
       return "file://" + screenshot;
     }
+  }
+
+  private <T> T ifWebDriverStarted(Driver driver, Supplier<T> lambda) {
+    if (!driver.hasWebDriverStarted()) {
+      log.warning("Cannot take screenshot because browser is not started");
+      return null;
+    }
+    return lambda.get();
+  }
+
+  private <T> T ifReportsFolderNotNull(Config config, Supplier<T> lambda) {
+    if (config.reportsFolder() == null) {
+      log.severe("Cannot take screenshot because reportsFolder is null");
+      return null;
+    }
+    return lambda.get();
   }
 }

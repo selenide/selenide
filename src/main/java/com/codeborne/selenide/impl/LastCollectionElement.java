@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
@@ -24,6 +25,11 @@ public class LastCollectionElement extends WebElementSource {
   }
 
   @Override
+  public Driver driver() {
+    return collection.driver();
+  }
+
+  @Override
   public WebElement getWebElement() {
     return lastElementOf(collection.getElements());
   }
@@ -40,7 +46,7 @@ public class LastCollectionElement extends WebElementSource {
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.description(), visible, lastError);
+      return new ElementNotFound(collection.driver(), collection.description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
   }

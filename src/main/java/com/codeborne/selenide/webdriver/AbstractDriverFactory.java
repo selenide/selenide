@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -11,9 +12,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
-import static com.codeborne.selenide.Configuration.browserVersion;
-import static com.codeborne.selenide.Configuration.pageLoadStrategy;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
@@ -24,17 +22,17 @@ abstract class AbstractDriverFactory {
 
   private static final Logger log = Logger.getLogger(AbstractDriverFactory.class.getName());
 
-  abstract boolean supports();
+  abstract boolean supports(Config config, Browser browser);
 
-  abstract WebDriver create(Proxy proxy);
+  abstract WebDriver create(Config config, Proxy proxy);
 
-  WebDriver createInstanceOf(final String className, final Proxy proxy) {
+  WebDriver createInstanceOf(String className, Config config, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = createCommonCapabilities(proxy);
+      DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
-      if (isPhantomjs()) {
+      if (className.contains("phantomjs")) {
         capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
                 new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
       }
@@ -59,24 +57,24 @@ abstract class AbstractDriverFactory {
     return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
   }
 
-  DesiredCapabilities createCommonCapabilities(final Proxy proxy) {
+  DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
     }
-    if (browserVersion != null && !browserVersion.isEmpty()) {
-      browserCapabilities.setVersion(browserVersion);
+    if (config.browserVersion() != null && !config.browserVersion().isEmpty()) {
+      browserCapabilities.setVersion(config.browserVersion());
     }
-    browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, pageLoadStrategy);
+    browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
     browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
 
     transferCapabilitiesFromSystemProperties(browserCapabilities);
-    browserCapabilities = mergeCapabilitiesFromConfiguration(browserCapabilities);
+    browserCapabilities = mergeCapabilitiesFromConfiguration(config, browserCapabilities);
     return browserCapabilities;
   }
 
-  DesiredCapabilities mergeCapabilitiesFromConfiguration(DesiredCapabilities currentCapabilities) {
-    return currentCapabilities.merge(Configuration.browserCapabilities);
+  DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
+    return currentCapabilities.merge(config.browserCapabilities());
   }
 
   private void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
