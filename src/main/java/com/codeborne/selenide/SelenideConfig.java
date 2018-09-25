@@ -9,9 +9,9 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 
 public class SelenideConfig implements Config {
-  private String browser = System.getProperty("selenide.browser", System.getProperty("browser", CHROME));
+  private String browser = System.getProperty("selenide.browser", CHROME);
   private boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
-  private String remote = System.getProperty("selenide.remote", System.getProperty("remote"));
+  private String remote = System.getProperty("selenide.remote");
   private String browserSize = System.getProperty("selenide.browserSize", "1024x768");
   private String browserVersion = System.getProperty("selenide.browserVersion");
   private String browserPosition = System.getProperty("selenide.browserPosition", "30x30");
