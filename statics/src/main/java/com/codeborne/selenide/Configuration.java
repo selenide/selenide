@@ -82,7 +82,7 @@ public class Configuration {
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie" or "-Dbrowser=ie".
    * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "htmlunit", "phantomjs", "opera", "safari", "edge", "jbrowser"
    * <br>
-   * Default value: "firefox"
+   * Default value: "chrome"
    */
   public static String browser = defaults.browser();
 
@@ -106,7 +106,7 @@ public class Configuration {
    * The browser window size.
    * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
    *
-   * Default value: none (browser size will not be set explicitly)
+   * Default value: 1024x768
    */
   public static String browserSize = defaults.browserSize();
 
@@ -114,7 +114,7 @@ public class Configuration {
    * The browser window position on screen.
    * Can be configured either programmatically or by system property "-Dselenide.browserPosition=10x10".
    *
-   * Default value: none (browser window position will not be set explicitly)
+   * Default value: 30x30
    */
   public static String browserPosition = defaults.browserPosition();
 
@@ -122,7 +122,7 @@ public class Configuration {
    * The browser window is maximized when started.
    * Can be configured either programmatically or by system property "-Dselenide.startMaximized=true".
    * <p>
-   * Default value: true
+   * Default value: false
    */
   public static boolean startMaximized = defaults.startMaximized();
 
