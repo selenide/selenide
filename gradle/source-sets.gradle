@@ -7,9 +7,22 @@ sourceSets {
       srcDir 'statics/src/main/java'
     }
   }
+  staticFacadeTest {
+    java {
+      srcDir 'statics/src/test/java'
+    }
+    resources {
+      srcDir 'statics/src/test/java'
+    }
+  }
 }
 
 sourceSets.staticFacade.compileClasspath += sourceSets.main.compileClasspath
 sourceSets.staticFacade.compileClasspath += sourceSets.main.output
-sourceSets.test.compileClasspath += sourceSets.staticFacade.output
-sourceSets.test.runtimeClasspath += sourceSets.staticFacade.output
+
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.main.output
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.test.compileClasspath
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.test.output
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.staticFacade.compileClasspath
+sourceSets.staticFacadeTest.compileClasspath += sourceSets.staticFacade.output

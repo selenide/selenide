@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Selenide.$;
 
-class InvalidXPathTest extends IntegrationTest {
+class InvalidXPathTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

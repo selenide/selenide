@@ -1,8 +1,8 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.WebDriverProvider;
-import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,30 +10,26 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class CustomWebDriverProviderTest extends IntegrationTest {
+class CustomWebDriverProviderTest extends BaseIntegrationTest {
+  SelenideDriver driver = new SelenideDriver(new SelenideConfig().browser(CustomWebDriverProvider.class.getName()));
+
   @BeforeEach
   void setUp() {
-    assumeTrue(isChrome());
-    close();
+    assumeTrue("chrome".equalsIgnoreCase(browser));
   }
 
   @AfterEach
   void tearDown() {
-    close();
+    driver.close();
   }
 
   @Test
   void userCanImplementAnyCustomWebdriverProvider() {
-    Configuration.browser = CustomWebDriverProvider.class.getName();
+    driver.open("/autocomplete.html");
 
-    openFile("autocomplete.html");
-
-    assertThat(WebDriverRunner.getWebDriver())
-      .isInstanceOf(CustomChromeDriver.class);
+    assertThat(driver.getWebDriver()).isInstanceOf(CustomChromeDriver.class);
   }
 
   private static class CustomChromeDriver extends ChromeDriver {

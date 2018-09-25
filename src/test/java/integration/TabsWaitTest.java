@@ -1,15 +1,12 @@
 package integration;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class TabsWaitTest extends IntegrationTest {
+class TabsWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs_with_delays.html");
@@ -24,7 +21,7 @@ class TabsWaitTest extends IntegrationTest {
 
   @Test
   void waitsUntilTabAppears_byIndex() {
-    Assumptions.assumeFalse(isHtmlUnit(), "Sometimes it fails");
+    assumeFalse(browser().isHtmlUnit(), "Sometimes it fails");
 
     $("#open-new-tab-with-delay").click();
     switchTo().window(1);

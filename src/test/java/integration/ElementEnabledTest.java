@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Selenide.$;
 
-class ElementEnabledTest extends IntegrationTest {
+class ElementEnabledTest extends ITest {
 
   @BeforeEach
   void setUp() {

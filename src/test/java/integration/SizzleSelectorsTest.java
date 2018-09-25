@@ -1,46 +1,39 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-class SizzleSelectorsTest extends IntegrationTest {
-  @BeforeEach
-  void setUp() {
-    openFile("page_with_jquery.html");
-    Configuration.selectorMode = Sizzle;
-  }
+class SizzleSelectorsTest extends BaseIntegrationTest {
+  SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle));
 
   @AfterEach
   void tearDown() {
-    Configuration.selectorMode = CSS;
+    driver.close();
   }
 
   @Test
   void canUseSizzleSelectors() {
-    $$(":input").shouldHave(size(4));
-    $$(":input:not(.masked)").shouldHave(size(3));
-    $$(":header").shouldHave(size(3)); // h1, h1, h2
-    $$(":parent").shouldHave(size(13)); // all non-leaf elements
-    $$(":not(:parent)").shouldHave(size(13)); // all leaf elements
+    driver.open("/page_with_jquery.html");
+    driver.$$(":input").shouldHave(size(4));
+    driver.$$(":input:not(.masked)").shouldHave(size(3));
+    driver.$$(":header").shouldHave(size(3)); // h1, h1, h2
+    driver.$$(":parent").shouldHave(size(13)); // all non-leaf elements
+    driver.$$(":not(:parent)").shouldHave(size(13)); // all leaf elements
 
-    $("input:first").shouldHave(attribute("name", "username"));
-    $("input:nth(1)").shouldHave(attribute("name", "password"));
-    $("input:last").shouldHave(attribute("id", "some-button"));
-    $("input[name!='username'][name!='password']").shouldHave(attribute("name", "rememberMe"));
-    $(":header").shouldHave(text("Page with JQuery"));
-    $(":header", 1).shouldHave(text("Now typing"));
-    $("label:contains('assword')").shouldHave(text("Password:"));
-    assertThat($(":parent:not('html'):not('head')").getTagName())
-      .isEqualTo("title");
+    driver.$("input:first").shouldHave(attribute("name", "username"));
+    driver.$("input:nth(1)").shouldHave(attribute("name", "password"));
+    driver.$("input:last").shouldHave(attribute("id", "some-button"));
+    driver.$("input[name!='username'][name!='password']").shouldHave(attribute("name", "rememberMe"));
+    driver.$(":header").shouldHave(text("Page with JQuery"));
+    driver.$(":header", 1).shouldHave(text("Now typing"));
+    driver.$("label:contains('assword')").shouldHave(text("Password:"));
+    assertThat(driver.$(":parent:not('html'):not('head')").getTagName()).isEqualTo("title");
   }
 }

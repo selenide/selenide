@@ -1,6 +1,7 @@
 package integration;
 
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,38 +14,36 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static java.lang.Thread.currentThread;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class FirefoxWithProfileTest extends IntegrationTest {
+class FirefoxWithProfileTest extends BaseIntegrationTest {
+  private SelenideDriver driver;
+
   @BeforeEach
   void setUp() {
-    assumeTrue(isFirefox());
-    close();
-    toggleProxy(false);
+    assumeTrue(browser().isFirefox());
     WebDriverManager.firefoxdriver().setup();
   }
 
   @AfterEach
   void tearDown() {
-    close();
+    if (driver != null) {
+      driver.close();
+    }
   }
 
   @Test
   void createFirefoxWithCustomProfile() {
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
-    WebDriver driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
-    driver.manage().window().maximize();
+    WebDriver firefox = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
 
-    WebDriverRunner.setWebDriver(driver);
-    openFile("page_with_selects_without_jquery.html");
-    $("#non-clickable-element").shouldBe(visible);
+    driver = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox);
+    driver.open("/page_with_selects_without_jquery.html");
+    driver.$("#non-clickable-element").shouldBe(visible);
 
-    openFile("page_with_jquery.html");
-    $("#rememberMe").shouldBe(visible);
+    driver.open("/page_with_jquery.html");
+    driver.$("#rememberMe").shouldBe(visible);
   }
 
   private FirefoxProfile createFirefoxProfileWithExtensions() {

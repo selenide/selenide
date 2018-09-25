@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.Selenide.$;
 
-class CheckboxTest extends IntegrationTest {
+class CheckboxTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

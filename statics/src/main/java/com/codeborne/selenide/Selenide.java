@@ -448,7 +448,7 @@ public class Selenide {
   }
 
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
-    return getSelenideDriver().driver().executeJavaScript(jsCode, arguments);
+    return getSelenideDriver().executeJavaScript(jsCode, arguments);
   }
 
   /**

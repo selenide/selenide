@@ -1,17 +1,14 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 
-/**
- * Created by sepi on 21.12.16.
- */
 class SelenidePageFactoryTest extends IntegrationTest {
 
   @BeforeEach
@@ -22,13 +19,13 @@ class SelenidePageFactoryTest extends IntegrationTest {
   @Test
   void canInitPageWithFindByAnnotations() {
     StartPageWithAnnotation startPage = page(StartPageWithAnnotation.class);
-    startPage.pageText.shouldHave(Condition.text("Start page"));
+    startPage.pageText.shouldHave(text("Start page"));
   }
 
   @Test
   void canInitPageWithoutFindByAnnotations() {
     StartPageWithoutAnnotation startPage = page(StartPageWithoutAnnotation.class);
-    startPage.pageHeader.shouldHave(Condition.text("Selenide"));
+    startPage.pageHeader.shouldHave(text("Selenide"));
   }
 }
 

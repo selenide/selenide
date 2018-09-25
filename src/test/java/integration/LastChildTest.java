@@ -4,11 +4,12 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 
-public class LastChildTest extends IntegrationTest {
+public class LastChildTest extends ITest {
 
   @BeforeEach
   void openTestPageWithJQuery() {

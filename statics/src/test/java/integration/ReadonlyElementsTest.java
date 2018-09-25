@@ -1,8 +1,5 @@
 package integration;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.ex.InvalidStateException;
@@ -11,6 +8,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactValue;

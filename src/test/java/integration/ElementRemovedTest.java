@@ -10,12 +10,11 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
 /**
  * All checks in this class are equivalent
  */
-class ElementRemovedTest extends IntegrationTest {
+class ElementRemovedTest extends ITest {
   @BeforeEach
   void clickRemovesElement() {
     openFile("elements_disappear_on_click.html");

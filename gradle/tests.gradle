@@ -19,7 +19,6 @@ task edge(type: Test) {
 
 task chrome(type: Test) {
   systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.headless'] = 'true'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -51,7 +50,6 @@ task phantomjs(type: Test) {
 
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
-  systemProperties['selenide.headless'] = 'true'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -97,6 +95,11 @@ tasks.withType(Test) {
   }
   jvmArgs = ['-ea', '-Xmx512m']
   systemProperties += System.properties
+
+  classpath += project.sourceSets.staticFacade.output.classesDirs
+  classpath += project.sourceSets.staticFacadeTest.output.classesDirs
+  testClassesDirs += project.sourceSets.staticFacadeTest.output.classesDirs
+
   jacoco {
     enabled = true
     includes = ['com/codeborne/selenide/**/*']

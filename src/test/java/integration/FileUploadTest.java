@@ -6,19 +6,15 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class FileUploadTest extends IntegrationTest {
+class FileUploadTest extends ITest {
   @BeforeEach
   void openFileUploadForm() {
-    assumeFalse(isPhantomjs());
+    assumeFalse(browser().isPhantomjs());
 
-    if (isIE()) {
-      closeWebDriver();
+    if (browser().isIE()) {
+      driver().close();
     }
     openFile("file_upload_form.html");
   }
@@ -28,7 +24,7 @@ class FileUploadTest extends IntegrationTest {
     File f1 = $("#cv").uploadFromClasspath("hello_world.txt");
     File f2 = $("#avatar").uploadFromClasspath("firebug-1.11.4.xpi");
     $("#submit").click();
-    $("h3").shouldHave(text("Uploaded 2 files"));
+    $("h3").shouldHave(text("Uploaded 2 files").because("Actual files: " + server.getUploadedFiles()));
 
     assertThat(f1).exists();
     assertThat(f2).exists();

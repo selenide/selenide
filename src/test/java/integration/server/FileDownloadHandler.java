@@ -10,7 +10,6 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Set;
 
-import static com.codeborne.selenide.Selenide.sleep;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
@@ -36,7 +35,11 @@ class FileDownloadHandler extends BaseHandler {
     }
 
     if (request.getParameter("pause") != null) {
-      sleep(Long.parseLong(request.getParameter("pause")));
+      try {
+        Thread.sleep(Long.parseLong(request.getParameter("pause")));
+      }
+      catch (InterruptedException ignore) {
+      }
     }
 
     return new Result(SC_OK, getContentType(fileName), fileContent,

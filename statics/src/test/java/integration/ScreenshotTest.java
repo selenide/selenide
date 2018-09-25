@@ -1,30 +1,30 @@
 package integration;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    Assumptions.assumeFalse(isHtmlUnit());
+    assumeFalse(isHtmlUnit());
     openFile("page_with_big_divs.html");
   }
 

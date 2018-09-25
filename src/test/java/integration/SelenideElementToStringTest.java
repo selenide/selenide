@@ -6,10 +6,8 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 
-public class SelenideElementToStringTest extends IntegrationTest {
+public class SelenideElementToStringTest extends ITest {
   @Test
   void toStringMethodShowsElementDetails() {
     openFile("page_with_selects_without_jquery.html");
@@ -21,7 +19,7 @@ public class SelenideElementToStringTest extends IntegrationTest {
     assertThat($(By.name("rememberMe")))
       .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>");
 
-    if (isHtmlUnit()) {
+    if (browser().isHtmlUnit()) {
       assertThat($(By.name("domain")).find("option"))
         .hasToString("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>");
     }
@@ -40,7 +38,7 @@ public class SelenideElementToStringTest extends IntegrationTest {
   void toStringShowsAllAttributesButStyleSortedAlphabetically() {
     openFile("page_with_selects_without_jquery.html");
 
-    if (isHtmlUnit()) {
+    if (browser().isHtmlUnit()) {
       assertThat($("#gopher"))
         .hasToString("<div class=\"invisible-with-multiple-attributes\" id=\"gopher\" " +
           "onclick=\"void(0);\" onchange=\"console.log(this);\" placeholder=\"Животное\" " +

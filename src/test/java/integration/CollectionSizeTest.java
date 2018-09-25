@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +10,8 @@ import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
-import static com.codeborne.selenide.Selenide.$$;
 
-class CollectionSizeTest extends IntegrationTest {
+class CollectionSizeTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -89,18 +87,5 @@ class CollectionSizeTest extends IntegrationTest {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldHave(sizeNotEqual(4)))
       .isInstanceOf(ListSizeMismatch.class)
       .hasMessageContaining("expected: <> 4, actual: 4");
-  }
-
-  @Test
-  void sizeCheck_forSpecialCornerCase_timeoutHappensAfterFirstCheck() {
-    Configuration.collectionsTimeout = 1000;
-    Configuration.collectionsPollingInterval = 1100;
-
-    try {
-      $$("#radioButtons input").shouldHave(size(4));
-    } finally {
-      Configuration.collectionsTimeout = 6000;
-      Configuration.collectionsPollingInterval = 200;
-    }
   }
 }

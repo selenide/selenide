@@ -17,6 +17,7 @@ class FastSetValueTest extends IntegrationTest {
   @Test
   void standardSetValueTriggersBlurCorrectly() {
     Configuration.fastSetValue = false;
+    Configuration.setValueChangeEvent = true;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
 
@@ -28,6 +29,7 @@ class FastSetValueTest extends IntegrationTest {
   @Test
   void fastSetValueTriggersBlurCorrectly() {
     Configuration.fastSetValue = true;
+    Configuration.setValueChangeEvent = true;
     $("#username").setValue("john");
     $("#usernameHint").should(appear);
 

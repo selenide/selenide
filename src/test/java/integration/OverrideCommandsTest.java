@@ -10,9 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.codeborne.selenide.Selenide.$;
-
-class OverrideCommandsTest extends IntegrationTest {
+class OverrideCommandsTest extends ITest {
   private AtomicInteger clickCounter = new AtomicInteger();
 
   @BeforeEach

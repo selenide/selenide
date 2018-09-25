@@ -1,16 +1,12 @@
 package com.codeborne.selenide.logevents;
 
-import com.codeborne.selenide.WebDriverRunner;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -20,17 +16,6 @@ import static org.mockito.Mockito.when;
 
 class SelenideLoggerTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
-
-  @BeforeEach
-  void setUp() {
-    WebDriverRunner.closeWebDriver();
-    WebDriverRunner.setWebDriver(webdriver);
-  }
-
-  @AfterEach
-  void tearDown() {
-    WebDriverRunner.closeWebDriver();
-  }
 
   @Test
   void convertsJavaMethodNameToHumanReadableClause() {
@@ -76,7 +61,7 @@ class SelenideLoggerTest implements WithAssertions {
     when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
 
-    $("div").click();
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
 
     verifyEvent(listener1);
     verifyEvent(listener2);
@@ -88,7 +73,7 @@ class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.removeListener("simpleReport");
     SelenideLogger.removeListener("softAsserts");
 
-    $("div").click();
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
     verifyEvent(listener3);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);
@@ -98,11 +83,8 @@ class SelenideLoggerTest implements WithAssertions {
     ArgumentCaptor<LogEvent> event = ArgumentCaptor.forClass(LogEvent.class);
     verify(listener1).onEvent(event.capture());
     LogEvent value = event.getValue();
-    assertThat(value.getElement())
-      .isEqualTo("div");
-    assertThat(value.getSubject())
-      .isEqualTo("click()");
-    assertThat(value.getStatus())
-      .isEqualTo(PASS);
+    assertThat(value.getElement()).isEqualTo("div");
+    assertThat(value.getSubject()).isEqualTo("click()");
+    assertThat(value.getStatus()).isEqualTo(PASS);
   }
 }

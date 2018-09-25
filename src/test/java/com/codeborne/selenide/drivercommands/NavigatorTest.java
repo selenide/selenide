@@ -1,7 +1,6 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.AuthenticationType;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
@@ -10,7 +9,6 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -139,11 +137,5 @@ class NavigatorTest implements WithAssertions {
     assertThatThrownBy(() -> navigator.open(selenideDriver, "https://some.com/login"))
       .isInstanceOf(IllegalStateException.class)
       .hasMessage("config.proxyEnabled == false but config.fileDownload == PROXY. You need to enable proxy server automatically.");
-  }
-
-  @AfterEach
-  void tearDown() {
-    Configuration.proxyEnabled = false;
-    Configuration.fileDownload = HTTPGET;
   }
 }

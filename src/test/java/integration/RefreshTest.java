@@ -1,14 +1,12 @@
 package integration;
 
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.Selenide.$;
 
-class RefreshTest extends IntegrationTest {
+class RefreshTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
@@ -20,7 +18,7 @@ class RefreshTest extends IntegrationTest {
     $(By.name("rememberMe")).click();
     $(By.name("rememberMe")).shouldBe(selected);
 
-    Selenide.refresh();
+    driver().refresh();
     $(By.name("rememberMe")).shouldNotBe(selected);
   }
 }

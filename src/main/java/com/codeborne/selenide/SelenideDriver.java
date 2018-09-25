@@ -123,7 +123,7 @@ public class SelenideDriver {
 
   public void updateHash(String hash) {
     String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
-    driver().executeJavaScript("window.location.hash='" + localHash + "'");
+    executeJavaScript("window.location.hash='" + localHash + "'");
   }
 
   public Browser browser() {
@@ -156,8 +156,12 @@ public class SelenideDriver {
     driver.close();
   }
 
+  public <T> T executeJavaScript(String jsCode, Object... arguments) {
+    return driver().executeJavaScript(jsCode, arguments);
+  }
+
   public WebElement getFocusedElement() {
-    return (WebElement) driver.executeJavaScript("return document.activeElement");
+    return executeJavaScript("return document.activeElement");
   }
 
 
@@ -178,7 +182,7 @@ public class SelenideDriver {
   }
 
   public void zoom(double factor) {
-    driver().executeJavaScript(
+    executeJavaScript(
       "document.body.style.transform = 'scale(' + arguments[0] + ')';" +
         "document.body.style.transformOrigin = '0 0';",
       factor
@@ -263,12 +267,31 @@ public class SelenideDriver {
   }
 
   public void clearBrowserLocalStorage() {
-    driver().executeJavaScript("localStorage.clear();");
+    executeJavaScript("localStorage.clear();");
   }
 
-
   public boolean atBottom() {
-    return driver().executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+    return executeJavaScript("return window.pageYOffset + window.innerHeight >= document.body.scrollHeight");
+  }
+
+  public SelenideTargetLocator switchTo() {
+    return driver().switchTo();
+  }
+
+  public String url() {
+    return getWebDriver().getCurrentUrl();
+  }
+
+  public String source() {
+    return getWebDriver().getPageSource();
+  }
+
+  public String getCurrentFrameUrl() {
+    return executeJavaScript("return window.location.href").toString();
+  }
+
+  public String getUserAgent() {
+    return driver().getUserAgent();
   }
 
   public File download(String url) throws IOException {

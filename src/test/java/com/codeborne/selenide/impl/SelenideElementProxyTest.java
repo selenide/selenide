@@ -1,10 +1,8 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
@@ -54,13 +52,9 @@ class SelenideElementProxyTest implements WithAssertions {
 
   @BeforeEach
   void mockWebDriver() {
-    WebDriverRunner.setWebDriver(webdriver);
     when(webdriver
       .executeScript(anyString(), any(WebElement.class)))
       .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
-
-    Screenshots.screenshots = mock(ScreenShotLaboratory.class);
-    when(Screenshots.screenshots.takeScreenShot(any())).thenReturn("");
 
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");
