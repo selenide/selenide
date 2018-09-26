@@ -28,7 +28,7 @@ class BrowserResizer {
   }
 
   WebDriver adjustBrowserSize(Config config, Browser browser, WebDriver driver) {
-    if (config.browserSize() != null) {
+    if (config.browserSize() != null && !config.startMaximized()) {
       log.info("Set browser size to " + config.browserSize());
       String[] dimension = config.browserSize().split("x");
       int width = Integer.parseInt(dimension[0]);

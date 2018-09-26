@@ -113,7 +113,7 @@ public class Configuration {
    * The browser window size.
    * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
    * <br>
-   * Default value: 1024x768
+   * Default value: 1366x768
    */
   public static String browserSize = defaults.browserSize();
 
@@ -121,7 +121,7 @@ public class Configuration {
    * The browser window position on screen.
    * Can be configured either programmatically or by system property "-Dselenide.browserPosition=10x10".
    * <br>
-   * Default value: 30x30
+   * Default value: none
    */
   public static String browserPosition = defaults.browserPosition();
 

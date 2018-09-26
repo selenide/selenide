@@ -12,9 +12,9 @@ public class SelenideConfig implements Config {
   private String browser = System.getProperty("selenide.browser", CHROME);
   private boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
   private String remote = System.getProperty("selenide.remote");
-  private String browserSize = System.getProperty("selenide.browserSize", "1024x768");
+  private String browserSize = System.getProperty("selenide.browserSize", "1366x768");
   private String browserVersion = System.getProperty("selenide.browserVersion");
-  private String browserPosition = System.getProperty("selenide.browserPosition", "30x30");
+  private String browserPosition = System.getProperty("selenide.browserPosition");
   private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
   private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
