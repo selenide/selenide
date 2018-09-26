@@ -12,7 +12,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 class BrowserResizerTest {
   private BrowserResizer factory = spy(new BrowserResizer());
@@ -21,12 +20,12 @@ class BrowserResizerTest {
   private SelenideConfig config = new SelenideConfig();
 
   @Test
-  void doesNotChangeWindowSize_ifStartMaximizedIsFalse() {
+  void doesChangeWindowSize_ifStartMaximizedIsFalse() {
     config.startMaximized(false);
 
     factory.adjustBrowserSize(config, browser, webdriver);
 
-    verifyNoMoreInteractions(webdriver);
+    verify(webdriver.manage().window()).setSize(new Dimension(1366, 768));
   }
 
   @Test

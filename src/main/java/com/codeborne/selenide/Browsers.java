@@ -6,10 +6,6 @@ package com.codeborne.selenide;
 public interface Browsers {
   public static final String CHROME = "chrome";
 
-  /**
-   * @deprecated use {@link #INTERNET_EXPLORER}
-   */
-  @Deprecated
   public static final String IE = "ie";
   public static final String INTERNET_EXPLORER = "internet explorer";
   public static final String EDGE = "edge";
