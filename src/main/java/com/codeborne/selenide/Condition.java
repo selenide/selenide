@@ -43,16 +43,6 @@ public abstract class Condition {
   };
 
   /**
-   * @deprecated please use {@link #exist} instead, "present" is ambiguous
-   * <p>
-   * Synonym for {@link #exist}.
-   *
-   * <p>Sample: {@code $("input").shouldBe(present);}</p>
-   */
-  @Deprecated
-  public static final Condition present = exist;
-
-  /**
    * Checks that element is not visible or does not exists.
    * <p>
    * Opposite to {@link #appear}
@@ -100,20 +90,6 @@ public abstract class Condition {
    * <p><code>$("#loginLink").should(disappear);</code></p>
    */
   public static final Condition disappear = hidden;
-
-  /**
-   * @param attributeName  name of attribute
-   * @param attributeValue expected value of attribute
-   * @deprecated please use {@link #attribute(String, String)} instead
-   * <p>
-   * Sample:
-   * <code>$("#mydiv").waitUntil(hasAttribute("fileId", "12345"), 7000);</code>
-   * </p>
-   */
-  @Deprecated
-  public static Condition hasAttribute(String attributeName, String attributeValue) {
-    return attribute(attributeName, attributeValue);
-  }
 
   /**
    * Check if element has "readonly" attribute (with any value)
@@ -201,16 +177,6 @@ public abstract class Condition {
   }
 
   /**
-   * @param value expected value of input field
-   * @deprecated please use {@link #value(String)} instead
-   * <p>Sample: <code>$("#myInput").waitUntil(hasValue("John"), 5000)</p>
-   */
-  @Deprecated
-  public static Condition hasValue(String value) {
-    return value(value);
-  }
-
-  /**
    * <p>Sample: <code>$("#input").shouldHave(name("username"))</code></p>
    *
    * @param name expected name of input field
@@ -274,20 +240,6 @@ public abstract class Condition {
         return name + " '" + regex + '\'';
       }
     };
-  }
-
-  /**
-   * @param text expected text of HTML element
-   * @deprecated please use {@link #text(String)} instead
-   * <p>Sample: <code>$("h1").waitUntil(hasText("Hello"), 10000)</code></p>
-   *
-   * <p>Case insensitive</p>
-   * <p>
-   * NB! Ignores multiple whitespaces between words
-   */
-  @Deprecated
-  public static Condition hasText(String text) {
-    return text(text);
   }
 
   /**
@@ -367,16 +319,6 @@ public abstract class Condition {
     };
   }
 
-  /**
-   * @see {@link #cssClass(String)} instead of using it
-   * @deprecated don't use this method, it is public by accident, and will be turned to private soon
-   */
-  @Deprecated
-  public static boolean hasClass(WebElement element, String cssClass) {
-    String classes = element.getAttribute("class");
-    return classes != null && contains(classes.split(" "), cssClass);
-  }
-
   private static <T> boolean contains(T[] objects, T object) {
     for (T object1 : objects) {
       if (object.equals(object1)) {
@@ -387,24 +329,14 @@ public abstract class Condition {
   }
 
   /**
-   * @see #cssClass(String)
-   *
-   * <p>Sample: <code>$("input").waitUntil(hasClass("blocked"), 7000);</code></p>
-   * @deprecated please use {@link #cssClass(String)} instead of this method, which is exactly the same
-   */
-  @Deprecated
-  public static Condition hasClass(String cssClass) {
-    return cssClass(cssClass);
-  }
-
-  /**
    * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
   public static Condition cssClass(final String cssClass) {
     return new Condition("css class") {
       @Override
       public boolean apply(Driver driver, WebElement element) {
-        return hasClass(element, cssClass);
+        String classes = element.getAttribute("class");
+        return classes != null && contains(classes.split(" "), cssClass);
       }
 
       @Override

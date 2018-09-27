@@ -238,34 +238,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts() that returns List instead of array
-   */
-  @Deprecated
-  public String[] getTexts() {
-    return getTexts(getElements());
-  }
-
-  /**
    * Fail-safe method for retrieving texts of given elements.
    * @param elements Any collection of WebElements
    * @return Array of texts (or exceptions in case of any WebDriverExceptions)
    */
   public static List<String> texts(Collection<WebElement> elements) {
-    return elements.stream().map(e -> getText(e)).collect(toList());
-  }
-
-  /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection)
-   *              that returns List instead of array
-   */
-  @Deprecated
-  public static String[] getTexts(Collection<WebElement> elements) {
-    String[] texts = new String[elements.size()];
-    int i = 0;
-    for (WebElement element : elements) {
-      texts[i++] = getText(element);
-    }
-    return texts;
+    return elements.stream().map(ElementsCollection::getText).collect(toList());
   }
 
   private static String getText(WebElement element) {

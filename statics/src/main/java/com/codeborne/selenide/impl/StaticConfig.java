@@ -177,11 +177,6 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public String chromeSwitches() {
-    return Configuration.chromeSwitches;
-  }
-
-  @Override
   public String pageLoadStrategy() {
     return Configuration.pageLoadStrategy;
   }

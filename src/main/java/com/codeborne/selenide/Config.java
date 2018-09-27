@@ -12,7 +12,6 @@ public interface Config {
   boolean startMaximized();
   boolean driverManagerEnabled();
   String browserBinary();
-  String chromeSwitches();
   String pageLoadStrategy();
   DesiredCapabilities browserCapabilities();
 

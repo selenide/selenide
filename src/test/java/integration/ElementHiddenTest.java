@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.visible;
 
 class ElementHiddenTest extends ITest {
@@ -36,11 +35,6 @@ class ElementHiddenTest extends ITest {
   @Test
   void shouldNotBeVisible() {
     $("#hide").shouldNotBe(visible);
-  }
-
-  @Test
-  void shouldBePresent() {
-    $("#hide").shouldBe(present);
   }
 
   @Test

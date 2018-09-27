@@ -6,8 +6,6 @@ import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Selenide.$;
@@ -36,7 +34,7 @@ class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting__When$$Collection() {
     ElementsCollection collection = $$("ul li");
 
-    assertThat(Arrays.toString(collection.getTexts()))
+    assertThat(collection.texts().toString())
       .isEqualTo("[Miller, Julie Mao]");
   }
 

@@ -18,7 +18,6 @@ public class SelenideConfig implements Config {
   private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
   private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
-  private String chromeSwitches = System.getProperty("selenide.chromeSwitches");
   private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy", "normal");
   private DesiredCapabilities browserCapabilities;
 
@@ -364,16 +363,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig browserBinary(String browserBinary) {
     this.browserBinary = browserBinary;
-    return this;
-  }
-
-  @Override
-  public String chromeSwitches() {
-    return chromeSwitches;
-  }
-
-  public SelenideConfig chromeSwitches(String chromeSwitches) {
-    this.chromeSwitches = chromeSwitches;
     return this;
   }
 

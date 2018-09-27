@@ -134,21 +134,6 @@ public class Configuration {
   public static boolean startMaximized = defaults.startMaximized();
 
   /**
-   * @deprecated this options allowed only a single switch.
-   * Please use instead more generic -Dchromeoptions.args=<comma-separated list of switches>
-   * <br>
-   * or use -Dchromeoptions.prefs=<comma-separated dictionary of key=value>
-   * <br>
-   * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property,
-   * i.e. "-Dselenide.chromeSwitches=--disable-popup-blocking".
-   * <br>
-   * Default value: none
-   */
-  @Deprecated
-  public static String chromeSwitches = defaults.chromeSwitches();
-
-  /**
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>

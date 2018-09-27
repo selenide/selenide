@@ -452,19 +452,6 @@ public class Selenide {
   }
 
   /**
-   * @deprecated Not recommended. Use method {@code $(radioField).selectRadio(value);} instead
-   *
-   * Select radio field by value
-   * @param radioField any By selector for finding radio field
-   * @param value value to select (should match an attribute "value")
-   * @return the selected radio field
-   */
-  @Deprecated
-  public static SelenideElement selectRadio(By radioField, String value) {
-    return $(radioField).selectRadio(value);
-  }
-
-  /**
    * Returns selected element in radio group
    * @return null if nothing selected
    */

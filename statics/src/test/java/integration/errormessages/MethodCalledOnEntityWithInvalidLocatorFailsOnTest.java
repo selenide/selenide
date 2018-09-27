@@ -11,10 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
-import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -128,7 +125,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     SelenideElement element = $$("##invalid-locator").findBy(cssClass("the-expanse"));
 
     try {
-      element.shouldBe(present);
+      element.shouldBe(exist);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
@@ -158,7 +155,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     SelenideElement element = $("ul").find("##invalid-locator");
 
     try {
-      element.shouldBe(present);
+      element.shouldBe(exist);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
@@ -248,7 +245,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     ElementsCollection collection = $$("##invalid-locator").filter(cssClass("the-expanse"));
 
     try {
-      collection.getTexts();
+      collection.texts();
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       //todo - need to fix

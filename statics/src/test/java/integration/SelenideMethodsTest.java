@@ -23,12 +23,10 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.focused;
-import static com.codeborne.selenide.Condition.hasValue;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.name;
-import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
@@ -92,20 +90,15 @@ class SelenideMethodsTest extends IntegrationTest {
     $("#theHiddenElement").should(disappear);
     $("#theHiddenElement").waitUntil(disappears, 1000);
     $("#theHiddenElement").should(exist);
-    $("#theHiddenElement").shouldBe(present);
-    $("#theHiddenElement").waitUntil(present, 1000);
 
     $(".non-existing-element").should(Condition.not(exist));
     $(".non-existing-element").shouldNot(exist);
-    $(".non-existing-element").shouldNotBe(present);
-    $(".non-existing-element").waitUntil(Condition.not(present), 1000);
-    $(".non-existing-element").waitWhile(present, 1000);
   }
 
   @Test
   void userCanUseCustomPollingInterval() {
     $("#theHiddenElement").waitUntil(disappears, 1000, 10);
-    $(".non-existing-element").waitWhile(present, 1000, 20);
+    $(".non-existing-element").waitWhile(exist, 1000, 20);
   }
 
   @Test
@@ -154,7 +147,7 @@ class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).val("sherlyn");
 //    $(By.name("password")).shouldBe(focused);
     $(By.name("password")).shouldHave(value("sherlyn"));
-    $(By.name("password")).waitUntil(hasValue("sherlyn"), 1000);
+    $(By.name("password")).waitUntil(value("sherlyn"), 1000);
     assertThat($(By.name("password")).val())
       .isEqualTo("sherlyn");
   }
