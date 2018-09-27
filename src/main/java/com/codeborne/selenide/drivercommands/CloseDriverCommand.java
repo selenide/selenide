@@ -14,10 +14,10 @@ public class CloseDriverCommand {
   private final SelenideProxyServer selenideProxyServer;
   private final long closeBrowserTimeoutMs;
 
-  CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer, long closeBrowserTimeoutMs) {
+  CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     this.webDriver = webDriver;
     this.selenideProxyServer = selenideProxyServer;
-    this.closeBrowserTimeoutMs = closeBrowserTimeoutMs;
+    this.closeBrowserTimeoutMs = 5000;
   }
 
   public void run() {

@@ -50,9 +50,6 @@ public class SetValue implements Command<WebElement> {
     else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
       if (error != null) throw new InvalidStateException(driver, error);
-      if (driver.config().setValueChangeEvent()) {
-        events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
-      }
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup");
       }
@@ -60,9 +57,6 @@ public class SetValue implements Command<WebElement> {
     else {
       element.clear();
       element.sendKeys(text);
-      if (driver.config().setValueChangeEvent()) {
-        events.fireChangeEvent(driver, element);
-      }
     }
   }
 

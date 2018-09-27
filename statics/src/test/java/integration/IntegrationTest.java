@@ -16,9 +16,7 @@ import java.util.logging.Logger;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
-import static com.codeborne.selenide.Configuration.collectionsTimeout;
 import static com.codeborne.selenide.Configuration.fastSetValue;
-import static com.codeborne.selenide.Configuration.setValueChangeEvent;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -36,7 +34,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
 
   private long defaultTimeout;
-  private long defaultCollectionsTimeout;
 
   @BeforeAll
   static void logBrowserName() {
@@ -64,7 +61,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     fastSetValue = false;
     versatileSetValue = false;
-    setValueChangeEvent = true;
     browserSize = "1200x960";
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
@@ -79,7 +75,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   private void rememberTimeout() {
     defaultTimeout = timeout;
-    defaultCollectionsTimeout = collectionsTimeout;
   }
 
   protected void openFile(String fileName) {
@@ -115,7 +110,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @AfterEach
   public void restoreDefaultProperties() {
     timeout = defaultTimeout;
-    collectionsTimeout = defaultCollectionsTimeout;
     clickViaJs = false;
   }
 }

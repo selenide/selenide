@@ -43,7 +43,7 @@ public class WebDriverWrapper implements Driver {
   @Override
   public void close() {
     if (!config().holdBrowserOpen()) {
-      new CloseDriverCommand(webDriver, null, config.closeBrowserTimeoutMs()).run();
+      new CloseDriverCommand(webDriver, null).run();
     }
   }
 }

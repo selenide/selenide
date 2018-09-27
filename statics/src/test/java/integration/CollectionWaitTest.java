@@ -52,7 +52,7 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void firstNElements_errorMessage() {
-    Configuration.collectionsTimeout = 4000;
+    Configuration.timeout = 4000;
     Assertions.assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #0, Element #1]\n" +
@@ -62,7 +62,7 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void lastNElements_errorMessage() {
-    Configuration.collectionsTimeout = 4000;
+    Configuration.timeout = 4000;
     Assertions.assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element #wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #48, Element #49]\n" +
@@ -72,7 +72,7 @@ class CollectionWaitTest extends IntegrationTest {
 
   @Test
   void customTimeoutForCollections() {
-    Configuration.collectionsTimeout = 1;
+    Configuration.timeout = 1;
     $$("#collection li").last(2).shouldHave(texts("Element #48", "Element #49"), 5000);
   }
 }

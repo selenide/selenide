@@ -70,7 +70,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", driver().config().collectionsTimeout(), conditions);
+    return should("be", driver().config().timeout(), conditions);
   }
 
   public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
@@ -83,7 +83,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", driver().config().collectionsTimeout(), conditions);
+    return should("have", driver().config().timeout(), conditions);
   }
 
   /**
@@ -147,7 +147,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(driver().config().collectionsPollingInterval());
+      sleep(driver().config().pollingInterval());
     }
     while (!stopwatch.isTimeoutReached());
     condition.fail(collection, actualElements, lastError, timeoutMs);

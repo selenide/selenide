@@ -5,7 +5,6 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Credentials;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideDriver;
-import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.AuthenticationFilter;
@@ -14,15 +13,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 
 public class Navigator {
-  private static final Logger log = Logger.getLogger(Navigator.class.getName());
-
-  private JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
@@ -66,7 +61,6 @@ public class Navigator {
       WebDriver webDriver = driver.getAndCheckWebDriver();
       beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, domain, login, password);
       webDriver.navigate().to(url);
-      javascriptErrorsCollector.collectJavascriptErrors(driver.config(), driver.getWebDriver());
       SelenideLogger.commitStep(log, PASS);
     }
     catch (WebDriverException e) {

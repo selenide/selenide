@@ -3,10 +3,8 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.drivercommands.LazyDriver;
 import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
-import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
-import com.codeborne.selenide.impl.JavascriptErrorsCollector;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
@@ -30,7 +28,6 @@ import static java.util.Collections.emptyList;
 public class SelenideDriver {
   private final Navigator navigator = new Navigator();
   private static SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static JavascriptErrorsCollector javascriptErrorsCollector = new JavascriptErrorsCollector();
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
   private final Config config;
@@ -164,21 +161,8 @@ public class SelenideDriver {
     return executeJavaScript("return document.activeElement");
   }
 
-
   public SelenideWait Wait() {
     return new SelenideWait(getWebDriver(), config().timeout(), config().pollingInterval());
-  }
-
-
-  public List<String> getJavascriptErrors() {
-    return javascriptErrorsCollector.getJavascriptErrors(driver());
-  }
-
-  public void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
-    List<String> jsErrors = getJavascriptErrors();
-    if (jsErrors != null && !jsErrors.isEmpty()) {
-      throw new JavaScriptErrorsFound(driver(), jsErrors);
-    }
   }
 
   public void zoom(double factor) {
