@@ -27,15 +27,6 @@ public class Events {
           "  }\n" +
           '}';
 
-  public void fireChangeEvent(Driver driver, WebElement element) {
-    if (driver.supportsJavascript()) {
-      fireEvent(driver, element, "change");
-    }
-    else {
-      log.fine("Cannot trigger change event: browser does not support javascript");
-    }
-  }
-
   public void fireEvent(Driver driver, WebElement element, final String... event) {
     try {
       executeJavaScript(driver, element, event);

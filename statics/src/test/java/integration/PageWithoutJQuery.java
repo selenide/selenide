@@ -15,19 +15,6 @@ class PageWithoutJQuery extends IntegrationTest {
   }
 
   @Test
-  void setValueTriggersOnChangeEvent() {
-    Assumptions.assumeFalse(isHtmlUnit());
-
-    $("#username").setValue("john");
-    $("#username-mirror").shouldHave(text("john"));
-
-    $("#username").append(" ");
-    $("#username").append("bon-jovi");
-
-    $("#username-mirror").shouldHave(text("john bon-jovi"));
-  }
-
-  @Test
   void setValueDoesNotTriggerOnChangeEvent() {
     Assumptions.assumeFalse(isHtmlUnit());
 
