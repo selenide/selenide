@@ -150,7 +150,9 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected void addHttpHeaders(Driver driver, HttpGet httpGet) {
-    httpGet.setHeader("User-Agent", driver.getUserAgent());
+    if (driver.hasWebDriverStarted()) {
+      httpGet.setHeader("User-Agent", driver.getUserAgent());
+    }
   }
 
   protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
