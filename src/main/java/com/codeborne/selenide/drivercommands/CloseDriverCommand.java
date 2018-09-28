@@ -12,12 +12,10 @@ public class CloseDriverCommand {
 
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxyServer;
-  private final long closeBrowserTimeoutMs;
 
   CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     this.webDriver = webDriver;
     this.selenideProxyServer = selenideProxyServer;
-    this.closeBrowserTimeoutMs = 5000;
   }
 
   public void run() {
@@ -35,21 +33,15 @@ public class CloseDriverCommand {
       t.start();
 
       try {
-        t.join(closeBrowserTimeoutMs);
-      }
-      catch (InterruptedException e) {
-        log.log(FINE, "Failed to close webdriver " + threadId + " in " + closeBrowserTimeoutMs + " milliseconds", e);
+        t.join();
+      } catch (InterruptedException e) {
+        long duration = System.currentTimeMillis() - start;
+        log.log(FINE, "Failed to close webdriver " + threadId + " in " + duration + " ms", e);
       }
 
       long duration = System.currentTimeMillis() - start;
-      if (duration >= closeBrowserTimeoutMs) {
-        log.severe("Failed to close webdriver " + threadId + " in " + closeBrowserTimeoutMs + " milliseconds");
-      }
-      else {
-        log.info("Closed webdriver " + threadId + " in " + duration + " ms");
-      }
-    }
-    else if (selenideProxyServer != null) {
+      log.info("Closed webdriver " + threadId + " in " + duration + " ms");
+    } else if (selenideProxyServer != null) {
       log.info("Close proxy server: " + threadId + " -> " + selenideProxyServer);
       selenideProxyServer.shutdown();
     }
