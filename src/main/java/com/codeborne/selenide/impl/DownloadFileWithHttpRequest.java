@@ -24,7 +24,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import javax.net.ssl.HostnameVerifier;
@@ -85,7 +84,7 @@ public class DownloadFileWithHttpRequest {
     configureHttpGet(httpGet, timeout);
     addHttpHeaders(driver, httpGet);
     try {
-      return httpClient.execute(httpGet, createHttpContext(driver.getWebDriver()));
+      return httpClient.execute(httpGet, createHttpContext(driver));
     }
     catch (SocketTimeoutException timeoutException) {
       throw new TimeoutException("Failed to download " + fileToDownloadLocation + " in " + timeout + " ms.", timeoutException);
@@ -143,9 +142,11 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  protected HttpContext createHttpContext(WebDriver webDriver) {
+  protected HttpContext createHttpContext(Driver driver) {
     HttpContext localContext = new BasicHttpContext();
-    localContext.setAttribute(COOKIE_STORE, new WebdriverCookieStore(webDriver));
+    if (driver.hasWebDriverStarted()) {
+      localContext.setAttribute(COOKIE_STORE, new WebdriverCookieStore(driver.getWebDriver()));
+    }
     return localContext;
   }
 
