@@ -149,9 +149,9 @@ public class Configuration {
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>
-   * Default value: null
+   * Default value: DesiredCapabilities::new
    */
-  public static DesiredCapabilities browserCapabilities;
+  public static DesiredCapabilities browserCapabilities = new DesiredCapabilities();
   /**
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".
