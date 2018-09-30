@@ -1,6 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.WebDriverRunner;
+import java.util.Optional;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -56,7 +57,8 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
 
   private FirefoxOptions transferFirefoxProfileFromSystemProperties(FirefoxOptions currentFirefoxOptions) {
     String prefix = "firefoxprofile.";
-    FirefoxProfile profile = new FirefoxProfile();
+    FirefoxProfile profile = Optional.ofNullable(currentFirefoxOptions.getProfile())
+      .orElseGet(FirefoxProfile::new);
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());

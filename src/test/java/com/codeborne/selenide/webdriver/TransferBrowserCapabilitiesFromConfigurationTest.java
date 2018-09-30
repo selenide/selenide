@@ -17,16 +17,14 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
 
   @AfterEach
   void clearConfiguration() {
-    Configuration.browserCapabilities = null;
+    Configuration.browserCapabilities = new DesiredCapabilities();
     System.clearProperty(SOME_CAP);
   }
 
   @BeforeEach
   void createFactory() {
     driverFactory = new ChromeDriverFactory();
-    DesiredCapabilities configurationCapabilities = new DesiredCapabilities();
-    configurationCapabilities.setCapability(SOME_CAP, "SOME_VALUE_FROM_CONFIGURATION");
-    Configuration.browserCapabilities = configurationCapabilities;
+    Configuration.browserCapabilities.setCapability(SOME_CAP, "SOME_VALUE_FROM_CONFIGURATION");
   }
 
   @Test
