@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
@@ -43,6 +44,20 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "25");
     assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap")).isEqualTo(25);
+  }
+
+  @Test
+  void keepConfigurationFirefoxProfileWhenTransferPreferencesFromSystemPropsToDriver() {
+    FirefoxProfile configurationProfile = new FirefoxProfile();
+    configurationProfile.setPreference("some.conf.cap", 42);
+    FirefoxOptions firefoxOptions = new FirefoxOptions().setProfile(configurationProfile);
+    config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
+    System.setProperty("firefoxprofile.some.cap", "25");
+
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
+
+    assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
+    assertThat(profile.getIntegerPreference("some.conf.cap", 0)).isEqualTo(42);
   }
 
   @Test
