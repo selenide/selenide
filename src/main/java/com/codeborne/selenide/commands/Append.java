@@ -5,16 +5,11 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.impl.Events.events;
-
 public class Append implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     WebElement input = locator.getWebElement();
     input.sendKeys((String) args[0]);
-    if (locator.driver().config().setValueChangeEvent()) {
-      events.fireChangeEvent(locator.driver(), input);
-    }
     return proxy;
   }
 }

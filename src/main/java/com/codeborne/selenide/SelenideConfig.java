@@ -18,20 +18,15 @@ public class SelenideConfig implements Config {
   private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
   private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
-  private String chromeSwitches = System.getProperty("selenide.chromeSwitches");
   private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy", "normal");
   private DesiredCapabilities browserCapabilities;
 
   private String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
   private long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
-  private long collectionsTimeout = Long.parseLong(System.getProperty("selenide.collectionsTimeout", "6000"));
-  private long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "100"));
-  private long collectionsPollingInterval = Long.parseLong(System.getProperty("selenide.collectionsPollingInterval", "200"));
+  private long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "200"));
   private boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
   private boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
-  private long closeBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.closeBrowserTimeout", "5000"));
   private boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs", "false"));
-  private boolean captureJavascriptErrors = Boolean.parseBoolean(System.getProperty("selenide.captureJavascriptErrors", "true"));
   private boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
 
   private boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
@@ -39,7 +34,6 @@ public class SelenideConfig implements Config {
   private String reportsUrl = new JenkinsReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
   private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
-  private boolean setValueChangeEvent = Boolean.parseBoolean(System.getProperty("selenide.setValueChangeEvent", "true"));
   private SelectorMode selectorMode = CSS;
   private AssertionMode assertionMode = STRICT;
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(System.getProperty("selenide.fileDownload", HTTPGET.name()));
@@ -68,32 +62,12 @@ public class SelenideConfig implements Config {
   }
 
   @Override
-  public long collectionsTimeout() {
-    return collectionsTimeout;
-  }
-
-  public SelenideConfig collectionsTimeout(long collectionsTimeout) {
-    this.collectionsTimeout = collectionsTimeout;
-    return this;
-  }
-
-  @Override
   public long pollingInterval() {
     return pollingInterval;
   }
 
   public SelenideConfig pollingInterval(long pollingInterval) {
     this.pollingInterval = pollingInterval;
-    return this;
-  }
-
-  @Override
-  public long collectionsPollingInterval() {
-    return collectionsPollingInterval;
-  }
-
-  public SelenideConfig collectionsPollingInterval(long collectionsPollingInterval) {
-    this.collectionsPollingInterval = collectionsPollingInterval;
     return this;
   }
 
@@ -118,32 +92,12 @@ public class SelenideConfig implements Config {
   }
 
   @Override
-  public long closeBrowserTimeoutMs() {
-    return closeBrowserTimeoutMs;
-  }
-
-  public SelenideConfig closeBrowserTimeoutMs(long closeBrowserTimeoutMs) {
-    this.closeBrowserTimeoutMs = closeBrowserTimeoutMs;
-    return this;
-  }
-
-  @Override
   public boolean clickViaJs() {
     return clickViaJs;
   }
 
   public SelenideConfig clickViaJs(boolean clickViaJs) {
     this.clickViaJs = clickViaJs;
-    return this;
-  }
-
-  @Override
-  public boolean captureJavascriptErrors() {
-    return captureJavascriptErrors;
-  }
-
-  public SelenideConfig captureJavascriptErrors(boolean captureJavascriptErrors) {
-    this.captureJavascriptErrors = captureJavascriptErrors;
     return this;
   }
 
@@ -204,16 +158,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig versatileSetValue(boolean versatileSetValue) {
     this.versatileSetValue = versatileSetValue;
-    return this;
-  }
-
-  @Override
-  public boolean setValueChangeEvent() {
-    return setValueChangeEvent;
-  }
-
-  public SelenideConfig setValueChangeEvent(boolean setValueChangeEvent) {
-    this.setValueChangeEvent = setValueChangeEvent;
     return this;
   }
 
@@ -364,16 +308,6 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig browserBinary(String browserBinary) {
     this.browserBinary = browserBinary;
-    return this;
-  }
-
-  @Override
-  public String chromeSwitches() {
-    return chromeSwitches;
-  }
-
-  public SelenideConfig chromeSwitches(String chromeSwitches) {
-    this.chromeSwitches = chromeSwitches;
     return this;
   }
 

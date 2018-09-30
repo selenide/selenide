@@ -22,15 +22,6 @@ public class Configuration {
   public static String baseUrl = defaults.baseUrl();
 
   /**
-   * Timeout in milliseconds for a collection to get completely loaded
-   * Conditions will be checked at this point at latest, even if they are still loading
-   * Can be configured either programmatically or by system property "-Dselenide.collectionsTimeout=10000"
-   * <br>
-   * Default value: 6000 (milliseconds)
-   */
-  public static long collectionsTimeout = defaults.collectionsTimeout();
-
-  /**
    * Timeout in milliseconds to fail the test, if conditions still not met
    * Can be configured either programmatically or by system property "-Dselenide.timeout=10000"
    * <br>
@@ -39,20 +30,12 @@ public class Configuration {
   public static long timeout = defaults.timeout();
 
   /**
-   * Interval in milliseconds, when checking if a single element is appeared
+   * Interval in milliseconds, when checking if a single element or collection elements are appeared
    * Can be configured either programmatically or by system property "-Dselenide.pollingInterval=50"
-   * <br>
-   * Default value: 100 (milliseconds)
-   */
-  public static long pollingInterval = defaults.pollingInterval();
-
-  /**
-   * Interval in milliseconds, when checking if a new collection elements appeared
-   * Can be configured either programmatically or by system property "-Dselenide.collectionsPollingInterval=150"
    * <br>
    * Default value: 200 (milliseconds)
    */
-  public static long collectionsPollingInterval = defaults.collectionsPollingInterval();
+  public static long pollingInterval = defaults.pollingInterval();
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
@@ -72,17 +55,6 @@ public class Configuration {
    * Default value: true
    */
   public static boolean reopenBrowserOnFail = defaults.reopenBrowserOnFail();
-
-  /**
-   * Timeout (in milliseconds) for closing/killing browser.
-   * <br>
-   * Sometimes we have problems with calling driver.close() or driver.quit() method, and test always is suspended too long.
-   * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.closeBrowserTimeout=10000"
-   * <br>
-   * Default value: 5000 (milliseconds)
-   */
-  public static long closeBrowserTimeoutMs = defaults.closeBrowserTimeoutMs();
 
   /**
    * Which browser to use.
@@ -134,21 +106,6 @@ public class Configuration {
   public static boolean startMaximized = defaults.startMaximized();
 
   /**
-   * @deprecated this options allowed only a single switch.
-   * Please use instead more generic -Dchromeoptions.args=<comma-separated list of switches>
-   * <br>
-   * or use -Dchromeoptions.prefs=<comma-separated dictionary of key=value>
-   * <br>
-   * Value of "chrome.switches" parameter (in case of using Chrome driver).
-   * Can be configured either programmatically or by system property,
-   * i.e. "-Dselenide.chromeSwitches=--disable-popup-blocking".
-   * <br>
-   * Default value: none
-   */
-  @Deprecated
-  public static String chromeSwitches = defaults.chromeSwitches();
-
-  /**
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>
@@ -185,14 +142,6 @@ public class Configuration {
    * Default value: false
    */
   public static boolean clickViaJs = defaults.clickViaJs();
-
-  /**
-   * Defines if Selenide tries to capture JS errors
-   * Can be configured either programmatically or by system property "-Dselenide.captureJavascriptErrors=false".
-   * <br>
-   * Default value: true
-   */
-  public static boolean captureJavascriptErrors = defaults.captureJavascriptErrors();
 
   /**
    * Defines if Selenide takes screenshots on failing tests.
@@ -259,19 +208,6 @@ public class Configuration {
    * Default value: false
    */
   public static boolean versatileSetValue = defaults.versatileSetValue();
-
-  /**
-   * If set to true, 'setValue' and 'val' methods of SelenideElement trigger changeEvent after main manipulations.
-   * <br>
-   * Firing change event is not natural and could lead to unpredictable results. Browser fires this event automatically
-   * according to web driver actions. Recommended behaviour is to disable this option.
-   * Make its true by default for backward compatibility.
-   * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.setValueChangeEvent=true".
-   * <br>
-   * Default value: true
-   */
-  public static boolean setValueChangeEvent = defaults.setValueChangeEvent();
 
   /**
    * Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3)

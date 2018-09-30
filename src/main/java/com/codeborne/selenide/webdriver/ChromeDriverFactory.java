@@ -35,9 +35,6 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: " + config.browserBinary());
       options.setBinary(config.browserBinary());
     }
-    if (config.chromeSwitches() != null) {
-      options.addArguments(config.chromeSwitches());
-    }
     options.merge(createCommonCapabilities(config, proxy));
     options = transferChromeOptionsFromSystemProperties(options);
     log.config("Chrome options:" + options.toString());

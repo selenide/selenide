@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +8,6 @@ import java.util.logging.Level;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.assertNoJavascriptErrors;
-import static com.codeborne.selenide.Selenide.getJavascriptErrors;
 import static com.codeborne.selenide.Selenide.getWebDriverLogs;
 import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
@@ -31,35 +28,6 @@ class BrowserLogsTest extends IntegrationTest {
       getWebDriverLogs(BROWSER); // clear logs
     }
     openFile("page_with_js_errors.html");
-  }
-
-  @Test
-  void canCheckJavaScriptErrors() {
-    assumeFalse(isChrome());
-
-    assertNoJavascriptErrors();
-    $(byText("Generate JS Error")).click();
-
-    assertThat(getJavascriptErrors())
-      .hasSize(1);
-
-    String jsError = getJavascriptErrors().get(0);
-    assertThat(jsError)
-      .contains("ReferenceError")
-      .contains("$")
-      .contains("/page_with_js_errors.html");
-  }
-
-  @Test
-  void canAssertNoJavaScriptErrors() {
-    $(byText("Generate JS Error")).click();
-    try {
-      assertNoJavascriptErrors();
-      fail("Expected JavaScriptErrorsFound");
-    } catch (JavaScriptErrorsFound expected) {
-      assertThat(getJavascriptErrors()).hasSize(1);
-      assertThat(expected.getJsErrors().get(0)).contains("ReferenceError");
-    }
   }
 
   @Test

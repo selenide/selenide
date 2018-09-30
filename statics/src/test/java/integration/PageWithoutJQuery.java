@@ -1,7 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,24 +15,9 @@ class PageWithoutJQuery extends IntegrationTest {
   }
 
   @Test
-  void setValueTriggersOnChangeEvent() {
-    Assumptions.assumeFalse(isHtmlUnit());
-
-    $("#username").setValue("john");
-    $("#username-mirror").shouldHave(text("john"));
-
-    $("#username").append(" ");
-    $("#username").append("bon-jovi");
-
-    $("#username-mirror").shouldHave(text("john bon-jovi"));
-  }
-
-  @Test
   void setValueDoesNotTriggerOnChangeEvent() {
     Assumptions.assumeFalse(isHtmlUnit());
 
-    Configuration.setValueChangeEvent = false;
-
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("_"));
 
@@ -42,10 +25,5 @@ class PageWithoutJQuery extends IntegrationTest {
     $("#username").append("bon-jovi");
 
     $("#username-mirror").shouldHave(text("_"));
-  }
-
-  @AfterEach
-  void tearDown() {
-    Configuration.setValueChangeEvent = true;
   }
 }

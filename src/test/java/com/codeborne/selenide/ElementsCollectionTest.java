@@ -10,10 +10,7 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -168,8 +165,8 @@ class ElementsCollectionTest implements WithAssertions {
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
-    String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
-    String[] expectedTexts = new String[]{"Hello", "Mark"};
+    List elementsTexts = ElementsCollection.texts(asList(element1, element2));
+    List expectedTexts = Arrays.asList("Hello", "Mark");
     assertThat(elementsTexts)
       .isEqualTo(expectedTexts);
   }
@@ -178,13 +175,13 @@ class ElementsCollectionTest implements WithAssertions {
   void testStaticGetTextsWithWebDriverException() {
     doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
     when(element2.getText()).thenReturn("Mark");
-    String[] elementsTexts = ElementsCollection.getTexts(asList(element1, element2));
-    String[] expectedTexts = new String[]{"org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark"};
+    List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
+    List<String> expectedTexts = Arrays.asList("org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark");
     assertThat(elementsTexts)
       .hasSameSizeAs(expectedTexts);
-    IntStream.range(0, expectedTexts.length)
-      .forEach(index -> assertThat(elementsTexts[index])
-        .contains(expectedTexts[index]));
+    IntStream.range(0, expectedTexts.size())
+      .forEach(index -> assertThat(elementsTexts.get(index))
+        .contains(expectedTexts.get(index)));
   }
 
   @Test

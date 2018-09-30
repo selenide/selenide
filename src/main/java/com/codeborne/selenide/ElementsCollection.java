@@ -70,7 +70,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", driver().config().collectionsTimeout(), conditions);
+    return should("be", driver().config().timeout(), conditions);
   }
 
   public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
@@ -83,7 +83,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
    */
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", driver().config().collectionsTimeout(), conditions);
+    return should("have", driver().config().timeout(), conditions);
   }
 
   /**
@@ -147,7 +147,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
-      sleep(driver().config().collectionsPollingInterval());
+      sleep(driver().config().pollingInterval());
     }
     while (!stopwatch.isTimeoutReached());
     condition.fail(collection, actualElements, lastError, timeoutMs);
@@ -238,34 +238,12 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts() that returns List instead of array
-   */
-  @Deprecated
-  public String[] getTexts() {
-    return getTexts(getElements());
-  }
-
-  /**
    * Fail-safe method for retrieving texts of given elements.
    * @param elements Any collection of WebElements
    * @return Array of texts (or exceptions in case of any WebDriverExceptions)
    */
   public static List<String> texts(Collection<WebElement> elements) {
-    return elements.stream().map(e -> getText(e)).collect(toList());
-  }
-
-  /**
-   * @deprecated Use method com.codeborne.selenide.ElementsCollection#texts(java.util.Collection)
-   *              that returns List instead of array
-   */
-  @Deprecated
-  public static String[] getTexts(Collection<WebElement> elements) {
-    String[] texts = new String[elements.size()];
-    int i = 0;
-    for (WebElement element : elements) {
-      texts[i++] = getText(element);
-    }
-    return texts;
+    return elements.stream().map(ElementsCollection::getText).collect(toList());
   }
 
   private static String getText(WebElement element) {

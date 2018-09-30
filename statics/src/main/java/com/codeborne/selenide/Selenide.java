@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import com.codeborne.selenide.ex.JavaScriptErrorsFound;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -452,19 +451,6 @@ public class Selenide {
   }
 
   /**
-   * @deprecated Not recommended. Use method {@code $(radioField).selectRadio(value);} instead
-   *
-   * Select radio field by value
-   * @param radioField any By selector for finding radio field
-   * @param value value to select (should match an attribute "value")
-   * @return the selected radio field
-   */
-  @Deprecated
-  public static SelenideElement selectRadio(By radioField, String value) {
-    return $(radioField).selectRadio(value);
-  }
-
-  /**
    * Returns selected element in radio group
    * @return null if nothing selected
    */
@@ -603,28 +589,6 @@ public class Selenide {
    */
   public static Actions actions() {
     return getSelenideDriver().driver().actions();
-  }
-
-  /**
-   * Get JavaScript errors that happened on this page.
-   *
-   * Format can differ from browser to browser:
-   *  - Uncaught ReferenceError: $ is not defined at http://localhost:35070/page_with_js_errors.html:8
-   *  - ReferenceError: Can't find variable: $ at http://localhost:8815/page_with_js_errors.html:8
-   *
-   * Function returns nothing if the page has its own "window.onerror" handler.
-   *
-   * @return list of error messages. Returns empty list if webdriver is not started properly.
-   */
-  public static List<String> getJavascriptErrors() {
-    return getSelenideDriver().getJavascriptErrors();
-  }
-
-  /**
-   * Check if there is not JS errors on the page
-   */
-  public static void assertNoJavascriptErrors() throws JavaScriptErrorsFound {
-    getSelenideDriver().assertNoJavascriptErrors();
   }
 
   /**

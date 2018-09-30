@@ -9,7 +9,6 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getSelectedRadio;
-import static com.codeborne.selenide.Selenide.selectRadio;
 
 class RadioTest extends IntegrationTest {
   @BeforeEach
@@ -21,14 +20,14 @@ class RadioTest extends IntegrationTest {
 
   @Test
   void userCanSelectRadioButtonByValue() {
-    selectRadio(By.name("me"), "cat");
+    $(By.name("me")).selectRadio("cat");
     assertThat(getSelectedRadio(By.name("me")).val())
       .isEqualTo("cat");
   }
 
   @Test
   void userCanSelectRadioButtonByValueOldWay() {
-    selectRadio(By.name("me"), "cat");
+    $(By.name("me")).selectRadio("cat");
     assertThat(getSelectedRadio(By.name("me")).getAttribute("value"))
       .isEqualTo("cat");
   }

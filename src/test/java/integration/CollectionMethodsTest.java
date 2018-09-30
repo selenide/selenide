@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -88,8 +89,8 @@ class CollectionMethodsTest extends ITest {
 
     assertThat(spans)
       .hasSize(2);
-    assertThat(spans.getTexts())
-      .isEqualTo(new String[]{"dynamic content", "dynamic content2"});
+    assertThat(spans.texts())
+      .isEqualTo(Arrays.asList("dynamic content", "dynamic content2"));
   }
 
   @Test

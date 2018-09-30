@@ -8,8 +8,6 @@ import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
 public class ErrorMessages {
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
@@ -65,13 +63,6 @@ public class ErrorMessages {
       return "\nCaused by: " + Cleanup.of.webdriverExceptionMessage(cause);
     }
     return "\nCaused by: " + cause;
-  }
-
-  static String jsErrors(List<String> jsErrors) {
-    if (jsErrors == null || jsErrors.isEmpty()) {
-      return "";
-    }
-    return "\nJavascript Errors: " + jsErrors;
   }
 
   private static String getHtmlFilePath(String screenshotPath) {

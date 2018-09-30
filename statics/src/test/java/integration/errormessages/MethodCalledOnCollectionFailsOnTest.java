@@ -30,7 +30,6 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       "</ul>"
     );
     Configuration.timeout = 1;
-    Configuration.collectionsTimeout = 1;
   }
 
   @Test

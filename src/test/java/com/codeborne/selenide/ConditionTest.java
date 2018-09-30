@@ -6,32 +6,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Condition.and;
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.checked;
-import static com.codeborne.selenide.Condition.cssValue;
-import static com.codeborne.selenide.Condition.disabled;
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.hasAttribute;
-import static com.codeborne.selenide.Condition.hasClass;
-import static com.codeborne.selenide.Condition.hasText;
-import static com.codeborne.selenide.Condition.hasValue;
-import static com.codeborne.selenide.Condition.have;
-import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.id;
-import static com.codeborne.selenide.Condition.matchesText;
-import static com.codeborne.selenide.Condition.name;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.or;
-import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.textCaseSensitive;
-import static com.codeborne.selenide.Condition.type;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -42,12 +17,12 @@ class ConditionTest {
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private SelenideConfig config = new SelenideConfig();
   private Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
-  
+
   @Test
   void displaysHumanReadableName() {
     assertThat(visible).hasToString("visible");
     assertThat(hidden).hasToString("hidden");
-    assertThat(hasAttribute("lastName", "Malkovich")).hasToString("attribute lastName=Malkovich");
+    assertThat(attribute("lastName", "Malkovich")).hasToString("attribute lastName=Malkovich");
   }
 
   @Test
@@ -208,13 +183,6 @@ class ConditionTest {
   }
 
   @Test
-  void elementHasValueMethod() {
-    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "selenide"))).isTrue();
-    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "selenide is great"))).isTrue();
-    assertThat(hasValue("selenide").apply(driver, elementWithAttribute("value", "is great"))).isFalse();
-  }
-
-  @Test
   void elementHasName() {
     assertThat(name("selenide").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
     assertThat(name("selenide").apply(driver, elementWithAttribute("name", "selenide is great"))).isFalse();
@@ -246,17 +214,10 @@ class ConditionTest {
   }
 
   @Test
-  void elementHasText() {
-    assertThat(hasText("selenide").apply(driver, elementWithText("selenidehello"))).isTrue();
-    assertThat(hasText("hello").apply(driver, elementWithText("selenidehello"))).isTrue();
-    assertThat(hasText("selenide, hello").apply(driver, elementWithText("selenidehello"))).isFalse();
-  }
-
-  @Test
   void elementHasClass() {
-    assertThat(hasClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
-    assertThat(hasClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
-    assertThat(hasClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();
+    assertThat(cssClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
+    assertThat(cssClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
+    assertThat(cssClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();
   }
 
   @Test
@@ -273,14 +234,7 @@ class ConditionTest {
 
   @Test
   void elementHasClassToString() {
-    assertThat(hasClass("Foo")).hasToString("css class 'Foo'");
-  }
-
-  @Test
-  void elementHasClassForElement() {
-    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "btn")).isTrue();
-    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "btn-warning")).isTrue();
-    assertThat(hasClass(elementWithAttribute("class", "btn btn-warning"), "form-horizontal")).isFalse();
+    assertThat(cssClass("Foo")).hasToString("css class 'Foo'");
   }
 
   @Test

@@ -27,18 +27,8 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public long collectionsTimeout() {
-    return Configuration.collectionsTimeout;
-  }
-
-  @Override
   public long pollingInterval() {
     return Configuration.pollingInterval;
-  }
-
-  @Override
-  public long collectionsPollingInterval() {
-    return Configuration.collectionsPollingInterval;
   }
 
   @Override
@@ -52,18 +42,8 @@ class StaticConfig implements Config {
   }
 
   @Override
-  public long closeBrowserTimeoutMs() {
-    return Configuration.closeBrowserTimeoutMs;
-  }
-
-  @Override
   public boolean clickViaJs() {
     return Configuration.clickViaJs;
-  }
-
-  @Override
-  public boolean captureJavascriptErrors() {
-    return Configuration.captureJavascriptErrors;
   }
 
   @Override
@@ -94,11 +74,6 @@ class StaticConfig implements Config {
   @Override
   public boolean versatileSetValue() {
     return Configuration.versatileSetValue;
-  }
-
-  @Override
-  public boolean setValueChangeEvent() {
-    return Configuration.setValueChangeEvent;
   }
 
   @Override
@@ -174,11 +149,6 @@ class StaticConfig implements Config {
   @Override
   public String browserBinary() {
     return Configuration.browserBinary;
-  }
-
-  @Override
-  public String chromeSwitches() {
-    return Configuration.chromeSwitches;
   }
 
   @Override
