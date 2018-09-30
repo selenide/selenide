@@ -109,7 +109,7 @@ public class Configuration {
    * Browser capabilities.
    * Warning: this capabilities will override capabilities were set by system properties.
    * <br>
-   * Default value: null
+   * Default value: DesiredCapabilities::new
    */
   public static DesiredCapabilities browserCapabilities = defaults.browserCapabilities();
 
