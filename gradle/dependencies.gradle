@@ -12,7 +12,7 @@ ext {
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-  api('io.github.bonigarcia:webdrivermanager:2.2.5')
+  api('io.github.bonigarcia:webdrivermanager:3.0.0')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 

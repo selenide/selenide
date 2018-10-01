@@ -11,6 +11,7 @@
 * #810 set browser size to 1366x768 by default   --  thanks to @rosolko for PR #812 
 * #806 Remove deprecated APIs   --  thanks to @rosolko for PR #812 
 * bugfix: method Selenide.download() should not fail if there is no opened browser yet
+* #825 Upgrade to WebDriverManager 3.0.0 (again)
 
 Technical changes (probably should not affect end users):
 * Move constants IE, FIREFOX etc from class `WebDriverRunner` to its parent class `Browsers`
