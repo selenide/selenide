@@ -103,7 +103,7 @@ class SelenideElementProxy implements InvocationHandler {
       catch (InvocationTargetException e) {
         lastError = e.getTargetException();
       }
-      catch (Throwable e) {
+      catch (WebDriverException | IndexOutOfBoundsException | AssertionError e) {
         lastError = e;
       }
 
