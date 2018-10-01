@@ -1,8 +1,21 @@
 # Changelog
 
-## 5.0.0
-* Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
-* Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package com.codeborne.selenide
+## 5.0.0 RC1 (released 01.10.2018)
+* #354 Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
+* Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package `com.codeborne.selenide`
+* #817 fix "FirefoxDriverFactory overwrites Firefox profile provided by Configuration"  --  thanks @BorisOsipov for PR #821
+* #809 Method $ will NOT automatically open a browser (if you forgot to call `open(url)` before)
+* Selenide now throws an exception if `Configuration.fileDownload == PROXY`, but `Configuration.proxyEnabled == false`. You will need to set `Configuration.proxyEnabled` to `true`.  
+* #811 Make Chrome the default browser   --  thanks to @rosolko for PR #812 
+* #810 do NOT maximize browser by default   --  thanks to @rosolko for PR #812 
+* #810 set browser size to 1366x768 by default   --  thanks to @rosolko for PR #812 
+* #806 Remove deprecated APIs   --  thanks to @rosolko for PR #812 
+* bugfix: method Selenide.download() should not fail if there is no opened browser yet
+
+Technical changes (probably should not affect end users):
+* Move constants IE, FIREFOX etc from class `WebDriverRunner` to its parent class `Browsers`
+* Move classes `Selenide`, `WebDriverRunner`, `Configuration` to subfolder `statics`. 
+* Move default settings logic from `Configuration` to `SelenideConfig`. 
 
 ## 4.14.2 (released 22.09.2018)
 * Upgrade to htmlunit 2.33
