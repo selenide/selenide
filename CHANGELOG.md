@@ -12,6 +12,7 @@
 * #806 Remove deprecated APIs   --  thanks to @rosolko for PR #812 
 * bugfix: method Selenide.download() should not fail if there is no opened browser yet
 * #825 Upgrade to WebDriverManager 3.0.0 (again)
+* #825 Add workaround for WebDriverManager issue when it calls github too often and gets 403 error
 
 Technical changes (probably should not affect end users):
 * Move constants IE, FIREFOX etc from class `WebDriverRunner` to its parent class `Browsers`
