@@ -15,10 +15,10 @@ dependencies {
   api('io.github.bonigarcia:webdrivermanager:2.2.5')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
-  implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 
   compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion")
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
+  compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   compileOnly("org.junit.jupiter:junit-jupiter-migrationsupport:$junitVersion")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
 
