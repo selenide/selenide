@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public abstract class WebElementSource {
         return element;
       }
     }
-    catch (Throwable e) {
+    catch (WebDriverException | IndexOutOfBoundsException | AssertionError e) {
       lastError = e;
     }
 

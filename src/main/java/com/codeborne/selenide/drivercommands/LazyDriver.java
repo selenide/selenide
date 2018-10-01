@@ -53,7 +53,16 @@ public class LazyDriver implements Driver {
   }
 
   @Override
-  public WebDriver getWebDriver() {
+  public boolean hasWebDriverStarted() {
+    return webDriver != null;
+  }
+
+  @Override
+  public synchronized WebDriver getWebDriver() {
+    if (webDriver == null) {
+      throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
+        ". You need to call open(url) first.");
+    }
     return webDriver;
   }
 
