@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -60,7 +62,7 @@ public class DownloadFile implements Command<File> {
       }
     }
     catch (ClassCastException e) {
-      throw new IllegalArgumentException("Unknown target type: " + args[0] + " (only long is supported)");
+      throw new IllegalArgumentException("Unknown target type: " + Arrays.toString(args) + " (only long is supported)");
     }
   }
 }
