@@ -57,7 +57,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   private void resetSettings() {
     Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
     Configuration.baseUrl = getBaseUrl();
-    Configuration.reportsFolder = "build/reports/tests/" + browser;
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     fastSetValue = false;
     versatileSetValue = false;
