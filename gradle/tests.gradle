@@ -5,6 +5,7 @@ test {
 task ie(type: Test) {
   systemProperties['selenide.browser'] = 'ie'
   systemProperties['selenide.timeout'] = '8000'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/ie'
   include 'integration/**/*'
   exclude '**/AlertText.*'
   exclude '**/ConfirmTest.*'
@@ -13,12 +14,14 @@ task ie(type: Test) {
 
 task edge(type: Test) {
   systemProperties['selenide.browser'] = 'edge'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task chrome(type: Test) {
   systemProperties['selenide.browser'] = 'chrome'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -26,30 +29,35 @@ task chrome(type: Test) {
 task chrome_headless(type: Test) {
   systemProperties['selenide.browser'] = 'chrome'
   systemProperties['selenide.headless'] = 'true'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_headless'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task safari(type: Test) {
   systemProperties['selenide.browser'] = 'safari'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/safari'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task htmlunit(type: Test) {
   systemProperties['selenide.browser'] = 'htmlunit'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/htmlunit'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task phantomjs(type: Test) {
   systemProperties['selenide.browser'] = 'phantomjs'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/phantomjs'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -57,23 +65,27 @@ task firefox(type: Test) {
 task firefox_headless(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
   systemProperties['selenide.headless'] = 'true'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_headless'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task legacy_firefox(type: Test) {
   systemProperties['selenide.browser'] = 'legacy_firefox'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/legacy_firefox'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task jbrowser(type: Test) {
   systemProperties['selenide.browser'] = 'jbrowser'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/jbrowser'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
 
 task grid(type: Test) {
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/grid'
   include 'grid/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }
@@ -82,6 +94,7 @@ task testng(type: Test) {
   useTestNG()
   include '**/*'
   systemProperties['selenide.browser'] = 'htmlunit'
+  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/testng'
 }
 
 tasks.withType(Test) {
