@@ -21,6 +21,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
+  private String reportsFolder;
 
   @BeforeEach
   final void setTimeout() {
@@ -31,6 +32,8 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   @BeforeEach
   void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
+    reportsFolder = Configuration.reportsFolder;
+    Configuration.reportsFolder = "build/reports/tests/ErrorMessagesWithScreenshotsTest";
     Configuration.reportsUrl = "http://ci.org/";
     Screenshots.screenshots = new ScreenShotLaboratory() {
       @Override
@@ -43,6 +46,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   @AfterEach
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
+    Configuration.reportsFolder = reportsFolder;
     Screenshots.screenshots = new ScreenShotLaboratory();
   }
 
@@ -73,7 +77,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {thead}");
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
@@ -90,7 +94,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)");
     }
   }
 

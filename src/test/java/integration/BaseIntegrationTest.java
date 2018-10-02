@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -18,6 +19,8 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({TextReportExtension.class})
 public abstract class BaseIntegrationTest implements WithAssertions {
+  private static final Logger log = Logger.getLogger(BaseIntegrationTest.class.getName());
+
   private static final boolean SSL = false;
   protected static LocalHttpServer server;
   protected static long averageSeleniumCommandDuration = 100;
@@ -32,6 +35,11 @@ public abstract class BaseIntegrationTest implements WithAssertions {
     Locale.setDefault(Locale.ENGLISH);
     runLocalHttpServer();
     setUpVideoRecorder();
+  }
+
+  @BeforeAll
+  static void logBrowserName() {
+    log.info("START " + browser + (headless ? " (headless)" : "") + " TESTS");
   }
 
   @BeforeEach
@@ -50,7 +58,7 @@ public abstract class BaseIntegrationTest implements WithAssertions {
   }
 
   private static void setUpVideoRecorder() {
-    File videoFolder = new File("build/reports/tests/" + browser);
+    File videoFolder = new File(System.getProperty("selenide.reportsFolder", "build/reports/tests"));
     videoFolder.mkdirs();
     System.setProperty("video.folder", videoFolder.getAbsolutePath());
     System.setProperty("video.enabled", String.valueOf(!browser().isHeadless()));
