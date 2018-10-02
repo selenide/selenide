@@ -25,6 +25,7 @@ public class LazyDriver implements Driver {
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
   private final Browser browser;
 
+  private boolean closed;
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
 
@@ -59,6 +60,9 @@ public class LazyDriver implements Driver {
 
   @Override
   public synchronized WebDriver getWebDriver() {
+    if (closed) {
+      throw new IllegalStateException("Webdriver has been closed. You need to call open(url) to open a browser again.");
+    }
     if (webDriver == null) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
         ". You need to call open(url) first.");
@@ -89,6 +93,7 @@ public class LazyDriver implements Driver {
     CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config, factory, userProvidedProxy, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
+    this.closed = false;
     Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
   }
 
@@ -98,6 +103,7 @@ public class LazyDriver implements Driver {
       new CloseDriverCommand(webDriver, selenideProxyServer).run();
       webDriver = null;
       selenideProxyServer = null;
+      closed = true;
     }
   }
 }
