@@ -22,7 +22,6 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
@@ -32,6 +31,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class ErrorMessagesForMissingElementTest extends IntegrationTest {
   private PageObject pageObject;
   private String reportsUrl;
+  private String reportsFolder;
 
   @BeforeEach
   final void setTimeout() {
@@ -42,12 +42,15 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
   @BeforeEach
   void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
+    reportsFolder = Configuration.reportsFolder;
     Configuration.reportsUrl = "http://ci.org/";
+    Configuration.reportsFolder = "build/reports/tests";
   }
 
   @AfterEach
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
+    Configuration.reportsFolder = reportsFolder;
   }
 
   private boolean supportsScreenshots() {
@@ -63,11 +66,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       assertStartsWith("Element not found \\{h9\\}\n" +
         "Expected: text 'expected text'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.\n" +
         "Caused by: NoSuchElementException:", expected);
-      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests/" + browser + pngOrHtml());
+      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests" + pngOrHtml());
     }
   }
 
@@ -86,10 +89,10 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected.toString()).matches("Element should have text 'expected text' \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
-      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests/" + browser + pngOrHtml());
+      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests" + pngOrHtml());
     }
   }
 
@@ -102,8 +105,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected.toString()).matches("Element should have attribute name=header \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
     }
   }
@@ -117,8 +120,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
     }
   }
@@ -132,10 +135,10 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould elementShouldExist) {
       assertThat(elementShouldExist.toString()).matches("Element should be visible \\{\\#theHiddenElement\\}\n" +
         "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
-      assertThat(elementShouldExist.getScreenshot()).matches("http://ci.org/build/reports/tests/" + browser + pngOrHtml());
+      assertThat(elementShouldExist.getScreenshot()).matches("http://ci.org/build/reports/tests" + pngOrHtml());
     }
   }
 
@@ -148,8 +151,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
     }
   }
@@ -163,8 +166,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShould expected) {
       assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
     }
   }
@@ -196,8 +199,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementNotFound e) {
       assertStartsWith("Element not found \\{By.id: invalid_id\\}\n" +
         "Expected: visible\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.\n" +
         "Caused by: NoSuchElementException:", e);
     }
@@ -212,8 +215,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementShouldNot e) {
       assertThat(e.toString()).matches("Element should not exist \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.");
     }
   }
@@ -227,8 +230,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementNotFound e) {
       assertStartsWith("Element not found \\{h14\\}\n" +
         "Expected: not hidden\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n" +
         "Timeout: 15 ms.\n" +
         "Caused by: NoSuchElementException:", e);
     }
@@ -245,8 +248,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (UIAssertionError e) {
       assertContains(e, "is not clickable at point",
         "Other element would receive the click",
-        supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/" + browser + png() + "\n" : "",
-        "Page source: http://ci.org/build/reports/tests/" + browser + html() + "\n");
+        supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests" + png() + "\n" : "",
+        "Page source: http://ci.org/build/reports/tests" + html() + "\n");
     }
   }
 

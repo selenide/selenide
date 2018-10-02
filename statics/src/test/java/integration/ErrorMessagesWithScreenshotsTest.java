@@ -14,7 +14,6 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
@@ -74,7 +73,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {thead}");
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/" + browser + "/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
@@ -91,7 +90,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/" + browser + "/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
