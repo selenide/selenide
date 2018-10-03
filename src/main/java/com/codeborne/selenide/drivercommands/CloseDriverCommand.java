@@ -37,6 +37,7 @@ public class CloseDriverCommand {
       } catch (InterruptedException e) {
         long duration = System.currentTimeMillis() - start;
         log.log(FINE, "Failed to close webdriver " + threadId + " in " + duration + " ms", e);
+        Thread.currentThread().interrupt();
       }
 
       long duration = System.currentTimeMillis() - start;

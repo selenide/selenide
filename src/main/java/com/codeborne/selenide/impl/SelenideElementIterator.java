@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.SelenideElement;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SelenideElementIterator implements Iterator<SelenideElement> {
   protected final WebElementsCollection collection;
@@ -19,6 +20,9 @@ public class SelenideElementIterator implements Iterator<SelenideElement> {
 
   @Override
   public SelenideElement next() {
+    if (!hasNext()) {
+      throw new NoSuchElementException();
+    }
     return CollectionElement.wrap(collection, index++);
   }
 
