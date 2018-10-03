@@ -59,7 +59,7 @@ public class SelenideProxyServer {
     addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
-    addResponseFilter("download", new FileDownloadFilter(config.reportsFolder()));
+    addResponseFilter("download", new FileDownloadFilter(config));
 
     proxy.start(config.proxyPort());
     port = proxy.getPort();

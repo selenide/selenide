@@ -98,6 +98,25 @@ class LazyDriverTest implements WithAssertions {
   }
 
   @Test
+  void getWebDriver_throwsException_ifBrowserIsNotOpen() {
+    assertThatThrownBy(() -> driver.getWebDriver())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("No webdriver is bound to current thread")
+      .hasMessageEndingWith("You need to call open(url) first.");
+  }
+
+  @Test
+  void getWebDriver_throwsException_ifBrowserHasBeenClosed() {
+    driver.getAndCheckWebDriver();
+    driver.close();
+
+    assertThatThrownBy(() -> driver.getWebDriver())
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageStartingWith("Webdriver has been closed")
+      .hasMessageEndingWith("You need to call open(url) to open a browser again.");
+  }
+
+  @Test
   void closeWebDriverLoggingWhenProxyIsAdded() {
     when(config.holdBrowserOpen()).thenReturn(false);
     when(config.proxyEnabled()).thenReturn(true);

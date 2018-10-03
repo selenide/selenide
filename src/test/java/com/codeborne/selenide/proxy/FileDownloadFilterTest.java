@@ -3,6 +3,7 @@ package com.codeborne.selenide.proxy;
 import java.io.File;
 import java.io.IOException;
 
+import com.codeborne.selenide.SelenideConfig;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class FileDownloadFilterTest implements WithAssertions {
-  private FileDownloadFilter filter = new FileDownloadFilter("build/downloads");
+  private FileDownloadFilter filter = new FileDownloadFilter(new SelenideConfig().reportsFolder("build/downloads"));
   private HttpResponse response = mock(HttpResponse.class);
   private HttpMessageContents contents = mock(HttpMessageContents.class);
   private HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);

@@ -7,11 +7,8 @@ import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Configuration.browserSize;
@@ -31,14 +28,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
-  private static final Logger log = Logger.getLogger(IntegrationTest.class.getName());
-
   private long defaultTimeout;
-
-  @BeforeAll
-  static void logBrowserName() {
-    log.info("START " + browser + " TESTS");
-  }
 
   @AfterAll
   public static void restartUnstableWebdriver() {
@@ -58,6 +48,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
+    Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
     versatileSetValue = false;
     browserSize = "1200x960";
