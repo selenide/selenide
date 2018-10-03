@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0 RC2 (released 03.10.2018)
+* #825 Upgrade to WebDriverManager 3.0.0 (again)
+* #825 Add workaround for WebDriverManager issue when it calls github too often and gets 403 error
+* #809 $ and $$ should throw a clear error message if browser is not opened yet (or has already been closed)
+* Move junit5-api dependency to compile level
+* #809 when waiting for a condition, catch explicitly only needed exceptions instead of `Throwable` which is too generic. It does not make sense to wait for 4 seconds in case of IllegalStateException, FileNotFoundException etc.
+  
 ## 5.0.0 RC1 (released 01.10.2018)
 * #354 Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
 * Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package `com.codeborne.selenide`
