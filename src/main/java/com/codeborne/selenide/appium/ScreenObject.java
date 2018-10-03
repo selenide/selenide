@@ -18,7 +18,7 @@ public class ScreenObject {
    * Initialize a Page Object fields annotated with @FindBy, @AndroidFindBy, @iOSFindBy etc.
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass screen(T pageObject) {
-    SelenidePageFactory.initElements(new SelenideAppiumFieldDecorator(getWebDriver()), pageObject);
+    new SelenidePageFactory().initElements(new SelenideAppiumFieldDecorator(getWebDriver()), pageObject);
     return pageObject;
   }
 

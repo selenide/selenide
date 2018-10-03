@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-  compile('com.codeborne:selenide:4.12.3')
+  compile('com.codeborne:selenide:4.14.2')
   compile('io.appium:java-client:6.1.0')
   testCompile('junit:junit:4.12')
 }

@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SelenidePageFactory;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenideElementListProxy;
@@ -47,7 +48,8 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     if (driver == null
       || !HasSessionDetails.class.isAssignableFrom(driver.getClass())) {
       return new DefaultElementByBuilder(null, null);
-    } else {
+    }
+    else {
       HasSessionDetails d = HasSessionDetails.class.cast(driver);
       return new DefaultElementByBuilder(d.getPlatformName(), d.getAutomationName());
     }
@@ -64,15 +66,20 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
 
     if (selector instanceof ByIdOrName) {
       return decorateWithAppium(loader, field);
-    } else if (SelenideElement.class.isAssignableFrom(field.getType())) {
+    }
+    else if (SelenideElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(searchContext, selector, 0);
-    } else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+    }
+    else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
       return new ElementsCollection(new BySelectorCollection(searchContext, selector));
-    } else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
+    }
+    else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
-    } else if (isDecoratableList(field, ElementsContainer.class)) {
+    }
+    else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
-    } else if (isDecoratableList(field, SelenideElement.class)) {
+    }
+    else if (isDecoratableList(field, SelenideElement.class)) {
       return SelenideElementListProxy.wrap(factory.createLocator(field));
     }
 
@@ -91,7 +98,8 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     try {
       SelenideElement self = ElementFinder.wrap(searchContext, selector, 0);
       return initElementsContainer(field.getType(), self);
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
@@ -120,7 +128,8 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   private ElementsContainer initElementsContainerList(Field field, Class<?> listType, SelenideElement element) {
     try {
       return initElementsContainer(listType, element);
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
     }
   }
@@ -129,7 +138,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    PageFactory.initElements(new SelenideFieldDecorator(self), result);
+    PageFactory.initElements(new SelenideFieldDecorator(new SelenidePageFactory(), self), result);
     result.setSelf(self);
     return result;
   }
