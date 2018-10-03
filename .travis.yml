@@ -1,3 +1,5 @@
+conditions: v1
+
 git:
   depth: 99999
 
@@ -34,13 +36,21 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 5
 
-script:
-  - ./gradlew check --no-daemon --console=plain
-  - ./gradlew grid --no-daemon --console=plain
-  - ./gradlew firefox_headless --no-daemon --console=plain
-  - ./gradlew chrome_headless --no-daemon --console=plain
-  - ./gradlew htmlunit --no-daemon --console=plain
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew sonarqube -x test --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}; fi'
+jobs:
+  include:
+    - script: ./gradlew check --no-daemon --console=plain
+      name: "Check"
+    - if: type != pull_request
+      script: ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+      name: "Check + Sonar"
+    - script: ./gradlew grid --no-daemon --console=plain
+      name: "Grid"
+    - script: ./gradlew htmlunit --no-daemon --console=plain
+      name: "Htmlunit"
+    - script: ./gradlew firefox_headless --no-daemon --console=plain
+      name: "Firefox"
+    - script: ./gradlew chrome_headless --no-daemon --console=plain
+      name: "Chrome"
 
 after_script: "./.upload_reports.sh"
 
