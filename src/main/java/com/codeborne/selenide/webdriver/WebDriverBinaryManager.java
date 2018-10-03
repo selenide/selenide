@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static io.github.bonigarcia.wdm.WebDriverManager.config;
+import static java.util.logging.Level.FINE;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class WebDriverBinaryManager {
@@ -62,34 +63,35 @@ public class WebDriverBinaryManager {
 
   private void cacheMeIfYouCan(String systemPropertyName, Runnable webdriverSetup) {
     if (webdriverIsAlreadyInitialized(systemPropertyName)) {
-      log.info("Skip: webdriver is already initialized: " + System.getProperty(systemPropertyName));
+      log.log(FINE, "Skip: webdriver is already initialized: " + System.getProperty(systemPropertyName));
       return;
     }
 
     File lastCheckIndicator = new File(config().getTargetPath(), lastModifiedFileName(systemPropertyName));
     boolean canUseCachedWebdriver = lastCheckIndicator.exists() && hasRecentlyCheckedForUpdates(lastCheckIndicator);
-    log.info("lastCheckIndicator=" + lastCheckIndicator.getAbsolutePath() +
+    log.log(FINE, "lastCheckIndicator=" + lastCheckIndicator.getAbsolutePath() +
       ", exists=" + lastCheckIndicator.exists() + ", lastModified=" + new Date(lastCheckIndicator.lastModified()) +
       ", now=" + new Date() + ", diff: " + (System.currentTimeMillis() - lastCheckIndicator.lastModified()) + " ms.");
 
     if (canUseCachedWebdriver) {
-      log.info("Can use cache");
+      log.log(FINE, "Can use cache");
       config().setForceCache(true);
     }
     else {
-      log.info("Cannot use cache");
+      log.log(FINE, "Cannot use cache");
     }
 
     webdriverSetup.run();
 
     if (!canUseCachedWebdriver) {
       long ts = System.currentTimeMillis();
-      log.info("Mark as recently checked: " + lastCheckIndicator.getAbsolutePath() + ", ts=" + ts + ", now=" + new Date(ts));
+      log.log(FINE, "Mark as recently checked: " + lastCheckIndicator.getAbsolutePath() + ", ts=" + ts + ", now=" + new Date(ts));
       markAsRecentlyChecked(lastCheckIndicator);
     }
     else {
       long ts = System.currentTimeMillis();
-      log.info("Not marking as recently checked: " + lastCheckIndicator.getAbsolutePath() + ", ts=" + ts + ", now=" + new Date(ts));
+      log.log(FINE, "Not marking as recently checked: " + lastCheckIndicator.getAbsolutePath() +
+        ", ts=" + ts + ", now=" + new Date(ts));
     }
   }
 
