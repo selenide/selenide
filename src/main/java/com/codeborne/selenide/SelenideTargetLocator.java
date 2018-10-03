@@ -65,7 +65,7 @@ public class SelenideTargetLocator implements TargetLocator {
     }
   }
 
-  private boolean isFirefox62Bug(InvalidArgumentException e) {
+  private static boolean isFirefox62Bug(InvalidArgumentException e) {
     return e.getMessage().contains("untagged enum FrameId");
   }
 
@@ -103,8 +103,7 @@ public class SelenideTargetLocator implements TargetLocator {
       try {
         String selector = String.format("frame#%1$s,frame[name=%1$s],iframe#%1$s,iframe[name=%1$s]", frame);
         Wait().until(frameToBeAvailableAndSwitchToIt_fixed(By.cssSelector(selector)));
-      }
-      catch (NoSuchElementException | TimeoutException e) {
+      } catch (NoSuchElementException | TimeoutException e) {
         throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
       }
     }
@@ -118,8 +117,6 @@ public class SelenideTargetLocator implements TargetLocator {
       public WebDriver apply(WebDriver driver) {
         try {
           return driver.switchTo().frame(driver.findElement(locator));
-        } catch (NoSuchFrameException e) {
-          return null;
         } catch (WebDriverException e) {
           return null;
         }
@@ -181,8 +178,7 @@ public class SelenideTargetLocator implements TargetLocator {
   public WebDriver window(int index) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
-    }
-    catch (TimeoutException e) {
+    } catch (TimeoutException e) {
       throw new NoSuchWindowException("No window found with index: " + index, e);
     }
   }
