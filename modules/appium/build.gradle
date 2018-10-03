@@ -72,5 +72,3 @@ artifacts {
   archives sourcesJar
   archives javadocJar
 }
-
-wrapper.gradleVersion = '4.9'
