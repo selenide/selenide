@@ -184,13 +184,13 @@ public class ScreenShotLaboratory {
   }
 
   private File writeToFile(Driver driver, BufferedImage dest) throws IOException {
-      if (dest == null) {
-        return null;
-      }
-      File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
-      ensureFolderExists(screenshotOfElement);
-      ImageIO.write(dest, "png", screenshotOfElement);
-      return screenshotOfElement;
+    if (dest == null) {
+      return null;
+    }
+    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
+    ensureFolderExists(screenshotOfElement);
+    ImageIO.write(dest, "png", screenshotOfElement);
+    return screenshotOfElement;
   }
 
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
