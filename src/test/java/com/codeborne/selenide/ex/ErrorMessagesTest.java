@@ -72,7 +72,7 @@ class ErrorMessagesTest implements WithAssertions {
 
     String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .as("Concatenate reportUrl + File name to page-source saved to out of build/project home directories")
+      .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home directories")
       .startsWith("\nScreenshot: " + reportsUrl + new File(screenshot).getName());
   }
 
