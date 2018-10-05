@@ -64,6 +64,19 @@ class ErrorMessagesTest implements WithAssertions {
   }
 
   @Test
+  void convertsReportUrlForOutsideSavedScreenshot() {
+    String reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
+    config.reportsUrl(reportsUrl);
+    config.reportsFolder("C://artifacts-storage/"); //directory, that not in 'user.dir'
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
+
+    String screenshot = ErrorMessages.screenshot(driver);
+    assertThat(screenshot)
+      .as("Concatenate reportUrl + File name to page-source saved to out of build/project home directories")
+      .startsWith("\nScreenshot: " + reportsUrl + new File(screenshot).getName());
+  }
+
+  @Test
   void returnsScreenshotFileName() {
     config.reportsUrl(null);
     String currentDir = System.getProperty("user.dir");
