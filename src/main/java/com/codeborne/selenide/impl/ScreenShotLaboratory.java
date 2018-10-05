@@ -443,7 +443,8 @@ public class ScreenShotLaboratory {
       } catch (MalformedURLException ignore) {
         // ignored exception
       }
-      log.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
+      //TODO temp* for debuging travis side issue
+      log.info("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
       return screenshotUrl;
     }
 
