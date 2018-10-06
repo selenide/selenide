@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import static java.io.File.separatorChar;
@@ -64,10 +67,10 @@ class ErrorMessagesTest implements WithAssertions {
   }
 
   @Test
-  void convertsReportUrlForOutsideSavedScreenshot() {
+  void convertsReportUrlForOutsideSavedScreenshot() throws IOException {
     String reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     config.reportsUrl(reportsUrl);
-    config.reportsFolder("C://artifacts-storage/"); //directory, that not in 'user.dir'
+    config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath());//directory, that not in 'user.dir'
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(FILE);
 
     String screenshot = ErrorMessages.screenshot(driver);
