@@ -23,7 +23,7 @@ class SelenideConfigTest implements WithAssertions {
     System.setProperty("teamcity.serverUrl", "http://ci.org/");
     System.setProperty("teamcity.buildType.id", "my-build");
     System.setProperty("build.number", "1");
-    assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org//repository/download/my-build/1:id/");
+    assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org/repository/download/my-build/1:id/");
   }
 
   @AfterEach

@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideConfig;
 
+import java.net.URI;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CiReportUrl {
@@ -10,7 +12,7 @@ public class CiReportUrl {
   public String getReportsUrl(String reportsUrl) {
     if (!isEmpty(reportsUrl)) {
       LOG.config("Using variable selenide.reportsUrl=" + reportsUrl);
-      return reportsUrl;
+      return resolveUrlSource(reportsUrl);
     }
     reportsUrl = getJenkinsReportsUrl();
     if (!isEmpty(reportsUrl)) {
@@ -19,7 +21,7 @@ public class CiReportUrl {
     }
     reportsUrl = getTeamCityUrl();
     if (!isEmpty(reportsUrl)) {
-      LOG.config("Not found one of [teamcity.serverUrl,teamcity.buildType.id,build.number]. It's not Teamcity.");
+      LOG.config("Using Teamcity artifacts url: ");
       return reportsUrl;
     }
     LOG.config("Variable selenide.reportsUrl not found");
@@ -30,20 +32,29 @@ public class CiReportUrl {
     String url = System.getProperty("teamcity.serverUrl");
     String build_type = System.getProperty("teamcity.buildType.id");
     String build_number = System.getProperty("build.number");
-    String result = url + "/repository/download/" + build_type + "/" + build_number + ":id/";
-    if (isEmpty(build_type) || isEmpty(build_number) || isEmpty(result)) {
+    if (isEmpty(build_type) || isEmpty(build_number) || isEmpty(url)) {
       return null;
-    } else {
-      LOG.config("Using teamcity artifacts: " + result);
-      return result;
     }
+    return resolveUrlSource("%s/repository/download/%s/%s:id/", url, build_type, build_number);
   }
 
   private String getJenkinsReportsUrl() {
     String build_url = System.getProperty("BUILD_URL");
     if (!isEmpty(build_url)) {
-      return build_url + "artifact/";
+      return resolveUrlSource("%s/artifact/", build_url);
     } else {
+      return null;
+    }
+  }
+
+  private String resolveUrlSource(String base, Object... format) {
+    if (format.length != 0) {
+      base = String.format(base, format);
+    }
+    try {
+      return new URI(base).normalize().toURL().toString();
+    } catch (Exception e) {
+      LOG.log(Level.ALL, "Variable selenide.reportsUrl is incorrect: " + base, e);
       return null;
     }
   }
