@@ -21,7 +21,7 @@ public class CiReportUrl {
     }
     reportsUrl = getTeamCityUrl();
     if (!isEmpty(reportsUrl)) {
-      LOG.config("Using Teamcity artifacts url: ");
+      LOG.config("Using Teamcity artifacts url: " + reportsUrl);
       return reportsUrl;
     }
     LOG.config("Variable selenide.reportsUrl not found");
