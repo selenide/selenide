@@ -18,6 +18,14 @@ class SelenideConfigTest implements WithAssertions {
     assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org/job/123/artifact/");
   }
 
+  @Test
+  void canConstructReportsUrlFromTeamcityProperty() {
+    System.setProperty("teamcity.serverUrl", "http://ci.org/");
+    System.setProperty("teamcity.buildType.id", "my-build");
+    System.setProperty("build.number", "1");
+    assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org/repository/download/my-build/1:id/");
+  }
+
   @AfterEach
   void resetBuildUrl() {
     setUp();
@@ -27,5 +35,8 @@ class SelenideConfigTest implements WithAssertions {
   void setUp() {
     System.setProperty("selenide.reportsUrl", "");
     System.setProperty("BUILD_URL", "");
+    System.setProperty("teamcity.serverUrl", "");
+    System.setProperty("teamcity.buildType.id", "");
+    System.setProperty("build.number", "");
   }
 }

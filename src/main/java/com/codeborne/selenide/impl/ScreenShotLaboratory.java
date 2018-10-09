@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -97,13 +99,7 @@ public class ScreenShotLaboratory {
   public File takeScreenshot(Driver driver, WebElement element) {
     try {
       BufferedImage destination = takeScreenshotAsImage(driver, element);
-      if (destination == null) {
-        return null;
-      }
-      File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
-      ensureFolderExists(screenshotOfElement);
-      ImageIO.write(destination, "png", screenshotOfElement);
-      return screenshotOfElement;
+      return writeToFile(driver, destination);
     }
     catch (IOException e) {
       log.log(SEVERE, "Failed to take screenshot of " + element, e);
@@ -179,18 +175,22 @@ public class ScreenShotLaboratory {
   public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
     try {
       BufferedImage dest = takeScreenshotAsImage(driver, iframe, element);
-      if (dest == null) {
-        return null;
-      }
-      File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
-      ensureFolderExists(screenshotOfElement);
-      ImageIO.write(dest, "png", screenshotOfElement);
-      return screenshotOfElement;
+      return writeToFile(driver, dest);
     }
     catch (IOException e) {
       log.log(SEVERE, "Failed to take screenshot of " + element + " inside frame " + iframe, e);
       return null;
     }
+  }
+
+  private File writeToFile(Driver driver, BufferedImage dest) throws IOException {
+    if (dest == null) {
+      return null;
+    }
+    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
+    ensureFolderExists(screenshotOfElement);
+    ImageIO.write(dest, "png", screenshotOfElement);
+    return screenshotOfElement;
   }
 
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
@@ -428,12 +428,19 @@ public class ScreenShotLaboratory {
     }
 
     if (driver.config().reportsUrl() != null) {
-      String screenshotRelativePath = screenshot.substring(System.getProperty("user.dir").length() + 1);
-      String screenshotUrl = driver.config().reportsUrl() + screenshotRelativePath.replace('\\', '/');
+      Path current = Paths.get(System.getProperty("user.dir"));
+      Path target = Paths.get(screenshot).normalize();
+      String screenshotUrl;
+      if (isInsideFolder(current, target)) {
+        Path relativePath = current.relativize(target);
+        screenshotUrl = driver.config().reportsUrl() + relativePath.toString().replace('\\', '/');
+      } else {
+        String name = target.toFile().getName();
+        screenshotUrl = driver.config().reportsUrl() + name;
+      }
       try {
         screenshotUrl = new URL(screenshotUrl).toExternalForm();
-      }
-      catch (MalformedURLException ignore) {
+      } catch (MalformedURLException ignore) {
         // ignored exception
       }
       log.config("Replaced screenshot file path '" + screenshot + "' by public CI URL '" + screenshotUrl + "'");
@@ -447,6 +454,10 @@ public class ScreenShotLaboratory {
     catch (MalformedURLException e) {
       return "file://" + screenshot;
     }
+  }
+
+  private static boolean isInsideFolder(Path root, Path other) {
+    return other.startsWith(root.toAbsolutePath());
   }
 
   private <T> T ifWebDriverStarted(Driver driver, Supplier<T> lambda) {
