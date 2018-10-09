@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.0 RC3 (released 10.10.2018)
+* upgrade to htmlunitdriver 2.33.0
+
 ## 5.0.0 RC2 (released 03.10.2018)
 * #825 Upgrade to WebDriverManager 3.0.0 (again)
 * #825 Add workaround for WebDriverManager issue when it calls github too often and gets 403 error

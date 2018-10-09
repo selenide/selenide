@@ -5,7 +5,7 @@ repositories {
 ext {
   testngVersion = '6.9.10'
   htmlunitVersion = '2.33'
-  htmlunitDriverVersion = '2.32.1'
+  htmlunitDriverVersion = '2.33.0'
   seleniumVersion = '3.14.0'
   junitVersion = '5.3.1'
 }
