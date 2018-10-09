@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.0.0 RC3 (released 10.10.2018)
+* #832 Added support for screenshots outside of "user.dir" in CI server
 * upgrade to htmlunitdriver 2.33.0
 
 ## 5.0.0 RC2 (released 03.10.2018)
