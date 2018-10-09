@@ -19,20 +19,16 @@ public interface Browsers {
   public static final String SAFARI = "safari";
 
   /**
-   * To use HtmlUnitDriver, you need to include extra dependency to your project:
-   * <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver" rev="2.+" conf="test->default"/>
-   *
-   * It's also possible to run HtmlUnit driver emulating different browsers:
+   * To use the HtmlUnitDriver, you need to add the following dependency to your project:
    * <p>
-   * java -Dbrowser=htmlunit:firefox
+   * {@code <dependency org="org.seleniumhq.selenium" name="selenium-htmlunit-driver"
+   *                         rev="2.+" conf= "test->default"/>}
    * </p>
-   * <p>
-   * java -Dbrowser=htmlunit:chrome
-   * </p>
-   * <p>
-   * java -Dbrowser=htmlunit:internet explorer   (default)
-   * </p>
-   * etc.
+   * <p>It is also possible to run HtmlUnitDriver so that it emulates different browsers</p>
+   * <p>{@code java -Dbrowser=htmlunit:firefox}</p>
+   * <p>{@code java -Dbrowser=htmlunit:chrome}</p>
+   * <p>{@code java -Dbrowser=htmlunit:internet explorer   (default)}</p>
+   * <p>etc</p>
    */
   public static final String HTMLUNIT = "htmlunit";
 
