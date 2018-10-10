@@ -1,34 +1,26 @@
 # Changelog
 
-## 5.0.0 RC4 (released 10.10.2018)
-* throw ElementIsNotClickableException instead of ElementNotFoundException if element is covered by other element
-
-## 5.0.0 RC3 (released 10.10.2018)
-* #832 Added support for screenshots outside of "user.dir" in CI server
-* upgrade to htmlunitdriver 2.33.0
-
-## 5.0.0 RC2 (released 03.10.2018)
-* #825 Upgrade to WebDriverManager 3.0.0 (again)
-* #825 Add workaround for WebDriverManager issue when it calls github too often and gets 403 error
-* #809 $ and $$ should throw a clear error message if browser is not opened yet (or has already been closed)
-* Move junit5-api dependency to compile level
-* #809 when waiting for a condition, catch explicitly only needed exceptions instead of `Throwable` which is too generic. It does not make sense to wait for 4 seconds in case of IllegalStateException, FileNotFoundException etc.
-  
-## 5.0.0 RC1 (released 01.10.2018)
+## 5.0.0 (released 10.10.2018)
 * #354 Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
 * Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package `com.codeborne.selenide`
-* #817 fix "FirefoxDriverFactory overwrites Firefox profile provided by Configuration"  --  thanks @BorisOsipov for PR #821
+* #809 $ and $$ should throw a clear error message if browser is not opened yet (or has already been closed)
+* #809 when waiting for a condition, catch explicitly only needed exceptions instead of `Throwable` which is too generic. It does not make sense to wait for 4 seconds in case of IllegalStateException, FileNotFoundException etc.
+* throw ElementIsNotClickableException instead of ElementNotFoundException if element is covered by other element
 * #809 Method $ will NOT automatically open a browser (if you forgot to call `open(url)` before)
 * Selenide now throws an exception if `Configuration.fileDownload == PROXY`, but `Configuration.proxyEnabled == false`. You will need to set `Configuration.proxyEnabled` to `true`.  
 * #811 Make Chrome the default browser   --  thanks to @rosolko for PR #812 
 * #810 do NOT maximize browser by default   --  thanks to @rosolko for PR #812 
 * #810 set browser size to 1366x768 by default   --  thanks to @rosolko for PR #812 
 * #806 Remove deprecated APIs   --  thanks to @rosolko for PR #812 
+* #817 fix "FirefoxDriverFactory overwrites Firefox profile provided by Configuration"  --  thanks @BorisOsipov for PR #821
 * bugfix: method Selenide.download() should not fail if there is no opened browser yet
 * #825 Upgrade to WebDriverManager 3.0.0 (again)
 * #825 Add workaround for WebDriverManager issue when it calls github too often and gets 403 error
+* #832 Added support for screenshots outside of "user.dir" in CI server
 
 Technical changes (probably should not affect end users):
+* Move junit5-api dependency to compile level
+* upgrade to htmlunitdriver 2.33.0
 * Move constants IE, FIREFOX etc from class `WebDriverRunner` to its parent class `Browsers`
 * Move classes `Selenide`, `WebDriverRunner`, `Configuration` to subfolder `statics`. 
 * Move default settings logic from `Configuration` to `SelenideConfig`. 
