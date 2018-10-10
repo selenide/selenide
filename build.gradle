@@ -11,7 +11,7 @@ plugins {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.0.0-rc.3'
+version = '5.0.0-rc.4-SNAPSHOT'
 
 ext {
   encoding = StandardCharsets.UTF_8.name()

@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.0 RC4 (released 10.10.2018)
+* throw ElementIsNotClickableException instead of ElementNotFoundException if element is covered by other element
+
 ## 5.0.0 RC3 (released 10.10.2018)
 * #832 Added support for screenshots outside of "user.dir" in CI server
 * upgrade to htmlunitdriver 2.33.0
