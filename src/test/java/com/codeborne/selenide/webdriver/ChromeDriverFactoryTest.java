@@ -31,11 +31,11 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   @Test
   void transferChromeOptionArgumentsFromSystemPropsToDriver() {
-    System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,xcvcd=123");
+    System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,xcvcd=123,A\\,B");
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(optionArguments).contains("abdd", "--abcd", "xcvcd=123");
+    assertThat(optionArguments).contains("abdd", "--abcd", "xcvcd=123", "A,B");
   }
 
   @Test

@@ -57,7 +57,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         String value = System.getProperties().getProperty(key);
         switch (capability) {
           case "args": {
-            List<String> args = Arrays.asList(value.split(","));
+            List<String> args = parseArgumentsFromString(value);
             currentChromeOptions.addArguments(args);
             break;
           }
@@ -120,5 +120,30 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         return value;
       }
     }
+  }
+
+  private List<String> parseArgumentsFromString(String argumentsString) {
+    List<String> splitted = splitIgnoreEscapedSymbol(argumentsString, ',');
+    return removeSymbolEscaping(splitted);
+  }
+
+  private List<String> splitIgnoreEscapedSymbol(String origin, Character escapedSymbol) {
+    return Arrays.asList(origin.split(String.format("(?<!\\\\)%c", escapedSymbol)));
+  }
+
+  private List<String> removeSymbolEscaping(List<String> origin) {
+    String escapingString = "\\\\";
+    for (String element : origin) {
+      if (containsEscapingCharacter(element)) {
+        String newElement = element.replaceAll(escapingString, "");
+        origin.set(origin.indexOf(element), newElement);
+      }
+    }
+    return origin;
+  }
+
+  private Boolean containsEscapingCharacter(String string) {
+    Character escapingCharacter = '\\';
+    return string.indexOf(escapingCharacter) > 0;
   }
 }
