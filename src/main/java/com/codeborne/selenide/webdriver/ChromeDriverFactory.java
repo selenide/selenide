@@ -128,7 +128,8 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   private List<String> splitIgnoreEscapedSymbol(String origin, Character escapedSymbol) {
-    return Arrays.asList(origin.split(String.format("(?<!\\\\)%c", escapedSymbol)));
+    String ignoreEscapedSymbol = String.format("(?<!\\\\)%c", escapedSymbol);
+    return Arrays.asList(origin.split(ignoreEscapedSymbol));
   }
 
   private List<String> removeSymbolEscaping(List<String> origin) {
