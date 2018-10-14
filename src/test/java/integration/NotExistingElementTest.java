@@ -21,6 +21,11 @@ class NotExistingElementTest extends ITest {
   }
 
   @Test
+  void shouldNotExistIfParentDoesNotExist() {
+    $$("#not_exist").first().$("#multirowTable").shouldNot(exist);
+  }
+
+  @Test
   void shouldBeHidden() {
     $("#not_exist").shouldBe(hidden);
   }

@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
@@ -69,6 +66,21 @@ class CollectionMethodsTest extends ITest {
     $$(By.name("#dynamic-content-container span")).shouldBe(empty);
     $$(By.name("non-existing-element")).shouldBe(empty);
     $$(byText("Loading...")).shouldBe(empty);
+  }
+
+  @Test
+  void canCheckIfCollectionIsEmptyForNonExistingParent() {
+    $$("not-existing-locator").first().$$("#multirowTable")
+      .shouldHaveSize(0)
+      .shouldBe(empty)
+      .shouldBe(size(0))
+      .shouldBe(sizeGreaterThan(-1))
+      .shouldBe(sizeGreaterThanOrEqual(0))
+      .shouldBe(sizeNotEqual(1))
+      .shouldBe(sizeLessThan(1))
+      .shouldBe(sizeLessThanOrEqual(0));
+
+    assertThat($$("not-existing-locator").last().$$("#multirowTable").isEmpty()).isTrue();
   }
 
   @Test
@@ -299,5 +311,38 @@ class CollectionMethodsTest extends ITest {
       .shouldHave(text("non-clickable element"));
 
     $$("div").filterBy(visible).get(2).click();
+  }
+
+  @Test
+  void shouldThrowIndexOutOfBoundsException() {
+    ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
+    String description = "Check throwing IndexOutOfBoundsException for %s";
+
+    assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))
+      .as(description, "shouldHaveSize").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
+      .as(description, "size").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThan(0)))
+      .as(description, "sizeGreaterThan").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThanOrEqual(1)))
+      .as(description, "sizeGreaterThanOrEqual").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeNotEqual(0)))
+      .as(description, "sizeNotEqual").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThan(0)))
+      .as(description, "sizeLessThan").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThanOrEqual(-1)))
+      .as(description, "sizeLessThanOrEqual").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
+      .as(description, "exactTexts").isInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
+      .as(description, "texts").isInstanceOf(IndexOutOfBoundsException.class);
   }
 }

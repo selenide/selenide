@@ -55,6 +55,11 @@ public class ExactTexts extends CollectionCondition {
   }
 
   @Override
+  public boolean applyNull() {
+    return false;
+  }
+
+  @Override
   public String toString() {
     return "Exact texts " + expectedTexts;
   }
