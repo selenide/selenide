@@ -1,6 +1,6 @@
 # Selenide = UI Testing Framework powered by Selenium WebDriver
 
-[![Build Status](https://travis-ci.org/codeborne/selenide.svg?branch=master)](https://travis-ci.org/codeborne/selenide)
+[![Build Status](https://travis-ci.org/selenide/selenide.svg?branch=master)](https://travis-ci.org/selenide/selenide)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 [![Sonar Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
 [![Sonar Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=coverage)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
