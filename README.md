@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codeborne/selenide)
 [![Sonar Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
 [![Sonar Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.codeborne%3Aselenide&metric=coverage)](https://sonarcloud.io/dashboard?id=com.codeborne%3Aselenide)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/codeborne/selenide/blob/master/LICENSE)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/selenide/selenide/blob/master/LICENSE)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
 
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -28,17 +28,17 @@ Selenide is based on and is compatible to Selenium WebDriver 2.0 and 3.0
       $("#username").shouldHave(text("Hello, Johny!"));
     }
 
-Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/codeborne/selenide/wiki/Selenide-vs-Selenium).
+Look for [detailed comparison of Selenide and Selenium WebDriver API](https://github.com/selenide/selenide/wiki/Selenide-vs-Selenium).
 
 ## Changelog
 
-Here is [CHANGELOG](https://github.com/codeborne/selenide/blob/master/CHANGELOG.md)
+Here is [CHANGELOG](https://github.com/selenide/selenide/blob/master/CHANGELOG.md)
 
 ## How to start?
 
 Just put selenide.jar to your project and import the following methods: `import static com.codeborne.selenide.Selenide.*;`
 
-Look for [Quick Start](https://github.com/codeborne/selenide/wiki/Quick-Start) for details.
+Look for [Quick Start](https://github.com/selenide/selenide/wiki/Quick-Start) for details.
 
 ## Resources
 
@@ -54,7 +54,7 @@ See [Frequently asked questions](http://selenide.org/faq.html)
 
 ## How to build Selenide?
 
-    git clone https://github.com/codeborne/selenide.git
+    git clone https://github.com/selenide/selenide.git
     cd selenide
     ./gradlew jar
 
