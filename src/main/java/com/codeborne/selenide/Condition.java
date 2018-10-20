@@ -49,7 +49,7 @@ public abstract class Condition {
    *
    * <p>Sample: {@code $("input[type=hidden]").should(existInDOM);}</p>
    */
-  public static final Condition existInDOM = new Condition("existInDOM") {
+  public static final Condition existInDOM = new Condition("exist in DOM") {
     @Override
     public boolean apply(Driver driver, WebElement element) {
       try {

@@ -21,7 +21,7 @@ class ElementNotFoundTest implements WithAssertions {
   void testElementNotFoundWithByCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, By.id("Hello"), Condition.existInDOM);
     String expectedMessage = "Element not found {By.id: Hello}\n" +
-      "Expected: existInDOM\n" +
+      "Expected: exist in DOM\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
     assertThat(elementNotFoundById)
@@ -32,7 +32,7 @@ class ElementNotFoundTest implements WithAssertions {
   void testElementNotFoundWithStringCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.existInDOM);
     String expectedMessage = "Element not found {Hello}\n" +
-      "Expected: existInDOM\n" +
+      "Expected: exist in DOM\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.";
     assertThat(elementNotFoundById)
@@ -43,7 +43,7 @@ class ElementNotFoundTest implements WithAssertions {
   void testElementNotFoundWithStringCriteriaAndThrowableError() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.existInDOM, new Throwable("Error message"));
     String expectedMessage = "Element not found {Hello}\n" +
-      "Expected: existInDOM\n" +
+      "Expected: exist in DOM\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: java.lang.Throwable: Error message";

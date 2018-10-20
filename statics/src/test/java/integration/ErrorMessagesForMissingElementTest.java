@@ -213,7 +213,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementFound");
     }
     catch (ElementShouldNot e) {
-      assertThat(e.toString()).matches("Element should not exist \\{h2\\}\n" +
+      assertThat(e.toString()).matches("Element should not exist in DOM \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
