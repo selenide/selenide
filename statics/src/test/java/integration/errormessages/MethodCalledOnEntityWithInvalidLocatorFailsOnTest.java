@@ -125,7 +125,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     SelenideElement element = $$("##invalid-locator").findBy(cssClass("the-expanse"));
 
     try {
-      element.shouldBe(exist);
+      element.should(existInDOM);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
@@ -155,7 +155,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     SelenideElement element = $("ul").find("##invalid-locator");
 
     try {
-      element.shouldBe(exist);
+      element.should(existInDOM);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
@@ -351,7 +351,7 @@ class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest 
     }
         /*
             Element not found {ul}
-            Expected: exist
+            Expected: existInDOM
 
             Screenshot: file:/E:/julia/QA/selenide/build/reports/tests/firefox/integration
             /errormessages/MethodCalledOnEntityWithInvalidLocatorFailsOnTest/

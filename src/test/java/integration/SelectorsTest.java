@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byId;
@@ -21,7 +21,7 @@ class SelectorsTest extends ITest {
 
   @Test
   void canFindElementByName() {
-    $(byName("domain")).should(exist);
+    $(byName("domain")).should(existInDOM);
   }
 
   @Test

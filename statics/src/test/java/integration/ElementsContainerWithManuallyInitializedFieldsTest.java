@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -26,7 +26,7 @@ class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest
   void canInitializeElementsContainerFieldsWithoutFindByAnnotation() {
     MyPage page = page(MyPage.class);
 
-    page.container.getSelf().should(exist, visible);
+    page.container.getSelf().should(existInDOM, visible);
     page.container.headerLink.shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     page.container.options.shouldHave(texts("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"",
       "Mickey \"Rock'n'Roll\" Rourke"));

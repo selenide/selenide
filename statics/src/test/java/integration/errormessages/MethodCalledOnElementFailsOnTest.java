@@ -12,7 +12,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -136,7 +136,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     SelenideElement element = $$(".nonexistent").findBy(cssClass("the-expanse"));
 
     try {
-      element.shouldBe(exist);
+      element.should(existInDOM);
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)

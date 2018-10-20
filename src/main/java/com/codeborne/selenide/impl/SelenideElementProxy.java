@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
@@ -128,7 +128,7 @@ class SelenideElementProxy implements InvocationHandler {
       throw new ElementIsNotClickableException(driver(), lastError);
     }
     else if (lastError instanceof WebDriverException) {
-      throw webElementSource.createElementNotFoundError(exist, lastError);
+      throw webElementSource.createElementNotFoundError(existInDOM, lastError);
     }
     throw lastError;
   }

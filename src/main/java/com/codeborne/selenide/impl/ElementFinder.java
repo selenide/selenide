@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static java.lang.Thread.currentThread;
 
 public class ElementFinder extends WebElementSource {
@@ -91,10 +91,10 @@ public class ElementFinder extends WebElementSource {
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (parent instanceof SelenideElement) {
-      ((SelenideElement) parent).should(exist);
+      ((SelenideElement) parent).should(existInDOM);
     }
     else if (parent instanceof WebElement) {
-      WebElementWrapper.wrap(driver(), (WebElement) parent).should(exist);
+      WebElementWrapper.wrap(driver(), (WebElement) parent).should(existInDOM);
     }
     
     return super.createElementNotFoundError(condition, lastError);

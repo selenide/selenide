@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.disappears;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
 
@@ -39,7 +39,7 @@ class ElementHiddenTest extends ITest {
 
   @Test
   void shouldExist() {
-    $("#hide").should(exist);
+    $("#hide").should(existInDOM);
   }
 
   @Test

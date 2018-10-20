@@ -20,7 +20,7 @@ import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
@@ -169,7 +169,7 @@ class CollectionMethodsTest extends ITest {
   @Test
   void findWaitsUntilElementMatches() {
     $$("#dynamic-content-container span").findBy(text("dynamic content2")).shouldBe(visible);
-    $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(exist);
+    $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(existInDOM);
   }
 
   @Test

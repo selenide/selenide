@@ -18,7 +18,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -209,7 +209,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
   @Test
   void existingElementShouldNotExist() {
     try {
-      $("h2").shouldNot(exist);
+      $("h2").shouldNot(existInDOM);
       fail("Expected ElementFound");
     }
     catch (ElementShouldNot e) {

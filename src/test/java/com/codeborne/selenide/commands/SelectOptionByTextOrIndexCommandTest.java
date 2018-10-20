@@ -53,7 +53,7 @@ class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{this.defaultElementText}});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessage(String.format("Element not found {null/option[text:%s]}\nExpected: exist", this.defaultElementText));
+        .hasMessage(String.format("Element not found {null/option[text:%s]}\nExpected: existInDOM", this.defaultElementText));
     }
   }
 
@@ -66,7 +66,7 @@ class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{""}});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessage("Element not found {null/option[text:]}\nExpected: exist");
+        .hasMessage("Element not found {null/option[text:]}\nExpected: existInDOM");
     }
   }
 
@@ -83,7 +83,7 @@ class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new int[]{defaultIndex}});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessage(String.format("Element not found {null/option[index:%d]}\nExpected: exist", defaultIndex));
+        .hasMessage(String.format("Element not found {null/option[index:%d]}\nExpected: existInDOM", defaultIndex));
     }
   }
 

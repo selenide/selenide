@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 
 public class SelectOptionByValue implements Command {
   @Override
@@ -31,7 +31,7 @@ public class SelectOptionByValue implements Command {
       select.selectByValue(value);
     }
     catch (NoSuchElementException e) {
-      throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[value:" + value + ']', exist, e);
+      throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[value:" + value + ']', existInDOM, e);
     }
   }
 }

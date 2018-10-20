@@ -277,7 +277,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>Timeout is configurable via Configuration#timeout</p>
    *
    * <p>For example: {@code
-   *   $("#errorMessage").should(exist);
+   *   $("#errorMessage").should(existInDOM);
    * }</p>
    *
    * @see Configuration#timeout

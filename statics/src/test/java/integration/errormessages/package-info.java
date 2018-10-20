@@ -39,7 +39,7 @@
  *                                             ...
  *                    without waiting
  *                                   isDisplayed()
- *                                   exist()
+ *                                   existInDOM()
  *
  *  fail options
  *             fail on getting element / elements

@@ -13,12 +13,12 @@ class UtilCommandTest implements WithAssertions {
   void testArgsToCondition() {
     List<Condition> conditions = Util.argsToConditions(new Object[]{
       Condition.enabled,
-      new Condition[]{Condition.appear, Condition.exist},
+      new Condition[]{Condition.appear, Condition.existInDOM},
       "hello",
       2L
     });
     assertThat(conditions)
-      .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.exist));
+      .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.existInDOM));
   }
 
   @Test
@@ -26,12 +26,12 @@ class UtilCommandTest implements WithAssertions {
     assertThatThrownBy(() -> {
       List<Condition> conditions = Util.argsToConditions(new Object[]{
         Condition.enabled,
-        new Condition[]{Condition.appear, Condition.exist},
+        new Condition[]{Condition.appear, Condition.existInDOM},
         1,
         2.0
       });
       assertThat(conditions)
-        .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.exist));
+        .isEqualTo(asList(Condition.enabled, Condition.visible, Condition.existInDOM));
     }).isInstanceOf(IllegalArgumentException.class);
   }
 }

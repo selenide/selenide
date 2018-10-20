@@ -137,15 +137,15 @@ class ConditionTest {
 
   @Test
   void elementExists() {
-    assertThat(exist.apply(driver, elementWithVisibility(true))).isTrue();
-    assertThat(exist.apply(driver, elementWithVisibility(false))).isTrue();
+    assertThat(existInDOM.apply(driver, elementWithVisibility(true))).isTrue();
+    assertThat(existInDOM.apply(driver, elementWithVisibility(false))).isTrue();
   }
 
   @Test
   void elementExists_returnsFalse_ifItThrowsException() {
     WebElement element = mock(WebElement.class);
     when(element.isDisplayed()).thenThrow(new StaleElementReferenceException("ups"));
-    assertThat(exist.apply(driver, element)).isFalse();
+    assertThat(existInDOM.apply(driver, element)).isFalse();
   }
 
   @Test

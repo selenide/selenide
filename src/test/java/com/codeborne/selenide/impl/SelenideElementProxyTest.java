@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
@@ -106,7 +106,7 @@ class SelenideElementProxyTest implements WithAssertions {
   @Test
   void elementNotFoundAsExpected() {
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
-    driver.find("#firstName").shouldNotBe(exist);
+    driver.find("#firstName").shouldNotBe(existInDOM);
     driver.find("#firstName").should(disappear);
     driver.find("#firstName").shouldNotBe(visible);
     driver.find("#firstName").shouldNotBe(enabled);
@@ -117,7 +117,7 @@ class SelenideElementProxyTest implements WithAssertions {
   void elementNotFoundAsExpected2() {
     when(webdriver.findElement(By.cssSelector("#firstName")))
       .thenThrow(new WebDriverException("element is not found and this is expected"));
-    driver.find("#firstName").shouldNot(exist);
+    driver.find("#firstName").shouldNot(existInDOM);
     driver.find("#firstName").should(disappear);
     driver.find("#firstName").shouldNotBe(visible);
     driver.find("#firstName").shouldNotBe(enabled);
@@ -136,7 +136,7 @@ class SelenideElementProxyTest implements WithAssertions {
   void webdriverReportsInvalidXpath_using_shouldNot() {
     when(webdriver.findElement(By.cssSelector("#firstName")))
       .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
-    assertThatThrownBy(() -> driver.find("#firstName").shouldNot(exist))
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNot(existInDOM))
       .isInstanceOf(InvalidSelectorException.class);
   }
 

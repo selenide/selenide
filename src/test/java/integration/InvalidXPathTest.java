@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 
 class InvalidXPathTest extends ITest {
   @BeforeEach
@@ -16,14 +16,14 @@ class InvalidXPathTest extends ITest {
 
   @Test
   void usingInvalidXPathShouldThrowInvalidSelectorException() {
-    assertThatThrownBy(() -> $(By.xpath("##[id")).shouldNot(exist))
+    assertThatThrownBy(() -> $(By.xpath("##[id")).shouldNot(existInDOM))
       .isInstanceOf(InvalidSelectorException.class);
   }
 
   @Test
   void lookingForMissingElementByXPathShouldFail() {
     try {
-      $(By.xpath("//tagga")).should(exist);
+      $(By.xpath("//tagga")).should(existInDOM);
       fail("Expected: ElementNotFound exception with cause");
     } catch (ElementNotFound expectedException) {
       assertThat(expectedException.toString())

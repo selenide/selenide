@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -17,7 +17,7 @@ class NotExistingElementTest extends ITest {
 
   @Test
   void shouldNotExist() {
-    $("#not_exist").shouldNot(exist);
+    $("#not_exist").shouldNot(existInDOM);
   }
 
   @Test

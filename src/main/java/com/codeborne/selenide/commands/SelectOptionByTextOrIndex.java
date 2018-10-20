@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 
 public class SelectOptionByTextOrIndex implements Command<Void> {
   @Override
@@ -28,7 +28,8 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
         select.selectByVisibleText(text);
       }
       catch (NoSuchElementException e) {
-        throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[text:" + text + ']', exist, e);
+        throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[text:" + text + ']',
+          existInDOM, e);
       }
     }
   }
@@ -40,7 +41,8 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
         select.selectByIndex(index);
       }
       catch (NoSuchElementException e) {
-        throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[index:" + index + ']', exist, e);
+        throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[index:" + index + ']',
+          existInDOM, e);
       }
     }
   }

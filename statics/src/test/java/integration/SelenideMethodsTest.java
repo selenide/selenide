@@ -21,7 +21,7 @@ import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.existInDOM;
 import static com.codeborne.selenide.Condition.focused;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
@@ -89,16 +89,16 @@ class SelenideMethodsTest extends IntegrationTest {
     $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
     $("#theHiddenElement").waitUntil(disappears, 1000);
-    $("#theHiddenElement").should(exist);
+    $("#theHiddenElement").should(existInDOM);
 
-    $(".non-existing-element").should(Condition.not(exist));
-    $(".non-existing-element").shouldNot(exist);
+    $(".non-existing-element").should(Condition.not(existInDOM));
+    $(".non-existing-element").shouldNot(existInDOM);
   }
 
   @Test
   void userCanUseCustomPollingInterval() {
     $("#theHiddenElement").waitUntil(disappears, 1000, 10);
-    $(".non-existing-element").waitWhile(exist, 1000, 20);
+    $(".non-existing-element").waitWhile(existInDOM, 1000, 20);
   }
 
   @Test

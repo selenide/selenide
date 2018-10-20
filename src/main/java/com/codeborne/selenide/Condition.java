@@ -25,10 +25,12 @@ public abstract class Condition {
   };
 
   /**
-   * Check if element exist. It can be visible or hidden.
+   * @deprecated use {@link #existInDOM} instead. Exist was often confused with visible.
+   * Check if element exists. It can be visible or hidden.
    *
    * <p>Sample: {@code $("input").should(exist);}</p>
    */
+  @Deprecated
   public static final Condition exist = new Condition("exist") {
     @Override
     public boolean apply(Driver driver, WebElement element) {
@@ -41,6 +43,25 @@ public abstract class Condition {
       }
     }
   };
+
+  /**
+   * Check if element exists in DOM. It can be visible or hidden.
+   *
+   * <p>Sample: {@code $("input[type=hidden]").should(existInDOM);}</p>
+   */
+  public static final Condition existInDOM = new Condition("existInDOM") {
+    @Override
+    public boolean apply(Driver driver, WebElement element) {
+      try {
+        element.isDisplayed();
+        return true;
+      } catch (StaleElementReferenceException e) {
+        return false;
+      }
+    }
+  };
+
+
 
   /**
    * Checks that element is not visible or does not exists.
@@ -479,7 +500,7 @@ public abstract class Condition {
   /**
    * Negate given condition.
    * <p>
-   * Used for methods like $.shouldNot(exist), $.shouldNotBe(visible)
+   * Used for methods like $.shouldNot(existInDOM), $.shouldNotBe(visible)
    * <p>
    * Typically you don't need to use it.
    */
