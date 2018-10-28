@@ -147,6 +147,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           throw Cleanup.of.wrap(elementNotFound);
         }
       }
+      catch (IndexOutOfBoundsException outOfCollection) {
+        if (condition.applyNull()) {
+          return;
+        }
+
+        throw outOfCollection;
+      }
       sleep(driver().config().pollingInterval());
     }
     while (!stopwatch.isTimeoutReached());
@@ -336,7 +343,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @Override
   public int size() {
-    return getElements().size();
+    try {
+      return getElements().size();
+    } catch (IndexOutOfBoundsException outOfCollection) {
+      return 0;
+    }
   }
 
   @Override

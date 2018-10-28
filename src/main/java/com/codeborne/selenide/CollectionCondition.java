@@ -110,4 +110,6 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     this.explanation = explanation;
     return this;
   }
+
+  public abstract boolean applyNull();
 }

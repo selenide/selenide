@@ -16,7 +16,7 @@ public class SizeGreaterThanOrEqual extends CollectionCondition {
 
   @Override
   public boolean apply(List<WebElement> elements) {
-    return elements.size() >= expectedSize;
+    return apply(elements.size());
   }
 
   @Override
@@ -25,7 +25,16 @@ public class SizeGreaterThanOrEqual extends CollectionCondition {
   }
 
   @Override
+  public boolean applyNull() {
+    return apply(0);
+  }
+
+  @Override
   public String toString() {
     return String.format("size >= %s", expectedSize);
+  }
+
+  private boolean apply(int size) {
+    return size >= expectedSize;
   }
 }
