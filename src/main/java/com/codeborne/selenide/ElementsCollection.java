@@ -369,9 +369,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public Object[] toArray() {
     List<WebElement> fetchedElements = collection.getElements();
     Object[] result = new Object[fetchedElements.size()];
-    Iterator<WebElement> it = fetchedElements.iterator();
     for (int i = 0; i < result.length; i++) {
-      result[i] = Describe.describe(driver(), it.next());
+      result[i] = CollectionElement.wrap(collection, i);
     }
     return result;
   }

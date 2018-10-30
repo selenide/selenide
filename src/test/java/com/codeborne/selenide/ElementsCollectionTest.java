@@ -323,6 +323,13 @@ class ElementsCollectionTest implements WithAssertions {
       .hasToString("[WebDriverException: Failed to fetch elements]");
   }
 
+  @Test
+  void toArray() {
+    ElementsCollection collection = new ElementsCollection(source);
+    when(source.getElements()).thenReturn(asList(element1, element2));
+    assertThat(collection.toArray()).hasOnlyElementsOfType(SelenideElement.class);
+  }
+
   private WebElement element(String tag) {
     WebElement element = mock(WebElement.class);
     when(element.getTagName()).thenReturn(tag);
