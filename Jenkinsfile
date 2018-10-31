@@ -1,16 +1,12 @@
-node {
-  try {
-    stage('Check') {
-      sh './gradlew check --no-daemon --console=plain'
+pipeline {
+    agent {
+        docker { image 'atlassianlabs/docker-node-jdk-chrome-firefox' }
     }
-  }
-  finally {
-    stage("Test Report") {
-      junit 'build/test-results/**/*.xml'
+    stages {
+        stage('Test') {
+            steps {
+                sh './gradlew check --no-daemon --console=plain'
+            }
+        }
     }
-  
-    stage("Archive Artifacts") {
-      archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
-    }
-  }
 }
