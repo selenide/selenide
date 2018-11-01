@@ -12,8 +12,6 @@ import org.openqa.grid.shared.Stoppable;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.util.Optional;
-
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.close;
@@ -21,20 +19,20 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 class SeleniumGridTest extends IntegrationTest {
-  private Optional<Stoppable> gridHub;
-  private Optional<Stoppable> gridNode;
+  private Stoppable gridHub;
+  private Stoppable gridNode;
 
   @BeforeEach
   void setUp() {
     close();
 
     int hubPort = findFreePort();
-    gridHub = new GridLauncherV3(new String[]{"-port", "" + hubPort}).launch();
+    gridHub = new GridLauncherV3().launch(new String[]{"-port", "" + hubPort});
 
-    gridNode = new GridLauncherV3(new String[]{"-port", "" + findFreePort(),
+    gridNode = new GridLauncherV3().launch(new String[]{"-port", "" + findFreePort(),
       "-role", "node",
       "-hub", "http://localhost:" + hubPort + "/grid/register"
-    }).launch();
+    });
 
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
     Configuration.browser = "chrome";
@@ -60,8 +58,8 @@ class SeleniumGridTest extends IntegrationTest {
   @AfterEach
   void tearDown() {
     close();
-    gridHub.ifPresent(Stoppable::stop);
-    gridNode.ifPresent(Stoppable::stop);
+    gridHub.stop();
+    gridNode.stop();
     Configuration.remote = null;
   }
 }
