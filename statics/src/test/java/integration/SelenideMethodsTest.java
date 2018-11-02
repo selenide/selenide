@@ -534,4 +534,11 @@ class SelenideMethodsTest extends IntegrationTest {
         .hasMessageContaining("because it's sensitive information");
     }
   }
+
+  @Test
+  void canClickElementsWithZeroOpacity() {
+    assertThat($("#zero-opacity-button").innerText()).isEqualTo("Zero Opacity");
+    $("#zero-opacity-button").click();
+    $("#username-mirror").shouldHave(text("Hidden button clicked"));
+  }
 }

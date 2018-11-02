@@ -36,6 +36,11 @@
         document.getElementById('selectedDomain').innerHTML = select.options[select.selectedIndex].text;
       }
 
+      function onHiddenButtonClicked(input) {
+        changedCounter++;
+        document.getElementById('username-mirror').innerHTML = 'Hidden button clicked (' + changedCounter + ')';
+      }
+
   </script>
 </head>
 <body onload="initBlur(); scheduleFillTextArea();">
@@ -192,5 +197,8 @@
      ng-class="widget"
      ng-click="none">Суслик
 </div>
+
+<button style="opacity: 0;" id="zero-opacity-button" onclick="onHiddenButtonClicked(this)">Zero Opacity</button>
+
 </body>
 </html>
