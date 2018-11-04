@@ -16,7 +16,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  * constructor and pass this class name as {@code browser} system variable value.
  * <li>Implement this very interface and pass the implementation class name as {@code browser} system variable value.
  * </ul>
- * </p>
  */
 public interface WebDriverProvider {
 

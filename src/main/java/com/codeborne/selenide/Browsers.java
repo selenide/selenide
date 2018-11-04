@@ -45,7 +45,7 @@ public interface Browsers {
 
   /**
    * To use JbrowserDriver, you need to include extra dependency to your project:
-   * <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;
+   * {@code <dependency org="com.machinepublishers" name="jbrowserdriver" rev="[0.13.0, 2.0)" conf="test-&gt;default"/&gt;}
    */
   public static final String JBROWSER = "jbrowser";
 }

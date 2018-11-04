@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 public enum FileDownloadMode {
   /**
    * Download files via direct http request.
-   * Works only for <a href></a> elements.
+   * Works only for {@code <a href></a>} elements.
    * Sends GET request to "href" with all cookies from current browser session.
    */
   HTTPGET,
