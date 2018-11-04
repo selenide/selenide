@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.1 (released 10.10.2018)
+* Upgrade to selenium-java 3.141.0
+* #747 fixed IndexOutOfBounds if CollectionElement does not exist  --  thanks to Denys Shynkarenko for PR #837 
+* #844 fixed ClassCastException in `$$.toArray()`  --  thanks to BorisOsipov for PR #847 
+
 ## 5.0.0 (released 10.10.2018)
 * #354 Create non-static alternative for Configuration (Config) and Selenide (SelenideDriver). Now you can run 2 browsers in a test.
 * Move inner classes AssertionMode, SelectorMode, FileDownloadMode from Configuration to package `com.codeborne.selenide`
