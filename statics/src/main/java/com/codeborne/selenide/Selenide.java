@@ -4,6 +4,7 @@ import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogType;
 
 import java.io.File;
 import java.io.IOException;
@@ -632,8 +633,8 @@ public class Selenide {
    * @param logType WebDriver supported log types
    * @param logLevel logging level that will be used to control logging output
    * @return list of log entries
-   * @see org.openqa.selenium.logging.LogType,
-   * @see java.util.logging.Level
+   * @see LogType
+   * @see Level
    */
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
     return getSelenideDriver().getWebDriverLogs().logs(logType, logLevel);

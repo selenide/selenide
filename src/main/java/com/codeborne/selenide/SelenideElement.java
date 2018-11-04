@@ -46,14 +46,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement val(String text);
 
   /**
-   * <p>Append given test to the text field and trigger "change" event.</p>
-   *
+   * Append given test to the text field and trigger "change" event.
    * <p>
    * Implementation details:
-   * This is the same as <pre>
+   * This is the same as
+   * <pre>
    *   1. WebElement.sendKeys(text)
-   *   2. Trigger change event</pre>
-   * </p>
+   *   2. Trigger change event
+   * </pre>
    *
    * @param text Any text to append into the text field.
    *

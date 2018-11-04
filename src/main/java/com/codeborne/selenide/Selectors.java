@@ -36,12 +36,12 @@ public class Selectors {
    * Find elements having attribute with given value.
    *
    * Examples:
-   * <div binding="fieldValue"></div>
+   * {@code <div binding="fieldValue"></div>}
    * Find element with attribute 'binding' EXACTLY containing text 'fieldValue' , use:
    * byAttribute("binding", "fieldValue")
    *
    * For finding difficult/generated data attribute which contains some value:
-   * <div binding="userName17fk5n6kc2Ds45F40d0fieldValue_promoLanding word"></div>
+   * {@code <div binding="userName17fk5n6kc2Ds45F40d0fieldValue_promoLanding word"></div>}
    *
    * Find element with attribute 'binding' CONTAINING text 'fieldValue', use symbol '*' with attribute name:
    * byAttribute("binding*", "fieldValue") it same as By.cssSelector("[binding*='fieldValue']")
@@ -55,7 +55,7 @@ public class Selectors {
    * Find element whose attribute 'binding' CONTAINING WORD 'word':
    * byAttribute("binding~", "word")
    *
-   * Seems to work incorrectly if attribute name contains dash, for example: <option data-mailServerId="123"></option>
+   * Seems to work incorrectly if attribute name contains dash, for example: {@code <option data-mailServerId="123"></option>}
    *
    * @param attributeName name of attribute, should not be empty or null
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
