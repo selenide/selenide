@@ -268,7 +268,8 @@ public abstract class Condition {
     return new Condition("selectedText") {
       @Override
       public boolean apply(final Driver driver, final WebElement element) {
-        return driver.executeJavaScript("return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element)
+        return driver.executeJavaScript(
+          "return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element)
           .equals(expectedText);
       }
 
