@@ -2,6 +2,7 @@
 
 ## 5.0.1 (released 10.10.2018)
 * Upgrade to selenium-java 3.141.5
+* #855 Lock chromedriver version for chrome 70
 * #747 fixed IndexOutOfBounds if CollectionElement does not exist  --  thanks to Denys Shynkarenko for PR #837 
 * #844 fixed ClassCastException in `$$.toArray()`  --  thanks to BorisOsipov for PR #847 
 * #840 generate random file name if failed to extract it from URL or http header
