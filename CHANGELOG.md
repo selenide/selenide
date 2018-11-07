@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.1 (released 10.10.2018)
+## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
 * #855 Lock chromedriver version for chrome 70
 * #747 fixed IndexOutOfBounds if CollectionElement does not exist  --  thanks to Denys Shynkarenko for PR #837 
