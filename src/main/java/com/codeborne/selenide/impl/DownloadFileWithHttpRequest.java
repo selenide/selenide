@@ -34,10 +34,12 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class DownloadFileWithHttpRequest {
@@ -174,13 +176,34 @@ public class DownloadFileWithHttpRequest {
     }
 
     final String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
+    return isBlank(fullFileName) ? random() : trimQuery(fullFileName);
+  }
+
+  String random() {
+    return UUID.randomUUID().toString();
+  }
+
+  private String trimQuery(String fullFileName) {
     return fullFileName.contains("?")
       ? StringUtils.left(fullFileName, fullFileName.indexOf("?"))
       : fullFileName;
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
+    ensureFolderExists(downloadedFile);
     copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
     return downloadedFile;
   }
+
+  protected File ensureFolderExists(File targetFile) {
+    File folder = targetFile.getParentFile();
+    if (!folder.exists()) {
+      log.info("Creating folder: " + folder);
+      if (!folder.mkdirs()) {
+        log.severe("Failed to create " + folder);
+      }
+    }
+    return targetFile;
+  }
+
 }
