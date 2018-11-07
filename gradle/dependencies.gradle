@@ -6,7 +6,7 @@ ext {
   testngVersion = '6.9.10'
   htmlunitVersion = '2.33'
   htmlunitDriverVersion = '2.33.1'
-  seleniumVersion = '3.141.0'
+  seleniumVersion = '3.141.5'
   junitVersion = '5.3.1'
 }
 

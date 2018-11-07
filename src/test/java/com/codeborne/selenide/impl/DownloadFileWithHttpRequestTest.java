@@ -4,8 +4,11 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.ImmutableSet;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
@@ -15,12 +18,13 @@ import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class DownloadFileWithHttpRequestTest {
-  DownloadFileWithHttpRequest download = new DownloadFileWithHttpRequest();
+  DownloadFileWithHttpRequest download = spy(new DownloadFileWithHttpRequest());
 
   @Test
   void makeAbsoluteUrl() {
@@ -77,5 +81,34 @@ public class DownloadFileWithHttpRequestTest {
     assertThat(bs.getCookies()).hasSize(1);
     assertThat(bs.getCookies().get(0).getName()).isEqualTo("jsessionid");
     assertThat(bs.getCookies().get(0).getValue()).isEqualTo("123456789");
+  }
+
+  @Test
+  void getFileName_fromHttpHeader() {
+    Header header = new BasicHeader("Content-Disposition", "Content-Disposition=attachment; filename=image.jpeg");
+    HttpResponse response = responseWithHeaders(header);
+
+    assertThat(download.getFileName("/blah.jpg", response)).isEqualTo("image.jpeg");
+  }
+
+  @Test
+  void getFileName_fromUrl() {
+    HttpResponse response = responseWithHeaders();
+
+    assertThat(download.getFileName("/blah.jpg", response)).isEqualTo("blah.jpg");
+  }
+
+  @Test
+  void getFileName_random() {
+    HttpResponse response = responseWithHeaders();
+    when(download.random()).thenReturn("111-222-333-444");
+
+    assertThat(download.getFileName("/images/6584836/", response)).isEqualTo("111-222-333-444");
+  }
+
+  private HttpResponse responseWithHeaders(Header... headers) {
+    HttpResponse response = mock(HttpResponse.class);
+    when(response.getAllHeaders()).thenReturn(headers);
+    return response;
   }
 }
