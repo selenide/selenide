@@ -151,7 +151,7 @@ public abstract class Condition {
    * @return true if attribute contains given value
    */
   public static Condition valueInAttribute(String attributeName, String value) {
-    return new Condition("attribute") {
+    return new Condition(String.format("value '%s' in attribute '%s'", value, attributeName)) {
       @Override
       public boolean apply(Driver driver, WebElement element) {
         return getAttributeValue(element, attributeName).contains(value);
