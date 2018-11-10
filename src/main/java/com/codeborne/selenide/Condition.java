@@ -140,6 +140,34 @@ public abstract class Condition {
     };
   }
 
+  /**
+   * Check if element attribute contains given value
+   * <p>Case sensitive</p>
+   *
+   * <p>Sample: <code>$("#task").shouldHave(valueInAttribute("class", "done"));</code></p>
+   *
+   * @param attributeName name of attribute, not null
+   * @param value attribute value, not null
+   * @return true if attribute contains given value
+   */
+  public static Condition valueInAttribute(String attributeName, String value) {
+    return new Condition("attribute") {
+      @Override
+      public boolean apply(Driver driver, WebElement element) {
+        return getAttributeValue(element, attributeName).contains(value);
+      }
+    };
+  }
+
+  /**
+   * Synonym for {@link #valueInAttribute(String, String)} - may be used for better readability:
+   *
+   * <p><code>$("#task").waitUntil(attributeContains("class", "done"));</code></p>
+   */
+  public static Condition attributeContains(String attributeName, String value) {
+    return valueInAttribute(attributeName, value);
+  }
+
   private static String getAttributeValue(WebElement element, String attributeName) {
     String attr = element.getAttribute(attributeName);
     return attr == null ? "" : attr;

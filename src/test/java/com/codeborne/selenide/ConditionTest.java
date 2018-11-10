@@ -111,6 +111,16 @@ class ConditionTest {
     assertThat(Condition.value("malko").apply(driver, element)).isTrue();
   }
 
+  @Test
+  void valueInAttribute() {
+    String attribute = "name";
+    WebElement element = elementWithAttribute(attribute, "John Malkovich");
+    assertThat(Condition.valueInAttribute(attribute, "Peter").apply(driver, element)).isFalse();
+    assertThat(Condition.valueInAttribute(attribute, "John").apply(driver, element)).isTrue();
+    assertThat(Condition.valueInAttribute(attribute, "john").apply(driver, element)).isFalse();
+    assertThat(Condition.valueInAttribute("invalid-attribute", "john").apply(driver, element)).isFalse();
+  }
+
   private WebElement elementWithAttribute(String name, String value) {
     WebElement element = mock(WebElement.class);
     when(element.getAttribute(name)).thenReturn(value);
