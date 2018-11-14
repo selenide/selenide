@@ -223,7 +223,7 @@ public class Configuration {
   public static AssertionMode assertionMode = defaults.assertionMode();
 
   /**
-   * Defines if files are downloaded via direct HTTP or vie selenide emebedded proxy server
+   * Defines if files are downloaded via direct HTTP or vie selenide embedded proxy server
    * Can be configured either programmatically or by system property "-Dselenide.fileDownload=PROXY"
    * <br>
    * Default: HTTPGET
