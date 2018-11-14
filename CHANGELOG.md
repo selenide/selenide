@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.2
+* Upgrade to selenium-java 3.141.59
+
 ## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
 * #855 Lock chromedriver version for chrome 70
