@@ -137,7 +137,7 @@ public class SelenideProxyServer {
 
   @Override
   public String toString() {
-    return String.format("Selenide proxy server :%s", port);
+    return String.format("Selenide proxy server: %s", port);
   }
 
   /**
