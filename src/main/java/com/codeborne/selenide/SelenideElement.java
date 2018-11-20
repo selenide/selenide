@@ -739,6 +739,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Override void click();
 
   /**
+   * Click the element ignore it's visibility. Check only element existence
+   * <p>
+   * You can use it for element that have opacity equals to zero.
+   * <p>
+   * Example: {@code <button style="opacity: 0;">Zero Opacity</button>}
+   *
+   * @see com.codeborne.selenide.commands.ClickIgnoreVisibility
+   */
+  void clickIgnoreVisibility();
+
+  /**
    * Click the element with a relative offset from the upper left corner of the element
    */
   void click(int offsetX, int offsetY);

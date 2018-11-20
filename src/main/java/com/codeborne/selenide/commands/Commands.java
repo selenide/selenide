@@ -70,6 +70,7 @@ public class Commands {
 
   private void addClickCommands() {
     add("click", new Click());
+    add("clickIgnoreVisibility", new ClickIgnoreVisibility());
     add("contextClick", new ContextClick());
     add("doubleClick", new DoubleClick());
   }

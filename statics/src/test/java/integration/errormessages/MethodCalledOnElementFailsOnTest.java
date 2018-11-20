@@ -122,7 +122,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul li[10]}");
       assertThat(expected)
-        .hasMessageContaining("Expected: exist");
+        .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);

@@ -127,6 +127,22 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
   }
 
   @Test
+  void clickHiddenElement() {
+    try {
+      $("#theHiddenElement").click();
+      fail("Expected ElementShould");
+    }
+    catch (ElementShould elementShouldExist) {
+      assertThat(elementShouldExist.toString()).matches("Element should be visible \\{\\#theHiddenElement\\}\n" +
+        "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
+        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
+        "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
+        "Timeout: 15 ms.");
+      assertThat(elementShouldExist.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET" + pngOrHtml());
+    }
+  }
+
+  @Test
   void pageObjectElementTextDoesNotMatch() {
     try {
       $(pageObject.header1).shouldHave(text("expected text"));
@@ -182,7 +198,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     }
     catch (ElementNotFound e) {
       assertStartsWith("Element not found \\{By.id: invalid_id\\}\n" +
-        "Expected: exist\n" +
+        "Expected: visible\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.\n" +
