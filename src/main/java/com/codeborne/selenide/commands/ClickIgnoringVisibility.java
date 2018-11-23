@@ -3,7 +3,7 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
-public class ClickIgnoreVisibility extends Click {
+public class ClickIgnoringVisibility extends Click {
   @Override
   public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     if (args == null || args.length == 0) {

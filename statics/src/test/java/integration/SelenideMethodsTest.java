@@ -538,7 +538,7 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void canClickElementsWithZeroOpacity() {
     assertThat($("#zero-opacity-button").innerText()).isEqualTo("Zero Opacity");
-    $("#zero-opacity-button").clickIgnoreVisibility();
+    $("#zero-opacity-button").clickIgnoringVisibility();
     $("#username-mirror").shouldHave(text("Hidden button clicked"));
   }
 }

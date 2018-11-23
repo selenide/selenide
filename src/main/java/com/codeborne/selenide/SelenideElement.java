@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.ClickIgnoringVisibility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
@@ -745,9 +746,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Example: {@code <button style="opacity: 0;">Zero Opacity</button>}
    *
-   * @see com.codeborne.selenide.commands.ClickIgnoreVisibility
+   * @see ClickIgnoringVisibility
    */
-  void clickIgnoreVisibility();
+  void clickIgnoringVisibility();
 
   /**
    * Click the element with a relative offset from the upper left corner of the element
