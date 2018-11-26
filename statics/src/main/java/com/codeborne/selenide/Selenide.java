@@ -417,32 +417,152 @@ public class Selenide {
   }
 
   /**
+   * Wrap standard Selenium WebElement into SelenideElement
+   * to use additional methods like shouldHave(), selectOption() etc.
+   *
+   * @param webElement standard Selenium WebElement
+   * @return given WebElement wrapped into SelenideElement
+   */
+  public static SelenideElement find(WebElement webElement) {
+    return getSelenideDriver().$(webElement);
+  }
+
+  /**
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return SelenideElement
+   */
+  public static SelenideElement find(String cssSelector) {
+    return getSelenideDriver().find(cssSelector);
+  }
+
+  /**
+   * Locates the first element matching given XPATH expression
+   * ATTENTION! This method doesn't start any search yet!
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @return SelenideElement which locates elements via XPath
+   */
+  public static SelenideElement findX(String xpathExpression) {
+    return getSelenideDriver().$x(xpathExpression);
+  }
+
+  /**
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return SelenideElement
+   */
+  public static SelenideElement find(By seleniumSelector) {
+    return getSelenideDriver().find(seleniumSelector);
+  }
+
+  /**
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param index 0..N
+   * @return SelenideElement
+   */
+  public static SelenideElement find(By seleniumSelector, int index) {
+    return getSelenideDriver().find(seleniumSelector, index);
+  }
+
+  /**
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 0..N
+   * @return SelenideElement
+   */
+  public static SelenideElement find(String cssSelector, int index) {
+    return getSelenideDriver().$(cssSelector, index);
+  }
+
+  /**
+   * Initialize collection with Elements
+   */
+  public static ElementsCollection findAll(Collection<? extends WebElement> elements) {
+    return getSelenideDriver().$$(elements);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return empty list if element was no found
+   */
+  public static ElementsCollection findAll(String cssSelector) {
+    return getSelenideDriver().$$(cssSelector);
+  }
+
+  /**
+   * Locates all elements matching given XPATH expression.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
+   * @return ElementsCollection which locates elements via XPath
+   */
+  public static ElementsCollection findAllX(String xpathExpression) {
+    return getSelenideDriver().$$x(xpathExpression);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return empty list if element was no found
+   */
+  public static ElementsCollection findAll(By seleniumSelector) {
+    return getSelenideDriver().findAll(seleniumSelector);
+  }
+
+  /**
+   * @deprecated please use find(criteria) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates the first element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
    */
+  @Deprecated
   public static SelenideElement getElement(By criteria) {
     return getSelenideDriver().find(criteria);
   }
 
   /**
+   * @deprecated please use find(criteria, index) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
    */
+  @Deprecated
   public static SelenideElement getElement(By criteria, int index) {
     return getSelenideDriver().find(criteria, index);
   }
 
   /**
+   * @deprecated please use findAll(criteria) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates all elements matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return empty list if element was no found
    */
+  @Deprecated
   public static ElementsCollection getElements(By criteria) {
     return getSelenideDriver().findAll(criteria);
   }
