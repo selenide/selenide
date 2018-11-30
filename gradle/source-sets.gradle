@@ -19,6 +19,7 @@ sourceSets {
 
 idea {
   module {
+    sourceDirs += file('statics/src/main/java')
     testSourceDirs += file('statics/src/test/java')
   }
 }

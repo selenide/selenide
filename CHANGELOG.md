@@ -2,6 +2,7 @@
 
 ## 5.0.2
 * Upgrade to selenium-java 3.141.59
+* #872 fix importing Selenide Gradle project to IDEA  --  thanks to jkromski-fh for PR #872
 
 ## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
