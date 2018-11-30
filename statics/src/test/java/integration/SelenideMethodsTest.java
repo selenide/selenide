@@ -526,7 +526,7 @@ class SelenideMethodsTest extends IntegrationTest {
         .exists()
     ).isTrue();
     assertThat(
-      find(selector, 1)
+      find(selector, 0)
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
