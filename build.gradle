@@ -9,6 +9,8 @@ plugins {
   id 'org.sonarqube' version '2.6.2'
 }
 
+apply plugin: 'idea'
+
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
 version = '5.0.2-SNAPSHOT'
