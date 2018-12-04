@@ -192,7 +192,7 @@ Technical changes (probably should not affect end users):
 
 ## 4.6 (released 31.08.2017)
 
-* See #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote -- thanks to @BorisOsipov
+* See #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dselenide.remote -- thanks to @BorisOsipov
 * See #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
 * See #528 - Wrong ElementNotFound exception message -- thanks to @BorisOsipov
 * See #573 - Method `$.shouldHave(exactValue(" foo  "))` does NOT trim leading/trailing spaces anymore - thanks to @mseele for this PR
