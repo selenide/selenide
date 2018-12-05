@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 public class PressEnter implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    locator.findAndAssertElementIsVisible().sendKeys(Keys.ENTER);
+    locator.findAndAssertElementIsVisibleOrOpaque().sendKeys(Keys.ENTER);
     return proxy;
   }
 }

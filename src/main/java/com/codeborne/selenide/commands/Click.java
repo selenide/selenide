@@ -10,10 +10,10 @@ public class Click implements Command<Void> {
   @Override
   public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     if (args == null || args.length == 0) {
-      click(locator.driver(), locator.findAndAssertElementIsVisible());
+      click(locator.driver(), locator.findAndAssertElementIsVisibleOrOpaque());
     }
     else if (args.length == 2) {
-      click(locator.driver(), locator.findAndAssertElementIsVisible(), (int) args[0], (int) args[1]);
+      click(locator.driver(), locator.findAndAssertElementIsVisibleOrOpaque(), (int) args[0], (int) args[1]);
     }
     return null;
   }

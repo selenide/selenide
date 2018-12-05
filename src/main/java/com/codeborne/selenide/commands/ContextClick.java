@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 public class ContextClick implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    locator.driver().actions().contextClick(locator.findAndAssertElementIsVisible()).perform();
+    locator.driver().actions().contextClick(locator.findAndAssertElementIsVisibleOrOpaque()).perform();
     return proxy;
   }
 }
