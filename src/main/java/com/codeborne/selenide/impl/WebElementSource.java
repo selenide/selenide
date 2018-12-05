@@ -75,15 +75,15 @@ public abstract class WebElementSource {
   }
 
   /**
-   * Elements which are opaque (opacity:0) are considered to be invisible, but interactive.
-   * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to opaque elements
+   * Elements which are transparent (opacity:0) are considered to be invisible, but interactive.
+   * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to transparent elements
    * for all major browsers
    *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
-  public WebElement findAndAssertElementIsVisibleOrOpaque() {
+  public WebElement findAndAssertElementIsVisibleOrTransparent() {
     return checkCondition("be ", null,
-      or("visible or opaque", visible, have(cssValue("opacity", "0"))),
+      or("visible or transparent", visible, have(cssValue("opacity", "0"))),
       false);
   }
 }

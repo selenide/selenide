@@ -6,14 +6,14 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-class OpacityTest extends IntegrationTest {
+class TransparencyTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    openFile("page_with_opaque_elements.html");
+    openFile("page_with_transparent_elements.html");
   }
 
   @Test
-  void opaqueElementIsInvisibleButClickable() {
+  void transparentElementIsInvisibleButClickable() {
     $("#inv-link").should(exist)
       .shouldNotBe(visible);
     $("#inv-link").click();
@@ -22,7 +22,7 @@ class OpacityTest extends IntegrationTest {
   }
 
   @Test
-  void almostOpaqueElementIsVisibleAndClickable() {
+  void almostTransparentElementIsVisibleAndClickable() {
     $("#link").shouldBe(visible);
     $("#link").click();
     $("#link").doubleClick();
