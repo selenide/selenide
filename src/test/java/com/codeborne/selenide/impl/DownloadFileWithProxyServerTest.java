@@ -49,7 +49,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
     when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
-    when(linkWithHref.findAndAssertElementIsVisibleOrTransparent()).thenReturn(link);
+    when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }
 

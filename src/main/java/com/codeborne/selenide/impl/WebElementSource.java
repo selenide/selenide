@@ -75,13 +75,15 @@ public abstract class WebElementSource {
   }
 
   /**
-   * Elements which are transparent (opacity:0) are considered to be invisible, but interactive.
+   * Asserts that returned element can be interacted with.
+   *
+   * Elements which are transparent (opacity:0) are considered to be invisible, but interactable.
    * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to transparent elements
    * for all major browsers
    *
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
-  public WebElement findAndAssertElementIsVisibleOrTransparent() {
+  public WebElement findAndAssertElementIsInteractable() {
     return checkCondition("be ", null,
       or("visible or transparent", visible, have(cssValue("opacity", "0"))),
       false);

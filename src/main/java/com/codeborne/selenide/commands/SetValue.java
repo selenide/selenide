@@ -26,7 +26,7 @@ public class SetValue implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String text = (String) args[0];
-    WebElement element = locator.findAndAssertElementIsVisibleOrTransparent();
+    WebElement element = locator.findAndAssertElementIsInteractable();
 
     if (locator.driver().config().versatileSetValue()
       && "select".equalsIgnoreCase(element.getTagName())) {

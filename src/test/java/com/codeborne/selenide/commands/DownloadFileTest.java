@@ -41,7 +41,7 @@ class DownloadFileTest implements WithAssertions {
   void setUp() {
     when(driver.config()).thenReturn(config);
     when(linkWithHref.driver()).thenReturn(driver);
-    when(linkWithHref.findAndAssertElementIsVisibleOrTransparent()).thenReturn(link);
+    when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
   }
 
   @Test
