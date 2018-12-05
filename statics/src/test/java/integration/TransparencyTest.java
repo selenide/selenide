@@ -1,6 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.*;
 
 import static com.codeborne.selenide.Condition.exist;
