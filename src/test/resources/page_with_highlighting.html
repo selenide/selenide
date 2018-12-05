@@ -6,6 +6,28 @@
   <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
 </head>
 <body>
-<input type="text" name="textbox" value="Select Me" id="selected" onfocus="this.select()">
+<input id="selected" type="text" value="this is a long piece of selectable text"><br>
+<input id="start" type="text" name="start"><br>
+<input id="tail" type="text" name="tail"><br>
+<input type="button" id="highlight" value="select!" onmousedown="highlight(getStart(), getTail()); return false">
+
+<script>
+
+  function getStart() {
+    return document.getElementById("start").value;
+  }
+
+  function getTail() {
+    return document.getElementById("tail").value;
+  }
+
+  function highlight(start, tail) {
+    var input = document.getElementById("selected");
+    input.setSelectionRange(start, tail);
+    input.focus();
+  }
+
+</script>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 package integration;
 
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -13,28 +14,40 @@ class SelectedTextTest extends ITest {
   @BeforeEach
   void before() {
     openFile("page_with_highlighting.html");
-    $(By.id("selected")).click();
   }
 
   @Test
-  void canRetrieveSelectedTextOfWebElementSuccessfully() {
-    $(By.id("selected")).shouldHave(selectedText("Select Me"));
+  void selectedTextOfInputIsConfirmedSuccessfully() {
+    makeSelection(0,5);
+    getSelectableElement().shouldHave(selectedText("this "));
   }
 
   @Test
-  void selectedTextIsOnlyCorrectOnExactCaseSensitiveMatch() {
-    $(By.id("selected")).shouldNotHave(selectedText("Select Me "));
+  void selectedTextOfInputIsCaseSensitive() {
+    makeSelection(5, 10);
+    getSelectableElement().shouldNotHave(selectedText("Is a "));
   }
 
   @Test
-  void whenThereIsNoSelectionSelectedTextIsEmpty() {
-    clearSelection();
-    $(By.id("selected")).shouldHave(selectedText(""));
+  void noSelectedTextOnInputReturnsEmptyString() {
+    getSelectableElement().shouldHave(selectedText(""));
   }
 
-  private void clearSelection() {
-    driver().executeJavaScript("window.getSelection().removeAllRanges();");
+  @Test
+  void overwrittenSelectionIsDetectedSuccessfully() {
+    makeSelection(2,4);
+    makeSelection(3, 13);
+    getSelectableElement().shouldHave(selectedText("s is a lon"));
   }
 
+  private SelenideElement getSelectableElement() {
+    return $(By.id("selected"));
+  }
+
+  private void makeSelection(final int start, final int tail) {
+    $(By.id("start")).setValue(String.valueOf(start));
+    $(By.id("tail")).setValue(String.valueOf(tail));
+    $(By.id("highlight")).click();
+  }
 
 }
