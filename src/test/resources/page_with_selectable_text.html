@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Highlighting elements</title>
+  <title>Selectable text on elements</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
 </head>
 <body>
 <input id="selected" type="text" value="this is a long piece of selectable text"><br>
 <input id="start" type="text" name="start"><br>
 <input id="tail" type="text" name="tail"><br>
-<input type="button" id="highlight" value="select!" onmousedown="highlight(getStart(), getTail()); return false">
+<input type="button" id="selectable" value="select!" onclick="makeSelection(getStart(), getTail()); return false">
 
 <script>
 
@@ -21,7 +20,7 @@
     return document.getElementById("tail").value;
   }
 
-  function highlight(start, tail) {
+  function makeSelection(start, tail) {
     var input = document.getElementById("selected");
     input.setSelectionRange(start, tail);
     input.focus();

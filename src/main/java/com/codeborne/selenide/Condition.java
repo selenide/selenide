@@ -256,13 +256,13 @@ public abstract class Condition {
   }
 
   /**
-   * Checks for selected or highlighted text on a given input web element
+   * Checks for selected text on a given input web element
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
    * <p>NB! Case sensitive</p>
    *
-   * @param expectedText expected highlighted text of the element
+   * @param expectedText expected selected text of the element
    */
   public static Condition selectedText(final String expectedText) {
     return new Condition("selectedText") {

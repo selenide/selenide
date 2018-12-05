@@ -13,7 +13,7 @@ class SelectedTextTest extends ITest {
 
   @BeforeEach
   void before() {
-    openFile("page_with_highlighting.html");
+    openFile("page_with_selectable_text.html");
   }
 
   @Test
@@ -47,7 +47,7 @@ class SelectedTextTest extends ITest {
   private void makeSelection(final int start, final int tail) {
     $(By.id("start")).setValue(String.valueOf(start));
     $(By.id("tail")).setValue(String.valueOf(tail));
-    $(By.id("highlight")).click();
+    $(By.id("selectable")).click();
   }
 
 }
