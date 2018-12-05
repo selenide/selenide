@@ -18,7 +18,7 @@ class SelectedTextTest extends ITest {
 
   @Test
   void selectedTextOfInputIsConfirmedSuccessfully() {
-    makeSelection(0,5);
+    makeSelection(0, 5);
     getSelectableElement().shouldHave(selectedText("this "));
   }
 
@@ -35,7 +35,7 @@ class SelectedTextTest extends ITest {
 
   @Test
   void overwrittenSelectionIsDetectedSuccessfully() {
-    makeSelection(2,4);
+    makeSelection(2, 4);
     makeSelection(3, 13);
     getSelectableElement().shouldHave(selectedText("s is a lon"));
   }
