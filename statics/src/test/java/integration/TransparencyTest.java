@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
 
 import static com.codeborne.selenide.Condition.exist;
@@ -9,6 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
 class TransparencyTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
+    Assumptions.assumeFalse(WebDriverRunner.isHtmlUnit(), "opacity:0 is visible in HtmlUnit");
     openFile("page_with_transparent_elements.html");
   }
 
@@ -22,7 +24,7 @@ class TransparencyTest extends IntegrationTest {
   }
 
   @Test
-  void almostTransparentElementIsVisibleAndClickable() {
+  void transparentTransparentElementIsVisibleAndClickable() {
     $("#link").shouldBe(visible);
     $("#link").click();
     $("#link").doubleClick();
@@ -30,7 +32,7 @@ class TransparencyTest extends IntegrationTest {
   }
 
   @Test
-  void opaqueElementIsInvisibleButGetsInput() {
+  void transparentElementIsInvisibleButGetsInput() {
     $("#inv-input").should(exist)
       .shouldNotBe(visible);
     $("#inv-input").setValue("abc");
@@ -41,7 +43,7 @@ class TransparencyTest extends IntegrationTest {
   }
 
   @Test
-  void almostOpaqueElementIsVisibleAndGetsInput() {
+  void almostTransparentElementIsVisibleAndGetsInput() {
     $("#input").shouldBe(visible);
     $("#input").setValue("abc");
     $("#input").clear();
