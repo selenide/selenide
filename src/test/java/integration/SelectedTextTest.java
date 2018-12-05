@@ -17,24 +17,24 @@ class SelectedTextTest extends ITest {
   }
 
   @Test
-  void selectedTextOfInputIsConfirmedSuccessfully() {
+  void selectedTextIsCorrect() {
     makeSelection(0, 5);
     getSelectableElement().shouldHave(selectedText("this "));
   }
 
   @Test
-  void selectedTextOfInputIsCaseSensitive() {
+  void selectedTextIsCaseSensitive() {
     makeSelection(5, 10);
     getSelectableElement().shouldNotHave(selectedText("Is a "));
   }
 
   @Test
-  void noSelectedTextOnInputReturnsEmptyString() {
+  void selectedTextReturnsEmptyWhenNothingIsSelected() {
     getSelectableElement().shouldHave(selectedText(""));
   }
 
   @Test
-  void overwrittenSelectionIsDetectedSuccessfully() {
+  void reappliedSelectionsAreDetectedCorrectly() {
     makeSelection(2, 4);
     makeSelection(3, 13);
     getSelectableElement().shouldHave(selectedText("s is a lon"));

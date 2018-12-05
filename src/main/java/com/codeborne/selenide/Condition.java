@@ -256,7 +256,7 @@ public abstract class Condition {
   }
 
   /**
-   * Checks for selected (highlighted) text on a given web element
+   * Checks for selected (highlighted) text on a given input web element
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
@@ -266,11 +266,18 @@ public abstract class Condition {
    */
   public static Condition selectedText(final String expectedText) {
     return new Condition("selectedText") {
+      String actualResult;
+
       @Override
       public boolean apply(final Driver driver, final WebElement element) {
-        return driver.executeJavaScript(
-          "return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element)
-          .equals(expectedText);
+        actualResult =  driver.executeJavaScript(
+          "return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element);
+        return actualResult.equals(expectedText);
+      }
+
+      @Override
+      public String actualValue(Driver driver, WebElement element) {
+        return "'" + actualResult + "'";
       }
 
       @Override
