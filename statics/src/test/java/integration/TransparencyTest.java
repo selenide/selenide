@@ -24,7 +24,7 @@ class TransparencyTest extends IntegrationTest {
   }
 
   @Test
-  void transparentTransparentElementIsVisibleAndClickable() {
+  void almostTransparentElementIsVisibleAndClickable() {
     $("#link").shouldBe(visible);
     $("#link").click();
     $("#link").doubleClick();
