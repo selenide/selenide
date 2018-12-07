@@ -15,7 +15,7 @@ class TransparencyAndOtherNonStandardVisiblityTest extends IntegrationTest {
   }
 
   @Test
-  void nosizeElementIsVisibleAndClickableTest() {
+  void nosizeElementIsVisibleAndClickable() {
     $("#no-size-link").should(exist)
       .shouldBe(visible);
     $("#no-size-link").click();
