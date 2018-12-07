@@ -6,6 +6,11 @@
   <style>
       #status {line-height: 10px;}
 
+      #no-size-link:before {
+        float: left;
+        content: "I am the no size link!";
+      }
+
   </style>
   <script type="text/javascript">
       function scheduleFillTextArea() {
@@ -39,6 +44,12 @@
       function onHiddenButtonClicked(input) {
         changedCounter++;
         document.getElementById('username-mirror').innerHTML = 'Hidden button clicked (' + changedCounter + ')';
+      }
+
+      function onNoSizeLinkClicked(input) {
+        var observer = document.getElementById('no-size-link-click-observer');
+        var count = observer.innerHTML ? parseInt(observer.innerHTML.split(": ").pop()) : 0;
+        observer.innerHTML = '&nbsp;clicked: ' + ++count;
       }
 
   </script>
@@ -199,6 +210,9 @@
 </div>
 
 <button style="opacity: 0;" id="zero-opacity-button" onclick="onHiddenButtonClicked(this)">Zero Opacity</button>
+<br />
+<a href="javascript:void(0)" onclick="onNoSizeLinkClicked(this)" id="no-size-link"></a>
+<span id="no-size-link-click-observer"></span>
 
 </body>
 </html>

@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
@@ -540,5 +541,13 @@ class SelenideMethodsTest extends IntegrationTest {
     assertThat($("#zero-opacity-button").innerText()).isEqualTo("Zero Opacity");
     $("#zero-opacity-button").clickIgnoringVisibility();
     $("#username-mirror").shouldHave(text("Hidden button clicked"));
+  }
+
+  @Test
+  void canClickElementWithNoSizeAndWithContent() {
+    assertThat($("#no-size-link").innerText()).isEqualTo("I am the no size link!");
+    SelenideElement observer = $("#no-size-link-click-observer").shouldBe(empty);
+    $("#no-size-link").click();
+    observer.shouldHave(text("clicked"));
   }
 }
