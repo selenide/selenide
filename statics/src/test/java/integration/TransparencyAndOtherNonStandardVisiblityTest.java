@@ -21,7 +21,6 @@ class TransparencyAndOtherNonStandardVisiblityTest extends IntegrationTest {
     $("#no-size-link").click();
     $("#no-size-link").doubleClick();
     $("#no-size-link").contextClick();
-
   }
 
   @Test
