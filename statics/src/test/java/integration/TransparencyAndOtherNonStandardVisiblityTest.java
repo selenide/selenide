@@ -7,11 +7,21 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-class TransparencyTest extends IntegrationTest {
+class TransparencyAndOtherNonStandardVisiblityTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     Assumptions.assumeFalse(WebDriverRunner.isHtmlUnit(), "opacity:0 is visible in HtmlUnit");
     openFile("page_with_transparent_elements.html");
+  }
+
+  @Test
+  void nosizeElementIsVisibleAndClickableTest() {
+    $("#no-size-link").should(exist)
+      .shouldBe(visible);
+    $("#no-size-link").click();
+    $("#no-size-link").doubleClick();
+    $("#no-size-link").contextClick();
+
   }
 
   @Test
