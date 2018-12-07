@@ -51,6 +51,4 @@ class TransparencyTest extends IntegrationTest {
     $("#input").pressEscape();
     $("#input").pressTab();
   }
-
-
 }
