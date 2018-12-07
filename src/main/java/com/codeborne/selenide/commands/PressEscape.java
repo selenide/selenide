@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 public class PressEscape implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    locator.findAndAssertElementIsVisible().sendKeys(Keys.ESCAPE);
+    locator.findAndAssertElementIsInteractable().sendKeys(Keys.ESCAPE);
     return proxy;
   }
 }

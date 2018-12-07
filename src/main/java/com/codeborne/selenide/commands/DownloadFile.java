@@ -32,7 +32,7 @@ public class DownloadFile implements Command<File> {
 
   @Override
   public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
-    WebElement link = linkWithHref.findAndAssertElementIsVisible();
+    WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
 
     long timeout = getTimeout(config, args);

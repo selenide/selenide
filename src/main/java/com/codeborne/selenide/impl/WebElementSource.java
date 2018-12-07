@@ -12,8 +12,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.cssValue;
 import static java.util.Collections.singletonList;
 
 public abstract class WebElementSource {
@@ -71,7 +74,18 @@ public abstract class WebElementSource {
     return null;
   }
 
-  public WebElement findAndAssertElementIsVisible() {
-    return checkCondition("be ", null, visible, false);
+  /**
+   * Asserts that returned element can be interacted with.
+   *
+   * Elements which are transparent (opacity:0) are considered to be invisible, but interactable.
+   * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to transparent elements
+   * for all major browsers
+   *
+   * @return element or throws ElementShould/ElementShouldNot exceptions
+   */
+  public WebElement findAndAssertElementIsInteractable() {
+    return checkCondition("be ", null,
+      or("visible or transparent", visible, have(cssValue("opacity", "0"))),
+      false);
   }
 }
