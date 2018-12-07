@@ -1,23 +1,24 @@
 package integration;
 
-import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 class TransparencyTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    Assumptions.assumeFalse(WebDriverRunner.isHtmlUnit(), "opacity:0 is visible in HtmlUnit");
+    assumeThat(isHtmlUnit()).as("opacity:0 is visible in HtmlUnit").isFalse();
     openFile("page_with_transparent_elements.html");
   }
 
   @Test
   void transparentElementIsInvisibleButClickable() {
-    $("#inv-link").should(exist)
-      .shouldNotBe(visible);
+    $("#inv-link").should(exist).shouldNotBe(visible);
     $("#inv-link").click();
     $("#inv-link").doubleClick();
     $("#inv-link").contextClick();
@@ -33,8 +34,7 @@ class TransparencyTest extends IntegrationTest {
 
   @Test
   void transparentElementIsInvisibleButGetsInput() {
-    $("#inv-input").should(exist)
-      .shouldNotBe(visible);
+    $("#inv-input").should(exist).shouldNotBe(visible);
     $("#inv-input").setValue("abc");
     $("#inv-input").clear();
     $("#inv-input").pressEnter();
