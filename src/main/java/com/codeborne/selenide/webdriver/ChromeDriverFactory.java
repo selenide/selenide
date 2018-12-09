@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
@@ -37,7 +38,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       options.setBinary(config.browserBinary());
     }
     options.merge(createCommonCapabilities(config, proxy));
-    options = transferChromeOptionsFromSystemProperties(options);
+    options = transferChromeOptionsFromSystemProperties(config, options);
     log.config("Chrome options:" + options.toString());
     return options;
   }
@@ -50,35 +51,18 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    * @param currentChromeOptions
    * @return
    */
-  private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
-    String prefix = "chromeoptions.";
-    for (String key : System.getProperties().stringPropertyNames()) {
-      if (key.startsWith(prefix)) {
-        String capability = key.substring(prefix.length());
-        String value = System.getProperties().getProperty(key);
-        switch (capability) {
-          case "args": {
-            // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
-            Stream<String> params = Arrays.stream(value.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
-            List<String> args=params
-              .map(s -> s.replace("\"",""))
-              .collect(Collectors.toList());
-            currentChromeOptions.addArguments(args);
-            break;
-          }
-          case "prefs": {
-            Map<String, Object> prefs = parsePreferencesFromString(value);
-            currentChromeOptions.setExperimentalOption("prefs", prefs);
-            break;
-          }
-          default:
-            log.warning(capability + " is ignored." +
-                    "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                    "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
-                    "are supported for the chromeoptions at the moment.");
-            break;
-        }
-      }
+  private ChromeOptions transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
+    if (!config.chromeoptionsArgs().equals("")) {
+      // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
+      Stream<String> params = Arrays.stream(config.chromeoptionsArgs().split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
+      List<String> args = params
+        .map(s -> s.replace("\"", ""))
+        .collect(Collectors.toList());
+      currentChromeOptions.addArguments(args);
+    }
+    if (!config.chromeoptionsPrefs().equals("")) {
+      Map<String, Object> prefs = parsePreferencesFromString(config.chromeoptionsPrefs());
+      currentChromeOptions.setExperimentalOption("prefs", prefs);
     }
     return currentChromeOptions;
   }
@@ -89,7 +73,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     String[] allPrefs = preferencesString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     for (String pref : allPrefs) {
       String[] keyValue = pref
-        .replace("\"","")
+        .replace("\"", "")
         .split("=");
 
       if (keyValue.length == 1) {

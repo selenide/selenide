@@ -160,4 +160,14 @@ class StaticConfig implements Config {
   public DesiredCapabilities browserCapabilities() {
     return Configuration.browserCapabilities;
   }
+
+  @Override
+  public String chromeoptionsArgs() {
+    return Configuration.chromeoptionsArgs;
+  }
+
+  @Override
+  public String chromeoptionsPrefs() {
+    return Configuration.chromeoptionsPrefs;
+  }
 }

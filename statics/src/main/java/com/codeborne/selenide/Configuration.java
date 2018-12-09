@@ -281,4 +281,25 @@ public class Configuration {
    * Works only for Chrome, Firefox and Opera.
    */
   public static String browserBinary = defaults.browserBinary();
+
+  /**
+   * Sets the arguments for chrome options, parameters are comma separated
+   * If comma is a part of the value, use double quotes around the argument
+   * Non-official list of parameters can be found
+   * at https://peter.sh/experiments/chromium-command-line-switches/
+   * Can be set by system property "chromeoptions.args" or programmatically
+   * Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
+   */
+  public static String chromeoptionsArgs = defaults.chromeoptionsArgs();
+
+  /**
+   * Sets the preferences for chrome options, which are comma separated
+   * keyX=valueX preferences
+   * If comma is a part of the value, use double quotes around the preference
+   * List of preferences can be found at
+   * https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
+   * Can be set by system property "chromeoptions.prefs" or programmatically
+   * Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
+   */
+  public static String chromeoptionsPrefs = defaults.chromeoptionsPrefs();
 }
