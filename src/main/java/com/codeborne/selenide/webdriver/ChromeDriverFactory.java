@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.*;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
@@ -57,7 +58,11 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         String value = System.getProperties().getProperty(key);
         switch (capability) {
           case "args": {
-            List<String> args = Arrays.asList(value.split(","));
+            // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
+            Stream<String> params = Arrays.stream(value.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
+            List<String> args=params
+              .map(s -> s.replace("\"",""))
+              .collect(Collectors.toList());
             currentChromeOptions.addArguments(args);
             break;
           }
@@ -70,7 +75,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
             log.warning(capability + " is ignored." +
                     "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
                     "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
-                    "are supported for the chromeoptions at the moment");
+                    "are supported for the chromeoptions at the moment.");
             break;
         }
       }
@@ -80,9 +85,12 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
-    String[] allPrefs = preferencesString.split(",");
+    // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
+    String[] allPrefs = preferencesString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     for (String pref : allPrefs) {
-      String[] keyValue = pref.split("=");
+      String[] keyValue = pref
+        .replace("\"","")
+        .split("=");
 
       if (keyValue.length == 1) {
         log.warning(String.format(
