@@ -438,16 +438,6 @@ public class Selenide {
   }
 
   /**
-   * Locates the first element matching given XPATH expression
-   * ATTENTION! This method doesn't start any search yet!
-   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
-   * @return SelenideElement which locates elements via XPath
-   */
-  public static SelenideElement findX(String xpathExpression) {
-    return getSelenideDriver().$x(xpathExpression);
-  }
-
-  /**
    * Locates the first element matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
@@ -498,19 +488,6 @@ public class Selenide {
    */
   public static ElementsCollection findAll(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
-  }
-
-  /**
-   * Locates all elements matching given XPATH expression.
-   * ATTENTION! This method doesn't start any search yet!
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface,
-   * meaning that you can call methods .sendKeys(), click() etc. on it.
-   * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
-   * @return ElementsCollection which locates elements via XPath
-   */
-  public static ElementsCollection findAllX(String xpathExpression) {
-    return getSelenideDriver().$$x(xpathExpression);
   }
 
   /**

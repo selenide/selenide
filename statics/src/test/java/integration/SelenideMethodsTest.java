@@ -507,7 +507,6 @@ class SelenideMethodsTest extends IntegrationTest {
   void canUseFindAliases() {
 
     String selector = "h1";
-    String selectorX = "//h1";
     String headerText = "Page with selects";
 
     assertThat(
@@ -535,18 +534,12 @@ class SelenideMethodsTest extends IntegrationTest {
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
-    assertThat(
-      findX(selectorX)
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
   }
 
   @Test
   void canUseFindAllAliases() {
 
     String selector = "[name='me']";
-    String selectorX = "//*[@name='me']";
 
     assertThat(
       findAll(selector).size()
@@ -556,9 +549,6 @@ class SelenideMethodsTest extends IntegrationTest {
     ).isEqualTo(4);
     assertThat(
       findAll(getWebDriver().findElements(By.cssSelector(selector))).size()
-    ).isEqualTo(4);
-    assertThat(
-      findAllX(selectorX).size()
     ).isEqualTo(4);
   }
 }
