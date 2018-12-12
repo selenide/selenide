@@ -40,10 +40,11 @@ public class WebDriverWrapper implements Driver {
     return webDriver;
   }
 
+  /**
+   * Does not close webdriver.
+   * This class holds a webdriver created by user - in this case user is responsible for closing webdriver by himself.
+   */
   @Override
   public void close() {
-    if (!config().holdBrowserOpen()) {
-      new CloseDriverCommand(webDriver, null).run();
-    }
   }
 }
