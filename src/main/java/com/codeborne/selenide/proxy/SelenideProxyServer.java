@@ -65,6 +65,10 @@ public class SelenideProxyServer {
     port = proxy.getPort();
   }
 
+  public boolean isStarted() {
+    return proxy.isStarted();
+  }
+
   /**
    * Add a custom request filter which allows to track/modify all requests from browser to server
    *

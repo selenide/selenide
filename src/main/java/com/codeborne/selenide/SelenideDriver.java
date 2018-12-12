@@ -42,9 +42,9 @@ public class SelenideDriver {
     this(config, null, emptyList());
   }
 
-  public SelenideDriver(Config config, WebDriver webDriver) {
+  public SelenideDriver(Config config, WebDriver webDriver, SelenideProxyServer selenideProxy) {
     this.config = config;
-    this.driver = new WebDriverWrapper(config, webDriver);
+    this.driver = new WebDriverWrapper(config, webDriver, selenideProxy);
   }
 
   public Config config() {

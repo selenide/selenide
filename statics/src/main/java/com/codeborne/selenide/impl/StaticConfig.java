@@ -15,7 +15,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *
  * This class should not be normally used in end user's code.
  */
-class StaticConfig implements Config {
+public class StaticConfig implements Config {
   @Override
   public String baseUrl() {
     return Configuration.baseUrl;

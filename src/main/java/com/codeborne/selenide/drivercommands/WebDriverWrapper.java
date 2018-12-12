@@ -7,12 +7,14 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 
 public class WebDriverWrapper implements Driver {
-  private final WebDriver webDriver;
   private final Config config;
+  private final WebDriver webDriver;
+  private final SelenideProxyServer selenideProxy;
 
-  public WebDriverWrapper(Config config, WebDriver webDriver) {
+  public WebDriverWrapper(Config config, WebDriver webDriver, SelenideProxyServer selenideProxy) {
     this.config = config;
     this.webDriver = webDriver;
+    this.selenideProxy = selenideProxy;
   }
 
   @Override
@@ -32,7 +34,7 @@ public class WebDriverWrapper implements Driver {
 
   @Override
   public SelenideProxyServer getProxy() {
-    return null;
+    return selenideProxy;
   }
 
   @Override

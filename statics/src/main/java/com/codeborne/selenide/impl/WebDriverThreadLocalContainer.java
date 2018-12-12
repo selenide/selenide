@@ -31,11 +31,16 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void setWebDriver(WebDriver webDriver) {
+    setWebDriver(webDriver, null);
+  }
+
+  @Override
+  public void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy) {
     SelenideDriver previous = threadWebDriver.get(currentThread().getId());
     if (previous != null) {
       previous.close();
     }
-    threadWebDriver.put(currentThread().getId(), new SelenideDriver(new StaticConfig(), webDriver));
+    threadWebDriver.put(currentThread().getId(), new SelenideDriver(new StaticConfig(), webDriver, selenideProxy));
   }
 
   @Override
