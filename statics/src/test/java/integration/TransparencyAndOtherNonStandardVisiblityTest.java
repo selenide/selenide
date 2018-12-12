@@ -9,11 +9,20 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-class TransparencyTest extends IntegrationTest {
+class TransparencyAndOtherNonStandardVisiblityTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     assumeThat(isHtmlUnit()).as("opacity:0 is visible in HtmlUnit").isFalse();
     openFile("page_with_transparent_elements.html");
+  }
+
+  @Test
+  void nosizeElementIsVisibleAndClickable() {
+    $("#no-size-link").should(exist)
+      .shouldBe(visible);
+    $("#no-size-link").click();
+    $("#no-size-link").doubleClick();
+    $("#no-size-link").contextClick();
   }
 
   @Test
