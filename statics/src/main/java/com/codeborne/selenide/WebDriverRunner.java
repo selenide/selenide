@@ -92,7 +92,7 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.getProxyServer();
   }
 
-  static SelenideDriver getSelenideDriver() {
+  public static SelenideDriver getSelenideDriver() {
     return webdriverContainer.getSelenideDriver();
   }
 
