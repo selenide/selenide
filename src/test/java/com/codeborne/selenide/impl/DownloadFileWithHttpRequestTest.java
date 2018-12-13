@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class DownloadFileWithHttpRequestTest {
-  DownloadFileWithHttpRequest download = spy(new DownloadFileWithHttpRequest());
+  DownloadFileWithHttpRequest download = spy(new DownloadFileWithHttpRequest(new DummyRandomizer("111-222-333-444")));
 
   @Test
   void makeAbsoluteUrl() {
@@ -101,7 +101,6 @@ public class DownloadFileWithHttpRequestTest {
   @Test
   void getFileName_random() {
     HttpResponse response = responseWithHeaders();
-    when(download.random()).thenReturn("111-222-333-444");
 
     assertThat(download.getFileName("/images/6584836/", response)).isEqualTo("111-222-333-444");
   }

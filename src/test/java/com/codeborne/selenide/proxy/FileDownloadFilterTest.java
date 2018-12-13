@@ -1,9 +1,7 @@
 package com.codeborne.selenide.proxy;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.impl.DummyRandomizer;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -14,25 +12,32 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class FileDownloadFilterTest implements WithAssertions {
-  private FileDownloadFilter filter = new FileDownloadFilter(new SelenideConfig().reportsFolder("build/downloads"));
+  private FileDownloadFilter filter = new FileDownloadFilter(
+    new SelenideConfig().reportsFolder("build/downloads"), new DummyRandomizer("random-text")
+  );
   private HttpResponse response = mock(HttpResponse.class);
   private HttpMessageContents contents = mock(HttpMessageContents.class);
   private HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws IOException {
     DefaultHttpHeaders headers = new DefaultHttpHeaders();
     headers.add("hkey-01", "hvalue-01");
     when(response.headers()).thenReturn(headers);
 
     when(contents.getContentType()).thenReturn("app/json");
     when(contents.getTextContents()).thenReturn("my-text");
+    deleteDirectory(new File("build/downloads/random-text"));
   }
 
   @Test
@@ -118,9 +123,8 @@ class FileDownloadFilterTest implements WithAssertions {
       .isEqualTo(1);
 
     File file = filter.getDownloadedFiles().get(0);
-    assertThat(file.getName())
-      .isEqualTo("report.pdf");
-    assertThat(readFileToByteArray(file))
-      .isEqualTo(new byte[]{1, 2, 3, 4, 5});
+    assertThat(file.getName()).isEqualTo("report.pdf");
+    assertThat(file.getPath()).endsWith("build/downloads/random-text/report.pdf");
+    assertThat(readFileToByteArray(file)).isEqualTo(new byte[]{1, 2, 3, 4, 5});
   }
 }

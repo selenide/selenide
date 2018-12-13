@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.impl.Describe.describe;
@@ -47,7 +46,16 @@ public class DownloadFileWithHttpRequest {
 
   protected boolean ignoreSelfSignedCerts = true;
 
+  private final Randomizer random;
   private HttpHelper httpHelper = new HttpHelper();
+
+  public DownloadFileWithHttpRequest() {
+    this(new Randomizer());
+  }
+
+  DownloadFileWithHttpRequest(Randomizer random) {
+    this.random = random;
+  }
 
   public File download(Driver driver, WebElement element, long timeout) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
@@ -159,7 +167,16 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
-    return new File(config.reportsFolder(), getFileName(fileToDownloadLocation, response));
+    String fileName = getFileName(fileToDownloadLocation, response);
+    File uniqueFolder = new File(config.reportsFolder(), random.text());
+    if (uniqueFolder.exists()) {
+      throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
+    }
+    if (!uniqueFolder.mkdirs()) {
+      throw new RuntimeException("Failed to create folder " + uniqueFolder.getAbsolutePath());
+    }
+
+    return new File(uniqueFolder, fileName);
   }
 
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {
@@ -176,11 +193,7 @@ public class DownloadFileWithHttpRequest {
     }
 
     final String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
-    return isBlank(fullFileName) ? random() : trimQuery(fullFileName);
-  }
-
-  String random() {
-    return UUID.randomUUID().toString();
+    return isBlank(fullFileName) ? random.text() : trimQuery(fullFileName);
   }
 
   private String trimQuery(String fullFileName) {
