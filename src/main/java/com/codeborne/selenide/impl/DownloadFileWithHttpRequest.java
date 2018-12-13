@@ -46,15 +46,15 @@ public class DownloadFileWithHttpRequest {
 
   protected boolean ignoreSelfSignedCerts = true;
 
-  private final Randomizer random;
+  private final Downloader downloader;
   private HttpHelper httpHelper = new HttpHelper();
 
   public DownloadFileWithHttpRequest() {
-    this(new Randomizer());
+    this(new Downloader());
   }
 
-  DownloadFileWithHttpRequest(Randomizer random) {
-    this.random = random;
+  DownloadFileWithHttpRequest(Downloader downloader) {
+    this.downloader = downloader;
   }
 
   public File download(Driver driver, WebElement element, long timeout) throws IOException {
@@ -79,8 +79,8 @@ public class DownloadFileWithHttpRequest {
         url + ": " + response.getStatusLine());
     }
 
-    File downloadedFile = prepareTargetFile(driver.config(), url, response);
-
+    String fileName = getFileName(url, response);
+    File downloadedFile = downloader.prepareTargetFile(driver.config(), fileName);
     return saveFileContent(response, downloadedFile);
   }
 
@@ -166,19 +166,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
-    String fileName = getFileName(fileToDownloadLocation, response);
-    File uniqueFolder = new File(config.reportsFolder(), random.text());
-    if (uniqueFolder.exists()) {
-      throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
-    }
-    if (!uniqueFolder.mkdirs()) {
-      throw new RuntimeException("Failed to create folder " + uniqueFolder.getAbsolutePath());
-    }
-
-    return new File(uniqueFolder, fileName);
-  }
-
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {
     for (Header header : response.getAllHeaders()) {
       Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
@@ -192,8 +179,8 @@ public class DownloadFileWithHttpRequest {
       log.info(header.getName() + '=' + header.getValue());
     }
 
-    final String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
-    return isBlank(fullFileName) ? random.text() : trimQuery(fullFileName);
+    String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
+    return isBlank(fullFileName) ? downloader.randomFileName() : trimQuery(fullFileName);
   }
 
   private String trimQuery(String fullFileName) {
@@ -203,20 +190,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
-    ensureFolderExists(downloadedFile);
     copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
     return downloadedFile;
   }
-
-  protected File ensureFolderExists(File targetFile) {
-    File folder = targetFile.getParentFile();
-    if (!folder.exists()) {
-      log.info("Creating folder: " + folder);
-      if (!folder.mkdirs()) {
-        log.severe("Failed to create " + folder);
-      }
-    }
-    return targetFile;
-  }
-
 }

@@ -18,13 +18,12 @@ import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class DownloadFileWithHttpRequestTest {
-  DownloadFileWithHttpRequest download = spy(new DownloadFileWithHttpRequest(new DummyRandomizer("111-222-333-444")));
+  DownloadFileWithHttpRequest download = new DownloadFileWithHttpRequest(new Downloader(new DummyRandomizer("111-222-333-444")));
 
   @Test
   void makeAbsoluteUrl() {

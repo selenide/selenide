@@ -1,6 +1,7 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.DummyRandomizer;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 class FileDownloadFilterTest implements WithAssertions {
   private FileDownloadFilter filter = new FileDownloadFilter(
-    new SelenideConfig().reportsFolder("build/downloads"), new DummyRandomizer("random-text")
+    new SelenideConfig().reportsFolder("build/downloads"), new Downloader(new DummyRandomizer("random-text"))
   );
   private HttpResponse response = mock(HttpResponse.class);
   private HttpMessageContents contents = mock(HttpMessageContents.class);

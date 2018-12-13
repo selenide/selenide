@@ -1,8 +1,8 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.HttpHelper;
-import com.codeborne.selenide.impl.Randomizer;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
 import net.lightbody.bmp.filters.ResponseFilter;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
   private final Config config;
-  private final Randomizer random;
+  private final Downloader downloader;
 
   private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
@@ -31,12 +31,12 @@ public class FileDownloadFilter implements ResponseFilter {
   private final List<Response> responses = new ArrayList<>();
 
   public FileDownloadFilter(Config config) {
-    this(config, new Randomizer());
+    this(config, new Downloader());
   }
 
-  FileDownloadFilter(Config config, Randomizer random) {
+  FileDownloadFilter(Config config, Downloader downloader) {
     this.config = config;
-    this.random = random;
+    this.downloader = downloader;
   }
 
   /**
@@ -74,7 +74,7 @@ public class FileDownloadFilter implements ResponseFilter {
     String fileName = getFileName(response);
     if (fileName == null) return;
 
-    File file = prepareTargetFile(fileName);
+    File file = downloader.prepareTargetFile(config, fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
       downloadedFiles.add(file);
@@ -98,17 +98,6 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   public List<File> getDownloadedFiles() {
     return downloadedFiles;
-  }
-
-  protected File prepareTargetFile(String fileName) {
-    File uniqueFolder = new File(config.reportsFolder(), random.text());
-    if (uniqueFolder.exists()) {
-      throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
-    }
-    if (!uniqueFolder.mkdirs()) {
-      throw new RuntimeException("Failed to create folder " + uniqueFolder.getAbsolutePath());
-    }
-    return new File(uniqueFolder, fileName);
   }
 
   String getFileName(HttpResponse response) {
