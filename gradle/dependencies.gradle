@@ -30,8 +30,8 @@ dependencies {
   testImplementation('com.automation-remarks:video-recorder-junit5:1.8')
   testImplementation("org.assertj:assertj-core:3.11.1")
   testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25')
   testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }
