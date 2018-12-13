@@ -1,9 +1,11 @@
 # Changelog
 
-## 5.0.2
+## 5.1.0 (going to release 14.12.2018)
 * Upgrade to selenium-java 3.141.59
 * #872 fix importing Selenide Gradle project to IDEA  --  thanks to jkromski-fh for PR #872
 * #201 can click elements with zero opacity  -- thanks to @vinogradoff for PR #874
+* #878 fix NPE when webdriver is created by user, and therefore Selenide proxy was not started
+* #867 user can switch between custom webdrivers many times
 
 ## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
