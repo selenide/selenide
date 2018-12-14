@@ -51,7 +51,7 @@ public class SelenideDriver {
     return config;
   }
 
-  Driver driver() {
+  public Driver driver() {
     return driver;
   }
 
