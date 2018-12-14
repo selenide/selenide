@@ -12,7 +12,7 @@ class WebDriverWrapperTest {
   @Test
   void name() {
     WebDriver webDriver = mock(WebDriver.class);
-    WebDriverWrapper driver = new WebDriverWrapper(new SelenideConfig(), webDriver);
+    WebDriverWrapper driver = new WebDriverWrapper(new SelenideConfig(), webDriver, null);
 
     driver.close();
 
