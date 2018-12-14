@@ -37,6 +37,7 @@ class NavigatorTest implements WithAssertions {
     doReturn(driver).when(selenideDriver).getAndCheckWebDriver();
     doReturn(selenideProxy).when(selenideDriver).getProxy();
     doReturn(navigation).when(driver).navigate();
+    doReturn(true).when(selenideProxy).isStarted();
     doReturn(authenticationFilter).when(selenideProxy).requestFilter("authentication");
   }
 

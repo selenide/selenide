@@ -47,7 +47,7 @@ class SelenideElementProxyTest implements WithAssertions {
     .screenshots(false)
     .timeout(3)
     .pollingInterval(1);
-  private SelenideDriver driver = new SelenideDriver(config, webdriver);
+  private SelenideDriver driver = new SelenideDriver(config, webdriver, null);
 
   @BeforeEach
   void mockWebDriver() {

@@ -84,8 +84,11 @@ public class Navigator {
 
   private void checkThatProxyIsStarted(SelenideProxyServer selenideProxy) {
     if (selenideProxy == null) {
-      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started. " +
-        "You are probably using your own webdriver without Selenide proxy?");
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " +
+        "You need to call `setWebDriver(webDriver, selenideProxy)` instead of `setWebDriver(webDriver)` if you need to use proxy.");
+    }
+    if (!selenideProxy.isStarted()) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
     }
   }
 

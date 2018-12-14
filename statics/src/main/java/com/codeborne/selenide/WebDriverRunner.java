@@ -59,6 +59,10 @@ public class WebDriverRunner implements Browsers {
     webdriverContainer.setWebDriver(webDriver);
   }
 
+  public static void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy) {
+    webdriverContainer.setWebDriver(webDriver, selenideProxy);
+  }
+
   /**
    * Get the underlying instance of Selenium WebDriver.
    * This can be used for any operations directly with WebDriver.
