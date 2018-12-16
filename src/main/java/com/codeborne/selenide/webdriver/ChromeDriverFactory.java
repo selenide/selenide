@@ -52,16 +52,16 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    * @return
    */
   private ChromeOptions transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
-    if (!config.chromeoptionsArgs().equals("")) {
+    if (System.getProperty("chromeoptions.args") != null) {
       // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
-      Stream<String> params = Arrays.stream(config.chromeoptionsArgs().split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
+      Stream<String> params = Arrays.stream(System.getProperty("chromeoptions.args").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
       List<String> args = params
         .map(s -> s.replace("\"", ""))
         .collect(Collectors.toList());
       currentChromeOptions.addArguments(args);
     }
-    if (!config.chromeoptionsPrefs().equals("")) {
-      Map<String, Object> prefs = parsePreferencesFromString(config.chromeoptionsPrefs());
+    if (System.getProperty("chromeoptions.prefs") != null) {
+      Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.prefs"));
       currentChromeOptions.setExperimentalOption("prefs", prefs);
     }
     return currentChromeOptions;

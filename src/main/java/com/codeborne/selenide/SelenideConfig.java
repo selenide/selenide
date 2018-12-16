@@ -41,9 +41,6 @@ public class SelenideConfig implements Config {
   private String proxyHost = System.getProperty("selenide.proxyHost", "");
   private int proxyPort = Integer.parseInt(System.getProperty("selenide.proxyPort", "0"));
 
-  private String chromeoptionsArgs = System.getProperty("chromeoptions.args", "");
-  private String chromeoptionsPrefs = System.getProperty("chromeoptions.prefs", "");
-
   @Override
   public String baseUrl() {
     return baseUrl;
@@ -334,23 +331,4 @@ public class SelenideConfig implements Config {
     return this;
   }
 
-  @Override
-  public String chromeoptionsArgs() {
-    return chromeoptionsArgs;
-  }
-
-  public SelenideConfig chromeoptionsArgs(String chromeoptionsArgs) {
-    this.chromeoptionsArgs = chromeoptionsArgs;
-    return this;
-  }
-
-  @Override
-  public String chromeoptionsPrefs() {
-    return chromeoptionsPrefs;
-  }
-
-  public SelenideConfig chromeoptionsPrefs(String chromeoptionsPrefs) {
-    this.chromeoptionsPrefs = chromeoptionsPrefs;
-    return this;
-  }
 }

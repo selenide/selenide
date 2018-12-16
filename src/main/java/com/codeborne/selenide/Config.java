@@ -14,8 +14,6 @@ public interface Config {
   String browserBinary();
   String pageLoadStrategy();
   DesiredCapabilities browserCapabilities();
-  String chromeoptionsArgs();
-  String chromeoptionsPrefs();
 
   String baseUrl();
   long timeout();
