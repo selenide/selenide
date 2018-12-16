@@ -38,7 +38,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       options.setBinary(config.browserBinary());
     }
     options.merge(createCommonCapabilities(config, proxy));
-    options = transferChromeOptionsFromSystemProperties(config, options);
+    options = transferChromeOptionsFromSystemProperties(options);
     log.config("Chrome options:" + options.toString());
     return options;
   }
@@ -49,9 +49,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    * for ChromeOptions (there is also "Extensions" etc.)
    *
    * @param currentChromeOptions
-   * @return
+   * @return options updated with args & prefs parameters
    */
-  private ChromeOptions transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
+  private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
     if (System.getProperty("chromeoptions.args") != null) {
       // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
       Stream<String> params = Arrays.stream(System.getProperty("chromeoptions.args").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
