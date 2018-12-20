@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Point;
 
 import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -17,7 +16,6 @@ class BrowserPositionTest extends IntegrationTest {
   @AfterEach
   void closeBrowser() {
     close();
-    Configuration.headless = false;
   }
 
   @Test
@@ -25,20 +23,10 @@ class BrowserPositionTest extends IntegrationTest {
     assumeFalse(isHeadless());
     Configuration.browserPosition = "30x60";
 
-    open("/start_page.html");
+    openFile("start_page.html");
 
     assertThat(getWebDriver().manage().window().getPosition())
       .isEqualTo(new Point(30, 60));
   }
 
-  @Test
-  void anotherBrowserPosition() {
-    assumeFalse(isHeadless());
-    Configuration.browserPosition = "110x100";
-
-    open("/start_page.html");
-
-    assertThat(getWebDriver().manage().window().getPosition())
-      .isEqualTo(new Point(110, 100));
-  }
 }
