@@ -18,7 +18,7 @@ import static java.lang.Thread.currentThread;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class FirefoxWithProfileTest extends BaseIntegrationTest {
-  private SelenideDriver driver;
+  private SelenideDriver customFirefox;
 
   @BeforeEach
   void setUp() {
@@ -28,22 +28,27 @@ class FirefoxWithProfileTest extends BaseIntegrationTest {
 
   @AfterEach
   void tearDown() {
-    if (driver != null) {
-      driver.close();
+    if (customFirefox != null) {
+      customFirefox.getWebDriver().close(); // change to customFirefox.close() after Bugfix is merged
+      // bug: SelenideDriver.close() doesn't close the browser
     }
   }
 
   @Test
   void createFirefoxWithCustomProfile() {
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
-    WebDriver firefox = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
+    FirefoxOptions options = new FirefoxOptions();
+    options.setProfile(profile);
+    if (browser().isHeadless()) options.setHeadless(true);
+    WebDriver firefox = new FirefoxDriver(options);
 
-    driver = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox, null);
-    driver.open("/page_with_selects_without_jquery.html");
-    driver.$("#non-clickable-element").shouldBe(visible);
+    customFirefox = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox, null);
+    customFirefox.open("/page_with_selects_without_jquery.html");
+    customFirefox.$("#non-clickable-element").shouldBe(visible);
 
-    driver.open("/page_with_jquery.html");
-    driver.$("#rememberMe").shouldBe(visible);
+    customFirefox.open("/page_with_jquery.html");
+    customFirefox.$("#rememberMe").shouldBe(visible);
+
   }
 
   private FirefoxProfile createFirefoxProfileWithExtensions() {
