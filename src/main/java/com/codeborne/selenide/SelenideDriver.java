@@ -136,11 +136,11 @@ public class SelenideDriver {
   }
 
   public WebDriver getWebDriver() {
-    return driver.getWebDriver();
+    return driver().getWebDriver();
   }
 
   public WebDriver getAndCheckWebDriver() {
-    return driver.getAndCheckWebDriver();
+    return driver().getAndCheckWebDriver();
   }
 
   public void clearCookies() {
@@ -150,7 +150,7 @@ public class SelenideDriver {
   }
 
   public void close() {
-    driver.close();
+    getWebDriver().close();
   }
 
   public <T> T executeJavaScript(String jsCode, Object... arguments) {
