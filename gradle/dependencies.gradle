@@ -5,14 +5,14 @@ repositories {
 ext {
   testngVersion = '6.9.10'
   htmlunitVersion = '2.33'
-  htmlunitDriverVersion = '2.33.1'
+  htmlunitDriverVersion = '2.33.3'
   seleniumVersion = '3.141.59'
   junitVersion = '5.3.2'
 }
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
-  api('io.github.bonigarcia:webdrivermanager:3.0.0')
+  api('io.github.bonigarcia:webdrivermanager:3.1.1')
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
@@ -30,8 +30,8 @@ dependencies {
   testImplementation('com.automation-remarks:video-recorder-junit5:1.8')
   testImplementation("org.assertj:assertj-core:3.11.1")
   testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25')
   testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }

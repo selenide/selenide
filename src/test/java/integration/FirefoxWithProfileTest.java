@@ -38,7 +38,7 @@ class FirefoxWithProfileTest extends BaseIntegrationTest {
     FirefoxProfile profile = createFirefoxProfileWithExtensions();
     WebDriver firefox = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
 
-    driver = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox);
+    driver = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox, null);
     driver.open("/page_with_selects_without_jquery.html");
     driver.$("#non-clickable-element").shouldBe(visible);
 

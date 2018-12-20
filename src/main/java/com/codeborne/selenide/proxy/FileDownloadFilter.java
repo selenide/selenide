@@ -1,6 +1,7 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
   private final Config config;
+  private final Downloader downloader;
 
   private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
@@ -29,7 +31,12 @@ public class FileDownloadFilter implements ResponseFilter {
   private final List<Response> responses = new ArrayList<>();
 
   public FileDownloadFilter(Config config) {
+    this(config, new Downloader());
+  }
+
+  FileDownloadFilter(Config config, Downloader downloader) {
     this.config = config;
+    this.downloader = downloader;
   }
 
   /**
@@ -67,7 +74,7 @@ public class FileDownloadFilter implements ResponseFilter {
     String fileName = getFileName(response);
     if (fileName == null) return;
 
-    File file = prepareTargetFile(fileName);
+    File file = downloader.prepareTargetFile(config, fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
       downloadedFiles.add(file);
@@ -91,10 +98,6 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   public List<File> getDownloadedFiles() {
     return downloadedFiles;
-  }
-
-  protected File prepareTargetFile(String fileName) {
-    return new File(config.reportsFolder(), fileName);
   }
 
   String getFileName(HttpResponse response) {

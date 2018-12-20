@@ -256,6 +256,7 @@ public class Configuration {
    * But it's not enabled by default because sometimes it would not work (more exactly, if tests and browser and
    * executed on different machines, and "test machine" is not accessible from "browser machine"). If it's not your
    * case, I recommend to enable proxy.
+   * Can be configured either programmatically or by system property "-Dselenide.proxyEnabled=true"
    * <br>
    * Default: false
    */
@@ -264,6 +265,7 @@ public class Configuration {
   /**
    * Host of Selenide proxy server.
    * Used only if proxyEnabled == true.
+   * Can be configured either programmatically or by system property "-DproxyHost=127.0.0.1"
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
@@ -274,6 +276,7 @@ public class Configuration {
   /**
    * Port of Selenide proxy server.
    * Used only if proxyEnabled == true.
+   * Can be configured either programmatically or by system property "-Dselenide.proxyPort=8888"
    * <br>
    * Default: 0 (meaning that Selenide will choose a random free port on current machine)
    */
@@ -283,7 +286,9 @@ public class Configuration {
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
    * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
+   * Can be configured either programmatically or by system property "-Dselenide.driverManagerEnabled=false"
    * <br>
+   *
    * Default: true
    */
   public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
@@ -291,6 +296,7 @@ public class Configuration {
   /**
    * Enables the ability to run the browser in headless mode.
    * Works only for Chrome(59+) and Firefox(56+).
+   * Can be configured either programmatically or by system property "-Dselenide.headless=true"
    * <br>
    * Default: false
    */
@@ -299,6 +305,7 @@ public class Configuration {
   /**
    * Sets the path to browser executable.
    * Works only for Chrome, Firefox and Opera.
+   * Can be configured either programmatically or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
   public static String browserBinary = defaults.browserBinary();
 

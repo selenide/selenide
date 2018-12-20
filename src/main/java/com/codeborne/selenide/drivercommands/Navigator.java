@@ -82,9 +82,20 @@ public class Navigator {
     }
   }
 
+  private void checkThatProxyIsStarted(SelenideProxyServer selenideProxy) {
+    if (selenideProxy == null) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " +
+        "You need to call `setWebDriver(webDriver, selenideProxy)` instead of `setWebDriver(webDriver)` if you need to use proxy.");
+    }
+    if (!selenideProxy.isStarted()) {
+      throw new IllegalStateException("config.proxyEnabled == true but proxy server is not started.");
+    }
+  }
+
   private void beforeNavigateTo(Config config, SelenideProxyServer selenideProxy,
                                 AuthenticationType authenticationType, String domain, String login, String password) {
     if (config.proxyEnabled()) {
+      checkThatProxyIsStarted(selenideProxy);
       beforeNavigateToWithProxy(selenideProxy, authenticationType, domain, login, password);
     }
     else {

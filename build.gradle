@@ -6,13 +6,13 @@ plugins {
   id 'maven'
   id 'jacoco'
   id 'checkstyle'
-  id 'com.github.spotbugs' version '1.6.3'
+  id 'com.github.spotbugs' version '1.6.6'
   id 'org.sonarqube' version '2.6.2'
 }
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.0.2-SNAPSHOT'
+version = '5.1.0'
 
 ext {
   encoding = StandardCharsets.UTF_8.name()

@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import static com.codeborne.selenide.impl.Describe.describe;
@@ -47,7 +46,16 @@ public class DownloadFileWithHttpRequest {
 
   protected boolean ignoreSelfSignedCerts = true;
 
+  private final Downloader downloader;
   private HttpHelper httpHelper = new HttpHelper();
+
+  public DownloadFileWithHttpRequest() {
+    this(new Downloader());
+  }
+
+  DownloadFileWithHttpRequest(Downloader downloader) {
+    this.downloader = downloader;
+  }
 
   public File download(Driver driver, WebElement element, long timeout) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
@@ -71,8 +79,8 @@ public class DownloadFileWithHttpRequest {
         url + ": " + response.getStatusLine());
     }
 
-    File downloadedFile = prepareTargetFile(driver.config(), url, response);
-
+    String fileName = getFileName(url, response);
+    File downloadedFile = downloader.prepareTargetFile(driver.config(), fileName);
     return saveFileContent(response, downloadedFile);
   }
 
@@ -158,10 +166,6 @@ public class DownloadFileWithHttpRequest {
     }
   }
 
-  protected File prepareTargetFile(Config config, String fileToDownloadLocation, HttpResponse response) {
-    return new File(config.reportsFolder(), getFileName(fileToDownloadLocation, response));
-  }
-
   protected String getFileName(String fileToDownloadLocation, HttpResponse response) {
     for (Header header : response.getAllHeaders()) {
       Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
@@ -175,12 +179,8 @@ public class DownloadFileWithHttpRequest {
       log.info(header.getName() + '=' + header.getValue());
     }
 
-    final String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
-    return isBlank(fullFileName) ? random() : trimQuery(fullFileName);
-  }
-
-  String random() {
-    return UUID.randomUUID().toString();
+    String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
+    return isBlank(fullFileName) ? downloader.randomFileName() : trimQuery(fullFileName);
   }
 
   private String trimQuery(String fullFileName) {
@@ -190,20 +190,7 @@ public class DownloadFileWithHttpRequest {
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
-    ensureFolderExists(downloadedFile);
     copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
     return downloadedFile;
   }
-
-  protected File ensureFolderExists(File targetFile) {
-    File folder = targetFile.getParentFile();
-    if (!folder.exists()) {
-      log.info("Creating folder: " + folder);
-      if (!folder.mkdirs()) {
-        log.severe("Failed to create " + folder);
-      }
-    }
-    return targetFile;
-  }
-
 }
