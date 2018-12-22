@@ -10,7 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.*;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.fastSetValue;
@@ -45,13 +45,13 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   private void resetSettings() {
-    Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
+    Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
     versatileSetValue = false;
-    browserSize = "1200x960";
+    browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     toggleProxy(!isPhantomjs());
