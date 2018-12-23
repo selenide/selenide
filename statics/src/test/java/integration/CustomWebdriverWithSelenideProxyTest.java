@@ -33,12 +33,22 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
     SelenideProxyServer proxy = new SelenideProxyServer(new StaticConfig(), null);
     proxy.start();
-    WebDriver webDriver = isChrome() ? chrome(proxy) : firefox(proxy);
-    WebDriverRunner.setWebDriver(webDriver, proxy);
+    try {
+      WebDriver webDriver = isChrome() ? chrome(proxy) : firefox(proxy);
+      try {
+        WebDriverRunner.setWebDriver(webDriver, proxy);
 
-    open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
-    $("body").shouldHave(text("Hello, scott:tiger!"));
-    WebDriverRunner.getWebDriver().close();
+        open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
+        $("body").shouldHave(text("Hello, scott:tiger!"));
+      }
+      finally {
+        close();
+        webDriver.quit();
+      }
+    }
+    finally {
+      proxy.shutdown();
+    }
   }
 
   private ChromeDriver chrome(SelenideProxyServer proxy) {
