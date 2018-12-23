@@ -43,7 +43,7 @@ class CustomWebDriverProviderTest extends BaseIntegrationTest {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
       ChromeOptions options = new ChromeOptions();
-      options.setHeadless(true);
+      if (browser().isHeadless()) options.setHeadless(true);
       return new CustomChromeDriver(options);
     }
   }
