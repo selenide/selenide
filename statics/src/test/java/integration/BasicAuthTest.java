@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.open;
 class BasicAuthTest extends IntegrationTest {
   @Test
   void canPassBasicAuth_via_URL() {
+    toggleProxy(false);
     open("/basic-auth/hello", "", "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
