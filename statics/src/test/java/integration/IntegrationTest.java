@@ -7,6 +7,7 @@ import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -37,6 +38,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     }
   }
 
+  @BeforeAll
+  static void resetSettingsBeforeClass() {
+    resetSettings();
+  }
+
   @BeforeEach
   final void setUpEach() {
     resetSettings();
@@ -44,7 +50,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     rememberTimeout();
   }
 
-  private void resetSettings() {
+  private static void resetSettings() {
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
@@ -77,7 +83,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "&timeout=" + timeout, pageObjectClass);
   }
 
-  protected void toggleProxy(boolean proxyEnabled) {
+  protected static void toggleProxy(boolean proxyEnabled) {
     if (proxyEnabled) {
       assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     }

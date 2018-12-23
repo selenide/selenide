@@ -15,12 +15,12 @@ class BrowserPositionTest extends IntegrationTest {
   @BeforeEach
   @AfterEach
   void closeBrowser() {
+    assumeFalse(isHeadless());
     close();
   }
 
   @Test
   void ableToSetBrowserPosition() {
-    assumeFalse(isHeadless());
     Configuration.browserPosition = "30x60";
 
     openFile("start_page.html");
