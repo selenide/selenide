@@ -91,6 +91,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   /**
    * Turns proxy on / off
+   * When toggling (on <-> off) happens, browser is closed
    * @param proxyEnabled true - turn on, false - turn off
    */
   protected static void useProxy(boolean proxyEnabled) {
