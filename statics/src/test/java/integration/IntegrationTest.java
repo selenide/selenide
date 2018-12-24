@@ -66,7 +66,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    toggleProxy(!isPhantomjs());
+    useProxy(!isPhantomjs());
   }
 
   private void restartReallyUnstableBrowsers() {
@@ -89,7 +89,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "&timeout=" + timeout, pageObjectClass);
   }
 
-  protected static void toggleProxy(boolean proxyEnabled) {
+  /**
+   * Turns proxy on / off
+   * @param proxyEnabled true - turn on, false - turn off
+   */
+  protected static void useProxy(boolean proxyEnabled) {
     if (proxyEnabled) {
       assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     }

@@ -29,7 +29,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
   @Test
   public void userCanUserCustomWebdriverWithSelenideProxy() {
-    toggleProxy(true);
+    useProxy(true);
 
     SelenideProxyServer proxy = new SelenideProxyServer(new StaticConfig(), null);
     proxy.start();

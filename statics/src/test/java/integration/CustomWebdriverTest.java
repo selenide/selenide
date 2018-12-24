@@ -31,7 +31,7 @@ public class CustomWebdriverTest extends IntegrationTest {
 
   @Test
   void userCanSwitchBetweenWebdrivers() {
-    toggleProxy(false);
+    useProxy(false);
     browser1 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
     browser2 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
 

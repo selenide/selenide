@@ -22,7 +22,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   void setUp() {
     Assumptions.assumeFalse(isPhantomjs()); // Why it's not working in PhantomJS? It's magic for me...
 
-    toggleProxy(false);
+    useProxy(false);
     openFile("page_with_uploads.html");
   }
 
