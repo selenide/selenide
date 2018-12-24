@@ -32,7 +32,6 @@ class LazyEvaluationTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
-    Configuration.browser = System.getProperty("selenide.browser");
     openFile("page_with_jquery.html");
   }
 

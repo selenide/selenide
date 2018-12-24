@@ -19,7 +19,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    toggleProxy(true);
+    useProxy(true);
     openFile("page_with_uploads.html");
   }
 
