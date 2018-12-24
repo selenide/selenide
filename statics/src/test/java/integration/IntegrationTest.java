@@ -31,13 +31,6 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 public abstract class IntegrationTest extends BaseIntegrationTest {
   private long defaultTimeout;
 
-  @AfterAll
-  public static void restartUnstableWebdriver() {
-    if (isIE() || isPhantomjs()) {
-      closeWebDriver();
-    }
-  }
-
   @BeforeAll
   static void resetSettingsBeforeClass() {
     resetSettings();
@@ -48,6 +41,19 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     resetSettings();
     restartReallyUnstableBrowsers();
     rememberTimeout();
+  }
+
+  @AfterEach
+  public void restoreDefaultProperties() {
+    timeout = defaultTimeout;
+    clickViaJs = false;
+  }
+
+  @AfterAll
+  public static void restartUnstableWebdriver() {
+    if (isIE() || isPhantomjs()) {
+      closeWebDriver();
+    }
   }
 
   private static void resetSettings() {
@@ -101,11 +107,5 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "document.querySelector('body').innerHTML = arguments[0];",
       String.join(" ", html)
     );
-  }
-
-  @AfterEach
-  public void restoreDefaultProperties() {
-    timeout = defaultTimeout;
-    clickViaJs = false;
   }
 }
