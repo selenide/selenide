@@ -75,7 +75,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   @Test
   void transferChromeOptionsAndPrefs() {
-    System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123");
+    System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\"");
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=stringval,key2=1,key3=false,key4=true,\"key5=abc,555\"");
 
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
@@ -83,7 +83,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments)
-      .contains("abdd", "--abcd", "xcvcd=123", "snc,snc");
+      .contains("abdd", "--abcd", "xcvcd=123", "snc,snc", "abc emd");
 
     assertThat(prefsMap)
       .containsEntry("key1", "stringval")
