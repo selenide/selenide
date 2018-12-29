@@ -53,8 +53,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    */
   private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
     if (System.getProperty("chromeoptions.args") != null) {
-      // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
-      Stream<String> params = Arrays.stream(System.getProperty("chromeoptions.args").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"));
+      Stream<String> params = Arrays.stream(parseCSVhandlingQuotes(System.getProperty("chromeoptions.args")));
       List<String> args = params
         .map(s -> s.replace("\"", ""))
         .collect(Collectors.toList());
@@ -69,8 +68,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
-    // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
-    String[] allPrefs = preferencesString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+    String[] allPrefs = parseCSVhandlingQuotes(preferencesString);
     for (String pref : allPrefs) {
       String[] keyValue = pref
         .replace("\"", "")
@@ -92,6 +90,17 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       prefs.put(keyValue[0], prefValue);
     }
     return prefs;
+  }
+
+  /**
+   * parse parameters which can come from command-line interface
+   * @param csvString comma-separated values, quotes can be used to mask spaces and commas
+   *                  Example: 123,"foo bar","bar,foo"
+   * @return values as array, quotes are preserved
+   */
+  private String[] parseCSVhandlingQuotes(String csvString) {
+    // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
+    return csvString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
   }
 
   /**
