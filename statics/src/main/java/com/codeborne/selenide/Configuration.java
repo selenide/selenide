@@ -3,12 +3,32 @@ package com.codeborne.selenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
- * Settings for all Selenide functionality
+ * Configuration settings for Selenide default browser
  * <br>
  * This class is designed so that every setting can be set either via system property or programmatically.
  * <br>
  * Please note that all fields are static, meaning that
  * every change will immediately reflect in all threads (if you run tests in parallel).
+ *
+ * <p>
+ *   These system properties can be additonally used having effect on every new created browser in test.
+ *   For example as -D<property>=<value> in command-line
+ * </p>
+ * <p>
+ *  <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
+ *  If comma is a part of the value, use double quotes around the argument
+ *  Non-official list of parameters can be found at https://peter.sh/experiments/chromium-command-line-switches/
+ *
+ *  Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
+ * </p>
+ * <p>
+ *  <b>chromeoptions.prefs</b> - ser the preferences for chrome options, which are comma separated
+ *   keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
+ *   List of preferences can be found at
+ *   https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
+ *
+ *   Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
+ * </p>
  */
 public class Configuration {
   private static SelenideConfig defaults = new SelenideConfig();
@@ -288,4 +308,5 @@ public class Configuration {
    * Can be configured either programmatically or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
   public static String browserBinary = defaults.browserBinary();
+
 }
