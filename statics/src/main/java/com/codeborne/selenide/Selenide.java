@@ -681,6 +681,8 @@ public class Selenide {
    * This method download file like it would be done in currently opened browser:
    * it adds all cookies and "User-Agent" header to the downloading request.
    *
+   * Download fails if default timeout (Configuration.timeout) is exceeded
+   *
    * @param url either relative or absolute url
    * @return downloaded File in folder `Configuration.reportsFolder`
    * @throws IOException if failed to download file
@@ -689,6 +691,18 @@ public class Selenide {
     return getSelenideDriver().download(url);
   }
 
+  /**
+   * Download file using a direct link.
+   * This method download file like it would be done in currently opened browser:
+   * it adds all cookies and "User-Agent" header to the downloading request.
+   *
+   * Download fails if specified timeout is exceeded
+   *
+   * @param url either relative or absolute url
+   * @param timeoutMs specific timeout in ms
+   * @return downloaded File in folder `Configuration.reportsFolder`
+   * @throws IOException if failed to download file
+   */
   public static File download(String url, long timeoutMs) throws IOException {
     return getSelenideDriver().download(url, timeoutMs);
   }
