@@ -504,51 +504,51 @@ class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  void canUseFindAliases() {
+  void canUseElementAliases() {
 
     String selector = "h1";
     String headerText = "Page with selects";
 
     assertThat(
-      find(selector)
+      element(selector)
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
     assertThat(
-      find(By.cssSelector(selector))
+      element(By.cssSelector(selector))
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
     assertThat(
-      find(getWebDriver().findElement(By.cssSelector("h1")))
+      element(getWebDriver().findElement(By.cssSelector("h1")))
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
     assertThat(
-      find(selector, 0)
+      element(selector, 0)
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
     assertThat(
-      find(selector)
+      element(selector)
         .should(visible, text(headerText))
         .exists()
     ).isTrue();
   }
 
   @Test
-  void canUseFindAllAliases() {
+  void canUseElementsAliases() {
 
     String selector = "[name='me']";
 
     assertThat(
-      findAll(selector).size()
+      elements(selector).size()
     ).isEqualTo(4);
     assertThat(
-      findAll(By.cssSelector(selector)).size()
+      elements(By.cssSelector(selector)).size()
     ).isEqualTo(4);
     assertThat(
-      findAll(getWebDriver().findElements(By.cssSelector(selector))).size()
+      elements(getWebDriver().findElements(By.cssSelector(selector))).size()
     ).isEqualTo(4);
   }
 }

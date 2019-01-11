@@ -423,7 +423,7 @@ public class Selenide {
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
    */
-  public static SelenideElement find(WebElement webElement) {
+  public static SelenideElement element(WebElement webElement) {
     return getSelenideDriver().$(webElement);
   }
 
@@ -433,8 +433,8 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
    */
-  public static SelenideElement find(String cssSelector) {
-    return getSelenideDriver().find(cssSelector);
+  public static SelenideElement element(String cssSelector) {
+    return getSelenideDriver().$(cssSelector);
   }
 
   /**
@@ -443,8 +443,8 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
    */
-  public static SelenideElement find(By seleniumSelector) {
-    return getSelenideDriver().find(seleniumSelector);
+  public static SelenideElement element(By seleniumSelector) {
+    return getSelenideDriver().$(seleniumSelector);
   }
 
   /**
@@ -454,8 +454,8 @@ public class Selenide {
    * @param index 0..N
    * @return SelenideElement
    */
-  public static SelenideElement find(By seleniumSelector, int index) {
-    return getSelenideDriver().find(seleniumSelector, index);
+  public static SelenideElement element(By seleniumSelector, int index) {
+    return getSelenideDriver().$(seleniumSelector, index);
   }
 
   /**
@@ -465,14 +465,14 @@ public class Selenide {
    * @param index 0..N
    * @return SelenideElement
    */
-  public static SelenideElement find(String cssSelector, int index) {
+  public static SelenideElement element(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
   }
 
   /**
    * Initialize collection with Elements
    */
-  public static ElementsCollection findAll(Collection<? extends WebElement> elements) {
+  public static ElementsCollection elements(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
   }
 
@@ -486,7 +486,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
    */
-  public static ElementsCollection findAll(String cssSelector) {
+  public static ElementsCollection elements(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
   }
 
@@ -500,12 +500,12 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    */
-  public static ElementsCollection findAll(By seleniumSelector) {
+  public static ElementsCollection elements(By seleniumSelector) {
     return getSelenideDriver().findAll(seleniumSelector);
   }
 
   /**
-   * @deprecated please use find(criteria) which is the same
+   * @deprecated please use element(criteria) which is the same
    * (method will not be removed until 4.x or later)
    * Locates the first element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
@@ -518,7 +518,7 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use find(criteria, index) which is the same
+   * @deprecated please use element(criteria, index) which is the same
    * (method will not be removed until 4.x or later)
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
@@ -532,7 +532,7 @@ public class Selenide {
   }
 
   /**
-   * @deprecated please use findAll(criteria) which is the same
+   * @deprecated please use elements(criteria) which is the same
    * (method will not be removed until 4.x or later)
    * Locates all elements matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
