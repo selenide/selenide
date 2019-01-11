@@ -470,7 +470,11 @@ public class Selenide {
   }
 
   /**
-   * Initialize collection with Elements
+   * Wrap standard Selenium WebElement collection into SelenideElement collection
+   * to use additional methods like shouldHave() etc.
+   *
+   * @param elements standard Selenium WebElement collection
+   * @return given WebElement collection wrapped into SelenideElement collection
    */
   public static ElementsCollection elements(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
@@ -501,7 +505,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   public static ElementsCollection elements(By seleniumSelector) {
-    return getSelenideDriver().findAll(seleniumSelector);
+    return getSelenideDriver().$$(seleniumSelector);
   }
 
   /**
