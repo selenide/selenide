@@ -17,6 +17,13 @@ sourceSets {
   }
 }
 
+idea {
+  module {
+    sourceDirs += file('statics/src/main/java')
+    testSourceDirs += file('statics/src/test/java')
+  }
+}
+
 sourceSets.staticFacade.compileClasspath += sourceSets.main.compileClasspath
 sourceSets.staticFacade.compileClasspath += sourceSets.main.output
 

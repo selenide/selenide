@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
@@ -47,42 +49,30 @@ class ChromeDriverFactory extends AbstractDriverFactory {
    * for ChromeOptions (there is also "Extensions" etc.)
    *
    * @param currentChromeOptions
-   * @return
+   * @return options updated with args & prefs parameters
    */
   private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
-    String prefix = "chromeoptions.";
-    for (String key : System.getProperties().stringPropertyNames()) {
-      if (key.startsWith(prefix)) {
-        String capability = key.substring(prefix.length());
-        String value = System.getProperties().getProperty(key);
-        switch (capability) {
-          case "args": {
-            List<String> args = Arrays.asList(value.split(","));
-            currentChromeOptions.addArguments(args);
-            break;
-          }
-          case "prefs": {
-            Map<String, Object> prefs = parsePreferencesFromString(value);
-            currentChromeOptions.setExperimentalOption("prefs", prefs);
-            break;
-          }
-          default:
-            log.warning(capability + " is ignored." +
-                    "Only so-called arguments (chromeoptions.args=<values comma separated>) " +
-                    "and preferences (chromeoptions.prefs=<comma-separated dictionary of key=value> " +
-                    "are supported for the chromeoptions at the moment");
-            break;
-        }
-      }
+    if (System.getProperty("chromeoptions.args") != null) {
+      Stream<String> params = Arrays.stream(parseCSVhandlingQuotes(System.getProperty("chromeoptions.args")));
+      List<String> args = params
+        .map(s -> s.replace("\"", ""))
+        .collect(Collectors.toList());
+      currentChromeOptions.addArguments(args);
+    }
+    if (System.getProperty("chromeoptions.prefs") != null) {
+      Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.prefs"));
+      currentChromeOptions.setExperimentalOption("prefs", prefs);
     }
     return currentChromeOptions;
   }
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
-    String[] allPrefs = preferencesString.split(",");
+    String[] allPrefs = parseCSVhandlingQuotes(preferencesString);
     for (String pref : allPrefs) {
-      String[] keyValue = pref.split("=");
+      String[] keyValue = pref
+        .replace("\"", "")
+        .split("=");
 
       if (keyValue.length == 1) {
         log.warning(String.format(
@@ -100,6 +90,17 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       prefs.put(keyValue[0], prefValue);
     }
     return prefs;
+  }
+
+  /**
+   * parse parameters which can come from command-line interface
+   * @param csvString comma-separated values, quotes can be used to mask spaces and commas
+   *                  Example: 123,"foo bar","bar,foo"
+   * @return values as array, quotes are preserved
+   */
+  private String[] parseCSVhandlingQuotes(String csvString) {
+    // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
+    return csvString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
   }
 
   /**

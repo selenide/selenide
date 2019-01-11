@@ -11,27 +11,28 @@ import static com.codeborne.selenide.Selenide.open;
 class BasicAuthTest extends IntegrationTest {
   @Test
   void canPassBasicAuth_via_URL() {
+    useProxy(false);
     open("/basic-auth/hello", "", "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canPassBasicAuth_via_proxy() {
-    toggleProxy(true);
+    useProxy(true);
     open("/basic-auth/hello", "", "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canAuthUsingProxyWithLoginAndPassword() {
-    toggleProxy(true);
+    useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, "scott", "tiger");
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
   @Test
   void canAuthUsingProxyWithCredentials() {
-    toggleProxy(true);
+    useProxy(true);
     Credentials credentials = new Credentials("scott", "tiger");
     open("/basic-auth/hello", AuthenticationType.BASIC, credentials);
     $("body").shouldHave(text("Hello, scott:tiger!"));
@@ -41,7 +42,7 @@ class BasicAuthTest extends IntegrationTest {
 
   @Test
   void canSwitchToAnotherBasicAuth() {
-    toggleProxy(true);
+    useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
     $("body").shouldHave(text("Hello, scott:tiger!"));
     open("/basic-auth/hello2", AuthenticationType.BASIC, new Credentials("scott2", "tiger2"));
@@ -50,7 +51,7 @@ class BasicAuthTest extends IntegrationTest {
 
   @Test
   void removesPreviousBasicAuthHeaders() {
-    toggleProxy(true);
+    useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
     $("body").shouldHave(text("Hello, scott:tiger!"));
     open("/headers/hello3");

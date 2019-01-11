@@ -9,6 +9,7 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 public interface WebDriverContainer {
   void addListener(WebDriverEventListener listener);
   void setWebDriver(WebDriver webDriver);
+  void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy);
   WebDriver getWebDriver();
   SelenideProxyServer getProxyServer();
   SelenideDriver getSelenideDriver();

@@ -22,7 +22,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   @AfterEach
   void setUp() {
     closeWebDriver();
-    toggleProxy(true);
+    useProxy(true);
   }
 
   @Test

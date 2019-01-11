@@ -7,10 +7,11 @@ import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.*;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.fastSetValue;
@@ -30,11 +31,9 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 public abstract class IntegrationTest extends BaseIntegrationTest {
   private long defaultTimeout;
 
-  @AfterAll
-  public static void restartUnstableWebdriver() {
-    if (isIE() || isPhantomjs()) {
-      closeWebDriver();
-    }
+  @BeforeAll
+  static void resetSettingsBeforeClass() {
+    resetSettings();
   }
 
   @BeforeEach
@@ -44,17 +43,30 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     rememberTimeout();
   }
 
-  private void resetSettings() {
-    Configuration.browser = System.getProperty("selenide.browser", FIREFOX);
+  @AfterEach
+  public void restoreDefaultProperties() {
+    timeout = defaultTimeout;
+    clickViaJs = false;
+  }
+
+  @AfterAll
+  public static void restartUnstableWebdriver() {
+    if (isIE() || isPhantomjs()) {
+      closeWebDriver();
+    }
+  }
+
+  private static void resetSettings() {
+    Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
     Configuration.reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
     fastSetValue = false;
     versatileSetValue = false;
-    browserSize = "1200x960";
+    browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    toggleProxy(!isPhantomjs());
+    useProxy(!isPhantomjs());
   }
 
   private void restartReallyUnstableBrowsers() {
@@ -77,7 +89,12 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "&timeout=" + timeout, pageObjectClass);
   }
 
-  protected void toggleProxy(boolean proxyEnabled) {
+  /**
+   * Turns proxy on / off
+   * When toggling (on <-> off) happens, browser is closed
+   * @param proxyEnabled true - turn on, false - turn off
+   */
+  protected static void useProxy(boolean proxyEnabled) {
     if (proxyEnabled) {
       assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
     }
@@ -95,11 +112,5 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "document.querySelector('body').innerHTML = arguments[0];",
       String.join(" ", html)
     );
-  }
-
-  @AfterEach
-  public void restoreDefaultProperties() {
-    timeout = defaultTimeout;
-    clickViaJs = false;
   }
 }

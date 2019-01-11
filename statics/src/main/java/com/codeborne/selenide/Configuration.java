@@ -3,12 +3,32 @@ package com.codeborne.selenide;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
- * Settings for all Selenide functionality
+ * Configuration settings for Selenide default browser
  * <br>
  * This class is designed so that every setting can be set either via system property or programmatically.
  * <br>
  * Please note that all fields are static, meaning that
  * every change will immediately reflect in all threads (if you run tests in parallel).
+ *
+ * <p>
+ *   These system properties can be additonally used having effect on every new created browser in test.
+ *   For example as -D<property>=<value> in command-line
+ * </p>
+ * <p>
+ *  <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
+ *  If comma is a part of the value, use double quotes around the argument
+ *  Non-official list of parameters can be found at https://peter.sh/experiments/chromium-command-line-switches/
+ *
+ *  Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
+ * </p>
+ * <p>
+ *  <b>chromeoptions.prefs</b> - ser the preferences for chrome options, which are comma separated
+ *   keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
+ *   List of preferences can be found at
+ *   https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
+ *
+ *   Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
+ * </p>
  */
 public class Configuration {
   private static SelenideConfig defaults = new SelenideConfig();
@@ -236,6 +256,7 @@ public class Configuration {
    * But it's not enabled by default because sometimes it would not work (more exactly, if tests and browser and
    * executed on different machines, and "test machine" is not accessible from "browser machine"). If it's not your
    * case, I recommend to enable proxy.
+   * Can be configured either programmatically or by system property "-Dselenide.proxyEnabled=true"
    * <br>
    * Default: false
    */
@@ -244,6 +265,7 @@ public class Configuration {
   /**
    * Host of Selenide proxy server.
    * Used only if proxyEnabled == true.
+   * Can be configured either programmatically or by system property "-DproxyHost=127.0.0.1"
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
@@ -254,6 +276,7 @@ public class Configuration {
   /**
    * Port of Selenide proxy server.
    * Used only if proxyEnabled == true.
+   * Can be configured either programmatically or by system property "-Dselenide.proxyPort=8888"
    * <br>
    * Default: 0 (meaning that Selenide will choose a random free port on current machine)
    */
@@ -263,7 +286,9 @@ public class Configuration {
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
    * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
+   * Can be configured either programmatically or by system property "-Dselenide.driverManagerEnabled=false"
    * <br>
+   *
    * Default: true
    */
   public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
@@ -271,6 +296,7 @@ public class Configuration {
   /**
    * Enables the ability to run the browser in headless mode.
    * Works only for Chrome(59+) and Firefox(56+).
+   * Can be configured either programmatically or by system property "-Dselenide.headless=true"
    * <br>
    * Default: false
    */
@@ -279,6 +305,8 @@ public class Configuration {
   /**
    * Sets the path to browser executable.
    * Works only for Chrome, Firefox and Opera.
+   * Can be configured either programmatically or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
   public static String browserBinary = defaults.browserBinary();
+
 }

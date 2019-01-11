@@ -1,7 +1,12 @@
 # Changelog
 
-## 5.0.2
+## 5.1.0 (released 14.12.2018)
 * Upgrade to selenium-java 3.141.59
+* #872 fix importing Selenide Gradle project to IDEA  --  thanks to jkromski-fh for PR #872
+* #201 can click elements with zero opacity  -- thanks to @vinogradoff for PR #874
+* #878 fix NPE when webdriver is created by user, and therefore Selenide proxy was not started  -- see PR #888
+* #867 user can switch between custom webdrivers many times  -- see PR #890
+* #892 generate unique location for every downloaded file  -- see PR #893
 
 ## 5.0.1 (released 07.11.2018)
 * Upgrade to selenium-java 3.141.5
@@ -191,7 +196,7 @@ Technical changes (probably should not affect end users):
 
 ## 4.6 (released 31.08.2017)
 
-* See #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dremote -- thanks to @BorisOsipov
+* See #529 Cannot find capabilities with browserName=ie when grid hub url specified in -Dselenide.remote -- thanks to @BorisOsipov
 * See #551 Method `$.setValue()` should not fail if it could not trigger change event (for whatever reason).
 * See #528 - Wrong ElementNotFound exception message -- thanks to @BorisOsipov
 * See #573 - Method `$.shouldHave(exactValue(" foo  "))` does NOT trim leading/trailing spaces anymore - thanks to @mseele for this PR

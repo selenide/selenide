@@ -198,7 +198,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     }
     catch (ElementNotFound e) {
       assertStartsWith("Element not found \\{By.id: invalid_id\\}\n" +
-        "Expected: visible\n" +
+        "Expected: visible or transparent\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.\n" +

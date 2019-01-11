@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -33,12 +34,17 @@ class CustomWebDriverProviderTest extends BaseIntegrationTest {
   }
 
   private static class CustomChromeDriver extends ChromeDriver {
+    protected CustomChromeDriver(ChromeOptions options) {
+      super(options);
+    }
   }
 
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-      return new CustomChromeDriver();
+      ChromeOptions options = new ChromeOptions();
+      if (browser().isHeadless()) options.setHeadless(true);
+      return new CustomChromeDriver(options);
     }
   }
 }

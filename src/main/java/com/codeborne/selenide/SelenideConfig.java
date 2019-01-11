@@ -330,4 +330,5 @@ public class SelenideConfig implements Config {
     this.browserCapabilities = browserCapabilities;
     return this;
   }
+
 }
