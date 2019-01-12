@@ -417,32 +417,133 @@ public class Selenide {
   }
 
   /**
+   * Wrap standard Selenium WebElement into SelenideElement
+   * to use additional methods like shouldHave(), selectOption() etc.
+   *
+   * @param webElement standard Selenium WebElement
+   * @return given WebElement wrapped into SelenideElement
+   */
+  public static SelenideElement element(WebElement webElement) {
+    return getSelenideDriver().$(webElement);
+  }
+
+  /**
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return SelenideElement
+   */
+  public static SelenideElement element(String cssSelector) {
+    return getSelenideDriver().$(cssSelector);
+  }
+
+  /**
+   * Locates the first element matching given CSS selector
+   * ATTENTION! This method doesn't start any search yet!
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return SelenideElement
+   */
+  public static SelenideElement element(By seleniumSelector) {
+    return getSelenideDriver().$(seleniumSelector);
+  }
+
+  /**
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @param index 0..N
+   * @return SelenideElement
+   */
+  public static SelenideElement element(By seleniumSelector, int index) {
+    return getSelenideDriver().$(seleniumSelector, index);
+  }
+
+  /**
+   * Locates the Nth element matching given criteria
+   * ATTENTION! This method doesn't start any search yet!
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @param index 0..N
+   * @return SelenideElement
+   */
+  public static SelenideElement element(String cssSelector, int index) {
+    return getSelenideDriver().$(cssSelector, index);
+  }
+
+  /**
+   * Wrap standard Selenium WebElement collection into SelenideElement collection
+   * to use additional methods like shouldHave() etc.
+   *
+   * @param elements standard Selenium WebElement collection
+   * @return given WebElement collection wrapped into SelenideElement collection
+   */
+  public static ElementsCollection elements(Collection<? extends WebElement> elements) {
+    return getSelenideDriver().$$(elements);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
+   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
+   * @return empty list if element was no found
+   */
+  public static ElementsCollection elements(String cssSelector) {
+    return getSelenideDriver().$$(cssSelector);
+  }
+
+  /**
+   * Locates all elements matching given CSS selector.
+   * ATTENTION! This method doesn't start any search yet!
+   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
+   * and at the same time is implementation of WebElement interface,
+   * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
+   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
+   * @return empty list if element was no found
+   */
+  public static ElementsCollection elements(By seleniumSelector) {
+    return getSelenideDriver().$$(seleniumSelector);
+  }
+
+  /**
+   * @deprecated please use element(criteria) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates the first element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
    */
+  @Deprecated
   public static SelenideElement getElement(By criteria) {
     return getSelenideDriver().find(criteria);
   }
 
   /**
+   * @deprecated please use element(criteria, index) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates the Nth element matching given criteria
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
    */
+  @Deprecated
   public static SelenideElement getElement(By criteria, int index) {
     return getSelenideDriver().find(criteria, index);
   }
 
   /**
+   * @deprecated please use elements(criteria) which is the same
+   * (method will not be removed until 4.x or later)
    * Locates all elements matching given CSS selector
    * ATTENTION! This method doesn't start any search yet!
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return empty list if element was no found
    */
+  @Deprecated
   public static ElementsCollection getElements(By criteria) {
     return getSelenideDriver().findAll(criteria);
   }
