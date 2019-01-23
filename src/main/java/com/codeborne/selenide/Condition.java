@@ -256,6 +256,39 @@ public abstract class Condition {
   }
 
   /**
+   * Checks for selected text on a given input web element
+   *
+   * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
+   *
+   * <p>NB! Case sensitive</p>
+   *
+   * @param expectedText expected selected text of the element
+   */
+  public static Condition selectedText(final String expectedText) {
+    return new Condition("selectedText") {
+      String actualResult = "";
+
+      @Override
+      public boolean apply(Driver driver, WebElement element) {
+        actualResult =  driver.executeJavaScript(
+          "return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element);
+        return actualResult.equals(expectedText);
+      }
+
+      @Override
+      public String actualValue(Driver driver, WebElement element) {
+        return "'" + actualResult + "'";
+      }
+
+      @Override
+      public String toString() {
+        return name + " '" + expectedText + '\'';
+      }
+    };
+  }
+
+
+  /**
    * <p>Sample: <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>

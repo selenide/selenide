@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Selectable text on elements</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<input id="selected" type="text" value="this is a long piece of selectable text"><br>
+<input id="start" type="text" name="start"><br>
+<input id="tail" type="text" name="tail"><br>
+<input type="button" id="selectable" value="select!" onclick="makeSelection(getStart(), getTail()); return false">
+
+<script>
+
+  function getStart() {
+    return document.getElementById("start").value;
+  }
+
+  function getTail() {
+    return document.getElementById("tail").value;
+  }
+
+  function makeSelection(start, tail) {
+    var input = document.getElementById("selected");
+    input.setSelectionRange(start, tail);
+    input.focus();
+  }
+
+</script>
+
+</body>
+</html>
