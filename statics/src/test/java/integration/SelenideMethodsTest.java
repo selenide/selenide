@@ -12,12 +12,47 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.disappears;
+import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.focused;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.id;
+import static com.codeborne.selenide.Condition.name;
+import static com.codeborne.selenide.Condition.readonly;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.type;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.timeout;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selectors.by;
+import static com.codeborne.selenide.Selectors.byCssSelector;
+import static com.codeborne.selenide.Selectors.byId;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byValue;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.actions;
+import static com.codeborne.selenide.Selenide.element;
+import static com.codeborne.selenide.Selenide.elements;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -505,50 +540,26 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseElementAliases() {
+    element("h1")
+      .shouldBe(visible).shouldHave(text("Page with selects"));
 
-    String selector = "h1";
-    String headerText = "Page with selects";
+    element(By.cssSelector("h1"))
+      .shouldBe(visible).shouldHave(text("Page with selects"));
 
-    assertThat(
-      element(selector)
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
-    assertThat(
-      element(By.cssSelector(selector))
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
-    assertThat(
-      element(getWebDriver().findElement(By.cssSelector("h1")))
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
-    assertThat(
-      element(selector, 0)
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
-    assertThat(
-      element(selector)
-        .should(visible, text(headerText))
-        .exists()
-    ).isTrue();
+    element(getWebDriver().findElement(By.cssSelector("h1")))
+      .shouldBe(visible).shouldHave(text("Page with selects"));
+
+    element("h1", 0)
+      .shouldBe(visible).shouldHave(text("Page with selects"));
+
+    element("h1")
+      .shouldBe(visible).shouldHave(text("Page with selects"));
   }
 
   @Test
   void canUseElementsAliases() {
-
-    String selector = "[name='me']";
-
-    assertThat(
-      elements(selector).size()
-    ).isEqualTo(4);
-    assertThat(
-      elements(By.cssSelector(selector)).size()
-    ).isEqualTo(4);
-    assertThat(
-      elements(getWebDriver().findElements(By.cssSelector(selector))).size()
-    ).isEqualTo(4);
+    elements("[name='me']").shouldHave(size(4));
+    elements(By.cssSelector("[name='me']")).shouldHave(size(4));
+    elements(getWebDriver().findElements(By.cssSelector("[name='me']"))).shouldHave(size(4));
   }
 }
