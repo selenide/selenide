@@ -2,11 +2,9 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
-import java.awt.Toolkit;
 import java.util.logging.Logger;
 
 class BrowserResizer {
@@ -37,33 +35,12 @@ class BrowserResizer {
     }
     else if (config.startMaximized()) {
       try {
-        if (browser.isChrome()) {
-          maximizeChromeBrowser(driver.manage().window());
-        }
-        else {
-          driver.manage().window().maximize();
-        }
+        driver.manage().window().maximize();
       }
       catch (Exception cannotMaximize) {
         log.warning("Cannot maximize " + driver.getClass().getSimpleName() + ": " + cannotMaximize);
       }
     }
     return driver;
-  }
-
-  private void maximizeChromeBrowser(WebDriver.Window window) {
-    // Chrome driver does not support maximizing. Let' apply black magic!
-    org.openqa.selenium.Dimension screenResolution = getScreenSize();
-
-    window.setSize(screenResolution);
-    window.setPosition(new org.openqa.selenium.Point(0, 0));
-  }
-
-  Dimension getScreenSize() {
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-    return new Dimension(
-      (int) toolkit.getScreenSize().getWidth(),
-      (int) toolkit.getScreenSize().getHeight());
   }
 }
