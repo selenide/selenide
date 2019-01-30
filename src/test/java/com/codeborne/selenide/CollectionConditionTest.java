@@ -9,7 +9,6 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-import com.codeborne.selenide.impl.CollectionElement;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 

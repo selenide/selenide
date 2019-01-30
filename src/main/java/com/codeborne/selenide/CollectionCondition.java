@@ -1,6 +1,14 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.collections.*;
+import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ListSize;
+import com.codeborne.selenide.collections.SizeGreaterThan;
+import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
+import com.codeborne.selenide.collections.SizeLessThan;
+import com.codeborne.selenide.collections.SizeLessThanOrEqual;
+import com.codeborne.selenide.collections.SizeNotEqual;
+import com.codeborne.selenide.collections.Texts;
+import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.google.common.base.Predicate;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -96,6 +104,10 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new ExactTexts(expectedTexts);
   }
 
+  /**
+   * Wraps CollectionCondition without any changes except toString() method
+   * where explanation string (because) are being appended
+   */
   private static class ExplainedCollectionCondition extends CollectionCondition {
     private final CollectionCondition delegate;
     private final String message;
