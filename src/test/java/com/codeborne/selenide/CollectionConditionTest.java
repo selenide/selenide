@@ -9,6 +9,7 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
+import com.codeborne.selenide.impl.CollectionElement;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -115,5 +116,13 @@ class CollectionConditionTest implements WithAssertions {
     assertThat(collectionCondition)
       .as("Text in any order content")
       .hasToString("TextsInAnyOrder [One, Two, Three]");
+  }
+
+  @Test
+  void testExplanationIsIncludedToString() {
+    CollectionCondition collectionCondition = CollectionCondition.texts("One").because("should be");
+    assertThat(collectionCondition)
+      .as("Should contain explanation")
+      .hasToString("Texts [One] (because should be)");
   }
 }
