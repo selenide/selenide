@@ -112,7 +112,7 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * @return true iff instance of Selenium WebDriver is started in current thread
+   * @return true if instance of Selenium WebDriver is started in current thread
    */
   public static boolean hasWebDriverStarted() {
     return webdriverContainer.hasWebDriverStarted();
