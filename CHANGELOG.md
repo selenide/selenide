@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.0 (released 19.02.2019)
+* #883 Enhanced chromeoptions arguments and preferences
+* #865 Add aliases for $ and $$ for Kotlin  --  thanks to @jkromski for PR #870
+* #766 Add method $.shouldHave(selectedText("oo ba"));  --  thanks to @symonk for PR #876
+* #838 remove chrome maximization black magic --  see PR #901
+
 ## 5.1.0 (released 14.12.2018)
 * Upgrade to selenium-java 3.141.59
 * #872 fix importing Selenide Gradle project to IDEA  --  thanks to jkromski-fh for PR #872
