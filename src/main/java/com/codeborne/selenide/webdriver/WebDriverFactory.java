@@ -19,17 +19,17 @@ public class WebDriverFactory {
   private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
 
   protected List<AbstractDriverFactory> factories = asList(
-      new RemoteDriverFactory(),
-      new ChromeDriverFactory(),
-      new LegacyFirefoxDriverFactory(),
-      new FirefoxDriverFactory(),
-      new HtmlUnitDriverFactory(),
-      new EdgeDriverFactory(),
-      new InternetExplorerDriverFactory(),
-      new PhantomJsDriverFactory(),
-      new OperaDriverFactory(),
-      new SafariDriverFactory(),
-      new JBrowserDriverFactory()
+    new RemoteDriverFactory(),
+    new ChromeDriverFactory(),
+    new LegacyFirefoxDriverFactory(),
+    new FirefoxDriverFactory(),
+    new HtmlUnitDriverFactory(),
+    new EdgeDriverFactory(),
+    new InternetExplorerDriverFactory(),
+    new PhantomJsDriverFactory(),
+    new OperaDriverFactory(),
+    new SafariDriverFactory(),
+    new JBrowserDriverFactory()
   );
 
   protected WebDriverBinaryManager webDriverBinaryManager = new WebDriverBinaryManager();
@@ -46,14 +46,14 @@ public class WebDriverFactory {
     Browser browser = new Browser(config.browser(), config.headless());
 
     if (config.driverManagerEnabled() && config.remote() == null) {
-      webDriverBinaryManager.setupBinaryPath(browser);
+      webDriverBinaryManager.setupBinaryPath(browser, proxy);
     }
 
     WebDriver webdriver = factories.stream()
-        .filter(factory -> factory.supports(config, browser))
-        .findAny()
-        .map(driverFactory -> driverFactory.create(config, proxy))
-        .orElseGet(() -> new DefaultDriverFactory().create(config, proxy));
+      .filter(factory -> factory.supports(config, browser))
+      .findAny()
+      .map(driverFactory -> driverFactory.create(config, proxy))
+      .orElseGet(() -> new DefaultDriverFactory().create(config, proxy));
 
     webdriver = browserResizer.adjustBrowserSize(config, browser, webdriver);
     webdriver = browserResizer.adjustBrowserPosition(config, webdriver);
@@ -68,7 +68,7 @@ public class WebDriverFactory {
     if (config.remote() == null) {
       BuildInfo seleniumInfo = new BuildInfo();
       log.info(
-          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+        "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
     }
   }
 
@@ -76,7 +76,7 @@ public class WebDriverFactory {
     if (webdriver instanceof HasCapabilities) {
       Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
       log.info("BrowserName=" + capabilities.getBrowserName() +
-          " Version=" + capabilities.getVersion() + " Platform=" + capabilities.getPlatform());
+        " Version=" + capabilities.getVersion() + " Platform=" + capabilities.getPlatform());
     } else {
       log.info("BrowserName=" + webdriver.getClass().getName());
     }

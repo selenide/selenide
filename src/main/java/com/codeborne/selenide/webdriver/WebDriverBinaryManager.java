@@ -2,11 +2,16 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Proxy;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class WebDriverBinaryManager {
-  public void setupBinaryPath(Browser browser) {
+
+  private Proxy proxy;
+
+  public void setupBinaryPath(Browser browser, Proxy proxy) {
+    this.proxy = proxy;
     if (browser.isChrome()) setupChrome();
     if (browser.isEdge()) setupEdge();
     if (browser.isIE()) setupIE();
@@ -17,37 +22,45 @@ public class WebDriverBinaryManager {
 
   private void setupChrome() {
     if (isSystemPropertySet("webdriver.chrome.driver")) {
-      WebDriverManager.chromedriver().setup();
+      WebDriverManager webDriverManager = WebDriverManager.chromedriver();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
+      webDriverManager.setup();
     }
   }
 
   private void setupEdge() {
     if (isSystemPropertySet("webdriver.edge.driver")) {
-      WebDriverManager.edgedriver().setup();
+      WebDriverManager webDriverManager = WebDriverManager.edgedriver();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
+      webDriverManager.setup();
     }
   }
 
   private void setupIE() {
     if (isSystemPropertySet("webdriver.ie.driver")) {
-      WebDriverManager.iedriver().setup();
+      WebDriverManager webDriverManager = WebDriverManager.iedriver();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
     }
   }
 
   private void setupOpera() {
     if (isSystemPropertySet("webdriver.opera.driver")) {
-      WebDriverManager.operadriver().setup();
+      WebDriverManager webDriverManager = WebDriverManager.operadriver();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
     }
   }
 
   private void setupPhantomjs() {
     if (isSystemPropertySet("phantomjs.binary.path")) {
-      WebDriverManager.phantomjs().setup();
+      WebDriverManager webDriverManager = WebDriverManager.phantomjs();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
     }
   }
 
   private void setupFirefox() {
     if (isSystemPropertySet("webdriver.gecko.driver")) {
-      WebDriverManager.firefoxdriver().setup();
+      WebDriverManager webDriverManager = WebDriverManager.firefoxdriver();
+      if (this.proxy != null) webDriverManager.proxy(proxy.getHttpProxy());
     }
   }
 
