@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.1 (released 13.03.2019)
+* add WDM support for Chrome 73 and 74
+
 ## 5.2.0 (released 19.02.2019)
 * #883 Enhanced chromeoptions arguments and preferences
 * #865 Add aliases for $ and $$ for Kotlin  --  thanks to @jkromski for PR #870
