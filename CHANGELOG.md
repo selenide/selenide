@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.2
+* upgrade to WebDriverManager 3.3.0
+
 ## 5.2.1 (released 13.03.2019)
 * add WDM support for Chrome 73 and 74
 
