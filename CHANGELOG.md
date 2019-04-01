@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.3
+* upgrade to WebDriverManager 3.4.0
+
 ## 5.2.2 (released 15.03.2019)
 * upgrade to WebDriverManager 3.3.0
 
