@@ -2,6 +2,8 @@
 
 ## 5.2.3
 * upgrade to WebDriverManager 3.4.0
+* upgrade to htmlunit 2.34.1
+* upgrade to htmlunitDriver 2.34.0
 
 ## 5.2.2 (released 15.03.2019)
 * upgrade to WebDriverManager 3.3.0
