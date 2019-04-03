@@ -7,10 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import java.util.logging.Logger;
-
 class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
-  private static final Logger log = Logger.getLogger(LegacyFirefoxDriverFactory.class.getName());
 
   @Override
   boolean supports(Config config, Browser browser) {

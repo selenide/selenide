@@ -3,15 +3,16 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.Arrays.asList;
 
 public class Events {
+  private static final Logger log = LoggerFactory.getLogger(Events.class);
+
   public static Events events = new Events();
 
-  Logger log = Logger.getLogger(Events.class.getName());
   private final String jsCodeToTriggerEvent =
       "var webElement = arguments[0];\n" +
           "var eventNames = arguments[1];\n" +
@@ -34,7 +35,7 @@ public class Events {
     catch (StaleElementReferenceException ignore) {
     }
     catch (Exception e) {
-      log.warning("Failed to trigger events " + asList(event) + ": " + Cleanup.of.webdriverExceptionMessage(e));
+      log.warn("Failed to trigger events {}: {}", asList(event), Cleanup.of.webdriverExceptionMessage(e));
     }
   }
 

@@ -25,6 +25,8 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -34,7 +36,6 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
@@ -42,7 +43,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class DownloadFileWithHttpRequest {
-  private static final Logger log = Logger.getLogger(DownloadFileWithHttpRequest.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileWithHttpRequest.class);
 
   protected boolean ignoreSelfSignedCerts = true;
 
@@ -176,7 +177,7 @@ public class DownloadFileWithHttpRequest {
 
     log.info("Cannot extract file name from http headers. Found headers: ");
     for (Header header : response.getAllHeaders()) {
-      log.info(header.getName() + '=' + header.getValue());
+      log.info("{}={}", header.getName(), header.getValue());
     }
 
     String fullFileName = FilenameUtils.getName(fileToDownloadLocation);

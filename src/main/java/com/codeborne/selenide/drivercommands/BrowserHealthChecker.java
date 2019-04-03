@@ -4,13 +4,11 @@ import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
-
-import java.util.logging.Logger;
-
-import static java.util.logging.Level.FINE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BrowserHealthChecker {
-  private static final Logger log = Logger.getLogger(BrowserHealthChecker.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(BrowserHealthChecker.class);
 
   public boolean isBrowserStillOpen(WebDriver webDriver) {
     try {
@@ -18,15 +16,15 @@ public class BrowserHealthChecker {
       return true;
     }
     catch (UnreachableBrowserException e) {
-      log.log(FINE, "Browser is unreachable", e);
+      log.debug("Browser is unreachable", e);
       return false;
     }
     catch (NoSuchWindowException e) {
-      log.log(FINE, "Browser window is not found", e);
+      log.debug("Browser window is not found", e);
       return false;
     }
     catch (NoSuchSessionException e) {
-      log.log(FINE, "Browser session is not found", e);
+      log.debug("Browser session is not found", e);
       return false;
     }
   }

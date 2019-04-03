@@ -11,13 +11,14 @@ import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
 
 class RemoteDriverFactory extends AbstractDriverFactory {
-  private static final Logger log = Logger.getLogger(RemoteDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(RemoteDriverFactory.class);
 
   @Override
   boolean supports(Config config, Browser browser) {
@@ -63,7 +64,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
       options.setBinary(config.browserBinary());
       return options;
     } else {
-      log.warning("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
+      log.warn("Changing browser binary on remote server is only supported for Chrome/Firefox, setting will be ignored.");
     }
     return new DesiredCapabilities();
   }
@@ -79,7 +80,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
       options.setHeadless(config.headless());
       return options;
     } else {
-      log.warning("Headless mode on remote server is only supported for Chrome/Firefox, setting will be ignored.");
+      log.warn("Headless mode on remote server is only supported for Chrome/Firefox, setting will be ignored.");
     }
     return new DesiredCapabilities();
   }

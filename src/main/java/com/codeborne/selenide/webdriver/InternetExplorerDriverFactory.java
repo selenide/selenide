@@ -7,11 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class InternetExplorerDriverFactory extends AbstractDriverFactory {
-  private static final Logger log = Logger.getLogger(InternetExplorerDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
 
   @Override
   boolean supports(Config config, Browser browser) {
@@ -27,8 +27,8 @@ class InternetExplorerDriverFactory extends AbstractDriverFactory {
     DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {
-      log.info("Using browser binary: " + config.browserBinary());
-      log.warning("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
+      log.info("Using browser binary: {}", config.browserBinary());
+      log.warn("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }
     return new InternetExplorerDriver(options);
   }

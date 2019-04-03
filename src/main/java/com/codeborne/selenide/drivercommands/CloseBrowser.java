@@ -5,13 +5,11 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
-
-import java.util.logging.Logger;
-
-import static java.util.logging.Level.FINE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class CloseBrowser implements Runnable {
-  private static final Logger log = Logger.getLogger(CloseBrowser.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(CloseBrowser.class);
 
   private final WebDriver webdriver;
   private final SelenideProxyServer proxy;
@@ -29,14 +27,14 @@ class CloseBrowser implements Runnable {
     }
     catch (UnreachableBrowserException e) {
       // It happens for Firefox. It's ok: browser is already closed.
-      log.log(FINE, "Browser is unreachable", e);
+      log.debug("Browser is unreachable", e);
     }
     catch (WebDriverException cannotCloseBrowser) {
-      log.severe("Cannot close browser normally: " + Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
+      log.error("Cannot close browser normally: {}", Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
     }
 
     if (proxy != null) {
-      log.info("Trying to shutdown " + proxy + " ...");
+      log.info("Trying to shutdown {} ...", proxy);
       proxy.shutdown();
     }
   }

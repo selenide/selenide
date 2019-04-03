@@ -7,11 +7,11 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class OperaDriverFactory extends AbstractDriverFactory {
-  private static final Logger log = Logger.getLogger(OperaDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(OperaDriverFactory.class);
 
   @Override
   boolean supports(Config config, Browser browser) {
@@ -30,7 +30,7 @@ class OperaDriverFactory extends AbstractDriverFactory {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");
     }
     if (!config.browserBinary().isEmpty()) {
-      log.info("Using browser binary: " + config.browserBinary());
+      log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }
     operaOptions.merge(createCommonCapabilities(config, proxy));

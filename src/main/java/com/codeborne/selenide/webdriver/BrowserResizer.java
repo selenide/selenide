@@ -4,15 +4,15 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class BrowserResizer {
-  private static final Logger log = Logger.getLogger(BrowserResizer.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(BrowserResizer.class);
 
   WebDriver adjustBrowserPosition(Config config, WebDriver driver) {
     if (config.browserPosition() != null) {
-      log.info("Set browser position to " + config.browserPosition());
+      log.info("Set browser position to {}", config.browserPosition());
       String[] coordinates = config.browserPosition().split("x");
       int x = Integer.parseInt(coordinates[0]);
       int y = Integer.parseInt(coordinates[1]);
@@ -27,7 +27,7 @@ class BrowserResizer {
 
   WebDriver adjustBrowserSize(Config config, Browser browser, WebDriver driver) {
     if (config.browserSize() != null && !config.startMaximized()) {
-      log.info("Set browser size to " + config.browserSize());
+      log.info("Set browser size to {}", config.browserSize());
       String[] dimension = config.browserSize().split("x");
       int width = Integer.parseInt(dimension[0]);
       int height = Integer.parseInt(dimension[1]);
@@ -38,7 +38,7 @@ class BrowserResizer {
         driver.manage().window().maximize();
       }
       catch (Exception cannotMaximize) {
-        log.warning("Cannot maximize " + driver.getClass().getSimpleName() + ": " + cannotMaximize);
+        log.warn("Cannot maximize {}: {}", driver.getClass().getSimpleName(), cannotMaximize);
       }
     }
     return driver;

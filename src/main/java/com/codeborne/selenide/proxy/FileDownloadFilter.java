@@ -9,6 +9,8 @@ import net.lightbody.bmp.filters.ResponseFilter;
 import net.lightbody.bmp.util.HttpMessageContents;
 import net.lightbody.bmp.util.HttpMessageInfo;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class FileDownloadFilter implements ResponseFilter {
-  private static final Logger log = Logger.getLogger(FileDownloadFilter.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(FileDownloadFilter.class);
+
   private final Config config;
   private final Downloader downloader;
 
@@ -80,7 +81,7 @@ public class FileDownloadFilter implements ResponseFilter {
       downloadedFiles.add(file);
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Failed to save downloaded file to " + file.getAbsolutePath() +
+      log.error("Failed to save downloaded file to " + file.getAbsolutePath() +
           " for url " + messageInfo.getUrl(), e);
     }
   }

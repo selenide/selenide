@@ -2,10 +2,10 @@ package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.reporters.ExitCodeListener;
-
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
@@ -14,7 +14,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * Annotate your test class with <code>@Listeners({ ScreenShooter.class})</code>
  */
 public class ScreenShooter extends ExitCodeListener {
-  private final Logger log = Logger.getLogger(getClass().getName());
+  private final Logger log = LoggerFactory.getLogger(getClass());
   
   public static boolean captureSuccessfulTests;
 

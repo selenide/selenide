@@ -1,10 +1,11 @@
 package com.codeborne.selenide.logevents;
 
 import com.google.common.base.Joiner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.OptionalInt;
-import java.util.logging.Logger;
 
 /**
  * A simple text report of Selenide actions performed during test run.
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
 public class SimpleReport {
-  private static final Logger log = Logger.getLogger(SimpleReport.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(SimpleReport.class);
 
   public void start() {
     SelenideLogger.addListener("simpleReport", new EventsCollector());
@@ -22,7 +23,7 @@ public class SimpleReport {
     EventsCollector logEventListener = SelenideLogger.removeListener("simpleReport");
 
     if (logEventListener == null) {
-      log.warning("Can not publish report because Selenide logger has not started.");
+      log.warn("Can not publish report because Selenide logger has not started.");
       return;
     }
 

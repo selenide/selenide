@@ -7,10 +7,11 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Logger;
 
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
@@ -19,8 +20,7 @@ import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
 import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 abstract class AbstractDriverFactory {
-
-  private static final Logger log = Logger.getLogger(AbstractDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
 
   abstract boolean supports(Config config, Browser browser);
 
@@ -83,7 +83,7 @@ abstract class AbstractDriverFactory {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
-        log.config("Use " + key + "=" + value);
+        log.debug("Use {}={}", key, value);
         if (value.equals("true") || value.equals("false")) {
           currentBrowserCapabilities.setCapability(capability, Boolean.valueOf(value));
         } else if (value.matches("^-?\\d+$")) { //if integer
