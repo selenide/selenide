@@ -103,7 +103,7 @@ public class ScreenShotLaboratory {
       return writeToFile(driver, destination);
     }
     catch (IOException e) {
-      log.error("Failed to take screenshot of " + element, e);
+      log.error("Failed to take screenshot of {}", element, e);
       return null;
     }
   }
@@ -136,7 +136,7 @@ public class ScreenShotLaboratory {
       return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
     }
     catch (IOException e) {
-      log.error("Failed to take screenshot of " + element, e);
+      log.error("Failed to take screenshot of {}", element, e);
       return null;
     }
     catch (RasterFormatException e) {
@@ -179,7 +179,7 @@ public class ScreenShotLaboratory {
       return writeToFile(driver, dest);
     }
     catch (IOException e) {
-      log.error("Failed to take screenshot of " + element + " inside frame " + iframe, e);
+      log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
       return null;
     }
   }
@@ -206,7 +206,7 @@ public class ScreenShotLaboratory {
       img = ImageIO.read(new ByteArrayInputStream(screen));
     }
     catch (IOException e) {
-      log.error("Failed to take screenshot of " + element + " inside frame " + iframe, e);
+      log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
       return null;
     }
     catch (RasterFormatException ex) {
@@ -322,7 +322,7 @@ public class ScreenShotLaboratory {
           savePageSourceToFile(config, fileName, webdriver, false);
         }
         catch (Exception unableToCloseAlert) {
-          log.error("Failed to close alert: " + unableToCloseAlert);
+          log.error("Failed to close alert", unableToCloseAlert);
         }
       }
       else {
@@ -330,12 +330,12 @@ public class ScreenShotLaboratory {
       }
     }
     catch (WebDriverException e) {
-      log.warn("Failed to save page source to " + fileName + " because of " + e);
+      log.warn("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
     }
     catch (RuntimeException e) {
-      log.error("Failed to save page source to " + fileName, e);
+      log.error("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
     }
     return pageSource;
@@ -349,12 +349,12 @@ public class ScreenShotLaboratory {
         copyFile(scrFile, imageFile);
       }
       catch (IOException e) {
-        log.error("Failed to save screenshot to " + imageFile, e);
+        log.error("Failed to save screenshot to {}", imageFile, e);
       }
       return imageFile;
     }
     catch (WebDriverException e) {
-      log.error("Failed to take screenshot to " + fileName + " because of " + e);
+      log.error("Failed to take screenshot to {}", fileName, e);
       return null;
     }
   }
@@ -382,7 +382,7 @@ public class ScreenShotLaboratory {
       copyFile(in, targetFile);
     }
     catch (IOException e) {
-      log.error("Failed to write file " + targetFile.getAbsolutePath(), e);
+      log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
     }
   }
 

@@ -54,7 +54,7 @@ public class CiReportUrl {
     try {
       return new URI(base).normalize().toURL().toString();
     } catch (Exception e) {
-      log.error("Variable selenide.reportsUrl is incorrect: " + base, e);
+      log.error("Variable selenide.reportsUrl is incorrect: {}", base, e);
       return null;
     }
   }

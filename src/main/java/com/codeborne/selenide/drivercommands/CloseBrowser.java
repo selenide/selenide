@@ -22,7 +22,7 @@ class CloseBrowser implements Runnable {
   @Override
   public void run() {
     try {
-      log.info("Trying to close the browser " + webdriver.getClass().getSimpleName() + " ...");
+      log.info("Trying to close the browser {} ...", webdriver.getClass().getSimpleName());
       webdriver.quit();
     }
     catch (UnreachableBrowserException e) {

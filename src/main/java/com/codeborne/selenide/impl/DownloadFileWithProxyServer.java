@@ -73,7 +73,7 @@ public class DownloadFileWithProxyServer {
           log.info("  Failed to close {}: {}", newWindow, Cleanup.of.webdriverExceptionMessage(windowHasBeenClosedMeanwhile));
         }
         catch (Exception e) {
-          log.warn("  Failed to close " + newWindow + ": " + e);
+          log.warn("  Failed to close {}", newWindow, e);
         }
       }
       webDriver.switchTo().window(currentWindowHandle);

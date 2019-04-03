@@ -81,8 +81,7 @@ public class FileDownloadFilter implements ResponseFilter {
       downloadedFiles.add(file);
     }
     catch (IOException e) {
-      log.error("Failed to save downloaded file to " + file.getAbsolutePath() +
-          " for url " + messageInfo.getUrl(), e);
+      log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
     }
   }
 
