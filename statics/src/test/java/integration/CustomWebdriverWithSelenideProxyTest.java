@@ -8,6 +8,7 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -28,6 +29,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   public void userCanUserCustomWebdriverWithSelenideProxy() {
     useProxy(true);
 

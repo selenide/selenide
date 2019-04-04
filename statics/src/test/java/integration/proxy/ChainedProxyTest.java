@@ -9,6 +9,7 @@ import net.lightbody.bmp.client.ClientUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.openqa.selenium.Proxy;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ class ChainedProxyTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void selenideProxyCanWorkWithUserProvidedChainedProxy() {
     openFile("file_upload_form.html");
     $("#cv").uploadFromClasspath("hello_world.txt");

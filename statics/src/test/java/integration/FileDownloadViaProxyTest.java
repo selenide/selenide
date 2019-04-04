@@ -3,12 +3,16 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.openqa.selenium.By;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -24,6 +28,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download();
 
@@ -36,6 +41,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
@@ -62,6 +68,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   public void download_withCustomTimeout() throws IOException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
