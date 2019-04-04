@@ -1,14 +1,17 @@
 package com.codeborne.selenide.impl;
 
+import com.google.common.collect.ImmutableMap;
+
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.google.common.collect.ImmutableMap;
+
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -151,30 +154,47 @@ class SelenideElementProxyTest implements WithAssertions {
   @Test
   void shouldLogSetValueSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener("test", createListener(selector, "set value", PASS));
+    SelenideLogger.addListener("test", new TestEventListener(selector, "set value", PASS));
 
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     SelenideElement selEl = driver.find("#firstName");
     selEl.setValue("ABC");
   }
 
-  private LogEventListener createListener(final String selector, final String subject, final EventStatus status) {
-    return currentLog -> {
+  private class TestEventListener implements LogEventListener {
+
+    private final String expectSelector;
+    private final String expectSubject;
+    private final EventStatus expectStatus;
+
+    TestEventListener(final String selector, final String subject, final EventStatus status) {
+      this.expectSelector = selector;
+      this.expectSubject = subject;
+      this.expectStatus = status;
+    }
+
+    @Override
+    public void afterEvent(LogEvent currentLog) {
       String format = String.format("{%s} %s: %s", currentLog.getElement(), currentLog.getSubject(), currentLog.getStatus());
       log.info(format);
       assertThat(currentLog.getElement())
-        .contains(selector);
+        .contains(expectSelector);
       assertThat(currentLog.getSubject())
-        .contains(subject);
+        .contains(expectSubject);
       assertThat(currentLog.getStatus())
-        .isEqualTo(status);
-    };
+        .isEqualTo(expectStatus);
+    }
+
+    @Override
+    public void beforeEvent(LogEvent currentLog) {
+
+    }
   }
 
   @Test
   void shouldLogShouldSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener("test", createListener(selector, "should have", PASS));
+    SelenideLogger.addListener("test", new TestEventListener(selector, "should have", PASS));
 
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("ABC");
@@ -185,7 +205,7 @@ class SelenideElementProxyTest implements WithAssertions {
   @Test
   void shouldLogShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener("test", createListener(selector, "should not have", PASS));
+    SelenideLogger.addListener("test", new TestEventListener(selector, "should not have", PASS));
 
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
@@ -196,7 +216,7 @@ class SelenideElementProxyTest implements WithAssertions {
   @Test
   void shouldLogFailedShouldNotSubject() {
     String selector = "#firstName";
-    SelenideLogger.addListener("test", createListener(selector, "should have", FAIL));
+    SelenideLogger.addListener("test", new TestEventListener(selector, "should have", FAIL));
 
     when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
     when(element.getAttribute("value")).thenReturn("wrong value");
