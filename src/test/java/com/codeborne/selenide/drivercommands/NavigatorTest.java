@@ -93,7 +93,7 @@ class NavigatorTest implements WithAssertions {
     navigator.open(selenideDriver, "https://some.com/login");
 
     Mockito.verify(navigation).to("https://some.com/login");
-    Mockito.verify(listener).onEvent(ArgumentMatchers.argThat(log ->
+    Mockito.verify(listener).afterEvent(ArgumentMatchers.argThat(log ->
       "open".equals(log.getElement()) && "https://some.com/login".equals(log.getSubject())));
   }
 

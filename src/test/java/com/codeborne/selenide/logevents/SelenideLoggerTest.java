@@ -79,9 +79,10 @@ class SelenideLoggerTest implements WithAssertions {
     verifyNoMoreInteractions(listener1, listener2, listener3);
   }
 
-  private void verifyEvent(LogEventListener listener1) {
+  private void verifyEvent(LogEventListener listener) {
     ArgumentCaptor<LogEvent> event = ArgumentCaptor.forClass(LogEvent.class);
-    verify(listener1).onEvent(event.capture());
+    verify(listener).beforeEvent(event.capture());
+    verify(listener).afterEvent(event.capture());
     LogEvent value = event.getValue();
     assertThat(value.getElement()).isEqualTo("div");
     assertThat(value.getSubject()).isEqualTo("click()");
