@@ -9,6 +9,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,9 +19,16 @@ import static com.codeborne.selenide.Condition.visible;
 import static java.lang.String.format;
 
 public class LogEventListenerTest extends BaseIntegrationTest {
-  SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()));
-  List<String> beforeEvents;
-  List<String> afterEvents;
+  private SelenideDriver driver;
+  private List<String> beforeEvents;
+  private List<String> afterEvents;
+
+  @BeforeEach
+  void setup(){
+    beforeEvents = new ArrayList<>();
+    afterEvents = new ArrayList<>();
+    driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()));
+  }
 
   @AfterEach
   void tearDown() {
@@ -30,9 +38,6 @@ public class LogEventListenerTest extends BaseIntegrationTest {
   @Test
   void canCatchBeforeAndAfterEvents() {
     SelenideLogger.addListener("log events collector", new SelenideListener());
-
-    beforeEvents = new ArrayList<>();
-    afterEvents = new ArrayList<>();
 
     driver.open("/elements_disappear_on_click.html");
 
