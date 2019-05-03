@@ -24,7 +24,7 @@ public class LogEventListenerTest extends BaseIntegrationTest {
   private List<String> afterEvents;
 
   @BeforeEach
-  void setup(){
+  void setup() {
     beforeEvents = new ArrayList<>();
     afterEvents = new ArrayList<>();
     driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()));
