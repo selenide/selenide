@@ -61,6 +61,12 @@ class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  void canOpenBlankPage() {
+    open("about:blank");
+    $("body").shouldHave(exactText(""));
+  }
+
+  @Test
   void userCanCheckIfElementExists() {
     assertThat($(By.name("domain")).exists())
       .isTrue();

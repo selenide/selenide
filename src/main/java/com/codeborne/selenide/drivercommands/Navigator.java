@@ -138,13 +138,7 @@ public class Navigator {
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
-    return relativeOrAbsoluteUrl.toLowerCase().startsWith("http:") ||
-      relativeOrAbsoluteUrl.toLowerCase().startsWith("https:") ||
-      isLocalFile(relativeOrAbsoluteUrl);
-  }
-
-  private boolean isLocalFile(String url) {
-    return url.toLowerCase().startsWith("file:");
+    return relativeOrAbsoluteUrl.matches("^[a-zA-Z]+:.*");
   }
 
   public void back(Driver driver) {
