@@ -6,6 +6,7 @@ import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void canAddInterceptorsToProxyServer() {
     openFile("file_upload_form.html");
 

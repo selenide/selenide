@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Credentials;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -17,6 +18,7 @@ class BasicAuthTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void canPassBasicAuth_via_proxy() {
     useProxy(true);
     open("/basic-auth/hello", "", "scott", "tiger");
@@ -24,6 +26,7 @@ class BasicAuthTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void canAuthUsingProxyWithLoginAndPassword() {
     useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, "scott", "tiger");
@@ -31,6 +34,7 @@ class BasicAuthTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void canAuthUsingProxyWithCredentials() {
     useProxy(true);
     Credentials credentials = new Credentials("scott", "tiger");
@@ -41,6 +45,7 @@ class BasicAuthTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void canSwitchToAnotherBasicAuth() {
     useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));
@@ -50,6 +55,7 @@ class BasicAuthTest extends IntegrationTest {
   }
 
   @Test
+  @DisabledIfSystemProperty(named = "selenide.browser", matches = "chrome")
   void removesPreviousBasicAuthHeaders() {
     useProxy(true);
     open("/basic-auth/hello", AuthenticationType.BASIC, new Credentials("scott", "tiger"));

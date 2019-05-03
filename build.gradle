@@ -12,7 +12,7 @@ plugins {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.2.1-SNAPSHOT'
+version = '5.2.3-SNAPSHOT'
 
 ext {
   encoding = StandardCharsets.UTF_8.name()
@@ -34,4 +34,3 @@ apply from: rootProject.file('gradle/code-analysis.gradle')
 apply from: rootProject.file('gradle/coverage.gradle')
 apply from: rootProject.file('gradle/tests.gradle')
 apply from: rootProject.file('gradle/deploy.gradle')
-
