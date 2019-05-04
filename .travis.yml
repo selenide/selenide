@@ -11,7 +11,6 @@ jdk:
 addons:
   apt:
     update: true
-  chrome: stable
   firefox: latest
 
 before_cache:
@@ -27,6 +26,8 @@ cache:
 before_install:
   - sudo apt-get install -y libappindicator1 fonts-liberation
   - export CHROME_BIN=/usr/bin/google-chrome
+  - wget -O google-chrome-71.deb --no-clobber https://www.slimjet.com/chrome/download-chrome.php?file=files%2F71.0.3578.80%2Fgoogle-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
 
 install: true
 
