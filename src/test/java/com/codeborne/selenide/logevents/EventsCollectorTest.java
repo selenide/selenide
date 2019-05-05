@@ -8,7 +8,7 @@ class EventsCollectorTest implements WithAssertions {
   void testOnEvent() {
     EventsCollector eventsCollector = new EventsCollector();
     SelenideLog selenideLog = new SelenideLog("Link", "Not Found");
-    eventsCollector.onEvent(selenideLog);
+    eventsCollector.afterEvent(selenideLog);
 
     assertThat(eventsCollector.events())
       .contains(selenideLog);

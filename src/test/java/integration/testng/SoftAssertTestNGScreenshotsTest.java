@@ -48,8 +48,13 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     }
 
     @Override
-    public void onEvent(LogEvent currentLog) {
+    public void afterEvent(LogEvent currentLog) {
       events.add(currentLog);
+    }
+
+    @Override
+    public void beforeEvent(LogEvent currentLog) {
+      //ignore
     }
   }
 

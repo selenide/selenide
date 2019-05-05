@@ -48,7 +48,13 @@ public class SelenideLogger {
   }
 
   public static SelenideLog beginStep(String source, String subject) {
-    return new SelenideLog(source, subject);
+    Collection<LogEventListener> listeners = getEventLoggerListeners();
+
+    SelenideLog log = new SelenideLog(source, subject);
+    for (LogEventListener listener : listeners) {
+      listener.beforeEvent(log);
+    }
+    return log;
   }
 
   public static void commitStep(SelenideLog log, Throwable error) {
@@ -61,7 +67,7 @@ public class SelenideLogger {
 
     Collection<LogEventListener> listeners = getEventLoggerListeners();
     for (LogEventListener listener : listeners) {
-      listener.onEvent(log);
+      listener.afterEvent(log);
     }
   }
 
