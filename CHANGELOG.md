@@ -1,9 +1,12 @@
 # Changelog
 
-## 5.2.3
+## 5.2.3 (released 07.05.2019)
 * upgrade to WebDriverManager 3.4.0
 * upgrade to htmlunit 2.34.1
 * upgrade to htmlunitDriver 2.34.0
+* #915 Add support for `open("about:blank")`
+* #927 Log event listener improvements  --  thanks to @pavelpp for PR
+* #912 (refactoring) extract Conditions to separate classes
 
 ## 5.2.2 (released 15.03.2019)
 * upgrade to WebDriverManager 3.3.0
