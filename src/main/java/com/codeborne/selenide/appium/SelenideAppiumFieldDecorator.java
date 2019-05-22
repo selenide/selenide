@@ -1,14 +1,15 @@
 package com.codeborne.selenide.appium;
 
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.SelenidePageFactory;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenideElementListProxy;
 import com.codeborne.selenide.impl.SelenideFieldDecorator;
+import com.codeborne.selenide.impl.SelenidePageFactory;
 import io.appium.java_client.HasSessionDetails;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -34,14 +35,16 @@ import static java.util.stream.Collectors.toList;
 
 public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
   private final SearchContext searchContext;
+  private final Driver driver;
   private final ElementLocatorFactory factory;
   private final AppiumByBuilder builder;
 
-  public SelenideAppiumFieldDecorator(SearchContext context) {
-    super(context);
-    this.searchContext = context;
+  public SelenideAppiumFieldDecorator(Driver driver) {
+    super(driver.getWebDriver());
+    this.searchContext = driver.getWebDriver();
     this.factory = new DefaultElementLocatorFactory(searchContext);
-    this.builder = byBuilder(context);
+    this.builder = byBuilder(driver.getWebDriver());
+    this.driver = driver;
   }
 
   private DefaultElementByBuilder byBuilder(SearchContext driver) {
@@ -50,7 +53,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return new DefaultElementByBuilder(null, null);
     }
     else {
-      HasSessionDetails d = HasSessionDetails.class.cast(driver);
+      HasSessionDetails d = (HasSessionDetails) driver;
       return new DefaultElementByBuilder(d.getPlatformName(), d.getAutomationName());
     }
   }
@@ -68,10 +71,10 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return decorateWithAppium(loader, field);
     }
     else if (SelenideElement.class.isAssignableFrom(field.getType())) {
-      return ElementFinder.wrap(searchContext, selector, 0);
+      return ElementFinder.wrap(driver, searchContext, selector, 0);
     }
     else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
-      return new ElementsCollection(new BySelectorCollection(searchContext, selector));
+      return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
@@ -80,7 +83,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return createElementsContainerList(field);
     }
     else if (isDecoratableList(field, SelenideElement.class)) {
-      return SelenideElementListProxy.wrap(factory.createLocator(field));
+      return SelenideElementListProxy.wrap(driver, factory.createLocator(field));
     }
 
     return super.decorate(loader, field);
@@ -96,7 +99,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
 
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = ElementFinder.wrap(searchContext, selector, 0);
+      SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
       return initElementsContainer(field.getType(), self);
     }
     catch (Exception e) {
@@ -117,7 +120,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
 
   private List<ElementsContainer> createElementsContainerList(Field field) {
     Class<?> listType = getListGenericType(field);
-    List<SelenideElement> selfList = SelenideElementListProxy.wrap(factory.createLocator(field));
+    List<SelenideElement> selfList = SelenideElementListProxy.wrap(driver, factory.createLocator(field));
 
     return selfList
       .stream()
@@ -138,7 +141,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    PageFactory.initElements(new SelenideFieldDecorator(new SelenidePageFactory(), self), result);
+    PageFactory.initElements(new SelenideFieldDecorator(new SelenidePageFactory(), driver, self), result);
     result.setSelf(self);
     return result;
   }
