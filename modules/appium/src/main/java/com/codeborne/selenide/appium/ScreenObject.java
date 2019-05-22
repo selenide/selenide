@@ -1,10 +1,10 @@
 package com.codeborne.selenide.appium;
 
-import com.codeborne.selenide.SelenidePageFactory;
+import com.codeborne.selenide.impl.SelenidePageFactory;
 
 import java.lang.reflect.Constructor;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.driver;
 
 public class ScreenObject {
   /**
@@ -18,7 +18,7 @@ public class ScreenObject {
    * Initialize a Page Object fields annotated with @FindBy, @AndroidFindBy, @iOSFindBy etc.
    */
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass screen(T pageObject) {
-    new SelenidePageFactory().initElements(new SelenideAppiumFieldDecorator(getWebDriver()), pageObject);
+    new SelenidePageFactory().initElements(new SelenideAppiumFieldDecorator(driver()), pageObject);
     return pageObject;
   }
 
