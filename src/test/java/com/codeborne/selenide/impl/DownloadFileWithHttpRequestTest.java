@@ -16,10 +16,12 @@ import org.openqa.selenium.WebDriver;
 
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class DownloadFileWithHttpRequestTest {
@@ -54,7 +56,7 @@ public class DownloadFileWithHttpRequestTest {
 
     download.addHttpHeaders(driver, httpGet);
 
-    verifyNoMoreInteractions(httpGet);
+    verify(httpGet, never()).setHeader(eq("User-Agent"), any());
   }
 
   @Test

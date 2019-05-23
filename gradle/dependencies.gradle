@@ -4,9 +4,10 @@ repositories {
 
 ext {
   testngVersion = '6.9.10'
-  htmlunitVersion = '2.34.1'
-  htmlunitDriverVersion = '2.34.0'
+  htmlunitVersion = '2.35.0'
+  htmlunitDriverVersion = '2.35.1'
   seleniumVersion = '3.141.59'
+  byteBuddyVersion = '1.9.12'
   junitVersion = '5.4.1'
 }
 
@@ -14,7 +15,8 @@ dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
   api('io.github.bonigarcia:webdrivermanager:3.4.0')
 
-  implementation('net.lightbody.bmp:browsermob-core:2.1.5')
+  implementation("net.bytebuddy:byte-buddy:$byteBuddyVersion")
+  implementation("net.lightbody.bmp:browsermob-core:2.1.5")
 
   compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion")
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
@@ -23,11 +25,12 @@ dependencies {
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
 
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion")
-  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.15.v20190215')
+  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.18.v20190429')
   testImplementation("org.testng:testng:$testngVersion")
-  testImplementation('org.mockito:mockito-core:2.25.1')
+  testImplementation('org.mockito:mockito-core:2.27.0')
+  testImplementation('net.bytebuddy:byte-buddy:$byteBuddyVersion')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
-  testImplementation('com.automation-remarks:video-recorder-junit5:1.8')
+  testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.12.2")
   testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

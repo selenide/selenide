@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 
 public class SelenideDriverITest extends ITest {
@@ -20,8 +21,8 @@ public class SelenideDriverITest extends ITest {
 
   @BeforeEach
   void setUp() {
-    browser1 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
-    browser2 = new SelenideDriver(new SelenideConfig().browser("htmlunit").baseUrl(getBaseUrl()));
+    browser1 = new SelenideDriver(new SelenideConfig().proxyEnabled(true).fileDownload(PROXY).browser(browser).baseUrl(getBaseUrl()));
+    browser2 = new SelenideDriver(new SelenideConfig().proxyEnabled(true).fileDownload(PROXY).browser("htmlunit").baseUrl(getBaseUrl()));
   }
 
   @AfterEach
