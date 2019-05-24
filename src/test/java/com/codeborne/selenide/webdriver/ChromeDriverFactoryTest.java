@@ -12,8 +12,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.List;
 import java.util.Map;
 
+import static com.codeborne.selenide.webdriver.ChromeDriverFactory.USE_AUTOMATION_EXTENSION;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getUseAutomationExtension;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
@@ -79,6 +81,16 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
     assertThat(prefsMap).hasSize(1);
     assertThat(prefsMap).containsEntry("key1", 1);
+  }
+
+  @Test
+  void transferChromeOptionUseAutomationExtension() {
+    System.setProperty(USE_AUTOMATION_EXTENSION, "true");
+
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    Boolean useAutomationExtension = getUseAutomationExtension(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(useAutomationExtension).isEqualTo(true);
   }
 
   @Test

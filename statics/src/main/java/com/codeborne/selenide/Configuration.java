@@ -22,12 +22,18 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *  Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
  * </p>
  * <p>
- *  <b>chromeoptions.prefs</b> - ser the preferences for chrome options, which are comma separated
+ *  <b>chromeoptions.prefs</b> - Sets the preferences for chrome options, which are comma separated
  *   keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
  *   List of preferences can be found at
  *   https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
  *
  *   Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
+ * </p>
+ * <p>
+ *  <b>chromeoptions.useautomationextension</b> - Controls Chrome Automation Extension, Boolean value
+ *   https://bugs.chromium.org/p/chromedriver/issues/detail?id=1749#c5
+ *
+ *   Example: false
  * </p>
  */
 public class Configuration {

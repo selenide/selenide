@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
+  static final String USE_AUTOMATION_EXTENSION = "chromeoptions.useautomationextension";
 
   @Override
   WebDriver create(Config config, Proxy proxy) {
@@ -62,6 +63,10 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     if (System.getProperty("chromeoptions.prefs") != null) {
       Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.prefs"));
       currentChromeOptions.setExperimentalOption("prefs", prefs);
+    }
+    if (System.getProperty(USE_AUTOMATION_EXTENSION) != null) {
+      Boolean useAutomationExtension = Boolean.parseBoolean(System.getProperty(USE_AUTOMATION_EXTENSION));
+      currentChromeOptions.setExperimentalOption("useAutomationExtension", useAutomationExtension);
     }
     return currentChromeOptions;
   }

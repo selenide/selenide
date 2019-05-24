@@ -28,4 +28,15 @@ class SeleniumCapabilitiesHelper {
     }
     return (Map<String, Object>) arguments.get("prefs");
   }
+
+  @SuppressWarnings("unchecked")
+  static Boolean getUseAutomationExtension(String capability, Capabilities capabilities) {
+    // it depends on internal Selenium capabilities structure
+    // but there are no ways to do the same by public interfaces
+    Map<String, Object> arguments = (Map<String, Object>) capabilities.asMap().get(capability);
+    if (arguments == null) {
+      return null;
+    }
+    return (Boolean) arguments.get("useAutomationExtension");
+  }
 }
