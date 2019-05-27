@@ -22,7 +22,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *  Example: --no-sandbox,--disable-3d-apis,"--user-agent=Firefox 45, Mozilla"
  * </p>
  * <p>
- *  <b>chromeoptions.prefs</b> - ser the preferences for chrome options, which are comma separated
+ *  <b>chromeoptions.prefs</b> - Sets the preferences for chrome options, which are comma separated
  *   keyX=valueX preferences. If comma is a part of the value, use double quotes around the preference
  *   List of preferences can be found at
  *   https://chromium.googlesource.com/chromium/src/+/master/chrome/common/pref_names.cc
