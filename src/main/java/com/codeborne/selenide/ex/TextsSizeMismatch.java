@@ -8,9 +8,8 @@ public class TextsSizeMismatch extends UIAssertionError {
   public TextsSizeMismatch(WebElementsCollection collection, List<String> actualTexts,
                        List<String> expectedTexts, String explanation, long timeoutMs) {
     super(collection.driver(),
-      "\nTexts size mismatch: " +
-        "\nActual: " + actualTexts + ", List size :" + actualTexts.size() +
-        "\nExpected: " + expectedTexts + ", List size :" + expectedTexts.size() +
+        "\nActual: " + actualTexts + ", List size: " + actualTexts.size() +
+        "\nExpected: " + expectedTexts + ", List size: " + expectedTexts.size() +
         (explanation == null ? "" : "\nBecause: " + explanation) +
         "\nCollection: " + collection.description());
     super.timeoutMs = timeoutMs;

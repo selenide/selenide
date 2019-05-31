@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
+import com.codeborne.selenide.ex.TextsSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,28 @@ class ExactTextsTest implements WithAssertions {
     } catch (TextsMismatch ex) {
       assertThat(ex)
         .hasMessage("\nActual: [Hello]\nExpected: [One]\nCollection: Collection description");
+    }
+  }
+
+  @Test
+  void failOnTextSizeMismatch() {
+    ExactTexts exactTexts = new ExactTexts("One", "Two");
+    Exception exception = new Exception("Exception method");
+
+    WebElement mockedWebElement = mock(WebElement.class);
+    when(mockedWebElement.getText()).thenReturn("One, Two");
+
+    WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
+    when(mockedElementsCollection.description()).thenReturn("Collection description");
+
+    try {
+      exactTexts.fail(mockedElementsCollection,
+        singletonList(mockedWebElement),
+        exception,
+        10000);
+    } catch (TextsSizeMismatch ex) {
+      assertThat(ex)
+        .hasMessage("\nActual: [One, Two], List size: 1\nExpected: [One, Two], List size: 2\nCollection: Collection description");
     }
   }
 
