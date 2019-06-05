@@ -16,7 +16,6 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.ByIdOrName;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -34,20 +33,18 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
-  private final SearchContext searchContext;
   private final Driver driver;
   private final ElementLocatorFactory factory;
   private final AppiumByBuilder builder;
 
   public SelenideAppiumFieldDecorator(Driver driver) {
     super(driver.getWebDriver());
-    this.searchContext = driver.getWebDriver();
-    this.factory = new DefaultElementLocatorFactory(searchContext);
-    this.builder = byBuilder(driver.getWebDriver());
     this.driver = driver;
+    this.factory = new DefaultElementLocatorFactory(driver.getWebDriver());
+    this.builder = byBuilder(driver);
   }
 
-  private DefaultElementByBuilder byBuilder(SearchContext driver) {
+  private DefaultElementByBuilder byBuilder(Driver driver) {
     if (driver == null
       || !HasSessionDetails.class.isAssignableFrom(driver.getClass())) {
       return new DefaultElementByBuilder(null, null);
@@ -71,10 +68,10 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
       return decorateWithAppium(loader, field);
     }
     else if (SelenideElement.class.isAssignableFrom(field.getType())) {
-      return ElementFinder.wrap(driver, searchContext, selector, 0);
+      return ElementFinder.wrap(driver, driver.getWebDriver(), selector, 0);
     }
     else if (ElementsCollection.class.isAssignableFrom(field.getType())) {
-      return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
+      return new ElementsCollection(new BySelectorCollection(driver, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(selector, field);
@@ -99,7 +96,7 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
 
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
-      SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
+      SelenideElement self = ElementFinder.wrap(driver, driver.getWebDriver(), selector, 0);
       return initElementsContainer(field.getType(), self);
     }
     catch (Exception e) {
