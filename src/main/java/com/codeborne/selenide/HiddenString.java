@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 public class HiddenString {
-
   private final String plainTextValue;
   private final String toStringValue;
 
@@ -18,5 +17,4 @@ public class HiddenString {
   public String toString() {
     return toStringValue;
   }
-
 }

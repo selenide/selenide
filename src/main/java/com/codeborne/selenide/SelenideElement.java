@@ -40,23 +40,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setValue(String text);
 
   /**
-   *
-   * <b>Implementation details:</b>
-   *
-   * <p>If Configuration.versatileSetValue is true, can work as 'selectOptionByValue', 'selectRadio'</p>
-   *
-   * <p>If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
-   * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.
-   *
-   * <p>In other case behavior will be:
-   * <pre>
-   * 1. WebElement.clear()
-   * 2. WebElement.sendKeys(text)
-   * 3. Trigger change event
-   * </pre>
-   *
-   * @param hiddenString Useful for entering passwords or sensitive data. HiddenString plainTextValue to enter into the text field or set by value for select/radio,
-   * HiddenString toStringValue to log and report.
+   * Useful for entering passwords or sensitive data.
+   * @param hiddenString HiddenString plainTextValue is used to interact with browser,
+   * while HiddenString toStringValue is used in logs and reports.
    *
    * @see com.codeborne.selenide.commands.SetValue
    */
