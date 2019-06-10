@@ -88,8 +88,14 @@ public class ScreenShooterExtension implements AfterAllCallback, BeforeAllCallba
   @Override
   public void testFailed(ExtensionContext context, Throwable cause) {
     if (!(cause instanceof UIAssertionError)) {
-      log.info(screenshot(driver()));
+      log.info(getScreenshot());
       SelenideLogger.commitStep(new SelenideLog(context.getTestMethod().toString(), context.getExecutionException().toString()), FAIL);
     }
   }
+
+  protected String getScreenshot() {
+    return screenshot(driver());
+  }
+
+
 }

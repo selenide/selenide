@@ -3,11 +3,14 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.junit5.ExecutionContextMock;
+import com.codeborne.selenide.junit5.ScreenShooterExtensionMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.opentest4j.AssertionFailedError;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,6 +22,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotTest extends IntegrationTest {
@@ -45,6 +49,14 @@ class ScreenshotTest extends IntegrationTest {
     assertThat(screenshot.getPath())
       .withFailMessage(String.format("Screenshot file should be located in %s, but was: %s", screenshotPath, screenshot.getPath()))
       .startsWith(screenshotPath);
+  }
+
+  @Test
+  void canTakeScreenshotOnJunitAssertions() {
+    ScreenShooterExtensionMock screenShooterExtensionMock = new ScreenShooterExtensionMock();
+    ExecutionContextMock contextMock = new ExecutionContextMock();
+    screenShooterExtensionMock.testFailed(contextMock, new AssertionFailedError());
+    assertEquals(1, screenShooterExtensionMock.getCounter(), "Screenshot is not taken on junit5 assertions");
   }
 
   @Test
