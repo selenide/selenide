@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.4
+* upgrade to WebDriverManager 3.6.1
+
 ## 5.2.3 (released 07.05.2019)
 * upgrade to WebDriverManager 3.4.0
 * upgrade to htmlunit 2.34.1
