@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.HiddenString;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -26,6 +27,12 @@ public class SetValue implements Command<WebElement> {
   @Override
   public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     String text = (String) args[0];
+
+    if (args[0] instanceof HiddenString) {
+      HiddenString hiddenString = (HiddenString) args[0];
+      text = hiddenString.getPlainTextValue();
+    }
+
     WebElement element = locator.findAndAssertElementIsInteractable();
 
     if (locator.driver().config().versatileSetValue()
