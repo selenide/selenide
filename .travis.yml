@@ -11,7 +11,7 @@ jdk:
 addons:
   apt:
     update: true
-  firefox: latest
+  firefox: "66.0"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -43,14 +43,8 @@ jobs:
     - if: type != pull_request
       script: ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
       name: "Check + Sonar"
-    - script: ./gradlew grid --no-daemon --console=plain
-      name: "Grid"
-    - script: ./gradlew htmlunit --no-daemon --console=plain
-      name: "Htmlunit"
     - script: ./gradlew firefox_headless --no-daemon --console=plain
       name: "Firefox"
-    - script: ./gradlew chrome_headless --no-daemon --console=plain
-      name: "Chrome"
 
 after_script: "./.upload_reports.sh"
 
