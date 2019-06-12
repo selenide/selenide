@@ -11,7 +11,7 @@ jdk:
 addons:
   apt:
     update: true
-  firefox: latest
+  firefox: "66.0"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
