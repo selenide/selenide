@@ -102,5 +102,6 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     FirefoxOptions options = driverFactory.createFirefoxOptions(config, proxy);
     FirefoxProfile firefoxProfile = (FirefoxProfile) options.asMap().get("firefox_profile");
     assertThat(firefoxProfile.getStringPreference("network.proxy.no_proxies_on", "localhost")).isEqualTo("");
+    assertThat(firefoxProfile.getBooleanPreference("network.proxy.allow_hijacking_localhost", false)).isTrue();
   }
 }

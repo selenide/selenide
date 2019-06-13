@@ -12,7 +12,7 @@ addons:
   apt:
     update: true
   chrome: stable
-  firefox: "66.0"
+  firefox: latest
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
