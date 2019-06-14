@@ -51,7 +51,7 @@ public class ExactTexts extends CollectionCondition {
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
     }
-    if (elements.size() != expectedTexts.size()) {
+    else if (elements.size() != expectedTexts.size()) {
       throw new TextsSizeMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
     }
     else {

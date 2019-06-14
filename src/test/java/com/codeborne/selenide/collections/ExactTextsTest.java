@@ -110,15 +110,12 @@ class ExactTextsTest implements WithAssertions {
     WebElementsCollection mockedElementsCollection = mock(WebElementsCollection.class);
     when(mockedElementsCollection.description()).thenReturn("Collection description");
 
-    try {
-      exactTexts.fail(mockedElementsCollection,
-        singletonList(mockedWebElement),
-        exception,
-        10000);
-    } catch (TextsSizeMismatch ex) {
-      assertThat(ex)
-        .hasMessage("\nActual: [One, Two], List size: 1\nExpected: [One, Two], List size: 2\nCollection: Collection description");
-    }
+    assertThatThrownBy(() -> exactTexts.fail(mockedElementsCollection,
+      singletonList(mockedWebElement), exception, 10000))
+      .isInstanceOf(TextsSizeMismatch.class)
+      .hasMessageContaining("Actual: [One, Two], List size: 1")
+      .hasMessageContaining("Expected: [One, Two], List size: 2")
+      .hasMessageEndingWith("Collection: Collection description");
   }
 
   @Test
