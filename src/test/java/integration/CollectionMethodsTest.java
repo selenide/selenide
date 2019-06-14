@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
+import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -139,8 +140,15 @@ class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void textsCheckThrowsTextsMismatch() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3")))
+  void textsCheckThrowsTextsSizeMismatch() {
+    assertThatThrownBy(() -> $$("#dynamic-content-container span")
+      .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
+      .isInstanceOf(TextsSizeMismatch.class);
+  }
+
+  @Test
+  void textCheckThrowsTextsMismatch() {
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
       .isInstanceOf(TextsMismatch.class);
   }
 

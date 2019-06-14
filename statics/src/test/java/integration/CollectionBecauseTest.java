@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
 
+import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,28 +22,53 @@ class CollectionBecauseTest extends IntegrationTest {
   }
 
   @Test
-  void canExplainWhyConditionIsExpected_texts() {
+  void canExplainWhyConditionIsExpected_textsMismatch() {
     try {
-      $$("#dropdown-list-container option").shouldHave(texts("foo", "bar").because("that's why"));
+      $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
-
       assertThat(expected.toString())
         .contains("TextsMismatch \n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
-          "Expected: [foo, bar]\n" +
+          "Expected: [foo, bar, var, buzz]\n" +
           "Because: that's why\n");
     }
   }
 
   @Test
-  void canExplainWhyConditionIsExpected_exactTexts() {
+  void canExplainWhyConditionIsExpected_textsSizeMismatch() {
     try {
-      $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar").because("that's why"));
+      $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var, buzz").because("that's why"));
+    } catch (TextsSizeMismatch expected) {
+      assertThat(expected.toString())
+        .contains("TextsSizeMismatch \n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
+          "Expected: [foo, bar, var, buzz], List size: 3\n" +
+          "Because: that's why\n");
+    }
+  }
+
+  @Test
+  void canExplainWhyConditionIsExpected_exactTextsMismatch() {
+    try {
+      $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
       assertThat(expected.toString())
         .contains("TextsMismatch \n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
-          "Expected: [foo, bar]\n" +
+          "Expected: [foo, bar, var, buzz]\n" +
+          "Because: that's why\n");
+    }
+  }
+
+  @Test
+  void canExplainWhyConditionIsExpected_exactTextsSizeMismatch() {
+    try {
+      $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var, buzz").because("that's why"));
+    } catch (TextsSizeMismatch expected) {
+      assertThat(expected.toString())
+        .contains("TextsSizeMismatch \n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
+          "Expected: [foo, bar, var, buzz], List size: 3\n" +
           "Because: that's why\n");
     }
   }
