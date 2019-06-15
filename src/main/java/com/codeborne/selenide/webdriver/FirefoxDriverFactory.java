@@ -45,6 +45,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.http.phishy-userpass-length", 255);
     firefoxOptions.addPreference("security.csp.enable", false);
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
+    firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
 
     firefoxOptions.merge(createCommonCapabilities(config, proxy));
     firefoxOptions = transferFirefoxProfileFromSystemProperties(firefoxOptions);
