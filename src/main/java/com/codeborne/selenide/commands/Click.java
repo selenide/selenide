@@ -29,12 +29,14 @@ public class Click implements Command<Void> {
 
   protected void click(Driver driver, WebElement element, int offsetX, int offsetY) {
     if (driver.config().clickViaJs()) {
-      driver.executeJavaScript("arguments[0].dispatchEvent(new MouseEvent('click', {" +
-          "'view': window," +
-          "'bubbles': true," +
-          "'cancelable': true," +
-          "'clientX': arguments[0].getClientRects()[0].left + arguments[1]," +
-          "'clientY': arguments[0].getClientRects()[0].top + arguments[2]" +
+      driver.executeJavaScript(
+          "var rect = arguments[0].getBoundingClientRect();" +
+          "arguments[0].dispatchEvent(new MouseEvent('click', {" +
+          " 'view': window," +
+          " 'bubbles': true," +
+          " 'cancelable': true," +
+          " 'clientX': rect.left + rect.width/2 + arguments[1]," +
+          " 'clientY': rect.top + rect.height/2 + arguments[2]" +
           "}))",
         element,
         offsetX,
