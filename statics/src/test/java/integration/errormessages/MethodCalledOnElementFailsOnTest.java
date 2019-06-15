@@ -87,7 +87,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 1, Size: 0");
+        .hasMessageMatching("Index\\D+1\\D+0");
     }
   }
 
@@ -107,7 +107,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 10, Size: 2");
+        .hasMessageMatching("Index\\D+10\\D+2");
     }
   }
 
@@ -127,7 +127,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 10, Size: 2");
+        .hasMessageMatching("Index\\D+10\\D+2");
     }
   }
 
@@ -341,7 +341,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 0, Size: 0");
+        .hasMessageMatching("Index\\D+0\\D+0");
     }
   }
 
@@ -361,7 +361,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 0, Size: 0");
+        .hasMessageMatching("Index\\D+0\\D+0");
     }
   }
 
@@ -381,7 +381,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .isInstanceOf(IndexOutOfBoundsException.class);
       assertThat(expected.getCause())
-        .hasMessageStartingWith("Index: 2, Size: 2");
+        .hasMessageMatching("Index\\D+2\\D+2");
     }
   }
 
