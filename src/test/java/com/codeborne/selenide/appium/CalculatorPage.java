@@ -17,6 +17,6 @@ class CalculatorPage {
   @AndroidFindBy(id = "digit_4")
   SelenideElement number4;
 
-  @AndroidFindBy(id = "formula")
+  @AndroidFindBy(id = "result")
   SelenideElement result;
 }
