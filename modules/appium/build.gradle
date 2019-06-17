@@ -5,7 +5,7 @@ defaultTasks 'check', 'test', 'install'
 
 group = 'com.codeborne'
 description = 'Selenide adaptor for Appium framework'
-version = '1.2-SNAPSHOT'
+version = '1.2'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
   compile('com.codeborne:selenide:5.2.3')
-  compile('io.appium:java-client:6.1.0')
+  compile('io.appium:java-client:7.0.0')
   testCompile('junit:junit:4.12')
 }
 
