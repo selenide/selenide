@@ -18,7 +18,7 @@ class CalculatorPageWithCollection {
   @AndroidFindBy(id = "digit_4")
   ElementsCollection number4;
 
-  @AndroidFindBy(id = "formula")
+  @AndroidFindBy(id = "result")
   ElementsCollection result;
 
   public void selectDigit2() {
