@@ -46,11 +46,11 @@ public class SelenideAppiumFieldDecorator extends AppiumFieldDecorator {
 
   private DefaultElementByBuilder byBuilder(Driver driver) {
     if (driver == null
-      || !HasSessionDetails.class.isAssignableFrom(driver.getClass())) {
+      || !HasSessionDetails.class.isAssignableFrom(driver.getWebDriver().getClass())) {
       return new DefaultElementByBuilder(null, null);
     }
     else {
-      HasSessionDetails d = (HasSessionDetails) driver;
+      HasSessionDetails d = (HasSessionDetails) driver.getWebDriver();
       return new DefaultElementByBuilder(d.getPlatformName(), d.getAutomationName());
     }
   }
