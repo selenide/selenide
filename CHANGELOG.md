@@ -2,6 +2,7 @@
 
 ## 5.2.4
 * upgrade to WebDriverManager 3.6.1
+* fixed ScreenShooterExtension fir JUnit5: now it takes screenshots for ALL errors (except UIAssertionError)
 
 ## 5.2.3 (released 07.05.2019)
 * upgrade to WebDriverManager 3.4.0
