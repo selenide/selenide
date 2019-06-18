@@ -65,10 +65,11 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
     if (captureSuccessfulTests) {
       log.info(screenshot(driver()));
     } else {
-      final Optional<Throwable> executionException = context.getExecutionException();
-      if (executionException.isPresent() && executionException.get() instanceof UIAssertionError) {
-        log.info(screenshot(driver()));
-      }
+      context.getExecutionException().ifPresent((error) -> {
+        if (!(error instanceof UIAssertionError)) {
+          log.info(screenshot(driver()));
+        }
+      });
     }
   }
 
