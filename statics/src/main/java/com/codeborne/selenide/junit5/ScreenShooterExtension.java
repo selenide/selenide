@@ -40,15 +40,24 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * How to use in Kotlin:
  *
  * <pre>
- * {@code
- * public class MyTest {
- *   companion object {
- *     @JvmField
- *     @RegisterExtension
- *     val screenshotEmAll: ScreenShooterExtension = ScreenShooterExtension(true);
+ *   {@code
+ *     @ExtendWith(ScreenShooterExtension::class)
+ *     public class MyTest {...}
  *   }
- *   ...
- * }
+ * </pre>
+ *
+ * How to use in Kotlin (with customization):
+ *
+ * <pre>
+ * {@code
+ *   public class MyTest {
+ *     companion object {
+ *       @JvmField
+ *       @RegisterExtension
+ *       val screenshotEmAll: ScreenShooterExtension = ScreenShooterExtension(true);
+ *     }
+ *     ...
+ *   }
  * }
  * </pre>
  *
