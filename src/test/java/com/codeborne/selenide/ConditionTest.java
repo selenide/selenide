@@ -218,6 +218,8 @@ class ConditionTest {
     assertThat(cssClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();
+    assertThat(cssClass("").apply(driver, elementWithAttribute("class", "btn btn-warning active"))).isFalse();
+    assertThat(cssClass("active").apply(driver, elementWithAttribute("href", "no-class"))).isFalse();
   }
 
   @Test

@@ -20,6 +20,6 @@ public class MatchText extends Condition {
 
   @Override
   public String toString() {
-    return getName() + " '" + regex + '\'';
+    return String.format("%s '%s'", getName(), regex);
   }
 }

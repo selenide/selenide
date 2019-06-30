@@ -34,6 +34,6 @@ public class Text extends Condition {
 
   @Override
   public String toString() {
-    return getName() + " '" + text + '\'';
+    return String.format("%s '%s'", getName(), text);
   }
 }
