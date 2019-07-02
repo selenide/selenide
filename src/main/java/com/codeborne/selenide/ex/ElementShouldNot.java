@@ -13,7 +13,7 @@ public class ElementShouldNot extends UIAssertionError {
     super(driver,
       "Element should not " + prefix + expectedCondition + " {" + searchCriteria + '}' +
         (message != null ? " because " + message : "") +
-        "\nElement: '" + Describe.describe(driver, element) + '\'' +
+        "\nElement: '" + Describe.describe(driver, element) + "'" +
         actualValue(expectedCondition, driver, element), lastError);
   }
 

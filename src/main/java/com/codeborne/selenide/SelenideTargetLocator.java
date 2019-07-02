@@ -39,7 +39,9 @@ public class SelenideTargetLocator implements TargetLocator {
     } catch (NoSuchElementException | TimeoutException e) {
       throw new NoSuchFrameException("No frame found with index: " + index, e);
     } catch (InvalidArgumentException e) {
-      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with index: " + index, e) : e;
+      throw isFirefox62Bug(e) || isChrome75Error(e)
+        ? new NoSuchFrameException("No frame found with index: " + index, e)
+        : e;
     }
   }
 
@@ -67,6 +69,10 @@ public class SelenideTargetLocator implements TargetLocator {
 
   private boolean isFirefox62Bug(InvalidArgumentException e) {
     return e.getMessage().contains("untagged enum FrameId");
+  }
+
+  private boolean isChrome75Error(InvalidArgumentException e) {
+    return e.getMessage().contains("invalid argument: 'id' out of range");
   }
 
   @Override

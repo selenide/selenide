@@ -61,6 +61,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
     ChromeOptions options = new ChromeOptions();
     if (isHeadless()) options.setHeadless(true);
     options.setProxy(proxy.createSeleniumProxy());
+    options.addArguments("--proxy-bypass-list=<-loopback>");
     return new ChromeDriver(options);
   }
 
@@ -71,6 +72,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
     if (isHeadless()) options.setHeadless(true);
     options.setProxy(proxy.createSeleniumProxy());
     options.addPreference("network.proxy.no_proxies_on", "");
+    options.addPreference("network.proxy.allow_hijacking_localhost", true);
     return new FirefoxDriver(options);
   }
 }

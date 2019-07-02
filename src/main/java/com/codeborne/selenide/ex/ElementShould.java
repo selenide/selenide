@@ -18,7 +18,7 @@ public class ElementShould extends UIAssertionError {
     super(driver,
       "Element should " + prefix + expectedCondition + " {" + searchCriteria + "}" +
         (message != null ? " because " + message : "") +
-        "\nElement: '" + Describe.describe(driver, element) + '\'' +
+        "\nElement: '" + Describe.describe(driver, element) + "'" +
         actualValue(expectedCondition, driver, element), lastError);
   }
 

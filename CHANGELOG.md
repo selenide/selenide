@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.2.4 (released 20.06.2019)
+* upgrade to WebDriverManager 3.6.1
+* upgrade to HtmlUnit 2.35.1
+* fixed ScreenShooterExtension for JUnit5: now it takes screenshots for ALL errors (except UIAssertionError)
+* #454 $$.shouldHave(texts()) checks size of collection -- thanks to A.Smashentsev for PR #944
+* Fix proxy server on localhost for Chrome72+ and Firefox 67+  --  see https://github.com/selenide/selenide/pull/950
+* Now method $.click(offsetX, offsetY) calculates coordinates from the CENTER of element (not upper left corner)
+
 ## 5.2.3 (released 07.05.2019)
 * upgrade to WebDriverManager 3.4.0
 * upgrade to htmlunit 2.34.1

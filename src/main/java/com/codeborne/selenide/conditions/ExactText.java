@@ -20,7 +20,7 @@ public class ExactText extends Condition {
 
   @Override
   public String toString() {
-    return getName() + " '" + expectedText + '\'';
+    return String.format("%s '%s'", getName(), expectedText);
   }
 
 }

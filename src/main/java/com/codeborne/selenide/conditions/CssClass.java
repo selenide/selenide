@@ -20,7 +20,7 @@ public class CssClass extends Condition {
 
   @Override
   public String toString() {
-    return getName() + " '" + expectedCssClass + '\'';
+    return String.format("%s '%s'", getName(), expectedCssClass);
   }
 
   private <T> boolean contains(T[] objects, T object) {
