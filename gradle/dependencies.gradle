@@ -7,7 +7,7 @@ ext {
   htmlunitVersion = '2.34.1'
   htmlunitDriverVersion = '2.34.0'
   seleniumVersion = '3.141.59'
-  junitVersion = '5.4.1'
+  junitVersion = '5.5.0'
 }
 
 dependencies {
@@ -29,18 +29,18 @@ dependencies {
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
-  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.15.v20190215')
+  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.19.v20190610')
   testImplementation("org.testng:testng:$testngVersion")
-  testImplementation('org.mockito:mockito-core:2.25.1')
+  testImplementation('org.mockito:mockito-core:3.0.0')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
-  testImplementation('com.automation-remarks:video-recorder-junit5:1.8')
+  testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.12.2")
   testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
-  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.25')
+  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.26')
   testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }
 
