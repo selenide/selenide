@@ -8,6 +8,7 @@ ext {
   htmlunitDriverVersion = '2.34.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.5.0'
+  jettyVersion = '9.4.19.v20190610'
 }
 
 dependencies {
@@ -18,10 +19,8 @@ dependencies {
 
   implementation('net.lightbody.bmp:browsermob-core:2.1.5')
 
-  compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion")
-  compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") {
-    exclude group: 'net.bytebuddy', module: 'byte-buddy'
-  }
+  compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion") { transitive = false }
+  compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") { transitive = false }
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   compileOnly("org.junit.jupiter:junit-jupiter-migrationsupport:$junitVersion")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
@@ -29,17 +28,21 @@ dependencies {
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
-  testImplementation('org.eclipse.jetty:jetty-servlet:9.4.19.v20190610')
+  testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion")
   testImplementation('org.mockito:mockito-core:3.0.0')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.12.2")
+
+  // for HtmlUnit:
   testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
+    exclude group: 'org.eclipse.jetty.websocket'
   }
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testRuntimeOnly("org.eclipse.jetty.websocket:websocket-client:${jettyVersion}")
 
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.26')
   testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }
