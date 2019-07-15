@@ -116,4 +116,12 @@ class CollectionConditionTest implements WithAssertions {
       .as("Text in any order content")
       .hasToString("TextsInAnyOrder [One, Two, Three]");
   }
+
+  @Test
+  void testExplanationIsIncludedToString() {
+    CollectionCondition collectionCondition = CollectionCondition.texts("One").because("should be");
+    assertThat(collectionCondition)
+      .as("Should contain explanation")
+      .hasToString("Texts [One] (because should be)");
+  }
 }
