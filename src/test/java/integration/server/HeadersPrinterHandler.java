@@ -13,16 +13,16 @@ class HeadersPrinterHandler extends BaseHandler {
     List<String> headers = list(request.getHeaderNames());
 
     String path = request.getPathInfo().replace("/", "");
-    String html = String.format("<html><body>%s!<br>", path);
+    StringBuilder html = new StringBuilder("<html><body>").append(path).append("!<br>");
 
     for (String header : headers) {
       for (String value : list(request.getHeaders(header))) {
-        html += "<br>" + header + "=" + value;
+        html.append("<br>").append(header).append("=").append(value);
       }
     }
 
-    html += "</body></html>";
+    html.append("</body></html>");
 
-    return new Result(SC_OK, CONTENT_TYPE_HTML_TEXT, html);
+    return new Result(SC_OK, CONTENT_TYPE_HTML_TEXT, html.toString());
   }
 }
