@@ -5,8 +5,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
-import java.util.List;
-
 import static com.codeborne.selenide.commands.Util.argsToConditions;
 
 public class Should implements Command<SelenideElement> {
@@ -22,13 +20,9 @@ public class Should implements Command<SelenideElement> {
 
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    should(locator, argsToConditions(args));
-    return proxy;
-  }
-
-  protected void should(WebElementSource locator, List<Condition> conditions) {
-    for (Condition condition : conditions) {
+    for (Condition condition : argsToConditions(args)) {
       locator.checkCondition(prefix, condition, false);
     }
+    return proxy;
   }
 }

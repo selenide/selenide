@@ -5,8 +5,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
-import java.util.List;
-
 import static com.codeborne.selenide.commands.Util.argsToConditions;
 
 public class ShouldNot implements Command<SelenideElement> {
@@ -22,18 +20,9 @@ public class ShouldNot implements Command<SelenideElement> {
 
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    if (args[0] instanceof String) {
-      shouldNot(proxy, locator, argsToConditions(args));
-    }
-    else {
-      shouldNot(proxy, locator, argsToConditions(args));
-    }
-    return proxy;
-  }
-
-  protected void shouldNot(SelenideElement proxy, WebElementSource locator, List<Condition> conditions) {
-    for (Condition condition : conditions) {
+    for (Condition condition : argsToConditions(args)) {
       locator.checkCondition(prefix, condition, true);
     }
+    return proxy;
   }
 }
