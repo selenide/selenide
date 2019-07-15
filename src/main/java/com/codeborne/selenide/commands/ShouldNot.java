@@ -23,17 +23,17 @@ public class ShouldNot implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     if (args[0] instanceof String) {
-      shouldNot(proxy, locator, (String) args[0], argsToConditions(args));
+      shouldNot(proxy, locator, argsToConditions(args));
     }
     else {
-      shouldNot(proxy, locator, null, argsToConditions(args));
+      shouldNot(proxy, locator, argsToConditions(args));
     }
     return proxy;
   }
 
-  protected void shouldNot(SelenideElement proxy, WebElementSource locator, String message, List<Condition> conditions) {
+  protected void shouldNot(SelenideElement proxy, WebElementSource locator, List<Condition> conditions) {
     for (Condition condition : conditions) {
-      locator.checkCondition(prefix, message, condition, true);
+      locator.checkCondition(prefix, condition, true);
     }
   }
 }

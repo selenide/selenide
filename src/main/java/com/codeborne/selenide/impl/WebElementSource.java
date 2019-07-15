@@ -41,7 +41,7 @@ public abstract class WebElementSource {
     return arg instanceof By ? (By) arg : By.cssSelector((String) arg);
   }
 
-  public WebElement checkCondition(String prefix, String message, Condition condition, boolean invert) {
+  public WebElement checkCondition(String prefix, Condition condition, boolean invert) {
     Condition check = invert ? not(condition) : condition;
 
     Throwable lastError = null;
@@ -66,10 +66,10 @@ public abstract class WebElementSource {
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, message, condition, element, lastError);
+      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, condition, element, lastError);
     }
     else {
-      throw new ElementShould(driver(), getSearchCriteria(), prefix, message, condition, element, lastError);
+      throw new ElementShould(driver(), getSearchCriteria(), prefix, condition, element, lastError);
     }
     return null;
   }
@@ -84,7 +84,7 @@ public abstract class WebElementSource {
    * @return element or throws ElementShould/ElementShouldNot exceptions
    */
   public WebElement findAndAssertElementIsInteractable() {
-    return checkCondition("be ", null,
+    return checkCondition("be ",
       or("visible or transparent", visible, have(cssValue("opacity", "0"))),
       false);
   }

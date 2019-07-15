@@ -14,9 +14,9 @@ class ElementShouldNotTest implements WithAssertions {
 
   @Test
   void testToString() {
-    ElementShouldNot elementShould = new ElementShouldNot(driver, "by.name: selenide", "be ", "message", appear,
+    ElementShouldNot elementShould = new ElementShouldNot(driver, "by.name: selenide", "be ", appear,
       mock(WebElement.class), new Throwable("Error message"));
-    assertThat(elementShould).hasToString("Element should not be visible {by.name: selenide} because message\n" +
+    assertThat(elementShould).hasToString("Element should not be visible {by.name: selenide}\n" +
       "Element: '<null displayed:false></null>'\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +

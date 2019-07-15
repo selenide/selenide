@@ -22,17 +22,13 @@ public class Should implements Command<SelenideElement> {
 
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    String message = null;
-    if (args[0] instanceof String) {
-      message = (String) args[0];
-    }
-    should(locator, message, argsToConditions(args));
+    should(locator, argsToConditions(args));
     return proxy;
   }
 
-  protected void should(WebElementSource locator, String message, List<Condition> conditions) {
+  protected void should(WebElementSource locator, List<Condition> conditions) {
     for (Condition condition : conditions) {
-      locator.checkCondition(prefix, message, condition, false);
+      locator.checkCondition(prefix, condition, false);
     }
   }
 }
