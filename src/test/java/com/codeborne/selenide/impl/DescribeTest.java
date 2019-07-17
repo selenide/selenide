@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.ElementShould;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -39,5 +40,30 @@ class DescribeTest implements WithAssertions {
 
     assertThat(Describe.shortly(driver, selenideElement))
       .isEqualTo("StaleElementReferenceException: disappeared");
+  }
+
+  @Test
+  void describe() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = mock(SelenideElement.class);
+    when(selenideElement.getTagName()).thenReturn("h1");
+    when(selenideElement.getText()).thenReturn("Hello yo");
+    when(selenideElement.isDisplayed()).thenReturn(true);
+    when(selenideElement.getAttribute("class")).thenReturn("active");
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 class=\"active\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = mock(SelenideElement.class);
+    when(selenideElement.getTagName()).thenReturn("h1");
+    when(selenideElement.getText()).thenReturn("Hello yo");
+    when(selenideElement.isDisplayed()).thenReturn(true);
+    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    when(selenideElement.getAttribute("class")).thenThrow(new NoSuchElementException("Appium throws exception for missing attributes"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
   }
 }

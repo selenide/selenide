@@ -4,14 +4,18 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 public class Describe {
+  private static final Logger log = Logger.getLogger(Describe.class.getName());
+
   private final Driver driver;
   private final WebElement element;
   private final StringBuilder sb = new StringBuilder();
@@ -29,6 +33,11 @@ public class Describe {
       }
     }
     catch (UnsupportedOperationException browserDoesNotSupportJavaScript) {
+    }
+    catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
+      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
+        log.warning("Failed to get attributes via JS: " + probablyBrowserDoesNotSupportJavaScript.toString());
+      }
     }
     return appendPredefinedAttributes();
   }
@@ -71,8 +80,13 @@ public class Describe {
   }
 
   private Describe attr(String attributeName) {
-    String attributeValue = element.getAttribute(attributeName);
-    return attr(attributeName, attributeValue);
+    try {
+      String attributeValue = element.getAttribute(attributeName);
+      return attr(attributeName, attributeValue);
+    }
+    catch (NoSuchElementException noSuchAttribute) {
+      return this;
+    }
   }
 
   private Describe attr(String attributeName, String attributeValue) {
