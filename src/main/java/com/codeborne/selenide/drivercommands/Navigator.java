@@ -75,6 +75,20 @@ public class Navigator {
     }
   }
 
+  public void open(SelenideDriver driver) {
+    checkThatProxyIsEnabled(driver.config());
+
+    SelenideLog log = SelenideLogger.beginStep("open", "");
+    try {
+      driver.getAndCheckWebDriver();
+      SelenideLogger.commitStep(log, PASS);
+    }
+    catch (RuntimeException | Error e) {
+      SelenideLogger.commitStep(log, e);
+      throw e;
+    }
+  }
+
   private void checkThatProxyIsEnabled(Config config) {
     if (!config.proxyEnabled() && config.fileDownload() == PROXY) {
       throw new IllegalStateException("config.proxyEnabled == false but config.fileDownload == PROXY. " +

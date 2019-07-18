@@ -25,13 +25,6 @@ import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 public class Selenide {
 
   /**
-   * Initialize WebDriver
-   */
-  public static void open(){
-    getSelenideDriver().getAndCheckWebDriver();
-  }
-
-  /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
    *
@@ -110,6 +103,14 @@ public class Selenide {
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(absoluteUrl, domain, login, password);
+  }
+
+  /**
+   * Open an empty browser (without opening any pages).
+   * E.g. useful for starting mobile applications in Appium.
+   */
+  public static void open() {
+    getSelenideDriver().open();
   }
 
   /**

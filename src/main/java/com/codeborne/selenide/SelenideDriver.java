@@ -55,6 +55,10 @@ public class SelenideDriver {
     return driver;
   }
 
+  public void open() {
+    navigator.open(this);
+  }
+
   public void open(String relativeOrAbsoluteUrl) {
     navigator.open(this, relativeOrAbsoluteUrl);
   }

@@ -6,18 +6,21 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class UnopenedBrowserTest {
+class UnopenedBrowserTest {
   @BeforeEach
   void givenNoOpenedBrowsers() {
     close();
   }
 
   @Test
-  void openWoParamsCreatesNewDriver(){
+  void openWoParamsCreatesNewDriver() {
     open();
     assertThat(WebDriverRunner.getWebDriver()).isNotNull();
   }
