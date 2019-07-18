@@ -23,6 +23,14 @@ import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
  * {@link #$(String)} for searching web elements.
  */
 public class Selenide {
+
+  /**
+   * Initialize WebDriver
+   */
+  public static void open(){
+    getSelenideDriver().getAndCheckWebDriver();
+  }
+
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
