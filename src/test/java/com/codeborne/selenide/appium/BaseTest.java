@@ -10,8 +10,10 @@ import static com.codeborne.selenide.Selenide.open;
 public class BaseTest {
   @Before
   public void setUp() {
+    Configuration.startMaximized = false;
+    Configuration.browserSize = null;
     Configuration.browser = AndroidDriverProvider.class.getName();
-    open("/");
+    open();
   }
 
   @After
