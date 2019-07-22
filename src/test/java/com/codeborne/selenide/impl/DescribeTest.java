@@ -76,7 +76,8 @@ class DescribeTest implements WithAssertions {
     when(selenideElement.getText()).thenReturn("Hello yo");
     when(selenideElement.isDisplayed()).thenReturn(true);
     when(selenideElement.getAttribute("name")).thenReturn("theName");
-    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedOperationException("io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
+    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedOperationException(
+      "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
   }
@@ -89,7 +90,8 @@ class DescribeTest implements WithAssertions {
     when(selenideElement.getText()).thenReturn("Hello yo");
     when(selenideElement.isDisplayed()).thenReturn(true);
     when(selenideElement.getAttribute("name")).thenReturn("theName");
-    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedCommandException("io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
+    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedCommandException(
+      "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
   }
