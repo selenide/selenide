@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -55,7 +56,7 @@ class DescribeTest implements WithAssertions {
   }
 
   @Test
-  void describe_appium() {
+  void describe_appium_NoSuchElementException() {
     Driver driver = mock(Driver.class);
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.getTagName()).thenReturn("h1");
@@ -63,6 +64,32 @@ class DescribeTest implements WithAssertions {
     when(selenideElement.isDisplayed()).thenReturn(true);
     when(selenideElement.getAttribute("name")).thenReturn("theName");
     when(selenideElement.getAttribute("class")).thenThrow(new NoSuchElementException("Appium throws exception for missing attributes"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_UnsupportedOperationException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = mock(SelenideElement.class);
+    when(selenideElement.getTagName()).thenReturn("h1");
+    when(selenideElement.getText()).thenReturn("Hello yo");
+    when(selenideElement.isDisplayed()).thenReturn(true);
+    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedOperationException("io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_UnsupportedCommandException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = mock(SelenideElement.class);
+    when(selenideElement.getTagName()).thenReturn("h1");
+    when(selenideElement.getText()).thenReturn("Hello yo");
+    when(selenideElement.isDisplayed()).thenReturn(true);
+    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedCommandException("io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
   }

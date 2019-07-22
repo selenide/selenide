@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.6 (released 22.07.2019)
+* #496 Another fix for $.toString() in Appium
+
 ## 5.2.5 (released 19.07.2019)
 * #496 Fix $.toString() in Appium
 * add Selenide.open() without string parameter  -- thanks to @yaroslav-orel for PR #956
