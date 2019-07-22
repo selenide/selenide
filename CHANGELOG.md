@@ -1,8 +1,9 @@
 # Changelog
 
-## 5.2.5
+## 5.2.5 (released 19.07.2019)
 * #496 Fix $.toString() in Appium
 * add Selenide.open() without string parameter  -- thanks to @yaroslav-orel for PR #956
+* Append condition explanation to $$.toString()  --  thanks to Roman Kliuha for PR #904
 
 ## 5.2.4 (released 20.06.2019)
 * upgrade to WebDriverManager 3.6.1
