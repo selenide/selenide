@@ -18,27 +18,18 @@ import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
-class SeleniumGridTest extends IntegrationTest {
-  private Stoppable gridHub;
-  private Stoppable gridNode;
-
+class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
-    close();
-
-    int hubPort = findFreePort();
-    gridHub = new GridLauncherV3().launch(new String[]{"-port", "" + hubPort});
-
-    gridNode = new GridLauncherV3().launch(new String[]{"-port", "" + findFreePort(),
-      "-role", "node",
-      "-hub", "http://localhost:" + hubPort + "/grid/register"
-    });
-
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
     Configuration.browser = "chrome";
     Configuration.headless = true;
     Configuration.proxyEnabled = true;
-    new WebDriverBinaryManager().setupBinaryPath(new Browser(Configuration.browser, Configuration.headless));
+  }
+
+  @AfterEach
+  void tearDown() {
+    Configuration.remote = null;
   }
 
   @Test
@@ -53,13 +44,5 @@ class SeleniumGridTest extends IntegrationTest {
     RemoteWebDriver webDriver = (RemoteWebDriver) getWebDriver();
 
     assertThat(webDriver.getFileDetector()).isInstanceOf(LocalFileDetector.class);
-  }
-
-  @AfterEach
-  void tearDown() {
-    close();
-    gridHub.stop();
-    gridNode.stop();
-    Configuration.remote = null;
   }
 }
