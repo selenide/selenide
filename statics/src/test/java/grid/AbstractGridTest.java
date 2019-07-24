@@ -15,7 +15,7 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 abstract class AbstractGridTest extends IntegrationTest {
   private Stoppable gridHub;
   private Stoppable gridNode;
-  protected int hubPort;
+  int hubPort;
 
   @BeforeEach
   final void setUpGrid() {
