@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -46,11 +47,7 @@ class DescribeTest implements WithAssertions {
   @Test
   void describe() {
     Driver driver = mock(Driver.class);
-    SelenideElement selenideElement = mock(SelenideElement.class);
-    when(selenideElement.getTagName()).thenReturn("h1");
-    when(selenideElement.getText()).thenReturn("Hello yo");
-    when(selenideElement.isDisplayed()).thenReturn(true);
-    when(selenideElement.getAttribute("class")).thenReturn("active");
+    SelenideElement selenideElement = element("h1", "class", "active");
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 class=\"active\">Hello yo</h1>");
   }
@@ -58,11 +55,7 @@ class DescribeTest implements WithAssertions {
   @Test
   void describe_appium_NoSuchElementException() {
     Driver driver = mock(Driver.class);
-    SelenideElement selenideElement = mock(SelenideElement.class);
-    when(selenideElement.getTagName()).thenReturn("h1");
-    when(selenideElement.getText()).thenReturn("Hello yo");
-    when(selenideElement.isDisplayed()).thenReturn(true);
-    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("class")).thenThrow(new NoSuchElementException("Appium throws exception for missing attributes"));
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
@@ -71,11 +64,7 @@ class DescribeTest implements WithAssertions {
   @Test
   void describe_appium_UnsupportedOperationException() {
     Driver driver = mock(Driver.class);
-    SelenideElement selenideElement = mock(SelenideElement.class);
-    when(selenideElement.getTagName()).thenReturn("h1");
-    when(selenideElement.getText()).thenReturn("Hello yo");
-    when(selenideElement.isDisplayed()).thenReturn(true);
-    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedOperationException(
       "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
 
@@ -85,14 +74,57 @@ class DescribeTest implements WithAssertions {
   @Test
   void describe_appium_UnsupportedCommandException() {
     Driver driver = mock(Driver.class);
-    SelenideElement selenideElement = mock(SelenideElement.class);
-    when(selenideElement.getTagName()).thenReturn("h1");
-    when(selenideElement.getText()).thenReturn("Hello yo");
-    when(selenideElement.isDisplayed()).thenReturn(true);
-    when(selenideElement.getAttribute("name")).thenReturn("theName");
+    SelenideElement selenideElement = element("h1", "name", "theName");
     when(selenideElement.getAttribute("disabled")).thenThrow(new UnsupportedCommandException(
       "io.appium.uiautomator2.common.exceptions.NoAttributeFoundException: 'disabled' attribute is unknown for the element"));
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"theName\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_isSelected_UnsupportedOperationException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("h1", "name", "fname");
+    when(selenideElement.isSelected()).thenThrow(new UnsupportedOperationException("isSelected doesn't work in iOS"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"fname\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_isSelected_WebDriverException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("h1", "name", "fname");
+    when(selenideElement.isSelected()).thenThrow(new WebDriverException("isSelected might fail on stolen element"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<h1 name=\"fname\">Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_isDisplayed_UnsupportedOperationException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("h1", "name", "fname");
+    when(selenideElement.isDisplayed()).thenThrow(new UnsupportedOperationException("it happens"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo(
+      "<h1 name=\"fname\" displayed:java.lang.UnsupportedOperationException: it happens>Hello yo</h1>");
+  }
+
+  @Test
+  void describe_appium_isDisplayed_WebDriverException() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("h1", "name", "fname");
+    when(selenideElement.isDisplayed()).thenThrow(new WebDriverException("isDisplayed might fail on stolen element"));
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo(
+      "<h1 name=\"fname\" displayed:WebDriverException: isDisplayed might fail on stolen element>Hello yo</h1>");
+  }
+
+  private SelenideElement element(String tagName, String attributeName, String attributeValue) {
+    SelenideElement selenideElement = mock(SelenideElement.class);
+    when(selenideElement.getTagName()).thenReturn(tagName);
+    when(selenideElement.getText()).thenReturn("Hello yo");
+    when(selenideElement.isDisplayed()).thenReturn(true);
+    when(selenideElement.getAttribute(attributeName)).thenReturn(attributeValue);
+    return selenideElement;
   }
 }

@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
@@ -158,8 +157,7 @@ public class Describe {
       if (element.isSelected()) {
         sb.append(' ').append("selected:true");
       }
-    } catch (UnsupportedOperationException ignore) {
-    } catch (InvalidElementStateException ignore) {
+    } catch (UnsupportedOperationException | WebDriverException ignore) {
     }
     return this;
   }
@@ -169,10 +167,8 @@ public class Describe {
       if (!element.isDisplayed()) {
         sb.append(' ').append("displayed:false");
       }
-    } catch (UnsupportedOperationException e) {
-      sb.append(' ').append("displayed:").append(e);
-    } catch (InvalidElementStateException e) {
-      sb.append(' ').append("displayed:").append(e);
+    } catch (UnsupportedOperationException | WebDriverException e) {
+      sb.append(' ').append("displayed:").append(Cleanup.of.webdriverExceptionMessage(e));
     }
     return this;
   }
