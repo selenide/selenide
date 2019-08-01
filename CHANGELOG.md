@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.7 (released 01.08.2019)
+* #928 fix paradoxical "IllegalStateException: You need to call open(url) first" from open method
+* One more fix for $.toString() in Appium (iOS)
+
 ## 5.2.6 (released 22.07.2019)
 * #496 Another fix for $.toString() in Appium
 
