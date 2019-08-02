@@ -4,6 +4,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -32,7 +33,8 @@ public class Describe {
         return appendAllAttributes();
       }
     }
-    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException browserDoesNotSupportJavaScript) {
+    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException |
+      StaleElementReferenceException browserDoesNotSupportJavaScript) {
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
       if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
@@ -84,12 +86,13 @@ public class Describe {
       String attributeValue = element.getAttribute(attributeName);
       return attr(attributeName, attributeValue);
     }
-    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException browserDoesNotSupportJavaScript) {
+    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException |
+      StaleElementReferenceException browserDoesNotSupportJavaScript) {
       return this;
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
       if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
-        log.warning("Failed to get attributes via JS: " + probablyBrowserDoesNotSupportJavaScript.toString());
+        log.warning(String.format("Failed to get attribute %s: %s", attributeName, probablyBrowserDoesNotSupportJavaScript.toString()));
       }
       return this;
     }

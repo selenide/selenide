@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.2.8 (released 02.08.2019)
+* #961 Fix spam in logs "Failed to get attributes via JS..."
+
 ## 5.2.7 (released 01.08.2019)
 * #928 fix paradoxical "IllegalStateException: You need to call open(url) first" from open method
 * One more fix for $.toString() in Appium (iOS)
