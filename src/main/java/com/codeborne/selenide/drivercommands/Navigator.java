@@ -13,11 +13,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
 import java.net.URL;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.util.regex.Pattern.DOTALL;
 
 public class Navigator {
+  protected Pattern absoluteUrlRegex = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
+
   private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
@@ -152,7 +156,7 @@ public class Navigator {
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
-    return relativeOrAbsoluteUrl.matches("^[a-zA-Z]+:.*");
+    return absoluteUrlRegex.matcher(relativeOrAbsoluteUrl).matches();
   }
 
   public void back(Driver driver) {

@@ -52,6 +52,9 @@ class NavigatorTest implements WithAssertions {
     assertThat(navigator.isAbsoluteUrl("file:///tmp/memory.dump"))
       .as("protocol file")
       .isTrue();
+    assertThat(navigator.isAbsoluteUrl("https://selenide.org\n"))
+      .as("ignores newline")
+      .isTrue();
 
     assertThat(navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"))
       .as("case insensitive: HTTP")
