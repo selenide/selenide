@@ -1,7 +1,8 @@
 # Changelog
 
-## 5.2.8 (released 02.08.2019)
+## 5.2.8 (released 03.08.2019)
 * #961 Fix spam in logs "Failed to get attributes via JS..."
+* #930 Make method Condition.applyNull() overridable
 
 ## 5.2.7 (released 01.08.2019)
 * #928 fix paradoxical "IllegalStateException: You need to call open(url) first" from open method

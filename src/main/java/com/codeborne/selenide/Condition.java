@@ -393,7 +393,7 @@ public abstract class Condition {
    */
   public abstract boolean apply(Driver driver, WebElement element);
 
-  public final boolean applyNull() {
+  public boolean applyNull() {
     return nullIsAllowed;
   }
 
