@@ -31,6 +31,6 @@ class AttributeWithValueTest {
 
   @Test
   void tostring() {
-    assertThat(new AttributeWithValue("data-id", "expected").toString()).isEqualTo("attribute data-id=\"expected\"");
+    assertThat(new AttributeWithValue("data-id", "expected")).hasToString("attribute data-id=\"expected\"");
   }
 }

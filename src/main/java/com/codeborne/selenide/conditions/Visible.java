@@ -13,4 +13,9 @@ public class Visible extends Condition {
   public boolean apply(Driver driver, WebElement element) {
     return element.isDisplayed();
   }
+
+  @Override
+  public String actualValue(Driver driver, WebElement element) {
+    return String.format("visible:%s", element.isDisplayed());
+  }
 }

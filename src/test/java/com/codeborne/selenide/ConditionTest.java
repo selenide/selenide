@@ -22,7 +22,7 @@ class ConditionTest {
   void displaysHumanReadableName() {
     assertThat(visible).hasToString("visible");
     assertThat(hidden).hasToString("hidden");
-    assertThat(attribute("lastName", "Malkovich")).hasToString("attribute lastName=Malkovich");
+    assertThat(attribute("lastName", "Malkovich")).hasToString("attribute lastName=\"Malkovich\"");
   }
 
   @Test
@@ -360,18 +360,16 @@ class ConditionTest {
   void elementOrConditionActualValue() {
     WebElement element = elementWithSelectedAndText(false, "text");
     Condition condition = or("selected with text", be(selected), have(text("text")));
-    assertThat(condition.actualValue(driver, element)).isNullOrEmpty();
+    assertThat(condition.actualValue(driver, element)).isEqualTo("false, null");
     assertThat(condition.apply(driver, element)).isTrue();
-    assertThat(condition.actualValue(driver, element)).isEqualTo("false");
   }
 
   @Test
   void elementOrConditionToString() {
     WebElement element = elementWithSelectedAndText(false, "text");
     Condition condition = or("selected with text", be(selected), have(text("text")));
-    assertThat(condition).hasToString("selected with text");
+    assertThat(condition).hasToString("selected with text: be selected or have text 'text'");
     assertThat(condition.apply(driver, element)).isTrue();
-    assertThat(condition).hasToString("be selected");
   }
 
   @Test

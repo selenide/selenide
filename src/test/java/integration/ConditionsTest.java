@@ -1,12 +1,15 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.or;
@@ -21,18 +24,37 @@ class ConditionsTest extends ITest {
 
   @Test
   void andShouldCheckConditions() {
-    $("#multirowTable").should(and("both true", be(visible), have(cssClass("table"))));
-    $("#multirowTable").shouldNot(and("first true", be(visible), have(cssClass("table1"))));
-    $("#multirowTable").shouldNot(and("second true", be(hidden), have(cssClass("table"))));
-    $("#multirowTable").shouldNot(and("both false", be(hidden), have(cssClass("table1"))));
+    $("#multirowTable").should(and("visible && table", be(visible), have(cssClass("table")))); // both true
+    $("#multirowTable").shouldNot(and("visible && list", be(visible), have(cssClass("list")))); // first true
+    $("#multirowTable").shouldNot(and("hidden && table", be(hidden), have(cssClass("table")))); // second true
+    $("#multirowTable").shouldNot(and("hidden && list", be(hidden), have(cssClass("list")))); // both false
   }
 
   @Test
   void orShouldCheckConditions() {
-    $("#multirowTable").should(or("both true", be(visible), have(cssClass("table"))));
-    $("#multirowTable").should(or("first true", be(visible), have(cssClass("table1"))));
-    $("#multirowTable").should(or("second true", be(hidden), have(cssClass("table"))));
-    $("#multirowTable").shouldNot(or("both false", be(hidden), have(cssClass("table1"))));
+    $("#multirowTable").should(or("visible || table", be(visible), have(cssClass("table")))); // both true
+    $("#multirowTable").should(or("visible || list", be(visible), have(cssClass("table1")))); // first true
+    $("#multirowTable").should(or("hidden || table", be(hidden), have(cssClass("table")))); // second true
+    $("#multirowTable").shouldNot(or("hidden || list", be(hidden), have(cssClass("list")))); // both false
+  }
+
+  @Test
+  void orShouldReportAllConditions() {
+    assertThatThrownBy(() ->
+      $("#multirowTable").shouldBe(or("non-active", be(disabled), have(cssClass("inactive"))))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should be non-active: be disabled or have css class 'inactive' {#multirowTable}");
+  }
+
+  @Test
+  void orShouldReportAllConditionsWithActualValues() {
+    assertThatThrownBy(() ->
+      $("#multirowTable").shouldHave(or("class || border", attribute("class", "foo"), attribute("border", "bar")))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageStartingWith("Element should have class || border: attribute class=\"foo\" or attribute border=\"bar\" {#multirowTable}")
+      .hasMessageContaining("Actual value: class=\"table multirow_table\", border=\"1\"");
   }
 
   @Test
