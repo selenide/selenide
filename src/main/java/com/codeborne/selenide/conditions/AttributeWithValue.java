@@ -16,15 +16,20 @@ public class AttributeWithValue extends Condition {
 
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    return expectedAttributeValue.equals(getAttributeValue(element, attributeName));
+    return expectedAttributeValue.equals(getAttributeValue(element));
+  }
+
+  @Override
+  public String actualValue(Driver driver, WebElement element) {
+    return String.format("%s=\"%s\"", attributeName, getAttributeValue(element));
   }
 
   @Override
   public String toString() {
-    return getName() + " " + attributeName + '=' + expectedAttributeValue;
+    return String.format("%s %s=\"%s\"", getName(), attributeName, expectedAttributeValue);
   }
 
-  private String getAttributeValue(WebElement element, String attributeName) {
+  private String getAttributeValue(WebElement element) {
     String attr = element.getAttribute(attributeName);
     return attr == null ? "" : attr;
   }
