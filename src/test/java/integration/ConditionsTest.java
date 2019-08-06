@@ -53,7 +53,8 @@ class ConditionsTest extends ITest {
       $("#multirowTable").shouldHave(or("class || border", attribute("class", "foo"), attribute("border", "bar")))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should have class || border: attribute class=\"foo\" or attribute border=\"bar\" {#multirowTable}")
+      .hasMessageStartingWith(
+        "Element should have class || border: attribute class=\"foo\" or attribute border=\"bar\" {#multirowTable}")
       .hasMessageContaining("Actual value: class=\"table multirow_table\", border=\"1\"");
   }
 

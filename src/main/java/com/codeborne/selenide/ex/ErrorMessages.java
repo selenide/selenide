@@ -8,6 +8,8 @@ import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import static org.apache.commons.lang3.StringUtils.substring;
+
 public class ErrorMessages {
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
@@ -22,9 +24,15 @@ public class ErrorMessages {
 
   static String actualValue(Condition condition, Driver driver, WebElement element) {
     if (element != null) {
-      String actualValue = condition.actualValue(driver, element);
-      if (actualValue != null) {
-        return "\nActual value: " + actualValue;
+      try {
+        String actualValue = condition.actualValue(driver, element);
+        if (actualValue != null) {
+          return "\nActual value: " + actualValue;
+        }
+      }
+      catch (RuntimeException failedToGetValue) {
+        String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
+        return "\nActual value: " + substring(failedActualValue, 0, 50);
       }
     }
     return "";
@@ -33,7 +41,7 @@ public class ErrorMessages {
   public static String screenshot(Driver driver) {
     return screenshot(driver.config(), ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
   }
-  
+
   public static String screenshot(Config config, String screenshotPath) {
     if (!config.screenshots()) {
       return "";
