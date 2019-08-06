@@ -443,8 +443,8 @@ class SelenideMethodsTest extends IntegrationTest {
 
     $("#login").contextClick().click();
 
-    $(By.name("domain")).find("option").click();
-    $(By.name("domain")).find("option").contextClick();
+    $(By.name("domain")).click();
+    $(By.name("domain")).contextClick();
   }
 
   @Test
