@@ -6,10 +6,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.joining;
+
 public class Or extends Condition {
 
   private final List<Condition> conditions;
-  private Condition firstFailedCondition;
 
   public Or(String name, List<Condition> conditions) {
     super(name);
@@ -18,14 +19,9 @@ public class Or extends Condition {
 
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    firstFailedCondition = null;
-
     for (Condition c : conditions) {
       if (c.apply(driver, element)) {
         return true;
-      }
-      else if (firstFailedCondition == null) {
-        firstFailedCondition = c;
       }
     }
     return false;
@@ -33,11 +29,12 @@ public class Or extends Condition {
 
   @Override
   public String actualValue(Driver driver, WebElement element) {
-    return firstFailedCondition == null ? null : firstFailedCondition.actualValue(driver, element);
+    return conditions.stream().map(condition -> condition.actualValue(driver, element)).collect(joining(", "));
   }
 
   @Override
   public String toString() {
-    return firstFailedCondition == null ? super.toString() : firstFailedCondition.toString();
+    String conditionsToString = conditions.stream().map(Condition::toString).collect(joining(" or "));
+    return String.format("%s: %s", getName(), conditionsToString);
   }
 }

@@ -103,8 +103,9 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementShould");
     }
     catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have attribute name=header \\{h2\\}\n" +
+      assertThat(expected.toString()).matches("Element should have attribute name=\"header\" \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
+        "Actual value: name=\"\"\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
@@ -133,11 +134,13 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementShould");
     }
     catch (ElementShould elementShouldExist) {
-      assertThat(elementShouldExist.toString()).matches("Element should be visible \\{\\#theHiddenElement\\}\n" +
-        "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
-        "Timeout: 15 ms.");
+      assertThat(elementShouldExist.toString()).matches(
+        "Element should be visible or transparent: visible or have css value opacity=0 \\{\\#theHiddenElement\\}\n" +
+          "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
+          "Actual value: visible:false, 1\n" +
+          (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
+          "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
+          "Timeout: 15 ms.");
       assertThat(elementShouldExist.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET" + pngOrHtml());
     }
   }
@@ -198,7 +201,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     }
     catch (ElementNotFound e) {
       assertStartsWith("Element not found \\{By.id: invalid_id\\}\n" +
-        "Expected: visible or transparent\n" +
+        "Expected: visible or transparent: visible or have css value opacity=0\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.\n" +

@@ -1,8 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <title>Test::dynamic select</title>
+  <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js" language="JavaScript"></script>
+  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
     var commandDuration = 100;
 
@@ -15,7 +17,7 @@
 
     function rebuildBooks() {
       $('#books').remove();
-      if ($('#language').val() == 'rus') {
+      if ($('#language').val() === 'rus') {
         setTimeout(buildBooks, commandDuration*1.5);
       }
     }

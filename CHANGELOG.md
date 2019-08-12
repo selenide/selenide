@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.2.9
+* support URLs with newlines
+* #469 improve error message of OR condition
+* upgrade to webdrivermanager:3.6.2
+
 ## 5.2.8 (released 03.08.2019)
 * #961 Fix spam in logs "Failed to get attributes via JS..."
 * #930 Make method Condition.applyNull() overridable
