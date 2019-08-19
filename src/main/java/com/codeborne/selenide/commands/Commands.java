@@ -43,6 +43,7 @@ public class Commands {
     add("screenshot", new TakeScreenshot());
     add("screenshotAsImage", new TakeScreenshotAsImage());
     add("getSearchCriteria", new GetSearchCriteria());
+    add("customCommand", new CustomCommand());
   }
 
   private void addActionsCommands() {
