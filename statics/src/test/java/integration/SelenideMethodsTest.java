@@ -56,6 +56,7 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -574,6 +575,8 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canExecuteCustomCommand() {
+    assumeFalse(browser().isHtmlUnit());
+
     final Replace replace = new Replace();
     $("#username").setValue("value");
     $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();
