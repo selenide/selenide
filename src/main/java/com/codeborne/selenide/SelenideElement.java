@@ -799,10 +799,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param command custom command
    * @return this element
    *
-   * @see com.codeborne.selenide.commands.CustomCommand
+   * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
    */
-  SelenideElement customCommand(Command<SelenideElement> command);
+  SelenideElement execute(Command<SelenideElement> command);
 
   /**
    * Check if image is properly loaded.

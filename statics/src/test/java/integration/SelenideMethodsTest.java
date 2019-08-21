@@ -576,7 +576,8 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void canExecuteCustomCommand() {
     final Replace replace = new Replace();
-    $("#username").scrollTo().customCommand(replace.withValue("custom value")).pressEnter();
+    $("#username").setValue("value");
+    $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();
     String mirrorText = $("#username-mirror").text();
     assertThat(mirrorText).startsWith("custom value");
   }
@@ -591,7 +592,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
     @Override
     public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-      proxy.sendKeys(Keys.chord(Keys.CONTROL, "a"), value);
+      proxy.doubleClick().sendKeys(value);
       return proxy;
     }
   }

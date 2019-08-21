@@ -6,7 +6,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 
 import java.io.IOException;
 
-public class CustomCommand implements Command<SelenideElement> {
+public class Execute implements Command<SelenideElement> {
   @Override
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     Command command = (Command) args[0];
