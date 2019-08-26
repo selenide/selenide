@@ -794,6 +794,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
+   * Execute custom implemented command
+   *
+   * @param command custom command
+   * @return this element
+   *
+   * @see com.codeborne.selenide.commands.Execute
+   * @see com.codeborne.selenide.Command
+   */
+  SelenideElement execute(Command<SelenideElement> command);
+
+  /**
    * Check if image is properly loaded.
    *
    * @throws IllegalArgumentException if argument is not an "img" element

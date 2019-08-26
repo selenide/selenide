@@ -1,10 +1,13 @@
 package integration;
 
+import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -53,6 +56,7 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -567,5 +571,31 @@ class SelenideMethodsTest extends IntegrationTest {
     elements("[name='me']").shouldHave(size(4));
     elements(By.cssSelector("[name='me']")).shouldHave(size(4));
     elements(getWebDriver().findElements(By.cssSelector("[name='me']"))).shouldHave(size(4));
+  }
+
+  @Test
+  void canExecuteCustomCommand() {
+    assumeFalse(browser().isHtmlUnit());
+
+    final Replace replace = new Replace();
+    $("#username").setValue("value");
+    $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();
+    String mirrorText = $("#username-mirror").text();
+    assertThat(mirrorText).startsWith("custom value");
+  }
+
+  static class Replace implements Command<SelenideElement> {
+    private String value;
+
+    Replace withValue(String value) {
+      this.value = value;
+      return this;
+    }
+
+    @Override
+    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+      proxy.doubleClick().sendKeys(value);
+      return proxy;
+    }
   }
 }
