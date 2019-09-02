@@ -22,7 +22,6 @@ class HrefTest extends IntegrationTest {
     })
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("Element should have attribute href=\"/files/hello_world.txt\" {by text: Download me}")
-      .hasMessageContaining("Element: '<a href=\"/files/hello_world.txt\">Download me</a>'")
       .hasMessageContaining(String.format("Actual value: href=\"%s/files/hello_world.txt\"", Configuration.baseUrl));
   }
 }
