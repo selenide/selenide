@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.9
+## 5.3.0 (released 02.09.2019)
 * support URLs with newlines
 * #469 improve error message of OR condition
 * #970 improve error message of `shouldHave(attribute("href", ..."))`
