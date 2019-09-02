@@ -3,6 +3,7 @@
 ## 5.2.9
 * support URLs with newlines
 * #469 improve error message of OR condition
+* #970 improve error message of `shouldHave(attribute("href", ..."))`
 * upgrade to webdrivermanager:3.6.2
 * add custom command executor
 
