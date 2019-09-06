@@ -25,7 +25,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.getElement;
+import static com.codeborne.selenide.Selenide.element;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ErrorMessagesForMissingElementTest extends IntegrationTest {
@@ -115,7 +115,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
   @Test
   void wrapperTextDoesNotMatch() {
     try {
-      $(getElement(By.tagName("h2"))).shouldHave(text("expected text"));
+      $(element(By.tagName("h2"))).shouldHave(text("expected text"));
       fail("Expected ElementShould");
     }
     catch (ElementShould expected) {
