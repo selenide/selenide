@@ -1,5 +1,6 @@
 package com.codeborne.selenide.collections;
 
+import com.codeborne.selenide.Mocks;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
@@ -10,47 +11,45 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class SizeGreaterThanOrEqualTest implements WithAssertions {
   @Test
-  void testApplyWithEmptyList() {
+  void applyWithEmptyList() {
     assertThat(new SizeGreaterThanOrEqual(10).apply(emptyList()))
       .isFalse();
   }
 
   @Test
-  void testApplyWithWrongSizeList() {
+  void applyWithWrongSizeList() {
     assertThat(new SizeGreaterThanOrEqual(10).apply(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
   @Test
-  void testApplyWithSameSize() {
+  void applyWithSameSize() {
     assertThat(new SizeGreaterThanOrEqual(1).apply(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 
   @Test
-  void testApplyWithGreaterSize() {
+  void applyWithGreaterSize() {
     assertThat(new SizeGreaterThanOrEqual(1).apply(asList(mock(WebElement.class), mock(WebElement.class))))
       .isTrue();
   }
 
   @Test
-  void testFailMethod() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.description()).thenReturn("Collection description");
+  void failMethod() {
+    WebElementsCollection collection = Mocks.mockCollection("Collection description");
 
-    try {
-      new SizeGreaterThanOrEqual(10).fail(mockedWebElementCollection,
+    assertThatThrownBy(() ->
+      new SizeGreaterThanOrEqual(10).fail(collection,
         emptyList(),
         new Exception("Exception message"),
-        10000);
-    } catch (ListSizeMismatch ex) {
-      assertThat(ex)
-        .hasMessage(": expected: >= 10, actual: 0, collection: Collection description\nElements: []");
-    }
+        10000))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch. " +
+        "Expected: >= 10, actual: 0, collection: Collection description\n" +
+        "Elements: []");
   }
 
   @Test

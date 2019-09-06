@@ -13,10 +13,10 @@ public class ToString implements Command<String> {
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     try {
       return Describe.describe(locator.driver(), locator.getWebElement());
-    } catch (WebDriverException | ElementNotFound elementDoesNotExist) {
+    } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
-    } catch (IndexOutOfBoundsException invalidElementIndex) {
-      return invalidElementIndex.toString();
+    } catch (ElementNotFound | IndexOutOfBoundsException elementDoesNotExist) {
+      return elementDoesNotExist.toString();
     }
   }
 }

@@ -10,12 +10,11 @@ class DialogTextMismatchTest implements WithAssertions {
   void dialogMismatchTextStringTest() {
     Driver driver = new DriverStub();
     DialogTextMismatch dialogTextMismatch = new DialogTextMismatch(driver, "Actual text", "Expected text");
-    String expectedString = "DialogTextMismatch \n" +
+
+    assertThat(dialogTextMismatch).hasMessage("Dialog text mismatch\n" +
       "Actual: Actual text\n" +
       "Expected: Expected text\n" +
       "Screenshot: null\n" +
-      "Timeout: 0 ms.";
-    assertThat(dialogTextMismatch)
-      .hasToString(expectedString);
+      "Timeout: 0 ms.");
   }
 }

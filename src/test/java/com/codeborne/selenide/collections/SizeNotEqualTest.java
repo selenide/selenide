@@ -6,44 +6,40 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class SizeNotEqualTest implements WithAssertions {
   @Test
-  void testApplyWithEmptyList() {
+  void applyWithEmptyList() {
     assertThat(new SizeNotEqual(10).apply(emptyList()))
       .isTrue();
   }
 
   @Test
-  void testApplyWithWrongSizeList() {
+  void applyWithWrongSizeList() {
     assertThat(new SizeNotEqual(10).apply(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 
   @Test
-  void testApplyWithCorrectSizeNotEqual() {
+  void applyWithCorrectSizeNotEqual() {
     assertThat(new SizeNotEqual(1).apply(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
   @Test
-  void testFailMethod() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.description()).thenReturn("Collection description");
+  void failMethod() {
+    WebElementsCollection collection = mockCollection("Collection description");
 
-    try {
-      new SizeNotEqual(10).fail(mockedWebElementCollection,
-        emptyList(),
-        new Exception("Exception message"),
-        10000);
-    } catch (ListSizeMismatch ex) {
-      assertThat(ex)
-        .hasMessage(": expected: <> 10, actual: 0, collection: Collection description\nElements: []");
-    }
+    assertThatThrownBy(() -> new SizeNotEqual(10).fail(collection,
+      emptyList(),
+      new Exception("Exception message"),
+      10000))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch. Expected: <> 10, actual: 0, collection: Collection description\nElements: []");
   }
 
   @Test

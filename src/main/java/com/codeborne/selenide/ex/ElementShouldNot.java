@@ -15,9 +15,4 @@ public class ElementShouldNot extends UIAssertionError {
         "\nElement: '" + Describe.describe(driver, element) + "'" +
         actualValue(expectedCondition, driver, element), lastError);
   }
-
-  @Override
-  public String toString() {
-    return getMessage() + uiDetails();
-  }
 }

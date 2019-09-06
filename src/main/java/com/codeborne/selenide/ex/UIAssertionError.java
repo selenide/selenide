@@ -16,7 +16,7 @@ public class UIAssertionError extends AssertionError {
   public long timeoutMs;
 
   public UIAssertionError(Driver driver, Throwable cause) {
-    this(driver, cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
+    this(driver, cause.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(cause.getMessage()), cause);
   }
 
   protected UIAssertionError(Driver driver, String message) {
@@ -30,8 +30,8 @@ public class UIAssertionError extends AssertionError {
   }
 
   @Override
-  public String toString() {
-    return getClass().getSimpleName() + " " + getLocalizedMessage() + uiDetails();
+  public final String getMessage() {
+    return super.getMessage() + uiDetails();
   }
 
   protected String uiDetails() {
