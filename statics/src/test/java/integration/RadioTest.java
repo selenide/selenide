@@ -51,13 +51,13 @@ class RadioTest extends IntegrationTest {
   void selenideElement_selectRadio_elementNotFound() {
     assertThatThrownBy(() -> $(By.id("unknownId")).selectRadio("margarita"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.id: unknownId}\nExpected: value 'margarita'");
+      .hasMessageStartingWith("Element not found {By.id: unknownId}\nExpected: value 'margarita'");
   }
 
   @Test
   void selenideElement_selectRadio_valueNotFound() {
     assertThatThrownBy(() -> $(By.name("me")).selectRadio("unknown-value"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.name: me}\nExpected: value 'unknown-value'");
+      .hasMessageStartingWith("Element not found {By.name: me}\nExpected: value 'unknown-value'");
   }
 }

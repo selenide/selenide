@@ -54,7 +54,7 @@ class ToStringCommandTest implements WithAssertions {
     doThrow(new ElementNotFound(driver, By.name(""), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo("com.codeborne.selenide.ex.ElementNotFound: Element not found {By.name: }\n" +
+      .isEqualTo("Element not found {By.name: }\n" +
         "Expected: visible\n" +
         "Screenshot: null\n" +
         "Timeout: 0 ms.");

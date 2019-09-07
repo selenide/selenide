@@ -15,7 +15,9 @@ public class ToString implements Command<String> {
       return Describe.describe(locator.driver(), locator.getWebElement());
     } catch (WebDriverException elementDoesNotExist) {
       return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
-    } catch (ElementNotFound | IndexOutOfBoundsException elementDoesNotExist) {
+    } catch (ElementNotFound elementDoesNotExist) {
+      return elementDoesNotExist.getMessage();
+    } catch (IndexOutOfBoundsException elementDoesNotExist) {
       return elementDoesNotExist.toString();
     }
   }

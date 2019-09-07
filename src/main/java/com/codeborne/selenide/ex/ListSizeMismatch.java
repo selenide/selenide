@@ -12,7 +12,7 @@ public class ListSizeMismatch extends UIAssertionError {
   public ListSizeMismatch(Driver driver, String operator, int expectedSize, String explanation, WebElementsCollection collection,
                           List<WebElement> actualElements, Exception lastError, long timeoutMs) {
     super(driver,
-      "List size mismatch. Expected: " + operator + ' ' + expectedSize +
+      "List size mismatch: expected: " + operator + ' ' + expectedSize +
         (explanation == null ? "" : " (because " + explanation + ")") +
         ", actual: " + (actualElements == null ? 0 : actualElements.size()) +
         ", collection: " + collection.description() +

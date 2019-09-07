@@ -39,7 +39,7 @@ class ListSizeMismatchTest implements WithAssertions {
       timeoutMs);
 
     assertThat(listSizeMismatch)
-      .hasMessage("List size mismatch. Expected: <= 10, actual: 3, collection: Collection description\n" +
+      .hasMessage("List size mismatch: expected: <= 10, actual: 3, collection: Collection description\n" +
         "Elements: [\n" +
         "\t<div displayed:false>Niff</div>,\n" +
         "\t<div displayed:false>Naff</div>,\n" +
@@ -61,7 +61,7 @@ class ListSizeMismatchTest implements WithAssertions {
       timeoutMs);
 
     assertThat(listSizeMismatch)
-      .hasMessage("List size mismatch. Expected: > 10" +
+      .hasMessage("List size mismatch: expected: > 10" +
         " (because it's said in customer requirement #12345), actual: 3, collection: Collection description\n" +
         "Elements: [\n" +
         "\t<div displayed:false>Niff</div>,\n" +

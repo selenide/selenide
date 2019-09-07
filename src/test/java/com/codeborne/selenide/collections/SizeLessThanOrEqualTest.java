@@ -41,7 +41,7 @@ class SizeLessThanOrEqualTest implements WithAssertions {
         new Exception("Exception message"),
         10000))
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch. Expected: <= 10, actual: 0, collection: Collection description\nElements: []");
+      .hasMessageStartingWith("List size mismatch: expected: <= 10, actual: 0, collection: Collection description\nElements: []");
   }
 
   @Test
