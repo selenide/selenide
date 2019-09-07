@@ -79,7 +79,8 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#radioButtons input").shouldHave(size(100).because("I expect many inputs"));
     } catch (ListSizeMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("List size mismatch: expected: = 100 (because I expect many inputs), actual: 4, collection: #radioButtons input");
+        .hasMessageStartingWith("List size mismatch: expected: = 100 (because I expect many inputs)," +
+          " actual: 4, collection: #radioButtons input");
     }
   }
 
@@ -89,7 +90,8 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#radioButtons input").shouldHave(sizeGreaterThan(100).because("I expect many inputs"));
     } catch (ListSizeMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("List size mismatch: expected: > 100 (because I expect many inputs), actual: 4, collection: #radioButtons input");
+        .hasMessageStartingWith("List size mismatch: expected: > 100 (because I expect many inputs)," +
+          " actual: 4, collection: #radioButtons input");
     }
   }
 }
