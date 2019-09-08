@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.3.1
+## 5.3.1 (released 08.09.2019)
 * #234 add screenshot to error message in Maven too  -- see PR #972
 
 ## 5.3.0 (released 02.09.2019)
