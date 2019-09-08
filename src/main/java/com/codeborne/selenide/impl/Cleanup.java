@@ -9,7 +9,7 @@ public class Cleanup {
     return webdriverExceptionMessage(webDriverException.toString());
   }
 
-  protected String webdriverExceptionMessage(String webDriverExceptionInfo) {
+  public String webdriverExceptionMessage(String webDriverExceptionInfo) {
     return webDriverExceptionInfo == null || webDriverExceptionInfo.indexOf('\n') == -1 ?
       webDriverExceptionInfo :
       webDriverExceptionInfo

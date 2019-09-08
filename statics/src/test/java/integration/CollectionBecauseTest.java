@@ -26,8 +26,8 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
-      assertThat(expected.toString())
-        .contains("TextsMismatch \n" +
+      assertThat(expected)
+        .hasMessageStartingWith("Texts mismatch\n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
           "Expected: [foo, bar, var, buzz]\n" +
           "Because: that's why\n");
@@ -39,8 +39,8 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var, buzz").because("that's why"));
     } catch (TextsSizeMismatch expected) {
-      assertThat(expected.toString())
-        .contains("TextsSizeMismatch \n" +
+      assertThat(expected)
+        .hasMessageStartingWith("Texts size mismatch\n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
           "Expected: [foo, bar, var, buzz], List size: 3\n" +
           "Because: that's why\n");
@@ -52,8 +52,8 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
-      assertThat(expected.toString())
-        .contains("TextsMismatch \n" +
+      assertThat(expected)
+        .hasMessageStartingWith("Texts mismatch\n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
           "Expected: [foo, bar, var, buzz]\n" +
           "Because: that's why\n");
@@ -65,8 +65,8 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var, buzz").because("that's why"));
     } catch (TextsSizeMismatch expected) {
-      assertThat(expected.toString())
-        .contains("TextsSizeMismatch \n" +
+      assertThat(expected)
+        .hasMessageStartingWith("Texts size mismatch\n" +
           "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
           "Expected: [foo, bar, var, buzz], List size: 3\n" +
           "Because: that's why\n");
@@ -78,8 +78,9 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#radioButtons input").shouldHave(size(100).because("I expect many inputs"));
     } catch (ListSizeMismatch expected) {
-      assertThat(expected.toString())
-        .contains("ListSizeMismatch : expected: = 100 (because I expect many inputs), actual: 4, collection: #radioButtons input");
+      assertThat(expected)
+        .hasMessageStartingWith("List size mismatch: expected: = 100 (because I expect many inputs)," +
+          " actual: 4, collection: #radioButtons input");
     }
   }
 
@@ -88,8 +89,9 @@ class CollectionBecauseTest extends IntegrationTest {
     try {
       $$("#radioButtons input").shouldHave(sizeGreaterThan(100).because("I expect many inputs"));
     } catch (ListSizeMismatch expected) {
-      assertThat(expected.toString())
-        .contains("ListSizeMismatch : expected: > 100 (because I expect many inputs), actual: 4, collection: #radioButtons input");
+      assertThat(expected)
+        .hasMessageStartingWith("List size mismatch: expected: > 100 (because I expect many inputs)," +
+          " actual: 4, collection: #radioButtons input");
     }
   }
 }

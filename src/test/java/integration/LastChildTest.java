@@ -30,7 +30,7 @@ public class LastChildTest extends ITest {
   void throwsExceptionWhenNoChildrenExist() {
     assertThatThrownBy(() -> $x("//span[@id='hello-world']").lastChild().should(be(visible)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.xpath: *[last()]}\nExpected: be visible");
+      .hasMessageStartingWith("Element not found {By.xpath: *[last()]}\nExpected: be visible");
   }
 
 }

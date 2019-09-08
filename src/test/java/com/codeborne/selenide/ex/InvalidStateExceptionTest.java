@@ -4,30 +4,31 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.StaleElementReferenceException;
 
 class InvalidStateExceptionTest implements WithAssertions {
   private Driver driver = new DriverStub();
 
   @Test
-  void testThrowableConstructor() {
-    InvalidStateException invalidStateException = new InvalidStateException(driver, new Throwable("Error message"));
-    String expectedString = "java.lang.Throwable: Error message\n" +
+  void constructorWithCause() {
+    StaleElementReferenceException cause = new StaleElementReferenceException("Houston, we have a problem");
+    InvalidStateException invalidStateException = new InvalidStateException(driver, cause);
+
+    assertThat(invalidStateException).hasMessageStartingWith("StaleElementReferenceException: Houston, we have a problem");
+    assertThat(invalidStateException).hasToString("com.codeborne.selenide.ex.InvalidStateException: " +
+      "StaleElementReferenceException: Houston, we have a problem\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Throwable: Error message";
-    assertThat(invalidStateException)
-      .hasToString(expectedString);
+      "Caused by: StaleElementReferenceException: Houston, we have a problem");
   }
 
   @Test
-  void testStringConstructor() {
-    InvalidStateException invalidStateException = new InvalidStateException(driver, "Error message");
-    String expectedString = "InvalidStateException Error message\n" +
+  void constructorWithMessage() {
+    InvalidStateException invalidStateException = new InvalidStateException(driver, "Houston, we have a problem");
+
+    assertThat(invalidStateException).hasMessageStartingWith("Houston, we have a problem");
+    assertThat(invalidStateException).hasToString("com.codeborne.selenide.ex.InvalidStateException: Houston, we have a problem\n" +
       "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.";
-    assertThat(invalidStateException)
-      .hasToString(expectedString);
+      "Timeout: 0 ms.");
   }
 }

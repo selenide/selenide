@@ -10,9 +10,4 @@ public class InvalidStateException extends UIAssertionError {
   public InvalidStateException(Driver driver, String message) {
     super(driver, message);
   }
-
-  @Override
-  public String toString() {
-    return (getCause() != null ? getCause().toString() : super.toString()) + uiDetails();
-  }
 }

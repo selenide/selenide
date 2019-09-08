@@ -206,24 +206,12 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
+      fail("Expected ListSizeMismatch");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected)
-        .hasMessageStartingWith(": expected: = 3, actual: 2, collection: ul li");
+      assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 2, collection: ul li");
       assertScreenshot(expected);
-      assertThat(expected.getCause())
-        .isNull();
+      assertThat(expected.getCause()).isNull();
     }
-        /*
-            ListSizeMismatch : expected: = 3, actual: 2, collection: ul li
-            Elements: [
-                <li class="the-expanse detective" value="0">Miller</li>,
-                <li class="the-expanse" value="0">Julie Mao</li>
-            ]
-
-            Screenshot: file:/..._WithNotSatisfiedConditionInShould/1471356041663.0.png
-            Timeout: 6 s.
-        */
   }
 
   @Test
@@ -232,20 +220,11 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
+      fail("Expected ListSizeMismatch");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected)
-        .hasMessageStartingWith(": expected: = 3, actual: 0, collection: ul .nonexistent");
+      assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 0, collection: ul .nonexistent");
       assertScreenshot(expected);
-      assertThat(expected.getCause())
-        .isNull();
+      assertThat(expected.getCause()).isNull();
     }
-        /*
-            ListSizeMismatch : expected: = 3, actual: 0, collection: ul .nonexistent
-            Elements: []
-
-            Screenshot: file:/..._WithNonExistentCollection/1471357025434.0.png
-            Timeout: 6 s.
-        */
   }
 }

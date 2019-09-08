@@ -20,7 +20,7 @@ public class LastCollectionElement extends WebElementSource {
 
   private final WebElementsCollection collection;
 
-  private LastCollectionElement(WebElementsCollection collection) {
+  LastCollectionElement(WebElementsCollection collection) {
     this.collection = collection;
   }
 

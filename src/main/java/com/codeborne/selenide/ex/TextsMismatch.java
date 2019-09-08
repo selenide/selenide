@@ -8,15 +8,10 @@ public class TextsMismatch extends UIAssertionError {
   public TextsMismatch(WebElementsCollection collection, List<String> actualTexts,
                        List<String> expectedTexts, String explanation, long timeoutMs) {
     super(collection.driver(),
-      "\nActual: " + actualTexts +
+      "Texts mismatch\nActual: " + actualTexts +
         "\nExpected: " + expectedTexts +
         (explanation == null ? "" : "\nBecause: " + explanation) +
         "\nCollection: " + collection.description());
     super.timeoutMs = timeoutMs;
-  }
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + ' ' + getMessage() + uiDetails();
   }
 }

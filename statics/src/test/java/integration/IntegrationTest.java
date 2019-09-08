@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.codeborne.selenide.Browsers.*;
+import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.fastSetValue;
@@ -84,7 +84,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "&timeout=" + timeout);
   }
 
-  <T> T openFile(String fileName, Class<T> pageObjectClass) {
+  protected <T> T openFile(String fileName, Class<T> pageObjectClass) {
     return open("/" + fileName + "?browser=" + browser +
       "&timeout=" + timeout, pageObjectClass);
   }

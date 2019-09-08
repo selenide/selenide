@@ -102,7 +102,8 @@ class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_ToString_WhenCollectionElement_WithNonExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
-    assertEquals("Element not found {ul li.findBy(css class 'nonexistent')}", element.toString());
+    assertThat(element.toString())
+      .startsWith("Element not found {ul li.findBy(css class 'nonexistent')}");
   }
 
   @Test

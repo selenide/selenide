@@ -1,4 +1,4 @@
-package integration;
+package integration.errormessages;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
@@ -8,6 +8,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import com.codeborne.selenide.ex.UIAssertionError;
+import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.getElement;
+import static com.codeborne.selenide.Selenide.element;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ErrorMessagesForMissingElementTest extends IntegrationTest {
@@ -64,125 +65,105 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
-      assertStartsWith("Element not found \\{h9\\}\n" +
-        "Expected: text 'expected text'\n" +
-        (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
-        "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
-        "Timeout: 15 ms.\n" +
-        "Caused by: NoSuchElementException:", expected);
+      assertThat(expected)
+        .hasMessageMatching("Element not found \\{h9\\}\n" +
+          "Expected: text 'expected text'\n" +
+          (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
+          "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
+          "Timeout: 15 ms.\n" +
+          "Caused by: NoSuchElementException:.*");
       assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET" + pngOrHtml());
     }
-  }
-
-  private void assertStartsWith(String expectedMessageStart, Error error) {
-    assertThat(error.toString())
-      .as("Error should start with " + expectedMessageStart + ", but received: " + error)
-      .matches(expectedMessageStart + ".*");
   }
 
   @Test
   void elementTextDoesNotMatch() {
-    try {
-      $("h2").shouldHave(text("expected text"));
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have text 'expected text' \\{h2\\}\n" +
+    assertThatThrownBy(() ->
+      $("h2").shouldHave(text("expected text"))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching("Element should have text 'expected text' \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET" + pngOrHtml());
-    }
   }
 
   @Test
   void elementAttributeDoesNotMatch() {
-    try {
-      $("h2").shouldHave(attribute("name", "header"));
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have attribute name=\"header\" \\{h2\\}\n" +
+    assertThatThrownBy(() ->
+      $("h2").shouldHave(attribute("name", "header"))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching("Element should have attribute name=\"header\" \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         "Actual value: name=\"\"\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-    }
   }
 
   @Test
   void wrapperTextDoesNotMatch() {
-    try {
-      $(getElement(By.tagName("h2"))).shouldHave(text("expected text"));
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
+    assertThatThrownBy(() ->
+      $(element(By.tagName("h2"))).shouldHave(text("expected text"))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-    }
   }
 
   @Test
   void clickHiddenElement() {
-    try {
-      $("#theHiddenElement").click();
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould elementShouldExist) {
-      assertThat(elementShouldExist.toString()).matches(
+    assertThatThrownBy(() ->
+      $("#theHiddenElement").click()
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching(
         "Element should be visible or transparent: visible or have css value opacity=0 \\{\\#theHiddenElement\\}\n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
           "Actual value: visible:false, 1\n" +
           (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
           "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
           "Timeout: 15 ms.");
-      assertThat(elementShouldExist.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET" + pngOrHtml());
-    }
   }
 
   @Test
   void pageObjectElementTextDoesNotMatch() {
-    try {
-      $(pageObject.header1).shouldHave(text("expected text"));
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
+    assertThatThrownBy(() ->
+      $(pageObject.header1).shouldHave(text("expected text"))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-    }
   }
 
   @Test
   void pageObjectWrapperTextDoesNotMatch() {
-    try {
-      $(pageObject.header2).shouldHave(text("expected text"));
-      fail("Expected ElementShould");
-    }
-    catch (ElementShould expected) {
-      assertThat(expected.toString()).matches("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
+    assertThatThrownBy(() ->
+      $(pageObject.header2).shouldHave(text("expected text"))
+    )
+      .isInstanceOf(ElementShould.class)
+      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-    }
   }
 
   @Test
   void selectOptionFromUnexistingList() {
-    try {
-      $(pageObject.categoryDropdown).selectOption("SomeOption");
-    }
-    catch (ElementNotFound e) {
-      assertContains(e, "Element not found \\{By.id: invalid_id\\}", "Expected: exist");
-    }
+    assertThatThrownBy(() ->
+      $(pageObject.categoryDropdown).selectOption("SomeOption")
+    ).isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {By.id: invalid_id}")
+      .hasMessageContaining("Expected: exist");
   }
 
   private void assertContains(UIAssertionError e, String... expectedTexts) {
@@ -195,65 +176,58 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void clickUnexistingWrappedElement() {
-    try {
-      $(pageObject.categoryDropdown).click();
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound e) {
-      assertStartsWith("Element not found \\{By.id: invalid_id\\}\n" +
+    assertThatThrownBy(() ->
+      $(pageObject.categoryDropdown).click()
+    ).isInstanceOf(ElementNotFound.class)
+      .hasMessageMatching("Element not found \\{By.id: invalid_id\\}\n" +
         "Expected: visible or transparent: visible or have css value opacity=0\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.\n" +
-        "Caused by: NoSuchElementException:", e);
-    }
+        "Caused by: NoSuchElementException:.*");
   }
 
   @Test
   void existingElementShouldNotExist() {
-    try {
-      $("h2").shouldNot(exist);
-      fail("Expected ElementFound");
-    }
-    catch (ElementShouldNot e) {
-      assertThat(e.toString()).matches("Element should not exist \\{h2\\}\n" +
+    assertThatThrownBy(() ->
+      $("h2").shouldNot(exist)
+    )
+      .isInstanceOf(ElementShouldNot.class)
+      .hasMessageMatching("Element should not exist \\{h2\\}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.");
-    }
   }
 
   @Test
   void nonExistingElementShouldNotBeHidden() {
-    try {
-      $("h14").shouldNotBe(hidden);
-      fail("Expected ElementNotFound");
-    }
-    catch (ElementNotFound e) {
-      assertStartsWith("Element not found \\{h14\\}\n" +
+    assertThatThrownBy(() ->
+      $("h14").shouldNotBe(hidden)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageMatching("Element not found \\{h14\\}\n" +
         "Expected: not hidden\n" +
         (supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "") +
         "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n" +
         "Timeout: 15 ms.\n" +
-        "Caused by: NoSuchElementException:", e);
-    }
+        "Caused by: NoSuchElementException:.*");
   }
 
   @Test
   void clickingNonClickableElement() {
     assumeTrue(WebDriverRunner.isChrome());
 
-    try {
-      $("#non-clickable-element a").shouldBe(visible).click();
-      fail("Expected WebDriverException");
-    }
-    catch (UIAssertionError e) {
-      assertContains(e, "is not clickable at point",
+    assertThatThrownBy(() ->
+      $("#non-clickable-element a").shouldBe(visible).click()
+    )
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageContainingAll(
+        "is not clickable at point",
         "Other element would receive the click",
-        supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" + png() + "\n" : "",
-        "Page source: http://ci.org/build/reports/tests/EMFMET" + html() + "\n");
-    }
+        supportsScreenshots() ? "Screenshot: http://ci.org/build/reports/tests/EMFMET" : "",
+        "Page source: http://ci.org/build/reports/tests/EMFMET"
+      );
   }
 
   private String png() {
