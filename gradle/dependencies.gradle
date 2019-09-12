@@ -17,7 +17,9 @@ dependencies {
   }
   api('io.github.bonigarcia:webdrivermanager:3.7.0')
 
-  implementation('net.lightbody.bmp:browsermob-core:2.1.5')
+  implementation('net.lightbody.bmp:browsermob-core:2.1.5') {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
 
   compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion") { transitive = false }
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") { transitive = false }
