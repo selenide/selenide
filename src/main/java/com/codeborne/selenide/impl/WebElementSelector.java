@@ -24,6 +24,8 @@ public class WebElementSelector {
   protected String sizzleSource;
 
   public WebElement findElement(Driver driver, SearchContext context, By selector) {
+    checkThatXPathNotStartingFromSlash(context, selector);
+
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElement(selector);
     }
@@ -33,11 +35,23 @@ public class WebElementSelector {
   }
 
   public List<WebElement> findElements(Driver driver, SearchContext context, By selector) {
+    checkThatXPathNotStartingFromSlash(context, selector);
+
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
       return context.findElements(selector);
     }
 
     return evaluateSizzleSelector(driver, context, (ByCssSelector) selector);
+  }
+
+  protected void checkThatXPathNotStartingFromSlash(SearchContext context, By selector) {
+    if (context instanceof WebElement) {
+      if (selector instanceof By.ByXPath) {
+        if (selector.toString().startsWith("By.xpath: /")) {
+          throw new IllegalArgumentException("XPath starting from / searches from root");
+        }
+      }
+    }
   }
 
   protected List<WebElement> evaluateSizzleSelector(Driver driver, SearchContext context, ByCssSelector sizzleCssSelector) {
