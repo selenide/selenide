@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
@@ -111,6 +112,10 @@ public class Selenide {
    */
   public static void open() {
     getSelenideDriver().open();
+  }
+
+  public static void in(WebDriver webDriver, Runnable lambda) {
+    WebDriverRunner.in(webDriver, lambda);
   }
 
   /**

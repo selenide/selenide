@@ -1,8 +1,10 @@
 package integration;
 
+import com.codeborne.selenide.Selenide;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,7 +23,7 @@ public class CustomWebdriverTest extends IntegrationTest {
   private WebDriver browser2;
 
   @BeforeAll
-  static void setUp() {
+  static void setUpWebdrivers() {
     assumeThat(isChrome() || isFirefox()).isTrue();
 
     close();
@@ -29,12 +31,15 @@ public class CustomWebdriverTest extends IntegrationTest {
     if (isChrome()) WebDriverManager.chromedriver().setup();
   }
 
-  @Test
-  void userCanSwitchBetweenWebdrivers() {
+  @BeforeEach
+  void setUpTwoBrowsers() {
     useProxy(false);
     browser1 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
     browser2 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
+  }
 
+  @Test
+  void userCanSwitchBetweenWebdrivers_using_setWebDriver() {
     setWebDriver(browser1);
     openFile("page_with_selects_without_jquery.html");
     $("h1").shouldBe(visible);
@@ -46,6 +51,24 @@ public class CustomWebdriverTest extends IntegrationTest {
     setWebDriver(browser1);
     openFile("page_with_selects_without_jquery.html");
     $("h1").shouldBe(visible);
+  }
+
+  @Test
+  void userCanSwitchBetweenWebdrivers_usingIn() {
+    Selenide.in(browser1, () -> {
+      openFile("page_with_selects_without_jquery.html");
+      $("h1").shouldBe(visible);
+    });
+
+    Selenide.in(browser2, () -> {
+      openFile("page_with_selects_without_jquery.html");
+      $("h2").shouldBe(visible);
+    });
+
+    Selenide.in(browser1, () -> {
+      openFile("page_with_selects_without_jquery.html");
+      $("h1").shouldBe(visible);
+    });
   }
 
   @AfterEach
