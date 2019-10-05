@@ -1,6 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.ex.UIAssertionError;
+
 import org.openqa.selenium.Alert;
 
 public class Modal {
@@ -54,7 +56,7 @@ public class Modal {
 
   private static void checkDialogText(Driver driver, String expectedDialogText, String actualDialogText) {
     if (expectedDialogText != null && !expectedDialogText.equals(actualDialogText)) {
-      throw new DialogTextMismatch(driver, actualDialogText, expectedDialogText);
+      throw UIAssertionError.wrap(driver, new DialogTextMismatch(driver, actualDialogText, expectedDialogText), 0);
     }
   }
 }

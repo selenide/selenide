@@ -4,7 +4,11 @@ import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.io.File;
+import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,11 +23,18 @@ class ModalTest {
   private final ChromeDriver webDriver = mock(ChromeDriver.class, RETURNS_DEEP_STUBS);
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
+  private URI reportsBaseUri;
 
   @BeforeEach
   void setUp() {
     when(webDriver.switchTo().alert()).thenReturn(alert);
     when(alert.getText()).thenReturn(ALERT_TEXT);
+
+    config.reportsFolder("build/reports/tests/ModalTest");
+    when(webDriver.getPageSource()).thenReturn("<html/>");
+    when(webDriver.getScreenshotAs(OutputType.FILE)).thenReturn(new File("src/test/resources/screenshot.png"));
+
+    reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).toURI();
   }
 
   @Test
@@ -50,7 +61,8 @@ class ModalTest {
 
     verify(alert).accept();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n");
+      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains("Screenshot: " + reportsBaseUri);
   }
 
   @Test
@@ -88,7 +100,8 @@ class ModalTest {
     verify(alert).sendKeys("Sure do");
     verify(alert).accept();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n");
+      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
   }
 
   @Test
@@ -115,6 +128,7 @@ class ModalTest {
 
     verify(alert).dismiss();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n");
+      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
   }
 }
