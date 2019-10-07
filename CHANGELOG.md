@@ -1,7 +1,8 @@
 # Changelog
 
-## 5.3.2
-* upgrade to webdrivermanager:3.7.0
+## 5.4.0
+* add method "using" to easy switch between webdrivers
+* upgrade to webdrivermanager:3.7.1
 
 ## 5.3.1 (released 08.09.2019)
 * #234 add screenshot to error message in Maven too  -- see PR #972
