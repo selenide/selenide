@@ -95,4 +95,22 @@ class FileUploadTest extends ITest {
     assertThat(server.getUploadedFiles().get(0).getString()).contains("Hello, WinRar!");
     assertThat(server.getUploadedFiles().get(1).getString()).contains("jQuery JavaScript Library v1.8.3");
   }
+
+  @Test
+  void uploadUnexistingFile() {
+    assertThatThrownBy(() ->
+      $("input[type='file'][id='cv']").uploadFile(new File("src/goodbye_world.txt"))
+    )
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageMatching("File not found:.*goodbye_world.txt");
+  }
+
+  @Test
+  void uploadUnexistingFileFromClasspath() {
+    assertThatThrownBy(() ->
+      $("input[type='file'][id='cv']").uploadFromClasspath("goodbye_world.txt")
+    )
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageMatching("File not found in classpath:.*goodbye_world.txt");
+  }
 }
