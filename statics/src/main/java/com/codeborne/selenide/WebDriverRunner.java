@@ -118,6 +118,27 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.hasWebDriverStarted();
   }
 
+  public static void using(WebDriver driver, Runnable lambda) {
+    if (hasWebDriverStarted()) {
+      WebDriver previous = getWebDriver();
+      try {
+        lambda.run();
+      }
+      finally {
+        setWebDriver(previous);
+      }
+    }
+    else {
+      setWebDriver(driver);
+      try {
+        lambda.run();
+      }
+      finally {
+        closeWebDriver();
+      }
+    }
+  }
+
   private static Browser browser() {
     return new Browser(browser, headless);
   }
