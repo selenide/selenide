@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Selenide;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,12 +12,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.using;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-public class CustomWebdriverTest extends IntegrationTest {
+class CustomWebdriverTest extends IntegrationTest {
   private WebDriver browser1;
   private WebDriver browser2;
 
@@ -55,17 +55,17 @@ public class CustomWebdriverTest extends IntegrationTest {
 
   @Test
   void userCanSwitchBetweenWebdrivers_usingIn() {
-    Selenide.in(browser1, () -> {
+    using(browser1, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h1").shouldBe(visible);
     });
 
-    Selenide.in(browser2, () -> {
+    using(browser2, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h2").shouldBe(visible);
     });
 
-    Selenide.in(browser1, () -> {
+    using(browser1, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h1").shouldBe(visible);
     });

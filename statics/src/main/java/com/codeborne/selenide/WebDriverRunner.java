@@ -118,9 +118,9 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.hasWebDriverStarted();
   }
 
-  public static void in(WebDriver driver, Runnable lambda) {
-    if (WebDriverRunner.hasWebDriverStarted()) {
-      WebDriver previous = WebDriverRunner.getWebDriver();
+  public static void using(WebDriver driver, Runnable lambda) {
+    if (hasWebDriverStarted()) {
+      WebDriver previous = getWebDriver();
       try {
         lambda.run();
       }

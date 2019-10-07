@@ -114,8 +114,8 @@ public class Selenide {
     getSelenideDriver().open();
   }
 
-  public static void in(WebDriver webDriver, Runnable lambda) {
-    WebDriverRunner.in(webDriver, lambda);
+  public static void using(WebDriver webDriver, Runnable lambda) {
+    WebDriverRunner.using(webDriver, lambda);
   }
 
   /**
