@@ -13,7 +13,7 @@ public class CloseDriverCommand {
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxyServer;
 
-  CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+  public CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     this.webDriver = webDriver;
     this.selenideProxyServer = selenideProxyServer;
   }

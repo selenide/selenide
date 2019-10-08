@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 
 import static java.lang.Thread.currentThread;
 
+/**
+ * A `Driver` implementation which opens browser on demand (on a first call).
+ * May be created with its own config, proxy and listeners.
+ */
 public class LazyDriver implements Driver {
   private static final Logger log = Logger.getLogger(LazyDriver.class.getName());
 

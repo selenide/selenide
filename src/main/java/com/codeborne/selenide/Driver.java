@@ -8,14 +8,11 @@ import org.openqa.selenium.interactions.Actions;
 public interface Driver {
   Config config();
   Browser browser();
+  boolean hasWebDriverStarted();
   WebDriver getWebDriver();
   SelenideProxyServer getProxy();
   WebDriver getAndCheckWebDriver();
   void close();
-
-  default boolean hasWebDriverStarted() {
-    return getWebDriver() != null;
-  }
 
   default boolean supportsJavascript() {
     return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
@@ -26,8 +23,26 @@ public interface Driver {
     return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
   }
 
+  default void clearCookies() {
+    if (hasWebDriverStarted()) {
+      getWebDriver().manage().deleteAllCookies();
+    }
+  }
+
   default String getUserAgent() {
     return executeJavaScript("return navigator.userAgent;");
+  }
+
+  default String source() {
+    return getWebDriver().getPageSource();
+  }
+
+  default String url() {
+    return getWebDriver().getCurrentUrl();
+  }
+
+  default String getCurrentFrameUrl() {
+    return executeJavaScript("return window.location.href").toString();
   }
 
   default SelenideTargetLocator switchTo() {

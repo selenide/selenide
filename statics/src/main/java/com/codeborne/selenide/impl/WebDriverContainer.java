@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +11,6 @@ public interface WebDriverContainer {
   void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy);
   WebDriver getWebDriver();
   SelenideProxyServer getProxyServer();
-  SelenideDriver getSelenideDriver();
   void setProxy(Proxy webProxy);
   WebDriver getAndCheckWebDriver();
   void closeWebDriver();

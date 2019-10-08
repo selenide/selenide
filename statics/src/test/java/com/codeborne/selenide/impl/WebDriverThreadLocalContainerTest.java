@@ -57,12 +57,6 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
   }
 
   @Test
-  void hasWebDriverStarted_false_ifDriverIsBoundToCurrentThread_butBrowserIsNotOpened() {
-    assertThat(container.getSelenideDriver()).isNotNull();
-    assertThat(container.hasWebDriverStarted()).isFalse();
-  }
-
-  @Test
   void hasWebDriverStarted_true_if_browserIsOpened() {
     assertThat(container.getAndCheckWebDriver()).isNotNull();
     assertThat(container.hasWebDriverStarted()).isTrue();
