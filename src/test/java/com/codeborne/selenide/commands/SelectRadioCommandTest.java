@@ -1,8 +1,5 @@
 package com.codeborne.selenide.commands;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -12,6 +9,9 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+
+import java.lang.reflect.Field;
+import java.util.Collections;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,7 +58,7 @@ class SelectRadioCommandTest implements WithAssertions {
       selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (InvalidStateException exception) {
       assertThat(exception)
-        .hasMessageStartingWith("Cannot select readonly radio button");
+        .hasMessageStartingWith("Invalid element state: Cannot select readonly radio button");
     }
   }
 

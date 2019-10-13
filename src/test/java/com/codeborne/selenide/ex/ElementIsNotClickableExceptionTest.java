@@ -13,6 +13,7 @@ class ElementIsNotClickableExceptionTest implements WithAssertions {
     WebDriverException cause = new WebDriverException("Sorry, is not clickable at the moment");
     ElementIsNotClickableException e = new ElementIsNotClickableException(driver, cause);
 
-    assertThat(e).hasMessageStartingWith("WebDriverException: Sorry, is not clickable at the moment");
+    assertThat(e).hasMessageStartingWith("Element is not clickable");
+    assertThat(e).hasMessageContaining("WebDriverException: Sorry, is not clickable at the moment");
   }
 }

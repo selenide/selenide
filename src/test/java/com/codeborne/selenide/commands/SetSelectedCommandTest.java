@@ -44,7 +44,7 @@ class SetSelectedCommandTest implements WithAssertions {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
       assertThat(exception)
-        .hasMessageStartingWith("Cannot change invisible element");
+        .hasMessageStartingWith("Invalid element state: Cannot change invisible element");
     }
   }
 
@@ -61,7 +61,7 @@ class SetSelectedCommandTest implements WithAssertions {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
     } catch (InvalidStateException exception) {
       assertThat(exception)
-        .hasMessageStartingWith("Only use setSelected on checkbox/option/radio");
+        .hasMessageStartingWith("Invalid element state: Only use setSelected on checkbox/option/radio");
     }
   }
 
@@ -84,7 +84,7 @@ class SetSelectedCommandTest implements WithAssertions {
       setSelectedCommand.execute(proxy, locator, new Object[]{true})
     )
       .isInstanceOf(InvalidStateException.class)
-      .hasMessageStartingWith("Cannot change value of readonly/disabled element");
+      .hasMessageStartingWith("Invalid element state: Cannot change value of readonly/disabled element");
   }
 
   @Test
