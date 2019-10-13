@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getSelectedRadio;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RadioTest extends IntegrationTest {
   @BeforeEach

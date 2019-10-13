@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.checked;
 import static com.codeborne.selenide.Condition.selected;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CheckboxTest extends ITest {
   @BeforeEach

@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LastChildTest extends ITest {
 

@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConditionsTest extends ITest {
   @BeforeEach

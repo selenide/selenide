@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.TextsMismatch;
-
 import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CollectionBecauseTest extends IntegrationTest {
   @BeforeEach

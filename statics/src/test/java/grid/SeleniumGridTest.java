@@ -10,6 +10,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach

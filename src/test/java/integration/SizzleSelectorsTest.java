@@ -9,6 +9,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SizzleSelectorsTest extends BaseIntegrationTest {
   SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle));

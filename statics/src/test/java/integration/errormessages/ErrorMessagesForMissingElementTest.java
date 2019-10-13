@@ -16,8 +16,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.regex.Pattern;
-
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
@@ -27,6 +25,9 @@ import static com.codeborne.selenide.Configuration.headless;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ErrorMessagesForMissingElementTest extends IntegrationTest {
@@ -164,14 +165,6 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {By.id: invalid_id}")
       .hasMessageContaining("Expected: exist");
-  }
-
-  private void assertContains(UIAssertionError e, String... expectedTexts) {
-    for (String expectedText : expectedTexts) {
-      assertThat(e.toString())
-        .as("Text not found: " + expectedText + " in error message: " + e)
-        .matches(Pattern.compile(".*" + expectedText + ".*", Pattern.DOTALL));
-    }
   }
 
   @Test

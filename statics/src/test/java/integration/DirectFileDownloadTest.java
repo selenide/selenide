@@ -10,6 +10,7 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.download;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DirectFileDownloadTest extends IntegrationTest {
   @BeforeEach

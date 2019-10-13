@@ -7,6 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
 import static com.codeborne.selenide.Condition.exist;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 class InvalidXPathTest extends ITest {
   @BeforeEach

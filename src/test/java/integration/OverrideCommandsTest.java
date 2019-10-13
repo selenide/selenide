@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class OverrideCommandsTest extends ITest {
   private AtomicInteger clickCounter = new AtomicInteger();
 
@@ -28,8 +30,7 @@ class OverrideCommandsTest extends ITest {
     Commands.getInstance().add("click", new MyClick());
     $("#valid-image").click();
     $("#invalid-image").click();
-    assertThat(clickCounter.get())
-      .isEqualTo(2);
+    assertThat(clickCounter.get()).isEqualTo(2);
   }
 
   private class MyClick extends Click {

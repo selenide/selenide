@@ -15,6 +15,8 @@ import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.dismiss;
 import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ConfirmTest extends IntegrationTest {
