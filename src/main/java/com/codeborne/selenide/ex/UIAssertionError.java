@@ -15,10 +15,6 @@ public class UIAssertionError extends AssertionError {
   private String screenshot;
   public long timeoutMs;
 
-  public UIAssertionError(Driver driver, Throwable cause) {
-    this(driver, cause.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(cause.getMessage()), cause);
-  }
-
   protected UIAssertionError(Driver driver, String message) {
     super(message);
     this.driver = driver;
@@ -32,6 +28,11 @@ public class UIAssertionError extends AssertionError {
   @Override
   public final String getMessage() {
     return super.getMessage() + uiDetails();
+  }
+
+  @Override
+  public final String toString() {
+    return getMessage();
   }
 
   protected String uiDetails() {
@@ -55,9 +56,15 @@ public class UIAssertionError extends AssertionError {
   }
 
   private static Error wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
-    UIAssertionError uiError = error instanceof UIAssertionError ? (UIAssertionError) error : new UIAssertionError(driver, error);
+    UIAssertionError uiError = error instanceof UIAssertionError ?
+      (UIAssertionError) error : wrapToUIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
     uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(driver);
     return uiError;
+  }
+
+  private static UIAssertionError wrapToUIAssertionError(Driver driver, Throwable error) {
+    String message = error.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(error.getMessage());
+    return new UIAssertionError(driver, message, error);
   }
 }

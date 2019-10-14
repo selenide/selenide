@@ -14,9 +14,10 @@ class InvalidStateExceptionTest implements WithAssertions {
     StaleElementReferenceException cause = new StaleElementReferenceException("Houston, we have a problem");
     InvalidStateException invalidStateException = new InvalidStateException(driver, cause);
 
-    assertThat(invalidStateException).hasMessageStartingWith("StaleElementReferenceException: Houston, we have a problem");
-    assertThat(invalidStateException).hasToString("com.codeborne.selenide.ex.InvalidStateException: " +
-      "StaleElementReferenceException: Houston, we have a problem\n" +
+    assertThat(invalidStateException).hasMessageStartingWith("Invalid element state");
+    assertThat(invalidStateException).hasMessageEndingWith("StaleElementReferenceException: Houston, we have a problem");
+    assertThat(invalidStateException).hasToString("Invalid element state: " +
+      "Houston, we have a problem\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
       "Caused by: StaleElementReferenceException: Houston, we have a problem");
@@ -26,8 +27,8 @@ class InvalidStateExceptionTest implements WithAssertions {
   void constructorWithMessage() {
     InvalidStateException invalidStateException = new InvalidStateException(driver, "Houston, we have a problem");
 
-    assertThat(invalidStateException).hasMessageStartingWith("Houston, we have a problem");
-    assertThat(invalidStateException).hasToString("com.codeborne.selenide.ex.InvalidStateException: Houston, we have a problem\n" +
+    assertThat(invalidStateException).hasMessageStartingWith("Invalid element state: Houston, we have a problem");
+    assertThat(invalidStateException).hasToString("Invalid element state: Houston, we have a problem\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.");
   }
