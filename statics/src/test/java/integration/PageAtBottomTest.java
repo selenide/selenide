@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.atBottom;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class PageAtBottomTest extends IntegrationTest {
   @BeforeEach

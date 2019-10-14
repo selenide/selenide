@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelenideDriverITest extends ITest {
   private SelenideDriver browser1;

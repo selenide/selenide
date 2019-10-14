@@ -13,6 +13,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ProxyServerUsageTest extends IntegrationTest {
   private List<String> requests = new ArrayList<>();

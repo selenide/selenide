@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static integration.customcommands.MyFramework.$_;
 import static integration.customcommands.MyFramework.quadrupleClickCounter;
 import static integration.customcommands.MyFramework.tripleClickCounter;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomCommandsTest extends IntegrationTest {
   @BeforeEach
@@ -29,10 +30,8 @@ class CustomCommandsTest extends IntegrationTest {
       .isTrue();
     $_("#valid-image img").shouldBe(visible);
 
-    assertThat(tripleClickCounter.get())
-      .isEqualTo(4);
-    assertThat(quadrupleClickCounter.get())
-      .isEqualTo(1);
+    assertThat(tripleClickCounter.get()).isEqualTo(4);
+    assertThat(quadrupleClickCounter.get()).isEqualTo(1);
   }
 
   @BeforeEach

@@ -1,8 +1,8 @@
 package integration;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 public class ZoomTest extends ITest {
@@ -28,10 +28,10 @@ public class ZoomTest extends ITest {
   }
 
   private static void assertBetween(int n, int lower, int upper) {
-    Assertions.assertThat(n >= lower)
+    assertThat(n >= lower)
       .withFailMessage(n + " should be between " + lower + " and " + upper)
       .isTrue();
-    Assertions.assertThat(n <= upper)
+    assertThat(n <= upper)
       .withFailMessage(n + " should be between " + lower + " and " + upper)
       .isTrue();
   }

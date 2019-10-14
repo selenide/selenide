@@ -10,6 +10,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CollectionSizeTest extends ITest {
   @BeforeEach

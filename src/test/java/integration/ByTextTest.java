@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ByTextTest extends ITest {
   @BeforeEach

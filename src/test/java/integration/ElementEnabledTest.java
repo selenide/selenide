@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ElementEnabledTest extends ITest {
 

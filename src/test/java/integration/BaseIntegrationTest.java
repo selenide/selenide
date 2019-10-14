@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.junit5.TextReportExtension;
 import integration.server.LocalHttpServer;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,7 @@ import static java.lang.Boolean.parseBoolean;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({TextReportExtension.class})
-public abstract class BaseIntegrationTest implements WithAssertions {
+public abstract class BaseIntegrationTest {
   private static final Logger log = Logger.getLogger(BaseIntegrationTest.class.getName());
 
   private static final boolean SSL = false;

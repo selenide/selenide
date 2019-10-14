@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.byValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttributeTest extends ITest {
   @BeforeEach

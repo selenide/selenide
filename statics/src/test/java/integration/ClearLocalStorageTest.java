@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ClearLocalStorageTest extends IntegrationTest {
   @BeforeEach
@@ -17,13 +18,11 @@ class ClearLocalStorageTest extends IntegrationTest {
 
   @Test
   void clearLocalStorageTest() {
-    assertThat(getLocalStorageLength())
-      .isEqualTo(2L);
+    assertThat(getLocalStorageLength()).isEqualTo(2L);
 
     clearBrowserLocalStorage();
 
-    assertThat(getLocalStorageLength())
-      .isEqualTo(0L);
+    assertThat(getLocalStorageLength()).isEqualTo(0L);
   }
 
   private long getLocalStorageLength() {
