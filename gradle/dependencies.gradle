@@ -7,7 +7,7 @@ ext {
   htmlunitVersion = '2.34.1'
   htmlunitDriverVersion = '2.34.0'
   seleniumVersion = '3.141.59'
-  junitVersion = '5.5.0'
+  junitVersion = '5.5.2'
   jettyVersion = '9.4.19.v20190610'
 }
 
