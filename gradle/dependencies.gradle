@@ -7,8 +7,8 @@ ext {
   htmlunitVersion = '2.34.1'
   htmlunitDriverVersion = '2.34.0'
   seleniumVersion = '3.141.59'
-  junitVersion = '5.5.0'
-  jettyVersion = '9.4.19.v20190610'
+  junitVersion = '5.5.2'
+  jettyVersion = '9.4.21.v20190926'
 }
 
 dependencies {
@@ -32,7 +32,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion")
-  testImplementation('org.mockito:mockito-core:3.0.0')
+  testImplementation('org.mockito:mockito-core:3.1.0')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.13.2")
@@ -45,7 +45,7 @@ dependencies {
   testRuntimeOnly("org.eclipse.jetty.websocket:websocket-client:${jettyVersion}")
 
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.26')
+  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.28')
   testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }
 
