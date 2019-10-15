@@ -8,7 +8,6 @@ import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -26,20 +25,24 @@ import static java.util.Collections.emptyList;
  * "Selenide driver" is a container for WebDriver + proxy server + settings
  */
 public class SelenideDriver {
-  private final Navigator navigator = new Navigator();
-  private static SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
+  private static final Navigator navigator = new Navigator();
+  private static final SelenidePageFactory pageFactory = new SelenidePageFactory();
+  private static final DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
   private final Config config;
   private final Driver driver;
 
-  public SelenideDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
-    this.config = config;
-    this.driver = new LazyDriver(config, userProvidedProxy, listeners);
+  public SelenideDriver(Config config) {
+    this(config, emptyList());
   }
 
-  public SelenideDriver(Config config) {
-    this(config, null, emptyList());
+  public SelenideDriver(Config config, List<WebDriverEventListener> listeners) {
+    this(config, new LazyDriver(config, null, listeners));
+  }
+
+  public SelenideDriver(Config config, Driver driver) {
+    this.config = config;
+    this.driver = driver;
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, SelenideProxyServer selenideProxy) {
@@ -148,9 +151,7 @@ public class SelenideDriver {
   }
 
   public void clearCookies() {
-    if (driver().hasWebDriverStarted()) {
-      driver().getWebDriver().manage().deleteAllCookies();
-    }
+    driver().clearCookies();
   }
 
   public void close() {

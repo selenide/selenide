@@ -597,7 +597,8 @@ class SelenideMethodsTest extends IntegrationTest {
 
     @Override
     public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-      proxy.doubleClick().sendKeys(value);
+      proxy.clear();
+      proxy.sendKeys(value);
       return proxy;
     }
   }

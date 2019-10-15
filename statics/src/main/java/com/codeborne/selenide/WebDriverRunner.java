@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.ThreadLocalSelenideDriver;
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -15,6 +16,7 @@ import static com.codeborne.selenide.Configuration.headless;
  */
 public class WebDriverRunner implements Browsers {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
+  private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -96,8 +98,8 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.getProxyServer();
   }
 
-  public static SelenideDriver getSelenideDriver() {
-    return webdriverContainer.getSelenideDriver();
+  static SelenideDriver getSelenideDriver() {
+    return staticSelenideDriver;
   }
 
   public static Driver driver() {
