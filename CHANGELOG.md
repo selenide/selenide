@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.4.0
-* add method "using" to easy switch between webdrivers
+## 5.4.0 (released 16.10.2019)
+* #862 #902 #954 #922 fix "IIlegalStateException WebDriver has been closed" (with a heavy heart!)   --  see PR #989
+* #896 Do close the browser in SelenideDriver.close()  --  see PR #989
+* #993 shorten the error message as it was before Selenide 5.3.1
+* #976 add method "using" to easy switch between webdrivers
+* #963 fail fast if xpath for searching inside a web element starts with /    --   see PR #975
 * upgrade to webdrivermanager:3.7.1
+* exclude old Guava dependency coming from net.lightbody.bmp:browsermob-core:2.1.5
 
 ## 5.3.1 (released 08.09.2019)
 * #234 add screenshot to error message in Maven too  -- see PR #972
