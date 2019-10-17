@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.4.1
+* upgrade to selenide:5.4.1
+
 === 1.4.0
 * upgrade to selenide:5.4.0
 
