@@ -8,4 +8,5 @@ hs_err_pid*
 /.project
 /.gradletasknamecache
 /bin/
+/out/
 /.settings/
