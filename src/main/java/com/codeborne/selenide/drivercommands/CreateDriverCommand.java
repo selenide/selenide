@@ -41,6 +41,7 @@ public class CreateDriverCommand {
       webdriver.getClass().getSimpleName() + " -> " + webdriver);
 
     WebDriver webDriver = addListeners(webdriver, listeners);
+    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(webDriver, selenideProxyServer));
     return new Result(webDriver, selenideProxyServer);
   }
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.4.1 (released 16.10.2019)
+* bugfix: close webdriver in the end of all tests
+
 ## 5.4.0 (released 16.10.2019)
 * #862 #902 #954 #922 fix "IIlegalStateException WebDriver has been closed" (with a heavy heart!)   --  see PR #989
 * #896 Do close the browser in SelenideDriver.close()  --  see PR #989

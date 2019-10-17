@@ -98,7 +98,6 @@ public class LazyDriver implements Driver {
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     this.closed = false;
-    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
   }
 
   @Override

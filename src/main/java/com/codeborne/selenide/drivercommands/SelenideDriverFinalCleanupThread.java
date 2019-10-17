@@ -1,14 +1,19 @@
 package com.codeborne.selenide.drivercommands;
 
-public class SelenideDriverFinalCleanupThread extends Thread {
-  private final LazyDriver driver;
+import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.openqa.selenium.WebDriver;
 
-  SelenideDriverFinalCleanupThread(LazyDriver driver) {
+public class SelenideDriverFinalCleanupThread extends Thread {
+  private final WebDriver driver;
+  private final SelenideProxyServer proxy;
+
+  SelenideDriverFinalCleanupThread(WebDriver driver, SelenideProxyServer proxy) {
     this.driver = driver;
+    this.proxy = proxy;
   }
 
   @Override
   public void run() {
-    driver.close();
+    new CloseDriverCommand(driver, proxy).run();
   }
 }
