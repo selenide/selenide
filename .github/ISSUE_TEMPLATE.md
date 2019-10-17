@@ -11,11 +11,11 @@ Tell us what you were trying to do and what happened instead.
 If necessary, describe the problem you have been experiencing in more detail.
 
 ## Tell us about your environment
-* **Selenide Version:**
-* **Chrome\Firefox\IE Version:**
-* **Browser Driver Version:**
-* **Selenium Version:**
-* **OS Version:**
+* **Selenide Version**: 
+* **Chrome\Firefox\IE Version**: 
+* **Browser Driver Version**: 
+* **Selenium Version**: 
+* **OS Version**: 
 
 ## Code To Reproduce Issue [ Good To Have ]
 Please remember that with sample code it's easier to reproduce the bug.
