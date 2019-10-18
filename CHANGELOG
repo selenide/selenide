@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.4.2
+* upgrade to io.appium:java-client:7.2.0
+
 === 1.4.1
 * upgrade to selenide:5.4.1
 
