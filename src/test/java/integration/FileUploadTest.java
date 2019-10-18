@@ -8,13 +8,10 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FileUploadTest extends ITest {
   @BeforeEach
   void openFileUploadForm() {
-    assumeFalse(browser().isPhantomjs());
-
     if (browser().isIE()) {
       driver().close();
     }

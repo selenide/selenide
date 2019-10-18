@@ -23,9 +23,7 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.isSafari;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
@@ -51,7 +49,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   @AfterAll
   public static void restartUnstableWebdriver() {
-    if (isIE() || isPhantomjs()) {
+    if (isIE()) {
       closeWebDriver();
     }
   }
@@ -66,7 +64,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    useProxy(!isPhantomjs());
+    useProxy(true);
   }
 
   private void restartReallyUnstableBrowsers() {
@@ -95,10 +93,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
    * @param proxyEnabled true - turn on, false - turn off
    */
   protected static void useProxy(boolean proxyEnabled) {
-    if (proxyEnabled) {
-      assumeFalse(isPhantomjs()); // I don't know why, but PhantomJS seems to ignore proxy
-    }
-
     if (Configuration.proxyEnabled != proxyEnabled) {
       Selenide.close();
     }

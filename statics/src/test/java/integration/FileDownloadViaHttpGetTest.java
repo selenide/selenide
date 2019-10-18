@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.TimeoutException;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,6 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,8 +21,6 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    Assumptions.assumeFalse(isPhantomjs()); // Why it's not working in PhantomJS? It's magic for me...
-
     useProxy(false);
     openFile("page_with_uploads.html");
   }

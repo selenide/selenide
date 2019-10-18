@@ -17,7 +17,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -150,9 +149,6 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     if (isHtmlUnit()) {
       assertThat(expected.getCause())
         .hasMessageContaining("Returned node (null) was not a DOM element");
-    } else if (isPhantomjs()) {
-      assertThat(expected.getCause())
-        .hasMessageContaining("Unable to find element with css selector '.nonexistent'");
     } else {
       String expectedCauseMessage = isFirefox()
         ? "Unable to locate element: .nonexistent"

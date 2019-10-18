@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-public class ZoomTest extends ITest {
+class ZoomTest extends ITest {
   @Test
   void canZoomInAndOut() {
-    assumeFalse(browser().isPhantomjs() || browser().isHtmlUnit(), "Both browsers return the same (X,Y) even after successful zooming");
+    assumeFalse(browser().isHtmlUnit(), "Both browsers return the same (X,Y) even after successful zooming");
 
     openFile("page_with_big_divs.html");
     int initialX = $("#wide_div").getLocation().getX();

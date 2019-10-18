@@ -188,7 +188,7 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
+   * Is Selenide configured to use headless browser (HtmlUnit)
    */
   public static boolean isHeadless() {
     return browser().isHeadless();
@@ -213,13 +213,6 @@ public class WebDriverRunner implements Browsers {
    */
   public static boolean isHtmlUnit() {
     return browser().isHtmlUnit();
-  }
-
-  /**
-   * Is Selenide configured to use PhantomJS browser
-   */
-  public static boolean isPhantomjs() {
-    return browser().isPhantomjs();
   }
 
   /**
