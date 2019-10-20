@@ -119,13 +119,6 @@ class WebDriverRunnerTest implements WithAssertions {
       .isFalse();
   }
 
-  @Test
-  void phantomjs_doesNotSupportAlerts() {
-    Configuration.browser = "phantomjs";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isFalse();
-  }
-
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {

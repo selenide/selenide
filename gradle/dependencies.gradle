@@ -46,7 +46,6 @@ dependencies {
 
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.28')
-  testRuntimeOnly('com.codeborne:phantomjsdriver:1.4.4') { transitive = false }
 }
 
 task libsProd(type: Sync) {

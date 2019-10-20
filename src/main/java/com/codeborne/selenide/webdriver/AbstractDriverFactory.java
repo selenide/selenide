@@ -32,10 +32,6 @@ abstract class AbstractDriverFactory {
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
-      if (className.contains("phantomjs")) {
-        capabilities.setCapability("phantomjs.cli.args", // PhantomJSDriverService.PHANTOMJS_CLI_ARGS == "phantomjs.cli.args"
-                new String[]{"--web-security=no", "--ignore-ssl-errors=yes"});
-      }
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {

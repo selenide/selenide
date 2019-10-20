@@ -19,7 +19,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -56,10 +55,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   }
 
   private void assertCauseMessage(UIAssertionError expected, String selector) {
-    if (isPhantomjs()) {
-      assertThat(expected.getCause()).hasMessageContaining("Unable to find element with css selector '" + selector + "'");
-    }
-    else if (isHtmlUnit()) {
+    if (isHtmlUnit()) {
       if (!expected.getCause().getMessage().contains("Returned node (null) was not a DOM element")) {
         assertThat(expected.getCause()).hasMessageContaining("Cannot find child element using css: " + selector);
       }

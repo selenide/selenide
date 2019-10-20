@@ -77,7 +77,7 @@ public class AttributeTest extends ITest {
 
   @Test
   void userCanSearchElementByDataAttribute() {
-    Assumptions.assumeFalse(browser().isChrome() || browser().isHtmlUnit() || browser().isPhantomjs());
+    Assumptions.assumeFalse(browser().isChrome() || browser().isHtmlUnit());
 
     assertThat($(by("data-mailServerId", "111")).data("mailServerId"))
       .isEqualTo("111");

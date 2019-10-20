@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 /**
@@ -19,7 +18,6 @@ class ClickRelativeTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     assumeFalse(isHtmlUnit());
-    assumeFalse(isPhantomjs());
     openFile("page_with_relative_click_position.html");
   }
 

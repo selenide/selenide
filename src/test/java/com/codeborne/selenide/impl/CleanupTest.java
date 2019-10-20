@@ -61,12 +61,4 @@ class CleanupTest implements WithAssertions {
     assertThat(Cleanup.of.isInvalidSelectorError(error))
       .isTrue();
   }
-
-  @Test
-  void phantomJsReportsStaleElementExceptionAsInvalidSelectorException() {
-    InvalidSelectorException staleElementExceptionInPhantomJs = new InvalidSelectorException(
-      "{\"errorMessage\":\"Element is not selectable\",\"request\": ..., takesScreenshot=true}]");
-    assertThat(Cleanup.of.isInvalidSelectorError(staleElementExceptionInPhantomJs))
-      .isFalse();
-  }
 }

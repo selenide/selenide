@@ -13,14 +13,13 @@ import java.io.IOException;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotInIframeTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    assumeFalse(isHtmlUnit() || isPhantomjs());
+    assumeFalse(isHtmlUnit());
     openFile("page_with_iframe.html");
   }
 

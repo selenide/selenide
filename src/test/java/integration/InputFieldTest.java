@@ -16,7 +16,6 @@ class InputFieldTest extends ITest {
   @Test
   void selenideClearTest() {
     Assumptions.assumeFalse(browser().isHtmlUnit(), "Fails with StringIndexOutOfBoundsException: start > length()");
-    Assumptions.assumeFalse(browser().isPhantomjs(), "Fails with Expected: '456', but: was ''");
 
     SelenideElement input = $("#id1");
     assertThat(input.getValue()).isNullOrEmpty();
