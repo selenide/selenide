@@ -580,25 +580,38 @@ class SelenideMethodsTest extends IntegrationTest {
   void canExecuteCustomCommand() {
     assumeFalse(browser().isHtmlUnit());
 
-    final Replace replace = new Replace();
     $("#username").setValue("value");
-    $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();
+    Replace replace = Replace.withValue("custom value");
+    Command<Void> doubleClick = new DoubleClick();
+    $("#username").scrollTo().execute(replace).pressEnter().execute(doubleClick);
     String mirrorText = $("#username-mirror").text();
     assertThat(mirrorText).startsWith("custom value");
   }
 
-  static class Replace implements Command<SelenideElement> {
-    private String value;
+  static class DoubleClick implements Command<Void> {
+    @Override
+    public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+      locator.driver().actions().doubleClick(locator.findAndAssertElementIsInteractable()).perform();
+      return null;
 
-    Replace withValue(String value) {
-      this.value = value;
-      return this;
+    }
+  }
+
+  static class Replace implements Command<SelenideElement> {
+    private final String replacement;
+
+    Replace(String replacement) {
+      this.replacement = replacement;
+    }
+
+    public static Replace withValue(String value) {
+      return new Replace(value);
     }
 
     @Override
     public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
       proxy.clear();
-      proxy.sendKeys(value);
+      proxy.sendKeys(replacement);
       return proxy;
     }
   }

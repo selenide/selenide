@@ -5,8 +5,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
-import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.interactions.internal.Locatable;
+import org.openqa.selenium.internal.WrapsElement;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -802,7 +802,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
    */
-  SelenideElement execute(Command<SelenideElement> command);
+  <ReturnType> ReturnType execute(Command<ReturnType> command);
 
   /**
    * Check if image is properly loaded.
