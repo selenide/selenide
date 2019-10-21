@@ -459,7 +459,7 @@ public class ScreenShotLaboratory {
 
   private int getRescaledElementWidth(WebElement element, BufferedImage image) {
     if (getElementWidth(element) > image.getWidth()) {
-       return image.getWidth() - element.getLocation().getX();
+      return image.getWidth() - element.getLocation().getX();
     } else {
       return getElementHeight(element);
     }
@@ -473,7 +473,7 @@ public class ScreenShotLaboratory {
     }
   }
 
-  private int getRescaledIframeWidth (WebElement iframe, BufferedImage image, WebDriver driver) {
+  private int getRescaledIframeWidth(WebElement iframe, BufferedImage image, WebDriver driver) {
     if (getIframeWidth(driver) > image.getWidth()) {
       return image.getWidth() - iframe.getLocation().getX();
     } else {

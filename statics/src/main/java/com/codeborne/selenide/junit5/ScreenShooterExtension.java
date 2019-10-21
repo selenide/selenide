@@ -19,7 +19,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
  * Use this class to automatically take screenshots in case of ANY errors in tests (not only Selenide errors).
- *
+ * <p>
  * How to use in Java:
  * <pre>
  * {@code
@@ -27,7 +27,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  *    public class MyTest {...}
  * }
  * </pre>
- *
+ * <p>
  * How to use in Java (with customization):
  * <pre>
  * {@code
@@ -38,7 +38,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  *   }
  * }
  * </pre>
- *
+ * <p>
  * How to use in Kotlin:
  *
  * <pre>
@@ -47,7 +47,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  *     public class MyTest {...}
  *   }
  * </pre>
- *
+ * <p>
  * How to use in Kotlin (with customization):
  *
  * <pre>
@@ -86,7 +86,6 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
    * One-liner to configure Configuration.reportsFolder property.
    *
    * @param folderWithScreenshots Folder to put screenshots to
-   *
    * @return current extension instance
    */
   public ScreenShooterExtension to(final String folderWithScreenshots) {
@@ -112,12 +111,12 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
     if (captureSuccessfulTests) {
       log.info(screenshot(driver()));
     } else {
-      if(!SelenideLogger.hasListener("allure"))
-      context.getExecutionException().ifPresent(error -> {
-        if (!(error instanceof UIAssertionError)) {
-          log.info(screenshot(driver()));
-        }
-      });
+      if (!SelenideLogger.hasListener("allure"))
+        context.getExecutionException().ifPresent(error -> {
+          if (!(error instanceof UIAssertionError)) {
+            log.info(screenshot(driver()));
+          }
+        });
     }
   }
 
