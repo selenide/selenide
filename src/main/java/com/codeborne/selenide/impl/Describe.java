@@ -8,14 +8,15 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 public class Describe {
-  private static final Logger log = Logger.getLogger(Describe.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(Describe.class);
 
   private final Driver driver;
   private final WebElement element;
@@ -38,7 +39,7 @@ public class Describe {
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
       if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
-        log.warning("Failed to get attributes via JS: " + probablyBrowserDoesNotSupportJavaScript.toString());
+        log.warn("Failed to get attributes via JS: {}", probablyBrowserDoesNotSupportJavaScript.toString());
       }
     }
     return appendPredefinedAttributes();
@@ -92,7 +93,7 @@ public class Describe {
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
       if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
-        log.warning(String.format("Failed to get attribute %s: %s", attributeName, probablyBrowserDoesNotSupportJavaScript.toString()));
+        log.warn("Failed to get attribute {}: {}", attributeName, probablyBrowserDoesNotSupportJavaScript.toString());
       }
       return this;
     }

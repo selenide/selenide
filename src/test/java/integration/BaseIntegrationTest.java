@@ -6,10 +6,11 @@ import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -18,7 +19,7 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({TextReportExtension.class})
 public abstract class BaseIntegrationTest {
-  private static final Logger log = Logger.getLogger(BaseIntegrationTest.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(BaseIntegrationTest.class);
 
   private static final boolean SSL = false;
   protected static LocalHttpServer server;
@@ -30,7 +31,6 @@ public abstract class BaseIntegrationTest {
 
   @BeforeAll
   static void setUpAll() throws Exception {
-    System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT %4$s %5$s%6$s%n"); // add %2$s for source
     Locale.setDefault(Locale.ENGLISH);
     runLocalHttpServer();
     setUpVideoRecorder();
@@ -38,7 +38,7 @@ public abstract class BaseIntegrationTest {
 
   @BeforeAll
   static void logBrowserName() {
-    log.info("START " + browser + (headless ? " (headless)" : "") + " TESTS");
+    log.info("START {}{} TESTS", browser, headless ? " (headless)" : "");
   }
 
   @BeforeEach

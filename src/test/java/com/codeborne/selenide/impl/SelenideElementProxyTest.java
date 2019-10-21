@@ -1,7 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.google.common.collect.ImmutableMap;
-
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
@@ -11,7 +9,7 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-
+import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +21,10 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelenideElementProxyTest implements WithAssertions {
-  private static final Logger log = Logger.getLogger(SelenideElementProxyTest.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
   private RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   private WebElement element = mock(WebElement.class);

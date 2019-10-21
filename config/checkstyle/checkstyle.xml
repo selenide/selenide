@@ -21,6 +21,7 @@
     </module>
     <module name="IllegalImport">
       <property name="illegalPkgs" value="junit, org.hamcrest"/>
+      <property name="illegalClasses" value="java.util.logging.Logger"/>
     </module>
     <module name="RedundantImport"/>
     <module name="AvoidStarImport"/>

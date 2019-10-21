@@ -8,6 +8,8 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,14 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.lang.Thread.currentThread;
 
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
-  private static final Logger log = Logger.getLogger(WebDriverThreadLocalContainer.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
   private final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
@@ -110,7 +111,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       webDriver = createDriver();
     }
     else if (webDriver == null) {
-      log.info("No webdriver is bound to current thread: " + currentThread().getId() + " - let's create a new webdriver");
+      log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
       webDriver = createDriver();
     }
     return webDriver;

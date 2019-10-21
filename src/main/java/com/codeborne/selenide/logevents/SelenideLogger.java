@@ -1,11 +1,12 @@
 package com.codeborne.selenide.logevents;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
@@ -13,7 +14,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
  * Logs Selenide test steps and notifies all registered LogEventListener about it
  */
 public class SelenideLogger {
-  private static final Logger LOG = Logger.getLogger(SelenideLogger.class.getName());
+  private static final Logger LOG = LoggerFactory.getLogger(SelenideLogger.class);
 
   protected static ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
 
@@ -60,7 +61,7 @@ public class SelenideLogger {
         listener.beforeEvent(log);
       }
       catch (RuntimeException e) {
-        LOG.log(Level.SEVERE, "Failed to call listener " + listener, e);
+        LOG.error("Failed to call listener {}", listener, e);
       }
     }
     return log;
@@ -80,14 +81,14 @@ public class SelenideLogger {
         listener.afterEvent(log);
       }
       catch (RuntimeException e) {
-        LOG.log(Level.SEVERE, "Failed to call listener " + listener, e);
+        LOG.error("Failed to call listener {}", listener, e);
       }
     }
   }
 
   private static Collection<LogEventListener> getEventLoggerListeners() {
     if (listeners.get() == null) {
-      listeners.set(new HashMap<String, LogEventListener>());
+      listeners.set(new HashMap<>());
     }
     return listeners.get().values();
   }
