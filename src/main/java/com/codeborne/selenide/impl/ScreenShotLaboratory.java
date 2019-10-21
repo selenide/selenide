@@ -101,8 +101,7 @@ public class ScreenShotLaboratory {
     try {
       BufferedImage destination = takeScreenshotAsImage(driver, element);
       return writeToFile(driver, destination);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error("Failed to take screenshot of {}", element, e);
       return null;
     }
@@ -125,21 +124,14 @@ public class ScreenShotLaboratory {
     Point elementLocation = element.getLocation();
     try {
       BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
-      int elementWidth = element.getSize().getWidth();
-      int elementHeight = element.getSize().getHeight();
-      if (elementWidth > img.getWidth()) {
-        elementWidth = img.getWidth() - elementLocation.getX();
-      }
-      if (elementHeight > img.getHeight()) {
-        elementHeight = img.getHeight() - elementLocation.getY();
-      }
+      int elementWidth = getRescaledElementWidth(element, img);
+      int elementHeight = getRescaledElementHeight(element, img);
+
       return img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error("Failed to take screenshot of {}", element, e);
       return null;
-    }
-    catch (RasterFormatException e) {
+    } catch (RasterFormatException e) {
       log.warn("Cannot take screenshot because element is not displayed on current screen position");
       return null;
     }
@@ -163,8 +155,7 @@ public class ScreenShotLaboratory {
     if (!printedErrors.contains(action)) {
       log.error(error.getMessage(), error);
       printedErrors.add(action);
-    }
-    else {
+    } else {
       log.error("Failed to {}: {}", action, error);
     }
   }
@@ -177,8 +168,7 @@ public class ScreenShotLaboratory {
     try {
       BufferedImage dest = takeScreenshotAsImage(driver, iframe, element);
       return writeToFile(driver, dest);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
       return null;
     }
@@ -204,40 +194,26 @@ public class ScreenShotLaboratory {
     BufferedImage img;
     try {
       img = ImageIO.read(new ByteArrayInputStream(screen));
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
       return null;
-    }
-    catch (RasterFormatException ex) {
+    } catch (RasterFormatException ex) {
       log.warn("Cannot take screenshot because iframe is not displayed");
       return null;
     }
-    int iframeHeight = iframe.getSize().getHeight();
+    int iframeHeight = getRescaledElementHeight(iframe, img);
     SelenideTargetLocator switchTo = new SelenideTargetLocator(driver.config(), driver.getWebDriver());
     switchTo.frame(iframe);
-    int iframeWidth = ((Long) ((JavascriptExecutor) webdriver).executeScript("return document.body.clientWidth")).intValue();
-    if (iframeHeight > img.getHeight()) {
-      iframeHeight = img.getHeight() - iframeLocation.getY();
-    }
-    if (iframeWidth > img.getWidth()) {
-      iframeWidth = img.getWidth() - iframeLocation.getX();
-    }
+    int iframeWidth = getRescaledIframeWidth(iframe, img, webdriver);
+
     Point elementLocation = element.getLocation();
-    int elementWidth = element.getSize().getWidth();
-    int elementHeight = element.getSize().getHeight();
-    if (elementWidth > iframeWidth) {
-      elementWidth = iframeWidth - elementLocation.getX();
-    }
-    if (elementHeight > iframeHeight) {
-      elementHeight = iframeHeight - elementLocation.getY();
-    }
+    int elementWidth = getRescaledElementWidth(element, iframeWidth);
+    int elementHeight = getRescaledElementHeight(element, iframeHeight);
     switchTo.defaultContent();
     try {
       img = img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
         elementWidth, elementHeight);
-    }
-    catch (RasterFormatException ex) {
+    } catch (RasterFormatException ex) {
       log.warn("Cannot take screenshot because element is not displayed in iframe");
       return null;
     }
@@ -252,8 +228,7 @@ public class ScreenShotLaboratory {
     if (!(webdriver instanceof TakesScreenshot)) {
       log.warn("Cannot take screenshot because browser does not support screenshots");
       return null;
-    }
-    else if (!(webdriver instanceof JavascriptExecutor)) {
+    } else if (!(webdriver instanceof JavascriptExecutor)) {
       log.warn("Cannot take screenshot as driver is not supporting javascript execution");
       return null;
     }
@@ -288,8 +263,7 @@ public class ScreenShotLaboratory {
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
     try {
       return driver.getScreenshotAs(FILE);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       log.error("Failed to take screenshot in memory", e);
       return null;
     }
@@ -312,29 +286,24 @@ public class ScreenShotLaboratory {
 
     try {
       writeToFile(webdriver.getPageSource(), pageSource);
-    }
-    catch (UnhandledAlertException e) {
+    } catch (UnhandledAlertException e) {
       if (retryIfAlert) {
         try {
           Alert alert = webdriver.switchTo().alert();
           log.error("{}: {}", e, alert.getText());
           alert.accept();
           savePageSourceToFile(config, fileName, webdriver, false);
-        }
-        catch (Exception unableToCloseAlert) {
+        } catch (Exception unableToCloseAlert) {
           log.error("Failed to close alert", unableToCloseAlert);
         }
-      }
-      else {
+      } else {
         printOnce("savePageSourceToFile", e);
       }
-    }
-    catch (WebDriverException e) {
+    } catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
-    }
-    catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
     }
@@ -347,13 +316,11 @@ public class ScreenShotLaboratory {
       File imageFile = new File(config.reportsFolder(), fileName + ".png");
       try {
         copyFile(scrFile, imageFile);
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);
       }
       return imageFile;
-    }
-    catch (WebDriverException e) {
+    } catch (WebDriverException e) {
       log.error("Failed to take screenshot to {}", fileName, e);
       return null;
     }
@@ -380,8 +347,7 @@ public class ScreenShotLaboratory {
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       copyFile(in, targetFile);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
     }
   }
@@ -449,8 +415,7 @@ public class ScreenShotLaboratory {
     log.debug("reportsUrl is not configured. Returning screenshot file name '{}'", screenshot);
     try {
       return new File(screenshot).toURI().toURL().toExternalForm();
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       return "file://" + screenshot;
     }
   }
@@ -473,5 +438,58 @@ public class ScreenShotLaboratory {
       return null;
     }
     return lambda.apply(config);
+  }
+
+
+  private int getRescaledElementWidth(WebElement element, int iframeWidth) {
+    if (getElementWidth(element) > iframeWidth) {
+      return iframeWidth - element.getLocation().getX();
+    } else {
+      return getElementHeight(element);
+    }
+  }
+
+  private int getRescaledElementHeight(WebElement element, int iframeHeight) {
+    if (getElementHeight(element) > iframeHeight) {
+      return iframeHeight - element.getLocation().getY();
+    } else {
+      return getElementHeight(element);
+    }
+  }
+
+  private int getRescaledElementWidth(WebElement element, BufferedImage image) {
+    if (getElementWidth(element) > image.getWidth()) {
+       return image.getWidth() - element.getLocation().getX();
+    } else {
+      return getElementHeight(element);
+    }
+  }
+
+  private int getRescaledElementHeight(WebElement element, BufferedImage image) {
+    if (getElementHeight(element) > image.getHeight()) {
+      return image.getHeight() - element.getLocation().getY();
+    } else {
+      return getElementHeight(element);
+    }
+  }
+
+  private int getRescaledIframeWidth (WebElement iframe, BufferedImage image, WebDriver driver) {
+    if (getIframeWidth(driver) > image.getWidth()) {
+      return image.getWidth() - iframe.getLocation().getX();
+    } else {
+      return getIframeWidth(driver);
+    }
+  }
+
+  private int getIframeWidth(WebDriver driver) {
+    return ((Long) ((JavascriptExecutor) driver).executeScript("return document.body.clientWidth")).intValue();
+  }
+
+  private int getElementWidth(WebElement element) {
+    return element.getSize().getWidth();
+  }
+
+  private int getElementHeight(WebElement element) {
+    return element.getSize().getHeight();
   }
 }

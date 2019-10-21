@@ -3,6 +3,7 @@ package com.codeborne.selenide.junit5;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -111,6 +112,7 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
     if (captureSuccessfulTests) {
       log.info(screenshot(driver()));
     } else {
+      if(!SelenideLogger.hasListener("allure"))
       context.getExecutionException().ifPresent(error -> {
         if (!(error instanceof UIAssertionError)) {
           log.info(screenshot(driver()));
