@@ -3,27 +3,14 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideTargetLocator;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -442,18 +429,20 @@ public class ScreenShotLaboratory {
 
 
   private int getRescaledElementWidth(WebElement element, int iframeWidth) {
-    if (getElementWidth(element) > iframeWidth) {
+    int elementWidth = getElementWidth(element);
+    if (elementWidth > iframeWidth) {
       return iframeWidth - element.getLocation().getX();
     } else {
-      return getElementHeight(element);
+      return elementWidth;
     }
   }
 
   private int getRescaledElementHeight(WebElement element, int iframeHeight) {
-    if (getElementHeight(element) > iframeHeight) {
+    int elementHeight = getElementHeight(element);
+    if (elementHeight > iframeHeight) {
       return iframeHeight - element.getLocation().getY();
     } else {
-      return getElementHeight(element);
+      return elementHeight;
     }
   }
 
