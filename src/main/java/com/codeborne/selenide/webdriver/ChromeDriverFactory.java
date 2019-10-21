@@ -7,17 +7,18 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class ChromeDriverFactory extends AbstractDriverFactory {
-  private static final Logger log = Logger.getLogger(ChromeDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
 
   @Override
   WebDriver create(Config config, Proxy proxy) {
@@ -34,13 +35,13 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
-      log.info("Using browser binary: " + config.browserBinary());
+      log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
     }
     options.addArguments("--proxy-bypass-list=<-loopback>");
     options.merge(createCommonCapabilities(config, proxy));
     options = transferChromeOptionsFromSystemProperties(options);
-    log.config("Chrome options:" + options.toString());
+    log.debug("Chrome options: {}", options.toString());
     return options;
   }
 
@@ -76,14 +77,10 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         .split("=");
 
       if (keyValue.length == 1) {
-        log.warning(String.format(
-            "Missing '=' sign while parsing <key=value> pairs from %s. Key '%s' is ignored.",
-            preferencesString, keyValue[0]));
+        log.warn("Missing '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.", preferencesString, keyValue[0]);
         continue;
       } else if (keyValue.length > 2) {
-        log.warning(String.format(
-            "More than one '=' sign while parsing <key=value> pairs from %s. Key '%s' is ignored.",
-            preferencesString, keyValue[0]));
+        log.warn("More than one '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.", preferencesString, keyValue[0]);
         continue;
       }
 

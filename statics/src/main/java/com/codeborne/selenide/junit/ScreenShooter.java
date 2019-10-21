@@ -5,8 +5,8 @@ import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
@@ -23,7 +23,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().to("test-results/img/");</pre>
  */
 public class ScreenShooter extends TestWatcher {
-  private final Logger log = Logger.getLogger(getClass().getName());
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   public boolean captureSuccessfulTests;
 

@@ -8,10 +8,11 @@ import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static java.lang.Thread.currentThread;
 
@@ -20,7 +21,7 @@ import static java.lang.Thread.currentThread;
  * May be created with its own config, proxy and listeners.
  */
 public class LazyDriver implements Driver {
-  private static final Logger log = Logger.getLogger(LazyDriver.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(LazyDriver.class);
 
   private final Config config;
   private final BrowserHealthChecker browserHealthChecker;
@@ -87,7 +88,7 @@ public class LazyDriver implements Driver {
       createDriver();
     }
     else if (webDriver == null) {
-      log.info("No webdriver is bound to current thread: " + currentThread().getId() + " - let's create a new webdriver");
+      log.info("No webdriver is bound to current thread: {} - let's create a new webdriver", currentThread().getId());
       createDriver();
     }
     return getWebDriver();

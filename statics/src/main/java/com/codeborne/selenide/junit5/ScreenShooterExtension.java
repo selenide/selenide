@@ -7,10 +7,11 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
@@ -65,7 +66,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * @since 4.12.2
  */
 public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallback, AfterAllCallback {
-  private static final Logger log = Logger.getLogger(ScreenShooterExtension.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(ScreenShooterExtension.class);
 
   private final boolean captureSuccessfulTests;
 

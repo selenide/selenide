@@ -20,6 +20,7 @@ dependencies {
   implementation('net.lightbody.bmp:browsermob-core:2.1.5') {
     exclude group: 'com.google.guava', module: 'guava'
   }
+  implementation('org.slf4j:slf4j-api:1.7.26')
 
   compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion") { transitive = false }
   compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") { transitive = false }

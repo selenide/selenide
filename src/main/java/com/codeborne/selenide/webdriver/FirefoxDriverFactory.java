@@ -8,11 +8,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class FirefoxDriverFactory extends AbstractDriverFactory {
-  private static final Logger log = Logger.getLogger(FirefoxDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
 
   @Override
   boolean supports(Config config, Browser browser) {
@@ -61,7 +61,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
-        log.config("Use " + key + "=" + value);
+        log.debug("Use {}={}", key, value);
         if (value.equals("true") || value.equals("false")) {
           profile.setPreference(capability, Boolean.valueOf(value));
         }

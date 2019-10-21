@@ -1,14 +1,17 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Logger;
 
 class UnusedWebdriversCleanupThread extends Thread {
-  private static final Logger log = Logger.getLogger(UnusedWebdriversCleanupThread.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(UnusedWebdriversCleanupThread.class);
 
   private final Collection<Thread> allWebDriverThreads;
   private final Map<Long, WebDriver> threadWebDriver;
@@ -40,7 +43,7 @@ class UnusedWebdriversCleanupThread extends Thread {
   private void closeUnusedWebdrivers() {
     for (Thread thread : allWebDriverThreads) {
       if (!thread.isAlive()) {
-        log.info("Thread " + thread.getId() + " is dead. Let's close webdriver " + threadWebDriver.get(thread.getId()));
+        log.info("Thread {} is dead. Let's close webdriver {}", thread.getId(), threadWebDriver.get(thread.getId()));
         closeWebDriver(thread);
       }
     }
@@ -51,7 +54,7 @@ class UnusedWebdriversCleanupThread extends Thread {
     WebDriver driver = threadWebDriver.remove(thread.getId());
 
     if (driver == null) {
-      log.info("No webdriver found for thread : " + thread.getId() + " - nothing to close");
+      log.info("No webdriver found for thread: {} - nothing to close", thread.getId());
     }
     else {
       driver.quit();

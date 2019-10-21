@@ -7,16 +7,17 @@ import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public class DownloadFileWithProxyServer {
-  private static final Logger log = Logger.getLogger(DownloadFileWithProxyServer.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
 
   private final Waiter waiter;
 
@@ -60,19 +61,19 @@ public class DownloadFileWithProxyServer {
       Set<String> newWindows = new HashSet<>(windowHandles);
       newWindows.removeAll(currentWindows);
 
-      log.info("File has been opened in a new window, let's close " + newWindows.size() + " new windows");
+      log.info("File has been opened in a new window, let's close {} new windows", newWindows.size());
 
       for (String newWindow : newWindows) {
-        log.info("  Let's close " + newWindow);
+        log.info("  Let's close {}", newWindow);
         try {
           webDriver.switchTo().window(newWindow);
           webDriver.close();
         }
         catch (NoSuchWindowException windowHasBeenClosedMeanwhile) {
-          log.info("  Failed to close " + newWindow + ": " + Cleanup.of.webdriverExceptionMessage(windowHasBeenClosedMeanwhile));
+          log.info("  Failed to close {}: {}", newWindow, Cleanup.of.webdriverExceptionMessage(windowHasBeenClosedMeanwhile));
         }
         catch (Exception e) {
-          log.warning("  Failed to close " + newWindow + ": " + e);
+          log.warn("  Failed to close {}", newWindow, e);
         }
       }
       webDriver.switchTo().window(currentWindowHandle);
@@ -94,8 +95,8 @@ public class DownloadFileWithProxyServer {
         " in " + timeout + " ms." + filter.getResponses());
     }
 
-    log.info("Downloaded file: " + files.get(0).getAbsolutePath());
-    log.info("Just in case, all intercepted responses: " + filter.getResponses());
+    log.info("Downloaded file: {}", files.get(0).getAbsolutePath());
+    log.info("Just in case, all intercepted responses: {}", filter.getResponses());
     return files.get(0);
   }
 }

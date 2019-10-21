@@ -8,15 +8,15 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import static java.util.Arrays.asList;
 
 public class WebDriverFactory {
-
-  private static final Logger log = Logger.getLogger(WebDriverFactory.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
 
   protected List<AbstractDriverFactory> factories = asList(
       new RemoteDriverFactory(),
@@ -36,11 +36,11 @@ public class WebDriverFactory {
   protected BrowserResizer browserResizer = new BrowserResizer();
 
   public WebDriver createWebDriver(Config config, Proxy proxy) {
-    log.config("browser=" + config.browser());
-    log.config("browser.version=" + config.browserVersion());
-    log.config("remote=" + config.remote());
-    log.config("browserSize=" + config.browserSize());
-    log.config("startMaximized=" + config.startMaximized());
+    log.debug("browser={}", config.browser());
+    log.debug("browser.version={}", config.browserVersion());
+    log.debug("remote={}", config.remote());
+    log.debug("browserSize={}", config.browserSize());
+    log.debug("startMaximized={}", config.startMaximized());
 
     Browser browser = new Browser(config.browser(), config.headless());
 
@@ -58,7 +58,7 @@ public class WebDriverFactory {
     webdriver = browserResizer.adjustBrowserPosition(config, webdriver);
 
     logBrowserVersion(webdriver);
-    log.info("Selenide v. " + SelenideDriver.class.getPackage().getImplementationVersion());
+    log.info("Selenide v. {}", SelenideDriver.class.getPackage().getImplementationVersion());
     logSeleniumInfo(config);
     return webdriver;
   }
@@ -66,18 +66,16 @@ public class WebDriverFactory {
   protected void logSeleniumInfo(Config config) {
     if (config.remote() == null) {
       BuildInfo seleniumInfo = new BuildInfo();
-      log.info(
-          "Selenium WebDriver v. " + seleniumInfo.getReleaseLabel() + " build time: " + seleniumInfo.getBuildTime());
+      log.info("Selenium WebDriver v. {} build time: {}", seleniumInfo.getReleaseLabel(), seleniumInfo.getBuildTime());
     }
   }
 
   protected void logBrowserVersion(WebDriver webdriver) {
     if (webdriver instanceof HasCapabilities) {
       Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
-      log.info("BrowserName=" + capabilities.getBrowserName() +
-          " Version=" + capabilities.getVersion() + " Platform=" + capabilities.getPlatform());
+      log.info("BrowserName={} Version={} Platform={}", capabilities.getBrowserName(), capabilities.getVersion(), capabilities.getPlatform());
     } else {
-      log.info("BrowserName=" + webdriver.getClass().getName());
+      log.info("BrowserName={}", webdriver.getClass().getName());
     }
   }
 }

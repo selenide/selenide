@@ -7,16 +7,17 @@ import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 
 public class DownloadFile implements Command<File> {
-  private static final Logger LOG = Logger.getLogger(DownloadFile.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
   private final DownloadFileWithProxyServer downloadFileWithProxyServer;
@@ -38,7 +39,7 @@ public class DownloadFile implements Command<File> {
     long timeout = getTimeout(config, args);
 
     if (config.fileDownload() == HTTPGET) {
-      LOG.config("selenide.fileDownload = " + System.getProperty("selenide.fileDownload") + " download file via http get");
+      log.debug("selenide.fileDownload = {} download file via http get", System.getProperty("selenide.fileDownload"));
       return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout);
     }
     if (!config.proxyEnabled()) {
