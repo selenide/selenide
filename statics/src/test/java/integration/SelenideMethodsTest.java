@@ -54,12 +54,10 @@ import static com.codeborne.selenide.Selenide.title;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
@@ -134,18 +132,10 @@ class SelenideMethodsTest extends IntegrationTest {
     assertThat($("h2").innerHtml())
       .isEqualTo("Dropdown list");
 
-    if (isHtmlUnit()) {
-      assertThat($("#baskerville").innerHtml().trim())
-        .isEqualTo("<span></span> L'a\n      Baskerville");
-      assertThat($("#status").innerHtml().trim())
-        .isEqualTo("Username: <span class=\"name\">Bob Smith</span> Last login: <span class=\"last-login\">01.01.1970</span>");
-    }
-    else {
-      assertThat($("#baskerville").innerHtml().trim())
-        .isEqualTo("<span></span> L'a\n      Baskerville");
-      assertThat($("#status").innerHtml().trim())
-        .isEqualTo("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>");
-    }
+    assertThat($("#baskerville").innerHtml().trim())
+      .isEqualTo("<span></span> L'a\n      Baskerville");
+    assertThat($("#status").innerHtml().trim())
+      .isEqualTo("Username: <span class=\"name\">Bob Smith</span>&nbsp;Last login: <span class=\"last-login\">01.01.1970</span>");
   }
 
   @Test
@@ -221,8 +211,8 @@ class SelenideMethodsTest extends IntegrationTest {
     $("#username").sendKeys(" x ");
     $("#username").pressTab();
 
-    if (!isHtmlUnit() && !isChrome() && !isFirefox()) {
-      // fails in HtmlUnit and Chrome for unknown reason. In Firefox, it's just unstable.
+    if (!isChrome() && !isFirefox()) {
+      // fails in Chrome for unknown reason. In Firefox, it's just unstable.
       $("#password").shouldBe(focused);
       $("#username-mirror").shouldHave(text(" x "));
       $("#username-blur-counter").shouldHave(text("blur: "));
@@ -237,14 +227,8 @@ class SelenideMethodsTest extends IntegrationTest {
       .isEqualTo("Dropdown list");
     assertThat($(By.name("domain")).find("option").text())
       .isEqualTo("@livemail.ru");
-    if (isHtmlUnit()) {
-      assertThat($("#radioButtons").text())
-        .isEqualTo("Radio buttons\nuncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland");
-    }
-    else {
-      assertThat($("#radioButtons").text())
-        .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
-    }
+    assertThat($("#radioButtons").text())
+      .isEqualTo("Radio buttons\nМастер Маргарита Кот \"Бегемот\" Theodor Woland");
 
     $("h1").shouldHave(text("Page "));
     $("h2").shouldHave(text("Dropdown list"));
@@ -257,14 +241,8 @@ class SelenideMethodsTest extends IntegrationTest {
     $("h1").shouldHave(exactText("Page with selects"));
     $("h2").shouldHave(exactText("Dropdown list"));
     $(By.name("domain")).find("option").shouldHave(text("@livemail.ru"));
-    if (isHtmlUnit()) {
-      $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "uncheckedМастер uncheckedМаргарита uncheckedКот \"Бегемот\" uncheckedTheodor Woland"));
-    }
-    else {
-      $("#radioButtons").shouldHave(text("Radio buttons\n" +
-        "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
-    }
+    $("#radioButtons").shouldHave(text("Radio buttons\n" +
+      "Мастер Маргарита Кот \"Бегемот\" Theodor Woland"));
   }
 
   @Test
@@ -578,8 +556,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canExecuteCustomCommand() {
-    assumeFalse(browser().isHtmlUnit());
-
     final Replace replace = new Replace();
     $("#username").setValue("value");
     $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();

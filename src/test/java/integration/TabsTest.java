@@ -92,8 +92,8 @@ class TabsTest extends ITest {
 
   @Test
   @Video
-  void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
-    assumeFalse(browser().isChrome() || browser().isHtmlUnit());
+  void canSwitchToWindowByIndex_other_browsers_but_chrome() {
+    assumeFalse(browser().isChrome());
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
@@ -113,7 +113,6 @@ class TabsTest extends ITest {
   @Test
   @Video
   void canSwitchBetweenWindowsWithSameTitles() {
-    assumeFalse(browser().isHtmlUnit());
     $(byText("Page4: same title")).click();
     $("h1").shouldHave(text("Tabs"));
 

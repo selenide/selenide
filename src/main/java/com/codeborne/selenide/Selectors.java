@@ -67,8 +67,6 @@ public class Selectors {
 
   /**
    * Synonym for #byAttribute
-   *
-   * Seems to work incorrectly in HtmlUnit if attribute name contains dash (e.g. "data-mailServerId")
    */
   public static By by(String attributeName, String attributeValue) {
     return byAttribute(attributeName, attributeValue);

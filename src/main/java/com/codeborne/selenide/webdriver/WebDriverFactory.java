@@ -26,6 +26,7 @@ public class WebDriverFactory {
       new HtmlUnitDriverFactory(),
       new EdgeDriverFactory(),
       new InternetExplorerDriverFactory(),
+      new PhantomJsDriverFactory(),
       new OperaDriverFactory(),
       new SafariDriverFactory(),
       new JBrowserDriverFactory()

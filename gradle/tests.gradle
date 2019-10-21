@@ -49,13 +49,6 @@ task safari(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task htmlunit(type: Test) {
-  systemProperties['selenide.browser'] = 'htmlunit'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/htmlunit'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
@@ -102,7 +95,8 @@ task grid(type: Test) {
 task testng(type: Test) {
   useTestNG()
   include '**/*'
-  systemProperties['selenide.browser'] = 'htmlunit'
+  systemProperties['selenide.browser'] = 'chrome'
+  systemProperties['selenide.headless'] = 'true'
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/testng'
 }
 
@@ -131,4 +125,4 @@ tasks.withType(Test) {
   }
 }
 
-task allTests(dependsOn: ['clean', 'check', 'test', 'grid', 'firefox_headless', 'chrome_headless', 'htmlunit']) {}
+task allTests(dependsOn: ['clean', 'check', 'test', 'grid', 'firefox_headless', 'chrome_headless']) {}

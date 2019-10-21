@@ -20,14 +20,8 @@ public class SelenideElementToStringTest extends ITest {
     assertThat($(By.name("rememberMe")))
       .hasToString("<input name=\"rememberMe\" type=\"checkbox\" value=\"on\"></input>");
 
-    if (browser().isHtmlUnit()) {
-      assertThat($(By.name("domain")).find("option"))
-        .hasToString("<option value=\"livemail.ru\" selected:true>@livemail.ru</option>");
-    }
-    else {
-      assertThat($(By.name("domain")).find("option"))
-        .hasToString("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>");
-    }
+    assertThat($(By.name("domain")).find("option"))
+      .hasToString("<option data-mailserverid=\"111\" value=\"livemail.ru\" selected:true>@livemail.ru</option>");
 
     assertThat($(byText("Want to see ajax in action?")).toString())
       .contains("<a href=");
@@ -39,19 +33,11 @@ public class SelenideElementToStringTest extends ITest {
   void toStringShowsAllAttributesButStyleSortedAlphabetically() {
     openFile("page_with_selects_without_jquery.html");
 
-    if (browser().isHtmlUnit()) {
-      assertThat($("#gopher"))
-        .hasToString("<div class=\"invisible-with-multiple-attributes\" id=\"gopher\" " +
-          "onclick=\"void(0);\" onchange=\"console.log(this);\" placeholder=\"Животное\" " +
-          "displayed:false></div>");
-    }
-    else {
-      assertThat($("#gopher"))
-        .hasToString("<div class=\"invisible-with-multiple-attributes\" " +
-          "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
-          "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
-          "displayed:false></div>");
-    }
+    assertThat($("#gopher"))
+      .hasToString("<div class=\"invisible-with-multiple-attributes\" " +
+        "data-animal-id=\"111\" id=\"gopher\" ng-class=\"widget\" ng-click=\"none\" " +
+        "onchange=\"console.log(this);\" onclick=\"void(0);\" placeholder=\"Животное\" " +
+        "displayed:false></div>");
   }
 
   @Test

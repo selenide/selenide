@@ -86,7 +86,6 @@ class FramesTest extends ITest {
 
   @Test
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByElement() {
-    assumeFalse(browser().isHtmlUnit());
     assertThat(driver().title()).isEqualTo("Test::frames");
 
     assertThatThrownBy(() -> {
