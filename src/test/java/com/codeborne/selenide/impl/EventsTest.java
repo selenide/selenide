@@ -1,13 +1,12 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
 
-import java.util.logging.Logger;
-
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -18,14 +17,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 class EventsTest {
-  private Events events = spy(new Events());
+  private Logger log = mock(Logger.class);
+  private Events events = spy(new Events(log));
   private WebElement element = mock(WebElement.class);
   private Driver driver = mock(Driver.class);
-
-  @BeforeEach
-  void setUp() {
-    events.log = mock(Logger.class);
-  }
 
   @Test
   void triggersEventsByExecutingJSCode() {
@@ -34,7 +29,7 @@ class EventsTest {
     events.fireEvent(driver, element, "input", "keyup", "change");
 
     verify(events).executeJavaScript(driver, element, "input", "keyup", "change");
-    verifyNoMoreInteractions(events.log);
+    verifyNoMoreInteractions(log);
   }
 
   @Test
@@ -44,7 +39,7 @@ class EventsTest {
     events.fireEvent(driver, element, "change");
 
     verify(events).executeJavaScript(driver, element, "change");
-    verifyNoMoreInteractions(events.log);
+    verifyNoMoreInteractions(log);
   }
 
   @Test
@@ -55,7 +50,7 @@ class EventsTest {
     events.fireEvent(driver, element, "input", "change");
 
     verify(events).executeJavaScript(driver, element, "input", "change");
-    verify(events.log).warning("Failed to trigger events [input, change]: " +
+    verify(log).warn("Failed to trigger events {}: {}", asList("input", "change"),
       "java.lang.UnsupportedOperationException: webdriver does not support JS");
   }
 }

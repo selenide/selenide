@@ -1,13 +1,12 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.SelenideConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
 public class CiReportUrl {
-  private static final Logger log = LoggerFactory.getLogger(SelenideConfig.class);
+  private static final Logger log = LoggerFactory.getLogger(CiReportUrl.class);
 
   public String getReportsUrl(String reportsUrl) {
     if (!isEmpty(reportsUrl)) {

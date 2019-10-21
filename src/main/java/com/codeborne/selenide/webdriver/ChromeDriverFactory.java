@@ -77,10 +77,12 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         .split("=");
 
       if (keyValue.length == 1) {
-        log.warn("Missing '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.", preferencesString, keyValue[0]);
+        log.warn("Missing '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.",
+          preferencesString, keyValue[0]);
         continue;
       } else if (keyValue.length > 2) {
-        log.warn("More than one '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.", preferencesString, keyValue[0]);
+        log.warn("More than one '=' sign while parsing <key=value> pairs from {}. Key '{}' is ignored.",
+          preferencesString, keyValue[0]);
         continue;
       }
 

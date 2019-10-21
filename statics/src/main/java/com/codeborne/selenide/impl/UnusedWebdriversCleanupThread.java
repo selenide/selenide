@@ -1,8 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

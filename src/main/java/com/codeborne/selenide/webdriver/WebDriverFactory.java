@@ -73,7 +73,8 @@ public class WebDriverFactory {
   protected void logBrowserVersion(WebDriver webdriver) {
     if (webdriver instanceof HasCapabilities) {
       Capabilities capabilities = ((HasCapabilities) webdriver).getCapabilities();
-      log.info("BrowserName={} Version={} Platform={}", capabilities.getBrowserName(), capabilities.getVersion(), capabilities.getPlatform());
+      log.info("BrowserName={} Version={} Platform={}",
+        capabilities.getBrowserName(), capabilities.getVersion(), capabilities.getPlatform());
     } else {
       log.info("BrowserName={}", webdriver.getClass().getName());
     }

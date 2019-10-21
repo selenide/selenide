@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
 import static java.lang.Thread.currentThread;
 
 public class CreateDriverCommand {
@@ -37,7 +38,8 @@ public class CreateDriverCommand {
 
     WebDriver webdriver = factory.createWebDriver(config, browserProxy);
 
-    log.info("Create webdriver in current thread {}: {} -> {}", currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
+    log.info("Create webdriver in current thread {}: {} -> {}",
+      currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
     WebDriver webDriver = addListeners(webdriver, listeners);
     Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(webDriver, selenideProxyServer));

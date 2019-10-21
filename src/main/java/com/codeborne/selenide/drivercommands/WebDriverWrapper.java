@@ -5,10 +5,11 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.internal.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
 
@@ -18,7 +19,7 @@ import static java.util.Objects.requireNonNull;
  * It doesn't start a new proxy.
  */
 public class WebDriverWrapper implements Driver {
-  private static final Logger log = Logger.getLogger(WebDriverWrapper.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(WebDriverWrapper.class);
 
   private final Config config;
   private final WebDriver webDriver;

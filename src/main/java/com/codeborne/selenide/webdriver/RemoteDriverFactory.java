@@ -54,7 +54,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   Capabilities getBrowserBinaryCapabilities(Config config, Browser browser) {
-    log.info("Using browser binary: " + config.browserBinary());
+    log.info("Using browser binary: {}", config.browserBinary());
     if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
       options.setBinary(config.browserBinary());

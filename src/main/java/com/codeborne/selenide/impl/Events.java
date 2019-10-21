@@ -9,9 +9,13 @@ import org.slf4j.LoggerFactory;
 import static java.util.Arrays.asList;
 
 public class Events {
-  private static final Logger log = LoggerFactory.getLogger(Events.class);
+  public static Events events = new Events(LoggerFactory.getLogger(Events.class));
 
-  public static Events events = new Events();
+  private final Logger log;
+
+  Events(Logger log) {
+    this.log = log;
+  }
 
   private final String jsCodeToTriggerEvent =
       "var webElement = arguments[0];\n" +
