@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.TextsMismatch;
-import org.assertj.core.api.Assertions;
+import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +11,7 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CollectionWaitTest extends IntegrationTest {
   @BeforeEach
@@ -51,22 +52,32 @@ class CollectionWaitTest extends IntegrationTest {
   }
 
   @Test
-  void firstNElements_errorMessage() {
+  void firstNElements_TextsMismatchErrorMessage() {
     Configuration.timeout = 4000;
-    Assertions.assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
+    assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element", "#wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #0, Element #1]\n" +
-        "Expected: [Element #wrong]\n" +
+        "Expected: [Element, #wrong]\n" +
+        "Collection: #collection li.first(2)");
+  }
+
+  @Test
+  void firstNElements_TextsSizeMismatchErrorMessage() {
+    Configuration.timeout = 4000;
+    assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
+      .isInstanceOf(TextsSizeMismatch.class)
+      .hasMessageContaining("Actual: [Element #0, Element #1], List size: 2\n" +
+        "Expected: [Element #wrong], List size: 1\n" +
         "Collection: #collection li.first(2)");
   }
 
   @Test
   void lastNElements_errorMessage() {
     Configuration.timeout = 4000;
-    Assertions.assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element #wrong")))
+    assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element", "#wrong")))
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #48, Element #49]\n" +
-        "Expected: [Element #wrong]\n" +
+        "Expected: [Element, #wrong]\n" +
         "Collection: #collection li.last(2)");
   }
 

@@ -14,6 +14,8 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SelectsTest extends IntegrationTest {
 
@@ -91,14 +93,14 @@ class SelectsTest extends IntegrationTest {
   void throwsElementNotFoundWithOptionsText() {
     assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption("unexisting-option"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\nExpected: exist");
+      .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\nExpected: exist");
   }
 
   @Test()
   void throwsElementNotFoundWithOptionsIndex() {
     assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption(999))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\nExpected: exist");
+      .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\nExpected: exist");
   }
 
   @Test

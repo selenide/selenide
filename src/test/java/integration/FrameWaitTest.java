@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class FrameWaitTest extends ITest {

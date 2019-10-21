@@ -15,12 +15,17 @@ public class ErrorsCollector implements LogEventListener {
   private final List<Throwable> errors = new ArrayList<>();
 
   @Override
-  public void onEvent(LogEvent event) {
+  public void afterEvent(LogEvent event) {
     if (event.getStatus() == FAIL) {
       errors.add(event.getError());
     }
   }
-  
+
+  @Override
+  public void beforeEvent(LogEvent currentLog) {
+    // ignore
+  }
+
   public void clear() {
     errors.clear();
   }

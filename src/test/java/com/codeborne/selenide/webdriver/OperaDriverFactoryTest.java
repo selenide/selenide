@@ -12,10 +12,9 @@ import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings("unchecked")
 class OperaDriverFactoryTest implements WithAssertions {
   private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig();
+  private SelenideConfig config = new SelenideConfig().headless(false);
 
   @Test
   void browserBinaryCanBeSet() {

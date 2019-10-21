@@ -1,10 +1,13 @@
 package integration;
 
+import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -53,11 +56,21 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class SelenideMethodsTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");
+  }
+
+  @Test
+  void canOpenBlankPage() {
+    open("about:blank");
+    $("body").shouldHave(exactText(""));
   }
 
   @Test
@@ -437,8 +450,8 @@ class SelenideMethodsTest extends IntegrationTest {
 
     $("#login").contextClick().click();
 
-    $(By.name("domain")).find("option").click();
-    $(By.name("domain")).find("option").contextClick();
+    $(By.name("domain")).click();
+    $(By.name("domain")).contextClick();
   }
 
   @Test
@@ -561,5 +574,32 @@ class SelenideMethodsTest extends IntegrationTest {
     elements("[name='me']").shouldHave(size(4));
     elements(By.cssSelector("[name='me']")).shouldHave(size(4));
     elements(getWebDriver().findElements(By.cssSelector("[name='me']"))).shouldHave(size(4));
+  }
+
+  @Test
+  void canExecuteCustomCommand() {
+    assumeFalse(browser().isHtmlUnit());
+
+    final Replace replace = new Replace();
+    $("#username").setValue("value");
+    $("#username").scrollTo().execute(replace.withValue("custom value")).pressEnter();
+    String mirrorText = $("#username-mirror").text();
+    assertThat(mirrorText).startsWith("custom value");
+  }
+
+  static class Replace implements Command<SelenideElement> {
+    private String value;
+
+    Replace withValue(String value) {
+      this.value = value;
+      return this;
+    }
+
+    @Override
+    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+      proxy.clear();
+      proxy.sendKeys(value);
+      return proxy;
+    }
   }
 }

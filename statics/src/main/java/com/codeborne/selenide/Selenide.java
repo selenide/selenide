@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
@@ -23,6 +24,7 @@ import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
  * {@link #$(String)} for searching web elements.
  */
 public class Selenide {
+
   /**
    * The main starting point in your tests.
    * Open a browser window with given URL.
@@ -102,6 +104,18 @@ public class Selenide {
    */
   public static void open(URL absoluteUrl, String domain, String login, String password) {
     getSelenideDriver().open(absoluteUrl, domain, login, password);
+  }
+
+  /**
+   * Open an empty browser (without opening any pages).
+   * E.g. useful for starting mobile applications in Appium.
+   */
+  public static void open() {
+    getSelenideDriver().open();
+  }
+
+  public static void using(WebDriver webDriver, Runnable lambda) {
+    WebDriverRunner.using(webDriver, lambda);
   }
 
   /**

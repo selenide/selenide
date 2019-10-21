@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
+import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,7 +16,15 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.CollectionCondition.*;
+import static com.codeborne.selenide.CollectionCondition.empty;
+import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
+import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
+import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
+import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
+import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
@@ -23,6 +32,8 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CollectionMethodsTest extends ITest {
   @BeforeEach
@@ -139,8 +150,15 @@ class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void textsCheckThrowsTextsMismatch() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2", "static3")))
+  void textsCheckThrowsTextsSizeMismatch() {
+    assertThatThrownBy(() -> $$("#dynamic-content-container span")
+      .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
+      .isInstanceOf(TextsSizeMismatch.class);
+  }
+
+  @Test
+  void textCheckThrowsTextsMismatch() {
+    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
       .isInstanceOf(TextsMismatch.class);
   }
 

@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getSelectedRadio;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RadioTest extends IntegrationTest {
   @BeforeEach
@@ -51,13 +53,13 @@ class RadioTest extends IntegrationTest {
   void selenideElement_selectRadio_elementNotFound() {
     assertThatThrownBy(() -> $(By.id("unknownId")).selectRadio("margarita"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.id: unknownId}\nExpected: value 'margarita'");
+      .hasMessageStartingWith("Element not found {By.id: unknownId}\nExpected: value 'margarita'");
   }
 
   @Test
   void selenideElement_selectRadio_valueNotFound() {
     assertThatThrownBy(() -> $(By.name("me")).selectRadio("unknown-value"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.name: me}\nExpected: value 'unknown-value'");
+      .hasMessageStartingWith("Element not found {By.name: me}\nExpected: value 'unknown-value'");
   }
 }

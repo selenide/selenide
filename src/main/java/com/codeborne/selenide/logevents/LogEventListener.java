@@ -8,5 +8,7 @@ package com.codeborne.selenide.logevents;
  */
 public interface LogEventListener {
 
-  void onEvent(LogEvent currentLog);
+  void afterEvent(LogEvent currentLog);
+
+  void beforeEvent(LogEvent currentLog);
 }

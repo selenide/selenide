@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-class TransparencyAndOtherNonStandardVisiblityTest extends IntegrationTest {
+class TransparencyAndOtherNonStandardVisibilityTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     assumeThat(isHtmlUnit()).as("opacity:0 is visible in HtmlUnit").isFalse();

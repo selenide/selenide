@@ -1,13 +1,18 @@
 package com.codeborne.selenide.logevents;
 
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -16,6 +21,12 @@ import static org.mockito.Mockito.when;
 
 class SelenideLoggerTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
+
+  @BeforeEach
+  @AfterEach
+  void setUp() {
+    SelenideLogger.removeAllListeners();
+  }
 
   @Test
   void convertsJavaMethodNameToHumanReadableClause() {
@@ -63,9 +74,9 @@ class SelenideLoggerTest implements WithAssertions {
 
     SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
 
-    verifyEvent(listener1);
-    verifyEvent(listener2);
-    verifyEvent(listener3);
+    verifyEvent(listener1, "div", "click()", PASS);
+    verifyEvent(listener2, "div", "click()", PASS);
+    verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);
 
@@ -74,17 +85,44 @@ class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.removeListener("softAsserts");
 
     SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
-    verifyEvent(listener3);
+    verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);
   }
 
-  private void verifyEvent(LogEventListener listener1) {
+  @Test
+  void doesNotFail_ifSomeOfListeners_before_throwsException() {
+    LogEventListener listener1 = mock(LogEventListener.class);
+    doThrow(new IllegalStateException("Failed to take screenshot because browser is not opened yet"))
+      .when(listener1).beforeEvent(any());
+    SelenideLogger.addListener("allureListener", listener1);
+
+    SelenideLogger.commitStep(SelenideLogger.beginStep("open", "https://any.url"), FAIL);
+
+    verifyEvent(listener1, "open", "https://any.url", FAIL);
+    verifyNoMoreInteractions(listener1);
+  }
+
+  @Test
+  void doesNotFail_ifSomeOfListeners_after_throwsException() {
+    LogEventListener listener1 = mock(LogEventListener.class);
+    doThrow(new IllegalStateException("Failed to take screenshot because browser is not opened yet"))
+      .when(listener1).afterEvent(any());
+    SelenideLogger.addListener("allureListener", listener1);
+
+    SelenideLogger.commitStep(SelenideLogger.beginStep("open", "https://any.url"), FAIL);
+
+    verifyEvent(listener1, "open", "https://any.url", FAIL);
+    verifyNoMoreInteractions(listener1);
+  }
+
+  private void verifyEvent(LogEventListener listener, String element, String subject, LogEvent.EventStatus status) {
     ArgumentCaptor<LogEvent> event = ArgumentCaptor.forClass(LogEvent.class);
-    verify(listener1).onEvent(event.capture());
+    verify(listener).beforeEvent(event.capture());
+    verify(listener).afterEvent(event.capture());
     LogEvent value = event.getValue();
-    assertThat(value.getElement()).isEqualTo("div");
-    assertThat(value.getSubject()).isEqualTo("click()");
-    assertThat(value.getStatus()).isEqualTo(PASS);
+    assertThat(value.getElement()).isEqualTo(element);
+    assertThat(value.getSubject()).isEqualTo(subject);
+    assertThat(value.getStatus()).isEqualTo(status);
   }
 }

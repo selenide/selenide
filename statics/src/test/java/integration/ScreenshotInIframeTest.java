@@ -8,17 +8,18 @@ import org.junit.jupiter.api.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotInIframeTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    assumeFalse(isHtmlUnit() || isPhantomjs());
+    assumeFalse(isHtmlUnit());
     openFile("page_with_iframe.html");
   }
 
@@ -36,7 +37,7 @@ class ScreenshotInIframeTest extends IntegrationTest {
   }
 
   @Test
-  void canTakeScreenshotOfFullyVisibleElementInIframe() throws Exception {
+  void canTakeScreenshotOfFullyVisibleElementInIframe() throws IOException {
     SelenideElement iframe = $("#iframe_page");
     SelenideElement element = $("#small_div");
     File file = Screenshots.takeScreenShot(iframe, element);
@@ -63,7 +64,7 @@ class ScreenshotInIframeTest extends IntegrationTest {
   }
 
   @Test
-  void canTakeScreenshotOfPartiallyVisibleElementInIframe() throws Exception {
+  void canTakeScreenshotOfPartiallyVisibleElementInIframe() throws IOException {
     SelenideElement iframe = $("#iframe_page");
     SelenideElement element = $("#wide_div");
     File file = Screenshots.takeScreenShot(iframe, element);

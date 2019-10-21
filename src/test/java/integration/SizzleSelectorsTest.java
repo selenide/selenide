@@ -9,6 +9,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SizzleSelectorsTest extends BaseIntegrationTest {
   SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle));
@@ -25,7 +26,7 @@ class SizzleSelectorsTest extends BaseIntegrationTest {
     driver.$$(":input:not(.masked)").shouldHave(size(3));
     driver.$$(":header").shouldHave(size(3)); // h1, h1, h2
     driver.$$(":parent").shouldHave(size(13)); // all non-leaf elements
-    driver.$$(":not(:parent)").shouldHave(size(13)); // all leaf elements
+    driver.$$(":not(:parent)").shouldHave(size(14)); // all leaf elements
 
     driver.$("input:first").shouldHave(attribute("name", "username"));
     driver.$("input:nth(1)").shouldHave(attribute("name", "password"));

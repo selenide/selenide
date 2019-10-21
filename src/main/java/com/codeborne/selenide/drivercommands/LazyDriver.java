@@ -16,6 +16,10 @@ import java.util.List;
 
 import static java.lang.Thread.currentThread;
 
+/**
+ * A `Driver` implementation which opens browser on demand (on a first call).
+ * May be created with its own config, proxy and listeners.
+ */
 public class LazyDriver implements Driver {
   private static final Logger log = LoggerFactory.getLogger(LazyDriver.class);
 
@@ -95,7 +99,6 @@ public class LazyDriver implements Driver {
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     this.closed = false;
-    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(this));
   }
 
   @Override

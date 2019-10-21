@@ -17,6 +17,51 @@ import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
 /**
+ * Use this class to automatically take screenshots in case of ANY errors in tests (not only Selenide errors).
+ *
+ * How to use in Java:
+ * <pre>
+ * {@code
+ *    @ExtendWith({ScreenShooterExtension.class})
+ *    public class MyTest {...}
+ * }
+ * </pre>
+ *
+ * How to use in Java (with customization):
+ * <pre>
+ * {@code
+ *   public class MyTest {
+ *     @RegisterExtension
+ *     static ScreenShooterExtension screenshotEmAll = new ScreenShooterExtension(true);
+ *     ...
+ *   }
+ * }
+ * </pre>
+ *
+ * How to use in Kotlin:
+ *
+ * <pre>
+ *   {@code
+ *     @ExtendWith(ScreenShooterExtension::class)
+ *     public class MyTest {...}
+ *   }
+ * </pre>
+ *
+ * How to use in Kotlin (with customization):
+ *
+ * <pre>
+ * {@code
+ *   public class MyTest {
+ *     companion object {
+ *       @JvmField
+ *       @RegisterExtension
+ *       val screenshotEmAll: ScreenShooterExtension = ScreenShooterExtension(true);
+ *     }
+ *     ...
+ *   }
+ * }
+ * </pre>
+ *
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
@@ -66,10 +111,11 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
     if (captureSuccessfulTests) {
       log.info(screenshot(driver()));
     } else {
-      final Optional<Throwable> executionException = context.getExecutionException();
-      if (executionException.isPresent() && executionException.get() instanceof UIAssertionError) {
-        log.info(screenshot(driver()));
-      }
+      context.getExecutionException().ifPresent(error -> {
+        if (!(error instanceof UIAssertionError)) {
+          log.info(screenshot(driver()));
+        }
+      });
     }
   }
 

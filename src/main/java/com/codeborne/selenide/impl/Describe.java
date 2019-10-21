@@ -3,15 +3,20 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 public class Describe {
+  private static final Logger log = Logger.getLogger(Describe.class.getName());
+
   private final Driver driver;
   private final WebElement element;
   private final StringBuilder sb = new StringBuilder();
@@ -28,7 +33,13 @@ public class Describe {
         return appendAllAttributes();
       }
     }
-    catch (UnsupportedOperationException browserDoesNotSupportJavaScript) {
+    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException |
+      StaleElementReferenceException browserDoesNotSupportJavaScript) {
+    }
+    catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
+      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
+        log.warning("Failed to get attributes via JS: " + probablyBrowserDoesNotSupportJavaScript.toString());
+      }
     }
     return appendPredefinedAttributes();
   }
@@ -71,8 +82,20 @@ public class Describe {
   }
 
   private Describe attr(String attributeName) {
-    String attributeValue = element.getAttribute(attributeName);
-    return attr(attributeName, attributeValue);
+    try {
+      String attributeValue = element.getAttribute(attributeName);
+      return attr(attributeName, attributeValue);
+    }
+    catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException |
+      StaleElementReferenceException browserDoesNotSupportJavaScript) {
+      return this;
+    }
+    catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
+      if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
+        log.warning(String.format("Failed to get attribute %s: %s", attributeName, probablyBrowserDoesNotSupportJavaScript.toString()));
+      }
+      return this;
+    }
   }
 
   private Describe attr(String attributeName, String attributeValue) {
@@ -137,8 +160,7 @@ public class Describe {
       if (element.isSelected()) {
         sb.append(' ').append("selected:true");
       }
-    } catch (UnsupportedOperationException ignore) {
-    } catch (InvalidElementStateException ignore) {
+    } catch (UnsupportedOperationException | WebDriverException ignore) {
     }
     return this;
   }
@@ -148,10 +170,8 @@ public class Describe {
       if (!element.isDisplayed()) {
         sb.append(' ').append("displayed:false");
       }
-    } catch (UnsupportedOperationException e) {
-      sb.append(' ').append("displayed:").append(e);
-    } catch (InvalidElementStateException e) {
-      sb.append(' ').append("displayed:").append(e);
+    } catch (UnsupportedOperationException | WebDriverException e) {
+      sb.append(' ').append("displayed:").append(Cleanup.of.webdriverExceptionMessage(e));
     }
     return this;
   }

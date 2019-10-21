@@ -31,7 +31,7 @@ class ToStringCommandTest implements WithAssertions {
   }
 
   @Test
-  void testExecuteMethod() {
+  void executeMethod() {
     when(mockedFoundElement.isSelected()).thenReturn(true);
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
     String elementText = "text";
@@ -42,7 +42,7 @@ class ToStringCommandTest implements WithAssertions {
   }
 
   @Test
-  void testExecuteMethodWhenWebDriverExceptionIsThrown() {
+  void executeMethodWhenWebDriverExceptionIsThrown() {
     doThrow(new WebDriverException()).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
@@ -50,15 +50,18 @@ class ToStringCommandTest implements WithAssertions {
   }
 
   @Test
-  void testExecuteMethodWhenElementNotFoundIsThrown() {
+  void executeMethodWhenElementNotFoundIsThrown() {
     doThrow(new ElementNotFound(driver, By.name(""), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo("Element not found {By.name: }");
+      .isEqualTo("Element not found {By.name: }\n" +
+        "Expected: visible\n" +
+        "Screenshot: null\n" +
+        "Timeout: 0 ms.");
   }
 
   @Test
-  void testExecuteMethodWhenIndexOutOfBoundExceptionIsThrown() {
+  void executeMethodWhenIndexOutOfBoundExceptionIsThrown() {
     doThrow(new IndexOutOfBoundsException()).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)

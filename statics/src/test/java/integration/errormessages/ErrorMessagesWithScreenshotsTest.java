@@ -1,10 +1,11 @@
-package integration;
+package integration.errormessages;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,12 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Configuration.reportsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
@@ -52,33 +55,29 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
 
   @Test
   void parentNotFound() {
-    try {
+    assertThatThrownBy(() ->
       $("#nonexisting-form")
         .findAll(byText("mymail@gmail.com"))
         .find(cssClass("trash"))
-        .shouldBe(visible);
-      fail("Expected ElementNotFound");
-    } catch (ElementNotFound e) {
-      assertThat(e)
-        .hasMessageContaining("Element not found {#nonexisting-form}");
-    }
+        .shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {#nonexisting-form}");
   }
 
   @Test
   void itShouldBeReportedWhichParentElementIsNotFound() {
-    try {
+    assertThatThrownBy(() ->
       $("#multirowTable")
         .find("thead")
         .find(byText("mymail@gmail.com"))
         .find(".trash")
-        .shouldBe(visible);
-      fail("Expected ElementNotFound");
-    } catch (ElementNotFound e) {
-      assertThat(e)
-        .hasMessageContaining("Element not found {thead}");
-      assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)");
-    }
+        .shouldBe(visible)
+    )
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Element not found {thead}")
+      .matches(e -> ((ElementNotFound) e).getScreenshot()
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)"));
   }
 
   @Test
@@ -90,7 +89,8 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .find(".trash")
         .shouldBe(visible);
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound e) {
+    }
+    catch (ElementNotFound e) {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       assertThat(e.getScreenshot())
@@ -107,7 +107,8 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
         .find(".second_row")
         .shouldBe(visible);
       fail("Expected ElementNotFound");
-    } catch (ElementNotFound e) {
+    }
+    catch (ElementNotFound e) {
       assertThat(e)
         .hasMessageContaining("Element not found {.second_row}");
     }

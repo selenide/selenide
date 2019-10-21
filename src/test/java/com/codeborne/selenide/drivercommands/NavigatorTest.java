@@ -52,6 +52,9 @@ class NavigatorTest implements WithAssertions {
     assertThat(navigator.isAbsoluteUrl("file:///tmp/memory.dump"))
       .as("protocol file")
       .isTrue();
+    assertThat(navigator.isAbsoluteUrl("https://selenide.org\n"))
+      .as("ignores newline")
+      .isTrue();
 
     assertThat(navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"))
       .as("case insensitive: HTTP")
@@ -62,11 +65,17 @@ class NavigatorTest implements WithAssertions {
     assertThat(navigator.isAbsoluteUrl("FILE:///TMP/MEMORY.DUMP"))
       .as("case insensitive: FILE")
       .isTrue();
+    assertThat(navigator.isAbsoluteUrl("about:blank"))
+      .as("case insensitive: FILE")
+      .isTrue();
 
     assertThat(navigator.isAbsoluteUrl("/tmp/memory.dump"))
       .as("relative url")
       .isFalse();
     assertThat(navigator.isAbsoluteUrl("/payments/history"))
+      .as("relative url")
+      .isFalse();
+    assertThat(navigator.isAbsoluteUrl("/tmp/memory.dump?url=http://selenide.org"))
       .as("relative url")
       .isFalse();
   }
@@ -93,7 +102,7 @@ class NavigatorTest implements WithAssertions {
     navigator.open(selenideDriver, "https://some.com/login");
 
     Mockito.verify(navigation).to("https://some.com/login");
-    Mockito.verify(listener).onEvent(ArgumentMatchers.argThat(log ->
+    Mockito.verify(listener).afterEvent(ArgumentMatchers.argThat(log ->
       "open".equals(log.getElement()) && "https://some.com/login".equals(log.getSubject())));
   }
 

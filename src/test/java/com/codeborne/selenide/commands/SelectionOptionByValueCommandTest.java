@@ -1,7 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import java.util.Collections;
-
+import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -10,64 +9,58 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Quotes;
 
+import java.util.Collections;
+
+import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelectionOptionByValueCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource selectField;
-  private SelectOptionByValue selectOptionByValueCommand;
-  private WebElement mockedElement;
-  private String defaultElementValue = "ElementValue";
-  private WebElement mockedFoundElement;
+  private SelenideElement proxy = mock(SelenideElement.class);
+  private WebElementSource selectField = mock(WebElementSource.class);
+  private SelectOptionByValue selectOptionByValueCommand = new SelectOptionByValue();
+  private WebElement element = mock(WebElement.class);
+  private WebElement foundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    selectOptionByValueCommand = new SelectOptionByValue();
-    proxy = mock(SelenideElement.class);
-    selectField = mock(WebElementSource.class);
-    mockedElement = mock(WebElement.class);
-    mockedFoundElement = mock(WebElement.class);
-
-    when(selectField.getWebElement()).thenReturn(mockedElement);
+    when(selectField.driver()).thenReturn(new DriverStub());
+    when(selectField.getWebElement()).thenReturn(element);
     when(selectField.getSearchCriteria()).thenReturn("By.tagName{select}");
-    when(mockedElement.getText()).thenReturn(defaultElementValue);
-    when(mockedElement.getTagName()).thenReturn("select");
-    when(mockedFoundElement.isSelected()).thenReturn(true);
+    when(element.getText()).thenReturn("walue");
+    when(element.getTagName()).thenReturn("select");
+    when(foundElement.isSelected()).thenReturn(true);
   }
 
   @Test
-  void testSelectByValueWithStringFromArgs() {
-    when(mockedElement.findElements(By.xpath(
-      ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
-      .thenReturn(Collections.singletonList(mockedFoundElement));
-    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{defaultElementValue});
+  void selectByValueWithStringFromArgs() {
+    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(Collections.singletonList(foundElement));
+    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{"walue"});
   }
 
   @Test
-  void testSelectByValueWithStringArrayFromArgs() {
-    when(mockedElement.findElements(By.xpath(
-      ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
-      .thenReturn(Collections.singletonList(mockedFoundElement));
-    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
+  void selectByValueWithStringArrayFromArgs() {
+    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(Collections.singletonList(foundElement));
+    selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{"walue"}});
   }
 
   @Test
-  void testSelectByValueWithArgNotString() {
+  void selectByValueWithArgNotString() {
     assertThat(selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new int[]{1}}))
       .isNull();
   }
 
   @Test
   void selectByValueWhenElementIsNotFound() {
-    when(mockedElement.findElements(By.xpath(
-      ".//option[@value = " + Quotes.escape(defaultElementValue) + "]")))
-      .thenReturn(Collections.emptyList());
-    assertThatThrownBy(() -> {
-      selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{defaultElementValue}});
-    }).isInstanceOf(ElementNotFound.class)
-      .hasMessage(String.format("Element not found {By.tagName{select}/option[value:%s]}\nExpected: exist", defaultElementValue));
+    when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(emptyList());
+
+    assertThatThrownBy(() ->
+      selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{"walue"}}))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {By.tagName{select}/option[value:walue]}\nExpected: exist");
   }
 }

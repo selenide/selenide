@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   private RemoteDriverFactory factory = new RemoteDriverFactory();
   private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig();
+  private SelenideConfig config = new SelenideConfig().headless(false);
 
   @Test
   void shouldNotAddChromeHeadlessOptions() {

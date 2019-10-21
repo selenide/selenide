@@ -391,7 +391,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public String toString() {
     try {
       return elementsToString(driver(), getElements());
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
     }
   }

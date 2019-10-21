@@ -13,8 +13,8 @@ import static com.codeborne.selenide.WebDriverRunner.hasWebDriverStarted;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static com.codeborne.selenide.WebDriverRunner.isSafari;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
@@ -36,7 +36,7 @@ class BrowserLogsTest extends IntegrationTest {
     $(byText("Generate JS Error")).click();
     List<String> webDriverLogs = getWebDriverLogs(BROWSER, Level.ALL);
 
-    assumeFalse(isHtmlUnit() || isPhantomjs() || isSafari());
+    assumeFalse(isHtmlUnit() || isSafari());
 
     assertThat(webDriverLogs).hasSize(1);
 

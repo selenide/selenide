@@ -29,8 +29,7 @@ class FirefoxWithProfileTest extends BaseIntegrationTest {
   @AfterEach
   void tearDown() {
     if (customFirefox != null) {
-      customFirefox.getWebDriver().close(); // change to customFirefox.close() after Bugfix is merged
-      // bug: SelenideDriver.close() doesn't close the browser
+      customFirefox.close();
     }
   }
 

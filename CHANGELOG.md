@@ -1,9 +1,57 @@
 # Changelog
 
-## 5.2.3
+## 5.4.1 (released 16.10.2019)
+* bugfix: close webdriver in the end of all tests
+
+## 5.4.0 (released 16.10.2019)
+* #862 #902 #954 #922 fix "IIlegalStateException WebDriver has been closed" (with a heavy heart!)   --  see PR #989
+* #896 Do close the browser in SelenideDriver.close()  --  see PR #989
+* #993 shorten the error message as it was before Selenide 5.3.1
+* #976 add method "using" to easy switch between webdrivers
+* #963 fail fast if xpath for searching inside a web element starts with /    --   see PR #975
+* upgrade to webdrivermanager:3.7.1
+* exclude old Guava dependency coming from net.lightbody.bmp:browsermob-core:2.1.5
+
+## 5.3.1 (released 08.09.2019)
+* #234 add screenshot to error message in Maven too  -- see PR #972
+
+## 5.3.0 (released 02.09.2019)
+* support URLs with newlines
+* #469 improve error message of OR condition
+* #970 improve error message of `shouldHave(attribute("href", ..."))`
+* upgrade to webdrivermanager:3.6.2
+* add custom command executor
+
+## 5.2.8 (released 03.08.2019)
+* #961 Fix spam in logs "Failed to get attributes via JS..."
+* #930 Make method Condition.applyNull() overridable
+
+## 5.2.7 (released 01.08.2019)
+* #928 fix paradoxical "IllegalStateException: You need to call open(url) first" from open method
+* One more fix for $.toString() in Appium (iOS)
+
+## 5.2.6 (released 22.07.2019)
+* #496 Another fix for $.toString() in Appium
+
+## 5.2.5 (released 19.07.2019)
+* #496 Fix $.toString() in Appium
+* add Selenide.open() without string parameter  -- thanks to @yaroslav-orel for PR #956
+* Append condition explanation to $$.toString()  --  thanks to Roman Kliuha for PR #904
+
+## 5.2.4 (released 20.06.2019)
+* upgrade to WebDriverManager 3.6.1
+* fixed ScreenShooterExtension for JUnit5: now it takes screenshots for ALL errors (except UIAssertionError)
+* #454 $$.shouldHave(texts()) checks size of collection -- thanks to A.Smashentsev for PR #944
+* Fix proxy server on localhost for Chrome72+ and Firefox 67+  --  see https://github.com/selenide/selenide/pull/950
+* Now method $.click(offsetX, offsetY) calculates coordinates from the CENTER of element (not upper left corner)
+
+## 5.2.3 (released 07.05.2019)
 * upgrade to WebDriverManager 3.4.0
 * upgrade to htmlunit 2.34.1
 * upgrade to htmlunitDriver 2.34.0
+* #915 Add support for `open("about:blank")`
+* #927 Log event listener improvements  --  thanks to @pavelpp for PR
+* #912 (refactoring) extract Conditions to separate classes
 
 ## 5.2.2 (released 15.03.2019)
 * upgrade to WebDriverManager 3.3.0

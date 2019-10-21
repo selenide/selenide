@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.ThreadLocalSelenideDriver;
 import com.codeborne.selenide.impl.WebDriverContainer;
 import com.codeborne.selenide.impl.WebDriverThreadLocalContainer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -15,6 +16,7 @@ import static com.codeborne.selenide.Configuration.headless;
  */
 public class WebDriverRunner implements Browsers {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
+  private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
 
   /**
    * Use this method BEFORE opening a browser to add custom event listeners to webdriver.
@@ -96,8 +98,8 @@ public class WebDriverRunner implements Browsers {
     return webdriverContainer.getProxyServer();
   }
 
-  public static SelenideDriver getSelenideDriver() {
-    return webdriverContainer.getSelenideDriver();
+  static SelenideDriver getSelenideDriver() {
+    return staticSelenideDriver;
   }
 
   public static Driver driver() {
@@ -116,6 +118,27 @@ public class WebDriverRunner implements Browsers {
    */
   public static boolean hasWebDriverStarted() {
     return webdriverContainer.hasWebDriverStarted();
+  }
+
+  public static void using(WebDriver driver, Runnable lambda) {
+    if (hasWebDriverStarted()) {
+      WebDriver previous = getWebDriver();
+      try {
+        lambda.run();
+      }
+      finally {
+        setWebDriver(previous);
+      }
+    }
+    else {
+      setWebDriver(driver);
+      try {
+        lambda.run();
+      }
+      finally {
+        closeWebDriver();
+      }
+    }
   }
 
   private static Browser browser() {
@@ -165,7 +188,7 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to use headless browser (HtmlUnit or PhantomJS)
+   * Is Selenide configured to use headless browser (HtmlUnit)
    */
   public static boolean isHeadless() {
     return browser().isHeadless();
@@ -190,13 +213,6 @@ public class WebDriverRunner implements Browsers {
    */
   public static boolean isHtmlUnit() {
     return browser().isHtmlUnit();
-  }
-
-  /**
-   * Is Selenide configured to use PhantomJS browser
-   */
-  public static boolean isPhantomjs() {
-    return browser().isPhantomjs();
   }
 
   /**

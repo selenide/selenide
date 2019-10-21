@@ -13,6 +13,8 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
   private File folder = new File(Configuration.reportsFolder);
@@ -62,7 +64,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
-  public void download_withCustomTimeout() throws IOException {
+  public void download_withCustomTimeout() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
     assertThat(downloadedFile.getName())

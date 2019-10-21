@@ -20,7 +20,7 @@ class CollectionElementTest implements WithAssertions {
   private Driver driver = new DriverStub();
 
   @Test
-  void testWrap() {
+  void wrap() {
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.isDisplayed()).thenReturn(true);
@@ -33,52 +33,52 @@ class CollectionElementTest implements WithAssertions {
   }
 
   @Test
-  void testGetWebElement() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
+  void getWebElement() {
+    WebElementsCollection collection = mock(WebElementsCollection.class);
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
     List<WebElement> listOfMockedElements = asList(mockedWebElement1, mockedWebElement2);
-    when(mockedWebElementCollection.getElements()).thenReturn(listOfMockedElements);
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
+    when(collection.getElements()).thenReturn(listOfMockedElements);
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
 
     assertThat(collectionElement.getWebElement())
       .isEqualTo(mockedWebElement2);
   }
 
   @Test
-  void testGetSearchCriteria() {
+  void getSearchCriteria() {
     String collectionDescription = "Collection description";
     int index = 1;
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
+    WebElementsCollection collection = mock(WebElementsCollection.class);
+    when(collection.description()).thenReturn(collectionDescription);
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
     assertThat(collectionElement.getSearchCriteria())
       .isEqualTo(String.format("%s[%s]", collectionDescription, index));
   }
 
   @Test
   void testToString() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
+    WebElementsCollection collection = mock(WebElementsCollection.class);
     String collectionDescription = "Collection description";
-    when(mockedWebElementCollection.description()).thenReturn(collectionDescription);
+    when(collection.description()).thenReturn(collectionDescription);
     int index = 1;
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
     assertThat(collectionElement)
       .hasToString(String.format("%s[%s]", collectionDescription, index));
   }
 
   @Test
-  void testCreateElementNotFoundErrorWithEmptyCollection() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.driver()).thenReturn(driver);
-    when(mockedWebElementCollection.description()).thenReturn("Collection description");
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
+  void createElementNotFoundErrorWithEmptyCollection() {
+    WebElementsCollection collection = mock(WebElementsCollection.class);
+    when(collection.driver()).thenReturn(driver);
+    when(collection.description()).thenReturn("Collection description");
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
 
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasToString("Element not found {Collection description}\n" +
+      .hasMessage("Element not found {Collection description}\n" +
         "Expected: visible\n" +
         "Screenshot: null\n" +
         "Timeout: 0 ms.\n" +
@@ -86,19 +86,19 @@ class CollectionElementTest implements WithAssertions {
   }
 
   @Test
-  void testCreateElementNotFoundErrorWithNonEmptyCollection() {
-    WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
-    when(mockedWebElementCollection.driver()).thenReturn(driver);
-    when(mockedWebElementCollection.description()).thenReturn("Collection description");
-    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
-    CollectionElement collectionElement = new CollectionElement(mockedWebElementCollection, 1);
+  void createElementNotFoundErrorWithNonEmptyCollection() {
+    WebElementsCollection collection = mock(WebElementsCollection.class);
+    when(collection.driver()).thenReturn(driver);
+    when(collection.description()).thenReturn("Collection description");
+    when(collection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
+    CollectionElement collectionElement = new CollectionElement(collection, 1);
 
     Condition mockedCollection = mock(Condition.class);
     when(mockedCollection.toString()).thenReturn("Reason description");
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasToString("Element not found {Collection description[1]}\n" +
+      .hasMessage("Element not found {Collection description[1]}\n" +
         "Expected: Reason description\n" +
         "Screenshot: null\n" +
         "Timeout: 0 ms.\n" +

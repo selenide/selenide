@@ -12,6 +12,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -102,7 +103,8 @@ class MethodCalledOnElementPassesOnTest extends IntegrationTest {
   void actionWithoutWaiting_ToString_WhenCollectionElement_WithNonExistentWebElement() {
     SelenideElement element = $$("ul li").findBy(cssClass("nonexistent"));
 
-    assertEquals("Element not found {ul li.findBy(css class 'nonexistent')}", element.toString());
+    assertThat(element.toString())
+      .startsWith("Element not found {ul li.findBy(css class 'nonexistent')}");
   }
 
   @Test

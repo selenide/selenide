@@ -1,82 +1,66 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelenideElementListIteratorTest implements WithAssertions {
-  private Driver driver = mock(Driver.class);
-  private WebElementsCollection mockedWebElementCollection = mock(WebElementsCollection.class);
+  private WebElementsCollection collection = mockCollection("Collection description");
 
-  @BeforeEach
-  void setUp() {
-    when(mockedWebElementCollection.driver()).thenReturn(driver);
+  @Test
+  void hasPrevious() {
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 1);
+    assertThat(selenideElementIterator.hasPrevious()).isTrue();
   }
 
   @Test
-  void testHasPrevious() {
-    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
-    assertThat(selenideElementIterator.hasPrevious())
-      .isTrue();
-  }
-
-  @Test
-  void testPrevious() {
+  void previous() {
     WebElement mockedWebElement = mock(WebElement.class);
     when(mockedWebElement.isDisplayed()).thenReturn(true);
     when(mockedWebElement.getTagName()).thenReturn("a");
     when(mockedWebElement.getText()).thenReturn("selenide");
 
-    when(mockedWebElementCollection.getElements()).thenReturn(singletonList(mockedWebElement));
+    when(collection.getElements()).thenReturn(singletonList(mockedWebElement));
 
-    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 1);
     SelenideElement previous = selenideElementIterator.previous();
-    assertThat(previous)
-      .isNotNull();
-    assertThat(previous)
-      .hasToString("<a>selenide</a>");
+    assertThat(previous).isNotNull();
+    assertThat(previous).hasToString("<a>selenide</a>");
   }
 
   @Test
-  void testNextIndex() {
-    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 1);
-    assertThat(selenideElementIterator.nextIndex())
-      .isEqualTo(2);
+  void nextIndex() {
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 1);
+    assertThat(selenideElementIterator.nextIndex()).isEqualTo(2);
   }
 
   @Test
-  void testPreviousIndex() {
-    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 3);
-    assertThat(selenideElementIterator.previousIndex())
-      .isEqualTo(2);
+  void previousIndex() {
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 3);
+    assertThat(selenideElementIterator.previousIndex()).isEqualTo(2);
   }
 
   @Test
-  void testAdd() {
-    try {
-      SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 0);
-      selenideElementIterator.add(mock(SelenideElement.class));
-    } catch (UnsupportedOperationException e) {
-      assertThat(e)
-        .hasMessage("Cannot add elements to web page");
-    }
+  void add() {
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 0);
+    assertThatThrownBy(() ->
+      selenideElementIterator.add(mock(SelenideElement.class))
+    ).isInstanceOf(UnsupportedOperationException.class)
+      .hasMessage("Cannot add elements to web page");
   }
 
   @Test
-  void testSet() {
-    try {
-      SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(mockedWebElementCollection, 0);
-      selenideElementIterator.set(mock(SelenideElement.class));
-    } catch (UnsupportedOperationException e) {
-      assertThat(e)
-        .hasMessage("Cannot set elements to web page");
-    }
+  void set() {
+    SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 0);
+    assertThatThrownBy(() ->
+      selenideElementIterator.set(mock(SelenideElement.class))
+    ).isInstanceOf(UnsupportedOperationException.class)
+      .hasMessage("Cannot set elements to web page");
   }
 }

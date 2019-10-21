@@ -29,9 +29,4 @@ public class ElementNotFound extends UIAssertionError {
       "Element not found {" + collection.description() + '}' +
         "\nExpected: " + expectedTexts, lastError);
   }
-
-  @Override
-  public String toString() {
-    return getMessage() + uiDetails();
-  }
 }

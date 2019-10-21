@@ -15,8 +15,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static com.codeborne.selenide.WebDriverRunner.isFirefox;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
@@ -57,6 +61,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
     ChromeOptions options = new ChromeOptions();
     if (isHeadless()) options.setHeadless(true);
     options.setProxy(proxy.createSeleniumProxy());
+    options.addArguments("--proxy-bypass-list=<-loopback>");
     return new ChromeDriver(options);
   }
 
@@ -67,6 +72,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
     if (isHeadless()) options.setHeadless(true);
     options.setProxy(proxy.createSeleniumProxy());
     options.addPreference("network.proxy.no_proxies_on", "");
+    options.addPreference("network.proxy.allow_hijacking_localhost", true);
     return new FirefoxDriver(options);
   }
 }

@@ -17,8 +17,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
 import static integration.errormessages.Helper.assertScreenshot;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   @BeforeEach
@@ -148,9 +149,6 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
     if (isHtmlUnit()) {
       assertThat(expected.getCause())
         .hasMessageContaining("Returned node (null) was not a DOM element");
-    } else if (isPhantomjs()) {
-      assertThat(expected.getCause())
-        .hasMessageContaining("Unable to find element with css selector '.nonexistent'");
     } else {
       String expectedCauseMessage = isFirefox()
         ? "Unable to locate element: .nonexistent"
@@ -206,24 +204,12 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
+      fail("Expected ListSizeMismatch");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected)
-        .hasMessageStartingWith(": expected: = 3, actual: 2, collection: ul li");
+      assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 2, collection: ul li");
       assertScreenshot(expected);
-      assertThat(expected.getCause())
-        .isNull();
+      assertThat(expected.getCause()).isNull();
     }
-        /*
-            ListSizeMismatch : expected: = 3, actual: 2, collection: ul li
-            Elements: [
-                <li class="the-expanse detective" value="0">Miller</li>,
-                <li class="the-expanse" value="0">Julie Mao</li>
-            ]
-
-            Screenshot: file:/..._WithNotSatisfiedConditionInShould/1471356041663.0.png
-            Timeout: 6 s.
-        */
   }
 
   @Test
@@ -232,20 +218,11 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
 
     try {
       collection.shouldHave(size(3));
-      fail("Expected ElementNotFound");
+      fail("Expected ListSizeMismatch");
     } catch (ListSizeMismatch expected) {
-      assertThat(expected)
-        .hasMessageStartingWith(": expected: = 3, actual: 0, collection: ul .nonexistent");
+      assertThat(expected).hasMessageStartingWith("List size mismatch: expected: = 3, actual: 0, collection: ul .nonexistent");
       assertScreenshot(expected);
-      assertThat(expected.getCause())
-        .isNull();
+      assertThat(expected.getCause()).isNull();
     }
-        /*
-            ListSizeMismatch : expected: = 3, actual: 0, collection: ul .nonexistent
-            Elements: []
-
-            Screenshot: file:/..._WithNonExistentCollection/1471357025434.0.png
-            Timeout: 6 s.
-        */
   }
 }

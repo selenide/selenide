@@ -741,7 +741,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Override void click();
 
   /**
-   * Click the element with a relative offset from the upper left corner of the element
+   * Click the element with a relative offset from the center of the element
    */
   void click(int offsetX, int offsetY);
 
@@ -792,6 +792,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DragAndDropTo
    */
   SelenideElement dragAndDropTo(WebElement target);
+
+  /**
+   * Execute custom implemented command
+   *
+   * @param command custom command
+   * @return this element
+   *
+   * @see com.codeborne.selenide.commands.Execute
+   * @see com.codeborne.selenide.Command
+   */
+  SelenideElement execute(Command<SelenideElement> command);
 
   /**
    * Check if image is properly loaded.

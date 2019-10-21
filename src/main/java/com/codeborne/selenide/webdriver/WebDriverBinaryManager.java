@@ -11,7 +11,6 @@ public class WebDriverBinaryManager {
     if (browser.isEdge()) setupEdge();
     if (browser.isIE()) setupIE();
     if (browser.isOpera()) setupOpera();
-    if (browser.isPhantomjs()) setupPhantomjs();
     if (browser.isFirefox()) setupFirefox();
   }
 
@@ -36,12 +35,6 @@ public class WebDriverBinaryManager {
   private void setupOpera() {
     if (isSystemPropertySet("webdriver.opera.driver")) {
       WebDriverManager.operadriver().setup();
-    }
-  }
-
-  private void setupPhantomjs() {
-    if (isSystemPropertySet("phantomjs.binary.path")) {
-      WebDriverManager.phantomjs().setup();
     }
   }
 

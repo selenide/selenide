@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FileUploadTest extends ITest {
   @BeforeEach
   void openFileUploadForm() {
-    assumeFalse(browser().isPhantomjs());
-
     if (browser().isIE()) {
       driver().close();
     }
@@ -94,5 +93,23 @@ class FileUploadTest extends ITest {
 
     assertThat(server.getUploadedFiles().get(0).getString()).contains("Hello, WinRar!");
     assertThat(server.getUploadedFiles().get(1).getString()).contains("jQuery JavaScript Library v1.8.3");
+  }
+
+  @Test
+  void uploadUnexistingFile() {
+    assertThatThrownBy(() ->
+      $("input[type='file'][id='cv']").uploadFile(new File("src/goodbye_world.txt"))
+    )
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageMatching("File not found:.*goodbye_world.txt");
+  }
+
+  @Test
+  void uploadUnexistingFileFromClasspath() {
+    assertThatThrownBy(() ->
+      $("input[type='file'][id='cv']").uploadFromClasspath("goodbye_world.txt")
+    )
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageMatching("File not found in classpath:.*goodbye_world.txt");
   }
 }

@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 
 class UIAssertionErrorTest implements WithAssertions {
   @Test
-  void testThrowableConstructor() {
+  void errorMessage() {
     Driver driver = new DriverStub();
-    UIAssertionError uiAssertionError = new UIAssertionError(driver, new Throwable("Error message"));
-    String expectedString = "UIAssertionError Throwable: Error message\n" +
+    UIAssertionError uiAssertionError = new UIAssertionError(driver, "Some it happened", new Throwable("Error message"));
+
+    assertThat(uiAssertionError).hasMessage("Some it happened\n" +
       "Screenshot: null\n" +
       "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Throwable: Error message";
-    assertThat(uiAssertionError)
-      .hasToString(expectedString);
+      "Caused by: java.lang.Throwable: Error message");
   }
 }

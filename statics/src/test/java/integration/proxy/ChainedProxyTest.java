@@ -17,8 +17,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
-import static com.codeborne.selenide.WebDriverRunner.isPhantomjs;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Selenide runs its own proxy server.
@@ -41,8 +40,6 @@ class ChainedProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    assumeFalse(isPhantomjs()); // Why it's not working? It's magic for me...
-
     close();
 
     chainedProxy = new BrowserMobProxyServer();

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
@@ -11,11 +13,13 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
  * Logs Selenide test steps and notifies all registered LogEventListener about it
  */
 public class SelenideLogger {
+  private static final Logger LOG = Logger.getLogger(SelenideLogger.class.getName());
+
   protected static ThreadLocal<Map<String, LogEventListener>> listeners = new ThreadLocal<>();
 
   /**
    * Add a listener (to the current thread).
-   * @param name unique name of this listener (per thread). 
+   * @param name unique name of this listener (per thread).
    *             Can be used later to remove listener using method {@link #removeListener(String)}
    * @param listener event listener
    */
@@ -48,20 +52,36 @@ public class SelenideLogger {
   }
 
   public static SelenideLog beginStep(String source, String subject) {
-    return new SelenideLog(source, subject);
+    Collection<LogEventListener> listeners = getEventLoggerListeners();
+
+    SelenideLog log = new SelenideLog(source, subject);
+    for (LogEventListener listener : listeners) {
+      try {
+        listener.beforeEvent(log);
+      }
+      catch (RuntimeException e) {
+        LOG.log(Level.SEVERE, "Failed to call listener " + listener, e);
+      }
+    }
+    return log;
   }
 
   public static void commitStep(SelenideLog log, Throwable error) {
     log.setError(error);
     commitStep(log, FAIL);
   }
-  
+
   public static void commitStep(SelenideLog log, LogEvent.EventStatus status) {
     log.setStatus(status);
 
     Collection<LogEventListener> listeners = getEventLoggerListeners();
     for (LogEventListener listener : listeners) {
-      listener.onEvent(log);
+      try {
+        listener.afterEvent(log);
+      }
+      catch (RuntimeException e) {
+        LOG.log(Level.SEVERE, "Failed to call listener " + listener, e);
+      }
     }
   }
 
@@ -83,7 +103,7 @@ public class SelenideLogger {
     Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();
     return listeners == null ? null : (T) listeners.remove(name);
   }
-  
+
   public static void removeAllListeners() {
     SelenideLogger.listeners.remove();
   }
@@ -92,8 +112,8 @@ public class SelenideLogger {
    * If listener with given name is bound (added) to the current thread.
    *
    * @param name unique name of listener added by method {@link #addListener(String, LogEventListener)}
-   * @return true iff method {@link #addListener(String, LogEventListener)} with 
-   *              corresponding name has been called in current thread. 
+   * @return true if method {@link #addListener(String, LogEventListener)} with
+   *              corresponding name has been called in current thread.
    */
   public static boolean hasListener(String name) {
     Map<String, LogEventListener> listeners = SelenideLogger.listeners.get();

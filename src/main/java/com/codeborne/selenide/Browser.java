@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.JBROWSER;
 import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
-import static com.codeborne.selenide.Browsers.PHANTOMJS;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static com.codeborne.selenide.Browsers.IE;
 
@@ -22,7 +21,7 @@ public class Browser {
   }
 
   public boolean isHeadless() {
-    return isHtmlUnit() || isPhantomjs() || headless;
+    return isHtmlUnit() || headless;
   }
 
   public boolean isChrome() {
@@ -53,10 +52,6 @@ public class Browser {
     return name != null && name.startsWith(HTMLUNIT);
   }
 
-  public boolean isPhantomjs() {
-    return PHANTOMJS.equalsIgnoreCase(name);
-  }
-
   public boolean isOpera() {
     return OPERA.equalsIgnoreCase(name);
   }
@@ -66,6 +61,6 @@ public class Browser {
   }
 
   public boolean supportsModalDialogs() {
-    return !isPhantomjs() && !isSafari();
+    return !isSafari();
   }
 }

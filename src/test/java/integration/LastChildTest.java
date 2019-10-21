@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LastChildTest extends ITest {
 
@@ -30,7 +31,7 @@ public class LastChildTest extends ITest {
   void throwsExceptionWhenNoChildrenExist() {
     assertThatThrownBy(() -> $x("//span[@id='hello-world']").lastChild().should(be(visible)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {By.xpath: *[last()]}\nExpected: be visible");
+      .hasMessageStartingWith("Element not found {By.xpath: *[last()]}\nExpected: be visible");
   }
 
 }

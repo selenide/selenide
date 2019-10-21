@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byText;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelenideElementToStringTest extends ITest {
   @Test

@@ -11,7 +11,7 @@ node {
   stage('Build') {
     sh './gradle compileJava'
   }
-  
+
   try {
     stage('Check') {
       sh './gradle check'
@@ -29,16 +29,13 @@ node {
       stage('htmlunit tests') {
         sh './gradle htmlunit'
       }
-      stage('phantomjs tests') {
-        sh './gradle phantomjs'
-      }
     }
   }
   finally {
     stage("Test Report") {
       junit 'build/test-results/**/*.xml'
     }
-  
+
     stage("Archive Artifacts") {
       archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
     }

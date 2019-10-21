@@ -16,7 +16,7 @@
 ## What is Selenide?
 
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
-It defines concise fluent API, natural language assertions and does some magic for ajax-bases applications to let you focus entirely on the business logic of your tests.
+It defines concise fluent API, natural language assertions and does some magic for ajax-based applications to let you focus entirely on the business logic of your tests.
 
 Selenide is based on and is compatible to Selenium WebDriver 2.0 and 3.0
 
@@ -68,6 +68,17 @@ After build you'll find Selenide's .jar file under `build/libs/` directory.
 To build Selenide on Windows use `gradlew.bat jar` command.
 
 Feel free to fork, clone, build, run tests and contribute pull requests for Selenide!
+
+## Run test locally inside docker containers
+
+- Syncing browser images from existing configuration file
+  - Install [jq](https://stedolan.github.io/jq)
+  - Extract image names from JSON and automatically pull them:
+     > cat /config/selenoid/browsers.json | jq -r '..|.image?|strings' | xargs -I{} docker pull {}
+- Start selenoid container
+  - Install [docker](https://www.docker.com/products/docker-desktop)
+  - Based on your operation system execute script. Check official [document](https://aerokube.com/selenoid/latest/#_option_2_start_selenoid_container) for correct script.
+- Start tests passing `selenide.remote` configuration variable with `http://localhost:4444/wd/hub` value
 
 ## Authors
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.value;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ReplacingElementTest extends ITest {
   @BeforeEach

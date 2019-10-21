@@ -1,0 +1,28 @@
+{
+  "chrome": {
+    "default": "71.0",
+    "versions": {
+      "71.0": {
+        "image": "selenoid/chrome:71.0",
+        "port": "4444",
+        "path": "/",
+        "tmpfs": {
+          "/tmp": "size=128m"
+        }
+      }
+    }
+  },
+  "firefox": {
+    "default": "66.0",
+    "versions": {
+      "66.0": {
+        "image": "selenoid/firefox:66.0",
+        "port": "4444",
+        "path": "/",
+        "tmpfs": {
+          "/tmp": "size=128m"
+        }
+      }
+    }
+  }
+}
