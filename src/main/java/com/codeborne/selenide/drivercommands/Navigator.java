@@ -71,6 +71,9 @@ public class Navigator {
       SelenideLogger.commitStep(log, e);
       e.addInfo("selenide.url", url);
       e.addInfo("selenide.baseUrl", driver.config().baseUrl());
+      if (driver.config().remote() != null) {
+        e.addInfo("selenide.remote", driver.config().remote());
+      }
       throw e;
     }
     catch (RuntimeException | Error e) {
