@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
@@ -48,13 +47,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver) {
     setWebDriver(webDriver, null);
-  }
-
-  private <K, V> void runIfPresent(Map<K, V> map, K key, Consumer<V> lambda) {
-    V value = map.get(key);
-    if (value != null) {
-      lambda.accept(value);
-    }
   }
 
   /**
@@ -137,7 +129,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public void closeWebDriver() {
     WebDriver driver = threadWebDriver.remove(currentThread().getId());
     SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());
-    new CloseDriverCommand(driver, proxy).run();
+    new CloseDriverCommand().run(driver, proxy);
   }
 
   @Override

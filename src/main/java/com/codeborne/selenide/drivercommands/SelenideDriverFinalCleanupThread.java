@@ -14,6 +14,6 @@ public class SelenideDriverFinalCleanupThread extends Thread {
 
   @Override
   public void run() {
-    new CloseDriverCommand(driver, proxy).run();
+    new CloseDriverCommand().run(driver, proxy);
   }
 }

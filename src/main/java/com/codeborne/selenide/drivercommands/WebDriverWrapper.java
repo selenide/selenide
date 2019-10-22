@@ -86,7 +86,7 @@ public class WebDriverWrapper implements Driver {
   @Override
   public void close() {
     if (!config.holdBrowserOpen()) {
-      new CloseDriverCommand(webDriver, selenideProxy).run();
+      new CloseDriverCommand().run(webDriver, selenideProxy);
     }
   }
 }

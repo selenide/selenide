@@ -104,7 +104,7 @@ public class LazyDriver implements Driver {
   @Override
   public void close() {
     if (!config.holdBrowserOpen()) {
-      new CloseDriverCommand(webDriver, selenideProxyServer).run();
+      new CloseDriverCommand().run(webDriver, selenideProxyServer);
       webDriver = null;
       selenideProxyServer = null;
       closed = true;

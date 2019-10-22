@@ -8,15 +8,7 @@ import org.slf4j.LoggerFactory;
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  private final WebDriver webDriver;
-  private final SelenideProxyServer selenideProxyServer;
-
-  public CloseDriverCommand(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
-    this.webDriver = webDriver;
-    this.selenideProxyServer = selenideProxyServer;
-  }
-
-  public void run() {
+  public void run(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     long threadId = Thread.currentThread().getId();
     if (webDriver != null) {
       log.info("Close webdriver: {} -> {}", threadId, webDriver);
