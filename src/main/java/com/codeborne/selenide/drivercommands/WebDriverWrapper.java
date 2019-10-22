@@ -30,7 +30,7 @@ public class WebDriverWrapper implements Driver {
     this(config, webDriver, selenideProxy, new BrowserHealthChecker());
   }
 
-  WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+  private WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
                    @Nonnull BrowserHealthChecker browserHealthChecker) {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
