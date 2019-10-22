@@ -23,7 +23,6 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isSafari;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
@@ -37,7 +36,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void setUpEach() {
     resetSettings();
-    restartReallyUnstableBrowsers();
     rememberTimeout();
   }
 
@@ -65,12 +63,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     useProxy(true);
-  }
-
-  private void restartReallyUnstableBrowsers() {
-    if (isSafari()) {
-      closeWebDriver();
-    }
   }
 
   private void rememberTimeout() {

@@ -23,13 +23,9 @@ public class WebDriverFactory {
       new ChromeDriverFactory(),
       new LegacyFirefoxDriverFactory(),
       new FirefoxDriverFactory(),
-      new HtmlUnitDriverFactory(),
       new EdgeDriverFactory(),
       new InternetExplorerDriverFactory(),
-      new PhantomJsDriverFactory(),
-      new OperaDriverFactory(),
-      new SafariDriverFactory(),
-      new JBrowserDriverFactory()
+      new OperaDriverFactory()
   );
 
   protected WebDriverBinaryManager webDriverBinaryManager = new WebDriverBinaryManager();

@@ -10,7 +10,6 @@
  * "./gradle firefox"
  * "./gradle chrome"
  * "./gradle ie"
- * "./gradle safari"
  * "./gradle opera"
  */
 

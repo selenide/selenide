@@ -42,13 +42,6 @@ task chrome_remote(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task safari(type: Test) {
-  systemProperties['selenide.browser'] = 'safari'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/safari'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
 task firefox(type: Test) {
   systemProperties['selenide.browser'] = 'firefox'
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
@@ -75,13 +68,6 @@ task firefox_remote(type: Test) {
 task legacy_firefox(type: Test) {
   systemProperties['selenide.browser'] = 'legacy_firefox'
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/legacy_firefox'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task jbrowser(type: Test) {
-  systemProperties['selenide.browser'] = 'jbrowser'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/jbrowser'
   include 'integration/**/*'
   exclude 'com/codeborne/selenide/**/*'
 }

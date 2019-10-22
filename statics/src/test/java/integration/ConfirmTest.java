@@ -14,10 +14,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.dismiss;
-import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ConfirmTest extends IntegrationTest {
   private String userName = "John Mc'Clane";
@@ -29,7 +27,6 @@ class ConfirmTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
-    assumeTrue(supportsModalDialogs());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);

@@ -81,43 +81,6 @@ class WebDriverRunnerTest implements WithAssertions {
     verify(listener).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
   }
 
-  @Test
-  void chrome_supportsAlerts() {
-    Configuration.browser = "chrome";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void headless_chrome_supportsAlerts() {
-    Configuration.browser = "chrome";
-    Configuration.headless = true;
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void firefox_supportsAlerts() {
-    Configuration.browser = "firefox";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void headless_firefox_supportsAlerts() {
-    Configuration.browser = "firefox";
-    Configuration.headless = true;
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void safari_doesNotSupportAlerts() {
-    Configuration.browser = "safari";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isFalse();
-  }
-
   private static class CustomWebDriverProvider implements WebDriverProvider {
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
