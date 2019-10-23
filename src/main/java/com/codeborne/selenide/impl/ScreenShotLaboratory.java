@@ -463,7 +463,7 @@ public class ScreenShotLaboratory {
     if (getElementWidth(element) > image.getWidth()) {
       return image.getWidth() - element.getLocation().getX();
     } else {
-      return getElementHeight(element);
+      return getElementWidth(element);
     }
   }
 
