@@ -25,13 +25,14 @@ public class WebDriverWrapper implements Driver {
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxy;
   private final BrowserHealthChecker browserHealthChecker;
+  private final CloseDriverCommand closeDriverCommand;
 
   public WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    this(config, webDriver, selenideProxy, new BrowserHealthChecker());
+    this(config, webDriver, selenideProxy, new BrowserHealthChecker(), new CloseDriverCommand());
   }
 
   private WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
-                   @Nonnull BrowserHealthChecker browserHealthChecker) {
+                   @Nonnull BrowserHealthChecker browserHealthChecker, @Nonnull CloseDriverCommand closeDriverCommand) {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
 
@@ -39,6 +40,7 @@ public class WebDriverWrapper implements Driver {
     this.webDriver = webDriver;
     this.selenideProxy = selenideProxy;
     this.browserHealthChecker = browserHealthChecker;
+    this.closeDriverCommand = closeDriverCommand;
   }
 
   @Override
@@ -86,7 +88,7 @@ public class WebDriverWrapper implements Driver {
   @Override
   public void close() {
     if (!config.holdBrowserOpen()) {
-      new CloseDriverCommand().run(webDriver, selenideProxy);
+      closeDriverCommand.closeAsync(webDriver, selenideProxy);
     }
   }
 }

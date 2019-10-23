@@ -26,6 +26,8 @@ public class LazyDriver implements Driver {
   private final Config config;
   private final BrowserHealthChecker browserHealthChecker;
   private final WebDriverFactory factory;
+  private final CloseDriverCommand closeDriverCommand;
+  private final CreateDriverCommand createDriverCommand;
   private final Proxy userProvidedProxy;
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
   private final Browser browser;
@@ -35,17 +37,21 @@ public class LazyDriver implements Driver {
   private SelenideProxyServer selenideProxyServer;
 
   public LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
-    this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker());
+    this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
+      new CreateDriverCommand(), new CloseDriverCommand());
   }
 
   LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
-             WebDriverFactory factory, BrowserHealthChecker browserHealthChecker) {
+             WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
+             CreateDriverCommand createDriverCommand, CloseDriverCommand closeDriverCommand) {
     this.config = config;
     this.browser = new Browser(config.browser(), config.headless());
     this.userProvidedProxy = userProvidedProxy;
     this.listeners.addAll(listeners);
     this.factory = factory;
     this.browserHealthChecker = browserHealthChecker;
+    this.closeDriverCommand = closeDriverCommand;
+    this.createDriverCommand = createDriverCommand;
   }
 
   @Override
@@ -95,7 +101,7 @@ public class LazyDriver implements Driver {
   }
 
   void createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand().createDriver(config, factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
     this.closed = false;
@@ -104,7 +110,7 @@ public class LazyDriver implements Driver {
   @Override
   public void close() {
     if (!config.holdBrowserOpen()) {
-      new CloseDriverCommand().run(webDriver, selenideProxyServer);
+      closeDriverCommand.closeAsync(webDriver, selenideProxyServer);
       webDriver = null;
       selenideProxyServer = null;
       closed = true;

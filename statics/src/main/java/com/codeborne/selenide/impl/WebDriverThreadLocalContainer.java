@@ -36,6 +36,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
   private final WebDriverFactory factory = new WebDriverFactory();
+  private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
+  private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
 
   private final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
@@ -110,7 +112,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private WebDriver createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand()
+    CreateDriverCommand.Result result = createDriverCommand
       .createDriver(new StaticConfig(), factory, userProvidedProxy, listeners);
     threadWebDriver.put(currentThread().getId(), result.webDriver);
     if (result.selenideProxyServer != null) {
@@ -129,7 +131,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public void closeWebDriver() {
     WebDriver driver = threadWebDriver.remove(currentThread().getId());
     SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());
-    new CloseDriverCommand().run(driver, proxy);
+    closeDriverCommand.closeAsync(driver, proxy);
   }
 
   @Override

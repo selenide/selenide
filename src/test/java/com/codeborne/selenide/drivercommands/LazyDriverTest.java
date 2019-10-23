@@ -22,13 +22,15 @@ class LazyDriverTest implements WithAssertions {
   private WebDriver webdriver = mock(WebDriver.class);
   private WebDriverFactory factory = mock(WebDriverFactory.class);
   private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private CreateDriverCommand createDriverCommand = new CreateDriverCommand();
+  private CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private LazyDriver driver;
 
   @BeforeEach
   void mockLogging() {
     when(config.reopenBrowserOnFail()).thenReturn(true);
     when(config.proxyEnabled()).thenReturn(true);
-    driver = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker);
+    driver = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
   }
 
   @BeforeEach
@@ -98,7 +100,8 @@ class LazyDriverTest implements WithAssertions {
     when(config.holdBrowserOpen()).thenReturn(false);
     when(config.proxyEnabled()).thenReturn(true);
 
-    driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(), factory, browserHealthChecker);
+    driver = new LazyDriver(config, mockProxy("selenide:0"), emptyList(),
+      factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
     givenOpenedBrowser();
 
     driver.close();

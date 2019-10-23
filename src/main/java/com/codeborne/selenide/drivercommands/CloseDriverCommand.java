@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  public void run(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+  public void closeAsync(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     long threadId = Thread.currentThread().getId();
     if (webDriver != null) {
       log.info("Close webdriver: {} -> {}", threadId, webDriver);
