@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
@@ -34,6 +35,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
   private Proxy userProvidedProxy;
 
+  private final Config config = new StaticConfig();
   private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
   private final WebDriverFactory factory = new WebDriverFactory();
   private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
@@ -112,8 +114,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private WebDriver createDriver() {
-    CreateDriverCommand.Result result = createDriverCommand
-      .createDriver(new StaticConfig(), factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     threadWebDriver.put(currentThread().getId(), result.webDriver);
     if (result.selenideProxyServer != null) {
       threadProxyServer.put(currentThread().getId(), result.selenideProxyServer);
@@ -131,7 +132,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public void closeWebDriver() {
     WebDriver driver = threadWebDriver.remove(currentThread().getId());
     SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());
-    closeDriverCommand.closeAsync(driver, proxy);
+    closeDriverCommand.closeAsync(config, driver, proxy);
   }
 
   @Override

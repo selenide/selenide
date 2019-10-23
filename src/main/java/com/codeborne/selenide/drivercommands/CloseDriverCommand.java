@@ -1,5 +1,6 @@
 package com.codeborne.selenide.drivercommands;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
@@ -11,9 +12,12 @@ import org.slf4j.LoggerFactory;
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  public void closeAsync(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+  public void closeAsync(Config config, WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
     long threadId = Thread.currentThread().getId();
-    if (webDriver != null) {
+    if (config.holdBrowserOpen()) {
+      log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, selenideProxyServer);
+    }
+    else if (webDriver != null) {
       log.info("Close webdriver: {} -> {}", threadId, webDriver);
       if (selenideProxyServer != null) {
         log.info("Close proxy server: {} -> {}", threadId, selenideProxyServer);
