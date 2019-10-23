@@ -3,12 +3,10 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideTargetLocator;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -31,13 +29,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 import static java.io.File.separatorChar;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
@@ -53,7 +48,7 @@ public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
-  protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
+
 
   public String takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenShot(driver, getScreenshotFileName(className, methodName));
@@ -151,14 +146,6 @@ public class ScreenShotLaboratory {
     }
   }
 
-  protected synchronized void printOnce(String action, Throwable error) {
-    if (!printedErrors.contains(action)) {
-      log.error(error.getMessage(), error);
-      printedErrors.add(action);
-    } else {
-      log.error("Failed to {}: {}", action, error);
-    }
-  }
 
   protected long timestamp() {
     return System.currentTimeMillis();
@@ -278,36 +265,7 @@ public class ScreenShotLaboratory {
   }
 
   protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver) {
-    return savePageSourceToFile(config, fileName, webdriver, true);
-  }
-
-  protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver, boolean retryIfAlert) {
-    File pageSource = new File(config.reportsFolder(), fileName + ".html");
-
-    try {
-      writeToFile(webdriver.getPageSource(), pageSource);
-    } catch (UnhandledAlertException e) {
-      if (retryIfAlert) {
-        try {
-          Alert alert = webdriver.switchTo().alert();
-          log.error("{}: {}", e, alert.getText());
-          alert.accept();
-          savePageSourceToFile(config, fileName, webdriver, false);
-        } catch (Exception unableToCloseAlert) {
-          log.error("Failed to close alert", unableToCloseAlert);
-        }
-      } else {
-        printOnce("savePageSourceToFile", e);
-      }
-    } catch (WebDriverException e) {
-      log.warn("Failed to save page source to {}", fileName, e);
-      writeToFile(e.toString(), pageSource);
-      return pageSource;
-    } catch (RuntimeException e) {
-      log.error("Failed to save page source to {}", fileName, e);
-      writeToFile(e.toString(), pageSource);
-    }
-    return pageSource;
+    return new PageSourceExtractor(config, webdriver, fileName).extract(true);
   }
 
   protected File takeScreenshotImage(Config config, TakesScreenshot driver, String fileName) {
@@ -344,13 +302,6 @@ public class ScreenShotLaboratory {
     }
   }
 
-  protected void writeToFile(String content, File targetFile) {
-    try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
-      copyFile(in, targetFile);
-    } catch (IOException e) {
-      log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
-    }
-  }
 
   public void startContext(String className, String methodName) {
     String context = className.replace('.', separatorChar) + separatorChar + methodName + separatorChar;
