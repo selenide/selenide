@@ -21,7 +21,7 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public abstract class BaseIntegrationTest {
   private static final Logger log = LoggerFactory.getLogger(BaseIntegrationTest.class);
 
-  private static final boolean SSL = false;
+  private static final boolean SSL = true;
   protected static LocalHttpServer server;
   protected static long averageSeleniumCommandDuration = 100;
   private static String protocol;
