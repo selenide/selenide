@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
@@ -20,7 +21,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
@@ -35,8 +35,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
   private Proxy userProvidedProxy;
 
+  private final Config config = new StaticConfig();
   private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
   private final WebDriverFactory factory = new WebDriverFactory();
+  private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
+  private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
 
   private final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
@@ -48,13 +51,6 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @Override
   public void setWebDriver(WebDriver webDriver) {
     setWebDriver(webDriver, null);
-  }
-
-  private <K, V> void runIfPresent(Map<K, V> map, K key, Consumer<V> lambda) {
-    V value = map.get(key);
-    if (value != null) {
-      lambda.accept(value);
-    }
   }
 
   /**
@@ -118,8 +114,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   private WebDriver createDriver() {
-    CreateDriverCommand.Result result = new CreateDriverCommand()
-      .createDriver(new StaticConfig(), factory, userProvidedProxy, listeners);
+    CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     threadWebDriver.put(currentThread().getId(), result.webDriver);
     if (result.selenideProxyServer != null) {
       threadProxyServer.put(currentThread().getId(), result.selenideProxyServer);
@@ -137,7 +132,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   public void closeWebDriver() {
     WebDriver driver = threadWebDriver.remove(currentThread().getId());
     SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());
-    new CloseDriverCommand(driver, proxy).run();
+    closeDriverCommand.closeAsync(config, driver, proxy);
   }
 
   @Override
