@@ -17,6 +17,7 @@ import com.google.common.base.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
