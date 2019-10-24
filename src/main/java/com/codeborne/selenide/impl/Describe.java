@@ -79,7 +79,7 @@ public class Describe {
   }
 
   private boolean supportsJavascriptAttributes() {
-    return driver.supportsJavascript() && !driver.browser().isHtmlUnit();
+    return driver.supportsJavascript();
   }
 
   private Describe attr(String attributeName) {

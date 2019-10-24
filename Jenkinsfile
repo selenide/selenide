@@ -26,9 +26,6 @@ node {
       stage('firefox tests') {
         sh './gradle firefox'
       }
-      stage('htmlunit tests') {
-        sh './gradle htmlunit'
-      }
     }
   }
   finally {

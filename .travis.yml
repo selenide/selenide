@@ -39,8 +39,6 @@ jobs:
       name: "Check + Sonar"
     - script: ./gradlew grid --no-daemon --console=plain
       name: "Grid"
-    - script: ./gradlew htmlunit --no-daemon --console=plain
-      name: "Htmlunit"
     - script: ./gradlew firefox_headless --no-daemon --console=plain
       name: "Firefox"
     - script: ./gradlew chrome_headless --no-daemon --console=plain

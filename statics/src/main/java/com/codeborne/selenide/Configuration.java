@@ -79,7 +79,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie".
-   * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "htmlunit", "opera", "safari", "edge", "jbrowser"
+   * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "opera", "edge"
    * <br>
    * Default value: "chrome"
    */

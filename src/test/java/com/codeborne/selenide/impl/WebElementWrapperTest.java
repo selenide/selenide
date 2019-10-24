@@ -11,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -44,15 +43,6 @@ class WebElementWrapperTest implements WithAssertions {
 
     assertThat(new WebElementWrapper(driver, element))
       .hasToString("<h2 class=\"class1 class2\" data-binding=\"to-name\" id=\"id1\"></h2>");
-  }
-
-  @Test
-  void toStringPrintsTagNameWithSomeAttributes() {
-    webDriver = mock(HtmlUnitDriver.class);
-    driver = new DriverStub(config, new Browser("htmlunit", false), webDriver, null);
-
-    assertThat(new WebElementWrapper(driver, element))
-      .hasToString("<h2 class=\"class1 class2\" id=\"id1\"></h2>");
   }
 
   @Test

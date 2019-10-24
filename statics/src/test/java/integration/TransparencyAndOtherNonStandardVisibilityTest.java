@@ -6,13 +6,10 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 class TransparencyAndOtherNonStandardVisibilityTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    assumeThat(isHtmlUnit()).as("opacity:0 is visible in HtmlUnit").isFalse();
     openFile("page_with_transparent_elements.html");
   }
 

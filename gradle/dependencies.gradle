@@ -4,8 +4,6 @@ repositories {
 
 ext {
   testngVersion = '6.9.10'
-  htmlunitVersion = '2.34.1'
-  htmlunitDriverVersion = '2.34.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.5.2'
   jettyVersion = '9.4.21.v20190926'
@@ -22,8 +20,6 @@ dependencies {
   }
   implementation('org.slf4j:slf4j-api:1.7.26')
 
-  compileOnly("net.sourceforge.htmlunit:htmlunit:$htmlunitVersion") { transitive = false }
-  compileOnly("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") { transitive = false }
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   compileOnly("org.junit.jupiter:junit-jupiter-migrationsupport:$junitVersion")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
@@ -37,13 +33,6 @@ dependencies {
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.13.2")
-
-  // for HtmlUnit:
-  testImplementation("org.seleniumhq.selenium:htmlunit-driver:$htmlunitDriverVersion") {
-    exclude group: 'net.bytebuddy', module: 'byte-buddy'
-    exclude group: 'org.eclipse.jetty.websocket'
-  }
-  testRuntimeOnly("org.eclipse.jetty.websocket:websocket-client:${jettyVersion}")
 
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.28')

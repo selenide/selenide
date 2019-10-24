@@ -34,6 +34,6 @@ tasks.withType(Checkstyle) {
 sonarqube {
   properties {
     property 'sonar.projectName', 'selenide'
-    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/htmlunit.exec, $project.buildDir/jacoco/chrome.exec"
+    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/chrome_headless.exec, $project.buildDir/jacoco/firefox_headless.exec"
   }
 }

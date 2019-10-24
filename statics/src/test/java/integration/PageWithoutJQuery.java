@@ -1,12 +1,10 @@
 package integration;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 
 class PageWithoutJQuery extends IntegrationTest {
   @BeforeEach
@@ -16,8 +14,6 @@ class PageWithoutJQuery extends IntegrationTest {
 
   @Test
   void setValueDoesNotTriggerOnChangeEvent() {
-    Assumptions.assumeFalse(isHtmlUnit());
-
     $("#username").setValue("john");
     $("#username-mirror").shouldHave(text("_"));
 

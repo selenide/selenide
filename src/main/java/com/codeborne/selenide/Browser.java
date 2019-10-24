@@ -3,12 +3,9 @@ package com.codeborne.selenide;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
-import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
-import static com.codeborne.selenide.Browsers.JBROWSER;
 import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
-import static com.codeborne.selenide.Browsers.SAFARI;
 import static com.codeborne.selenide.Browsers.IE;
 
 public class Browser {
@@ -21,7 +18,7 @@ public class Browser {
   }
 
   public boolean isHeadless() {
-    return isHtmlUnit() || headless;
+    return headless;
   }
 
   public boolean isChrome() {
@@ -44,23 +41,7 @@ public class Browser {
     return EDGE.equalsIgnoreCase(name);
   }
 
-  public boolean isSafari() {
-    return SAFARI.equalsIgnoreCase(name);
-  }
-
-  public boolean isHtmlUnit() {
-    return name != null && name.startsWith(HTMLUNIT);
-  }
-
   public boolean isOpera() {
     return OPERA.equalsIgnoreCase(name);
-  }
-
-  public boolean isJBrowser() {
-    return JBROWSER.equalsIgnoreCase(name);
-  }
-
-  public boolean supportsModalDialogs() {
-    return !isSafari();
   }
 }

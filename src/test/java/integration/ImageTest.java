@@ -1,6 +1,5 @@
 package integration;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +14,6 @@ class ImageTest extends ITest {
 
   @Test
   void userCanCheckIfImageIsLoadedCorrectly() {
-    Assumptions.assumeFalse(browser().isHtmlUnit());
-
     assertThat($("#valid-image img").isImage())
       .isTrue();
     assertThat($("#invalid-image img").isImage())

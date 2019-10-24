@@ -181,24 +181,10 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to user Safari browser
-   */
-  public static boolean isSafari() {
-    return browser().isSafari();
-  }
-
-  /**
-   * Is Selenide configured to use headless browser (HtmlUnit)
+   * Is Selenide configured to use headless browser
    */
   public static boolean isHeadless() {
     return browser().isHeadless();
-  }
-
-  /**
-   * Does this browser support "alert" and "confirm" dialogs.
-   */
-  public static boolean supportsModalDialogs() {
-    return browser().supportsModalDialogs();
   }
 
   /**
@@ -209,24 +195,10 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to use HtmlUnit browser
-   */
-  public static boolean isHtmlUnit() {
-    return browser().isHtmlUnit();
-  }
-
-  /**
    * Is Selenide configured to use Opera browser
    */
   public static boolean isOpera() {
     return browser().isOpera();
-  }
-
-  /**
-   * Is Selenide configured to use JBrowser browser
-   */
-  public static boolean isJBrowser() {
-    return browser().isJBrowser();
   }
 
   /**

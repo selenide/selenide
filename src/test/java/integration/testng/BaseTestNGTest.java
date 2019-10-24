@@ -16,7 +16,7 @@ abstract class BaseTestNGTest {
   private static final Logger log = LoggerFactory.getLogger(BaseTestNGTest.class);
   private static LocalHttpServer server;
 
-  protected static final String browser = System.getProperty("selenide.browser", "htmlunit");
+  protected static final String browser = System.getProperty("selenide.browser", "chrome");
   protected static String baseUrl;
 
   protected SelenideDriver driver = new SelenideDriver(

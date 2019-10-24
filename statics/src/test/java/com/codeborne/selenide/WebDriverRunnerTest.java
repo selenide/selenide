@@ -15,7 +15,6 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import java.net.URL;
 
 import static com.codeborne.selenide.Browsers.FIREFOX;
-import static com.codeborne.selenide.Browsers.HTMLUNIT;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.webdriverContainer;
@@ -77,46 +76,9 @@ class WebDriverRunnerTest implements WithAssertions {
   void userCanAddWebDriverListeners() {
     WebDriverEventListener listener = mock(WebDriverEventListener.class);
     WebDriverRunner.addListener(listener);
-    Configuration.browser = HTMLUNIT;
+    Configuration.browser = "chrome";
     open(url);
     verify(listener).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
-  }
-
-  @Test
-  void chrome_supportsAlerts() {
-    Configuration.browser = "chrome";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void headless_chrome_supportsAlerts() {
-    Configuration.browser = "chrome";
-    Configuration.headless = true;
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void firefox_supportsAlerts() {
-    Configuration.browser = "firefox";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void headless_firefox_supportsAlerts() {
-    Configuration.browser = "firefox";
-    Configuration.headless = true;
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isTrue();
-  }
-
-  @Test
-  void safari_doesNotSupportAlerts() {
-    Configuration.browser = "safari";
-    assertThat(WebDriverRunner.supportsModalDialogs())
-      .isFalse();
   }
 
   private static class CustomWebDriverProvider implements WebDriverProvider {
