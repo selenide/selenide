@@ -18,10 +18,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -44,11 +41,12 @@ public class ScreenShotLaboratory {
     return instance;
   }
 
+  protected final IO io = new IO();
   protected final PageSourceExtractor pageSourceExtractor = new PageSourceExtractor();
   protected final List<File> allScreenshots = new ArrayList<>();
-  protected AtomicLong screenshotCounter = new AtomicLong();
-  protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
-  protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
+  protected final AtomicLong screenshotCounter = new AtomicLong();
+  protected final ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
+  protected final ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
 
   public String takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenShot(driver, getScreenshotFileName(className, methodName));
@@ -94,8 +92,8 @@ public class ScreenShotLaboratory {
 
   public File takeScreenshot(Driver driver, WebElement element) {
     try {
-      BufferedImage destination = takeScreenshotAsImage(driver, element);
-      return writeToFile(driver, destination);
+      BufferedImage screenshot = takeScreenshotAsImage(driver, element);
+      return writeToFile(driver.config(), screenshot);
     } catch (IOException e) {
       log.error("Failed to take screenshot of {}", element, e);
       return null;
@@ -114,11 +112,10 @@ public class ScreenShotLaboratory {
       return null;
     }
 
-    byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
-
     Point elementLocation = element.getLocation();
     try {
-      BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
+      byte[] screen = ((TakesScreenshot) webdriver).getScreenshotAs(OutputType.BYTES);
+      BufferedImage img = io.readImage(screen);
       int elementWidth = getRescaledElementWidth(element, img);
       int elementHeight = getRescaledElementHeight(element, img);
 
@@ -136,38 +133,27 @@ public class ScreenShotLaboratory {
     return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
-  protected void ensureFolderExists(File targetFile) {
-    File folder = targetFile.getParentFile();
-    if (!folder.exists()) {
-      log.info("Creating folder: {}", folder);
-      if (!folder.mkdirs()) {
-        log.error("Failed to create {}", folder);
-      }
-    }
-  }
-
-
   protected long timestamp() {
     return System.currentTimeMillis();
   }
 
   public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
     try {
-      BufferedImage dest = takeScreenshotAsImage(driver, iframe, element);
-      return writeToFile(driver, dest);
+      BufferedImage screenshot = takeScreenshotAsImage(driver, iframe, element);
+      return writeToFile(driver.config(), screenshot);
     } catch (IOException e) {
       log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
       return null;
     }
   }
 
-  private File writeToFile(Driver driver, BufferedImage dest) throws IOException {
-    if (dest == null) {
+  private File writeToFile(Config config, BufferedImage screenshot) throws IOException {
+    if (screenshot == null) {
       return null;
     }
-    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
-    ensureFolderExists(screenshotOfElement);
-    ImageIO.write(dest, "png", screenshotOfElement);
+    File screenshotOfElement = new File(config.reportsFolder(), generateScreenshotFileName() + ".png");
+    io.ensureFolderExists(screenshotOfElement);
+    ImageIO.write(screenshot, "png", screenshotOfElement);
     return screenshotOfElement;
   }
 
@@ -273,7 +259,7 @@ public class ScreenShotLaboratory {
       File scrFile = driver.getScreenshotAs(FILE);
       File imageFile = new File(config.reportsFolder(), fileName + ".png");
       try {
-        copyFile(scrFile, imageFile);
+        io.copyFile(scrFile, imageFile);
       } catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);
       }
@@ -283,25 +269,6 @@ public class ScreenShotLaboratory {
       return null;
     }
   }
-
-  protected void copyFile(File sourceFile, File targetFile) throws IOException {
-    try (FileInputStream in = new FileInputStream(sourceFile)) {
-      copyFile(in, targetFile);
-    }
-  }
-
-  protected void copyFile(InputStream in, File targetFile) throws IOException {
-    ensureFolderExists(targetFile);
-
-    try (FileOutputStream out = new FileOutputStream(targetFile)) {
-      byte[] buffer = new byte[1024];
-      int len;
-      while ((len = in.read(buffer)) != -1) {
-        out.write(buffer, 0, len);
-      }
-    }
-  }
-
 
   public void startContext(String className, String methodName) {
     String context = className.replace('.', separatorChar) + separatorChar + methodName + separatorChar;
