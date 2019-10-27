@@ -13,39 +13,37 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class PageSourceExtractor {
+class PageSourceExtractor {
   private static final Logger log = LoggerFactory.getLogger(PageSourceExtractor.class);
-  protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
-  private final WebDriver driver;
-  private final Config config;
-  private final String fileName;
+  private boolean errorPrinted;
 
-  public PageSourceExtractor(Config config, WebDriver driver, String fileName) {
-    this.config = config;
-    this.driver = driver;
-    this.fileName = fileName;
+  File extract(Config config, WebDriver driver, String fileName) {
+    return extract(config, driver, fileName, true);
   }
 
-  protected File extract(boolean retryIfAlert) {
+  private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
     File pageSource = new File(config.reportsFolder(), fileName + ".html");
     try {
       writeToFile(driver.getPageSource(), pageSource);
-    } catch (UnhandledAlertException e) {
+    }
+    catch (UnhandledAlertException e) {
       if (retryIfAlert) {
-        retryingExtractionOnAlert(e);
-      } else {
+        closeAlert(driver, e);
+        extract(config, driver, fileName, false);
+      }
+      else {
         printOnce("savePageSourceToFile", e);
       }
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
-    } catch (RuntimeException e) {
+    }
+    catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
     }
@@ -56,16 +54,18 @@ public class PageSourceExtractor {
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       copyFile(in, targetFile);
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
     }
   }
 
   protected synchronized void printOnce(String action, Throwable error) {
-    if (!printedErrors.contains(action)) {
+    if (!errorPrinted) {
       log.error(error.getMessage(), error);
-      printedErrors.add(action);
-    } else {
+      errorPrinted = true;
+    }
+    else {
       log.error("Failed to {}: {}", action, error);
     }
   }
@@ -92,16 +92,14 @@ public class PageSourceExtractor {
     }
   }
 
-  private void retryingExtractionOnAlert(Exception e) {
+  private void closeAlert(WebDriver driver, Exception e) {
     try {
       Alert alert = driver.switchTo().alert();
-      log.error("{}: {}", e, alert.getText());
+      log.error("Closing unexpected alert {}: {}", e, alert.getText());
       alert.accept();
-      extract(false);
-    } catch (Exception unableToCloseAlert) {
+    }
+    catch (Exception unableToCloseAlert) {
       log.error("Failed to close alert", unableToCloseAlert);
     }
   }
-
-
 }

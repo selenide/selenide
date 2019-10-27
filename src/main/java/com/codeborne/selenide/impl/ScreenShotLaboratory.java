@@ -44,11 +44,11 @@ public class ScreenShotLaboratory {
     return instance;
   }
 
+  protected final PageSourceExtractor pageSourceExtractor = new PageSourceExtractor();
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
-
 
   public String takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenShot(driver, getScreenshotFileName(className, methodName));
@@ -265,7 +265,7 @@ public class ScreenShotLaboratory {
   }
 
   protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver) {
-    return new PageSourceExtractor(config, webdriver, fileName).extract(true);
+    return pageSourceExtractor.extract(config, webdriver, fileName);
   }
 
   protected File takeScreenshotImage(Config config, TakesScreenshot driver, String fileName) {
@@ -435,7 +435,7 @@ public class ScreenShotLaboratory {
   }
 
   private int getIframeWidth(WebDriver driver) {
-    return ((Long) ((JavascriptExecutor) driver).executeScript("return document.body.clientWidth")).intValue();
+    return ((Number) ((JavascriptExecutor) driver).executeScript("return document.body.clientWidth")).intValue();
   }
 
   private int getElementWidth(WebElement element) {
