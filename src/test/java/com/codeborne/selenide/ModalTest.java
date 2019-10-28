@@ -62,7 +62,8 @@ class ModalTest {
     verify(alert).accept();
     assertThat(exception.getMessage())
       .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
-      .contains("Screenshot: " + reportsBaseUri);
+      .contains("Screenshot: " + reportsBaseUri)
+      .contains("Page source: " + reportsBaseUri);
   }
 
   @Test
@@ -101,7 +102,8 @@ class ModalTest {
     verify(alert).accept();
     assertThat(exception.getMessage())
       .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
-      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
+      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/")
+      .contains("Page source: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
   }
 
   @Test
@@ -129,6 +131,7 @@ class ModalTest {
     verify(alert).dismiss();
     assertThat(exception.getMessage())
       .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
-      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
+      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/")
+      .contains("Page source: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
   }
 }
