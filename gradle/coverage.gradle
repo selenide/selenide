@@ -6,7 +6,7 @@ tasks.withType(JacocoReport) {
 }
 
 jacocoTestReport {
-  executionData = files(
+  executionData files(
     file("$buildDir/jacoco/test.exec"),
     file("$buildDir/jacoco/chrome_headless.exec"),
     file("$buildDir/jacoco/firefox_headless.exec")
