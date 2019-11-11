@@ -65,13 +65,6 @@ task firefox_remote(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task legacy_firefox(type: Test) {
-  systemProperties['selenide.browser'] = 'legacy_firefox'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/legacy_firefox'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
 task grid(type: Test) {
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/grid'
   include 'grid/**/*'
