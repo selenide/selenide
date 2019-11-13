@@ -72,3 +72,5 @@ artifacts {
   archives sourcesJar
   archives javadocJar
 }
+
+apply from: file('gradle/deploy.gradle')
