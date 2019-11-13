@@ -107,7 +107,20 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Close the browser if it's open
+   * Close the current window, quitting the browser if it's the last window currently open.
+   *
+   * @see WebDriver#close()
+   */
+  public static void closeWindow() {
+    webdriverContainer.closeWindow();
+  }
+
+  /**
+   * <p>Close the browser if it's open.</p>
+   * <br>
+   * <p>NB! Method quits this driver, closing every associated window.</p>
+   *
+   * @see WebDriver#quit()
    */
   public static void closeWebDriver() {
     webdriverContainer.closeWebDriver();
