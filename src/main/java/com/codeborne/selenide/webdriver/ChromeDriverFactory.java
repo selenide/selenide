@@ -65,6 +65,10 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.prefs"));
       currentChromeOptions.setExperimentalOption("prefs", prefs);
     }
+    if (System.getProperty("chromeoptions.mobileEmulation") != null) {
+      Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.mobileEmulation"));
+      currentChromeOptions.setExperimentalOption("mobileEmulation", prefs);
+    }
     return currentChromeOptions;
   }
 
