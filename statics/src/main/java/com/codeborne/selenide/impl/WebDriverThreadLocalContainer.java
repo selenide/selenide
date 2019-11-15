@@ -129,6 +129,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  public void closeWindow() {
+    getWebDriver().close();
+  }
+
+  @Override
   public void closeWebDriver() {
     WebDriver driver = threadWebDriver.remove(currentThread().getId());
     SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());

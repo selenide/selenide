@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 
 /**
@@ -166,8 +165,29 @@ public class Selenide {
   }
 
   /**
-   * Close the browser if it's open
+   * Close the current window, quitting the browser if it's the last window currently open.
+   *
+   * @see WebDriver#close()
    */
+  public static void closeWindow() {
+    WebDriverRunner.closeWindow();
+  }
+
+  /**
+   * <p>Close the browser if it's open.</p>
+   * <br>
+   * <p>NB! Method quits this driver, closing every associated window.</p>
+   *
+   * @see WebDriver#quit()
+   */
+  public static void closeWebDriver() {
+    WebDriverRunner.closeWebDriver();
+  }
+
+  /**
+   * @deprecated Use either {@link #closeWindow()} or {@link #closeWebDriver()}
+   */
+  @Deprecated
   public static void close() {
     closeWebDriver();
   }

@@ -13,6 +13,7 @@ public interface WebDriverContainer {
   SelenideProxyServer getProxyServer();
   void setProxy(Proxy webProxy);
   WebDriver getAndCheckWebDriver();
+  void closeWindow();
   void closeWebDriver();
   boolean hasWebDriverStarted();
 
