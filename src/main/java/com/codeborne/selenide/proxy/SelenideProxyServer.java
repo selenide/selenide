@@ -131,9 +131,9 @@ public class SelenideProxyServer {
   }
 
   /**
-   * Method return current instance of browser mob proxy
+   * Method return current instance of browser up proxy
    *
-   * @return browser mob proxy instance
+   * @return browser up proxy instance
    */
   public BrowserUpProxy getProxy() {
     return proxy;

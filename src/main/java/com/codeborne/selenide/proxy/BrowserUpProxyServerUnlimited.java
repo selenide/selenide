@@ -10,7 +10,7 @@ import com.browserup.bup.filters.ResponseFilterAdapter;
  * By default, BrowserUpProxyServer doesn't allow requests/responses bugger than 2 MB.
  * We need this class to enable bigger sizes.
  */
-public class BrowserUpProxyServerUnlimited extends BrowserUpProxyServer {
+class BrowserUpProxyServerUnlimited extends BrowserUpProxyServer {
   private static final int maxSize = 64 * 1024 * 1024; // 64 MB
 
   @Override
