@@ -269,7 +269,7 @@ public class Configuration {
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
-   * @see net.lightbody.bmp.client.ClientUtil#getConnectableAddress()
+   * @see com.browserup.bup.client.ClientUtil#getConnectableAddress()
    */
   public static String proxyHost = defaults.proxyHost();
 

@@ -1,7 +1,7 @@
 package com.codeborne.selenide.proxy;
 
 import com.codeborne.selenide.Config;
-import net.lightbody.bmp.BrowserMobProxyServer;
+import com.browserup.bup.BrowserUpProxyServer;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SelenideProxyServerTest implements WithAssertions {
-  private BrowserMobProxyServer bmp = mock(BrowserMobProxyServer.class);
+  private BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
   private Config config = mock(Config.class);
   private SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
 
