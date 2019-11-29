@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.5.1 (released 29.11.2019)
+* #1008 add support for system property "chromeoptions.mobileEmulation"  --  see PR #1011
+* #1016 deprecate method `Selenide.close()`  --  see PR #1017
+
 ## 5.5.0 (released 31.10.2019)
 * #923 Migrate from JUL to SLF4J  --  thanks to Gleb Schukin @gschukin for PR #926
 * Remove HtmlUnit dependency  --  thanks to Aliaksandr Rasolka for PR #1003
