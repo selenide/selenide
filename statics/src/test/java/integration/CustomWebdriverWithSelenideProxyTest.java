@@ -61,6 +61,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
     ChromeOptions options = new ChromeOptions();
     if (isHeadless()) options.setHeadless(true);
     options.setProxy(proxy.createSeleniumProxy());
+    addSslErrorIgnoreCapabilities(options);
     options.addArguments("--proxy-bypass-list=<-loopback>");
     return new ChromeDriver(options);
   }

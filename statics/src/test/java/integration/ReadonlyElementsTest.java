@@ -40,6 +40,7 @@ class ReadonlyElementsTest extends IntegrationTest {
       "Element is read-only and so may not be used for actions",
       "Element must be user-editable in order to clear it",
       "You may only edit editable elements",
+      "Invalid element state: invalid element state",
       "Element is read-only: <input name=\"username\">"
     );
 
@@ -74,6 +75,7 @@ class ReadonlyElementsTest extends IntegrationTest {
       "You may only edit editable elements",
       "You may only interact with enabled elements",
       "Element is not currently interactable and may not be manipulated",
+      "Invalid element state: invalid element state: Element is not currently interactable and may not be manipulated",
       "Element is disabled");
 
     Configuration.fastSetValue = false;

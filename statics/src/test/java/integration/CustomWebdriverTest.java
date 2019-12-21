@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -34,8 +36,13 @@ class CustomWebdriverTest extends IntegrationTest {
   @BeforeEach
   void setUpTwoBrowsers() {
     useProxy(false);
-    browser1 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
-    browser2 = isFirefox() ? new FirefoxDriver() : new ChromeDriver();
+
+    browser1 = isFirefox() ?
+      new FirefoxDriver(addSslErrorIgnoreCapabilities(new FirefoxOptions())) :
+      new ChromeDriver(addSslErrorIgnoreCapabilities(new ChromeOptions()));
+    browser2 = isFirefox() ?
+      new FirefoxDriver(addSslErrorIgnoreCapabilities(new FirefoxOptions())) :
+      new ChromeDriver(addSslErrorIgnoreCapabilities(new ChromeOptions()));
   }
 
   @Test
