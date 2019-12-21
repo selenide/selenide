@@ -7,6 +7,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
@@ -75,7 +76,8 @@ class UnopenedBrowserTest extends IntegrationTest {
     useProxy(false);
 
     SelenideElement header = $("h1");
-    ChromeDriver driver = new ChromeDriver();
+    ChromeOptions options = new ChromeOptions();
+    ChromeDriver driver = new ChromeDriver(addSslErrorIgnoreCapabilities(options));
     try {
       WebDriverRunner.setWebDriver(driver);
       openFile("page_with_selects_without_jquery.html");
