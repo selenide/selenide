@@ -11,7 +11,7 @@ import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.google.common.base.Predicate;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -133,7 +133,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean apply(@NullableDecl List<WebElement> input) {
+    public boolean apply(@Nullable List<WebElement> input) {
       return delegate.apply(input);
     }
   }

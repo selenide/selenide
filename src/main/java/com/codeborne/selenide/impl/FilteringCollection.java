@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.google.common.base.Predicate;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class FilteringCollection implements WebElementsCollection {
     }
 
     @Override
-    public boolean apply(@NullableDecl WebElement webElement) {
+    public boolean apply(@Nullable WebElement webElement) {
       return filter.apply(driver, webElement);
     }
 

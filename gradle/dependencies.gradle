@@ -15,9 +15,9 @@ dependencies {
   }
   api('io.github.bonigarcia:webdrivermanager:3.7.1')
 
-  implementation('net.lightbody.bmp:browsermob-core:2.1.5') {
-    exclude group: 'com.google.guava', module: 'guava'
-  }
+  implementation('com.browserup:browserup-proxy-core:2.0.1')
+  implementation('io.netty:netty-codec:4.1.42.Final')
+  implementation('xyz.rogfam:littleproxy:2.0.0-beta-5')
   implementation('org.slf4j:slf4j-api:1.7.26')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
