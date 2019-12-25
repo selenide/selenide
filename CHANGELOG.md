@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.6.0 (released 26.12.2019)
+* #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
+
 ## 5.5.1 (released 29.11.2019)
 * #1008 add support for system property "chromeoptions.mobileEmulation"  --  see PR #1011
 * #1016 deprecate method `Selenide.close()`  --  see PR #1017
