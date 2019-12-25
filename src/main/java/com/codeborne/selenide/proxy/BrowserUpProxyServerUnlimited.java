@@ -1,16 +1,16 @@
 package com.codeborne.selenide.proxy;
 
-import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.filters.RequestFilter;
-import net.lightbody.bmp.filters.RequestFilterAdapter;
-import net.lightbody.bmp.filters.ResponseFilter;
-import net.lightbody.bmp.filters.ResponseFilterAdapter;
+import com.browserup.bup.BrowserUpProxyServer;
+import com.browserup.bup.filters.RequestFilter;
+import com.browserup.bup.filters.RequestFilterAdapter;
+import com.browserup.bup.filters.ResponseFilter;
+import com.browserup.bup.filters.ResponseFilterAdapter;
 
 /**
- * By default, BrowserMobProxyServer doesn't allow requests/responses bugger than 2 MB.
+ * By default, BrowserUpProxyServer doesn't allow requests/responses bugger than 2 MB.
  * We need this class to enable bigger sizes.
  */
-class BrowserMobProxyServerUnlimited extends BrowserMobProxyServer {
+class BrowserUpProxyServerUnlimited extends BrowserUpProxyServer {
   private static final int maxSize = 64 * 1024 * 1024; // 64 MB
 
   @Override

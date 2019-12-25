@@ -1,9 +1,9 @@
 package com.codeborne.selenide.proxy;
 
 import io.netty.handler.codec.http.HttpResponse;
-import net.lightbody.bmp.filters.ResponseFilter;
-import net.lightbody.bmp.util.HttpMessageContents;
-import net.lightbody.bmp.util.HttpMessageInfo;
+import com.browserup.bup.filters.ResponseFilter;
+import com.browserup.bup.util.HttpMessageContents;
+import com.browserup.bup.util.HttpMessageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
