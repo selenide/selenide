@@ -583,14 +583,14 @@ public class Selenide {
   }
 
   /**
-   * See {@link org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)}
+   * @see @see <a href="https://selenium.dev/selenium/docs/api/java/org/openqa/selenium/JavascriptExecutor.html#executeScript-java.lang.String-java.lang.Object...-">executeScript</a>
    */
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeJavaScript(jsCode, arguments);
   }
 
   /**
-   * See {@link org.openqa.selenium.JavascriptExecutor#executeAsyncScript(String, Object...)}
+   * @see @see <a href="https://selenium.dev/selenium/docs/api/java/org/openqa/selenium/JavascriptExecutor.html#executeAsyncScript-java.lang.String-java.lang.Object...-">executeAsyncScript</a>
    */
   public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeAsyncJavaScript(jsCode, arguments);
