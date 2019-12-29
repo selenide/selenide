@@ -582,8 +582,18 @@ public class Selenide {
     return getSelenideDriver().findAll(criteria);
   }
 
+  /**
+   * See {@link org.openqa.selenium.JavascriptExecutor#executeScript(String, Object...)}
+   */
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeJavaScript(jsCode, arguments);
+  }
+
+  /**
+   * See {@link org.openqa.selenium.JavascriptExecutor#executeAsyncScript(String, Object...)}
+   */
+  public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return getSelenideDriver().executeAsyncJavaScript(jsCode, arguments);
   }
 
   /**
