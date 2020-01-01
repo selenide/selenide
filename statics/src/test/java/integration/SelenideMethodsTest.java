@@ -574,7 +574,7 @@ class SelenideMethodsTest extends IntegrationTest {
   @Test
   void canExecuteAsyncJavascript() {
     long value = (Long) Selenide.executeAsyncJavaScript(
-      "var callback = arguments[0]; setTimeout(function() { callback(10); }, 50);"
+      "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
     );
     assertThat(value).isEqualTo(10);
   }
