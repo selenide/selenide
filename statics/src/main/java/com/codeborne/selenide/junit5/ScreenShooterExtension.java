@@ -21,45 +21,37 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * <p>
  * How to use in Java:
  * <pre>
- * {@code
- *    @ExtendWith({ScreenShooterExtension.class})
+ *   {@code @ExtendWith({ScreenShooterExtension.class})}
  *    public class MyTest {...}
- * }
  * </pre>
  * <p>
  * How to use in Java (with customization):
  * <pre>
- * {@code
  *   public class MyTest {
- *     @RegisterExtension
+ *    {@code @RegisterExtension}
  *     static ScreenShooterExtension screenshotEmAll = new ScreenShooterExtension(true);
  *     ...
  *   }
- * }
  * </pre>
  * <p>
  * How to use in Kotlin:
  *
  * <pre>
- *   {@code
- *     @ExtendWith(ScreenShooterExtension::class)
+ *    {@code @ExtendWith(ScreenShooterExtension::class)}
  *     public class MyTest {...}
- *   }
  * </pre>
  * <p>
  * How to use in Kotlin (with customization):
  *
  * <pre>
- * {@code
  *   public class MyTest {
  *     companion object {
- *       @JvmField
- *       @RegisterExtension
+ *      {@code @JvmField}
+ *      {@code @RegisterExtension}
  *       val screenshotEmAll: ScreenShooterExtension = ScreenShooterExtension(true);
  *     }
  *     ...
  *   }
- * }
  * </pre>
  *
  * @author Aliaksandr Rasolka
