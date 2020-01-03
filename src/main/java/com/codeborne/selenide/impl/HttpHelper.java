@@ -1,5 +1,7 @@
 package com.codeborne.selenide.impl;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
@@ -8,6 +10,7 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+import static org.apache.commons.lang3.StringUtils.left;
 
 public class HttpHelper {
 
@@ -32,5 +35,15 @@ public class HttpHelper {
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  String getFileName(String url) {
+    return trimQuery(FilenameUtils.getName(url));
+  }
+
+  private String trimQuery(String filenameWithQuery) {
+    return filenameWithQuery.contains("?")
+      ? left(filenameWithQuery, filenameWithQuery.indexOf("?"))
+      : filenameWithQuery;
   }
 }

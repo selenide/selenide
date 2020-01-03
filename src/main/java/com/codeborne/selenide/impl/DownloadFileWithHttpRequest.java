@@ -3,8 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
@@ -39,7 +37,7 @@ import java.util.Optional;
 
 import static com.codeborne.selenide.impl.Describe.describe;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class DownloadFileWithHttpRequest {
@@ -180,14 +178,8 @@ public class DownloadFileWithHttpRequest {
       log.info("{}={}", header.getName(), header.getValue());
     }
 
-    String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
-    return isBlank(fullFileName) ? downloader.randomFileName() : trimQuery(fullFileName);
-  }
-
-  private String trimQuery(String fullFileName) {
-    return fullFileName.contains("?")
-      ? StringUtils.left(fullFileName, fullFileName.indexOf("?"))
-      : fullFileName;
+    String fileNameFromUrl = httpHelper.getFileName(fileToDownloadLocation);
+    return isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
   }
 
   protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
