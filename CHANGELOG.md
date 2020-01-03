@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.7.0
+* #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR #1031
+
 ## 5.6.0 (released 26.12.2019)
 * #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
 

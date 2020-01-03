@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -583,14 +584,14 @@ public class Selenide {
   }
 
   /**
-   * @see <a href="https://selenium.dev/selenium/docs/api/java/org/openqa/selenium/JavascriptExecutor.html#executeScript-java.lang.String-java.lang.Object...-">org.openqa.selenium.JavascriptExecutor.executeScript(String jsCode, Object... arguments)</a>
+   * @see JavascriptExecutor#executeScript(java.lang.String, java.lang.Object...)
    */
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeJavaScript(jsCode, arguments);
   }
 
   /**
-   * @see <a href="https://selenium.dev/selenium/docs/api/java/org/openqa/selenium/JavascriptExecutor.html#executeAsyncScript-java.lang.String-java.lang.Object...-">org.openqa.selenium.JavascriptExecutor.executeAsyncJavaScript(String jsCode, Object... arguments)</a>
+   * @see JavascriptExecutor#executeAsyncScript(java.lang.String, java.lang.Object...)
    */
   public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeAsyncJavaScript(jsCode, arguments);
