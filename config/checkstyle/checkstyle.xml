@@ -14,7 +14,6 @@
   </module>
   <!--Add more checks from google style guide:-->
   <!--https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml-->
-
   <module name="TreeWalker">
     <property name="tabWidth" value="2"/>
     <module name="PackageName">
@@ -73,6 +72,7 @@
   </module>
 
   <module name="LineLength">
+    <property name="ignorePattern" value="^ *\* *@see.+$"/>
     <property name="max" value="136"/>
   </module>
 

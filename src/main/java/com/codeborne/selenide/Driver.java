@@ -23,6 +23,11 @@ public interface Driver {
     return (T) ((JavascriptExecutor) getWebDriver()).executeScript(jsCode, arguments);
   }
 
+  @SuppressWarnings("unchecked")
+  default <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return (T) ((JavascriptExecutor) getWebDriver()).executeAsyncScript(jsCode, arguments);
+  }
+
   default void clearCookies() {
     if (hasWebDriverStarted()) {
       getWebDriver().manage().deleteAllCookies();

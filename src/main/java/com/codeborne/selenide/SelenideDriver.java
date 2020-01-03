@@ -162,6 +162,10 @@ public class SelenideDriver {
     return driver().executeJavaScript(jsCode, arguments);
   }
 
+  public <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return driver().executeAsyncJavaScript(jsCode, arguments);
+  }
+
   public WebElement getFocusedElement() {
     return executeJavaScript("return document.activeElement");
   }

@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
@@ -562,6 +563,20 @@ class SelenideMethodsTest extends IntegrationTest {
     $("#username").scrollTo().execute(replace).pressEnter().execute(doubleClick);
     String mirrorText = $("#username-mirror").text();
     assertThat(mirrorText).startsWith("custom value");
+  }
+
+  @Test
+  void canExecuteJavascript() {
+    long value = (Long) Selenide.executeJavaScript("return 10;");
+    assertThat(value).isEqualTo(10);
+  }
+
+  @Test
+  void canExecuteAsyncJavascript() {
+    long value = (Long) Selenide.executeAsyncJavaScript(
+      "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
+    );
+    assertThat(value).isEqualTo(10);
   }
 
   static class DoubleClick implements Command<Void> {
