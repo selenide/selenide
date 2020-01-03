@@ -1,13 +1,13 @@
 package com.codeborne.selenide.proxy;
 
+import com.browserup.bup.filters.ResponseFilter;
+import com.browserup.bup.util.HttpMessageContents;
+import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
-import com.browserup.bup.filters.ResponseFilter;
-import com.browserup.bup.util.HttpMessageContents;
-import com.browserup.bup.util.HttpMessageInfo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,15 +62,16 @@ public class FileDownloadFilter implements ResponseFilter {
   @Override
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (!active) return;
+
     responses.add(new Response(messageInfo.getUrl(),
-        response.getStatus().code(),
-        response.getStatus().reasonPhrase(),
+        response.status().code(),
+        response.status().reasonPhrase(),
         toMap(response.headers()),
         contents.getContentType(),
         contents.getTextContents()
     ));
 
-    if (response.getStatus().code() < 200 || response.getStatus().code() >= 300) return;
+    if (response.status().code() < 200 || response.status().code() >= 300) return;
 
     String fileName = getFileName(response);
     if (fileName == null) return;
@@ -116,10 +117,11 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   public String getResponses() {
     StringBuilder sb = new StringBuilder();
-    sb.append("Intercepted ").append(responses.size()).append(" responses.");
+    sb.append("Intercepted ").append(responses.size()).append(" responses:\n");
 
+    int i = 0;
     for (Response response : responses) {
-      sb.append("\n  ").append(response).append("\n");
+      sb.append("  #").append(++i).append("  ").append(response).append("\n");
     }
     return sb.toString();
   }

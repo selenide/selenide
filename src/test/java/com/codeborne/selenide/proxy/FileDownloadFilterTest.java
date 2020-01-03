@@ -1,5 +1,7 @@
 package com.codeborne.selenide.proxy;
 
+import com.browserup.bup.util.HttpMessageContents;
+import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.DummyRandomizer;
@@ -7,8 +9,6 @@ import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import com.browserup.bup.util.HttpMessageContents;
-import com.browserup.bup.util.HttpMessageInfo;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,11 +84,11 @@ class FileDownloadFilterTest implements WithAssertions {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.getResponses())
-      .isEqualTo("Intercepted 1 responses.\n  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
+      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   private void mockStatusCode(int code, String reason) {
-    when(response.getStatus()).thenReturn(new HttpResponseStatus(code, reason));
+    when(response.status()).thenReturn(new HttpResponseStatus(code, reason));
   }
 
   @Test
@@ -98,7 +98,7 @@ class FileDownloadFilterTest implements WithAssertions {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.getResponses())
-      .isEqualTo("Intercepted 1 responses.\n  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
+      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
   @Test
@@ -109,7 +109,7 @@ class FileDownloadFilterTest implements WithAssertions {
     filter.filterResponse(response, contents, messageInfo);
 
     assertThat(filter.getResponses())
-      .isEqualTo("Intercepted 1 responses.\n  null -> 200 \"200=success\" {} app/json  (7 bytes)\n");
+      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 200 \"200=success\" {} app/json  (7 bytes)\n");
   }
 
   @Test
