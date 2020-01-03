@@ -83,4 +83,13 @@ class HttpHelperTest implements WithAssertions {
     assertThat(helper.getFileNameFromContentDisposition("another-header", "some.png").isPresent())
       .isFalse();
   }
+
+  @Test
+  void extractsFileNameFromUrl() {
+    assertThat(helper.getFileName("/blah.jpg")).isEqualTo("blah.jpg");
+    assertThat(helper.getFileName("/blah.jpg?foo")).isEqualTo("blah.jpg");
+    assertThat(helper.getFileName("https://blah.org/blah.jpg")).isEqualTo("blah.jpg");
+
+    assertThat(helper.getFileName("https://some.com/foo/bar/")).isEqualTo("");
+  }
 }
