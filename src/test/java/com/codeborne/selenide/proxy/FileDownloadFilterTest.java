@@ -41,30 +41,10 @@ class FileDownloadFilterTest implements WithAssertions {
     deleteDirectory(new File("build/downloads/random-text"));
   }
 
-  @Test
-  void getsFileNameFromResponseHeader() {
-    mockHeaders()
-      .add("content-disposition", "attachement; filename=report.pdf")
-      .add("referrer", "http://google.kz");
-
-    assertThat(filter.getFileName(response))
-      .isEqualTo("report.pdf");
-  }
-
   private HttpHeaders mockHeaders() {
     HttpHeaders headers = new DefaultHttpHeaders();
     when(response.headers()).thenReturn(headers);
     return headers;
-  }
-
-  @Test
-  void fileNameIsNull_ifResponseDoesNotContainDispositionHeader() {
-    mockHeaders()
-      .add("location", "/downloads")
-      .add("referrer", "http://google.kz");
-
-    assertThat(filter.getFileName(response))
-      .isNullOrEmpty();
   }
 
   @Test

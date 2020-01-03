@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadFilter.class);
@@ -102,14 +101,8 @@ public class FileDownloadFilter implements ResponseFilter {
   }
 
   String getFileName(HttpResponse response) {
-    for (Map.Entry<String, String> header : response.headers().entries()) {
-      Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getKey(), header.getValue());
-      if (fileName.isPresent()) {
-        return fileName.get();
-      }
-    }
-
-    return null;
+    return httpHelper.getFileNameFromContentDisposition(response.headers().entries())
+      .orElse(null);
   }
 
   /**
