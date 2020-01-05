@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadFilter.class);
 
@@ -62,17 +64,18 @@ public class FileDownloadFilter implements ResponseFilter {
   public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (!active) return;
 
-    responses.add(new Response(messageInfo.getUrl(),
-        response.status().code(),
-        response.status().reasonPhrase(),
-        toMap(response.headers()),
-        contents.getContentType(),
-        contents.getTextContents()
-    ));
+    Response r = new Response(messageInfo.getUrl(),
+      response.status().code(),
+      response.status().reasonPhrase(),
+      toMap(response.headers()),
+      contents.getContentType(),
+      contents.getTextContents()
+    );
+    responses.add(r);
 
     if (response.status().code() < 200 || response.status().code() >= 300) return;
 
-    String fileName = getFileName(response);
+    String fileName = getFileName(r);
     if (fileName == null) return;
 
     File file = downloader.prepareTargetFile(config, fileName);
@@ -100,9 +103,17 @@ public class FileDownloadFilter implements ResponseFilter {
     return downloadedFiles;
   }
 
-  String getFileName(HttpResponse response) {
-    return httpHelper.getFileNameFromContentDisposition(response.headers().entries())
-      .orElse(null);
+  String getFileName(Response response) {
+    return httpHelper.getFileNameFromContentDisposition(response.headers)
+      .orElseGet(() -> {
+        log.info("Cannot extract file name from http headers. Found headers: ");
+        for (Map.Entry<String, String> header : response.headers.entrySet()) {
+          log.info("{}={}", header.getKey(), header.getValue());
+        }
+
+        String fileNameFromUrl = httpHelper.getFileName(response.url);
+        return isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
+      });
   }
 
   /**

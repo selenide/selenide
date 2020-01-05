@@ -16,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -71,6 +73,10 @@ class FileDownloadFilterTest implements WithAssertions {
     when(response.status()).thenReturn(new HttpResponseStatus(code, reason));
   }
 
+  private void mockUrl(String url) {
+    when(messageInfo.getUrl()).thenReturn(url);
+  }
+
   @Test
   void doesNotInterceptResponsesWithCodeAbove300() {
     filter.activate();
@@ -79,17 +85,6 @@ class FileDownloadFilterTest implements WithAssertions {
 
     assertThat(filter.getResponses())
       .isEqualTo("Intercepted 1 responses:\n  #1  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
-  }
-
-  @Test
-  void doesNotInterceptResponsesWithoutDispositionHeader() {
-    filter.activate();
-    mockStatusCode(200, "200=success");
-    mockHeaders();
-    filter.filterResponse(response, contents, messageInfo);
-
-    assertThat(filter.getResponses())
-      .isEqualTo("Intercepted 1 responses:\n  #1  null -> 200 \"200=success\" {} app/json  (7 bytes)\n");
   }
 
   @Test
@@ -107,5 +102,23 @@ class FileDownloadFilterTest implements WithAssertions {
     assertThat(file.getName()).isEqualTo("report.pdf");
     assertThat(file.getPath()).endsWith("build/downloads/random-text/report.pdf");
     assertThat(readFileToByteArray(file)).isEqualTo(new byte[]{1, 2, 3, 4, 5});
+  }
+
+  @Test
+  void usesNameFromURL_ifResponseHasNoContentDispositionHeader() throws IOException {
+    filter.activate();
+    mockStatusCode(200, "200=success");
+    mockHeaders();
+    mockUrl("/foo/bar/cv.pdf?42");
+    when(contents.getBinaryContents()).thenReturn("HELLO".getBytes(UTF_8));
+
+    filter.filterResponse(response, contents, messageInfo);
+
+    assertThat(filter.getResponses())
+      .isEqualTo("Intercepted 1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
+    File file = filter.getDownloadedFiles().get(0);
+    assertThat(file.getName()).isEqualTo("cv.pdf");
+    assertThat(file.getPath()).endsWith("build/downloads/random-text/cv.pdf");
+    assertThat(readFileToString(file, UTF_8)).isEqualTo("HELLO");
   }
 }
