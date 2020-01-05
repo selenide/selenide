@@ -53,7 +53,7 @@ public class HttpHelper {
     }
   }
 
-  String getFileName(String url) {
+  public String getFileName(String url) {
     return trimQuery(FilenameUtils.getName(url));
   }
 
