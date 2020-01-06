@@ -119,13 +119,27 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return all intercepted http response (as a string) - it can be useful for debugging
    */
-  public String getResponses() {
+  public String responsesAsString() {
     StringBuilder sb = new StringBuilder();
     sb.append("Intercepted ").append(responses.size()).append(" responses:\n");
 
     int i = 0;
     for (Response response : responses) {
       sb.append("  #").append(++i).append("  ").append(response).append("\n");
+    }
+    return sb.toString();
+  }
+
+  /**
+   * @return all downloaded files (as a string) - it can be useful for debugging
+   */
+  public String downloadedFilesAsString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Downloaded ").append(downloadedFiles.size()).append(" files:\n");
+
+    int i = 0;
+    for (File file : downloadedFiles) {
+      sb.append("  #").append(++i).append("  ").append(file.getAbsolutePath()).append("\n");
     }
     return sb.toString();
   }
