@@ -65,7 +65,7 @@ class FileDownloadFilterTest implements WithAssertions {
     mockStatusCode(199, "below 200");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses())
+    assertThat(filter.responsesAsString())
       .isEqualTo("Intercepted 1 responses:\n  #1  null -> 199 \"below 200\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
@@ -83,7 +83,7 @@ class FileDownloadFilterTest implements WithAssertions {
     mockStatusCode(300, "300 or above");
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses())
+    assertThat(filter.responsesAsString())
       .isEqualTo("Intercepted 1 responses:\n  #1  null -> 300 \"300 or above\" {hkey-01=hvalue-01} app/json  (7 bytes)\n");
   }
 
@@ -114,7 +114,7 @@ class FileDownloadFilterTest implements WithAssertions {
 
     filter.filterResponse(response, contents, messageInfo);
 
-    assertThat(filter.getResponses())
+    assertThat(filter.responsesAsString())
       .isEqualTo("Intercepted 1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
     File file = filter.getDownloadedFiles().get(0);
     assertThat(file.getName()).isEqualTo("cv.pdf");

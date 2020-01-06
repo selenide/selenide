@@ -92,11 +92,11 @@ public class DownloadFileWithProxyServer {
     List<File> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-        " in " + timeout + " ms." + filter.getResponses());
+        " in " + timeout + " ms." + filter.responsesAsString());
     }
 
-    log.info("Downloaded file: {}", files.get(0).getAbsolutePath());
-    log.info("Just in case, all intercepted responses: {}", filter.getResponses());
+    log.info(filter.downloadedFilesAsString());
+    log.info("Just in case, all intercepted responses: {}", filter.responsesAsString());
     return files.get(0);
   }
 }
