@@ -1,8 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
-import com.codeborne.selenide.proxy.FileDownloadFilter.DownloadedFile;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;

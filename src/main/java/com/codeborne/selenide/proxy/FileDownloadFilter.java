@@ -91,7 +91,7 @@ public class FileDownloadFilter implements ResponseFilter {
   private Map<String, String> toMap(HttpHeaders headers) {
     Map<String, String> map = new HashMap<>();
     for (Map.Entry<String, String> header : headers) {
-      map.put(header.getKey(), header.getValue());
+      map.put(header.getKey().toLowerCase(), header.getValue());
     }
     return map;
   }
@@ -139,31 +139,9 @@ public class FileDownloadFilter implements ResponseFilter {
 
     int i = 0;
     for (DownloadedFile file : downloadedFiles) {
-      sb.append("  #").append(++i).append("  ").append(file.file.getAbsolutePath()).append("\n");
+      sb.append("  #").append(++i).append("  ").append(file.getFile().getAbsolutePath()).append("\n");
     }
     return sb.toString();
-  }
-
-  public static class DownloadedFile {
-    private final File file;
-    private final Map<String, String> headers;
-
-    public DownloadedFile(File file, Map<String, String> headers) {
-      this.file = file;
-      this.headers = headers;
-    }
-
-    public File getFile() {
-      return file;
-    }
-
-    public boolean hasContentDispositionHeader() {
-      return headers.containsKey("Content-Disposition");
-    }
-
-    public String getContentType() {
-      return headers.get("Content-Type");
-    }
   }
 
   private static class Response {

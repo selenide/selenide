@@ -1,6 +1,6 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.proxy.FileDownloadFilter.DownloadedFile;
+import com.codeborne.selenide.proxy.DownloadedFile;
 import com.google.common.collect.ImmutableSet;
 
 import java.io.Serializable;
