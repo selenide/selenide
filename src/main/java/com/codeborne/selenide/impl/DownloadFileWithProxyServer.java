@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
+import com.codeborne.selenide.proxy.FileDownloadFilter.DownloadedFile;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;
@@ -89,7 +90,7 @@ public class DownloadFileWithProxyServer {
 
   private File firstDownloadedFile(WebElementSource anyClickableElement,
                                    FileDownloadFilter filter, long timeout) throws FileNotFoundException {
-    List<File> files = filter.getDownloadedFiles();
+    List<DownloadedFile> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
         " in " + timeout + " ms." + filter.responsesAsString());
@@ -97,6 +98,10 @@ public class DownloadFileWithProxyServer {
 
     log.info(filter.downloadedFilesAsString());
     log.info("Just in case, all intercepted responses: {}", filter.responsesAsString());
-    return files.get(0);
+    return files.stream().sorted(new DownloadDetector()).findFirst()
+      .orElseThrow(() ->
+        new FileNotFoundException("Failed to download file " + anyClickableElement +
+          " in " + timeout + " ms." + filter.responsesAsString())
+      ).getFile();
   }
 }
