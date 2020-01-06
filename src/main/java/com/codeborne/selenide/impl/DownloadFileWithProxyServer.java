@@ -45,6 +45,9 @@ public class DownloadFileWithProxyServer {
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     filter.activate();
     try {
+      waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
+
+      filter.reset();
       clickable.click();
 
       waiter.wait(filter, new HasDownloads(), timeout, config.pollingInterval());
@@ -85,6 +88,20 @@ public class DownloadFileWithProxyServer {
     @Override
     public boolean apply(FileDownloadFilter filter) {
       return !filter.getDownloadedFiles().isEmpty();
+    }
+  }
+
+  private static class PreviousDownloadsCompleted implements Predicate<FileDownloadFilter> {
+    private int downloadsCount = -1;
+
+    @Override
+    public boolean apply(FileDownloadFilter filter) {
+      try {
+        return downloadsCount == filter.getDownloadedFiles().size();
+      }
+      finally {
+        downloadsCount = filter.getDownloadedFiles().size();
+      }
     }
   }
 

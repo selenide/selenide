@@ -43,13 +43,16 @@ public class FileDownloadFilter implements ResponseFilter {
 
   /**
    * Activate this filter.
-   * Starting from this moment, it will record all responses that contain header "Content-Disposition".
-   * These responses are supposed to contain a file being downloaded.
+   * Starting from this moment, it will record all responses that seem to be a "file download".
    */
   public void activate() {
+    reset();
+    active = true;
+  }
+
+  public void reset() {
     downloadedFiles.clear();
     responses.clear();
-    active = true;
   }
 
   /**
