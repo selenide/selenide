@@ -29,7 +29,7 @@ public class FileDownloadFilter implements ResponseFilter {
 
   private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
-  private final List<File> downloadedFiles = new ArrayList<>();
+  private final List<DownloadedFile> downloadedFiles = new ArrayList<>();
   private final List<Response> responses = new ArrayList<>();
 
   public FileDownloadFilter(Config config) {
@@ -81,7 +81,7 @@ public class FileDownloadFilter implements ResponseFilter {
     File file = downloader.prepareTargetFile(config, fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
-      downloadedFiles.add(file);
+      downloadedFiles.add(new DownloadedFile(file, r.headers));
     }
     catch (IOException e) {
       log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
@@ -99,11 +99,11 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return list of all downloaded files since activation.
    */
-  public List<File> getDownloadedFiles() {
+  public List<DownloadedFile> getDownloadedFiles() {
     return downloadedFiles;
   }
 
-  String getFileName(Response response) {
+  private String getFileName(Response response) {
     return httpHelper.getFileNameFromContentDisposition(response.headers)
       .orElseGet(() -> {
         log.info("Cannot extract file name from http headers. Found headers: ");
@@ -138,19 +138,41 @@ public class FileDownloadFilter implements ResponseFilter {
     sb.append("Downloaded ").append(downloadedFiles.size()).append(" files:\n");
 
     int i = 0;
-    for (File file : downloadedFiles) {
-      sb.append("  #").append(++i).append("  ").append(file.getAbsolutePath()).append("\n");
+    for (DownloadedFile file : downloadedFiles) {
+      sb.append("  #").append(++i).append("  ").append(file.file.getAbsolutePath()).append("\n");
     }
     return sb.toString();
   }
 
+  public static class DownloadedFile {
+    private final File file;
+    private final Map<String, String> headers;
+
+    public DownloadedFile(File file, Map<String, String> headers) {
+      this.file = file;
+      this.headers = headers;
+    }
+
+    public File getFile() {
+      return file;
+    }
+
+    public boolean hasContentDispositionHeader() {
+      return headers.containsKey("Content-Disposition");
+    }
+
+    public String getContentType() {
+      return headers.get("Content-Type");
+    }
+  }
+
   private static class Response {
-    private String url;
-    private int code;
-    private String reasonPhrase;
-    private String contentType;
-    private Map<String, String> headers;
-    private String content;
+    private final String url;
+    private final int code;
+    private final String reasonPhrase;
+    private final String contentType;
+    private final Map<String, String> headers;
+    private final String content;
 
     private Response(String url, int code, String reasonPhrase, Map<String, String> headers,
                      String contentType, String content) {

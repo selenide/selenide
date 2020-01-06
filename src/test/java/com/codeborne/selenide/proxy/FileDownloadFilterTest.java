@@ -98,7 +98,7 @@ class FileDownloadFilterTest implements WithAssertions {
     assertThat(filter.getDownloadedFiles().size())
       .isEqualTo(1);
 
-    File file = filter.getDownloadedFiles().get(0);
+    File file = filter.getDownloadedFiles().get(0).getFile();
     assertThat(file.getName()).isEqualTo("report.pdf");
     assertThat(file.getPath()).endsWith("build/downloads/random-text/report.pdf");
     assertThat(readFileToByteArray(file)).isEqualTo(new byte[]{1, 2, 3, 4, 5});
@@ -116,7 +116,7 @@ class FileDownloadFilterTest implements WithAssertions {
 
     assertThat(filter.responsesAsString())
       .isEqualTo("Intercepted 1 responses:\n  #1  /foo/bar/cv.pdf?42 -> 200 \"200=success\" {} app/json  (7 bytes)\n");
-    File file = filter.getDownloadedFiles().get(0);
+    File file = filter.getDownloadedFiles().get(0).getFile();
     assertThat(file.getName()).isEqualTo("cv.pdf");
     assertThat(file.getPath()).endsWith("build/downloads/random-text/cv.pdf");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("HELLO");

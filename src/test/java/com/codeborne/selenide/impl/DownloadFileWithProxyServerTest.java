@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
+import com.codeborne.selenide.proxy.FileDownloadFilter.DownloadedFile;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.api.WithAssertions;
@@ -17,8 +18,10 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -68,7 +71,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
   private void emulateServerResponseWithFiles(final File... files) {
     doAnswer(invocation -> {
-      filter.getDownloadedFiles().addAll(asList(files));
+      filter.getDownloadedFiles().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
       return null;
     }).when(link).click();
   }
