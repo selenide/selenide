@@ -41,7 +41,7 @@ jobs:
     - script: ./gradlew chrome_headless --no-daemon --console=plain -i
       name: "Chrome"
 
-after_script: "./.upload_reports.sh"
+after_failure: "./.upload_reports.sh"
 
 notifications:
   slack:
