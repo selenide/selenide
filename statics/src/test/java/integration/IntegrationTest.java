@@ -91,7 +91,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
    */
   protected static void useProxy(boolean proxyEnabled) {
     if (Configuration.proxyEnabled != proxyEnabled) {
-      Selenide.close();
+      Selenide.closeWebDriver();
     }
     Configuration.proxyEnabled = proxyEnabled;
     Configuration.fileDownload = proxyEnabled ? PROXY : HTTPGET;
@@ -105,13 +105,18 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     );
   }
 
-  protected static ChromeOptions addSslErrorIgnoreCapabilities(ChromeOptions options) {
+  protected static <T extends MutableCapabilities> T addSslErrorIgnoreCapabilities(T options) {
     addSslErrorIgnoreOptions(options);
     return options;
   }
 
-  protected static FirefoxOptions addSslErrorIgnoreCapabilities(FirefoxOptions options) {
-    addSslErrorIgnoreOptions(options);
+  protected static ChromeOptions addHeadless(ChromeOptions options) {
+    if (Configuration.headless) options.setHeadless(true);
+    return options;
+  }
+
+  protected static FirefoxOptions addHeadless(FirefoxOptions options) {
+    if (Configuration.headless) options.setHeadless(true);
     return options;
   }
 

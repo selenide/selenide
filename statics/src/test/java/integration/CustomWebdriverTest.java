@@ -38,11 +38,11 @@ class CustomWebdriverTest extends IntegrationTest {
     useProxy(false);
 
     browser1 = isFirefox() ?
-      new FirefoxDriver(addSslErrorIgnoreCapabilities(new FirefoxOptions())) :
-      new ChromeDriver(addSslErrorIgnoreCapabilities(new ChromeOptions()));
+      new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
+      new ChromeDriver(addSslErrorIgnoreCapabilities(addHeadless(new ChromeOptions())));
     browser2 = isFirefox() ?
-      new FirefoxDriver(addSslErrorIgnoreCapabilities(new FirefoxOptions())) :
-      new ChromeDriver(addSslErrorIgnoreCapabilities(new ChromeOptions()));
+      new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
+      new ChromeDriver(addSslErrorIgnoreCapabilities(addHeadless(new ChromeOptions())));
   }
 
   @Test
