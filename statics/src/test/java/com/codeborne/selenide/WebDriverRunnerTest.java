@@ -55,7 +55,7 @@ class WebDriverRunnerTest implements WithAssertions {
   @Test
   void allowsToSpecifyCustomWebDriverConfiguration() {
     WebDriverRunner.closeWebDriver();
-    Configuration.browser = "com.codeborne.selenide.WebDriverRunnerTest$CustomWebDriverProvider";
+    Configuration.browser = CustomWebDriverProvider.class.getName();
 
     assertThat(WebDriverRunner.getAndCheckWebDriver())
       .isEqualTo(driver);
@@ -76,7 +76,7 @@ class WebDriverRunnerTest implements WithAssertions {
   void userCanAddWebDriverListeners() {
     WebDriverEventListener listener = mock(WebDriverEventListener.class);
     WebDriverRunner.addListener(listener);
-    Configuration.browser = "chrome";
+    Configuration.browser = CustomWebDriverProvider.class.getName();
     open(url);
     verify(listener).beforeNavigateTo(eq(url.toString()), any(WebDriver.class));
   }

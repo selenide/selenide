@@ -13,19 +13,17 @@ node {
   }
 
   try {
-    stage('Check') {
-      sh './gradle check'
-    }
     stage('Unit-tests') {
-      sh './gradle test'
+      sh './gradlew test'
     }
-    wrap([$class: 'Xvfb', displayNameOffset: env.BUILD_NUMBER.toInteger() % 100 + 20]) {
-      stage('Chrome tests') {
-        sh './gradle chrome'
-      }
-      stage('firefox tests') {
-        sh './gradle firefox'
-      }
+    stage('Check') {
+      sh './gradlew check'
+    }
+    stage('Chrome tests') {
+      sh './gradlew chrome_headless'
+    }
+    stage('firefox tests') {
+      sh './gradlew firefox_headless'
     }
   }
   finally {
