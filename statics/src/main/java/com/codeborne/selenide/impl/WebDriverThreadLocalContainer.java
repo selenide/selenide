@@ -64,14 +64,23 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    */
   @Override
   public void setWebDriver(@Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    long threadId = currentThread().getId();
-    threadProxyServer.remove(threadId);
-    threadWebDriver.remove(threadId);
+    resetWebDriver();
 
+    long threadId = currentThread().getId();
     if (selenideProxy != null) {
       threadProxyServer.put(threadId, selenideProxy);
     }
     threadWebDriver.put(threadId, webDriver);
+  }
+
+  /**
+   * Remove links to webdriver/proxy, but don't close the webdriver/proxy itself.
+   */
+  @Override
+  public void resetWebDriver() {
+    long threadId = currentThread().getId();
+    threadProxyServer.remove(threadId);
+    threadWebDriver.remove(threadId);
   }
 
   @Override
@@ -133,11 +142,17 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     getWebDriver().close();
   }
 
+  /**
+   * Remove links to webdriver/proxy AND close the webdriver and proxy
+   */
   @Override
   public void closeWebDriver() {
-    WebDriver driver = threadWebDriver.remove(currentThread().getId());
-    SelenideProxyServer proxy = threadProxyServer.remove(currentThread().getId());
+    long threadId = currentThread().getId();
+    WebDriver driver = threadWebDriver.get(threadId);
+    SelenideProxyServer proxy = threadProxyServer.get(threadId);
     closeDriverCommand.closeAsync(config, driver, proxy);
+
+    resetWebDriver();
   }
 
   @Override

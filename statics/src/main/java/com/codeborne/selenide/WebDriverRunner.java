@@ -149,7 +149,7 @@ public class WebDriverRunner implements Browsers {
         lambda.run();
       }
       finally {
-        closeWebDriver();
+        webdriverContainer.resetWebDriver();
       }
     }
   }

@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.WebDriverRunner;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,11 +14,12 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.using;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 class CustomWebdriverTest extends IntegrationTest {
@@ -28,7 +30,7 @@ class CustomWebdriverTest extends IntegrationTest {
   static void setUpWebdrivers() {
     assumeThat(isChrome() || isFirefox()).isTrue();
 
-    close();
+    closeWebDriver();
     if (isFirefox()) WebDriverManager.firefoxdriver().setup();
     if (isChrome()) WebDriverManager.chromedriver().setup();
   }
@@ -65,17 +67,26 @@ class CustomWebdriverTest extends IntegrationTest {
     using(browser1, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h1").shouldBe(visible);
+      assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser1);
     });
+
+    assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
 
     using(browser2, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h2").shouldBe(visible);
+      assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser2);
     });
+
+    assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
 
     using(browser1, () -> {
       openFile("page_with_selects_without_jquery.html");
       $("h1").shouldBe(visible);
+      assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser1);
     });
+
+    assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
   }
 
   @AfterEach
