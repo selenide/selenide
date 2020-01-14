@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.using;
@@ -66,7 +67,7 @@ class CustomWebdriverTest extends IntegrationTest {
   void userCanSwitchBetweenWebdrivers_usingIn() {
     using(browser1, () -> {
       openFile("page_with_selects_without_jquery.html");
-      $("h1").shouldBe(visible);
+      $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
       assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser1);
     });
 
@@ -74,16 +75,22 @@ class CustomWebdriverTest extends IntegrationTest {
 
     using(browser2, () -> {
       openFile("page_with_selects_without_jquery.html");
-      $("h2").shouldBe(visible);
+      $("h2").shouldBe(visible).shouldHave(text("Dropdown list"));
       assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser2);
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
 
     using(browser1, () -> {
-      openFile("page_with_selects_without_jquery.html");
-      $("h1").shouldBe(visible);
+      $("h1").shouldBe(visible).shouldHave(text("Page with selects"));
       assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser1);
+    });
+
+    assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
+
+    using(browser2, () -> {
+      $("h2").shouldBe(visible).shouldHave(text("Dropdown list"));
+      assertThat(WebDriverRunner.getWebDriver()).isSameAs(browser2);
     });
 
     assertThat(WebDriverRunner.hasWebDriverStarted()).isFalse();
