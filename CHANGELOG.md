@@ -1,7 +1,10 @@
 # Changelog
 
-## 5.7.0
-* #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR #1031
+## 5.6.1 (released 14.01.2020)
+* #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR https://github.com/selenide/selenide/pull/1031
+* fix #1034 Selenide cannot download file if response doesn't contain "Content-Disposition" header,  see PR https://github.com/selenide/selenide/pull/1035
+* fix method WebDriverRunner.using(): don't close the webdriver itself,  see https://github.com/selenide/selenide/commit/4d1b19972d
+* upgrade to WebDriverManager 3.8.0,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.0...master
 
 ## 5.6.0 (released 26.12.2019)
 * #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
