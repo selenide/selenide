@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class FileDownloadViaHttpGetTest extends IntegrationTest {
-  private File folder = new File(Configuration.reportsFolder);
+  private File folder = new File(Configuration.downloadsFolder);
 
   @BeforeEach
   void setUp() {
@@ -81,5 +81,16 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
     final File downloadedFile = $("#link").download();
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  void downloadsFilesToCustomFolder() throws IOException {
+    String downloadsFolder = "build/custom-folder";
+    Configuration.downloadsFolder = downloadsFolder;
+
+    File downloadedFile = $(byText("Download me")).download();
+
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(new File(downloadsFolder).getAbsolutePath());
   }
 }

@@ -24,6 +24,7 @@ public interface Config {
   boolean screenshots();
   boolean savePageSource();
   String reportsFolder();
+  String downloadsFolder();
   String reportsUrl();
   boolean fastSetValue();
   boolean versatileSetValue();

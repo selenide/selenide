@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
-  private File folder = new File(Configuration.reportsFolder);
+  private File folder = new File(Configuration.downloadsFolder);
 
   @BeforeEach
   void setUp() {
@@ -69,5 +69,16 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  void downloadsFilesToCustomFolder() throws IOException {
+    String downloadsFolder = "build/custom-folder";
+    Configuration.downloadsFolder = downloadsFolder;
+
+    File downloadedFile = $(byText("Download me")).download();
+
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(new File(downloadsFolder).getAbsolutePath());
   }
 }
