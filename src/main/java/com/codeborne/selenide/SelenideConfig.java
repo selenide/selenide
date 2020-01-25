@@ -31,7 +31,7 @@ public class SelenideConfig implements Config {
 
   private boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
   private String reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
-  private String downloadsFolder = System.getProperty("selenide.downloadFolder", "build/downloads");
+  private String downloadsFolder = System.getProperty("selenide.downloadsFolder", "build/downloads");
   private String reportsUrl = new CiReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
   private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
