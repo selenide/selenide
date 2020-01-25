@@ -100,8 +100,12 @@ public class Describe {
   }
 
   private Describe attr(String attributeName, String attributeValue) {
-    if (attributeValue != null && attributeValue.length() > 0) {
-      sb.append(' ').append(attributeName).append("=\"").append(attributeValue).append('"');
+    if (attributeValue != null) {
+      if (attributeValue.length() > 0) {
+        sb.append(' ').append(attributeName).append("=\"").append(attributeValue).append('"');
+      } else {
+        sb.append(' ').append(attributeName);
+      }
     }
     return this;
   }
