@@ -15,6 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.readonly;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.anyOf;
@@ -187,5 +188,11 @@ class ReadonlyElementsTest extends IntegrationTest {
     $("#enable-inputs").click();
     $(By.name("me")).selectRadio("margarita");
     $(Selectors.byValue("margarita")).shouldBe(selected);
+  }
+
+  @Test
+  void readonlyAttributeIsShownInErrorMessage() {
+    assertThatThrownBy(() -> $(By.name("username")).shouldNotHave(readonly))
+      .hasMessageMatching("(?s).*<input.*readonly.*");
   }
 }
