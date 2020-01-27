@@ -9,12 +9,16 @@ import integration.testng.SoftAssertTestNGTest2;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.testng.IClass;
+import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
+import org.testng.internal.ConstructorOrMethod;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -74,11 +78,17 @@ class SoftAssertsTest implements WithAssertions {
   }
 
   private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
-    ITestResult result = mock(ITestResult.class, RETURNS_DEEP_STUBS);
-    when(result.getTestClass().getName()).thenReturn(testClass.getName());
-    when(result.getTestClass().getRealClass()).thenReturn(testClass);
+    ITestResult result = mock(ITestResult.class);
+    IClass iClass = mock(IClass.class);
+    when(result.getTestClass()).thenReturn(iClass);
+    when(iClass.getName()).thenReturn(testClass.getName());
+    doReturn(testClass).when(iClass).getRealClass();
     when(result.getName()).thenReturn(methodName);
-    when(result.getMethod().getConstructorOrMethod().getMethod()).thenReturn(testClass.getMethod(methodName));
+    ConstructorOrMethod constructorOrMethod = mock(ConstructorOrMethod.class);
+    ITestNGMethod method = mock(ITestNGMethod.class);
+    when(result.getMethod()).thenReturn(method);
+    when(method.getConstructorOrMethod()).thenReturn(constructorOrMethod);
+    when(constructorOrMethod.getMethod()).thenReturn(testClass.getMethod(methodName));
     return result;
   }
 

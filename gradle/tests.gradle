@@ -73,7 +73,7 @@ task grid(type: Test) {
 
 task testng(type: Test) {
   useTestNG()
-  include '**/*'
+  include '**/testng/**/*'
   systemProperties['selenide.browser'] = 'chrome'
   systemProperties['selenide.headless'] = 'true'
   systemProperties['selenide.reportsFolder'] = 'build/reports/tests/testng'

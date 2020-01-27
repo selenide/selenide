@@ -3,10 +3,10 @@ repositories {
 }
 
 ext {
-  testngVersion = '6.9.10'
+  testngVersion = '7.1.0'
   seleniumVersion = '3.141.59'
-  junitVersion = '5.5.2'
-  jettyVersion = '9.4.25.v20191220'
+  junitVersion = '5.6.0'
+  jettyVersion = '9.4.26.v20200117'
 }
 
 dependencies {
@@ -16,7 +16,7 @@ dependencies {
   api('io.github.bonigarcia:webdrivermanager:3.8.1')
 
   implementation('com.browserup:browserup-proxy-core:2.0.1')
-  implementation('io.netty:netty-all:4.1.44.Final')
+  implementation('io.netty:netty-all:4.1.45.Final')
   implementation('xyz.rogfam:littleproxy:2.0.0-beta-5')
   implementation('org.slf4j:slf4j-api:1.7.30')
 
@@ -29,7 +29,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion")
-  testImplementation('org.mockito:mockito-core:3.1.0')
+  testImplementation('org.mockito:mockito-core:3.2.4')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
   testImplementation("org.assertj:assertj-core:3.14.0")
