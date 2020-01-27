@@ -187,6 +187,14 @@ public class Configuration {
    */
   public static String reportsFolder = defaults.reportsFolder();
 
+    /**
+   * Folder to store downloaded files to.
+   * Can be configured either programmatically or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * <br>
+   * Default value: "build/downloads" (this is default for Gradle projects)
+   */
+  public static String downloadsFolder = defaults.downloadsFolder();
+
   /**
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.

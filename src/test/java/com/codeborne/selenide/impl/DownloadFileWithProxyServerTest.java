@@ -43,7 +43,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private WebElementSource linkWithHref = mock(WebElementSource.class);
   private WebElement link = mock(WebElement.class);
-  private FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().reportsFolder("build/downloads")));
+  private FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().downloadsFolder("build/downloads")));
 
   @BeforeEach
   void setUp() {
