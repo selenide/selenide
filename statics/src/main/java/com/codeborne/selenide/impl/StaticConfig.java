@@ -62,6 +62,11 @@ public class StaticConfig implements Config {
   }
 
   @Override
+  public String downloadsFolder() {
+    return Configuration.downloadsFolder;
+  }
+
+  @Override
   public String reportsUrl() {
     return Configuration.reportsUrl;
   }
