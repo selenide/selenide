@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.6.2
+* #990 show "readonly" attribute of element  --  thanks to Dmytro Stekanov for PR #1042
 * upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
 
 ## 5.6.1 (released 14.01.2020)
@@ -134,7 +135,7 @@ Technical changes (probably should not affect end users):
 ## 4.14.2 (released 22.09.2018)
 * Upgrade to htmlunit 2.33
 * Upgrade to Sizzle 2.3.4-pre
-* #804 avoid throwing NPE when `Configuration.reportFolder` is null
+* #804 avoid throwing NPE when `Configuration.reportsFolder` is null
 
 ## 4.14.1 (released 06.09.2018)
 * Upgrade to WebDriverManager 3.0.0

@@ -73,7 +73,7 @@ public class Describe {
   }
 
   private Describe appendPredefinedAttributes() {
-    return attr("class").attr("disabled").attr("href").attr("id").attr("name")
+    return attr("class").attr("disabled").attr("readonly").attr("href").attr("id").attr("name")
         .attr("onclick").attr("onchange").attr("placeholder")
         .attr("type").attr("value");
   }

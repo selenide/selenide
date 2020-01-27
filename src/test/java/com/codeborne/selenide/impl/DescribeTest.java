@@ -53,6 +53,14 @@ class DescribeTest implements WithAssertions {
   }
 
   @Test
+  void attribute_with_empty_value() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("input", "readonly", "");
+
+    assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<input readonly>Hello yo</input>");
+  }
+
+  @Test
   void describe_appium_NoSuchElementException() {
     Driver driver = mock(Driver.class);
     SelenideElement selenideElement = element("h1", "name", "theName");
