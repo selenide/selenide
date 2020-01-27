@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.6.2
+* #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041
 * #990 show "readonly" attribute of element  --  thanks to Dmytro Stekanov for PR #1042
 * upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
 
