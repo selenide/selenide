@@ -334,33 +334,69 @@ class CollectionMethodsTest extends ITest {
   @Test
   void shouldThrowIndexOutOfBoundsException() {
     ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
-    String description = "Check throwing IndexOutOfBoundsException for %s";
+    String description = "Check throwing ElementNotFound for %s";
 
     assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))
-      .as(description, "shouldHaveSize").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "shouldHaveSize").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
-      .as(description, "size").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "size").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThan(0)))
-      .as(description, "sizeGreaterThan").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "sizeGreaterThan").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThanOrEqual(1)))
-      .as(description, "sizeGreaterThanOrEqual").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "sizeGreaterThanOrEqual").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeNotEqual(0)))
-      .as(description, "sizeNotEqual").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "sizeNotEqual").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThan(0)))
-      .as(description, "sizeLessThan").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "sizeLessThan").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThanOrEqual(-1)))
-      .as(description, "sizeLessThanOrEqual").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "sizeLessThanOrEqual").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
-      .as(description, "exactTexts").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
-      .as(description, "texts").isInstanceOf(IndexOutOfBoundsException.class);
+      .as(description, "texts").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
+  }
+
+  @Test
+  void errorWhenFindInLastElementOfEmptyCollection() {
+    assertThatThrownBy(() -> $$("#not_exist").last().$("#multirowTable").should(exist))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#not_exist}")
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class)
+      .hasCause(new IndexOutOfBoundsException("Index -1 out of bounds for length 0"));
+  }
+
+  @Test
+  void errorWhenFindCollectionInLastElementOfEmptyCollection() {
+    assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(1))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#not_exist.last/#multirowTable}")
+      .hasCause(new IndexOutOfBoundsException("Index -1 out of bounds for length 0"));
+  }
+
+  @Test
+  void shouldHaveZeroSizeWhenFindCollectionInLastElementOfEmptyCollection() {
+    $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(0);
+  }
+
+  @Test
+  void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
+    $$("#user-table td").last().$$("#not_exist").shouldHaveSize(0);
   }
 }
