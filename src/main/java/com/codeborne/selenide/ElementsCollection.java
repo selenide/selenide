@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
@@ -27,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -152,7 +154,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           return;
         }
 
-        throw outOfCollection;
+        throw new ElementNotFound(collection.driver(), collection.description(), exist, outOfCollection);
       }
       sleep(driver().config().pollingInterval());
     }
