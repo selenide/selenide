@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test page :: pseudo-elements</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <style type="text/css">
+    h1::first-letter {color: #ff0000;}
+    abbr::before {content: 'beforeContent'; color: blue;}
+  </style>
+</head>
+<body>
+  <h1>H1 - Hello World!</h1>
+  <h2>H2 - Hello World!</h2>
+  <p>The <abbr title="World Wide Web">WWW</abbr> was invented in 1989.</p>
+</body>
+</html>

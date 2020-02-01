@@ -19,6 +19,7 @@ import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
+import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Selected;
 import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
@@ -124,6 +125,30 @@ public abstract class Condition {
    */
   public static Condition value(String expectedValue) {
     return new Value(expectedValue);
+  }
+
+  /**
+   * Check that element has given the property value of the pseudo-element
+   * <p>Sample: <code>$("input").shouldHave(pseudo(":first-letter", "color", "#ff0000"));</code></p>
+   *
+   * @param pseudoElementName pseudo-element name of the element,
+   *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
+   * @param propertyName property name of the pseudo-element
+   * @param expectedValue expected value of the property
+   */
+  public static Condition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
+    return new PseudoElementPropertyWithValue(pseudoElementName, propertyName, expectedValue);
+  }
+
+  /**
+   * Check that element has given the "content" property of the pseudo-element
+   * <p>Sample: <code>$("input").shouldHave(pseudo(":before", "Hello"));</code></p>
+   *
+   * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
+   * @param expectedValue expected content of the pseudo-element
+   */
+  public static Condition pseudo(String pseudoElementName, String expectedValue) {
+    return new PseudoElementPropertyWithValue(pseudoElementName, "content", expectedValue);
   }
 
   /**
