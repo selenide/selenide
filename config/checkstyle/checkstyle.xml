@@ -69,11 +69,11 @@
       <property name="arrayInitIndent" value="2"/>
       <property name="lineWrappingIndentation" value="2"/>
     </module>
-	
-	<module name="LineLength">
-      <property name="ignorePattern" value="^ *\* *@see.+$"/>
-      <property name="max" value="136"/>
-    </module>
+  </module>
+
+  <module name="LineLength">
+    <property name="ignorePattern" value="^ *\* *@see.+$"/>
+    <property name="max" value="136"/>
   </module>
 
   <module name="NewlineAtEndOfFile">
