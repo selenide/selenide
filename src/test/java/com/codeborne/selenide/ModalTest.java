@@ -8,6 +8,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,7 +102,7 @@ class ModalTest {
     verify(alert).accept();
     assertThat(exception.getMessage())
       .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
-      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
+      .contains("Screenshot: " +  convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
   }
 
   @Test
@@ -129,6 +130,14 @@ class ModalTest {
     verify(alert).dismiss();
     assertThat(exception.getMessage())
       .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
-      .contains("Screenshot: file:" + System.getProperty("user.dir") + "/" + config.reportsFolder() + "/");
+      .contains("Screenshot: " + convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
+  }
+
+  private String convertFilePath(String path) {
+    try {
+      return new File(path).toURI().toURL().toExternalForm();
+    } catch (MalformedURLException e) {
+      return "file://" + path;
+    }
   }
 }
