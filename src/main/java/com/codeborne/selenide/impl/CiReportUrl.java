@@ -40,14 +40,8 @@ public class CiReportUrl {
   }
 
   private String getJenkinsReportsUrl() {
-    String build_url = System.getProperty("BUILD_URL");
-    if (isEmpty(build_url)) {
-      build_url = System.getenv("BUILD_URL");
-    }
-    String workspace = System.getProperty("WORKSPACE");
-    if (isEmpty(workspace)) {
-      workspace = System.getenv("WORKSPACE");
-    }
+    String build_url = System.getProperty("BUILD_URL", System.getenv("BUILD_URL"));
+    String workspace = System.getProperty("WORKSPACE", System.getenv("WORKSPACE"));
 
     if (!isEmpty(build_url)) {
       String reportRelativePath = "";
