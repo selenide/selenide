@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -194,6 +195,20 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   /**
+   * Switch to window/tab by index with a configurable timeout
+   * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
+   * @param index index of window (0-based)
+   * @param duration the timeout duration. It overrides default Config.timeout()
+   */
+  public WebDriver window(int index, Duration duration) {
+    try {
+      return Wait(duration).until(windowToBeAvailableAndSwitchToIt(index));
+    } catch (TimeoutException e) {
+      throw new NoSuchWindowException("No window found with index: " + index, e);
+    }
+  }
+
+  /**
    * Switch to window/tab by name/handle/title
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    */
@@ -201,6 +216,19 @@ public class SelenideTargetLocator implements TargetLocator {
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
+    } catch (TimeoutException e) {
+      throw new NoSuchWindowException("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
+    }
+  }
+
+  /**
+   * Switch to window/tab by name/handle/title with a configurable timeout
+   * @param nameOrHandleOrTitle name or handle or title of window/tab
+   * @param duration the timeout duration. It overrides default Config.timeout()
+   */
+  public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
+    try {
+      return Wait(duration).until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
     } catch (TimeoutException e) {
       throw new NoSuchWindowException("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
     }
@@ -224,5 +252,9 @@ public class SelenideTargetLocator implements TargetLocator {
 
   private SelenideWait Wait() {
     return new SelenideWait(webDriver, config.timeout(), config.pollingInterval());
+  }
+
+  private SelenideWait Wait(Duration timeout) {
+    return new SelenideWait(webDriver, timeout.toMillis(), config.pollingInterval());
   }
 }
