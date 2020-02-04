@@ -40,16 +40,15 @@ public class CiReportUrl {
   }
 
   private String getJenkinsReportsUrl() {
-    String build_url = System.getProperty("BUILD_URL", System.getenv("BUILD_URL"));
-    String workspace = System.getProperty("WORKSPACE", System.getenv("WORKSPACE"));
-
+    String build_url = System.getProperty("BUILD_URL");
     if (!isEmpty(build_url)) {
+      String workspace = System.getProperty("WORKSPACE", System.getenv("WORKSPACE"));
       String reportRelativePath = "";
       if (!isEmpty(workspace)) { // we have a workspace folder. Calculate the report relative path
         Path pathAbsoluteReportsFolder = Paths.get("").normalize().toAbsolutePath();
         Path pathAbsoluteWorkSpace = Paths.get(workspace).normalize().toAbsolutePath();
         Path pathRelative = pathAbsoluteWorkSpace.relativize(pathAbsoluteReportsFolder);
-        reportRelativePath = pathRelative.toString() + '/';
+        reportRelativePath = pathRelative.toString().replace('\\', '/') + '/';
       }
       return resolveUrlSource("%s/artifact/%s", build_url, reportRelativePath);
     } else {
