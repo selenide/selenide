@@ -50,7 +50,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
     Configuration.reportsFolder = reportsFolder;
-    Screenshots.screenshots = new ScreenShotLaboratory();
+    Screenshots.screenshots = ScreenShotLaboratory.getInstance();
   }
 
   @Test
@@ -77,7 +77,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {thead}")
       .matches(e -> ((ElementNotFound) e).getScreenshot()
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)"));
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod/\\d+\\.\\d+\\.(png|html)"));
   }
 
   @Test
@@ -94,7 +94,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
