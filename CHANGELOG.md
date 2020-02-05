@@ -1,9 +1,13 @@
 # Changelog
 
-## 5.6.2
+## 5.7.0
 * #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041
+* #399 Add method for switching to a window with custom timeout  --  thanks to Dmytro Stekanov for PR #1054
 * #990 show "readonly" attribute of element  --  thanks to Dmytro Stekanov for PR #1042
 * #991 fix IndexOutOfBoundsException when searching from first/last element of empty collection  --  thanks to Dmytro Stekanov for PR #1043
+* #814 #880 fix Screenshots  --  thanks to Petro Ovcharenko for PR #1052
+* #1049 use env variable BUILD_URL (no need to add BUILD_URL to system properties anymore)  --  thanks to GongYi for PR #1049 
+* #1049 fix path to screenshots in Jenkins for multi-module maven projects  --  thanks to GongYi for PR #1049 
 * upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
 
 ## 5.6.1 (released 14.01.2020)
