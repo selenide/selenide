@@ -76,8 +76,11 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {thead}")
-      .matches(e -> ((ElementNotFound) e).getScreenshot()
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod/\\d+\\.\\d+\\.(png|html)"));
+      .matches(e -> {
+        String path = "/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod";
+        return ((ElementNotFound) e).getScreenshot()
+          .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
+      });
   }
 
   @Test
@@ -93,8 +96,9 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     catch (ElementNotFound e) {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
+      String path = "/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod";
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
     }
   }
 

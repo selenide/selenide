@@ -60,32 +60,35 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
+      String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
       assertThat(expected)
         .hasMessageMatching("Element not found \\{h9}\n" +
           "Expected: text 'expected text'\n" +
-          "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-          "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+          "Screenshot: " + path + png() + "\n" +
+          "Page source: " + path + html() + "\n" +
           "Timeout: 15 ms.\n" +
           "Caused by: NoSuchElementException:.*");
-      assertThat(expected.getScreenshot()).matches("http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + pngOrHtml());
+      assertThat(expected.getScreenshot()).matches(path + pngOrHtml());
     }
   }
 
   @Test
   void elementTextDoesNotMatch() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $("h2").shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching("Element should have text 'expected text' \\{h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
   @Test
   void elementAttributeDoesNotMatch() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $("h2").shouldHave(attribute("name", "header"))
     )
@@ -93,26 +96,28 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       .hasMessageMatching("Element should have attribute name=\"header\" \\{h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
         "Actual value: name=\"\"\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
   @Test
   void wrapperTextDoesNotMatch() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
   @Test
   void clickHiddenElement() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $("#theHiddenElement").click()
     )
@@ -121,34 +126,36 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
         "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}\n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
           "Actual value: visible:false, 1\n" +
-          "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-          "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+          "Screenshot: " + path + png() + "\n" +
+          "Page source: " + path + html() + "\n" +
           "Timeout: 15 ms.");
   }
 
   @Test
   void pageObjectElementTextDoesNotMatch() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $(pageObject.header1).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
   @Test
   void pageObjectWrapperTextDoesNotMatch() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $(pageObject.header2).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
@@ -163,40 +170,43 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void clickUnexistingWrappedElement() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
       .hasMessageMatching("Element not found \\{By.id: invalid_id}\n" +
         "Expected: visible or transparent: visible or have css value opacity=0\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.\n" +
         "Caused by: NoSuchElementException:.*");
   }
 
   @Test
   void existingElementShouldNotExist() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $("h2").shouldNot(exist)
     )
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageMatching("Element should not exist \\{h2}\n" +
         "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.");
   }
 
   @Test
   void nonExistingElementShouldNotBeHidden() {
+    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
     assertThatThrownBy(() ->
       $("h14").shouldNotBe(hidden)
     )
       .isInstanceOf(ElementNotFound.class)
       .hasMessageMatching("Element not found \\{h14}\n" +
         "Expected: not hidden\n" +
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + png() + "\n" +
-        "Page source: http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod" + html() + "\n" +
+        "Screenshot: " + path + png() + "\n" +
+        "Page source: " + path + html() + "\n" +
         "Timeout: 15 ms.\n" +
         "Caused by: NoSuchElementException:.*");
   }
