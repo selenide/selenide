@@ -59,7 +59,7 @@ class ScreenshotTest extends IntegrationTest {
   @Disabled
   void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
-    BufferedImage img = new ScreenShotLaboratory().takeScreenshotAsImage(null, element);
+    BufferedImage img = ScreenShotLaboratory.getInstance().takeScreenshotAsImage(null, element);
     assertThat(img.getHeight())
       .withFailMessage("Screenshot doesn't fit height")
       .isLessThan(element.getSize().getHeight());

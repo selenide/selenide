@@ -49,6 +49,8 @@ public class ScreenShotLaboratory {
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
 
+  protected ScreenShotLaboratory() {
+  }
 
   public String takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenShot(driver, getScreenshotFileName(className, methodName));

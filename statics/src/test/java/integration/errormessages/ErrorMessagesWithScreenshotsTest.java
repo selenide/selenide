@@ -50,7 +50,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
     Configuration.reportsFolder = reportsFolder;
-    Screenshots.screenshots = new ScreenShotLaboratory();
+    Screenshots.screenshots = ScreenShotLaboratory.getInstance();
   }
 
   @Test
