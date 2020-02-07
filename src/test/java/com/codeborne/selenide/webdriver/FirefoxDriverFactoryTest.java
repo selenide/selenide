@@ -8,10 +8,10 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 import java.util.Map;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
@@ -69,9 +69,11 @@ class FirefoxDriverFactoryTest implements WithAssertions {
 
   @Test
   void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
-    System.setProperty("firefoxprofile.some.cap", "false");
+    System.setProperty("firefoxprofile.some.cap1", "faLSe");
+    System.setProperty("firefoxprofile.some.cap2", "TRue");
     FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
-    assertThat(profile.getBooleanPreference("some.cap", true)).isEqualTo(false);
+    assertThat(profile.getBooleanPreference("some.cap1", true)).isEqualTo(false);
+    assertThat(profile.getBooleanPreference("some.cap2", false)).isEqualTo(true);
   }
 
   @Test
@@ -103,5 +105,15 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     FirefoxProfile firefoxProfile = (FirefoxProfile) options.asMap().get("firefox_profile");
     assertThat(firefoxProfile.getStringPreference("network.proxy.no_proxies_on", "localhost")).isEqualTo("");
     assertThat(firefoxProfile.getBooleanPreference("network.proxy.allow_hijacking_localhost", false)).isTrue();
+  }
+
+  @Test
+  void downloadsAllPopularContentTypesWithoutDialog() {
+    assertThat(driverFactory.popularContentTypes()).contains(";application/pdf;");
+    assertThat(driverFactory.popularContentTypes()).contains(";application/octet-stream;");
+    assertThat(driverFactory.popularContentTypes()).contains(";application/msword;");
+    assertThat(driverFactory.popularContentTypes()).contains(";application/vnd.ms-excel;");
+    assertThat(driverFactory.popularContentTypes()).contains(";application/zip;");
+    assertThat(driverFactory.popularContentTypes()).contains(";text/csv;");
   }
 }

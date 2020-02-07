@@ -2,6 +2,7 @@
 
 ## 5.7.0
 * #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041
+* #1057 Download files to `Configuration.downloadsFolder` instead of ~/Downloads
 * #399 Add method for switching to a window with custom timeout  --  thanks to Dmytro Stekanov for PR #1054
 * #990 show "readonly" attribute of element  --  thanks to Dmytro Stekanov for PR #1042
 * #991 fix IndexOutOfBoundsException when searching from first/last element of empty collection  --  thanks to Dmytro Stekanov for PR #1043
