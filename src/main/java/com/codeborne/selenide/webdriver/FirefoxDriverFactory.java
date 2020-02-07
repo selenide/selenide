@@ -106,7 +106,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   private boolean isBoolean(String value) {
-    return "true".equals(value) || "false".equals(value);
+    return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
   }
 
   private boolean isInteger(String value) {

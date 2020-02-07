@@ -69,9 +69,11 @@ class FirefoxDriverFactoryTest implements WithAssertions {
 
   @Test
   void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
-    System.setProperty("firefoxprofile.some.cap", "false");
+    System.setProperty("firefoxprofile.some.cap1", "faLSe");
+    System.setProperty("firefoxprofile.some.cap2", "TRue");
     FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
-    assertThat(profile.getBooleanPreference("some.cap", true)).isEqualTo(false);
+    assertThat(profile.getBooleanPreference("some.cap1", true)).isEqualTo(false);
+    assertThat(profile.getBooleanPreference("some.cap2", false)).isEqualTo(true);
   }
 
   @Test
