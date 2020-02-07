@@ -1,7 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.SelenideConfig;
-import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   private final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
 
   private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig();
+  private SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
 
   @AfterEach
   void tearDown() {
@@ -65,9 +64,9 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(1);
+    assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
-    assertThat(prefsMap).isEqualTo(ImmutableMap.of("key1", 1));
+    assertThat(prefsMap).containsEntry("download.default_directory", "/blah/downloads");
   }
 
   @Test
@@ -77,8 +76,9 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(1);
+    assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
+    assertThat(prefsMap).containsEntry("download.default_directory", "/blah/downloads");
   }
 
   @Test
