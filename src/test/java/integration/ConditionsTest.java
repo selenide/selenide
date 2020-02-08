@@ -5,16 +5,7 @@ import com.codeborne.selenide.ex.ElementShould;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.and;
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.disabled;
-import static com.codeborne.selenide.Condition.have;
-import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.or;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConditionsTest extends ITest {
@@ -75,5 +66,29 @@ class ConditionsTest extends ITest {
 
     Condition none_of_conditions = or("baskerville", text("pasker"), text("wille"));
     $("#baskerville").shouldNotBe(none_of_conditions);
+  }
+
+
+  @Test
+  void matchWithCustomPredicateShouldCheckCondition() {
+    $("#multirowTable").should(match("border=1", el -> el.getAttribute("border").equals("1")));
+  }
+
+  @Test
+  void matchWithPredicateShouldReportErrorMessage() {
+    assertThatThrownBy(() ->
+      $("#multirowTable").should(match("tag=input", el -> el.getTagName().equals("input1")))
+    )
+      .hasMessageStartingWith(
+        "Element should match 'tag=input' predicate. {#multirowTable}");
+  }
+
+  @Test
+  void matchWithShouldNotPredicateReportErrorMessage() {
+    assertThatThrownBy(() ->
+      $("#multirowTable").shouldNot(match("border=1", el -> el.getAttribute("border").equals("1")))
+    )
+      .hasMessageStartingWith(
+        "Element should not match 'border=1' predicate. {#multirowTable}");
   }
 }
