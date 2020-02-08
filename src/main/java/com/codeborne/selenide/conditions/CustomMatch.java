@@ -22,7 +22,7 @@ public class CustomMatch extends Condition {
 
   @Override
   public String toString() {
-    return String.format("match '%s' predicate but did not.", getName());
+    return String.format("match '%s' predicate.", getName());
   }
 
 }
