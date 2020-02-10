@@ -32,7 +32,7 @@ jobs:
     - script: ./gradlew check --no-daemon --console=plain
       name: "Check"
     - if: type != pull_request
-      script: ./gradlew jacocoTestReport sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
+      script: ./gradlew sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
       name: "Check + Sonar"
     - script: ./gradlew grid --no-daemon --console=plain -i
       name: "Grid"
