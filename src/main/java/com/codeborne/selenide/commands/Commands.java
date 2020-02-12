@@ -92,6 +92,7 @@ public class Commands {
     add("$$x", new FindAllByXpath());
     add("closest", new GetClosest());
     add("parent", new GetParent());
+    add("sibling", new GetSibling());
     add("lastChild", new GetLastChild());
   }
 
