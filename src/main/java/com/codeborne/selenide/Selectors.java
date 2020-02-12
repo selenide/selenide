@@ -62,7 +62,7 @@ public class Selectors {
    * @return standard selenium By cssSelector criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
-    return By.cssSelector(String.format("[%s='%s']", attributeName, attributeValue));
+    return By.cssSelector(String.format("[%s=\"%s\"]", attributeName, attributeValue));
   }
 
   /**
