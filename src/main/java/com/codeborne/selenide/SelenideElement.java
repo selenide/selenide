@@ -382,6 +382,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement parent();
 
   /**
+   * Get sibling element of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").sibling(0) will give first sibling of "td"
+   *
+   * @param index the index of sibling element
+   * @return Sibling element by index
+   *
+   * @see com.codeborne.selenide.commands.GetSibling
+   */
+  SelenideElement sibling(int index);
+
+  /**
    * Get last child element of this element
    * ATTENTION! this method doesn't start any search yet!
    * For example, $("tr").lastChild(); could give the last "td".
