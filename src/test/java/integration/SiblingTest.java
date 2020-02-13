@@ -33,4 +33,22 @@ class SiblingTest extends ITest {
       .isInstanceOf(ElementNotFound.class);
   }
 
+  @Test
+  void canGetPrecedingElement() {
+    assertThat($("#multirowTableSecondRow").preceding(0))
+      .isEqualTo($("#multirowTableFirstRow"));
+    $("#baskerville").preceding(0).has(Condition.text("Chack"));
+  }
+
+  @Test
+  void canGetPrecedingElementOfParent() {
+    assertThat($(".second_row").parent().preceding(0).find("td", 0))
+      .isEqualTo($(".first_row"));
+  }
+
+  @Test
+  void errorWhenPrecedingElementAbsent() {
+    assertThatThrownBy(() -> $("#multirowTableSecondRow").preceding(3).click())
+      .isInstanceOf(ElementNotFound.class);
+  }
 }
