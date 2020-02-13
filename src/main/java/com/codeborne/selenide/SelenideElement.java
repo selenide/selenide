@@ -382,9 +382,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement parent();
 
   /**
-   * Get sibling element of this element
+   * Get the following sibling element of this element
    * ATTENTION! This method doesn't start any search yet!
-   * For example, $("td").sibling(0) will give first sibling of "td"
+   * For example, $("td").sibling(0) will give the first following sibling element of "td"
    *
    * @param index the index of sibling element
    * @return Sibling element by index
@@ -392,6 +392,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetSibling
    */
   SelenideElement sibling(int index);
+
+  /**
+   * Get the preceding sibling element of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").preceding(0) will give the first preceding sibling element of "td"
+   *
+   * @param index the index of sibling element
+   * @return Sibling element by index
+   *
+   * @see com.codeborne.selenide.commands.GetPreceding
+   */
+  SelenideElement preceding(int index);
 
   /**
    * Get last child element of this element

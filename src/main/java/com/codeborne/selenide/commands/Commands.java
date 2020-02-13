@@ -93,6 +93,7 @@ public class Commands {
     add("closest", new GetClosest());
     add("parent", new GetParent());
     add("sibling", new GetSibling());
+    add("preceding", new GetPreceding());
     add("lastChild", new GetLastChild());
   }
 
