@@ -21,6 +21,7 @@ import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import static com.codeborne.selenide.CollectionCondition.noneMatch;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -434,4 +435,21 @@ class CollectionMethodsTest extends ITest {
       .hasMessageContaining("Collection matcher error" +
         "\nExpected: all of elements to match [value==cat] predicate");
   }
+
+  @Test
+  void shouldNoneMatchPredicate() {
+    $$("#radioButtons input")
+      .shouldBe(noneMatch("name==you",
+        el -> el.getAttribute("name").equals("you")));
+  }
+
+  @Test
+  void errorWhenSomeMatchedButNoneShould() {
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(noneMatch("value==cat",
+      el -> el.getAttribute("value").equals("cat"))))
+      .isInstanceOf(MatcherError.class)
+      .hasMessageContaining("Collection matcher error" +
+        "\nExpected: none of elements to match [value==cat] predicate");
+  }
+
 }
