@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.collections.AnyMatch;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ListSize;
 import com.codeborne.selenide.collections.SizeGreaterThan;
@@ -102,6 +103,17 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    */
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
+  }
+
+  /**
+   * Checks if ANY elements of this collection match the provided predicate
+   *
+   * @param description The description of the given predicate
+   * @param predicate   the {@link java.util.function.Predicate} to match
+   * @return
+   */
+  public static CollectionCondition anyMatch(String description, java.util.function.Predicate<WebElement> predicate) {
+    return new AnyMatch(description, predicate);
   }
 
   /**

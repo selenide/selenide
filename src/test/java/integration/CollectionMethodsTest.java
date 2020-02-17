@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -398,5 +400,21 @@ class CollectionMethodsTest extends ITest {
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
     $$("#user-table td").last().$$("#not_exist").shouldHaveSize(0);
+  }
+
+  @Test
+  void shouldMatchPredicate() {
+    $$("#radioButtons input")
+      .shouldBe(anyMatch("value==cat",
+        el -> el.getAttribute("value").equals("cat")));
+  }
+
+  @Test
+  void errorWhenPredicateNotMatchedButShouldBe() {
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==cat",
+        el -> el.getAttribute("value").equals("dog"))))
+      .isInstanceOf(MatcherError.class)
+      .hasMessageContaining("Collection matcher error" +
+        "\nExpected: any of elements to match [value==cat] predicate");
   }
 }
