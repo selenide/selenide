@@ -794,6 +794,24 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
+   * Drag and drop center-point of this element to the left-most pixel of the screen.
+   *
+   * @return this element
+   *
+   * @see com.codeborne.selenide.commands.SwipeLeft
+   */
+  SelenideElement swipeLeft();
+
+  /**
+   * Drag and drop center-point of this element to the right-most pixel of the screen.
+   *
+   * @return this element
+   *
+   * @see com.codeborne.selenide.commands.SwipeRight
+   */
+  SelenideElement swipeRight();
+
+  /**
    * Execute custom implemented command
    *
    * @param command custom command

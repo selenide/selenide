@@ -51,6 +51,8 @@ public class Commands {
     add("hover", new Hover());
     add("scrollTo", new ScrollTo());
     add("scrollIntoView", new ScrollIntoView());
+    add("swipeRight", new SwipeRight());
+    add("swipeLeft", new SwipeLeft());
   }
 
   private void addInfoCommands() {
