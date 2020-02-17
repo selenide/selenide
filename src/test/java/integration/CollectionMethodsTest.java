@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
@@ -403,18 +404,34 @@ class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void shouldMatchPredicate() {
+  void shouldAnyMatchPredicate() {
     $$("#radioButtons input")
       .shouldBe(anyMatch("value==cat",
         el -> el.getAttribute("value").equals("cat")));
   }
 
   @Test
-  void errorWhenPredicateNotMatchedButShouldBe() {
+  void errorWhenAnyNotMatchedButShouldBe() {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==cat",
-        el -> el.getAttribute("value").equals("dog"))))
+      el -> el.getAttribute("value").equals("dog"))))
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining("Collection matcher error" +
         "\nExpected: any of elements to match [value==cat] predicate");
+  }
+
+  @Test
+  void shouldAllMatchPredicate() {
+    $$("#radioButtons input")
+      .shouldBe(allMatch("name==me",
+        el -> el.getAttribute("name").equals("me")));
+  }
+
+  @Test
+  void errorWhenAllNotMatchedButShouldBe() {
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(allMatch("value==cat",
+      el -> el.getAttribute("value").equals("cat"))))
+      .isInstanceOf(MatcherError.class)
+      .hasMessageContaining("Collection matcher error" +
+        "\nExpected: all of elements to match [value==cat] predicate");
   }
 }
