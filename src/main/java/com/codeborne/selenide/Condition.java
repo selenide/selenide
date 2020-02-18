@@ -66,8 +66,6 @@ public abstract class Condition {
    * Synonym for {@link #visible} - may be used for better readability
    * <p><code>$("#logoutLink").waitUntil(appears, 10000);</code></p>
    * <p>
-   * Though the same can be done in a shorter way:
-   * <p><code>waitFor(By.id("logoutLink");</code></p>
    */
   public static final Condition appears = visible;
 
@@ -115,7 +113,7 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element has given "value" attribute as substring
+   * Assert that element contains given "value" attribute as substring
    * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
    *
    * <p>Sample: <code>$("input").shouldHave(value("12345 666 77"));</code></p>
@@ -136,6 +134,7 @@ public abstract class Condition {
   }
 
   /**
+   * Asserts the name attribute of the element to be exact string
    * <p>Sample: <code>$("#input").shouldHave(name("username"))</code></p>
    *
    * @param name expected name of input field
@@ -145,6 +144,7 @@ public abstract class Condition {
   }
 
   /**
+   *  Asserts the type attribute of the element to be exact string
    * <p>Sample: <code>$("#input").shouldHave(type("checkbox"))</code></p>
    *
    * @param type expected type of input field
@@ -172,6 +172,7 @@ public abstract class Condition {
   public static final Condition empty = and("empty", exactValue(""), exactText(""));
 
   /**
+   * The same as matchText()
    * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>
    *
    * @see #matchText(String)
@@ -192,6 +193,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element contains given text as a substring
    * <p>Sample: <code>$("h1").shouldHave(text("Hello\s*John"))</code></p>
    *
    * <p>NB! Case insensitive</p>
@@ -205,7 +207,7 @@ public abstract class Condition {
   }
 
   /**
-   * Checks for selected text on a given input web element
+   * Checks on a element that exactly given text is selected (=marked with mouse/keybord)
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
@@ -218,6 +220,8 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element contains given text as a case sensitive substring
+   *
    * <p>Sample: <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -229,6 +233,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element is exactly (case insensitive) given text 
    * <p>Sample: <code>$("h1").shouldHave(exactText("Hello"))</code></p>
    *
    * <p>Case insensitive</p>
@@ -241,6 +246,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element has exactly the given text
    * <p>Sample: <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -252,6 +258,7 @@ public abstract class Condition {
   }
 
   /**
+   * Asserts that element has the given class. Element may other classes too.
    * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
   public static Condition cssClass(String cssClass) {
@@ -301,7 +308,7 @@ public abstract class Condition {
   public static final Condition disabled = new Disabled();
 
   /**
-   * Checks that element is selected
+   * Checks that element is selected (inputs like dropdowns etc.)
    *
    * @see WebElement#isSelected()
    */
