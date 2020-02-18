@@ -12,6 +12,7 @@
 [![Follow](https://img.shields.io/twitter/follow/jselenide.svg?style=social&label=Follow)](https://twitter.com/jselenide)
 [![Slack chat](https://img.shields.io/badge/slack-chat-yellow.svg)](https://testers.io/messages/selenide)
 [![Слак чат](https://img.shields.io/badge/слак-чат-yellow.svg)](https://softwaretesters.slack.com/messages/selenide_ru)
+[![Telegram чат](https://img.shields.io/badge/Telegram-%D1%87%D0%B0%D1%82-blue.svg)](https://t.me/selenide_ru)
 
 ## What is Selenide?
 
