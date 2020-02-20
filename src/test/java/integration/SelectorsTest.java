@@ -1,17 +1,12 @@
 package integration;
 
+import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byId;
-import static com.codeborne.selenide.Selectors.byLinkText;
-import static com.codeborne.selenide.Selectors.byName;
-import static com.codeborne.selenide.Selectors.byPartialLinkText;
-import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.*;
 
 class SelectorsTest extends ITest {
   @BeforeEach
@@ -39,6 +34,12 @@ class SelectorsTest extends ITest {
   void canFindElementByPartialLinkText() {
     $(byPartialLinkText("'apostrophes")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     $(byPartialLinkText("quotes\"")).shouldHave(text("Options with 'apostrophes' and \"quotes\""));
+  }
+
+  @Test
+  void byAttributeEscapesQuotes() {
+    $(Selectors.byAttribute("value", "john mc'lain")).shouldHave(attribute("value", "john mc'lain"));
+    $(Selectors.byAttribute("value", "arnold \"schwarzenegger\"")).shouldHave(attribute("value", "arnold \"schwarzenegger\""));
   }
 
   @Test
