@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.Selectors.ByText;
 import com.codeborne.selenide.Selectors.WithText;
+import com.codeborne.selenide.selector.ByShadow;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -157,5 +158,17 @@ class SelectorsTest implements WithAssertions {
       .isInstanceOf(By.ByClassName.class);
     assertThat(classNameSelector)
       .hasToString("By.className: " + className);
+  }
+
+  @Test
+  void byShadowCss() {
+    String target = "#target";
+    String shadow = "#shadow";
+    String innerShadow = "#inner-shadow";
+    By cssSelector = Selectors.shadowCss(target, shadow, innerShadow);
+    assertThat(cssSelector)
+      .isInstanceOf(ByShadow.ByShadowCss.class);
+    assertThat(cssSelector)
+      .hasToString("By.cssSelector: " + shadow + " [" + innerShadow + "] " + target);
   }
 }
