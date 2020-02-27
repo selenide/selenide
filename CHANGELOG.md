@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.7.1
+* #1071 Fixing issue when SoftAssertionsExtension for JUnit5 sometimes marked passed tests as failed 
+
 ## 5.7.0
 * #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041
 * #1057 Download files to `Configuration.downloadsFolder` instead of ~/Downloads

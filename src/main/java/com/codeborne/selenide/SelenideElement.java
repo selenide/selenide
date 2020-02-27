@@ -48,14 +48,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Append given test to the text field and trigger "change" event.
    *
-   * <p>
    * Implementation details:
    * This is the same as
    * <pre>
    *   1. WebElement.sendKeys(text)
    *   2. Trigger change event
    * </pre>
-   * </p>
    *
    * @param text Any text to append into the text field.
    *
@@ -241,7 +239,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return Given element, useful for chaining:
    * {@code $("#errorMessage").should(appear).shouldBe(enabled);}
    *
-   * @see Configuration#timeout
+   * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.Should
    */
   SelenideElement should(Condition... condition);
@@ -282,7 +280,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *   $("#errorMessage").should(exist);
    * }</p>
    *
-   * @see Configuration#timeout
+   * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.ShouldNot
    */
   SelenideElement shouldNot(Condition... condition);

@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *
  * <p>
  *   These system properties can be additonally used having effect on every new created browser in test.
- *   For example as -D<property>=<value> in command-line
+ *   For example as -D&lt;property&gt;=&lt;value&gt; in command-line
  * </p>
  * <p>
  *  <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
