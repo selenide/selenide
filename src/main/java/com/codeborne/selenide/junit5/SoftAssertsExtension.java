@@ -40,6 +40,7 @@ public class SoftAssertsExtension implements BeforeEachCallback, AfterEachCallba
 
   @Override
   public void beforeEach(final ExtensionContext context) {
+    errorsCollector.clear();
     addListener(LISTENER_SOFT_ASSERT, errorsCollector);
   }
 
