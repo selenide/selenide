@@ -162,6 +162,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getValue();
 
   /**
+   * Get the property value of the pseudo-element
+   * @param pseudoElementName pseudo-element name of the element,
+   *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
+   * @param propertyName property name of the pseudo-element
+   * @return the property value or "" if the property is missing
+   */
+  String pseudo(String pseudoElementName, String propertyName);
+
+  /**
+   * Get content of the pseudo-element
+   * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
+   * @return the content value or "none" if the content is missing
+   */
+  String pseudo(String pseudoElementName);
+
+  /**
    * Select radio button
    * @param value value of radio button to select
    * @return selected "input type=radio" element
