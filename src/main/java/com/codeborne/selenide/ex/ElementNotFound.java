@@ -29,4 +29,10 @@ public class ElementNotFound extends UIAssertionError {
       "Element not found {" + collection.description() + '}' +
         "\nExpected: " + expectedTexts, lastError);
   }
+
+  public ElementNotFound(WebElementsCollection collection, String description, Throwable lastError) {
+    super(collection.driver(),
+      "Element not found {" + collection.description() + '}' +
+        "\nExpected: " + description, lastError);
+  }
 }

@@ -7,6 +7,7 @@ import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
+import com.codeborne.selenide.conditions.CustomMatch;
 import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.conditions.ExactText;
@@ -25,6 +26,8 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
 import org.openqa.selenium.WebElement;
+
+import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;
 
@@ -289,6 +292,18 @@ public abstract class Condition {
   }
 
   /**
+   * Checks if element matches the given predicate.
+   *
+   * <p>Sample: {@code $("input").should(match("empty value attribute", el -> el.getAttribute("value").isEmpty()));}</p>
+   *
+   * @param description the description of the predicate
+   * @param predicate   the {@link Predicate} to match
+   */
+  public static Condition match(String description, Predicate<WebElement> predicate) {
+    return new CustomMatch(description, predicate);
+  }
+
+  /**
    * Check if browser focus is currently in given element.
    */
   public static final Condition focused = new Focused();
@@ -335,7 +350,7 @@ public abstract class Condition {
   /**
    * Check if element matches ALL given conditions.
    *
-   * @param name      Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
+   * @param name       Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
    * @param conditions Conditions to match.
    * @return logical AND for given conditions.
    */
@@ -346,7 +361,7 @@ public abstract class Condition {
   /**
    * Check if element matches ANY of given conditions.
    *
-   * @param name      Name of this condition, like "error" (meaning e.g. "error" OR "failed").
+   * @param name       Name of this condition, like "error" (meaning e.g. "error" OR "failed").
    * @param conditions Conditions to match.
    * @return logical OR for given conditions.
    */

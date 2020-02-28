@@ -1,7 +1,10 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.collections.AllMatch;
+import com.codeborne.selenide.collections.AnyMatch;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ListSize;
+import com.codeborne.selenide.collections.NoneMatch;
 import com.codeborne.selenide.collections.SizeGreaterThan;
 import com.codeborne.selenide.collections.SizeGreaterThanOrEqual;
 import com.codeborne.selenide.collections.SizeLessThan;
@@ -102,6 +105,36 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    */
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
+  }
+
+  /**
+   * Checks if ANY elements of this collection match the provided predicate
+   *
+   * @param description The description of the given predicate
+   * @param predicate   the {@link java.util.function.Predicate} to match
+   */
+  public static CollectionCondition anyMatch(String description, java.util.function.Predicate<WebElement> predicate) {
+    return new AnyMatch(description, predicate);
+  }
+
+  /**
+   * Checks if ALL elements of this collection match the provided predicate
+   *
+   * @param description The description of the given predicate
+   * @param predicate   the {@link java.util.function.Predicate} to match
+   */
+  public static CollectionCondition allMatch(String description, java.util.function.Predicate<WebElement> predicate) {
+    return new AllMatch(description, predicate);
+  }
+
+  /**
+   * Checks if NONE elements of this collection match the provided predicate
+   *
+   * @param description The description of the given predicate
+   * @param predicate   the {@link java.util.function.Predicate} to match
+   */
+  public static CollectionCondition noneMatch(String description, java.util.function.Predicate<WebElement> predicate) {
+    return new NoneMatch(description, predicate);
   }
 
   /**
