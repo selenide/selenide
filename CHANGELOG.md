@@ -1,6 +1,7 @@
 # Changelog
 
-## 5.7.1
+## 5.8.0
+* #662 Add Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
 * #1071 Fixing issue when SoftAssertionsExtension for JUnit5 sometimes marked passed tests as failed 
 * $.click() now clicks the CENTER of element (also for Configuration.clickViaJS=true)  
 

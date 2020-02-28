@@ -382,8 +382,7 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("#not_exist").last().$("#multirowTable").should(exist))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist}")
-      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class)
-      .hasCause(new IndexOutOfBoundsException("Index -1 out of bounds for length 0"));
+      .hasCauseInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
@@ -391,7 +390,7 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(1))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist.last/#multirowTable}")
-      .hasCause(new IndexOutOfBoundsException("Index -1 out of bounds for length 0"));
+      .hasCauseInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
@@ -413,11 +412,11 @@ class CollectionMethodsTest extends ITest {
 
   @Test
   void errorWhenAnyNotMatchedButShouldBe() {
-    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==cat",
+    assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==dog",
       el -> el.getAttribute("value").equals("dog"))))
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining("Collection matcher error" +
-        "\nExpected: any of elements to match [value==cat] predicate");
+        "\nExpected: any of elements to match [value==dog] predicate");
   }
 
   @Test
