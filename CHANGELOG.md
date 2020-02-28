@@ -2,6 +2,7 @@
 
 ## 5.7.1
 * #1071 Fixing issue when SoftAssertionsExtension for JUnit5 sometimes marked passed tests as failed 
+* $.click() now clicks the CENTER of element (also for Configuration.clickViaJS=true)  
 
 ## 5.7.0
 * #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041

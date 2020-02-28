@@ -20,7 +20,7 @@ public class Click implements Command<Void> {
 
   protected void click(Driver driver, WebElement element) {
     if (driver.config().clickViaJs()) {
-      driver.executeJavaScript("arguments[0].click()", element);
+      click(driver, element, 0, 0);
     }
     else {
       element.click();
