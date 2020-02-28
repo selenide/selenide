@@ -8,34 +8,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetPseudoValueCommandTest implements WithAssertions {
 
-  private static final String PSEUDO_ELEMENT_NAME = ":before";
-  private static final String PROPERTY_NAME = "content";
-  private static final String ACTUAL_VALUE = "hello";
-
-  private SelenideElement proxy;
-  private WebElementSource locator;
+  private final Driver driver = mock(Driver.class);
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final WebElement element = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    WebElement element = mock(WebElement.class);
-    Driver driver = mock(Driver.class);
-
     when(locator.driver()).thenReturn(driver);
     when(locator.getWebElement()).thenReturn(element);
-    when(driver.executeJavaScript(GetPseudoValue.JS_CODE, element, PSEUDO_ELEMENT_NAME, PROPERTY_NAME))
-      .thenReturn(ACTUAL_VALUE);
   }
 
   @Test
-  void testExecuteMethod() {
-    assertThat(new GetPseudoValue().execute(proxy, locator, new Object[]{PSEUDO_ELEMENT_NAME, PROPERTY_NAME}))
-      .isEqualTo(ACTUAL_VALUE);
+  void execute() {
+    when(driver.executeJavaScript(any(), any(), any(), any())).thenReturn("hello");
+
+    assertThat(new GetPseudoValue().execute(proxy, locator, new Object[]{":before", "content"}))
+      .isEqualTo("hello");
+
+    verify(driver).executeJavaScript(GetPseudoValue.JS_CODE, element, ":before", "content");
   }
 }

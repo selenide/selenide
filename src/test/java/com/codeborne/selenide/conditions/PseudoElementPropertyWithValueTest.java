@@ -5,44 +5,40 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.conditions.PseudoElementPropertyWithValue.JS_CODE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PseudoElementPropertyWithValueTest {
 
-  private static final String PSEUDO_ELEMENT_NAME = ":before";
-  private static final String PROPERTY_NAME = "content";
-  private static final String ACTUAL_VALUE = "hello";
-
-  private Driver driver = mock(Driver.class);
-  private WebElement element = mock(WebElement.class);
+  private final Driver driver = mock(Driver.class);
+  private final WebElement element = mock(WebElement.class);
 
   @BeforeEach
   void setUp() {
-    when(driver.executeJavaScript(PseudoElementPropertyWithValue.JS_CODE, element, PSEUDO_ELEMENT_NAME, PROPERTY_NAME))
-      .thenReturn(ACTUAL_VALUE);
+    when(driver.executeJavaScript(JS_CODE, element, ":before", "content")).thenReturn("hello");
   }
 
   @Test
   void apply() {
-    assertThat(new PseudoElementPropertyWithValue(PSEUDO_ELEMENT_NAME, PROPERTY_NAME, ACTUAL_VALUE)
+    assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello")
       .apply(driver, element)).isTrue();
-    assertThat(new PseudoElementPropertyWithValue(PSEUDO_ELEMENT_NAME, PROPERTY_NAME, "Hello")
+    assertThat(new PseudoElementPropertyWithValue(":before", "content", "Hello")
       .apply(driver, element)).isTrue();
-    assertThat(new PseudoElementPropertyWithValue(PSEUDO_ELEMENT_NAME, PROPERTY_NAME, "dummy")
+    assertThat(new PseudoElementPropertyWithValue(":before", "content", "dummy")
       .apply(driver, element)).isFalse();
   }
 
   @Test
   void actualValue() {
-    assertThat(new PseudoElementPropertyWithValue(PSEUDO_ELEMENT_NAME, PROPERTY_NAME, ACTUAL_VALUE)
+    assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello")
       .actualValue(driver, element)).isEqualTo(":before {content: hello;}");
   }
 
   @Test
   void tostring() {
-    assertThat(new PseudoElementPropertyWithValue(PSEUDO_ELEMENT_NAME, PROPERTY_NAME, ACTUAL_VALUE))
+    assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello"))
       .hasToString("pseudo-element :before {content: hello;}");
   }
 }
