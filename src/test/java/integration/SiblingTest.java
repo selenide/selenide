@@ -1,11 +1,12 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.id;
+import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SiblingTest extends ITest {
@@ -16,39 +17,37 @@ class SiblingTest extends ITest {
 
   @Test
   void canGetSiblingElement() {
-    assertThat($("#multirowTableFirstRow").sibling(0))
-      .isEqualTo($("#multirowTableSecondRow"));
-    $(".first_row").sibling(0).has(Condition.text("Norris"));
+    $("#multirowTableFirstRow").sibling(0).shouldHave(id("multirowTableSecondRow"));
+    $(".first_row").sibling(0).shouldHave(text("Norris"));
   }
 
   @Test
   void canGetSiblingOfParent() {
-    assertThat($(".first_row").parent().sibling(0).find("td", 1))
-      .isEqualTo($("#baskerville"));
+    $(".first_row").parent().sibling(0).find("td", 1).shouldHave(id("baskerville"));
   }
 
   @Test
   void errorWhenSiblingAbsent() {
     assertThatThrownBy(() -> $("#multirowTableFirstRow").sibling(3).click())
-      .isInstanceOf(ElementNotFound.class);
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {By.xpath: following-sibling::*[4]}");
   }
 
   @Test
   void canGetPrecedingElement() {
-    assertThat($("#multirowTableSecondRow").preceding(0))
-      .isEqualTo($("#multirowTableFirstRow"));
-    $("#baskerville").preceding(0).has(Condition.text("Chack"));
+    $("#multirowTableSecondRow").preceding(0).shouldHave(id("multirowTableFirstRow"));
+    $("#baskerville").preceding(0).shouldHave(text("Chack"));
   }
 
   @Test
   void canGetPrecedingElementOfParent() {
-    assertThat($(".second_row").parent().preceding(0).find("td", 0))
-      .isEqualTo($(".first_row"));
+    $(".second_row").parent().preceding(0).find("td", 0).shouldHave(cssClass("first_row"));
   }
 
   @Test
   void errorWhenPrecedingElementAbsent() {
     assertThatThrownBy(() -> $("#multirowTableSecondRow").preceding(3).click())
-      .isInstanceOf(ElementNotFound.class);
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {By.xpath: preceding-sibling::*[4]}");
   }
 }

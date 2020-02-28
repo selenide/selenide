@@ -1,11 +1,12 @@
 # Changelog
 
-## 5.8.0
-* #662 Add Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
+## 5.8.0 (released 28.02.2020)
+* #662 Added Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
+* #845 Added methods $.sibling() and $.preceding()  --  thanks to Dmytro Stekanov for #1064
 * #1071 Fixing issue when SoftAssertionsExtension for JUnit5 sometimes marked passed tests as failed 
 * $.click() now clicks the CENTER of element (also for Configuration.clickViaJS=true)  
 
-## 5.7.0
+## 5.7.0 (released 07.02.2020)
 * #1025 Add setting `Configuration.downloadsFolder` --  thanks to Dmytro Stekanov for PR #1041
 * #1057 Download files to `Configuration.downloadsFolder` instead of ~/Downloads
 * #399 Add method for switching to a window with custom timeout  --  thanks to Dmytro Stekanov for PR #1054
