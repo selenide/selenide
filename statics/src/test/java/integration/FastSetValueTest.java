@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 class FastSetValueTest extends IntegrationTest {
   @BeforeEach
@@ -45,5 +48,13 @@ class FastSetValueTest extends IntegrationTest {
     $("#password").setValue("admin");
     $("#usernameHint").should(disappear);
     $("#passwordHint").should(appear);
+  }
+
+  @Test
+  void fastSetValue_forMaterialDesign() {
+    Configuration.fastSetValue = true;
+    open("https://rusakovstas.github.io/material-autocomplete/");
+    $(byText("Вбейте что нибудь или скопируйте")).closest("div").$("input").setValue("123");
+    $(byText("Поймали логику!")).shouldBe(visible);
   }
 }

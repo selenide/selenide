@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.8.1
+* #1074 Fix fastSetValue for material design  --  thanks to Rusakov Stas for the research
+
 ## 5.8.0 (released 28.02.2020)
 * #662 Added Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
 * #845 Added methods $.sibling() and $.preceding()  --  thanks to Dmytro Stekanov for #1064
