@@ -4,6 +4,7 @@ import com.browserup.bup.filters.ResponseFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -14,11 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class FileDownloadFilter implements ResponseFilter {
@@ -29,8 +31,8 @@ public class FileDownloadFilter implements ResponseFilter {
 
   private HttpHelper httpHelper = new HttpHelper();
   private boolean active;
-  private final List<DownloadedFile> downloadedFiles = new ArrayList<>();
-  private final List<Response> responses = new ArrayList<>();
+  private final List<DownloadedFile> downloadedFiles = new CopyOnWriteArrayList<>();
+  private final List<Response> responses = new CopyOnWriteArrayList<>();
 
   public FileDownloadFilter(Config config) {
     this(config, new Downloader());
@@ -104,6 +106,13 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   public List<DownloadedFile> getDownloadedFiles() {
     return downloadedFiles;
+  }
+
+  /**
+   * @return list of downloaded files matching given criteria
+   */
+  public List<DownloadedFile> getDownloadedFiles(FileFilter fileFilter) {
+    return downloadedFiles.stream().filter(fileFilter::match).collect(toList());
   }
 
   private String getFileName(Response response) {

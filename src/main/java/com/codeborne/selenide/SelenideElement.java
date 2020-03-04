@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.files.FileFilter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
@@ -723,16 +724,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
 
   /**
-   * Download file linked by "href" attribute of this element
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
    * @throws RuntimeException if 50x status code was returned from server
    * @throws FileNotFoundException if 40x status code was returned from server
    *
+   * @see FileDownloadMode
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download() throws FileNotFoundException;
 
   /**
-   * Download file linked by "href" attribute of this element or any file to which this element redirects.
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
    *
    * @param timeout download operations timeout.
    *
@@ -742,6 +745,41 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download(long timeout) throws FileNotFoundException;
+
+  /**
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
+   * @param fileFilter Criteria for defining which file is expected (
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withNameMatching(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
+   *                   ).
+   *
+   * @throws RuntimeException      if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   *
+   * @see com.codeborne.selenide.files.FileFilters
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
+  File download(FileFilter fileFilter) throws FileNotFoundException;
+
+  /**
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
+   * @param timeout download operations timeout.
+   * @param fileFilter Criteria for defining which file is expected (
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withNameMatching(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
+   *                   ).
+   *
+   * @throws RuntimeException      if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   *
+   * @see com.codeborne.selenide.files.FileFilters
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
+  File download(long timeout, FileFilter fileFilter) throws FileNotFoundException;
 
   /**
    * Return criteria by which this element is located
