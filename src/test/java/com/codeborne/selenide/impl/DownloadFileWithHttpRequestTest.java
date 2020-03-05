@@ -23,7 +23,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class DownloadFileWithHttpRequestTest {
-  DownloadFileWithHttpRequest download = new DownloadFileWithHttpRequest(new Downloader(new DummyRandomizer("111-222-333-444")));
+  private final DownloadFileWithHttpRequest download = new DownloadFileWithHttpRequest(
+    new Downloader(new DummyRandomizer("111-222-333-444"))
+  );
 
   @Test
   void makeAbsoluteUrl() {

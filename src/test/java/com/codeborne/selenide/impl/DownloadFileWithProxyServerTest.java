@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +61,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -84,7 +85,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -106,7 +107,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
       .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -120,7 +121,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000, none()))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }

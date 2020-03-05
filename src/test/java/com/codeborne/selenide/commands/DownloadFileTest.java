@@ -5,6 +5,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -20,6 +22,7 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.files.FileFilters.none;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -49,12 +52,12 @@ class DownloadFileTest implements WithAssertions {
     when(config.proxyEnabled()).thenReturn(false);
     when(config.fileDownload()).thenReturn(HTTPGET);
 
-    when(httpget.download(any(), any(WebElement.class), anyLong())).thenReturn(file);
+    when(httpget.download(any(), any(WebElement.class), anyLong(), any())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{8000L});
 
     assertThat(f).isSameAs(file);
-    verify(httpget).download(driver, link, 8000L);
+    verify(httpget).download(driver, link, 8000L, none());
     verifyNoMoreInteractions(proxy);
   }
 
@@ -63,12 +66,12 @@ class DownloadFileTest implements WithAssertions {
     SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, null, null, selenideProxy));
-    when(proxy.download(any(), any(), any(), anyLong())).thenReturn(file);
+    when(proxy.download(any(), any(), any(), anyLong(), any())).thenReturn(file);
 
     File f = command.execute(null, linkWithHref, new Object[]{9000L});
 
     assertThat(f).isSameAs(file);
-    verify(proxy).download(linkWithHref, link, selenideProxy, 9000L);
+    verify(proxy).download(linkWithHref, link, selenideProxy, 9000L, none());
     verifyNoMoreInteractions(httpget);
   }
 
@@ -100,9 +103,20 @@ class DownloadFileTest implements WithAssertions {
   }
 
   @Test
-  void customerTimeout() {
+  void customTimeout() {
     SelenideConfig config = new SelenideConfig().timeout(3L);
 
     assertThat(command.getTimeout(config, new Object[]{2L})).isEqualTo(2L);
+    assertThat(command.getTimeout(config, new Object[]{2L, none()})).isEqualTo(2L);
+  }
+
+  @Test
+  void getFileFilterFromArguments() {
+    FileFilter expected = FileFilters.withExtension("doc");
+
+    assertThat(command.getFileFilter(new Object[]{})).isSameAs(none());
+    assertThat(command.getFileFilter(new Object[]{4000L})).isSameAs(none());
+    assertThat(command.getFileFilter(new Object[]{4000L, expected})).isSameAs(expected);
+    assertThat(command.getFileFilter(new Object[]{expected})).isSameAs(expected);
   }
 }

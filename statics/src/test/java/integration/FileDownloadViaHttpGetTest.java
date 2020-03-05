@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.TimeoutException;
+import com.codeborne.selenide.files.FileFilters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +53,25 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   @Test
   void downloadMissingFile() {
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
-      .isInstanceOf(FileNotFoundException.class);
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageStartingWith("Failed to download file http")
+      .hasMessageMatching("Failed to download file http.+/files/unexisting_file.png: .+");
+  }
+
+  @Test
+  void downloadFileByName() {
+    assertThatThrownBy(() -> $(byText("Download me")).download(FileFilters.withName("good_bye_world.txt")))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 4000 ms." +
+        " with file name \"good_bye_world.txt\" \n" +
+        "; actually downloaded: .+/hello_world.txt");
+  }
+
+  @Test
+  void downloadFile() {
+    assertThatThrownBy(() -> $(byText("Download missing file")).download())
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageMatching("Failed to download file http.+/files/unexisting_file.png: .+");
   }
 
   @Test
