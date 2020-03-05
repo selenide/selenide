@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.Selenide.switchTo;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.fail;
 class AlertTest extends IntegrationTest {
   @AfterAll
   static void tearDown() {
-    close();
+    closeWebDriver();
   }
 
   @BeforeEach

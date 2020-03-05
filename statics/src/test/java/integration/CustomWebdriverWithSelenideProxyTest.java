@@ -16,7 +16,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
@@ -28,7 +28,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     assumeThat(isChrome() || isFirefox()).isTrue();
-    close();
+    closeWebDriver();
   }
 
   @Test
@@ -46,7 +46,7 @@ public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
         $("body").shouldHave(text("Hello, scott:tiger!"));
       }
       finally {
-        close();
+        closeWebDriver();
         webDriver.quit();
       }
     }

@@ -10,11 +10,16 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -165,8 +170,8 @@ class ElementsCollectionTest implements WithAssertions {
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
-    List elementsTexts = ElementsCollection.texts(asList(element1, element2));
-    List expectedTexts = Arrays.asList("Hello", "Mark");
+    List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
+    List<String> expectedTexts = Arrays.asList("Hello", "Mark");
     assertThat(elementsTexts)
       .isEqualTo(expectedTexts);
   }
@@ -242,34 +247,26 @@ class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void testIteratorMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
-    Iterator<SelenideElement> iterator = collection.iterator();
-    assertThat(iterator)
-      .isNotNull();
-    assertThat(iterator)
-      .isInstanceOf(SelenideElementIterator.class);
-    assertThat(iterator.hasNext())
-      .isTrue();
+    Iterator<SelenideElement> iterator = new ElementsCollection(source).iterator();
+    assertThat(iterator).isNotNull();
+    assertThat(iterator).isInstanceOf(SelenideElementIterator.class);
+    assertThat(iterator.hasNext()).isTrue();
   }
 
   @Test
   void testIteratorListMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     when(element3.getText()).thenReturn("Twen");
-    ListIterator<SelenideElement> iteratorList = collection.listIterator(1);
-    assertThat(iteratorList)
-      .isNotNull();
-    assertThat(iteratorList)
-      .isInstanceOf(SelenideElementListIterator.class);
-    assertThat(iteratorList.hasNext())
-      .isTrue();
+    ListIterator<SelenideElement> iteratorList = new ElementsCollection(source).listIterator(1);
+    assertThat(iteratorList).isNotNull();
+    assertThat(iteratorList).isInstanceOf(SelenideElementListIterator.class);
+    assertThat(iteratorList.hasNext()).isTrue();
   }
 
   @Test
@@ -299,7 +296,7 @@ class ElementsCollectionTest implements WithAssertions {
   void sleepsAsLessAsPossible_untilConditionGetsMatched() {
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(
-      Collections.singletonList(element1),
+      singletonList(element1),
       asList(element1, element2),
       asList(element1, element2, element2)
     );
@@ -325,9 +322,8 @@ class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void toArray() {
-    ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
-    assertThat(collection.toArray()).hasOnlyElementsOfType(SelenideElement.class);
+    assertThat(new ElementsCollection(source).toArray()).hasOnlyElementsOfType(SelenideElement.class);
   }
 
   private WebElement element(String tag) {

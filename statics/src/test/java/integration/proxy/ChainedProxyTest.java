@@ -1,11 +1,11 @@
 package integration.proxy;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
-import integration.IntegrationTest;
 import com.browserup.bup.BrowserUpProxy;
 import com.browserup.bup.BrowserUpProxyServer;
 import com.browserup.bup.client.ClientUtil;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
+import integration.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -31,7 +31,7 @@ class ChainedProxyTest extends IntegrationTest {
 
   @AfterEach
   void tearDown() {
-    close();
+    closeWebDriver();
     WebDriverRunner.setProxy(null);
     if (chainedProxy != null) {
       chainedProxy.stop();
@@ -40,7 +40,7 @@ class ChainedProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    close();
+    closeWebDriver();
 
     chainedProxy = new BrowserUpProxyServer();
     chainedProxy.setTrustAllServers(true);

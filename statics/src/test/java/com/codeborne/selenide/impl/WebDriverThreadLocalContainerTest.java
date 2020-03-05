@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.mockito.Mockito.mock;
 
 class WebDriverThreadLocalContainerTest implements WithAssertions {
@@ -34,7 +34,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
   @AfterEach
   void tearDown() {
     WebDriverRunner.setProxy(null);
-    close();
+    closeWebDriver();
   }
 
   @Test

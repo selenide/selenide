@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.grid.selenium.GridLauncherV3;
 import org.openqa.grid.shared.Stoppable;
 
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 abstract class AbstractGridTest extends IntegrationTest {
@@ -19,7 +19,7 @@ abstract class AbstractGridTest extends IntegrationTest {
 
   @BeforeEach
   final void setUpGrid() {
-    close();
+    closeWebDriver();
 
     hubPort = findFreePort();
     gridHub = new GridLauncherV3().launch(new String[]{"-port", "" + hubPort});
@@ -34,7 +34,7 @@ abstract class AbstractGridTest extends IntegrationTest {
 
   @AfterEach
   final void tearDownGrid() {
-    close();
+    closeWebDriver();
     gridHub.stop();
     gridNode.stop();
   }

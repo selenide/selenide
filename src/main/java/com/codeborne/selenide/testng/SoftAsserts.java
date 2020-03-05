@@ -7,7 +7,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
@@ -36,7 +35,7 @@ public class SoftAsserts extends ExitCodeListener {
   public void onTestSuccess(ITestResult result) {
     failIfErrors(result);
   }
-  
+
   @Override
   public void onConfigurationFailure(ITestResult result) {
     failIfErrors(result);
@@ -58,21 +57,21 @@ public class SoftAsserts extends ExitCodeListener {
     }
   }
 
-  boolean shouldIntercept(Class testClass) {
+  boolean shouldIntercept(Class<?> testClass) {
     Listeners listenersAnnotation = getListenersAnnotation(testClass);
     return listenersAnnotation != null && asList(listenersAnnotation.value()).contains(SoftAsserts.class);
   }
 
   boolean shouldIntercept(Method testMethod) {
     if (testMethod == null) return false;
-    
+
     Test annotation = testMethod.getAnnotation(Test.class);
     return annotation != null && asList(annotation.expectedExceptions()).isEmpty();
   }
 
-  Listeners getListenersAnnotation(Class testClass) {
-    Annotation annotation = testClass.getAnnotation(Listeners.class);
-    return annotation != null ? (Listeners) annotation :
+  Listeners getListenersAnnotation(Class<?> testClass) {
+    Listeners annotation = testClass.getAnnotation(Listeners.class);
+    return annotation != null ? annotation :
         testClass.getSuperclass() != null ? getListenersAnnotation(testClass.getSuperclass()) : null;
   }
 
