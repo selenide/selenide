@@ -8,6 +8,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
     assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
-    assertThat(prefsMap).containsEntry("download.default_directory", "/blah/downloads");
+    assertThat(prefsMap).containsEntry("download.default_directory",
+      new File("/blah/downloads").getAbsolutePath());
   }
 
   @Test
@@ -78,7 +80,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
     assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
-    assertThat(prefsMap).containsEntry("download.default_directory", "/blah/downloads");
+    assertThat(prefsMap).containsEntry("download.default_directory",
+      new File("/blah/downloads").getAbsolutePath());
   }
 
   @Test
