@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
+import static com.codeborne.selenide.Browsers.EDGE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
@@ -66,7 +67,11 @@ abstract class AbstractDriverFactory {
     }
     browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
     browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
-    if (!INTERNET_EXPLORER.equalsIgnoreCase(config.browser()) && !IE.equalsIgnoreCase(config.browser())) {
+    boolean isNotMicrosoftBrowsers =
+      !INTERNET_EXPLORER.equalsIgnoreCase(config.browser())
+      && !IE.equalsIgnoreCase(config.browser())
+      && !EDGE.equalsIgnoreCase(config.browser());
+    if (isNotMicrosoftBrowsers) {
       browserCapabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
     transferCapabilitiesFromSystemProperties(browserCapabilities);

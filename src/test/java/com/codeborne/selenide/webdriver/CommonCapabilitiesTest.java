@@ -10,8 +10,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Browsers.IE;
-import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
+import static com.codeborne.selenide.Browsers.*;
 import static org.mockito.Mockito.mock;
 import static org.openqa.selenium.remote.CapabilityType.*;
 
@@ -45,7 +44,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
   }
 
   @Test
-  void transferCapabilitiesFromConfiguration1() {
+  void transferCapabilitiesFromConfigurationInternetExplorer() {
     SelenideConfig config = new SelenideConfig();
     config.browser(INTERNET_EXPLORER);
     DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
@@ -54,9 +53,18 @@ public class CommonCapabilitiesTest implements WithAssertions {
   }
 
   @Test
-  void transferCapabilitiesFromConfiguration2() {
+  void transferCapabilitiesFromConfigurationIE() {
     SelenideConfig config = new SelenideConfig();
     config.browser(IE);
+    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
+    assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
+    assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
+  }
+
+  @Test
+  void transferCapabilitiesFromConfigurationEdge() {
+    SelenideConfig config = new SelenideConfig();
+    config.browser(EDGE);
     DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
