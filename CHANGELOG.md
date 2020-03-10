@@ -1,8 +1,9 @@
 # Changelog
 
-## 5.9.0 (planned to xx.03.2020)
+## 5.9.0 (released 10.03.2020)
 * #1065 add method $.download(FileFilter)  --  see PR #1080
-* #1061 IEDriverServer 3.150 is not work (don't set ACCEPT_INSECURE_CERTS for IE)  --  thanks to Boris Osipov for PR #1075
+* #1061 IE 3.150 doesn't start  --  thanks to Boris Osipov for PR #1075
+* #1039 Microsoft Edge doesn't start  --  thanks to Boris Osipov for PR #1084
 
 ## 5.8.0 (released 28.02.2020)
 * #662 Added Condition with Predicate<WebElement> parameter as alternative to check element conditions  --  thanks to Dmytro Stekanov for #1059
