@@ -63,8 +63,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
     assertThatThrownBy(() -> $(byText("Download me")).download(FileFilters.withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 4000 ms." +
-        " with file name \"good_bye_world.txt\" \n" +
-        "; actually downloaded: .+/hello_world.txt");
+        " with file name \"good_bye_world.txt\" " + System.lineSeparator() + "; actually downloaded: .+hello_world.txt");
   }
 
   @Test
