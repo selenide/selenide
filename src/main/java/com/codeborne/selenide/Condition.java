@@ -16,7 +16,7 @@ import com.codeborne.selenide.conditions.Exist;
 import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
-import com.codeborne.selenide.conditions.IsImage;
+import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
@@ -332,7 +332,7 @@ public abstract class Condition {
   /**
    * Check if image is loaded.
    */
-  public static final Condition isImage = new IsImage();
+  public static final Condition image = new IsImageLoaded();
 
   /**
    * Check if browser focus is currently in given element.

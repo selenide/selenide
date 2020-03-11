@@ -4,9 +4,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
-public class IsImage extends Condition {
+public class IsImageLoaded extends Condition {
 
-  public IsImage() {
+  public IsImageLoaded() {
     super("is image");
   }
 
@@ -15,6 +15,10 @@ public class IsImage extends Condition {
     if (!"img".equalsIgnoreCase(webElement.getTagName())) {
       return false;
     }
+    return isImage(driver, webElement);
+  }
+
+  public static boolean isImage(Driver driver, WebElement webElement) {
     return driver.executeJavaScript("return arguments[0].complete && " +
       "typeof arguments[0].naturalWidth != 'undefined' && " +
       "arguments[0].naturalWidth > 0", webElement);
