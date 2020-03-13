@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.10.0
+* #1069 add condition `$.shouldBe(image)`  --  thanks to Dmytro Stekanov for #1086
+
 ## 5.9.0 (released 10.03.2020)
 * #1065 add method $.download(FileFilter)  --  see PR #1080
 * #1061 IE 3.150 doesn't start  --  thanks to Boris Osipov for PR #1075

@@ -12,14 +12,12 @@ public class IsImageLoaded extends Condition {
 
   @Override
   public boolean apply(Driver driver, WebElement webElement) {
-    if (!"img".equalsIgnoreCase(webElement.getTagName())) {
-      return false;
-    }
     return isImage(driver, webElement);
   }
 
   public static boolean isImage(Driver driver, WebElement webElement) {
-    return driver.executeJavaScript("return arguments[0].complete && " +
+    return driver.executeJavaScript("return arguments[0].tagName.toLowerCase() === 'img' && " +
+      "arguments[0].complete && " +
       "typeof arguments[0].naturalWidth != 'undefined' && " +
       "arguments[0].naturalWidth > 0", webElement);
   }
