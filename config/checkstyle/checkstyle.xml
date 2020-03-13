@@ -54,6 +54,7 @@
     <!--<module name="MutableException"/>-->
     <module name="ClassFanOutComplexity">
       <property name="max" value="29"/>
+      <property name="excludeClassesRegexps" value=".*Condition.*"/>
     </module>
     <module name="CyclomaticComplexity">
       <property name="max" value="11"/>
