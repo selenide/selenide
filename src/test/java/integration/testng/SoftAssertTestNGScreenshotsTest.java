@@ -24,7 +24,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     SelenideLogger.addListener("SoftAssertTestLogListener", testLogListener);
   }
 
-  @Test()
+  @Test
   public void shouldTakeScreenshotForSoftAsserts() {
     $("h22").shouldBe(visible);
     $$("#radioButtons input").shouldHave(size(888));
@@ -39,7 +39,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     SelenideLogger.removeListener("SoftAssertTestLogListener");
   }
 
-  private class TestLogListener implements LogEventListener {
+  private static class TestLogListener implements LogEventListener {
 
     private final List<LogEvent> events = new ArrayList<>();
 

@@ -46,7 +46,7 @@ class SelectRadioCommandTest implements WithAssertions {
       selectRadioCommand.execute(proxy, locator, new Object[]{defaultElementValue});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessageStartingWith(String.format("Element not found {null}\nExpected: value '%s'", defaultElementValue));
+        .hasMessageStartingWith(String.format("Element not found {null}%nExpected: value '%s'", defaultElementValue));
     }
   }
 

@@ -49,9 +49,11 @@ public abstract class BaseIntegrationTest {
   private static void runLocalHttpServer() throws Exception {
     if (server == null) {
       synchronized (BaseIntegrationTest.class) {
-        port = findFreePort();
-        server = new LocalHttpServer(port, SSL).start();
-        protocol = SSL ? "https://" : "http://";
+        if (server == null) {
+          port = findFreePort();
+          server = new LocalHttpServer(port, SSL).start();
+          protocol = SSL ? "https://" : "http://";
+        }
       }
     }
   }

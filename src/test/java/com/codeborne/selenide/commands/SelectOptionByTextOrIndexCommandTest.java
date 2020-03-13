@@ -1,6 +1,5 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
@@ -19,7 +18,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
-  private Driver driver = mock(Driver.class);
   private SelenideElement proxy = mock(SelenideElement.class);
   private WebElementSource selectField = mock(WebElementSource.class);
   private SelectOptionByTextOrIndex selectOptionByTextOrIndexCommand = new SelectOptionByTextOrIndex();
@@ -51,7 +49,7 @@ class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{this.defaultElementText}});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessageStartingWith(String.format("Element not found {null/option[text:%s]}\nExpected: exist", this.defaultElementText));
+        .hasMessageStartingWith(String.format("Element not found {null/option[text:%s]}%nExpected: exist", this.defaultElementText));
     }
   }
 
@@ -84,7 +82,7 @@ class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
       selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new int[]{defaultIndex}});
     } catch (ElementNotFound exception) {
       assertThat(exception)
-        .hasMessageStartingWith(String.format("Element not found {null/option[index:%d]}\nExpected: exist", defaultIndex));
+        .hasMessageStartingWith(String.format("Element not found {null/option[index:%d]}%nExpected: exist", defaultIndex));
     }
   }
 

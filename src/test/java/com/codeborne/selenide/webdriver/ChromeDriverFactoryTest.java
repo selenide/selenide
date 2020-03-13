@@ -16,10 +16,9 @@ import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBro
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings("unchecked")
 class ChromeDriverFactoryTest implements WithAssertions {
-  private final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
-  private final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
+  private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
+  private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
 
   private Proxy proxy = mock(Proxy.class);
   private SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
