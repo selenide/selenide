@@ -15,19 +15,19 @@ import static org.mockito.Mockito.mock;
 class SizeGreaterThanTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
-    assertThat(new SizeGreaterThan(10).apply(emptyList()))
+    assertThat(new SizeGreaterThan(10).test(emptyList()))
       .isFalse();
   }
 
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeGreaterThan(10).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeGreaterThan(10).test(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
   @Test
   void applyWithCorrectSizeGreaterThan() {
-    assertThat(new SizeGreaterThan(1).apply(asList(mock(WebElement.class), mock(WebElement.class))))
+    assertThat(new SizeGreaterThan(1).test(asList(mock(WebElement.class), mock(WebElement.class))))
       .isTrue();
   }
 

@@ -2,12 +2,12 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
-import com.google.common.base.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.google.common.collect.Collections2.filter;
 
@@ -27,7 +27,7 @@ public class FilteringCollection implements WebElementsCollection {
 
   @Override
   public List<WebElement> getElements() {
-    return new ArrayList<>(filter(originalCollection.getElements(), filter));
+    return new ArrayList<>(filter(originalCollection.getElements(), filter::test));
   }
 
   @Override
@@ -50,7 +50,7 @@ public class FilteringCollection implements WebElementsCollection {
     }
 
     @Override
-    public boolean apply(@Nullable WebElement webElement) {
+    public boolean test(@Nullable WebElement webElement) {
       return filter.apply(driver, webElement);
     }
 

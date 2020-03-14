@@ -135,7 +135,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     do {
       try {
         actualElements = collection.getElements();
-        if (condition.apply(actualElements)) {
+        if (condition.test(actualElements)) {
           return;
         }
       }

@@ -20,7 +20,7 @@ public class AllMatch extends CollectionCondition {
   }
 
   @Override
-  public boolean apply(List<WebElement> elements) {
+  public boolean test(List<WebElement> elements) {
     if (elements.isEmpty()) {
       return false;
     }
