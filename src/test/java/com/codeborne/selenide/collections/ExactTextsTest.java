@@ -30,7 +30,7 @@ class ExactTextsTest implements WithAssertions {
   void applyOnWrongSizeList() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");
 
-    assertThat(exactTexts.apply(singletonList(mock(WebElement.class))))
+    assertThat(exactTexts.test(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
@@ -40,7 +40,7 @@ class ExactTextsTest implements WithAssertions {
     WebElement webElement1 = mockElement("One");
     WebElement webElement2 = mockElement("Two");
 
-    assertThat(exactTexts.apply(asList(webElement1, webElement2)))
+    assertThat(exactTexts.test(asList(webElement1, webElement2)))
       .isTrue();
   }
 
@@ -50,7 +50,7 @@ class ExactTextsTest implements WithAssertions {
     WebElement webElement1 = mockElement("One");
     WebElement webElement2 = mockElement("One");
 
-    assertThat(exactTexts.apply(asList(webElement1, webElement2)))
+    assertThat(exactTexts.test(asList(webElement1, webElement2)))
       .isFalse();
   }
 

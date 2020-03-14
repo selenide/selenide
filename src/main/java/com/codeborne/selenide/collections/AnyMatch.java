@@ -20,7 +20,7 @@ public class AnyMatch extends CollectionCondition {
   }
 
   @Override
-  public boolean apply(List<WebElement> elements) {
+  public boolean test(List<WebElement> elements) {
     return elements.stream().anyMatch(predicate);
   }
 

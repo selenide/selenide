@@ -13,7 +13,7 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
@@ -166,8 +166,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean apply(@Nullable List<WebElement> input) {
-      return delegate.apply(input);
+    public boolean test(@Nullable List<WebElement> input) {
+      return delegate.test(input);
     }
   }
 

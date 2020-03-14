@@ -19,14 +19,14 @@ class AnyMatchTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
-      .apply(mockCollection("Collection description").getElements()))
+      .test(mockCollection("Collection description").getElements()))
       .isFalse();
   }
 
   @Test
   void applyWithNonMatchingPredicate() {
     assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
-      .apply(singletonList(element1)))
+      .test(singletonList(element1)))
       .isFalse();
   }
 
@@ -35,7 +35,7 @@ class AnyMatchTest implements WithAssertions {
     WebElementsCollection collection = mockCollection("Collection description", element1, element2);
 
     assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
-      .apply(collection.getElements()))
+      .test(collection.getElements()))
       .isTrue();
   }
 

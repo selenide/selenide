@@ -23,7 +23,7 @@ class TextsInAnyOrderTest implements WithAssertions {
     when(mockElement1.getText()).thenReturn("One");
     when(mockElement2.getText()).thenReturn("Two");
     when(mockElement3.getText()).thenReturn("Three");
-    assertThat(texts.apply(asList(mockElement1, mockElement2, mockElement3)))
+    assertThat(texts.test(asList(mockElement1, mockElement2, mockElement3)))
       .isEqualTo(shouldMatch);
   }
 

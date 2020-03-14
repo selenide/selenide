@@ -15,13 +15,13 @@ import static org.mockito.Mockito.mock;
 class SizeLessThanTest implements WithAssertions {
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeLessThan(1).apply(asList(mock(WebElement.class), mock(WebElement.class))))
+    assertThat(new SizeLessThan(1).test(asList(mock(WebElement.class), mock(WebElement.class))))
       .isFalse();
   }
 
   @Test
   void applyWithCorrectSizeLessThan() {
-    assertThat(new SizeLessThan(2).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeLessThan(2).test(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 

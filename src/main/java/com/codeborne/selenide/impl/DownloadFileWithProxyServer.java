@@ -5,7 +5,6 @@ import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
@@ -95,7 +95,7 @@ public class DownloadFileWithProxyServer {
     }
 
     @Override
-    public boolean apply(FileDownloadFilter filter) {
+    public boolean test(FileDownloadFilter filter) {
       return !filter.getDownloadedFiles(fileFilter).isEmpty();
     }
   }
@@ -104,7 +104,7 @@ public class DownloadFileWithProxyServer {
     private int downloadsCount = -1;
 
     @Override
-    public boolean apply(FileDownloadFilter filter) {
+    public boolean test(FileDownloadFilter filter) {
       try {
         return downloadsCount == filter.getDownloadedFiles().size();
       }

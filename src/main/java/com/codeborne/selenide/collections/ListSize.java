@@ -15,7 +15,7 @@ public class ListSize extends CollectionCondition {
   }
 
   @Override
-  public boolean apply(List<WebElement> elements) {
+  public boolean test(List<WebElement> elements) {
     return apply(elements.size());
   }
 

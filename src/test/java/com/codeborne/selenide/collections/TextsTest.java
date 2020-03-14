@@ -13,14 +13,14 @@ import static org.mockito.Mockito.when;
 class TextsTest implements WithAssertions {
   @Test
   void testApplyWithEmptyList() {
-    assertThat(new Texts("One", "Two", "Three").apply(emptyList()))
+    assertThat(new Texts("One", "Two", "Three").test(emptyList()))
       .isFalse();
   }
 
   @Test
   void testApplyWithWrongSizeList() {
     Texts texts = new Texts(asList("One", "Two", "Three"));
-    assertThat(texts.apply(singletonList(mock(WebElement.class))))
+    assertThat(texts.test(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
@@ -36,7 +36,7 @@ class TextsTest implements WithAssertions {
 
     when(mockElement1.getText()).thenReturn(shouldMatch ? "OneThing" : "Three");
     when(mockElement2.getText()).thenReturn(shouldMatch ? "Two" : "Selenide");
-    assertThat(texts.apply(asList(mockElement1, mockElement2)))
+    assertThat(texts.test(asList(mockElement1, mockElement2)))
       .isEqualTo(shouldMatch);
   }
 

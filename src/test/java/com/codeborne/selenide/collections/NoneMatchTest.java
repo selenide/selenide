@@ -20,21 +20,21 @@ class NoneMatchTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new NoneMatch("Predicate description", it -> it.getText().equals("EmptyList"))
-      .apply(mockCollection("Collection description").getElements()))
+      .test(mockCollection("Collection description").getElements()))
       .isFalse();
   }
 
   @Test
   void applyWithMatchingPredicate() {
     assertThat(new NoneMatch("Predicate description", it -> it.getText().contains("Test"))
-      .apply(collection.getElements()))
+      .test(collection.getElements()))
       .isFalse();
   }
 
   @Test
   void applyWithNonMatchingPredicate() {
     assertThat(new NoneMatch("Predicate description", it -> it.getText().equals("NotPresent"))
-      .apply(collection.getElements()))
+      .test(collection.getElements()))
       .isTrue();
   }
 

@@ -14,19 +14,19 @@ import static org.mockito.Mockito.mock;
 class SizeNotEqualTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
-    assertThat(new SizeNotEqual(10).apply(emptyList()))
+    assertThat(new SizeNotEqual(10).test(emptyList()))
       .isTrue();
   }
 
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeNotEqual(10).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeNotEqual(10).test(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 
   @Test
   void applyWithCorrectSizeNotEqual() {
-    assertThat(new SizeNotEqual(1).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeNotEqual(1).test(singletonList(mock(WebElement.class))))
       .isFalse();
   }
 
