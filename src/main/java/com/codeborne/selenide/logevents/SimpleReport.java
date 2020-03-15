@@ -1,6 +1,5 @@
 package com.codeborne.selenide.logevents;
 
-import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +8,7 @@ import java.util.OptionalInt;
 
 /**
  * A simple text report of Selenide actions performed during test run.
- * 
+ *
  * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
 public class SimpleReport {
@@ -39,7 +38,7 @@ public class SimpleReport {
     StringBuilder sb = new StringBuilder();
     sb.append("Report for ").append(title).append('\n');
 
-    String delimiter = '+' + Joiner.on('+').join(line(count), line(70), line(10), line(10)) + "+\n";
+    String delimiter = '+' + String.join("+", line(count), line(70), line(10), line(10)) + "+\n";
 
     sb.append(delimiter);
     sb.append(String.format("|%-" + count + "s|%-70s|%-10s|%-10s|%n", "Element", "Subject", "Status", "ms."));
@@ -52,12 +51,12 @@ public class SimpleReport {
     sb.append(delimiter);
     log.info(sb.toString());
   }
-  
+
   public void clean() {
     SelenideLogger.removeListener("simpleReport");
   }
 
   private String line(int count) {
-    return Joiner.on("").join(Collections.nCopies(count, "-"));
+    return String.join("", Collections.nCopies(count, "-"));
   }
 }

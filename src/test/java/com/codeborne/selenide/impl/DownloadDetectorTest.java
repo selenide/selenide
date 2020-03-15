@@ -1,7 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.proxy.DownloadedFile;
-import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -51,12 +52,16 @@ class DownloadDetectorTest {
     assertThat(detector.compare(response2, response1)).isEqualTo(1);
   }
 
-  private ImmutableMap<String, String> withContentDisposition(String contentType) {
-    return ImmutableMap.of("content-disposition", contentType);
+  private Map<String, String> withContentDisposition(String contentType) {
+    Map<String, String> map = new HashMap<>();
+    map.put("content-disposition", contentType);
+    return map;
   }
 
-  private ImmutableMap<String, String> withContentType(String contentType) {
-    return ImmutableMap.of("content-type", contentType);
+  private Map<String, String> withContentType(String contentType) {
+    Map<String, String> map = new HashMap<>();
+    map.put("content-type", contentType);
+    return map;
   }
 
   private File fileCreatedSecondsAgo(String name, int secondsAgo) {

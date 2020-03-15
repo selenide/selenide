@@ -5,11 +5,10 @@ import com.codeborne.selenide.Driver;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.google.common.collect.Collections2.filter;
+import static java.util.stream.Collectors.toList;
 
 public class FilteringCollection implements WebElementsCollection {
   private final WebElementsCollection originalCollection;
@@ -27,7 +26,7 @@ public class FilteringCollection implements WebElementsCollection {
 
   @Override
   public List<WebElement> getElements() {
-    return new ArrayList<>(filter(originalCollection.getElements(), filter::test));
+    return originalCollection.getElements().stream().filter(filter).collect(toList());
   }
 
   @Override
