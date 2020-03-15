@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,13 @@ public class ShadowElementTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_shadow_dom.html");
+  }
+
+  @Test
+  void clickInsideShadowHost() {
+    SelenideElement button = $(shadowCss("#anyButton", "#shadow-host"));
+    button.click();
+    button.shouldHave(text("Changed text"));
   }
 
   @Test

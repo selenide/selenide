@@ -14,6 +14,12 @@
       var div = document.createElement("div");
       var div2 = document.createElement("div");
       var div3 = document.createElement("div");
+      var input = document.createElement("input");
+      var button = document.createElement("button");
+      button.setAttribute("id", "anyButton");
+      button.textContent = `Button`;
+      button.onclick = function() {this.textContent = "Changed text";};
+      input.setAttribute("type", "text");
       div.setAttribute('id', 'inner-shadow-host');
       div2.setAttribute('class', 'test-class');
       div3.setAttribute('class', 'test-class');
@@ -23,6 +29,8 @@
       shadow.appendChild(div);
       shadow.appendChild(div2);
       shadow.appendChild(div3);
+      shadow.appendChild(input);
+      shadow.appendChild(button);
 
       var shadow2 = shadow.getElementById("inner-shadow-host").attachShadow( { mode: "open" } )
 
@@ -31,6 +39,8 @@
       p2.appendChild(text2);
       shadow2.appendChild(p2);
     });
+
+
 
   </script>
 </head>
