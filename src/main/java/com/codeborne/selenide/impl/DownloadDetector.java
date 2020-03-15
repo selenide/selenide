@@ -1,11 +1,13 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.proxy.DownloadedFile;
-import com.google.common.collect.ImmutableSet;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
+
+import static java.util.Arrays.asList;
 
 /**
  * Sort all downloaded files by "likeness" to be the right download.
@@ -18,9 +20,9 @@ import java.util.Set;
  * </p>
  */
 public class DownloadDetector implements Comparator<DownloadedFile>, Serializable {
-  private static final Set<String> LOW_RANK_CONTENT_TYPES = ImmutableSet.of(
+  private static final Set<String> LOW_RANK_CONTENT_TYPES = new HashSet<>(asList(
     "text/html", "text/plain", "text/css", "text/javascript", "application/json"
-  );
+  ));
 
   @Override
   public int compare(DownloadedFile file1, DownloadedFile file2) {

@@ -1,7 +1,7 @@
 package integration.server;
 
-import com.google.common.collect.ImmutableMap;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,8 +42,9 @@ class FileDownloadHandler extends BaseHandler {
       }
     }
 
-    return new Result(SC_OK, getContentType(fileName), fileContent,
-      ImmutableMap.of("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8")));
+    Map<String, String> map = new HashMap<>();
+    map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+    return new Result(SC_OK, getContentType(fileName), fileContent, map);
   }
 
   private String getSessionId(HttpServletRequest request) {

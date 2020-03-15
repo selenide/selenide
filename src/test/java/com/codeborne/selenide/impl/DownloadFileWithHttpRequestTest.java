@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideConfig;
-import com.google.common.collect.ImmutableSet;
+import java.util.HashSet;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
+import static java.util.Arrays.asList;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
@@ -71,7 +72,7 @@ public class DownloadFileWithHttpRequestTest {
   @Test
   void shouldAddAllCookiesFromOpenedBrowser() {
     WebDriver webDriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
-    when(webDriver.manage().getCookies()).thenReturn(ImmutableSet.of(new Cookie("jsessionid", "123456789")));
+    when(webDriver.manage().getCookies()).thenReturn(new HashSet<>(asList(new Cookie("jsessionid", "123456789"))));
     Driver driver = mock(Driver.class);
     when(driver.hasWebDriverStarted()).thenReturn(true);
     when(driver.getWebDriver()).thenReturn(webDriver);

@@ -1,5 +1,7 @@
 package integration.server;
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -15,9 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import static com.google.common.base.Joiner.on;
 import static java.lang.Thread.currentThread;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.joining;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_METHOD_NOT_ALLOWED;
 
@@ -86,7 +88,9 @@ public abstract class BaseHandler extends HttpServlet {
     String time = new SimpleDateFormat("hh:MM:ss:SSS").format(new Date());
     log.info("{} {} -> {} {} ms",
       time,
-      on('?').skipNulls().join(request.getRequestURL(), request.getQueryString()),
+      Stream.of(request.getRequestURL(), request.getQueryString())
+        .filter(Objects::nonNull)
+        .collect(joining("?")),
       httpStatus,
       (System.nanoTime() - startTime) / 1000000
     );

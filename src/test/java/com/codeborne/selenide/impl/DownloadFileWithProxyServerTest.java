@@ -6,7 +6,7 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.google.common.collect.ImmutableSet;
+import java.util.HashSet;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.files.FileFilters.none;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,8 +83,8 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
 
     File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
@@ -104,8 +105,8 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
 
     File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
