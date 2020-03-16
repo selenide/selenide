@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.selector.ByShadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
@@ -63,6 +64,14 @@ public class Selectors {
    */
   public static By byAttribute(String attributeName, String attributeValue) {
     return By.cssSelector(String.format("[%s='%s']", attributeName, attributeValue));
+  }
+
+  /**
+   * @see ByShadow#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
+   * @since 5.10
+   */
+  public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
+    return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
   }
 
   /**
