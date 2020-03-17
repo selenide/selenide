@@ -63,9 +63,14 @@ class SelectorsTest implements WithAssertions {
 
   @Test
   void byAttributeEscapesQuotes() {
-    By selector = Selectors.byAttribute("value", "Ludvig'van\"Beethoven");
-    assertThat(selector)
+    assertThat(Selectors.byAttribute("value", "Ludvig'van\"Beethoven"))
       .hasToString("By.cssSelector: [value=\"Ludvig'van\\\"Beethoven\"]");
+
+    assertThat(Selectors.byAttribute("value", "i love back\\\\slashes"))
+      .hasToString("By.cssSelector: [value=\"i love back\\\\\\\\slashes\"]");
+
+    assertThat(Selectors.byAttribute("value", "denzel \\\"equalizer\\\" washington"))
+      .hasToString("By.cssSelector: [value=\"denzel \\\\\\\"equalizer\\\\\\\" washington\"]");
   }
 
   @Test

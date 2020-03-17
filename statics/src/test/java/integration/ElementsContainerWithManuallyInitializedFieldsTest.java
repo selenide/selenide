@@ -29,10 +29,10 @@ class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest
     page.container.getSelf().should(exist, visible);
     page.container.headerLink.shouldHave(text("Options with 'apostrophes' and \"quotes\""));
     page.container.options.shouldHave(texts("-- Select your hero --", "John Mc'Lain", "Arnold \"Schwarzenegger\"",
-      "Mickey \"Rock'n'Roll\" Rourke"));
+      "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
     page.container.options.first(2).shouldHave(texts("-- Select your hero --", "John Mc'Lain"));
-    page.container.options.last(3).shouldHave(texts("John Mc'Lain", "Arnold \"Schwarzenegger\"",
-      "Mickey \"Rock'n'Roll\" Rourke"));
+    page.container.options.last(3).shouldHave(texts("Arnold \"Schwarzenegger\"",
+      "Mickey \"Rock'n'Roll\" Rourke", "Denzel Washington"));
   }
 
   private static class MyPage {
