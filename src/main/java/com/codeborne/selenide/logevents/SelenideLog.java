@@ -53,6 +53,6 @@ public class SelenideLog implements LogEvent {
 
   @Override
   public String toString() {
-    return "$(" + element + ") " + subject;
+    return String.format("$(\"%s\") %s", element, subject);
   }
 }
