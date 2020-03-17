@@ -40,6 +40,6 @@ class SelenideLogTest implements WithAssertions {
   void testToString() {
     SelenideLog log = new SelenideLog("Element", "Subject");
     assertThat(log)
-      .hasToString(String.format("$(%s) %s", log.getElement(), log.getSubject()));
+      .hasToString(String.format("$(\"%s\") %s", log.getElement(), log.getSubject()));
   }
 }
