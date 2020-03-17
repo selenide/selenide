@@ -58,35 +58,35 @@ class SelectorsTest implements WithAssertions {
   void byAttributeUsesXPath() {
     By selector = Selectors.byAttribute("value", "катя");
     assertThat(selector)
-      .hasToString("By.cssSelector: [value='катя']");
+      .hasToString("By.cssSelector: [value=\"катя\"]");
   }
 
   @Test
   void byAttributeEscapesQuotes() {
     By selector = Selectors.byAttribute("value", "Ludvig'van\"Beethoven");
     assertThat(selector)
-      .hasToString("By.cssSelector: [value='Ludvig'van\"Beethoven']");
+      .hasToString("By.cssSelector: [value=\"Ludvig'van\"Beethoven\"]");
   }
 
   @Test
   void userCanFindElementByAnyAttribute() {
     By selector = Selectors.by("data-account-id", "666");
     assertThat(selector)
-      .hasToString("By.cssSelector: [data-account-id='666']");
+      .hasToString("By.cssSelector: [data-account-id=\"666\"]");
   }
 
   @Test
   void byTitleUsesXPath() {
     By selector = Selectors.byTitle("PDF report");
     assertThat(selector)
-      .hasToString("By.cssSelector: [title='PDF report']");
+      .hasToString("By.cssSelector: [title=\"PDF report\"]");
   }
 
   @Test
   void byValueUsesXPath() {
     By selector = Selectors.byValue("водокачка");
     assertThat(selector)
-      .hasToString("By.cssSelector: [value='водокачка']");
+      .hasToString("By.cssSelector: [value=\"водокачка\"]");
   }
 
   @Test
