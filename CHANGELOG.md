@@ -1,7 +1,12 @@
 # Changelog
 
 ## 5.10.0
+* #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090
+* #1021 Selenide does not fetch BrowserUpProxy dependency by default  --  see PR #1094
+* #1091 Migrated Guava API to the equivalent Java API  --  thanks to Wladimir Schmidt for PR #1091
+* #1032 Add quotes around selectors in Selenide logger  --  thanks to Dmytro Stekanov for #1092
 * #1069 add condition `$.shouldBe(image)`  --  thanks to Dmytro Stekanov for #1086
+* #1060 fix finding element by attribute which contains quotes  --  thanks to Denys Lystopadskyy for PR #1062 
 
 ## 5.9.0 (released 10.03.2020)
 * #1065 add method $.download(FileFilter)  --  see PR #1080
