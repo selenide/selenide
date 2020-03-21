@@ -1,18 +1,15 @@
 package integration;
 
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.atBottom;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PageAtBottomTest extends IntegrationTest {
   @BeforeEach
   void createScrollablePage() {
-    Assumptions.assumeFalse(isHtmlUnit(), "Scrolling not supported in htmlunit");
     openFile("empty.html");
     for (int i = 0; i < 200; i++) {
       Selenide.executeJavaScript(

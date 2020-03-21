@@ -16,7 +16,7 @@ abstract class BaseTestNGTest {
   private static final Logger log = LoggerFactory.getLogger(BaseTestNGTest.class);
   private static LocalHttpServer server;
 
-  protected static final String browser = System.getProperty("selenide.browser", "htmlunit");
+  protected static final String browser = System.getProperty("selenide.browser", "chrome");
   protected static String baseUrl;
 
   protected SelenideDriver driver = new SelenideDriver(
@@ -28,8 +28,8 @@ abstract class BaseTestNGTest {
     if (server == null) {
       int port = findFreePort();
       log.info("START {} Test NG tests", browser);
-      server = new LocalHttpServer(port, false).start();
-      baseUrl = "http://127.0.0.1:" + port;
+      server = new LocalHttpServer(port, true).start();
+      baseUrl = "https://127.0.0.1:" + port;
     }
   }
 

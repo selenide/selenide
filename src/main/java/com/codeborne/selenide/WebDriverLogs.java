@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 public class WebDriverLogs {
   private final Driver driver;
@@ -25,11 +28,17 @@ public class WebDriverLogs {
 
   private List<LogEntry> getLogEntries(String logType, Level logLevel) {
     try {
-      return driver.getWebDriver().manage().logs().get(logType).filter(logLevel);
+      return filter(driver.getWebDriver().manage().logs().get(logType), logLevel);
     }
     catch (UnsupportedOperationException ignore) {
       return emptyList();
     }
+  }
+
+  private List<LogEntry> filter(LogEntries entries, Level level) {
+    return unmodifiableList(entries.getAll().stream()
+      .filter(entry -> entry.getLevel().intValue() >= level.intValue())
+      .collect(toList()));
   }
 
   private <T> List<String> listToString(List<T> objects) {

@@ -31,9 +31,15 @@ public class CreateDriverCommand {
     Proxy browserProxy = userProvidedProxy;
 
     if (config.proxyEnabled()) {
-      selenideProxyServer = new SelenideProxyServer(config, userProvidedProxy);
-      selenideProxyServer.start();
-      browserProxy = selenideProxyServer.createSeleniumProxy();
+      try {
+        selenideProxyServer = new SelenideProxyServer(config, userProvidedProxy);
+        selenideProxyServer.start();
+        browserProxy = selenideProxyServer.createSeleniumProxy();
+      }
+      catch (NoClassDefFoundError e) {
+        throw new IllegalStateException("Cannot initialize proxy. " +
+          "Probably you should add BrowserUpProxy dependency to your project.", e);
+      }
     }
 
     WebDriver webdriver = factory.createWebDriver(config, browserProxy);
@@ -42,7 +48,7 @@ public class CreateDriverCommand {
       currentThread().getId(), webdriver.getClass().getSimpleName(), webdriver);
 
     WebDriver webDriver = addListeners(webdriver, listeners);
-    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(webDriver, selenideProxyServer));
+    Runtime.getRuntime().addShutdownHook(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer));
     return new Result(webDriver, selenideProxyServer);
   }
 

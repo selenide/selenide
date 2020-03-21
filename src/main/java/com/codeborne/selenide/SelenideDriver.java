@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codeborne.selenide.files.FileFilters.none;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 
@@ -162,6 +163,10 @@ public class SelenideDriver {
     return driver().executeJavaScript(jsCode, arguments);
   }
 
+  public <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return driver().executeAsyncJavaScript(jsCode, arguments);
+  }
+
   public WebElement getFocusedElement() {
     return executeJavaScript("return document.activeElement");
   }
@@ -288,6 +293,6 @@ public class SelenideDriver {
   }
 
   public File download(String url, long timeoutMs) throws IOException {
-    return downloadFileWithHttpRequest.download(driver(), url, timeoutMs);
+    return downloadFileWithHttpRequest.download(driver(), url, timeoutMs, none());
   }
 }

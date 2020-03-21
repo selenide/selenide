@@ -9,15 +9,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static com.codeborne.selenide.files.FileFilters.withName;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
-  private File folder = new File(Configuration.reportsFolder);
+  private File folder = new File(Configuration.downloadsFolder);
 
   @BeforeEach
   void setUp() {
@@ -69,5 +73,37 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  public void download_byName() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withName("hello_world.txt"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  public void download_byNameRegex() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(withNameMatching("hello_.\\w+\\.txt"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  public void download_byExtension() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(timeout, withExtension("txt"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  void downloadsFilesToCustomFolder() throws IOException {
+    String downloadsFolder = "build/custom-folder";
+    Configuration.downloadsFolder = downloadsFolder;
+
+    File downloadedFile = $(byText("Download me")).download();
+
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(new File(downloadsFolder).getAbsolutePath());
   }
 }

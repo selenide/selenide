@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +39,10 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
     }
+    options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
     options.addArguments("--proxy-bypass-list=<-loopback>");
     options.merge(createCommonCapabilities(config, proxy));
-    options = transferChromeOptionsFromSystemProperties(options);
+    transferChromeOptionsFromSystemProperties(config, options);
     log.debug("Chrome options: {}", options.toString());
     return options;
   }
@@ -49,11 +51,8 @@ class ChromeDriverFactory extends AbstractDriverFactory {
   /**
    * This method only handles so-called "arguments" and "preferences"
    * for ChromeOptions (there is also "Extensions" etc.)
-   *
-   * @param currentChromeOptions
-   * @return options updated with args & prefs parameters
    */
-  private ChromeOptions transferChromeOptionsFromSystemProperties(ChromeOptions currentChromeOptions) {
+  private void transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
     if (System.getProperty("chromeoptions.args") != null) {
       Stream<String> params = Arrays.stream(parseCSVhandlingQuotes(System.getProperty("chromeoptions.args")));
       List<String> args = params
@@ -61,11 +60,20 @@ class ChromeDriverFactory extends AbstractDriverFactory {
         .collect(Collectors.toList());
       currentChromeOptions.addArguments(args);
     }
+
+    Map<String, Object> chromePreferences = new HashMap<>();
+    chromePreferences.put("download.default_directory", new File(config.downloadsFolder()).getAbsolutePath());
+
     if (System.getProperty("chromeoptions.prefs") != null) {
       Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.prefs"));
-      currentChromeOptions.setExperimentalOption("prefs", prefs);
+      chromePreferences.putAll(prefs);
     }
-    return currentChromeOptions;
+    currentChromeOptions.setExperimentalOption("prefs", chromePreferences);
+
+    if (System.getProperty("chromeoptions.mobileEmulation") != null) {
+      Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.mobileEmulation"));
+      currentChromeOptions.setExperimentalOption("mobileEmulation", prefs);
+    }
   }
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {

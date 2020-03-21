@@ -7,6 +7,7 @@ import com.codeborne.selenide.conditions.CaseSensitiveText;
 import com.codeborne.selenide.conditions.Checked;
 import com.codeborne.selenide.conditions.CssClass;
 import com.codeborne.selenide.conditions.CssValue;
+import com.codeborne.selenide.conditions.CustomMatch;
 import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.conditions.ExactText;
@@ -15,16 +16,20 @@ import com.codeborne.selenide.conditions.Exist;
 import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
+import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
+import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Selected;
 import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
 import org.openqa.selenium.WebElement;
+
+import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;
 
@@ -66,8 +71,6 @@ public abstract class Condition {
    * Synonym for {@link #visible} - may be used for better readability
    * <p><code>$("#logoutLink").waitUntil(appears, 10000);</code></p>
    * <p>
-   * Though the same can be done in a shorter way:
-   * <p><code>waitFor(By.id("logoutLink");</code></p>
    */
   public static final Condition appears = visible;
 
@@ -115,7 +118,7 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element has given "value" attribute as substring
+   * Assert that element contains given "value" attribute as substring
    * NB! Ignores difference in non-visible characters like spaces, non-breakable spaces, tabs, newlines  etc.
    *
    * <p>Sample: <code>$("input").shouldHave(value("12345 666 77"));</code></p>
@@ -124,6 +127,30 @@ public abstract class Condition {
    */
   public static Condition value(String expectedValue) {
     return new Value(expectedValue);
+  }
+
+  /**
+   * Check that element has given the property value of the pseudo-element
+   * <p>Sample: <code>$("input").shouldHave(pseudo(":first-letter", "color", "#ff0000"));</code></p>
+   *
+   * @param pseudoElementName pseudo-element name of the element,
+   *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
+   * @param propertyName property name of the pseudo-element
+   * @param expectedValue expected value of the property
+   */
+  public static Condition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
+    return new PseudoElementPropertyWithValue(pseudoElementName, propertyName, expectedValue);
+  }
+
+  /**
+   * Check that element has given the "content" property of the pseudo-element
+   * <p>Sample: <code>$("input").shouldHave(pseudo(":before", "Hello"));</code></p>
+   *
+   * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
+   * @param expectedValue expected content of the pseudo-element
+   */
+  public static Condition pseudo(String pseudoElementName, String expectedValue) {
+    return new PseudoElementPropertyWithValue(pseudoElementName, "content", expectedValue);
   }
 
   /**
@@ -136,6 +163,7 @@ public abstract class Condition {
   }
 
   /**
+   * Asserts the name attribute of the element to be exact string
    * <p>Sample: <code>$("#input").shouldHave(name("username"))</code></p>
    *
    * @param name expected name of input field
@@ -145,6 +173,7 @@ public abstract class Condition {
   }
 
   /**
+   *  Asserts the type attribute of the element to be exact string
    * <p>Sample: <code>$("#input").shouldHave(type("checkbox"))</code></p>
    *
    * @param type expected type of input field
@@ -172,6 +201,7 @@ public abstract class Condition {
   public static final Condition empty = and("empty", exactValue(""), exactText(""));
 
   /**
+   * The same as matchText()
    * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>
    *
    * @see #matchText(String)
@@ -192,6 +222,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element contains given text as a substring
    * <p>Sample: <code>$("h1").shouldHave(text("Hello\s*John"))</code></p>
    *
    * <p>NB! Case insensitive</p>
@@ -205,7 +236,7 @@ public abstract class Condition {
   }
 
   /**
-   * Checks for selected text on a given input web element
+   * Checks on a element that exactly given text is selected (=marked with mouse/keybord)
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
@@ -218,6 +249,8 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element contains given text as a case sensitive substring
+   *
    * <p>Sample: <code>$("h1").shouldHave(textCaseSensitive("Hello\s*John"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -229,6 +262,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element is exactly (case insensitive) given text 
    * <p>Sample: <code>$("h1").shouldHave(exactText("Hello"))</code></p>
    *
    * <p>Case insensitive</p>
@@ -241,6 +275,7 @@ public abstract class Condition {
   }
 
   /**
+   * Assert that element has exactly the given text
    * <p>Sample: <code>$("h1").shouldHave(exactTextCaseSensitive("Hello"))</code></p>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
@@ -252,6 +287,7 @@ public abstract class Condition {
   }
 
   /**
+   * Asserts that element has the given class. Element may other classes too.
    * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
   public static Condition cssClass(String cssClass) {
@@ -282,6 +318,23 @@ public abstract class Condition {
   }
 
   /**
+   * Checks if element matches the given predicate.
+   *
+   * <p>Sample: {@code $("input").should(match("empty value attribute", el -> el.getAttribute("value").isEmpty()));}</p>
+   *
+   * @param description the description of the predicate
+   * @param predicate   the {@link Predicate} to match
+   */
+  public static Condition match(String description, Predicate<WebElement> predicate) {
+    return new CustomMatch(description, predicate);
+  }
+
+  /**
+   * Check if image is loaded.
+   */
+  public static final Condition image = new IsImageLoaded();
+
+  /**
    * Check if browser focus is currently in given element.
    */
   public static final Condition focused = new Focused();
@@ -301,7 +354,7 @@ public abstract class Condition {
   public static final Condition disabled = new Disabled();
 
   /**
-   * Checks that element is selected
+   * Checks that element is selected (inputs like dropdowns etc.)
    *
    * @see WebElement#isSelected()
    */
@@ -328,7 +381,7 @@ public abstract class Condition {
   /**
    * Check if element matches ALL given conditions.
    *
-   * @param name      Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
+   * @param name       Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
    * @param conditions Conditions to match.
    * @return logical AND for given conditions.
    */
@@ -339,7 +392,7 @@ public abstract class Condition {
   /**
    * Check if element matches ANY of given conditions.
    *
-   * @param name      Name of this condition, like "error" (meaning e.g. "error" OR "failed").
+   * @param name       Name of this condition, like "error" (meaning e.g. "error" OR "failed").
    * @param conditions Conditions to match.
    * @return logical OR for given conditions.
    */

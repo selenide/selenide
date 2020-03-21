@@ -5,14 +5,13 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:2.0.0"
+    classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.0.1"
   }
 }
 
-import com.github.spotbugs.SpotBugsTask
+import com.github.spotbugs.snom.SpotBugsTask
 
 spotbugs {
-  sourceSets = [sourceSets.main]
   effort = 'max'
   excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
 }
@@ -34,6 +33,6 @@ tasks.withType(Checkstyle) {
 sonarqube {
   properties {
     property 'sonar.projectName', 'selenide'
-    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/htmlunit.exec, $project.buildDir/jacoco/chrome.exec"
+    property 'sonar.jacoco.reportPaths', "$project.buildDir/jacoco/test.exec, $project.buildDir/jacoco/chrome_headless.exec, $project.buildDir/jacoco/firefox_headless.exec"
   }
 }

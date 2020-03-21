@@ -15,7 +15,7 @@ public class Texts extends ExactTexts {
   }
 
   @Override
-  public boolean apply(List<WebElement> elements) {
+  public boolean test(List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {
       return false;
     }

@@ -1,10 +1,10 @@
 package com.codeborne.selenide.proxy;
 
+import com.browserup.bup.BrowserUpProxy;
+import com.browserup.bup.client.ClientUtil;
+import com.browserup.bup.filters.ResponseFilter;
 import com.codeborne.selenide.Config;
-import net.lightbody.bmp.BrowserMobProxy;
-import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.filters.RequestFilter;
-import net.lightbody.bmp.filters.ResponseFilter;
+import com.browserup.bup.filters.RequestFilter;
 import org.openqa.selenium.Proxy;
 
 import java.net.InetSocketAddress;
@@ -23,7 +23,7 @@ public class SelenideProxyServer {
   private final Config config;
   private final InetAddressResolver inetAddressResolver;
   private final Proxy outsideProxy;
-  private final BrowserMobProxy proxy;
+  private final BrowserUpProxy proxy;
   private final Map<String, RequestFilter> requestFilters = new HashMap<>();
   private final Map<String, ResponseFilter> responseFilters = new HashMap<>();
   private int port;
@@ -35,10 +35,10 @@ public class SelenideProxyServer {
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
   public SelenideProxyServer(Config config, Proxy outsideProxy) {
-    this(config, outsideProxy, new InetAddressResolver(), new BrowserMobProxyServerUnlimited());
+    this(config, outsideProxy, new InetAddressResolver(), new BrowserUpProxyServerUnlimited());
   }
 
-  protected SelenideProxyServer(Config config, Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserMobProxy proxy) {
+  protected SelenideProxyServer(Config config, Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserUpProxy proxy) {
     this.config = config;
     this.outsideProxy = outsideProxy;
     this.inetAddressResolver = inetAddressResolver;
@@ -131,11 +131,11 @@ public class SelenideProxyServer {
   }
 
   /**
-   * Method return current instance of browser mob proxy
+   * Method return current instance of browser up proxy
    *
-   * @return browser mob proxy instance
+   * @return browser up proxy instance
    */
-  public BrowserMobProxy getProxy() {
+  public BrowserUpProxy getProxy() {
     return proxy;
   }
 

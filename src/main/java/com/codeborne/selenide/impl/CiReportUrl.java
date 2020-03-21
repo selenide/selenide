@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class CiReportUrl {
   private static final Logger log = LoggerFactory.getLogger(CiReportUrl.class);
@@ -40,7 +42,15 @@ public class CiReportUrl {
   private String getJenkinsReportsUrl() {
     String build_url = System.getProperty("BUILD_URL");
     if (!isEmpty(build_url)) {
-      return resolveUrlSource("%s/artifact/", build_url);
+      String workspace = System.getProperty("WORKSPACE", System.getenv("WORKSPACE"));
+      String reportRelativePath = "";
+      if (!isEmpty(workspace)) { // we have a workspace folder. Calculate the report relative path
+        Path pathAbsoluteReportsFolder = Paths.get("").normalize().toAbsolutePath();
+        Path pathAbsoluteWorkSpace = Paths.get(workspace).normalize().toAbsolutePath();
+        Path pathRelative = pathAbsoluteWorkSpace.relativize(pathAbsoluteReportsFolder);
+        reportRelativePath = pathRelative.toString().replace('\\', '/') + '/';
+      }
+      return resolveUrlSource("%s/artifact/%s", build_url, reportRelativePath);
     } else {
       return null;
     }

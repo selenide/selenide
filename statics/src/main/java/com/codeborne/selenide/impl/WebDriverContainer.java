@@ -9,10 +9,12 @@ public interface WebDriverContainer {
   void addListener(WebDriverEventListener listener);
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy);
+  void resetWebDriver();
   WebDriver getWebDriver();
   SelenideProxyServer getProxyServer();
   void setProxy(Proxy webProxy);
   WebDriver getAndCheckWebDriver();
+  void closeWindow();
   void closeWebDriver();
   boolean hasWebDriverStarted();
 

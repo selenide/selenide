@@ -10,7 +10,7 @@ import java.util.List;
 import static com.codeborne.selenide.WebDriverRunner.driver;
 
 public class Screenshots {
-  public static ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
+  public static ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
   public static String takeScreenShot(String className, String methodName) {
     return screenshots.takeScreenShot(driver(), className, methodName);

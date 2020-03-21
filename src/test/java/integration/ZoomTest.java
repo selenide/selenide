@@ -3,13 +3,10 @@ package integration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ZoomTest extends ITest {
   @Test
   void canZoomInAndOut() {
-    assumeFalse(browser().isHtmlUnit(), "Both browsers return the same (X,Y) even after successful zooming");
-
     openFile("page_with_big_divs.html");
     int initialX = $("#wide_div").getLocation().getX();
     assertBetween($("#wide_div").getLocation().getY(), 70, 85); // FF: 81, Chrome: 79

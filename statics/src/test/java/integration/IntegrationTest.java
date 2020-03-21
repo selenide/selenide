@@ -10,6 +10,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.browserSize;
@@ -23,7 +26,8 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
-import static com.codeborne.selenide.WebDriverRunner.isSafari;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
 @ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
@@ -37,7 +41,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void setUpEach() {
     resetSettings();
-    restartReallyUnstableBrowsers();
     rememberTimeout();
   }
 
@@ -67,12 +70,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     useProxy(true);
   }
 
-  private void restartReallyUnstableBrowsers() {
-    if (isSafari()) {
-      closeWebDriver();
-    }
-  }
-
   private void rememberTimeout() {
     defaultTimeout = timeout;
   }
@@ -94,7 +91,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
    */
   protected static void useProxy(boolean proxyEnabled) {
     if (Configuration.proxyEnabled != proxyEnabled) {
-      Selenide.close();
+      Selenide.closeWebDriver();
     }
     Configuration.proxyEnabled = proxyEnabled;
     Configuration.fileDownload = proxyEnabled ? PROXY : HTTPGET;
@@ -106,5 +103,25 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
       "document.querySelector('body').innerHTML = arguments[0];",
       String.join(" ", html)
     );
+  }
+
+  protected static <T extends MutableCapabilities> T addSslErrorIgnoreCapabilities(T options) {
+    addSslErrorIgnoreOptions(options);
+    return options;
+  }
+
+  protected static ChromeOptions addHeadless(ChromeOptions options) {
+    if (Configuration.headless) options.setHeadless(true);
+    return options;
+  }
+
+  protected static FirefoxOptions addHeadless(FirefoxOptions options) {
+    if (Configuration.headless) options.setHeadless(true);
+    return options;
+  }
+
+  private static void addSslErrorIgnoreOptions(MutableCapabilities options) {
+    options.setCapability(ACCEPT_SSL_CERTS, true);
+    options.setCapability(ACCEPT_INSECURE_CERTS, true);
   }
 }

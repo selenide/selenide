@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.Selectors.ByText;
 import com.codeborne.selenide.Selectors.WithText;
+import com.codeborne.selenide.selector.ByShadow;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -57,35 +58,40 @@ class SelectorsTest implements WithAssertions {
   void byAttributeUsesXPath() {
     By selector = Selectors.byAttribute("value", "катя");
     assertThat(selector)
-      .hasToString("By.cssSelector: [value='катя']");
+      .hasToString("By.cssSelector: [value=\"катя\"]");
   }
 
   @Test
   void byAttributeEscapesQuotes() {
-    By selector = Selectors.byAttribute("value", "Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .hasToString("By.cssSelector: [value='Ludvig'van\"Beethoven']");
+    assertThat(Selectors.byAttribute("value", "Ludvig'van\"Beethoven"))
+      .hasToString("By.cssSelector: [value=\"Ludvig'van\\\"Beethoven\"]");
+
+    assertThat(Selectors.byAttribute("value", "i love back\\\\slashes"))
+      .hasToString("By.cssSelector: [value=\"i love back\\\\\\\\slashes\"]");
+
+    assertThat(Selectors.byAttribute("value", "denzel \\\"equalizer\\\" washington"))
+      .hasToString("By.cssSelector: [value=\"denzel \\\\\\\"equalizer\\\\\\\" washington\"]");
   }
 
   @Test
   void userCanFindElementByAnyAttribute() {
     By selector = Selectors.by("data-account-id", "666");
     assertThat(selector)
-      .hasToString("By.cssSelector: [data-account-id='666']");
+      .hasToString("By.cssSelector: [data-account-id=\"666\"]");
   }
 
   @Test
   void byTitleUsesXPath() {
     By selector = Selectors.byTitle("PDF report");
     assertThat(selector)
-      .hasToString("By.cssSelector: [title='PDF report']");
+      .hasToString("By.cssSelector: [title=\"PDF report\"]");
   }
 
   @Test
   void byValueUsesXPath() {
     By selector = Selectors.byValue("водокачка");
     assertThat(selector)
-      .hasToString("By.cssSelector: [value='водокачка']");
+      .hasToString("By.cssSelector: [value=\"водокачка\"]");
   }
 
   @Test
@@ -157,5 +163,17 @@ class SelectorsTest implements WithAssertions {
       .isInstanceOf(By.ByClassName.class);
     assertThat(classNameSelector)
       .hasToString("By.className: " + className);
+  }
+
+  @Test
+  void byShadowCss() {
+    String target = "#target";
+    String shadow = "#shadow";
+    String innerShadow = "#inner-shadow";
+    By cssSelector = Selectors.shadowCss(target, shadow, innerShadow);
+    assertThat(cssSelector)
+      .isInstanceOf(ByShadow.ByShadowCss.class);
+    assertThat(cssSelector)
+      .hasToString("By.cssSelector: " + shadow + " [" + innerShadow + "] " + target);
   }
 }

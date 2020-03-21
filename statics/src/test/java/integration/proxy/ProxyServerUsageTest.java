@@ -50,7 +50,7 @@ class ProxyServerUsageTest extends IntegrationTest {
     $("#submit").click();
 
     assertThat(getSelenideProxy().getProxy())
-      .as("Check browser mob proxy instance")
+      .as("Check browser up proxy instance")
       .isNotNull();
 
     assertThat(requests)

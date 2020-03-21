@@ -1,12 +1,13 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.files.FileFilter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.interactions.internal.Locatable;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,14 +49,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Append given test to the text field and trigger "change" event.
    *
-   * <p>
    * Implementation details:
    * This is the same as
    * <pre>
    *   1. WebElement.sendKeys(text)
    *   2. Trigger change event
    * </pre>
-   * </p>
    *
    * @param text Any text to append into the text field.
    *
@@ -164,6 +163,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getValue();
 
   /**
+   * Get the property value of the pseudo-element
+   * @param pseudoElementName pseudo-element name of the element,
+   *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
+   * @param propertyName property name of the pseudo-element
+   * @return the property value or "" if the property is missing
+   */
+  String pseudo(String pseudoElementName, String propertyName);
+
+  /**
+   * Get content of the pseudo-element
+   * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
+   * @return the content value or "none" if the content is missing
+   */
+  String pseudo(String pseudoElementName);
+
+  /**
    * Select radio button
    * @param value value of radio button to select
    * @return selected "input type=radio" element
@@ -241,7 +256,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return Given element, useful for chaining:
    * {@code $("#errorMessage").should(appear).shouldBe(enabled);}
    *
-   * @see Configuration#timeout
+   * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.Should
    */
   SelenideElement should(Condition... condition);
@@ -282,7 +297,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *   $("#errorMessage").should(exist);
    * }</p>
    *
-   * @see Configuration#timeout
+   * @see com.codeborne.selenide.Config#timeout
    * @see com.codeborne.selenide.commands.ShouldNot
    */
   SelenideElement shouldNot(Condition... condition);
@@ -382,6 +397,30 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetParent
    */
   SelenideElement parent();
+
+  /**
+   * Get the following sibling element of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").sibling(0) will give the first following sibling element of "td"
+   *
+   * @param index the index of sibling element
+   * @return Sibling element by index
+   *
+   * @see com.codeborne.selenide.commands.GetSibling
+   */
+  SelenideElement sibling(int index);
+
+  /**
+   * Get the preceding sibling element of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").preceding(0) will give the first preceding sibling element of "td"
+   *
+   * @param index the index of sibling element
+   * @return Sibling element by index
+   *
+   * @see com.codeborne.selenide.commands.GetPreceding
+   */
+  SelenideElement preceding(int index);
 
   /**
    * Get last child element of this element
@@ -685,16 +724,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement scrollIntoView(String scrollIntoViewOptions);
 
   /**
-   * Download file linked by "href" attribute of this element
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
    * @throws RuntimeException if 50x status code was returned from server
    * @throws FileNotFoundException if 40x status code was returned from server
    *
+   * @see FileDownloadMode
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download() throws FileNotFoundException;
 
   /**
-   * Download file linked by "href" attribute of this element or any file to which this element redirects.
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
    *
    * @param timeout download operations timeout.
    *
@@ -704,6 +745,41 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DownloadFile
    */
   File download(long timeout) throws FileNotFoundException;
+
+  /**
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
+   * @param fileFilter Criteria for defining which file is expected (
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withNameMatching(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
+   *                   ).
+   *
+   * @throws RuntimeException      if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   *
+   * @see com.codeborne.selenide.files.FileFilters
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
+  File download(FileFilter fileFilter) throws FileNotFoundException;
+
+  /**
+   * Download file by clicking this element. Algorithm depends on {@code @{@link Config#fileDownload() }}.
+   *
+   * @param timeout download operations timeout.
+   * @param fileFilter Criteria for defining which file is expected (
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withNameMatching(String)},
+   *                   {@link com.codeborne.selenide.files.FileFilters#withName(String)}
+   *                   ).
+   *
+   * @throws RuntimeException      if 50x status code was returned from server
+   * @throws FileNotFoundException if 40x status code was returned from server, or the downloaded file didn't match given filter.
+   *
+   * @see com.codeborne.selenide.files.FileFilters
+   * @see com.codeborne.selenide.commands.DownloadFile
+   */
+  File download(long timeout, FileFilter fileFilter) throws FileNotFoundException;
 
   /**
    * Return criteria by which this element is located
@@ -802,7 +878,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
    */
-  SelenideElement execute(Command<SelenideElement> command);
+  <ReturnType> ReturnType execute(Command<ReturnType> command);
 
   /**
    * Check if image is properly loaded.

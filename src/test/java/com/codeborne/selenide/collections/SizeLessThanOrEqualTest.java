@@ -15,19 +15,19 @@ import static org.mockito.Mockito.mock;
 class SizeLessThanOrEqualTest implements WithAssertions {
   @Test
   void applyWithWrongSizeList() {
-    assertThat(new SizeLessThanOrEqual(1).apply(asList(mock(WebElement.class), mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(1).test(asList(mock(WebElement.class), mock(WebElement.class))))
       .isFalse();
   }
 
   @Test
   void applyWithSameSize() {
-    assertThat(new SizeLessThanOrEqual(1).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(1).test(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 
   @Test
   void applyWithLessSize() {
-    assertThat(new SizeLessThanOrEqual(2).apply(singletonList(mock(WebElement.class))))
+    assertThat(new SizeLessThanOrEqual(2).test(singletonList(mock(WebElement.class))))
       .isTrue();
   }
 

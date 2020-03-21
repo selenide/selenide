@@ -3,6 +3,9 @@ package com.codeborne.selenide.impl;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class HttpHelperTest implements WithAssertions {
   private HttpHelper helper = new HttpHelper();
 
@@ -82,5 +85,34 @@ class HttpHelperTest implements WithAssertions {
   void fileNameIsNone_ifContentDispositionHeaderIsNotFound() {
     assertThat(helper.getFileNameFromContentDisposition("another-header", "some.png").isPresent())
       .isFalse();
+  }
+
+  @Test
+  void getsFileNameFromResponseHeader() {
+    Map<String, String> headers = new HashMap<>();
+    headers.put("content-disposition", "attachement; filename=report.pdf");
+    headers.put("referrer", "http://google.kz");
+
+    assertThat(helper.getFileNameFromContentDisposition(headers))
+      .contains("report.pdf");
+  }
+
+  @Test
+  void fileNameIsNull_ifResponseDoesNotContainDispositionHeader() {
+    Map<String, String> headers = new HashMap<>();
+    headers.put("location", "/downloads");
+    headers.put("referrer", "http://google.kz");
+
+    assertThat(helper.getFileNameFromContentDisposition(headers))
+      .isEmpty();
+  }
+
+  @Test
+  void extractsFileNameFromUrl() {
+    assertThat(helper.getFileName("/blah.jpg")).isEqualTo("blah.jpg");
+    assertThat(helper.getFileName("/blah.jpg?foo")).isEqualTo("blah.jpg");
+    assertThat(helper.getFileName("https://blah.org/blah.jpg")).isEqualTo("blah.jpg");
+
+    assertThat(helper.getFileName("https://some.com/foo/bar/")).isEqualTo("");
   }
 }

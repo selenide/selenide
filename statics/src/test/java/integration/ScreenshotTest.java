@@ -17,15 +17,12 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ScreenshotTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    assumeFalse(isHtmlUnit());
     openFile("page_with_big_divs.html");
   }
 
@@ -62,7 +59,7 @@ class ScreenshotTest extends IntegrationTest {
   @Disabled
   void resizeBigImageHeight() {
     SelenideElement element = $("#big_div");
-    BufferedImage img = new ScreenShotLaboratory().takeScreenshotAsImage(null, element);
+    BufferedImage img = ScreenShotLaboratory.getInstance().takeScreenshotAsImage(null, element);
     assertThat(img.getHeight())
       .withFailMessage("Screenshot doesn't fit height")
       .isLessThan(element.getSize().getHeight());

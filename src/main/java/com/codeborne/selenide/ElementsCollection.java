@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
@@ -27,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -133,7 +135,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     do {
       try {
         actualElements = collection.getElements();
-        if (condition.apply(actualElements)) {
+        if (condition.test(actualElements)) {
           return;
         }
       }
@@ -152,7 +154,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
           return;
         }
 
-        throw outOfCollection;
+        throw new ElementNotFound(collection.driver(), collection.description(), exist, outOfCollection);
       }
       sleep(driver().config().pollingInterval());
     }
@@ -172,7 +174,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
-   * @param condition
+   * @param condition condition
    * @return ElementsCollection
    */
   public ElementsCollection filter(Condition condition) {
@@ -183,7 +185,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Filters collection elements based on the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #filter(Condition)
-   * @param condition
+   * @param condition condition
    * @return ElementsCollection
    */
   public ElementsCollection filterBy(Condition condition) {
@@ -193,7 +195,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
-   * @param condition
+   * @param condition condition
    * @return ElementsCollection
    */
   public ElementsCollection exclude(Condition condition) {
@@ -204,7 +206,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Filters elements excluding those which met the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #exclude(Condition)
-   * @param condition
+   * @param condition condition
    * @return ElementsCollection
    */
   public ElementsCollection excludeWith(Condition condition) {
@@ -214,7 +216,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Find the first element which met the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
-   * @param condition
+   * @param condition condition
    * @return SelenideElement
    */
   public SelenideElement find(Condition condition) {
@@ -225,7 +227,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * Find the first element which met the given condition (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
    * @see #find(Condition)
-   * @param condition
+   * @param condition condition
    * @return SelenideElement
    */
   public SelenideElement findBy(Condition condition) {
@@ -263,7 +265,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Outputs string presentation of the element's collection
-   * @param elements
+   * @param elements elements of string
    * @return String
    */
   public static String elementsToString(Driver driver, Collection<WebElement> elements) {
@@ -292,7 +294,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
    *
    * @param index 0..N
-   * @return
+   * @return the n-th element of collection
    */
   @Override
   public SelenideElement get(int index) {
@@ -303,7 +305,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * returns the first element of the collection
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
    * NOTICE: $(css) is faster and returns the same result as $$(css).first()
-   * @return
+   * @return the first element of the collection
    */
   public SelenideElement first() {
     return get(0);
@@ -312,7 +314,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * returns the last element of the collection (lazy evaluation)
    * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
-   * @return
+   * @return the last element of the collection
    */
   public SelenideElement last() {
     return LastCollectionElement.wrap(collection);
@@ -339,7 +341,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * return actual size of the collection, doesn't wait on collection to be loaded.
    * ATTENTION not recommended for use in tests. Use collection.shouldHave(size(n)); for assertions instead.
-   * @return
+   * @return actual size of the collection
    */
   @Override
   public int size() {

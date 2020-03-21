@@ -1,13 +1,13 @@
 package com.codeborne.selenide.impl;
 
-import com.google.common.base.Predicate;
-
 import static java.lang.System.currentTimeMillis;
+
+import java.util.function.Predicate;
 
 public class Waiter {
   public <T> void wait(T subject, Predicate<T> condition, long timeout, long pollingInterval) {
     for (long start = currentTimeMillis();
-         !isTimeoutExceeded(timeout, start) && !condition.apply(subject); ) {
+         !isTimeoutExceeded(timeout, start) && !condition.test(subject); ) {
       sleep(pollingInterval);
     }
   }

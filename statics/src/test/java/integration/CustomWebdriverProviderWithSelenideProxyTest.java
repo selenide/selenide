@@ -17,7 +17,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
@@ -28,12 +28,12 @@ public class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTes
   @BeforeEach
   void setUp() {
     assumeThat(isChrome() || isFirefox()).isTrue();
-    close();
+    closeWebDriver();
   }
 
   @AfterEach
   void tearDown() {
-    close();
+    closeWebDriver();
   }
 
   @Test

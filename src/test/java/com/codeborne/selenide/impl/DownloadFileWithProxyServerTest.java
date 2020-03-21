@@ -3,9 +3,10 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.google.common.collect.ImmutableSet;
+import java.util.HashSet;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,12 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.stream.Stream;
 
+import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -40,7 +45,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private WebElementSource linkWithHref = mock(WebElementSource.class);
   private WebElement link = mock(WebElement.class);
-  private FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().reportsFolder("build/downloads")));
+  private FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().downloadsFolder("build/downloads")));
 
   @BeforeEach
   void setUp() {
@@ -57,7 +62,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -68,7 +73,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
   private void emulateServerResponseWithFiles(final File... files) {
     doAnswer(invocation -> {
-      filter.getDownloadedFiles().addAll(asList(files));
+      filter.getDownloadedFiles().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
       return null;
     }).when(link).click();
   }
@@ -78,10 +83,10 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -100,10 +105,10 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     emulateServerResponseWithFiles(new File("report.pdf"));
     when(webdriver.getWindowHandle()).thenReturn("tab1");
     when(webdriver.getWindowHandles())
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3"))
-      .thenReturn(ImmutableSet.of("tab1", "tab2", "tab3", "tab-with-pdf"));
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
+      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
 
-    File file = command.download(linkWithHref, link, proxy, 3000);
+    File file = command.download(linkWithHref, link, proxy, 3000, none());
     assertThat(file.getName())
       .isEqualTo("report.pdf");
 
@@ -117,7 +122,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000, none()))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }

@@ -3,8 +3,8 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ex.TimeoutException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.proxy.DownloadedFile;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
@@ -38,8 +38,9 @@ import java.security.cert.X509Certificate;
 import java.util.Optional;
 
 import static com.codeborne.selenide.impl.Describe.describe;
+import static java.util.Collections.emptyMap;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.http.client.protocol.HttpClientContext.COOKIE_STORE;
 
 public class DownloadFileWithHttpRequest {
@@ -58,16 +59,16 @@ public class DownloadFileWithHttpRequest {
     this.downloader = downloader;
   }
 
-  public File download(Driver driver, WebElement element, long timeout) throws IOException {
+  public File download(Driver driver, WebElement element, long timeout, FileFilter fileFilter) throws IOException {
     String fileToDownloadLocation = element.getAttribute("href");
     if (fileToDownloadLocation == null || fileToDownloadLocation.trim().isEmpty()) {
       throw new IllegalArgumentException("The element does not have href attribute: " + describe(driver, element));
     }
 
-    return download(driver, fileToDownloadLocation, timeout);
+    return download(driver, fileToDownloadLocation, timeout, fileFilter);
   }
 
-  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout) throws IOException {
+  public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) throws IOException {
     String url = makeAbsoluteUrl(driver.config(), relativeOrAbsoluteUrl);
     HttpResponse response = executeHttpRequest(driver, url, timeout);
 
@@ -82,7 +83,14 @@ public class DownloadFileWithHttpRequest {
 
     String fileName = getFileName(url, response);
     File downloadedFile = downloader.prepareTargetFile(driver.config(), fileName);
-    return saveFileContent(response, downloadedFile);
+    saveContentToFile(response, downloadedFile);
+
+    if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
+      throw new FileNotFoundException(String.format("Failed to download file from %s in %d ms.%s %n; actually downloaded: %s",
+        relativeOrAbsoluteUrl, timeout, fileFilter.description(), downloadedFile.getAbsolutePath())
+      );
+    }
+    return downloadedFile;
   }
 
   String makeAbsoluteUrl(Config config, String relativeOrAbsoluteUrl) {
@@ -180,18 +188,11 @@ public class DownloadFileWithHttpRequest {
       log.info("{}={}", header.getName(), header.getValue());
     }
 
-    String fullFileName = FilenameUtils.getName(fileToDownloadLocation);
-    return isBlank(fullFileName) ? downloader.randomFileName() : trimQuery(fullFileName);
+    String fileNameFromUrl = httpHelper.getFileName(fileToDownloadLocation);
+    return isNotBlank(fileNameFromUrl) ? fileNameFromUrl : downloader.randomFileName();
   }
 
-  private String trimQuery(String fullFileName) {
-    return fullFileName.contains("?")
-      ? StringUtils.left(fullFileName, fullFileName.indexOf("?"))
-      : fullFileName;
-  }
-
-  protected File saveFileContent(HttpResponse response, File downloadedFile) throws IOException {
+  protected void saveContentToFile(HttpResponse response, File downloadedFile) throws IOException {
     copyInputStreamToFile(response.getEntity().getContent(), downloadedFile);
-    return downloadedFile;
   }
 }

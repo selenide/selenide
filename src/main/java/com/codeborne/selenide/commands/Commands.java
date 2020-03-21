@@ -67,6 +67,7 @@ public class Commands {
     add("name", new GetName());
     add("text", new GetText());
     add("getValue", new GetValue());
+    add("pseudo", new GetPseudoValue());
   }
 
   private void addClickCommands() {
@@ -92,6 +93,8 @@ public class Commands {
     add("$$x", new FindAllByXpath());
     add("closest", new GetClosest());
     add("parent", new GetParent());
+    add("sibling", new GetSibling());
+    add("preceding", new GetPreceding());
     add("lastChild", new GetLastChild());
   }
 

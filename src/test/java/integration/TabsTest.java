@@ -92,8 +92,8 @@ class TabsTest extends ITest {
 
   @Test
   @Video
-  void canSwitchToWindowByIndex_other_browsers_but_htmlunit() {
-    assumeFalse(browser().isChrome() || browser().isHtmlUnit());
+  void canSwitchToWindowByIndex_other_browsers_but_chrome() {
+    assumeFalse(browser().isChrome());
     $(byText("Page2: alerts")).click();
     $(byText("Page1: uploads")).click();
     $(byText("Page3: jquery")).click();
@@ -113,13 +113,11 @@ class TabsTest extends ITest {
   @Test
   @Video
   void canSwitchBetweenWindowsWithSameTitles() {
-    assumeFalse(browser().isHtmlUnit());
     $(byText("Page4: same title")).click();
     $("h1").shouldHave(text("Tabs"));
 
     switchTo().window("Test::tabs::title");
     $("body").shouldHave(text("Secret phrase 1"));
-    String firstHandle = driver().getWebDriver().getWindowHandle();
 
     switchTo().window(0);
     $("h1").shouldHave(text("Tabs"));
@@ -128,19 +126,6 @@ class TabsTest extends ITest {
     $("body").shouldHave(text("Secret phrase 1"));
     switchTo().window(0);
     $("h1").shouldHave(text("Tabs"));
-
-//    switchTo().windowExceptHandles("Test::tabs::title", firstHandle); $("body").shouldHave(text("Secret phrase 2"));
-//    String secondHandle = getWebDriver().getWindowHandle();
-//
-//    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
-//    $(byText("Page6: same title")).click();
-//    switchTo().window("Test::tabs::title"); $("body").shouldHave(text("Secret phrase 1"));
-//    switchTo().window(0); $("h1").shouldHave(text("Tabs"));
-//
-//    switchTo().windowExceptHandles("Test::tabs::title", firstHandle, secondHandle);
-//    $("body").shouldHave(text("Secret phrase 3"));
-//
-//    switchTo().window("Test::tabs"); $("h1").shouldHave(text("Tabs"));
   }
 
   @Test
@@ -148,9 +133,9 @@ class TabsTest extends ITest {
     assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
-    assertThatThrownBy(() -> {
-      switchTo().window("absentWindow");
-    }).isInstanceOf(NoSuchWindowException.class).hasMessage("No window found with name or handle or title: absentWindow");
+    assertThatThrownBy(() -> switchTo().window("absentWindow"))
+      .isInstanceOf(NoSuchWindowException.class)
+      .hasMessage("No window found with name or handle or title: absentWindow");
   }
 
   @Test
@@ -158,9 +143,9 @@ class TabsTest extends ITest {
     assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
-    assertThatThrownBy(() -> {
-      switchTo().window(Integer.MAX_VALUE);
-    }).isInstanceOf(NoSuchWindowException.class).hasMessage("No window found with index: " + Integer.MAX_VALUE);
+    assertThatThrownBy(() -> switchTo().window(Integer.MAX_VALUE))
+      .isInstanceOf(NoSuchWindowException.class)
+      .hasMessage("No window found with index: " + Integer.MAX_VALUE);
   }
 
   @AfterEach

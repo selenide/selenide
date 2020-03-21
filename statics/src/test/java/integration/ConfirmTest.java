@@ -11,26 +11,22 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.dismiss;
-import static com.codeborne.selenide.WebDriverRunner.isHtmlUnit;
-import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ConfirmTest extends IntegrationTest {
   private String userName = "John Mc'Clane";
 
   @AfterAll
   static void tearDown() {
-    close();
+    closeWebDriver();
   }
 
   @BeforeEach
   void openTestPage() {
-    assumeTrue(supportsModalDialogs());
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
@@ -69,7 +65,7 @@ class ConfirmTest extends IntegrationTest {
       .isInstanceOf(DialogTextMismatch.class)
       .hasMessageContaining("Actual: Get out of this page, John Mc'Clane?")
       .hasMessageContaining("Expected: Get out of this page, Maria?")
-      .hasMessageMatching(isHtmlUnit() ? "(?s).*" : "(?s).*Screenshot: file:.+\\.png.*")
+      .hasMessageMatching("(?s).*Screenshot: file:.+\\.png.*")
       .hasMessageMatching("(?s).*Page source: file:.+\\.html.*")
       .hasMessageMatching("(?s).*Timeout: .+ s\\..*");
   }

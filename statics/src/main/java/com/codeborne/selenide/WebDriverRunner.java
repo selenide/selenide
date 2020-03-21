@@ -107,7 +107,20 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Close the browser if it's open
+   * Close the current window, quitting the browser if it's the last window currently open.
+   *
+   * @see WebDriver#close()
+   */
+  public static void closeWindow() {
+    webdriverContainer.closeWindow();
+  }
+
+  /**
+   * <p>Close the browser if it's open.</p>
+   * <br>
+   * <p>NB! Method quits this driver, closing every associated window.</p>
+   *
+   * @see WebDriver#quit()
    */
   public static void closeWebDriver() {
     webdriverContainer.closeWebDriver();
@@ -136,7 +149,7 @@ public class WebDriverRunner implements Browsers {
         lambda.run();
       }
       finally {
-        closeWebDriver();
+        webdriverContainer.resetWebDriver();
       }
     }
   }
@@ -181,24 +194,10 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to user Safari browser
-   */
-  public static boolean isSafari() {
-    return browser().isSafari();
-  }
-
-  /**
-   * Is Selenide configured to use headless browser (HtmlUnit)
+   * Is Selenide configured to use headless browser
    */
   public static boolean isHeadless() {
     return browser().isHeadless();
-  }
-
-  /**
-   * Does this browser support "alert" and "confirm" dialogs.
-   */
-  public static boolean supportsModalDialogs() {
-    return browser().supportsModalDialogs();
   }
 
   /**
@@ -209,24 +208,10 @@ public class WebDriverRunner implements Browsers {
   }
 
   /**
-   * Is Selenide configured to use HtmlUnit browser
-   */
-  public static boolean isHtmlUnit() {
-    return browser().isHtmlUnit();
-  }
-
-  /**
    * Is Selenide configured to use Opera browser
    */
   public static boolean isOpera() {
     return browser().isOpera();
-  }
-
-  /**
-   * Is Selenide configured to use JBrowser browser
-   */
-  public static boolean isJBrowser() {
-    return browser().isJBrowser();
   }
 
   /**

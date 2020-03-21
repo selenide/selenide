@@ -1,14 +1,7 @@
 tasks.withType(JacocoReport) {
   reports {
+    xml.enabled = true
     csv.enabled = false
     html.enabled = true
   }
-}
-
-jacocoTestReport {
-  executionData = files(
-    file("$buildDir/jacoco/test.exec"),
-    file("$buildDir/jacoco/htmlunit.exec"),
-    file("$buildDir/jacoco/chrome.exec")
-  )
 }

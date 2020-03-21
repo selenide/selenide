@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -21,12 +21,12 @@ class CustomWebDriverProviderTest extends IntegrationTest {
   void setUp() {
     assumeTrue("chrome".equalsIgnoreCase(browser));
     Configuration.browser = CustomWebDriverProvider.class.getName();
-    close();
+    closeWebDriver();
   }
 
   @AfterEach
   void tearDown() {
-    close();
+    closeWebDriver();
   }
 
   @Test

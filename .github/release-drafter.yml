@@ -6,9 +6,11 @@ template: |
 
 categories:
   - title: '🚀 Features'
-    label: 'feature'
+    labels:
+      - 'feature'
+      - 'refactoring'
   - title: '🐛 Bug Fixes'
-    label: 'bug 🐛'
+    label: 'bug'
   - title: 📦 Dependency updates
     label: 'dependencies'
   - title: 📖 Documentation

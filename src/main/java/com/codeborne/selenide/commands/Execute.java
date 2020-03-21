@@ -6,15 +6,16 @@ import com.codeborne.selenide.impl.WebElementSource;
 
 import java.io.IOException;
 
-public class Execute implements Command<SelenideElement> {
+public class Execute<ReturnType> implements Command<ReturnType> {
+
+  @SuppressWarnings("unchecked")
   @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    Command command = (Command) args[0];
+  public ReturnType execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+    Command<ReturnType> command = (Command<ReturnType>) args[0];
     try {
-      command.execute(proxy, locator, args);
+      return command.execute(proxy, locator, args);
     } catch (IOException e) {
       throw new RuntimeException("Unable to execute custom command", e);
     }
-    return proxy;
   }
 }

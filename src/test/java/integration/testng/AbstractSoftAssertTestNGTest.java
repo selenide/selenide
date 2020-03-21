@@ -16,7 +16,7 @@ public abstract class AbstractSoftAssertTestNGTest implements WithAssertions {
 
   protected SelenideDriver driver = new SelenideDriver(
     new SelenideConfig()
-      .browser("htmlunit")
+      .browser("chrome")
       .assertionMode(SOFT)
       .timeout(1)
   );

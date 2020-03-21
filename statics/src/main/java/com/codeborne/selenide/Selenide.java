@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
 
 /**
@@ -166,8 +166,29 @@ public class Selenide {
   }
 
   /**
-   * Close the browser if it's open
+   * Close the current window, quitting the browser if it's the last window currently open.
+   *
+   * @see WebDriver#close()
    */
+  public static void closeWindow() {
+    WebDriverRunner.closeWindow();
+  }
+
+  /**
+   * <p>Close the browser if it's open.</p>
+   * <br>
+   * <p>NB! Method quits this driver, closing every associated window.</p>
+   *
+   * @see WebDriver#quit()
+   */
+  public static void closeWebDriver() {
+    WebDriverRunner.closeWebDriver();
+  }
+
+  /**
+   * @deprecated Use either {@link #closeWindow()} or {@link #closeWebDriver()}
+   */
+  @Deprecated
   public static void close() {
     closeWebDriver();
   }
@@ -562,8 +583,18 @@ public class Selenide {
     return getSelenideDriver().findAll(criteria);
   }
 
+  /**
+   * @see JavascriptExecutor#executeScript(java.lang.String, java.lang.Object...)
+   */
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeJavaScript(jsCode, arguments);
+  }
+
+  /**
+   * @see JavascriptExecutor#executeAsyncScript(java.lang.String, java.lang.Object...)
+   */
+  public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return getSelenideDriver().executeAsyncJavaScript(jsCode, arguments);
   }
 
   /**

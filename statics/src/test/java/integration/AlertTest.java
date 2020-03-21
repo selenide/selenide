@@ -11,24 +11,21 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.confirm;
 import static com.codeborne.selenide.Selenide.prompt;
 import static com.codeborne.selenide.Selenide.switchTo;
-import static com.codeborne.selenide.WebDriverRunner.supportsModalDialogs;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class AlertTest extends IntegrationTest {
   @AfterAll
   static void tearDown() {
-    close();
+    closeWebDriver();
   }
 
   @BeforeEach
   void openTestPage() {
-    assumeTrue(supportsModalDialogs());
     openFile("page_with_alerts.html");
   }
 
@@ -66,9 +63,7 @@ class AlertTest extends IntegrationTest {
     } catch (DialogTextMismatch expected) {
       return;
     }
-    if (supportsModalDialogs()) {
-      fail("Should throw DialogTextMismatch for mismatching text");
-    }
+    fail("Should throw DialogTextMismatch for mismatching text");
   }
 
   @Test

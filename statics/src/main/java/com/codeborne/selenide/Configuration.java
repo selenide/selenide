@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *
  * <p>
  *   These system properties can be additonally used having effect on every new created browser in test.
- *   For example as -D<property>=<value> in command-line
+ *   For example as -D&lt;property&gt;=&lt;value&gt; in command-line
  * </p>
  * <p>
  *  <b>chromeoptions.args</b> - Sets the arguments for chrome options, parameters are comma separated
@@ -79,7 +79,7 @@ public class Configuration {
   /**
    * Which browser to use.
    * Can be configured either programmatically or by system property "-Dselenide.browser=ie".
-   * Supported values: "chrome", "firefox", "legacy_firefox", "ie", "htmlunit", "opera", "safari", "edge", "jbrowser"
+   * Supported values: "chrome", "firefox", "legacy_firefox" (upto ESR 52), "ie", "opera", "edge"
    * <br>
    * Default value: "chrome"
    */
@@ -187,6 +187,14 @@ public class Configuration {
    */
   public static String reportsFolder = defaults.reportsFolder();
 
+    /**
+   * Folder to store downloaded files to.
+   * Can be configured either programmatically or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * <br>
+   * Default value: "build/downloads" (this is default for Gradle projects)
+   */
+  public static String downloadsFolder = defaults.downloadsFolder();
+
   /**
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
@@ -269,7 +277,7 @@ public class Configuration {
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
-   * @see net.lightbody.bmp.client.ClientUtil#getConnectableAddress()
+   * @see com.browserup.bup.client.ClientUtil#getConnectableAddress()
    */
   public static String proxyHost = defaults.proxyHost();
 

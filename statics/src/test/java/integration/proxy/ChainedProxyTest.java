@@ -1,11 +1,11 @@
 package integration.proxy;
 
+import com.browserup.bup.BrowserUpProxy;
+import com.browserup.bup.BrowserUpProxyServer;
+import com.browserup.bup.client.ClientUtil;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import integration.IntegrationTest;
-import net.lightbody.bmp.BrowserMobProxy;
-import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.client.ClientUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.close;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -26,12 +26,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * This test verifies that both these proxies work well together.
  */
 class ChainedProxyTest extends IntegrationTest {
-  private BrowserMobProxy chainedProxy;
+  private BrowserUpProxy chainedProxy;
   private List<String> visitedUrls = new ArrayList<>();
 
   @AfterEach
   void tearDown() {
-    close();
+    closeWebDriver();
     WebDriverRunner.setProxy(null);
     if (chainedProxy != null) {
       chainedProxy.stop();
@@ -40,9 +40,9 @@ class ChainedProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    close();
+    closeWebDriver();
 
-    chainedProxy = new BrowserMobProxyServer();
+    chainedProxy = new BrowserUpProxyServer();
     chainedProxy.setTrustAllServers(true);
     chainedProxy.start(0);
 

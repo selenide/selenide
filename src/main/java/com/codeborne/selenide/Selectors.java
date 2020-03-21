@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.selector.ByShadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
@@ -8,7 +9,7 @@ public class Selectors {
 
   /**
    * Find element CONTAINING given text (as a substring).
-   *
+   * <p>
    * This method ignores difference between space, \n, \r, \t and &nbsp;
    * This method ignores multiple spaces.
    *
@@ -21,7 +22,7 @@ public class Selectors {
 
   /**
    * Find element that has given text (the whole text, not a substring).
-   *
+   * <p>
    * This method ignores difference between space, \n, \r, \t and &nbsp;
    * This method ignores multiple spaces.
    *
@@ -34,41 +35,48 @@ public class Selectors {
 
   /**
    * Find elements having attribute with given value.
-   *
+   * <p>
    * Examples:
    * {@code <div binding="fieldValue"></div>}
    * Find element with attribute 'binding' EXACTLY containing text 'fieldValue' , use:
    * byAttribute("binding", "fieldValue")
-   *
+   * <p>
    * For finding difficult/generated data attribute which contains some value:
    * {@code <div binding="userName17fk5n6kc2Ds45F40d0fieldValue_promoLanding word"></div>}
-   *
+   * <p>
    * Find element with attribute 'binding' CONTAINING text 'fieldValue', use symbol '*' with attribute name:
    * byAttribute("binding*", "fieldValue") it same as By.cssSelector("[binding*='fieldValue']")
-   *
+   * <p>
    * Find element whose attribute 'binding' BEGINS with 'userName', use symbol '^' with attribute name:
    * byAttribute("binding^", "fieldValue")
-   *
+   * <p>
    * Find element whose attribute 'binding' ENDS with 'promoLanding', use symbol '$' with attribute name:
    * byAttribute("binding$", "promoLanding")
-   *
+   * <p>
    * Find element whose attribute 'binding' CONTAINING WORD 'word':
    * byAttribute("binding~", "word")
-   *
+   * <p>
    * Seems to work incorrectly if attribute name contains dash, for example: {@code <option data-mailServerId="123"></option>}
    *
-   * @param attributeName name of attribute, should not be empty or null
+   * @param attributeName  name of attribute, should not be empty or null
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
    * @return standard selenium By cssSelector criteria
    */
   public static By byAttribute(String attributeName, String attributeValue) {
-    return By.cssSelector(String.format("[%s='%s']", attributeName, attributeValue));
+    String escapedAttributeValue = attributeValue.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
+    return By.cssSelector(String.format("[%s=\"%s\"]", attributeName, escapedAttributeValue));
+  }
+
+  /**
+   * @see ByShadow#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
+   * @since 5.10
+   */
+  public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
+    return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
   }
 
   /**
    * Synonym for #byAttribute
-   *
-   * Seems to work incorrectly in HtmlUnit if attribute name contains dash (e.g. "data-mailServerId")
    */
   public static By by(String attributeName, String attributeValue) {
     return byAttribute(attributeName, attributeValue);
@@ -123,6 +131,7 @@ public class Selectors {
       return super.toString().replace("By.xpath: ", "");
     }
   }
+
   /**
    * @see By#name(java.lang.String)
    * @since 3.1

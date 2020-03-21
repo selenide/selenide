@@ -76,6 +76,12 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
+  public <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
+    return (T) ((JavascriptExecutor) webDriver).executeAsyncScript(jsCode, arguments);
+  }
+
+  @Override
   public String getUserAgent() {
     return "zhopera";
   }

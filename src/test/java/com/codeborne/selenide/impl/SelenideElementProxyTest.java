@@ -9,7 +9,8 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.Map;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,9 +54,12 @@ class SelenideElementProxyTest implements WithAssertions {
 
   @BeforeEach
   void mockWebDriver() {
+    Map<String, String> map = new HashMap<>();
+    map.put("id", "id1");
+    map.put("class", "class1");
     when(webdriver
       .executeScript(anyString(), any(WebElement.class)))
-      .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
+      .thenReturn(map);
 
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");

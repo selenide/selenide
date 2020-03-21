@@ -11,7 +11,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 
 public class ErrorsCollector implements LogEventListener {
   public static final String LISTENER_SOFT_ASSERT = "softAssert";
-  
+
   private final List<Throwable> errors = new ArrayList<>();
 
   @Override
@@ -51,7 +51,8 @@ public class ErrorsCollector implements LogEventListener {
   public static void validateAssertionMode(Config config) {
     if (config.assertionMode() == SOFT) {
       if (!SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)) {
-        throw new IllegalStateException("Using soft asserts, but without @SoftAsserts annotation");
+        throw new IllegalStateException("You must configure you classes using JUnit4/JUnit5/TestNG " +
+          "mechanism as documented in https://github.com/selenide/selenide/wiki/SoftAssertions");
       }
     }
   }

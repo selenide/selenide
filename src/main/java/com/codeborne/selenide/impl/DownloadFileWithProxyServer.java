@@ -1,9 +1,10 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.google.common.base.Predicate;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
@@ -30,12 +32,14 @@ public class DownloadFileWithProxyServer {
   }
 
   public File download(WebElementSource anyClickableElement,
-                       WebElement clickable, SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
-    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer, timeout);
+                       WebElement clickable, SelenideProxyServer proxyServer, long timeout,
+                       FileFilter fileFilter) throws FileNotFoundException {
+    return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer, timeout, fileFilter);
   }
 
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
-                                          SelenideProxyServer proxyServer, long timeout) throws FileNotFoundException {
+                                                  SelenideProxyServer proxyServer, long timeout,
+                                                  FileFilter fileFilter) throws FileNotFoundException {
     Config config = anyClickableElement.driver().config();
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     String currentWindowHandle = webDriver.getWindowHandle();
@@ -44,10 +48,13 @@ public class DownloadFileWithProxyServer {
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     filter.activate();
     try {
+      waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
+
+      filter.reset();
       clickable.click();
 
-      waiter.wait(filter, new HasDownloads(), timeout, config.pollingInterval());
-      return firstDownloadedFile(anyClickableElement, filter, timeout);
+      waiter.wait(filter, new HasDownloads(fileFilter), timeout, config.pollingInterval());
+      return firstDownloadedFile(anyClickableElement, filter, timeout, fileFilter);
     }
     finally {
       filter.deactivate();
@@ -81,22 +88,47 @@ public class DownloadFileWithProxyServer {
   }
 
   private static class HasDownloads implements Predicate<FileDownloadFilter> {
+    private final FileFilter fileFilter;
+
+    private HasDownloads(FileFilter fileFilter) {
+      this.fileFilter = fileFilter;
+    }
+
     @Override
-    public boolean apply(FileDownloadFilter filter) {
-      return !filter.getDownloadedFiles().isEmpty();
+    public boolean test(FileDownloadFilter filter) {
+      return !filter.getDownloadedFiles(fileFilter).isEmpty();
+    }
+  }
+
+  private static class PreviousDownloadsCompleted implements Predicate<FileDownloadFilter> {
+    private int downloadsCount = -1;
+
+    @Override
+    public boolean test(FileDownloadFilter filter) {
+      try {
+        return downloadsCount == filter.getDownloadedFiles().size();
+      }
+      finally {
+        downloadsCount = filter.getDownloadedFiles().size();
+      }
     }
   }
 
   private File firstDownloadedFile(WebElementSource anyClickableElement,
-                                   FileDownloadFilter filter, long timeout) throws FileNotFoundException {
-    List<File> files = filter.getDownloadedFiles();
+                                   FileDownloadFilter filter, long timeout, FileFilter fileFilter) throws FileNotFoundException {
+    List<DownloadedFile> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
-        " in " + timeout + " ms." + filter.getResponses());
+        " in " + timeout + " ms." + filter.responsesAsString());
     }
 
-    log.info("Downloaded file: {}", files.get(0).getAbsolutePath());
-    log.info("Just in case, all intercepted responses: {}", filter.getResponses());
-    return files.get(0);
+    log.info(filter.downloadedFilesAsString());
+    log.info("Just in case, all intercepted responses: {}", filter.responsesAsString());
+
+    return files.stream().filter(fileFilter::match).sorted(new DownloadDetector()).findFirst()
+      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms.%s %n%s",
+        anyClickableElement, timeout, fileFilter.description(), filter.responsesAsString())
+        )
+      ).getFile();
   }
 }
