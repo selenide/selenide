@@ -3,6 +3,10 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.impl.CiReportUrl;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -20,7 +24,7 @@ public class SelenideConfig implements Config {
   private String browserBinary = System.getProperty("selenide.browserBinary", "");
   private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy", "normal");
   private DesiredCapabilities browserCapabilities = new DesiredCapabilities();
-
+  private List<String> additionalOptions = new ArrayList<>();
   private String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
   private long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
   private long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "200"));
@@ -329,6 +333,21 @@ public class SelenideConfig implements Config {
 
   public SelenideConfig pageLoadStrategy(String pageLoadStrategy) {
     this.pageLoadStrategy = pageLoadStrategy;
+    return this;
+  }
+
+  @Override
+  public List<String> additionalOptions() {
+    return additionalOptions;
+  }
+
+  public SelenideConfig additionalOptions(List<String> additionalOptions) {
+    this.additionalOptions = additionalOptions;
+    return this;
+  }
+
+  public SelenideConfig additionalOptions(String... additionalOptions) {
+    this.additionalOptions = Arrays.asList(additionalOptions);
     return this;
   }
 

@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -115,5 +116,23 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     assertThat(driverFactory.popularContentTypes()).contains(";application/vnd.ms-excel;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/zip;");
     assertThat(driverFactory.popularContentTypes()).contains(";text/csv;");
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsArray() {
+    config.additionalOptions("blahhh", "anotherOption", "mahTests");
+    FirefoxOptions firefoxOptions = driverFactory.createFirefoxOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsList() {
+    config.additionalOptions(Arrays.asList("blahhh", "anotherOption", "mahTests"));
+    FirefoxOptions firefoxOptions = driverFactory.createFirefoxOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
   }
 }

@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.List;
+
 /**
  * Configuration settings for Selenide default browser
  * <br>
@@ -132,6 +134,10 @@ public class Configuration {
    * Default value: DesiredCapabilities::new
    */
   public static DesiredCapabilities browserCapabilities = defaults.browserCapabilities();
+
+
+
+  public static List<String> additionalOptions = defaults.additionalOptions();
 
   /**
    * Should webdriver wait until page is completely loaded.

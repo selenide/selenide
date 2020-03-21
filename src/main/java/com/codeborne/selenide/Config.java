@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.List;
+
 public interface Config {
   String browser();
   boolean headless();
@@ -13,6 +15,7 @@ public interface Config {
   boolean driverManagerEnabled();
   String browserBinary();
   String pageLoadStrategy();
+  List<String> additionalOptions();
   DesiredCapabilities browserCapabilities();
 
   String baseUrl();

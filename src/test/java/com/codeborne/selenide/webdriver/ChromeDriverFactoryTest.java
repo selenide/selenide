@@ -9,6 +9,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -101,5 +102,23 @@ class ChromeDriverFactoryTest implements WithAssertions {
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless");
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsArray() {
+    config.additionalOptions("blahhh", "anotherOption", "mahTests");
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsList() {
+    config.additionalOptions(Arrays.asList("blahhh", "anotherOption", "mahTests"));
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
   }
 }

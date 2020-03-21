@@ -8,8 +8,11 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.opera.OperaOptions;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
 
 class OperaDriverFactoryTest implements WithAssertions {
@@ -30,5 +33,23 @@ class OperaDriverFactoryTest implements WithAssertions {
     config.headless(true);
     assertThatThrownBy(() -> new OperaDriverFactory().createOperaOptions(config, proxy))
       .isInstanceOf(InvalidArgumentException.class);
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsArray() {
+    config.additionalOptions("blahhh", "anotherOption", "mahTests");
+    OperaOptions operaOptions = new OperaDriverFactory().createOperaOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(OperaOptions.CAPABILITY, operaOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
+  }
+
+  @Test
+  void additionalOptionsCanBeAddedFromCodeAsList() {
+    config.additionalOptions(Arrays.asList("blahhh", "anotherOption", "mahTests"));
+    OperaOptions operaOptions = new OperaDriverFactory().createOperaOptions(config, proxy);
+    List<String> optionArguments = getBrowserLaunchArgs(OperaOptions.CAPABILITY, operaOptions);
+
+    assertThat(optionArguments).contains("blahhh", "anotherOption", "mahTests");
   }
 }

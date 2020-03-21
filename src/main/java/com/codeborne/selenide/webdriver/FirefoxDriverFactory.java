@@ -54,6 +54,9 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("security.csp.enable", false);
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
+    if (!config.additionalOptions().isEmpty()) {
+      firefoxOptions.addArguments(config.additionalOptions());
+    }
 
     firefoxOptions.merge(createCommonCapabilities(config, proxy));
 

@@ -33,6 +33,9 @@ class OperaDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }
+    if(!config.additionalOptions().isEmpty()) {
+      operaOptions.addArguments(config.additionalOptions());
+    }
     operaOptions.merge(createCommonCapabilities(config, proxy));
     return operaOptions;
   }
