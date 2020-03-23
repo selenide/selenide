@@ -39,7 +39,7 @@ public class RemoteDriverFactory {
       return BrowserType.EDGE;
     }
     else if (browser.isOpera()) {
-      return BrowserType.OPERA_BLINK;
+      return BrowserType.OPERA;
     }
     else {
       return config.browser();

@@ -110,7 +110,7 @@ public class WebDriverFactory {
   protected void logSeleniumInfo(Config config) {
     if (config.remote() == null) {
       BuildInfo seleniumInfo = new BuildInfo();
-      log.info("Selenium WebDriver v. {} build time: {}", seleniumInfo.getReleaseLabel(), seleniumInfo.getBuildTime());
+      log.info("Selenium WebDriver v. {} build revision: {}", seleniumInfo.getReleaseLabel(), seleniumInfo.getBuildRevision());
     }
   }
 

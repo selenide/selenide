@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
-    Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
+    Configuration.remote = "http://localhost:" + hubPort;
     Configuration.browser = "chrome";
     Configuration.headless = true;
     Configuration.proxyEnabled = true;

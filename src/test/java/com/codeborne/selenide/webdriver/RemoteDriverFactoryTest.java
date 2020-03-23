@@ -50,7 +50,7 @@ final class RemoteDriverFactoryTest implements WithAssertions {
   @Test
   void getBrowserNameForGrid_opera() {
     assertThat(factory.getBrowserNameForGrid(config, new Browser("opera", false)))
-      .isEqualTo(BrowserType.OPERA_BLINK);
+      .isEqualTo(BrowserType.OPERA);
   }
 
   @Test
@@ -60,6 +60,7 @@ final class RemoteDriverFactoryTest implements WithAssertions {
       .isEqualTo("anotherWebdriver");
   }
 
+  @SuppressWarnings("rawtypes")
   @Test
   void browserBinaryCanBeSetForFirefox() {
     config.browser("firefox");
@@ -73,6 +74,7 @@ final class RemoteDriverFactoryTest implements WithAssertions {
       .isEqualTo("c:/browser.exe");
   }
 
+  @SuppressWarnings("rawtypes")
   @Test
   void browserBinaryCanBeSetForChrome() {
     config.browser("chrome");
