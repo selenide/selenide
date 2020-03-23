@@ -23,6 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -356,11 +358,7 @@ public class ScreenShotLaboratory {
         String name = target.toFile().getName();
         screenshotUrl = driver.config().reportsUrl() + name;
       }
-      try {
-        screenshotUrl = new URL(screenshotUrl).toExternalForm();
-      } catch (MalformedURLException ignore) {
-        // ignored exception
-      }
+      screenshotUrl = normalizeURL(screenshotUrl);
       log.debug("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenshotUrl);
       return screenshotUrl;
     }
@@ -370,6 +368,17 @@ public class ScreenShotLaboratory {
       return new File(screenshot).toURI().toURL().toExternalForm();
     } catch (MalformedURLException e) {
       return "file://" + screenshot;
+    }
+  }
+
+  private String normalizeURL(String url) {
+    try {
+      URL aURL = new URL(url);
+      return new URI(aURL.getProtocol(), aURL.getAuthority(), aURL.getPath(), aURL.getQuery(), aURL.getRef())
+        .toURL().toExternalForm();
+    } catch (MalformedURLException | URISyntaxException e) {
+      log.error("URL syntax error: {}", url, e);
+      return url;
     }
   }
 

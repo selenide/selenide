@@ -1,13 +1,18 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 import java.util.List;
 
 import static java.io.File.separatorChar;
+import static org.mockito.Mockito.mock;
 
 class ScreenShotLaboratoryTest implements WithAssertions {
   private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
@@ -94,6 +99,17 @@ class ScreenShotLaboratoryTest implements WithAssertions {
       .hasToString("12356789.3");
     assertThat(allScreenshots.get(4))
       .hasToString("12356789.4");
+  }
+
+  @Test
+  void canFormatReportsURLWithSpaces() {
+    Driver driver = new DriverStub(new SelenideConfig().reportsUrl("http://ci.org/with space/"),
+      new Browser("chrome", false), mock(ChromeDriver.class), null);
+
+    String screenShotPath = screenshots.formatScreenShotPath(driver);
+
+    assertThat(screenShotPath)
+      .hasToString("http://ci.org/with%20space/12356789.0");
   }
 
   @Test
