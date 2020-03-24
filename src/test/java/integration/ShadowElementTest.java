@@ -52,7 +52,7 @@ public class ShadowElementTest extends ITest {
     assertThatThrownBy(() -> $(shadowCss("p", "h1")).text())
       .isInstanceOf(ElementNotFound.class)
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .hasMessageContaining("The element is not a shadow host:");
+      .hasMessageContaining("The element is not a shadow host or has 'closed' shadow-dom mode:");
   }
 
   @Test

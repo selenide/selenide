@@ -75,7 +75,7 @@ public class ByShadow {
         }
         return targetWebElement;
       } else {
-        throw new NoSuchElementException("The element is not a shadow host: " + host);
+        throw new NoSuchElementException("The element is not a shadow host or has 'closed' shadow-dom mode: " + host);
       }
     }
 
