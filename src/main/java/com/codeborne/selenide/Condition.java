@@ -17,6 +17,7 @@ import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
 import com.codeborne.selenide.conditions.IsImageLoaded;
+import com.codeborne.selenide.conditions.MatchAttributeWithValue;
 import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
@@ -115,6 +116,18 @@ public abstract class Condition {
    */
   public static Condition attribute(String attributeName, String expectedAttributeValue) {
     return new AttributeWithValue(attributeName, expectedAttributeValue);
+  }
+
+  /**
+   * Assert that given element's attribute matches given regular expression
+   *
+   * <p>Sample: <code>$("h1").should(attributeMatching(".*12345.*"))</code></p>
+   *
+   * @param attributeName  name of attribute
+   * @param attributeRegex regex to match attribute value
+   */
+  public static Condition attributeMatching(String attributeName, String attributeRegex) {
+    return new MatchAttributeWithValue(attributeName, attributeRegex);
   }
 
   /**
@@ -262,7 +275,7 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element is exactly (case insensitive) given text 
+   * Assert that element is exactly (case insensitive) given text
    * <p>Sample: <code>$("h1").shouldHave(exactText("Hello"))</code></p>
    *
    * <p>Case insensitive</p>
