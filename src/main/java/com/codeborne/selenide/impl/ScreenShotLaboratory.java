@@ -348,19 +348,9 @@ public class ScreenShotLaboratory {
     }
 
     if (driver.config().reportsUrl() != null) {
-      Path current = Paths.get(System.getProperty("user.dir"));
-      Path target = Paths.get(screenshot).normalize();
-      String screenshotUrl;
-      if (isInsideFolder(current, target)) {
-        Path relativePath = current.relativize(target);
-        screenshotUrl = driver.config().reportsUrl() + relativePath.toString().replace('\\', '/');
-      } else {
-        String name = target.toFile().getName();
-        screenshotUrl = driver.config().reportsUrl() + name;
-      }
-      screenshotUrl = normalizeURL(screenshotUrl);
-      log.debug("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenshotUrl);
-      return screenshotUrl;
+      String screenShotURL = formatScreenShotURL(driver.config().reportsUrl(), screenshot);
+      log.info("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenShotURL);
+      return screenShotURL;
     }
 
     log.debug("reportsUrl is not configured. Returning screenshot file name '{}'", screenshot);
@@ -369,6 +359,18 @@ public class ScreenShotLaboratory {
     } catch (MalformedURLException e) {
       return "file://" + screenshot;
     }
+  }
+
+  private String formatScreenShotURL(String reportsURL, String screenshot) {
+    Path current = Paths.get(System.getProperty("user.dir"));
+    Path target = Paths.get(screenshot).normalize();
+    String screenShotPath;
+    if (isInsideFolder(current, target)) {
+      screenShotPath = current.relativize(target).toString().replace('\\', '/');
+    } else {
+      screenShotPath = target.toFile().getName();
+    }
+    return normalizeURL(reportsURL + screenShotPath);
   }
 
   private String normalizeURL(String url) {
