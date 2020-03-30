@@ -15,7 +15,7 @@ public class MatchAttributeWithValue extends Condition {
   public MatchAttributeWithValue(String attributeName, String attributeRegex) {
     super("match attribute");
     this.attributeName = attributeName;
-    this.attributeRegex = Pattern.compile(attributeRegex, DOTALL);
+    this.attributeRegex = Pattern.compile(attributeRegex);
   }
 
   @Override
