@@ -6,8 +6,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.regex.Pattern;
 
-import static java.util.regex.Pattern.DOTALL;
-
 public class MatchAttributeWithValue extends Condition {
   private final String attributeName;
   private final Pattern attributeRegex;
