@@ -22,17 +22,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.io.File.separatorChar;
 import static org.openqa.selenium.OutputType.FILE;
@@ -370,17 +372,25 @@ public class ScreenShotLaboratory {
     } else {
       screenShotPath = target.toFile().getName();
     }
-    return normalizeURL(reportsURL + screenShotPath);
+    return normalizeURL(reportsURL, screenShotPath);
   }
 
-  private String normalizeURL(String url) {
+  private String normalizeURL(String reportsURL, String path) {
+    String slash = "/";
+    reportsURL = reportsURL.endsWith(slash) ? reportsURL : reportsURL + slash;
+    path = Arrays.stream(path.split(slash))
+      .map(this::encode)
+      .collect(Collectors.joining(slash))
+      .replaceAll("\\+", "%20");
+    return reportsURL + path;
+  }
+
+  private String encode(String str) {
     try {
-      URL aURL = new URL(url);
-      return new URI(aURL.getProtocol(), aURL.getAuthority(), aURL.getPath(), aURL.getQuery(), aURL.getRef())
-        .toURL().toExternalForm();
-    } catch (MalformedURLException | URISyntaxException e) {
-      log.error("URL syntax error: {}", url, e);
-      return url;
+      return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
+    } catch (UnsupportedEncodingException e) {
+      log.debug("Cannot encode path segment: {}", str, e);
+      return str;
     }
   }
 
