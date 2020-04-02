@@ -176,6 +176,14 @@ class ConditionTest {
   }
 
   @Test
+  void elementHasAttributeMatching() {
+    assertThat(attributeMatching("name", "selenide").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
+    assertThat(attributeMatching("name", "selenide.*").apply(driver, elementWithAttribute("name", "selenide is great"))).isTrue();
+    assertThat(attributeMatching("name", "selenide.*").apply(driver, elementWithAttribute("id", "selenide"))).isFalse();
+    assertThat(attributeMatching("name", "value.*").apply(driver, elementWithAttribute("name", "another value"))).isFalse();
+  }
+
+  @Test
   void elementHasValue() {
     assertThat(Condition.value("selenide").apply(driver, elementWithAttribute("value", "selenide"))).isTrue();
     assertThat(Condition.value("selenide").apply(driver, elementWithAttribute("value", "selenide is great"))).isTrue();
