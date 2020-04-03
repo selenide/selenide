@@ -1,6 +1,9 @@
 # Changelog
 
-## 5.10.0
+## 5.11.0
+* #996 Add MatchAttributeWithValue condition -- thanks to Dmytro Stekanov for PR #1100
+
+## 5.10.0 (released 18.03.2020)
 * #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090
 * #1021 Selenide does not fetch BrowserUpProxy dependency by default  --  see PR #1094
 * #1091 Migrated Guava API to the equivalent Java API  --  thanks to Wladimir Schmidt for PR #1091
