@@ -65,9 +65,9 @@ class ExactTextsTest implements WithAssertions {
 
     assertThatThrownBy(() -> exactTexts.fail(mockCollection("Collection description"), elements, cause, 10000))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage("Element not found {Collection description}\nExpected: [One]\nScreenshot: null\n" +
-        "Timeout: 10 s.\n" +
-        "Caused by: java.lang.Exception: Exception method");
+      .hasMessage(String.format("Element not found {Collection description}%nExpected: [One]%nScreenshot: null%n" +
+        "Timeout: 10 s.%n" +
+        "Caused by: java.lang.Exception: Exception method"));
   }
 
   @Test
@@ -86,11 +86,11 @@ class ExactTextsTest implements WithAssertions {
     assertThatThrownBy(() ->
       exactTexts.fail(mockCollection("Collection description"), singletonList(mockedWebElement), cause, 10000))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessage("Texts mismatch\n" +
-        "Actual: [Hello]\n" +
-        "Expected: [One]\n" +
-        "Collection: Collection description\n" +
-        "Screenshot: null\nTimeout: 10 s.");
+      .hasMessage(String.format("Texts mismatch%n" +
+        "Actual: [Hello]%n" +
+        "Expected: [One]%n" +
+        "Collection: Collection description%n" +
+        "Screenshot: null%nTimeout: 10 s."));
   }
 
   @Test
@@ -105,7 +105,7 @@ class ExactTextsTest implements WithAssertions {
       .isInstanceOf(TextsSizeMismatch.class)
       .hasMessageContaining("Actual: [One], List size: 1")
       .hasMessageContaining("Expected: [One, Two], List size: 2")
-      .hasMessageEndingWith("Collection: Collection description\nScreenshot: null\nTimeout: 10 s.");
+      .hasMessageEndingWith(String.format("Collection: Collection description%nScreenshot: null%nTimeout: 10 s."));
   }
 
   @Test

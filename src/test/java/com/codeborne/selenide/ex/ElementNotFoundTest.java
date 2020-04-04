@@ -20,31 +20,31 @@ class ElementNotFoundTest implements WithAssertions {
   @Test
   void elementNotFoundWithByCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, By.id("Hello"), Condition.exist);
-    String expectedMessage = "Element not found {By.id: Hello}\n" +
-      "Expected: exist\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.";
+    String expectedMessage = String.format("Element not found {By.id: Hello}%n" +
+      "Expected: exist%n" +
+      "Screenshot: null%n" +
+      "Timeout: 0 ms.");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
 
   @Test
   void elementNotFoundWithStringCriteria() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist);
-    String expectedMessage = "Element not found {Hello}\n" +
-      "Expected: exist\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.";
+    String expectedMessage = String.format("Element not found {Hello}%n" +
+      "Expected: exist%n" +
+      "Screenshot: null%n" +
+      "Timeout: 0 ms.");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
 
   @Test
   void elementNotFoundWithStringCriteriaAndThrowableError() {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist, new Throwable("Error message"));
-    String expectedMessage = "Element not found {Hello}\n" +
-      "Expected: exist\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Throwable: Error message";
+    String expectedMessage = String.format("Element not found {Hello}%n" +
+      "Expected: exist%n" +
+      "Screenshot: null%n" +
+      "Timeout: 0 ms.%n" +
+      "Caused by: java.lang.Throwable: Error message");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
 
@@ -58,11 +58,11 @@ class ElementNotFoundTest implements WithAssertions {
     ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
       expectedStrings,
       new Throwable("Error message"));
-    String expectedMessage = "Element not found {mock collection description}\n" +
-      "Expected: [One, Two, Three]\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Throwable: Error message";
+    String expectedMessage = String.format("Element not found {mock collection description}%n" +
+      "Expected: [One, Two, Three]%n" +
+      "Screenshot: null%n" +
+      "Timeout: 0 ms.%n" +
+      "Caused by: java.lang.Throwable: Error message");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
 }

@@ -32,6 +32,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.toList;
 
 public class ElementsCollection extends AbstractList<SelenideElement> {
@@ -278,14 +279,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
 
     StringBuilder sb = new StringBuilder(256);
-    sb.append("[\n\t");
+    sb.append("[").append(lineSeparator()).append("\t");
     for (WebElement element : elements) {
       if (sb.length() > 4) {
-        sb.append(",\n\t");
+        sb.append(",").append(lineSeparator()).append("\t");
       }
       sb.append(Describe.describe(driver, element));
     }
-    sb.append("\n]");
+    sb.append(lineSeparator()).append("]");
     return sb.toString();
   }
 

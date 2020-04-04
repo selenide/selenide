@@ -12,11 +12,11 @@ public class MatcherError extends UIAssertionError {
   public MatcherError(String matcher, String predicateDescription, String explanation,
                       WebElementsCollection collection, List<WebElement> actualElements, Exception lastError, long timeoutMs) {
     super(collection.driver(),
-      "Collection matcher error" +
-        "\nExpected: " + matcher + " of elements to match [" + predicateDescription + "] predicate" +
-        (explanation == null ? "" : "\nBecause: " + explanation) +
-        "\nCollection: " + collection.description() +
-        "\nElements: " + elementsToString(collection.driver(), actualElements), lastError
+      String.format("Collection matcher error" +
+        "%nExpected: " + matcher + " of elements to match [" + predicateDescription + "] predicate" +
+        (explanation == null ? "" : "%nBecause: " + explanation) +
+        "%nCollection: " + collection.description() +
+        "%nElements: " + elementsToString(collection.driver(), actualElements)), lastError
     );
     super.timeoutMs = timeoutMs;
   }

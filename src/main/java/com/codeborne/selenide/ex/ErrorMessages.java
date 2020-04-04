@@ -13,13 +13,13 @@ import static org.apache.commons.lang3.StringUtils.substring;
 public class ErrorMessages {
   protected static String timeout(long timeoutMs) {
     if (timeoutMs < 1000) {
-      return "\nTimeout: " + timeoutMs + " ms.";
+      return String.format("%nTimeout: %d ms.", timeoutMs);
     }
     if (timeoutMs % 1000 == 0) {
-      return "\nTimeout: " + timeoutMs / 1000 + " s.";
+      return String.format("%nTimeout: %d s.", timeoutMs / 1000);
     }
 
-    return "\nTimeout: " + String.format("%.3f", timeoutMs / 1000.0) + " s.";
+    return String.format("%nTimeout: %.3f s.", timeoutMs / 1000.0);
   }
 
   static String actualValue(Condition condition, Driver driver, WebElement element) {
@@ -27,12 +27,12 @@ public class ErrorMessages {
       try {
         String actualValue = condition.actualValue(driver, element);
         if (actualValue != null) {
-          return "\nActual value: " + actualValue;
+          return String.format("%nActual value: %s", actualValue);
         }
       }
       catch (RuntimeException failedToGetValue) {
         String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
-        return "\nActual value: " + substring(failedActualValue, 0, 50);
+        return String.format("%nActual value: %s", substring(failedActualValue, 0, 50));
       }
     }
     return "";
@@ -48,18 +48,18 @@ public class ErrorMessages {
     }
 
     if (screenshotPath == null || screenshotPath.isEmpty()) {
-      return "\nScreenshot: " + screenshotPath;
+      return String.format("%nScreenshot: %s", screenshotPath);
     }
 
     if (config.savePageSource() && !screenshotPath.endsWith(".html")) {
       String htmlFilePath = getHtmlFilePath(screenshotPath);
-      return "\nScreenshot: " + screenshotPath + "\nPage source: " + htmlFilePath;
+      return String.format("%nScreenshot: %s%nPage source: %s", screenshotPath, htmlFilePath);
     }
     else if (screenshotPath.endsWith(".html")) {
-      return "\nPage source: " + screenshotPath;
+      return String.format("%nPage source: %s", screenshotPath);
     }
     else {
-      return "\nScreenshot: " + screenshotPath;
+      return String.format("%nScreenshot: %s", screenshotPath);
     }
   }
 
@@ -68,9 +68,9 @@ public class ErrorMessages {
       return "";
     }
     if (cause instanceof WebDriverException) {
-      return "\nCaused by: " + Cleanup.of.webdriverExceptionMessage(cause);
+      return String.format("%nCaused by: %s", Cleanup.of.webdriverExceptionMessage(cause));
     }
-    return "\nCaused by: " + cause;
+    return String.format("%nCaused by: %s", cause);
   }
 
   private static String getHtmlFilePath(String screenshotPath) {

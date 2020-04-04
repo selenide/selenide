@@ -61,6 +61,6 @@ class SelectionOptionByValueCommandTest implements WithAssertions {
     assertThatThrownBy(() ->
       selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{"walue"}}))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.tagName{select}/option[value:walue]}\nExpected: exist");
+      .hasMessageStartingWith(String.format("Element not found {By.tagName{select}/option[value:walue]}%nExpected: exist"));
   }
 }

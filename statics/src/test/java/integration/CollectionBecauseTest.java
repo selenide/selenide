@@ -27,10 +27,10 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Texts mismatch\n" +
-          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
-          "Expected: [foo, bar, var, buzz]\n" +
-          "Because: that's why\n");
+        .hasMessageStartingWith(String.format("Texts mismatch%n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]%n" +
+          "Expected: [foo, bar, var, buzz]%n" +
+          "Because: that's why%n"));
     }
   }
 
@@ -40,10 +40,10 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#dropdown-list-container option").shouldHave(texts("foo", "bar", "var, buzz").because("that's why"));
     } catch (TextsSizeMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Texts size mismatch\n" +
-          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
-          "Expected: [foo, bar, var, buzz], List size: 3\n" +
-          "Because: that's why\n");
+        .hasMessageStartingWith(String.format("Texts size mismatch%n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4%n" +
+          "Expected: [foo, bar, var, buzz], List size: 3%n" +
+          "Because: that's why%n"));
     }
   }
 
@@ -53,10 +53,10 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var", "buzz").because("that's why"));
     } catch (TextsMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Texts mismatch\n" +
-          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]\n" +
-          "Expected: [foo, bar, var, buzz]\n" +
-          "Because: that's why\n");
+        .hasMessageStartingWith(String.format("Texts mismatch%n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру]%n" +
+          "Expected: [foo, bar, var, buzz]%n" +
+          "Because: that's why%n"));
     }
   }
 
@@ -66,10 +66,10 @@ class CollectionBecauseTest extends IntegrationTest {
       $$("#dropdown-list-container option").shouldHave(exactTexts("foo", "bar", "var, buzz").because("that's why"));
     } catch (TextsSizeMismatch expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Texts size mismatch\n" +
-          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4\n" +
-          "Expected: [foo, bar, var, buzz], List size: 3\n" +
-          "Because: that's why\n");
+        .hasMessageStartingWith(String.format("Texts size mismatch%n" +
+          "Actual: [@livemail.ru, @myrambler.ru, @rusmail.ru, @мыло.ру], List size: 4%n" +
+          "Expected: [foo, bar, var, buzz], List size: 3%n" +
+          "Because: that's why%n"));
     }
   }
 

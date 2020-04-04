@@ -20,11 +20,11 @@ class ElementShouldTest implements WithAssertions {
     ElementShould elementShould = new ElementShould(driver, searchCriteria, prefix, Condition.appear, webElementMock, exception);
 
     assertThat(elementShould)
-      .hasMessage("Element should be visible {by.name: selenide}\n" +
-        "Element: '<null displayed:false></null>'\n" +
-        "Actual value: visible:false\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Exception: Error message");
+      .hasMessage(String.format("Element should be visible {by.name: selenide}%n" +
+        "Element: '<null displayed:false></null>'%n" +
+        "Actual value: visible:false%n" +
+        "Screenshot: null%n" +
+        "Timeout: 0 ms.%n" +
+        "Caused by: java.lang.Exception: Error message"));
   }
 }

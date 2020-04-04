@@ -48,7 +48,7 @@ class LastCollectionElementTest implements WithAssertions {
     ElementNotFound notFoundError = lastCollectionElement
       .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertThat(notFoundError)
-      .hasMessageStartingWith("Element not found {Collection description}\nExpected: visible");
+      .hasMessageStartingWith(String.format("Element not found {Collection description}%nExpected: visible"));
   }
 
   @Test
@@ -56,7 +56,7 @@ class LastCollectionElementTest implements WithAssertions {
     ElementNotFound notFoundError = lastCollectionElement
       .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
     assertThat(notFoundError)
-      .hasMessageStartingWith("Element not found {Collection description.last}\nExpected: be empty");
+      .hasMessageStartingWith(String.format("Element not found {Collection description.last}%nExpected: be empty"));
   }
 
   @Test
