@@ -93,14 +93,16 @@ class SelectsTest extends IntegrationTest {
   void throwsElementNotFoundWithOptionsText() {
     assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption("unexisting-option"))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}\nExpected: exist");
+      .hasMessageStartingWith(
+        String.format("Element not found {By.xpath: //select[@name='domain']/option[text:unexisting-option]}%nExpected: exist"));
   }
 
   @Test()
   void throwsElementNotFoundWithOptionsIndex() {
     assertThatThrownBy(() -> $x("//select[@name='domain']").selectOption(999))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.xpath: //select[@name='domain']/option[index:999]}\nExpected: exist");
+      .hasMessageStartingWith(
+        String.format("Element not found {By.xpath: //select[@name='domain']/option[index:999]}%nExpected: exist"));
   }
 
   @Test

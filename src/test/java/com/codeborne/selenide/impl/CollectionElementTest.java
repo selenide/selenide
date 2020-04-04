@@ -78,11 +78,11 @@ class CollectionElementTest implements WithAssertions {
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage("Element not found {Collection description}\n" +
-        "Expected: visible\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Error: Error message");
+      .hasMessage(String.format("Element not found {Collection description}%n" +
+        "Expected: visible%n" +
+        "Screenshot: null%n" +
+        "Timeout: 0 ms.%n" +
+        "Caused by: java.lang.Error: Error message"));
   }
 
   @Test
@@ -98,10 +98,10 @@ class CollectionElementTest implements WithAssertions {
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage("Element not found {Collection description[1]}\n" +
-        "Expected: Reason description\n" +
-        "Screenshot: null\n" +
-        "Timeout: 0 ms.\n" +
-        "Caused by: java.lang.Error: Error message");
+      .hasMessage(String.format("Element not found {Collection description[1]}%n" +
+        "Expected: Reason description%n" +
+        "Screenshot: null%n" +
+        "Timeout: 0 ms.%n" +
+        "Caused by: java.lang.Error: Error message"));
   }
 }

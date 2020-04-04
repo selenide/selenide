@@ -62,12 +62,12 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     catch (ElementNotFound expected) {
       String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
       assertThat(expected)
-        .hasMessageMatching("Element not found \\{h9}\n" +
-          "Expected: text 'expected text'\n" +
-          "Screenshot: " + path + png() + "\n" +
-          "Page source: " + path + html() + "\n" +
-          "Timeout: 15 ms.\n" +
-          "Caused by: NoSuchElementException:.*");
+        .hasMessageMatching(String.format("Element not found \\{h9}%n" +
+          "Expected: text 'expected text'%n" +
+          "Screenshot: " + path + png() + "%n" +
+          "Page source: " + path + html() + "%n" +
+          "Timeout: 15 ms.%n" +
+          "Caused by: NoSuchElementException:.*"));
       assertThat(expected.getScreenshot()).matches(path + pngOrHtml());
     }
   }
@@ -79,11 +79,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching("Element should have text 'expected text' \\{h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should have text 'expected text' \\{h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -93,12 +93,12 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldHave(attribute("name", "header"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching("Element should have attribute name=\"header\" \\{h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Actual value: name=\"\"\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should have attribute name=\"header\" \\{h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: name=\"\"%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -108,11 +108,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -122,13 +122,13 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("#theHiddenElement").click()
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching(
-        "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}\n" +
-          "Element: '<div id=\"theHiddenElement\" displayed:false></div>'\n" +
-          "Actual value: visible:false, 1\n" +
-          "Screenshot: " + path + png() + "\n" +
-          "Page source: " + path + html() + "\n" +
-          "Timeout: 15 ms.");
+      .hasMessageMatching(String.format(
+        "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}%n" +
+          "Element: '<div id=\"theHiddenElement\" displayed:false></div>'%n" +
+          "Actual value: visible:false, 1%n" +
+          "Screenshot: " + path + png() + "%n" +
+          "Page source: " + path + html() + "%n" +
+          "Timeout: 15 ms."));
   }
 
   @Test
@@ -138,11 +138,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $(pageObject.header1).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -152,11 +152,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $(pageObject.header2).shouldHave(text("expected text"))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageMatching("Element should have text 'expected text' \\{By.tagName: h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -174,12 +174,12 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
-      .hasMessageMatching("Element not found \\{By.id: invalid_id}\n" +
-        "Expected: visible or transparent: visible or have css value opacity=0\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.\n" +
-        "Caused by: NoSuchElementException:.*");
+      .hasMessageMatching(String.format("Element not found \\{By.id: invalid_id}%n" +
+        "Expected: visible or transparent: visible or have css value opacity=0%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms.%n" +
+        "Caused by: NoSuchElementException:.*"));
   }
 
   @Test
@@ -189,11 +189,11 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h2").shouldNot(exist)
     )
       .isInstanceOf(ElementShouldNot.class)
-      .hasMessageMatching("Element should not exist \\{h2}\n" +
-        "Element: '<h2>Dropdown list</h2>'\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.");
+      .hasMessageMatching(String.format("Element should not exist \\{h2}%n" +
+        "Element: '<h2>Dropdown list</h2>'%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms."));
   }
 
   @Test
@@ -203,12 +203,12 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       $("h14").shouldNotBe(hidden)
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageMatching("Element not found \\{h14}\n" +
-        "Expected: not hidden\n" +
-        "Screenshot: " + path + png() + "\n" +
-        "Page source: " + path + html() + "\n" +
-        "Timeout: 15 ms.\n" +
-        "Caused by: NoSuchElementException:.*");
+      .hasMessageMatching(String.format("Element not found \\{h14}%n" +
+        "Expected: not hidden%n" +
+        "Screenshot: " + path + png() + "%n" +
+        "Page source: " + path + html() + "%n" +
+        "Timeout: 15 ms.%n" +
+        "Caused by: NoSuchElementException:.*"));
   }
 
   @Test

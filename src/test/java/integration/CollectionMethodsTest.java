@@ -415,8 +415,8 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(anyMatch("value==dog",
       el -> el.getAttribute("value").equals("dog"))))
       .isInstanceOf(MatcherError.class)
-      .hasMessageContaining("Collection matcher error" +
-        "\nExpected: any of elements to match [value==dog] predicate");
+      .hasMessageContaining(String.format("Collection matcher error" +
+        "%nExpected: any of elements to match [value==dog] predicate"));
   }
 
   @Test
@@ -431,8 +431,8 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(allMatch("value==cat",
       el -> el.getAttribute("value").equals("cat"))))
       .isInstanceOf(MatcherError.class)
-      .hasMessageContaining("Collection matcher error" +
-        "\nExpected: all of elements to match [value==cat] predicate");
+      .hasMessageContaining(String.format("Collection matcher error" +
+        "%nExpected: all of elements to match [value==cat] predicate"));
   }
 
   @Test
@@ -447,8 +447,8 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("#radioButtons input").shouldBe(noneMatch("value==cat",
       el -> el.getAttribute("value").equals("cat"))))
       .isInstanceOf(MatcherError.class)
-      .hasMessageContaining("Collection matcher error" +
-        "\nExpected: none of elements to match [value==cat] predicate");
+      .hasMessageContaining(String.format("Collection matcher error" +
+        "%nExpected: none of elements to match [value==cat] predicate"));
   }
 
 }

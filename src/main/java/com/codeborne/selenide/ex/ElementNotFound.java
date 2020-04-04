@@ -14,25 +14,25 @@ public class ElementNotFound extends UIAssertionError {
 
   public ElementNotFound(Driver driver, String searchCriteria, Condition expectedCondition) {
     super(driver,
-      "Element not found {" + searchCriteria + '}' +
-        "\nExpected: " + expectedCondition);
+      String.format("Element not found {%s}" +
+        "%nExpected: %s", searchCriteria, expectedCondition));
   }
 
   public ElementNotFound(Driver driver, String searchCriteria, Condition expectedCondition, Throwable lastError) {
     super(driver,
-      "Element not found {" + searchCriteria + '}' +
-        "\nExpected: " + expectedCondition, lastError);
+      String.format("Element not found {%s}" +
+        "%nExpected: %s", searchCriteria, expectedCondition), lastError);
   }
 
   public ElementNotFound(WebElementsCollection collection, List<String> expectedTexts, Throwable lastError) {
     super(collection.driver(),
-      "Element not found {" + collection.description() + '}' +
-        "\nExpected: " + expectedTexts, lastError);
+      String.format("Element not found {%s}" +
+        "%nExpected: %s", collection.description(), expectedTexts), lastError);
   }
 
   public ElementNotFound(WebElementsCollection collection, String description, Throwable lastError) {
     super(collection.driver(),
-      "Element not found {" + collection.description() + '}' +
-        "\nExpected: " + description, lastError);
+      String.format("Element not found {%s}" +
+        "%nExpected: %s", collection.description(), description), lastError);
   }
 }

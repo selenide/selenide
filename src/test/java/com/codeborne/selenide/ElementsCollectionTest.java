@@ -310,7 +310,7 @@ class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     assertThat(collection)
-      .hasToString("[\n\t<h1></h1>,\n\t<h2></h2>\n]");
+      .hasToString(String.format("[%n\t<h1></h1>,%n\t<h2></h2>%n]"));
   }
 
   @Test

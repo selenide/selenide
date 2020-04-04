@@ -18,12 +18,12 @@ class TextsMismatchTest implements WithAssertions {
       expectedTexts,
       "we expect favorite characters", 9000);
 
-    assertThat(textsMismatch).hasMessage("Texts mismatch\n" +
-      "Actual: [Niff, Naff, Nuff]\n" +
-      "Expected: [Piff, Paff, Puff]\n" +
-      "Because: we expect favorite characters\n" +
-      "Collection: .characters\n" +
-      "Screenshot: null\n" +
-      "Timeout: 9 s.");
+    assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
+      "Actual: [Niff, Naff, Nuff]%n" +
+      "Expected: [Piff, Paff, Puff]%n" +
+      "Because: we expect favorite characters%n" +
+      "Collection: .characters%n" +
+      "Screenshot: null%n" +
+      "Timeout: 9 s."));
   }
 }

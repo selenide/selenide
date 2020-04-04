@@ -62,7 +62,7 @@ class ModalTest {
 
     verify(alert).accept();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
       .contains("Screenshot: " + reportsBaseUri);
   }
 
@@ -101,7 +101,7 @@ class ModalTest {
     verify(alert).sendKeys("Sure do");
     verify(alert).accept();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
       .contains("Screenshot: " +  convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
   }
 
@@ -129,7 +129,7 @@ class ModalTest {
 
     verify(alert).dismiss();
     assertThat(exception.getMessage())
-      .contains("Actual: " + ALERT_TEXT + "\nExpected: Are you sure?\n")
+      .contains(String.format("Actual: %s%nExpected: Are you sure?%n", ALERT_TEXT))
       .contains("Screenshot: " + convertFilePath(System.getProperty("user.dir") + "/" + config.reportsFolder() + "/"));
   }
 

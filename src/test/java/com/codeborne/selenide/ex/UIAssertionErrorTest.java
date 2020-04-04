@@ -11,9 +11,9 @@ class UIAssertionErrorTest implements WithAssertions {
     Driver driver = new DriverStub();
     UIAssertionError uiAssertionError = new UIAssertionError(driver, "Some it happened", new Throwable("Error message"));
 
-    assertThat(uiAssertionError).hasMessage("Some it happened\n" +
-      "Screenshot: null\n" +
-      "Timeout: 0 ms.\n" +
-      "Caused by: java.lang.Throwable: Error message");
+    assertThat(uiAssertionError).hasMessage(String.format("Some it happened%n" +
+      "Screenshot: null%n" +
+      "Timeout: 0 ms.%n" +
+      "Caused by: java.lang.Throwable: Error message"));
   }
 }

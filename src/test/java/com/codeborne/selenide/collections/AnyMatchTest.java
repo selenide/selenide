@@ -49,9 +49,9 @@ class AnyMatchTest implements WithAssertions {
           singletonList(element1),
           new Exception("Exception message"), 10000))
       .isInstanceOf(MatcherError.class)
-      .hasMessageStartingWith("Collection matcher error" +
-        "\nExpected: any of elements to match [Predicate description] predicate" +
-        "\nCollection: Collection description");
+      .hasMessageStartingWith(String.format("Collection matcher error" +
+        "%nExpected: any of elements to match [Predicate description] predicate" +
+        "%nCollection: Collection description"));
   }
 
   @Test

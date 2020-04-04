@@ -56,9 +56,9 @@ class CollectionWaitTest extends IntegrationTest {
     Configuration.timeout = 4000;
     assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element", "#wrong")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [Element #0, Element #1]\n" +
-        "Expected: [Element, #wrong]\n" +
-        "Collection: #collection li.first(2)");
+      .hasMessageContaining(String.format("Actual: [Element #0, Element #1]%n" +
+        "Expected: [Element, #wrong]%n" +
+        "Collection: #collection li.first(2)"));
   }
 
   @Test
@@ -66,9 +66,9 @@ class CollectionWaitTest extends IntegrationTest {
     Configuration.timeout = 4000;
     assertThatThrownBy(() -> $$("#collection li").first(2).shouldHave(texts("Element #wrong")))
       .isInstanceOf(TextsSizeMismatch.class)
-      .hasMessageContaining("Actual: [Element #0, Element #1], List size: 2\n" +
-        "Expected: [Element #wrong], List size: 1\n" +
-        "Collection: #collection li.first(2)");
+      .hasMessageContaining(String.format("Actual: [Element #0, Element #1], List size: 2%n" +
+        "Expected: [Element #wrong], List size: 1%n" +
+        "Collection: #collection li.first(2)"));
   }
 
   @Test
@@ -76,9 +76,9 @@ class CollectionWaitTest extends IntegrationTest {
     Configuration.timeout = 4000;
     assertThatThrownBy(() -> $$("#collection li").last(2).shouldHave(texts("Element", "#wrong")))
       .isInstanceOf(TextsMismatch.class)
-      .hasMessageContaining("Actual: [Element #48, Element #49]\n" +
-        "Expected: [Element, #wrong]\n" +
-        "Collection: #collection li.last(2)");
+      .hasMessageContaining(String.format("Actual: [Element #48, Element #49]%n" +
+        "Expected: [Element, #wrong]%n" +
+        "Collection: #collection li.last(2)"));
   }
 
   @Test

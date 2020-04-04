@@ -61,7 +61,7 @@ class ErrorMessagesTest implements WithAssertions {
 
     String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
+      .startsWith(String.format("%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
       .endsWith(".png");
   }
 
@@ -75,7 +75,7 @@ class ErrorMessagesTest implements WithAssertions {
     String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
       .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home directories")
-      .startsWith("\nScreenshot: " + reportsUrl + new File(screenshot).getName());
+      .startsWith(String.format("%nScreenshot: %s", reportsUrl + new File(screenshot).getName()));
   }
 
   @Test
@@ -90,7 +90,7 @@ class ErrorMessagesTest implements WithAssertions {
 
     String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .startsWith("\nScreenshot: file:" + currentDir + "/build/reports/tests/")
+      .startsWith(String.format("%nScreenshot: file:%s/build/reports/tests/", currentDir))
       .endsWith(".png");
   }
 
@@ -112,8 +112,8 @@ class ErrorMessagesTest implements WithAssertions {
 
     String screenshot = ErrorMessages.screenshot(driver);
     assertThat(screenshot)
-      .startsWith("\nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
-      .contains(".png\nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/tests/")
+      .startsWith(String.format("%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
+      .contains(String.format(".png%nPage source: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
       .endsWith(".html");
   }
 }
