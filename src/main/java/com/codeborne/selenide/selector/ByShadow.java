@@ -6,7 +6,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
-import org.openqa.selenium.internal.FindsByCssSelector;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -48,7 +47,7 @@ public class ByShadow {
 
     @Override
     public WebElement findElement(SearchContext context) {
-      WebElement host = ((FindsByCssSelector) context).findElementByCssSelector(shadowHost);
+      WebElement host = context.findElement(By.cssSelector(shadowHost));
       for (String innerHost : innerShadowHosts) {
         host = getElementInsideShadowTree(host, innerHost);
       }
@@ -58,7 +57,7 @@ public class ByShadow {
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-      WebElement host = ((FindsByCssSelector) context).findElementByCssSelector(shadowHost);
+      WebElement host = context.findElement(By.cssSelector(shadowHost));
       for (String innerHost : innerShadowHosts) {
         host = getElementInsideShadowTree(host, innerHost);
       }
