@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.isChrome;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 public class MobileEmulationTest {
@@ -19,14 +20,15 @@ public class MobileEmulationTest {
     assumeThat(isChrome()).isTrue();
 
     closeWebDriver();
+    assertThat(System.getProperty("chromeoptions.mobileEmulation")).isNull();
     System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
-    System.setProperty("chromeoptions.args", "--diagnostics,--disable-blink-features");
   }
 
   @AfterEach
   void tearDown() {
     if (isChrome()) {
       closeWebDriver();
+      System.clearProperty("chromeoptions.mobileEmulation");
     }
   }
 
