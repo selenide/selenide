@@ -15,7 +15,8 @@ class EdgeDriverFactory extends AbstractDriverFactory {
 
   @Override
   WebDriver create(Config config, Proxy proxy) {
-    return createEdgeDriver(config, proxy);
+    EdgeOptions edgeOptions = createEdgeOptions(config, proxy);
+    return new EdgeDriver(edgeOptions);
   }
 
   @Override
@@ -23,14 +24,16 @@ class EdgeDriverFactory extends AbstractDriverFactory {
     return browser.isEdge();
   }
 
-  private WebDriver createEdgeDriver(Config config, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+  EdgeOptions createEdgeOptions(Config config, Proxy proxy) {
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    setupCommonCapabilities(capabilities, config, proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
-    return new EdgeDriver(options);
+    config.browserOptionsInterceptors().edgeOptionsInterceptor.afterSelenideChangesOptions(options);
+    return options;
   }
 }

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
@@ -55,13 +54,14 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
 
-    firefoxOptions.merge(createCommonCapabilities(config, proxy));
+    setupCommonCapabilities(firefoxOptions, config, proxy);
 
-    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
+    FirefoxProfile profile = new FirefoxProfile();
     setupDownloadsFolder(config, profile);
     transferFirefoxProfileFromSystemProperties(profile);
     firefoxOptions.setProfile(profile);
-
+    config.browserOptionsInterceptors().firefoxOptionsInterceptor.afterSelenideChangesOptions(firefoxOptions);
+    log.debug("Firefox options: {}", firefoxOptions.toString());
     return firefoxOptions;
   }
 

@@ -5,7 +5,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.SelectorMode;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import com.codeborne.selenide.webdriver.BrowserOptionsInterceptors;
+import org.openqa.selenium.MutableCapabilities;
 
 /**
  * A non-static facade for static fields in {@link com.codeborne.selenide.Configuration}
@@ -162,7 +163,12 @@ public class StaticConfig implements Config {
   }
 
   @Override
-  public DesiredCapabilities browserCapabilities() {
+  public MutableCapabilities browserCapabilities() {
     return Configuration.browserCapabilities;
+  }
+
+  @Override
+  public BrowserOptionsInterceptors browserOptionsInterceptors() {
+    return Configuration.browserOptionsInterceptors;
   }
 }

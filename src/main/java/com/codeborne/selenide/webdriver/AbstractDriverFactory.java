@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -19,6 +20,7 @@ import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
 import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
 import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
+import static org.openqa.selenium.remote.CapabilityType.VERSION;
 
 abstract class AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
@@ -29,7 +31,8 @@ abstract class AbstractDriverFactory {
 
   WebDriver createInstanceOf(String className, Config config, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      setupCommonCapabilities(capabilities, config, proxy);
       capabilities.setJavascriptEnabled(true);
       capabilities.setCapability(TAKES_SCREENSHOT, true);
       capabilities.setCapability(SUPPORTS_ALERTS, true);
@@ -54,13 +57,12 @@ abstract class AbstractDriverFactory {
     return exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
   }
 
-  DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
-    DesiredCapabilities browserCapabilities = new DesiredCapabilities();
+  void setupCommonCapabilities(MutableCapabilities browserCapabilities, Config config, Proxy proxy) {
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
     }
     if (config.browserVersion() != null && !config.browserVersion().isEmpty()) {
-      browserCapabilities.setVersion(config.browserVersion());
+      browserCapabilities.setCapability(VERSION, config.browserVersion());
     }
     browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
     browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
@@ -70,15 +72,9 @@ abstract class AbstractDriverFactory {
       browserCapabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
     transferCapabilitiesFromSystemProperties(browserCapabilities);
-    browserCapabilities = mergeCapabilitiesFromConfiguration(config, browserCapabilities);
-    return browserCapabilities;
   }
 
-  DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
-    return currentCapabilities.merge(config.browserCapabilities());
-  }
-
-  private void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
+  private void transferCapabilitiesFromSystemProperties(MutableCapabilities currentBrowserCapabilities) {
     String prefix = "capabilities.";
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {

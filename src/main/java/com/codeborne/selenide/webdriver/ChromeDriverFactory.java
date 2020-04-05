@@ -41,8 +41,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     }
     options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
     options.addArguments("--proxy-bypass-list=<-loopback>");
-    options.merge(createCommonCapabilities(config, proxy));
+    setupCommonCapabilities(options, config, proxy);
     transferChromeOptionsFromSystemProperties(config, options);
+    config.browserOptionsInterceptors().chromeOptionsInterceptor.afterSelenideChangesOptions(options);
     log.debug("Chrome options: {}", options.toString());
     return options;
   }

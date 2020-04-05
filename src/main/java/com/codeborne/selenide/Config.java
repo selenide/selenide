@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
+import com.codeborne.selenide.webdriver.BrowserOptionsInterceptors;
+import org.openqa.selenium.MutableCapabilities;
 
 public interface Config {
   String browser();
@@ -13,7 +14,8 @@ public interface Config {
   boolean driverManagerEnabled();
   String browserBinary();
   String pageLoadStrategy();
-  DesiredCapabilities browserCapabilities();
+  MutableCapabilities browserCapabilities();
+  BrowserOptionsInterceptors browserOptionsInterceptors();
 
   String baseUrl();
   long timeout();

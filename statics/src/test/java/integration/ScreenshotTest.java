@@ -1,7 +1,6 @@
 package integration;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -19,7 +18,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.assertj.core.api.Assertions.assertThat;
-
 class ScreenshotTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {

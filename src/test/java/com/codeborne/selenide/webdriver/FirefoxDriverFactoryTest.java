@@ -30,34 +30,26 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transfersStringCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "abcd");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap")).isEqualTo("abcd");
+    DesiredCapabilities commonCapabilities = new DesiredCapabilities();
+    driverFactory.setupCommonCapabilities(commonCapabilities, config, proxy);
+    assertThat(commonCapabilities.getCapability("some.cap")).isEqualTo("abcd");
   }
 
   @Test
   void transfersBooleanCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "true");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap"))
+    DesiredCapabilities commonCapabilities = new DesiredCapabilities();
+    driverFactory.setupCommonCapabilities(commonCapabilities, config, proxy);
+    assertThat(commonCapabilities.getCapability("some.cap"))
       .isEqualTo(true);
   }
 
   @Test
   void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "25");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap")).isEqualTo(25);
-  }
-
-  @Test
-  void keepConfigurationFirefoxProfileWhenTransferPreferencesFromSystemPropsToDriver() {
-    FirefoxProfile configurationProfile = new FirefoxProfile();
-    configurationProfile.setPreference("some.conf.cap", 42);
-    FirefoxOptions firefoxOptions = new FirefoxOptions().setProfile(configurationProfile);
-    config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
-    System.setProperty("firefoxprofile.some.cap", "25");
-
-    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
-
-    assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
-    assertThat(profile.getIntegerPreference("some.conf.cap", 0)).isEqualTo(42);
+    DesiredCapabilities commonCapabilities = new DesiredCapabilities();
+    driverFactory.setupCommonCapabilities(commonCapabilities, config, proxy);
+    assertThat(commonCapabilities.getCapability("some.cap")).isEqualTo(25);
   }
 
   @Test

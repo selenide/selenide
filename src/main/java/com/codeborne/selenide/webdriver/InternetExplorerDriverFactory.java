@@ -6,7 +6,6 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +23,18 @@ class InternetExplorerDriverFactory extends AbstractDriverFactory {
   }
 
   private WebDriver createInternetExplorerDriver(Config config, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
-    InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
+    InternetExplorerOptions options = createExplorerOptions(config, proxy);
+    return new InternetExplorerDriver(options);
+  }
+
+  InternetExplorerOptions createExplorerOptions(Config config, Proxy proxy) {
+    InternetExplorerOptions options = new InternetExplorerOptions();
+    setupCommonCapabilities(options, config, proxy);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }
-    return new InternetExplorerDriver(options);
+    config.browserOptionsInterceptors().internetExplorerOptionsInterceptor.afterSelenideChangesOptions(options);
+    return options;
   }
 }
