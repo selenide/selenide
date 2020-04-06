@@ -10,15 +10,15 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.text;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -30,11 +30,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ElementsCollectionTest implements WithAssertions {
-  private DriverStub driver = new DriverStub();
-  private WebElementsCollection source = mock(WebElementsCollection.class);
-  private WebElement element1 = element("h1");
-  private WebElement element2 = element("h2");
-  private WebElement element3 = element("h3");
+  private final DriverStub driver = new DriverStub();
+  private final WebElementsCollection source = mock(WebElementsCollection.class);
+  private final WebElement element1 = element("h1");
+  private final WebElement element2 = element("h2");
+  private final WebElement element3 = element("h3");
 
   @BeforeEach
   final void mockWebDriver() {
@@ -42,9 +42,9 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testShouldHaveSize() {
+  void shouldHaveSize() {
     ElementsCollection collection = spy(new ElementsCollection(source));
-    when(source.getElements()).thenReturn(Collections.emptyList());
+    when(source.getElements()).thenReturn(emptyList());
 
     collection.shouldHaveSize(0);
 
@@ -55,9 +55,9 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testShouldBe() {
+  void shouldBe() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(Collections.emptyList());
+    when(source.getElements()).thenReturn(emptyList());
 
     collection.shouldBe(CollectionCondition.size(0));
 
@@ -66,16 +66,16 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testShouldWithErrorThrown() {
+  void shouldWithErrorThrown() {
     ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(Collections.emptyList());
+    when(source.getElements()).thenReturn(emptyList());
 
     assertThatThrownBy(() -> collection.should("Size", 1, CollectionCondition.size(1)))
       .isInstanceOf(Error.class);
   }
 
   @Test
-  void testShouldWithRuntimeException() {
+  void shouldWithRuntimeException() {
     ElementsCollection collection = new ElementsCollection(source);
     doThrow(RuntimeException.class).when(source).getElements();
 
@@ -84,104 +84,73 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testFilter() {
-    checkFilterMethod(false);
-  }
+  void filter() {
+    ElementsCollection filteredCollection = collection("Hello", "Mark").filter(text("Hello"));
 
-  private void checkFilterMethod(boolean useBy) {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    ElementsCollection filteredCollection = useBy ?
-      collection.filterBy(Condition.text("Hello")) :
-      collection.filter(Condition.text("Hello"));
-    assertThat(filteredCollection)
-      .hasSize(1);
-    assertThat(filteredCollection)
-      .extracting(SelenideElement::getText)
-      .contains("Hello");
+    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testFilterBy() {
-    checkFilterMethod(true);
+  void filterBy() {
+    ElementsCollection filteredCollection = collection("Hello", "Mark").filterBy(text("Hello"));
+
+    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testExclude() {
-    checkExcludeMethod(false);
-  }
+  void exclude() {
+    ElementsCollection filteredCollection = collection("Hello", "Mark").exclude(text("Mark"));
 
-  private void checkExcludeMethod(boolean useWith) {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    ElementsCollection filteredCollection = useWith ?
-      collection.excludeWith(Condition.text("Mark")) :
-      collection.exclude(Condition.text("Mark"));
-    assertThat(filteredCollection)
-      .hasSize(1);
-    assertThat(filteredCollection)
-      .extracting(SelenideElement::getText)
-      .contains("Hello");
+    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testExcludeWith() {
-    checkExcludeMethod(true);
+  void excludeWith() {
+    ElementsCollection filteredCollection = collection("Hello", "Mark").excludeWith(text("Mark"));
+
+    assertThat(filteredCollection).hasSize(1);
+    assertThat(filteredCollection.get(0).getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testFind() {
-    checkFindMethod(false);
-  }
-
-  private void checkFindMethod(boolean useBy) {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    Condition condition = Condition.text("Hello");
-    SelenideElement foundElement = useBy ? collection.findBy(condition) : collection.find(condition);
-    assertThat(foundElement.getText())
-      .isEqualTo("Hello");
+  void find() {
+    SelenideElement foundElement = collection("Hello", "Mark").find(text("Hello"));
+    assertThat(foundElement.getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testFindBy() {
-    checkFindMethod(true);
+  void findBy() {
+    SelenideElement foundElement = collection("Hello", "Mark").findBy(text("Hello"));
+    assertThat(foundElement.getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testTexts() {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
+  void texts() {
+    ElementsCollection collection = collection("Hello", "Mark");
     List<String> elementsTexts = collection.texts();
-    assertThat(elementsTexts)
-      .contains("Hello", "Mark");
+    assertThat(elementsTexts).isEqualTo(asList("Hello", "Mark"));
   }
 
   @Test
-  void testStaticGetTexts() {
+  void staticGetTexts() {
     when(source.getElements()).thenReturn(asList(element1, element2));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
     List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
-    List<String> expectedTexts = Arrays.asList("Hello", "Mark");
+    List<String> expectedTexts = asList("Hello", "Mark");
     assertThat(elementsTexts)
       .isEqualTo(expectedTexts);
   }
 
   @Test
-  void testStaticGetTextsWithWebDriverException() {
+  void staticGetTextsWithWebDriverException() {
     doThrow(new WebDriverException("Failed to fetch elements")).when(element1).getText();
     when(element2.getText()).thenReturn("Mark");
     List<String> elementsTexts = ElementsCollection.texts(asList(element1, element2));
-    List<String> expectedTexts = Arrays.asList("org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark");
+    List<String> expectedTexts = asList("org.openqa.selenium.WebDriverException: Failed to fetch elements", "Mark");
     assertThat(elementsTexts)
       .hasSameSizeAs(expectedTexts);
     IntStream.range(0, expectedTexts.size())
@@ -190,28 +159,18 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testElementsToStringOnNullCollection() {
-    assertThat(ElementsCollection.elementsToString(null, null))
-      .isEqualTo("[not loaded yet...]");
+  void elementsToStringOnNullCollection() {
+    assertThat(ElementsCollection.elementsToString(null, null)).isEqualTo("[not loaded yet...]");
   }
 
   @Test
-  void testFirstMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    assertThat(collection.first().getText())
-      .isEqualTo("Hello");
+  void firstMethod() {
+    assertThat(collection("Hello", "Mark").first().getText()).isEqualTo("Hello");
   }
 
   @Test
-  void testFirstNElementsMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2, element3));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    when(element3.getText()).thenReturn("Twen");
+  void firstNElementsMethod() {
+    ElementsCollection collection = collection("Hello", "Mark", "Twen");
     ElementsCollection firstTwoElements = collection.first(2);
     assertThat(firstTwoElements)
       .hasSize(2);
@@ -221,22 +180,13 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testLastMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    assertThat(collection.last().getText())
-      .isEqualTo("Mark");
+  void lastMethod() {
+    assertThat(collection("Hello", "Mark").last().getText()).isEqualTo("Mark");
   }
 
   @Test
-  void testLastNElementsMethod() {
-    ElementsCollection collection = new ElementsCollection(source);
-    when(source.getElements()).thenReturn(asList(element1, element2, element3));
-    when(element1.getText()).thenReturn("Hello");
-    when(element2.getText()).thenReturn("Mark");
-    when(element3.getText()).thenReturn("Twen");
+  void lastNElementsMethod() {
+    ElementsCollection collection = collection("Hello", "Mark", "Twen");
     ElementsCollection firstTwoElements = collection.last(2);
     assertThat(firstTwoElements)
       .hasSize(2);
@@ -246,7 +196,7 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testIteratorMethod() {
+  void iteratorMethod() {
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
@@ -258,7 +208,7 @@ class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void testIteratorListMethod() {
+  void iteratorListMethod() {
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
     when(element1.getText()).thenReturn("Hello");
     when(element2.getText()).thenReturn("Mark");
@@ -332,5 +282,22 @@ class ElementsCollectionTest implements WithAssertions {
     when(element.isDisplayed()).thenReturn(true);
     when(element.isEnabled()).thenReturn(true);
     return element;
+  }
+
+  private ElementsCollection collection(String first, String second) {
+    ElementsCollection collection = new ElementsCollection(source);
+    when(source.getElements()).thenReturn(asList(element1, element2));
+    when(element1.getText()).thenReturn(first);
+    when(element2.getText()).thenReturn(second);
+    return collection;
+  }
+
+  private ElementsCollection collection(String first, String second, String third) {
+    ElementsCollection collection = new ElementsCollection(source);
+    when(source.getElements()).thenReturn(asList(element1, element2, element3));
+    when(element1.getText()).thenReturn(first);
+    when(element2.getText()).thenReturn(second);
+    when(element3.getText()).thenReturn(third);
+    return collection;
   }
 }
