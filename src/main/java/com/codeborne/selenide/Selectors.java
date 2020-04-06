@@ -187,4 +187,12 @@ public class Selectors {
   public static By byClassName(String className) {
     return By.className(className);
   }
+
+  /**
+   * @see By#tagName(java.lang.String)
+   * @since 5.11
+   */
+  public static By byTagName(String tagName) {
+    return By.tagName(tagName);
+  }
 }
