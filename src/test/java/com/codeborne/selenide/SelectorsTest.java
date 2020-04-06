@@ -176,4 +176,14 @@ class SelectorsTest implements WithAssertions {
     assertThat(cssSelector)
       .hasToString("By.cssSelector: " + shadow + " [" + innerShadow + "] " + target);
   }
+
+  @Test
+  void byTagName() {
+    String tagName = "selenide";
+    By tagNameSelector = Selectors.byTagName(tagName);
+    assertThat(tagNameSelector)
+      .isInstanceOf(By.ByTagName.class);
+    assertThat(tagNameSelector)
+      .hasToString("By.tagName: " + tagName);
+  }
 }
