@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
+import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
@@ -112,6 +113,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see WebElement#getText()
    * @see com.codeborne.selenide.commands.GetText
    */
+  @CheckReturnValue
   String text();
 
   /**
@@ -120,6 +122,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
    * @see com.codeborne.selenide.commands.GetInnerText
    */
+  @CheckReturnValue
   String innerText();
 
   /**
@@ -128,6 +131,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Short form of getAttribute("innerHTML")
    * @see com.codeborne.selenide.commands.GetInnerHtml
    */
+  @CheckReturnValue
   String innerHtml();
 
   /**
@@ -135,6 +139,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return null if attribute is missing
    * @see com.codeborne.selenide.commands.GetAttribute
    */
+  @CheckReturnValue
   String attr(String attributeName);
 
   /**
@@ -142,6 +147,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return attribute "name" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.GetName
    */
+  @CheckReturnValue
   String name();
 
   /**
@@ -151,6 +157,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Val
    */
+  @CheckReturnValue
   String val();
 
   /**
@@ -160,6 +167,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetValue
    */
+  @CheckReturnValue
   String getValue();
 
   /**
@@ -169,6 +177,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param propertyName property name of the pseudo-element
    * @return the property value or "" if the property is missing
    */
+  @CheckReturnValue
   String pseudo(String pseudoElementName, String propertyName);
 
   /**
@@ -176,6 +185,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
    * @return the content value or "none" if the content is missing
    */
+  @CheckReturnValue
   String pseudo(String pseudoElementName);
 
   /**
@@ -192,6 +202,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetDataAttribute
    */
+  @CheckReturnValue
   String data(String dataAttributeName);
 
   /**
@@ -219,6 +230,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see #has
    * @see com.codeborne.selenide.commands.Matches
    */
+  @CheckReturnValue
   boolean is(Condition condition);
 
   /**
@@ -229,6 +241,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see #is
    * @see com.codeborne.selenide.commands.Matches
    */
+  @CheckReturnValue
   boolean has(Condition condition);
 
   /**
@@ -396,6 +409,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetParent
    */
+  @CheckReturnValue
   SelenideElement parent();
 
   /**
@@ -408,6 +422,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetSibling
    */
+  @CheckReturnValue
   SelenideElement sibling(int index);
 
   /**
@@ -420,6 +435,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetPreceding
    */
+  @CheckReturnValue
   SelenideElement preceding(int index);
 
   /**
@@ -427,6 +443,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * ATTENTION! this method doesn't start any search yet!
    * For example, $("tr").lastChild(); could give the last "td".
    */
+  @CheckReturnValue
   SelenideElement lastChild();
 
   /**
@@ -439,6 +456,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetClosest
    */
+  @CheckReturnValue
   SelenideElement closest(String tagOrClass);
 
   /**
@@ -448,6 +466,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement find(String cssSelector);
 
   /**
@@ -456,6 +475,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement find(String cssSelector, int index);
 
   /**
@@ -463,6 +483,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement find(By selector);
 
   /**
@@ -470,6 +491,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement find(By selector, int index);
 
   /**
@@ -477,6 +499,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement $(String cssSelector);
 
   /**
@@ -484,6 +507,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement $(String cssSelector, int index);
 
   /**
@@ -491,6 +515,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement $(By selector);
 
   /**
@@ -498,6 +523,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Same as {@link #find(String, int)}
    * @see com.codeborne.selenide.commands.Find
    */
+  @CheckReturnValue
   SelenideElement $(By selector, int index);
 
   /**
@@ -507,6 +533,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.FindByXpath
    */
+  @CheckReturnValue
   SelenideElement $x(String xpath);
 
   /**
@@ -515,6 +542,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.FindByXpath
    */
+  @CheckReturnValue
   SelenideElement $x(String xpath, int index);
 
   /**
@@ -530,6 +558,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.FindAll
    */
+  @CheckReturnValue
   ElementsCollection findAll(String cssSelector);
 
   /**
@@ -545,17 +574,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.FindAll
    */
+  @CheckReturnValue
   ElementsCollection findAll(By selector);
 
   /**
    * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #findAll(String)}
    */
+  @CheckReturnValue
   ElementsCollection $$(String cssSelector);
 
   /**
    * Same as {@link #findAll(By)}
    */
+  @CheckReturnValue
   ElementsCollection $$(By selector);
 
   /**
@@ -571,6 +603,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.FindAllByXpath
    */
+  @CheckReturnValue
   ElementsCollection $$x(String xpath);
 
   /**
@@ -613,7 +646,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   void selectOption(String... text);
 
-
   /**
    * Select an option from dropdown list that contains given text
    * @param text substring of visible text of option
@@ -652,6 +684,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetSelectedValue
    */
+  @CheckReturnValue
   String getSelectedValue();
 
   /**
@@ -659,6 +692,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetSelectedText
    */
+  @CheckReturnValue
   String getSelectedText();
 
   /**
@@ -785,6 +819,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Return criteria by which this element is located
    * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
    */
+  @CheckReturnValue
   String getSearchCriteria();
 
   /**
@@ -792,6 +827,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.ToWebElement
    */
+  @CheckReturnValue
   WebElement toWebElement();
 
   /**
@@ -799,6 +835,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetWrappedElement
    */
   @Override
+  @CheckReturnValue
   WebElement getWrappedElement();
 
   /**
@@ -904,5 +941,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
+  @CheckReturnValue
   BufferedImage screenshotAsImage();
 }

@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -218,6 +219,7 @@ public class Selenide {
    *
    * @return title of the page
    */
+  @CheckReturnValue
   public static String title() {
     return getSelenideDriver().title();
   }
@@ -251,6 +253,7 @@ public class Selenide {
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement $(WebElement webElement) {
     return getSelenideDriver().$(webElement);
   }
@@ -261,6 +264,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement $(String cssSelector) {
     return getSelenideDriver().find(cssSelector);
   }
@@ -271,6 +275,7 @@ public class Selenide {
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return SelenideElement which locates elements via XPath
    */
+  @CheckReturnValue
   public static SelenideElement $x(String xpathExpression) {
     return getSelenideDriver().$x(xpathExpression);
   }
@@ -281,6 +286,7 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement $(By seleniumSelector) {
     return getSelenideDriver().find(seleniumSelector);
   }
@@ -288,6 +294,7 @@ public class Selenide {
   /**
    * @see #getElement(By, int)
    */
+  @CheckReturnValue
   public static SelenideElement $(By seleniumSelector, int index) {
     return getSelenideDriver().find(seleniumSelector, index);
   }
@@ -315,6 +322,7 @@ public class Selenide {
    * @param index 0..N
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement $(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
   }
@@ -332,6 +340,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @CheckReturnValue
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return getSelenideDriver().$(parent).find(cssSelector, index);
   }
@@ -348,6 +357,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @CheckReturnValue
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
     return getSelenideDriver().$(parent).find(seleniumSelector);
   }
@@ -365,6 +375,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @CheckReturnValue
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
     return getSelenideDriver().$(parent).find(seleniumSelector, index);
   }
@@ -372,6 +383,7 @@ public class Selenide {
   /**
    * Initialize collection with Elements
    */
+  @CheckReturnValue
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
   }
@@ -386,6 +398,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
    */
+  @CheckReturnValue
   public static ElementsCollection $$(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
   }
@@ -399,6 +412,7 @@ public class Selenide {
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return ElementsCollection which locates elements via XPath
    */
+  @CheckReturnValue
   public static ElementsCollection $$x(String xpathExpression) {
     return getSelenideDriver().$$x(xpathExpression);
   }
@@ -413,6 +427,7 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    */
+  @CheckReturnValue
   public static ElementsCollection $$(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
   }
@@ -433,6 +448,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @Deprecated
+  @CheckReturnValue
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
     return getSelenideDriver().$(parent).findAll(cssSelector);
   }
@@ -447,6 +463,7 @@ public class Selenide {
    * @see Selenide#$$(WebElement, String)
    */
   @Deprecated
+  @CheckReturnValue
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return getSelenideDriver().$(parent).findAll(seleniumSelector);
   }
@@ -458,6 +475,7 @@ public class Selenide {
    * @param webElement standard Selenium WebElement
    * @return given WebElement wrapped into SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement element(WebElement webElement) {
     return getSelenideDriver().$(webElement);
   }
@@ -468,6 +486,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement element(String cssSelector) {
     return getSelenideDriver().$(cssSelector);
   }
@@ -478,6 +497,7 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement element(By seleniumSelector) {
     return getSelenideDriver().$(seleniumSelector);
   }
@@ -489,6 +509,7 @@ public class Selenide {
    * @param index 0..N
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement element(By seleniumSelector, int index) {
     return getSelenideDriver().$(seleniumSelector, index);
   }
@@ -500,6 +521,7 @@ public class Selenide {
    * @param index 0..N
    * @return SelenideElement
    */
+  @CheckReturnValue
   public static SelenideElement element(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
   }
@@ -511,6 +533,7 @@ public class Selenide {
    * @param elements standard Selenium WebElement collection
    * @return given WebElement collection wrapped into SelenideElement collection
    */
+  @CheckReturnValue
   public static ElementsCollection elements(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
   }
@@ -525,6 +548,7 @@ public class Selenide {
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
    */
+  @CheckReturnValue
   public static ElementsCollection elements(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
   }
@@ -539,6 +563,7 @@ public class Selenide {
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
    */
+  @CheckReturnValue
   public static ElementsCollection elements(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
   }
@@ -552,6 +577,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @CheckReturnValue
   public static SelenideElement getElement(By criteria) {
     return getSelenideDriver().find(criteria);
   }
@@ -566,6 +592,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @CheckReturnValue
   public static SelenideElement getElement(By criteria, int index) {
     return getSelenideDriver().find(criteria, index);
   }
@@ -579,6 +606,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @Deprecated
+  @CheckReturnValue
   public static ElementsCollection getElements(By criteria) {
     return getSelenideDriver().findAll(criteria);
   }
@@ -601,6 +629,7 @@ public class Selenide {
    * Returns selected element in radio group
    * @return null if nothing selected
    */
+  @CheckReturnValue
   public static SelenideElement getSelectedRadio(By radioField) {
     return getSelenideDriver().getSelectedRadio(radioField);
   }
@@ -689,6 +718,7 @@ public class Selenide {
    *
    * @return WebElement, not SelenideElement! which has focus on it
    */
+  @CheckReturnValue
   public static WebElement getFocusedElement() {
     return getSelenideDriver().getFocusedElement();
   }
@@ -696,6 +726,7 @@ public class Selenide {
   /**
    * Create a Page Object instance
    */
+  @CheckReturnValue
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     return getSelenideDriver().page(pageObjectClass);
   }
@@ -703,6 +734,7 @@ public class Selenide {
   /**
    * Initialize a given Page Object instance
    */
+  @CheckReturnValue
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     return getSelenideDriver().page(pageObject);
   }
