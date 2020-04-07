@@ -28,6 +28,7 @@ import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Predicate;
@@ -104,6 +105,7 @@ public abstract class Condition {
    * @param attributeName name of attribute, not null
    * @return true iff attribute exists
    */
+  @CheckReturnValue
   public static Condition attribute(String attributeName) {
     return new Attribute(attributeName);
   }
@@ -114,6 +116,7 @@ public abstract class Condition {
    * @param attributeName          name of attribute
    * @param expectedAttributeValue expected value of attribute
    */
+  @CheckReturnValue
   public static Condition attribute(String attributeName, String expectedAttributeValue) {
     return new AttributeWithValue(attributeName, expectedAttributeValue);
   }
@@ -126,6 +129,7 @@ public abstract class Condition {
    * @param attributeName  name of attribute
    * @param attributeRegex regex to match attribute value
    */
+  @CheckReturnValue
   public static Condition attributeMatching(String attributeName, String attributeRegex) {
     return new MatchAttributeWithValue(attributeName, attributeRegex);
   }
@@ -138,6 +142,7 @@ public abstract class Condition {
    *
    * @param expectedValue expected value of "value" attribute
    */
+  @CheckReturnValue
   public static Condition value(String expectedValue) {
     return new Value(expectedValue);
   }
@@ -151,6 +156,7 @@ public abstract class Condition {
    * @param propertyName property name of the pseudo-element
    * @param expectedValue expected value of the property
    */
+  @CheckReturnValue
   public static Condition pseudo(String pseudoElementName, String propertyName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, propertyName, expectedValue);
   }
@@ -162,6 +168,7 @@ public abstract class Condition {
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
    * @param expectedValue expected content of the pseudo-element
    */
+  @CheckReturnValue
   public static Condition pseudo(String pseudoElementName, String expectedValue) {
     return new PseudoElementPropertyWithValue(pseudoElementName, "content", expectedValue);
   }
@@ -171,6 +178,7 @@ public abstract class Condition {
    *
    * @param value expected value of input field
    */
+  @CheckReturnValue
   public static Condition exactValue(String value) {
     return attribute("value", value);
   }
@@ -181,6 +189,7 @@ public abstract class Condition {
    *
    * @param name expected name of input field
    */
+  @CheckReturnValue
   public static Condition name(String name) {
     return attribute("name", name);
   }
@@ -191,6 +200,7 @@ public abstract class Condition {
    *
    * @param type expected type of input field
    */
+  @CheckReturnValue
   public static Condition type(String type) {
     return attribute("type", type);
   }
@@ -200,6 +210,7 @@ public abstract class Condition {
    *
    * @param id expected id of input field
    */
+  @CheckReturnValue
   public static Condition id(String id) {
     return attribute("id", id);
   }
@@ -219,6 +230,7 @@ public abstract class Condition {
    *
    * @see #matchText(String)
    */
+  @CheckReturnValue
   public static Condition matchesText(String text) {
     return matchText(text);
   }
@@ -230,6 +242,7 @@ public abstract class Condition {
    *
    * @param regex e.g. Kicked.*Chuck Norris - in this case ".*" can contain any characters including spaces, tabs, CR etc.
    */
+  @CheckReturnValue
   public static Condition matchText(String regex) {
     return new MatchText(regex);
   }
@@ -244,6 +257,7 @@ public abstract class Condition {
    *
    * @param text expected text of HTML element
    */
+  @CheckReturnValue
   public static Condition text(String text) {
     return new Text(text);
   }
@@ -257,6 +271,7 @@ public abstract class Condition {
    *
    * @param expectedText expected selected text of the element
    */
+  @CheckReturnValue
   public static Condition selectedText(String expectedText) {
     return new SelectedText(expectedText);
   }
@@ -270,6 +285,7 @@ public abstract class Condition {
    *
    * @param text expected text of HTML element
    */
+  @CheckReturnValue
   public static Condition textCaseSensitive(String text) {
     return new CaseSensitiveText(text);
   }
@@ -283,6 +299,7 @@ public abstract class Condition {
    *
    * @param text expected text of HTML element
    */
+  @CheckReturnValue
   public static Condition exactText(String text) {
     return new ExactText(text);
   }
@@ -295,6 +312,7 @@ public abstract class Condition {
    *
    * @param text expected text of HTML element
    */
+  @CheckReturnValue
   public static Condition exactTextCaseSensitive(String text) {
     return new ExactTextCaseSensitive(text);
   }
@@ -303,6 +321,7 @@ public abstract class Condition {
    * Asserts that element has the given class. Element may other classes too.
    * <p>Sample: <code>$("input").shouldHave(cssClass("active"));</code></p>
    */
+  @CheckReturnValue
   public static Condition cssClass(String cssClass) {
     return new CssClass(cssClass);
   }
@@ -326,6 +345,7 @@ public abstract class Condition {
    * @param expectedValue expected value of css property
    * @see WebElement#getCssValue
    */
+  @CheckReturnValue
   public static Condition cssValue(String propertyName, String expectedValue) {
     return new CssValue(propertyName, expectedValue);
   }
@@ -338,6 +358,7 @@ public abstract class Condition {
    * @param description the description of the predicate
    * @param predicate   the {@link Predicate} to match
    */
+  @CheckReturnValue
   public static Condition match(String description, Predicate<WebElement> predicate) {
     return new CustomMatch(description, predicate);
   }
@@ -387,6 +408,7 @@ public abstract class Condition {
    * <p>
    * Typically you don't need to use it.
    */
+  @CheckReturnValue
   public static Condition not(final Condition condition) {
     return new Not(condition);
   }
@@ -398,6 +420,7 @@ public abstract class Condition {
    * @param conditions Conditions to match.
    * @return logical AND for given conditions.
    */
+  @CheckReturnValue
   public static Condition and(String name, Condition... conditions) {
     return new And(name, asList(conditions));
   }
@@ -409,6 +432,7 @@ public abstract class Condition {
    * @param conditions Conditions to match.
    * @return logical OR for given conditions.
    */
+  @CheckReturnValue
   public static Condition or(String name, Condition... conditions) {
     return new Or(name, asList(conditions));
   }
@@ -420,6 +444,7 @@ public abstract class Condition {
    * @param delegate next condition to wrap
    * @return Condition
    */
+  @CheckReturnValue
   public static Condition be(Condition delegate) {
     return wrap("be", delegate);
   }
@@ -431,6 +456,7 @@ public abstract class Condition {
    * @param delegate next condition to wrap
    * @return Condition
    */
+  @CheckReturnValue
   public static Condition have(Condition delegate) {
     return wrap("have", delegate);
   }
@@ -468,7 +494,7 @@ public abstract class Condition {
    * Used in error reporting.
    * Optional. Makes sense only if you need to add some additional important info to error message.
    *
-   * @param driver
+   * @param driver given driver
    * @param element given WebElement
    * @return any string that needs to be appended to error message.
    */
@@ -479,6 +505,7 @@ public abstract class Condition {
   /**
    * Should be used for explaining the reason of condition
    */
+  @CheckReturnValue
   public Condition because(String message) {
     return new ExplainedCondition(this, message);
   }

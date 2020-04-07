@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByShadow;
+import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
@@ -16,6 +17,7 @@ public class Selectors {
    * @param elementText Text to search inside element
    * @return standard selenium By criteria`
    */
+  @CheckReturnValue
   public static By withText(String elementText) {
     return new WithText(elementText);
   }
@@ -29,6 +31,7 @@ public class Selectors {
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
    */
+  @CheckReturnValue
   public static By byText(String elementText) {
     return new ByText(elementText);
   }
@@ -62,6 +65,7 @@ public class Selectors {
    * @param attributeValue value of attribute, should not contain both apostrophes and quotes
    * @return standard selenium By cssSelector criteria
    */
+  @CheckReturnValue
   public static By byAttribute(String attributeName, String attributeValue) {
     String escapedAttributeValue = attributeValue.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
     return By.cssSelector(String.format("[%s=\"%s\"]", attributeName, escapedAttributeValue));
@@ -71,6 +75,7 @@ public class Selectors {
    * @see ByShadow#cssSelector(java.lang.String, java.lang.String, java.lang.String...)
    * @since 5.10
    */
+  @CheckReturnValue
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
     return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
   }
@@ -78,6 +83,7 @@ public class Selectors {
   /**
    * Synonym for #byAttribute
    */
+  @CheckReturnValue
   public static By by(String attributeName, String attributeValue) {
     return byAttribute(attributeName, attributeValue);
   }
@@ -85,6 +91,7 @@ public class Selectors {
   /**
    * Find element with given title ("title" attribute)
    */
+  @CheckReturnValue
   public static By byTitle(String title) {
     return byAttribute("title", title);
   }
@@ -92,6 +99,7 @@ public class Selectors {
   /**
    * Find input element with given value ("value" attribute)
    */
+  @CheckReturnValue
   public static By byValue(String value) {
     return byAttribute("value", value);
   }
@@ -136,6 +144,7 @@ public class Selectors {
    * @see By#name(java.lang.String)
    * @since 3.1
    */
+  @CheckReturnValue
   public static By byName(String name) {
     return By.name(name);
   }
@@ -144,6 +153,7 @@ public class Selectors {
    * @see By#xpath(java.lang.String)
    * @since 3.1
    */
+  @CheckReturnValue
   public static By byXpath(String xpath) {
     return By.xpath(xpath);
   }
@@ -152,6 +162,7 @@ public class Selectors {
    * @see By#linkText(java.lang.String)
    * @since 3.1
    */
+  @CheckReturnValue
   public static By byLinkText(String linkText) {
     return By.linkText(linkText);
   }
@@ -160,6 +171,7 @@ public class Selectors {
    * @see By#partialLinkText(java.lang.String)
    * @since 3.1
    */
+  @CheckReturnValue
   public static By byPartialLinkText(String partialLinkText) {
     return By.partialLinkText(partialLinkText);
   }
@@ -168,6 +180,7 @@ public class Selectors {
    * @see By#id(java.lang.String)
    * @since 3.1
    */
+  @CheckReturnValue
   public static By byId(String id) {
     return By.id(id);
   }
@@ -176,6 +189,7 @@ public class Selectors {
    * @see By#cssSelector(java.lang.String)
    * @since 3.8
    */
+  @CheckReturnValue
   public static By byCssSelector(String css) {
     return By.cssSelector(css);
   }
@@ -184,6 +198,7 @@ public class Selectors {
    * @see By#className(java.lang.String)
    * @since 3.8
    */
+  @CheckReturnValue
   public static By byClassName(String className) {
     return By.className(className);
   }
@@ -192,6 +207,7 @@ public class Selectors {
    * @see By#tagName(java.lang.String)
    * @since 5.11
    */
+  @CheckReturnValue
   public static By byTagName(String tagName) {
     return By.tagName(tagName);
   }

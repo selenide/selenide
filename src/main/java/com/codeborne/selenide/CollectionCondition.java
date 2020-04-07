@@ -13,11 +13,12 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
   protected String explanation;
@@ -29,26 +30,32 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   /**
    * Checks that collection has the given size
    */
+  @CheckReturnValue
   public static CollectionCondition size(int expectedSize) {
     return new ListSize(expectedSize);
   }
 
+  @CheckReturnValue
   public static CollectionCondition sizeGreaterThan(int expectedSize) {
     return new SizeGreaterThan(expectedSize);
   }
 
+  @CheckReturnValue
   public static CollectionCondition sizeGreaterThanOrEqual(int expectedSize) {
     return new SizeGreaterThanOrEqual(expectedSize);
   }
 
+  @CheckReturnValue
   public static CollectionCondition sizeLessThan(int expectedSize) {
     return new SizeLessThan(expectedSize);
   }
 
+  @CheckReturnValue
   public static CollectionCondition sizeLessThanOrEqual(int size) {
     return new SizeLessThanOrEqual(size);
   }
 
+  @CheckReturnValue
   public static CollectionCondition sizeNotEqual(int expectedSize) {
     return new SizeNotEqual(expectedSize);
   }
@@ -58,6 +65,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition texts(String... expectedTexts) {
     return new Texts(expectedTexts);
   }
@@ -67,6 +75,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition texts(List<String> expectedTexts) {
     return new Texts(expectedTexts);
   }
@@ -76,6 +85,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition textsInAnyOrder(String... expectedTexts) {
     return new TextsInAnyOrder(expectedTexts);
   }
@@ -85,6 +95,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition textsInAnyOrder(List<String> expectedTexts) {
     return new TextsInAnyOrder(expectedTexts);
   }
@@ -94,6 +105,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition exactTexts(String... expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
@@ -103,6 +115,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    *
    * <p>NB! Ignores multiple whitespaces between words</p>
    */
+  @CheckReturnValue
   public static CollectionCondition exactTexts(List<String> expectedTexts) {
     return new ExactTexts(expectedTexts);
   }
@@ -113,6 +126,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
+  @CheckReturnValue
   public static CollectionCondition anyMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new AnyMatch(description, predicate);
   }
@@ -123,6 +137,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
+  @CheckReturnValue
   public static CollectionCondition allMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new AllMatch(description, predicate);
   }
@@ -133,6 +148,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * @param description The description of the given predicate
    * @param predicate   the {@link java.util.function.Predicate} to match
    */
+  @CheckReturnValue
   public static CollectionCondition noneMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new NoneMatch(description, predicate);
   }
