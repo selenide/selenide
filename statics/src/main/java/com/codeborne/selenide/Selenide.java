@@ -749,6 +749,7 @@ public class Selenide {
    *
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
+  @CheckReturnValue
   public static SelenideWait Wait() {
     return getSelenideDriver().Wait();
   }
@@ -766,6 +767,7 @@ public class Selenide {
    *    .perform();
    * </pre>
    */
+  @CheckReturnValue
   public static Actions actions() {
     return getSelenideDriver().driver().actions();
   }
