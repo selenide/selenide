@@ -20,7 +20,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.regex.Pattern.DOTALL;
 
 public class Navigator {
-  protected static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
+  private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
 
   private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
