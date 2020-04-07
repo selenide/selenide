@@ -86,6 +86,8 @@ class ErrorMessagesTest implements WithAssertions {
       currentDir = '/' + currentDir.replace('\\', '/');
     }
 
+    currentDir = currentDir.replace(" ", "%20"); //the screenshot path uses %20 instead of the space character
+
     doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(OutputType.FILE);
 
     String screenshot = ErrorMessages.screenshot(driver);
