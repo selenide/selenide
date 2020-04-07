@@ -5,8 +5,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
 public class Val implements Command<Object> {
-  private GetValue getValue;
-  private SetValue setValue;
+  private final GetValue getValue;
+  private final SetValue setValue;
 
   public Val() {
     this.getValue = new GetValue();

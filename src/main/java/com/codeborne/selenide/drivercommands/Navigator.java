@@ -20,9 +20,9 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.regex.Pattern.DOTALL;
 
 public class Navigator {
-  protected Pattern absoluteUrlRegex = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
+  protected static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
 
-  private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
+  private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   public void open(SelenideDriver driver, String relativeOrAbsoluteUrl) {
     navigateTo(driver, relativeOrAbsoluteUrl, AuthenticationType.BASIC, "", "", "");
@@ -159,7 +159,7 @@ public class Navigator {
   }
 
   boolean isAbsoluteUrl(String relativeOrAbsoluteUrl) {
-    return absoluteUrlRegex.matcher(relativeOrAbsoluteUrl).matches();
+    return ABSOLUTE_URL_REGEX.matcher(relativeOrAbsoluteUrl).matches();
   }
 
   public void back(Driver driver) {

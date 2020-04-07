@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import java.io.IOException;
 
 public class GetSelectedValue implements Command<String> {
-  private Command<SelenideElement> getSelectedOption;
+  private final Command<SelenideElement> getSelectedOption;
 
   public GetSelectedValue() {
     this.getSelectedOption = new GetSelectedOption();
