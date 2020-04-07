@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 public class SetSelected implements Command<WebElement> {
-  private Click click;
+  private final Click click;
 
   public SetSelected() {
     this.click = new Click();

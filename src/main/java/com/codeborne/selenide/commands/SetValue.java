@@ -10,8 +10,8 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.impl.Events.events;
 
 public class SetValue implements Command<WebElement> {
-  private SelectOptionByValue selectOptionByValue;
-  private SelectRadio selectRadio;
+  private final SelectOptionByValue selectOptionByValue;
+  private final SelectRadio selectRadio;
 
   public SetValue() {
     this.selectOptionByValue = new SelectOptionByValue();

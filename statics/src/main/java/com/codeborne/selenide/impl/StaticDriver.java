@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
  * @see StaticConfig
  */
 public class StaticDriver implements Driver {
-  private Config config = new StaticConfig();
+  private final Config config = new StaticConfig();
 
   @Override
   public Config config() {

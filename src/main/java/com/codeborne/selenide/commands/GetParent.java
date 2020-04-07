@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.By;
 
 public class GetParent implements Command<SelenideElement> {
-  private Find find;
+  private final Find find;
 
   GetParent() {
     this.find = new Find();

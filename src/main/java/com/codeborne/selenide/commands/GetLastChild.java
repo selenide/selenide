@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 
 public class GetLastChild implements Command<SelenideElement> {
 
-  private Find find;
+  private final Find find;
 
   public GetLastChild() {
     find = new Find();

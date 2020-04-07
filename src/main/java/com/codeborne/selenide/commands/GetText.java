@@ -6,7 +6,7 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
 public class GetText implements Command<String> {
-  private GetSelectedText getSelectedText;
+  private final GetSelectedText getSelectedText;
 
   public GetText() {
     this.getSelectedText = new GetSelectedText();
