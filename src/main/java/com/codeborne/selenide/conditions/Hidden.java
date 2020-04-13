@@ -19,4 +19,9 @@ public class Hidden extends Condition {
       return true;
     }
   }
+
+  @Override
+  protected Condition negate() {
+    return new Not(this, false);
+  }
 }

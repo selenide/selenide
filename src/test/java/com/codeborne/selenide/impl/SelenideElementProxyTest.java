@@ -9,8 +9,6 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import java.util.HashMap;
-import java.util.Map;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -115,8 +115,8 @@ class SelenideElementProxyTest implements WithAssertions {
     driver.find("#firstName").shouldNotBe(exist);
     driver.find("#firstName").should(disappear);
     driver.find("#firstName").shouldNotBe(visible);
-    driver.find("#firstName").shouldNotBe(enabled);
-    driver.find("#firstName").shouldNotHave(text("goodbye"));
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
   }
 
   @Test
@@ -126,8 +126,8 @@ class SelenideElementProxyTest implements WithAssertions {
     driver.find("#firstName").shouldNot(exist);
     driver.find("#firstName").should(disappear);
     driver.find("#firstName").shouldNotBe(visible);
-    driver.find("#firstName").shouldNotBe(enabled);
-    driver.find("#firstName").shouldNotHave(text("goodbye"));
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
   }
 
   @Test

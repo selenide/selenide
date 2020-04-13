@@ -7,8 +7,8 @@ import org.openqa.selenium.WebElement;
 public class Not extends Condition {
   private final Condition condition;
 
-  public Not(Condition originalCondition) {
-    super("not " + originalCondition.getName(), !originalCondition.missingElementSatisfiesCondition());
+  public Not(Condition originalCondition, boolean absentElementMatchesCondition) {
+    super("not " + originalCondition.getName(), absentElementMatchesCondition);
     this.condition = originalCondition;
   }
 

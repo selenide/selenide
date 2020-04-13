@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NotExistingElementTest extends ITest {
   @BeforeEach
@@ -36,12 +38,18 @@ class NotExistingElementTest extends ITest {
   }
 
   @Test
-  void shouldNotHaveTextRemove() {
-    $("#not_exist").shouldNotHave(text("Remove me"));
+  void shouldNotHaveText_fails_ifElementIsNotFound() {
+    assertThatThrownBy(() ->
+      $("#not_exist").shouldNotHave(text("Remove me"))
+    ).isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#not_exist}");
   }
 
   @Test
-  void shouldNotHaveAttributeAbc() {
-    $("#not_exist").shouldNotHave(attribute("abc"));
+  void shouldNotHaveAttribute_fails_ifElementIsNotFound() {
+    assertThatThrownBy(() ->
+      $("#not_exist").shouldNotHave(attribute("abc"))
+    ).isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#not_exist}");
   }
 }
