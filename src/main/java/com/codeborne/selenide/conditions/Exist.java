@@ -20,4 +20,9 @@ public class Exist extends Condition {
       return false;
     }
   }
+
+  @Override
+  protected Condition negate() {
+    return new Not(this, true);
+  }
 }

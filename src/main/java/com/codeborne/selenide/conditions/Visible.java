@@ -18,4 +18,9 @@ public class Visible extends Condition {
   public String actualValue(Driver driver, WebElement element) {
     return String.format("visible:%s", element.isDisplayed());
   }
+
+  @Override
+  protected Condition negate() {
+    return new Not(this, true);
+  }
 }
