@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 /**
  * The main starting point of Selenide.
@@ -245,6 +248,22 @@ public class Selenide {
   public static String screenshot(String fileName) {
     return Screenshots.takeScreenShot(fileName);
   }
+
+  /**Take a full screenshot of the current page and save as fileName.png
+   * @param fileName Name of file (without extension) to as PNG
+   * @param filePath file path to the directory for the screenshot. Example: "C:\\testing\\screenshots\\"
+   * The default location of the screenshot will in be folder called "screenshots" in the project directory
+   * Many other options are available using the Shutterbug class as seen at https://github.com/assertthat/selenium-shutterbug
+   */
+  public static void screenshotFullpage(String fileName, String filePath) {
+    Shutterbug.shootPage(getWebDriver(), ScrollStrategy.WHOLE_PAGE).withName(fileName).save(filePath);
+  }
+  public static void screenshotFullpage(String fileName) {
+    Shutterbug.shootPage(getWebDriver(), ScrollStrategy.WHOLE_PAGE).withName(fileName).save();
+  }
+  public static void screenshotFullpage() {
+    Shutterbug.shootPage(getWebDriver(), ScrollStrategy.WHOLE_PAGE).save();
+    }
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
