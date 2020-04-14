@@ -263,7 +263,7 @@ public class Selenide {
   }
   public static void screenshotFullpage() {
     Shutterbug.shootPage(getWebDriver(), ScrollStrategy.WHOLE_PAGE).save();
-    }
+  }
 
   /**
    * Wrap standard Selenium WebElement into SelenideElement
