@@ -31,7 +31,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  * </p>
  */
 public class Configuration {
-  private static SelenideConfig defaults = new SelenideConfig();
+  private static final SelenideConfig defaults = new SelenideConfig();
 
   /**
    * Base url for open() function calls

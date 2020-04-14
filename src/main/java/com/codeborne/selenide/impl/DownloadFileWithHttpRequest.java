@@ -49,7 +49,7 @@ public class DownloadFileWithHttpRequest {
   protected boolean ignoreSelfSignedCerts = true;
 
   private final Downloader downloader;
-  private HttpHelper httpHelper = new HttpHelper();
+  private final HttpHelper httpHelper = new HttpHelper();
 
   public DownloadFileWithHttpRequest() {
     this(new Downloader());

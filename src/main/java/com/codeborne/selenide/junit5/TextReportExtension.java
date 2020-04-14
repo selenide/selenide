@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  * @since 1.0.0
  */
 public class TextReportExtension implements BeforeEachCallback, AfterEachCallback, AfterAllCallback {
-  private SimpleReport report;
+  private final SimpleReport report;
   private boolean onFailedTest;
   private boolean onSucceededTest;
 

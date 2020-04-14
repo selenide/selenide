@@ -29,7 +29,7 @@ public class FileDownloadFilter implements ResponseFilter {
   private final Config config;
   private final Downloader downloader;
 
-  private HttpHelper httpHelper = new HttpHelper();
+  private final HttpHelper httpHelper = new HttpHelper();
   private boolean active;
   private final List<DownloadedFile> downloadedFiles = new CopyOnWriteArrayList<>();
   private final List<Response> responses = new CopyOnWriteArrayList<>();

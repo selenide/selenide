@@ -2,6 +2,8 @@
 
 ## 5.11.0
 * #996 Add MatchAttributeWithValue condition -- thanks to Dmytro Stekanov for PR #1100
+* Add CheckReturnValue annotation for methods that only return value  --  thanks to Yuriy Artamonov for PR #1106
+* Add missing byTagName to Selectors to make it consistent with By  --  thanks to Yuriy Artamonov for PR #1104
 
 ## 5.10.0 (released 18.03.2020)
 * #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090
@@ -51,6 +53,8 @@
 * #923 Migrate from JUL to SLF4J  --  thanks to Gleb Schukin @gschukin for PR #926
 * Remove HtmlUnit dependency  --  thanks to Aliaksandr Rasolka for PR #1003
 * Remove PhantomJS dependency  --  thanks to Aliaksandr Rasolka for PR #998
+* Remove built-in support for Safari browser  (but you can still use Safari, see https://github.com/selenide/selenide/wiki/Safari)
+* Remove built-in support for jbrowser driver
 * #1000 make `$.execute(command)` generic: it now can return any value, or even be Void  --  see PR #1001
 * #999 make `holdBrowserOpen` setting work again  --  see PR #1005
 * #907 take screenshot in case of `DialogTextMismatch` error  --  thanks to Nick Holloway @nwholloway for PR #986
