@@ -34,3 +34,16 @@ apply from: rootProject.file('gradle/code-analysis.gradle')
 apply from: rootProject.file('gradle/coverage.gradle')
 apply from: rootProject.file('gradle/tests.gradle')
 apply from: rootProject.file('gradle/deploy.gradle')
+
+task fatJar(type: Jar) {
+  //create a single jar file with all dependencies
+  manifest {
+    //attributes 'Main-Class': 'com.yourpackage.Main' //not needed
+  }
+  archiveClassifier = "all"
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+  with jar
+}
