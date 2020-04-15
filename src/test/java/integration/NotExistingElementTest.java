@@ -4,11 +4,14 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NotExistingElementTest extends ITest {
@@ -35,6 +38,20 @@ class NotExistingElementTest extends ITest {
   @Test
   void shouldNotBeVisible() {
     $("#not_exist").shouldNotBe(visible);
+  }
+
+  @Test
+  void toWebElement_shouldNotWait() {
+    long start = System.nanoTime();
+    try {
+      assertThatThrownBy(() -> $("#not_exist").toWebElement())
+        .isInstanceOf(org.openqa.selenium.NoSuchElementException.class)
+        .hasMessageStartingWith("Unable to locate element: #not_exist");
+    }
+    finally {
+      long end = System.nanoTime();
+      assertThat(TimeUnit.NANOSECONDS.toMillis(end - start)).isLessThan(200);
+    }
   }
 
   @Test
