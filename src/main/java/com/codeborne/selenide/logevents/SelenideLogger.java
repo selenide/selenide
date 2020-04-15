@@ -1,7 +1,10 @@
 package com.codeborne.selenide.logevents;
 
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.NOPLogger;
+import org.slf4j.helpers.NOPLoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,6 +56,7 @@ public class SelenideLogger {
   }
 
   public static SelenideLog beginStep(String source, String subject) {
+    checkThatSlf4jIsConfigured();
     Collection<LogEventListener> listeners = getEventLoggerListeners();
 
     SelenideLog log = new SelenideLog(source, subject);
@@ -65,6 +69,15 @@ public class SelenideLogger {
       }
     }
     return log;
+  }
+
+  private static void checkThatSlf4jIsConfigured() {
+    ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
+    if (loggerFactory instanceof NOPLoggerFactory || loggerFactory.getLogger("com.codeborne.selenide") instanceof NOPLogger) {
+      throw new IllegalStateException("SLF4J is not configured. You will not see any Selenide logs. \n" +
+        "  Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath. \n" +
+        "  See https://github.com/selenide/selenide/wiki/slf4j");
+    }
   }
 
   public static void commitStep(SelenideLog log, Throwable error) {
