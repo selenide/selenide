@@ -250,7 +250,7 @@ public class Selenide {
   }
 
   /**Take a full screenshot of the current page and save as fileName.png
-   * @param fileName Name of file (without extension) to as PNG
+   * @param fileName Name of file (without extension) to be saved as PNG
    * @param filePath file path to the directory for the screenshot. Example: "C:\\testing\\screenshots\\"
    * The default location of the screenshot will in be folder called "screenshots" in the project directory
    */
