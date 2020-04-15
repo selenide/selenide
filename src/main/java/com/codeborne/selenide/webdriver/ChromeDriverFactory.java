@@ -39,7 +39,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       options.setBinary(config.browserBinary());
     }
-    options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+    options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation", "load-extension"});
     options.addArguments("--proxy-bypass-list=<-loopback>");
     options.merge(createCommonCapabilities(config, proxy));
     transferChromeOptionsFromSystemProperties(config, options);
