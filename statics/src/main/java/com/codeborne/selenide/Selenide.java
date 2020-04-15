@@ -253,7 +253,6 @@ public class Selenide {
    * @param fileName Name of file (without extension) to as PNG
    * @param filePath file path to the directory for the screenshot. Example: "C:\\testing\\screenshots\\"
    * The default location of the screenshot will in be folder called "screenshots" in the project directory
-   * Many other options are available using the Shutterbug class as seen at https://github.com/assertthat/selenium-shutterbug
    */
   public static void screenshotFullpage(String fileName, String filePath) {
     Shutterbug.shootPage(getWebDriver(), ScrollStrategy.WHOLE_PAGE).withName(fileName).save(filePath);
