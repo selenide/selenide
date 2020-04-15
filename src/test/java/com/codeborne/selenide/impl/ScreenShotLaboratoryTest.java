@@ -1,15 +1,26 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 import java.util.List;
 
 import static java.io.File.separatorChar;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 class ScreenShotLaboratoryTest implements WithAssertions {
+  private final ChromeDriver webDriver = mock(ChromeDriver.class);
+  private final SelenideConfig config = new SelenideConfig().savePageSource(false);
+  private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
+
   private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
     public String takeScreenShot(Driver driver, String fileName) {
@@ -112,5 +123,32 @@ class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastScreenshot())
       .hasToString("12356789.2");
+  }
+
+  @Test
+  void canFormatScreenShotPathWithSpaces() {
+    ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(OutputType.FILE);
+
+    config.reportsUrl("http://ci.org/job/123/artifact");
+    config.reportsFolder("build/reports/path with spaces/");
+
+    String screenShot = screenshots.formatScreenShotPath(driver);
+
+    assertThat(screenShot)
+      .contains("http://ci.org/job/123/artifact/build/reports/path%20with%20spaces/");
+  }
+
+  @Test
+  void doNotEncodeReportsURL() {
+    ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
+    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(OutputType.FILE);
+
+    config.reportsUrl("http://ci.org/path%20with%spaces/");
+
+    String screenShotPath = screenshots.formatScreenShotPath(driver);
+
+    assertThat(screenShotPath)
+      .contains("http://ci.org/path%20with%spaces/");
   }
 }

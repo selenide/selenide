@@ -22,15 +22,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.io.File.separatorChar;
 import static org.openqa.selenium.OutputType.FILE;
@@ -346,23 +350,9 @@ public class ScreenShotLaboratory {
     }
 
     if (driver.config().reportsUrl() != null) {
-      Path current = Paths.get(System.getProperty("user.dir"));
-      Path target = Paths.get(screenshot).normalize();
-      String screenshotUrl;
-      if (isInsideFolder(current, target)) {
-        Path relativePath = current.relativize(target);
-        screenshotUrl = driver.config().reportsUrl() + relativePath.toString().replace('\\', '/');
-      } else {
-        String name = target.toFile().getName();
-        screenshotUrl = driver.config().reportsUrl() + name;
-      }
-      try {
-        screenshotUrl = new URL(screenshotUrl).toExternalForm();
-      } catch (MalformedURLException ignore) {
-        // ignored exception
-      }
-      log.debug("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenshotUrl);
-      return screenshotUrl;
+      String screenShotURL = formatScreenShotURL(driver.config().reportsUrl(), screenshot);
+      log.info("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenShotURL);
+      return screenShotURL;
     }
 
     log.debug("reportsUrl is not configured. Returning screenshot file name '{}'", screenshot);
@@ -370,6 +360,37 @@ public class ScreenShotLaboratory {
       return new File(screenshot).toURI().toURL().toExternalForm();
     } catch (MalformedURLException e) {
       return "file://" + screenshot;
+    }
+  }
+
+  private String formatScreenShotURL(String reportsURL, String screenshot) {
+    Path current = Paths.get(System.getProperty("user.dir"));
+    Path target = Paths.get(screenshot).normalize();
+    String screenShotPath;
+    if (isInsideFolder(current, target)) {
+      screenShotPath = current.relativize(target).toString().replace('\\', '/');
+    } else {
+      screenShotPath = target.toFile().getName();
+    }
+    return normalizeURL(reportsURL, screenShotPath);
+  }
+
+  private String normalizeURL(String reportsURL, String path) {
+    String slash = "/";
+    reportsURL = reportsURL.endsWith(slash) ? reportsURL : reportsURL + slash;
+    path = Arrays.stream(path.split(slash))
+      .map(this::encode)
+      .collect(Collectors.joining(slash))
+      .replaceAll("\\+", "%20");
+    return reportsURL + path;
+  }
+
+  private String encode(String str) {
+    try {
+      return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
+    } catch (UnsupportedEncodingException e) {
+      log.debug("Cannot encode path segment: {}", str, e);
+      return str;
     }
   }
 
