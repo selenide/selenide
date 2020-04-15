@@ -74,8 +74,9 @@ public class SelenideLogger {
   private static void checkThatSlf4jIsConfigured() {
     ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
     if (loggerFactory instanceof NOPLoggerFactory || loggerFactory.getLogger("com.codeborne.selenide") instanceof NOPLogger) {
-      throw new IllegalStateException("SLF4J is not configured. You will not see any Selenide logs. " +
-        "Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath.");
+      throw new IllegalStateException("SLF4J is not configured. You will not see any Selenide logs. \n" +
+        "  Please add slf4j-simple.jar, slf4j-log4j12.jar or logback-classic.jar to your classpath. \n" +
+        "  See https://github.com/selenide/selenide/wiki/slf4j");
     }
   }
 
