@@ -4,6 +4,7 @@
 * #996 Add MatchAttributeWithValue condition -- thanks to Dmytro Stekanov for PR #1100
 * Add CheckReturnValue annotation for methods that only return value  --  thanks to Yuriy Artamonov for PR #1106
 * Add missing byTagName to Selectors to make it consistent with By  --  thanks to Yuriy Artamonov for PR #1104
+* #1114 throw a clear error message if SLF4J is not properly configured  --  see PR #1115
 
 ## 5.10.0 (released 18.03.2020)
 * #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090
