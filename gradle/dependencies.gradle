@@ -39,6 +39,8 @@ dependencies {
   implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
+
+  implementation 'com.assertthat:selenium-shutterbug:0.9.3'
 }
 
 task libsProd(type: Sync) {
