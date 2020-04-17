@@ -35,8 +35,8 @@ public class SelenideConfig implements Config {
   private String reportsUrl = new CiReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
   private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
   private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
-  private SelectorMode selectorMode = CSS;
-  private AssertionMode assertionMode = STRICT;
+  private SelectorMode selectorMode = SelectorMode.valueOf(System.getProperty("selenide.selectorMode", CSS.name()));
+  private AssertionMode assertionMode = AssertionMode.valueOf(System.getProperty("selenide.assertionMode", STRICT.name()));
   private FileDownloadMode fileDownload = FileDownloadMode.valueOf(System.getProperty("selenide.fileDownload", HTTPGET.name()));
   private boolean proxyEnabled = Boolean.parseBoolean(System.getProperty("selenide.proxyEnabled", "false"));
   private String proxyHost = System.getProperty("selenide.proxyHost", "");
