@@ -17,6 +17,7 @@ class ElementRemovedTest extends ITest {
   @BeforeEach
   void clickRemovesElement() {
     openFile("elements_disappear_on_click.html");
+    setTimeout(2000);
     $("#remove").click();
   }
 

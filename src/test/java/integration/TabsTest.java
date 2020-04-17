@@ -26,7 +26,7 @@ class TabsTest extends ITest {
   @Test
   @Video
   void userCanBrowseTabs_webdriver_api() {
-    openFile("page_with_tabs.html");
+    setTimeout(1000);
 
     WebDriver driver = driver().getWebDriver();
 

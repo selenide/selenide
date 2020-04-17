@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +69,7 @@ class AlertTest extends IntegrationTest {
 
   @Test
   void waitsUntilAlertDialogAppears() {
+    Configuration.timeout = 4000;
     $(By.name("username")).val("Быстрый Гарри");
     $(byValue("Slow alert")).click();
     confirm("Are you sure, Быстрый Гарри?");
@@ -77,6 +79,7 @@ class AlertTest extends IntegrationTest {
 
   @Test
   void waitsUntilPromptDialogAppears() {
+    Configuration.timeout = 4000;
     $(By.name("username")).val("Медленный Барри");
     $(byValue("Slow prompt")).click();
     prompt("Медленный Барри");

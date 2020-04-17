@@ -18,8 +18,9 @@ class TabsCustomWaitTest extends ITest {
 
   @Test
   void waitsUntilTabAppears_withCustomTimeout() {
+    setTimeout(1000);
     $("#open-new-tab-with-delay").click();
-    switchTo().window("Test::alerts", Duration.ofSeconds(5));
+    switchTo().window("Test::alerts", Duration.ofSeconds(3));
     $("h1").shouldHave(text("Page with alerts"));
   }
 

@@ -15,9 +15,9 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,7 +27,6 @@ class PageObjectTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");
-    sleep(100);
     pageWithSelects = page(SelectsPage.class);
   }
 
@@ -66,6 +65,7 @@ class PageObjectTest extends IntegrationTest {
 
   @Test
   void canInjectSelenideElement() {
+    timeout = 4000;
     pageWithSelects.h1.shouldHave(Condition.text("Page with selects"));
     pageWithSelects.dynamicContent.shouldHave(text("dynamic content"));
   }

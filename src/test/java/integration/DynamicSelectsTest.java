@@ -13,6 +13,7 @@ class DynamicSelectsTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_dynamic_select.html");
+    setTimeout(4000);
   }
 
   @Test

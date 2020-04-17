@@ -30,8 +30,6 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
 @ExtendWith({ScreenShooterExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
-  private long defaultTimeout;
-
   @BeforeAll
   static void resetSettingsBeforeClass() {
     resetSettings();
@@ -40,12 +38,11 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeEach
   final void setUpEach() {
     resetSettings();
-    rememberTimeout();
   }
 
   @AfterEach
   public void restoreDefaultProperties() {
-    timeout = defaultTimeout;
+    timeout = 1;
     clickViaJs = false;
   }
 
@@ -57,6 +54,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   private static void resetSettings() {
+    timeout = 1;
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
@@ -67,10 +65,6 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     useProxy(true);
-  }
-
-  private void rememberTimeout() {
-    defaultTimeout = timeout;
   }
 
   protected void openFile(String fileName) {

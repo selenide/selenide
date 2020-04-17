@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 class ElementHiddenTest extends ITest {
   @BeforeEach
   void clickRemovesElement() {
+    setTimeout(4000);
     openFile("elements_disappear_on_click.html");
     $("#hide").click();
   }

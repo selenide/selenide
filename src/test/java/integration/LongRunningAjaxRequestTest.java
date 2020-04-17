@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class LongRunningAjaxRequestTest extends ITest {
   @BeforeEach
   void openTestPage() {
+    setTimeout(4000);
     openFile("long_ajax_request.html");
     $("#loading").shouldNot(exist);
     $(byText("Run long request")).click();
