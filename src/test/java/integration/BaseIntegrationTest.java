@@ -18,7 +18,6 @@ import static org.openqa.selenium.net.PortProber.findFreePort;
 public abstract class BaseIntegrationTest {
   private static final boolean SSL = true;
   protected static LocalHttpServer server;
-  protected static long averageSeleniumCommandDuration = 100;
   private static String protocol;
   private static int port;
   protected static final String browser = System.getProperty("selenide.browser", FIREFOX);

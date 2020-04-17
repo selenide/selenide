@@ -12,6 +12,7 @@ class CollectionReloadingTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("collection_with_delays.html");
+    setTimeout(4000);
   }
 
   @Test

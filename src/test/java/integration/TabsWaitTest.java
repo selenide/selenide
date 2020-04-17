@@ -9,6 +9,7 @@ class TabsWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs_with_delays.html");
+    setTimeout(2000);
   }
 
   @Test

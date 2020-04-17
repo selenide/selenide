@@ -20,6 +20,7 @@ public class DirectFileDownloadTest extends IntegrationTest {
 
   @Test
   void downloadFileByDirectLink() throws IOException {
+    Configuration.timeout = 4000;
     File file = download("/files/hello_world.txt");
     assertThat(file.getName()).isEqualTo("hello_world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, WinRar!");
@@ -27,6 +28,7 @@ public class DirectFileDownloadTest extends IntegrationTest {
 
   @Test
   void downloadFileWithCyrillicName() throws IOException {
+    Configuration.timeout = 4000;
     File file = download("/files/файл-с-русским-названием.txt");
     assertThat(file.getName()).isEqualTo("файл-с-русским-названием.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Превед медвед!");

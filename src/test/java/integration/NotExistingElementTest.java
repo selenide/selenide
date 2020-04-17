@@ -42,11 +42,13 @@ class NotExistingElementTest extends ITest {
 
   @Test
   void toWebElement_shouldNotWait() {
+    setTimeout(4000);
     long start = System.nanoTime();
     try {
       assertThatThrownBy(() -> $("#not_exist").toWebElement())
         .isInstanceOf(org.openqa.selenium.NoSuchElementException.class)
-        .hasMessageStartingWith("Unable to locate element: #not_exist");
+        .hasMessageContaining("Unable to locate element:")
+        .hasMessageContaining("#not_exist");
     }
     finally {
       long end = System.nanoTime();

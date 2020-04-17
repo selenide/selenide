@@ -248,6 +248,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void elementIsEmptyIfTextAndValueAreBothEmpty() {
+    timeout = 4000;
     $("br").shouldBe(empty);
     $("h2").shouldNotBe(empty);
     $(By.name("password")).shouldBe(empty);
@@ -393,11 +394,13 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void findWaitsUntilParentAppears() {
+    timeout = 4000;
     $("#container").find("#dynamic-content2").shouldBe(visible);
   }
 
   @Test
   void findWaitsUntilElementMatchesCondition() {
+    timeout = 4000;
     $("#dynamic-content-container").find("#dynamic-content2").shouldBe(visible);
   }
 
@@ -454,8 +457,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_1() {
-    timeout = 100L;
-
     assertThatThrownBy(() -> $("h1").should(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("because it's wrong text");
@@ -463,8 +464,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_2() {
-    timeout = 100L;
-
     assertThatThrownBy(() -> $("h1").shouldHave(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("because it's wrong text");
@@ -472,8 +471,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldMethodsMayContainOptionalMessageThatIsPartOfErrorMessage_3() {
-    timeout = 100L;
-
     assertThatThrownBy(() -> $("h1").shouldBe(text("Some wrong test").because("it's wrong text")))
       .isInstanceOf(ElementShould.class)
       .hasMessageContaining("because it's wrong text");
@@ -481,8 +478,6 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void shouldNotMethodsMayContainOptionalMessageThatIsPartOfErrorMessage() {
-    timeout = 100L;
-
     assertThatThrownBy(() -> $("h1").shouldNot(text("Page with selects").because("it's wrong text")))
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageContaining("because it's wrong text");
@@ -573,7 +568,7 @@ class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canExecuteAsyncJavascript() {
-    long value = (Long) Selenide.executeAsyncJavaScript(
+    long value = Selenide.executeAsyncJavaScript(
       "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
     );
     assertThat(value).isEqualTo(10);

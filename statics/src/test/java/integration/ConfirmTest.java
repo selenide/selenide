@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConfirmTest extends IntegrationTest {
-  private String userName = "John Mc'Clane";
+  private final String userName = "John Mc'Clane";
 
   @AfterAll
   static void tearDown() {
@@ -27,6 +28,7 @@ class ConfirmTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
+    timeout = 1000;
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(userName);
@@ -67,7 +69,7 @@ class ConfirmTest extends IntegrationTest {
       .hasMessageContaining("Expected: Get out of this page, Maria?")
       .hasMessageMatching("(?s).*Screenshot: file:.+\\.png.*")
       .hasMessageMatching("(?s).*Page source: file:.+\\.html.*")
-      .hasMessageMatching("(?s).*Timeout: .+ s\\..*");
+      .hasMessageMatching("(?s).*Timeout: .+ m?s\\..*");
   }
 
   @Test
@@ -89,6 +91,7 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void waitsUntilConfirmDialogAppears() {
+    timeout = 2000;
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
 

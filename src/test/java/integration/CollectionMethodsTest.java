@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -100,45 +99,53 @@ class CollectionMethodsTest extends ITest {
 
   @Test
   void canCheckSizeOfCollection() {
-    $$(By.name("domain")).shouldHaveSize(1);
-    $$("#theHiddenElement").shouldHaveSize(1);
-    $$("#radioButtons input").shouldHaveSize(4);
-    $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
-    $$(By.name("non-existing-element")).shouldHaveSize(0);
-    $$("#dynamic-content-container span").shouldHave(size(2));
+    withLongTimeout(() -> {
+      $$(By.name("domain")).shouldHaveSize(1);
+      $$("#theHiddenElement").shouldHaveSize(1);
+      $$("#radioButtons input").shouldHaveSize(4);
+      $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
+      $$(By.name("non-existing-element")).shouldHaveSize(0);
+      $$("#dynamic-content-container span").shouldHave(size(2));
+    });
   }
 
   @Test
   void shouldWaitUntilCollectionGetsExpectedSize() {
-    ElementsCollection spans = $$("#dynamic-content-container span");
+    withLongTimeout(() -> {
+      ElementsCollection spans = $$("#dynamic-content-container span");
 
-    spans.shouldHave(size(2)); // appears after 2 seconds
+      spans.shouldHave(size(2)); // appears after 2 seconds
 
-    assertThat(spans)
-      .hasSize(2);
-    assertThat(spans.texts())
-      .isEqualTo(Arrays.asList("dynamic content", "dynamic content2"));
+      assertThat(spans).hasSize(2);
+      assertThat(spans.texts()).isEqualTo(asList("dynamic content", "dynamic content2"));
+    });
   }
 
   @Test
   void canCheckThatElementsHaveCorrectTexts() {
-    $$("#dynamic-content-container span").shouldHave(
-      texts("dynamic content", "dynamic content2"),
-      texts("mic cont", "content2"),
-      exactTexts(asList("dynamic content", "dynamic content2")));
+    withLongTimeout(() -> {
+      $$("#dynamic-content-container span").shouldHave(
+        texts("dynamic content", "dynamic content2"),
+        texts("mic cont", "content2"),
+        exactTexts(asList("dynamic content", "dynamic content2")));
+    });
   }
 
   @Test
   void ignoresWhitespacesInTexts() {
-    $$("#dynamic-content-container span").shouldHave(
-      texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
-      exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+    withLongTimeout(() -> {
+      $$("#dynamic-content-container span").shouldHave(
+        texts("   dynamic \ncontent ", "dynamic \t\t\tcontent2\t\t\r\n"),
+        exactTexts("dynamic \t\n content\n\r", "    dynamic content2      "));
+    });
   }
 
   @Test
   void canCheckThatElementsHaveExactlyCorrectTexts() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactTexts("content", "content2")))
-      .isInstanceOf(TextsMismatch.class);
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(exactTexts("content", "content2")))
+        .isInstanceOf(TextsMismatch.class);
+    });
   }
 
   @Test
@@ -155,15 +162,19 @@ class CollectionMethodsTest extends ITest {
 
   @Test
   void textsCheckThrowsTextsSizeMismatch() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span")
-      .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
-      .isInstanceOf(TextsSizeMismatch.class);
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span")
+        .shouldHave(texts("static-content1", "static-content2", "dynamic-content1")))
+        .isInstanceOf(TextsSizeMismatch.class);
+    });
   }
 
   @Test
   void textCheckThrowsTextsMismatch() {
-    assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
-      .isInstanceOf(TextsMismatch.class);
+    withLongTimeout(() -> {
+      assertThatThrownBy(() -> $$("#dynamic-content-container span").shouldHave(texts("static-content1", "static-content2")))
+        .isInstanceOf(TextsMismatch.class);
+    });
   }
 
   @Test
@@ -202,8 +213,10 @@ class CollectionMethodsTest extends ITest {
 
   @Test
   void findWaitsUntilElementMatches() {
-    $$("#dynamic-content-container span").findBy(text("dynamic content2")).shouldBe(visible);
-    $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(exist);
+    withLongTimeout(() -> {
+      $$("#dynamic-content-container span").findBy(text("dynamic content2")).shouldBe(visible);
+      $$("#dynamic-content-container span").findBy(text("unexisting")).shouldNot(exist);
+    });
   }
 
   @Test

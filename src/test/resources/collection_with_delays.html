@@ -11,8 +11,8 @@
         document.getElementById('collection').innerHTML += '<li>Element #' + size + '</li>';
         size++;
 
-        if (size < 50) {
-          setTimeout(growCollection, 50);
+        if (size < 20) {
+          setTimeout(growCollection, 20);
         }
         else {
           document.getElementById('status').innerHTML += "Generated in " + (new Date() - totalTime) / 1000.0 + " seconds";

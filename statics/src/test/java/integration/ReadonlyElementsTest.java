@@ -14,9 +14,8 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactValue;
-import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.readonly;
-import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,9 +26,10 @@ class ReadonlyElementsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_readonly_elements.html");
-    timeout = 10 * averageSeleniumCommandDuration;
+    Configuration.timeout = 1000;
   }
 
+  @BeforeEach
   @AfterEach
   void cleanUp() {
     Configuration.fastSetValue = false;

@@ -18,11 +18,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class FileDownloadViaHttpGetTest extends IntegrationTest {
-  private File folder = new File(Configuration.downloadsFolder);
+  private final File folder = new File(Configuration.downloadsFolder);
 
   @BeforeEach
   void setUp() {
     useProxy(false);
+    Configuration.timeout = 1000;
     openFile("page_with_uploads.html");
   }
 
@@ -62,7 +63,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadFileByName() {
     assertThatThrownBy(() -> $(byText("Download me")).download(FileFilters.withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 4000 ms." +
+      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 1000 ms." +
         " with file name \"good_bye_world.txt\" " + System.lineSeparator() + "; actually downloaded: .+hello_world.txt");
   }
 

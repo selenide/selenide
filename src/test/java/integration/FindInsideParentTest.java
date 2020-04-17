@@ -11,6 +11,7 @@ class FindInsideParentTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("long_ajax_request.html");
+    setTimeout(4000);
   }
 
   @Test
