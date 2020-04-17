@@ -9,10 +9,26 @@ import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
 
 class TextsMismatchTest implements WithAssertions {
+  private final List<String> actualTexts = asList("Niff", "Naff", "Nuff");
+  private final List<String> expectedTexts = asList("Piff", "Paff", "Puff");
+
   @Test
   void errorMessage() {
-    List<String> actualTexts = asList("Niff", "Naff", "Nuff");
-    List<String> expectedTexts = asList("Piff", "Paff", "Puff");
+    TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
+      actualTexts,
+      expectedTexts,
+      null, 9000);
+
+    assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
+      "Actual: [Niff, Naff, Nuff]%n" +
+      "Expected: [Piff, Paff, Puff]%n" +
+      "Collection: .characters%n" +
+      "Screenshot: null%n" +
+      "Timeout: 9 s."));
+  }
+
+  @Test
+  void errorMessage_withExplanation() {
     TextsMismatch textsMismatch = new TextsMismatch(mockCollection(".characters"),
       actualTexts,
       expectedTexts,

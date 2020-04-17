@@ -6,17 +6,18 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static com.codeborne.selenide.ElementsCollection.elementsToString;
+import static java.lang.System.lineSeparator;
 
 public class MatcherError extends UIAssertionError {
 
   public MatcherError(String matcher, String predicateDescription, String explanation,
                       WebElementsCollection collection, List<WebElement> actualElements, Exception lastError, long timeoutMs) {
     super(collection.driver(),
-      String.format("Collection matcher error" +
-        "%nExpected: " + matcher + " of elements to match [" + predicateDescription + "] predicate" +
-        (explanation == null ? "" : "%nBecause: " + explanation) +
-        "%nCollection: " + collection.description() +
-        "%nElements: " + elementsToString(collection.driver(), actualElements)), lastError
+      "Collection matcher error" +
+        lineSeparator() + "Expected: " + matcher + " of elements to match [" + predicateDescription + "] predicate" +
+        (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
+        lineSeparator() + "Collection: " + collection.description() +
+        lineSeparator() + "Elements: " + elementsToString(collection.driver(), actualElements), lastError
     );
     super.timeoutMs = timeoutMs;
   }

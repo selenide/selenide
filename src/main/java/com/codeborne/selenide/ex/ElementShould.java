@@ -6,14 +6,15 @@ import com.codeborne.selenide.impl.Describe;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
-import static java.lang.System.lineSeparator;
 
 public class ElementShould extends UIAssertionError {
   public ElementShould(Driver driver, String searchCriteria, String prefix, Condition expectedCondition,
                        WebElement element, Throwable lastError) {
     super(driver,
-      "Element should " + prefix + expectedCondition + " {" + searchCriteria + "}" +
-        lineSeparator() + "Element: '" + Describe.describe(driver, element) + "'" +
-        actualValue(expectedCondition, driver, element), lastError);
+      String.format("Element should %s%s {%s}%nElement: '%s'%s",
+        prefix, expectedCondition, searchCriteria,
+        Describe.describe(driver, element),
+        actualValue(expectedCondition, driver, element)
+      ), lastError);
   }
 }
