@@ -273,7 +273,7 @@ public class Configuration {
   /**
    * Host of Selenide proxy server.
    * Used only if proxyEnabled == true.
-   * Can be configured either programmatically or by system property "-DproxyHost=127.0.0.1"
+   * Can be configured either programmatically or by system property "-Dselenide.proxyHost=127.0.0.1"
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
