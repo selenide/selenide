@@ -52,7 +52,23 @@ class NotExistingElementTest extends ITest {
     }
     finally {
       long end = System.nanoTime();
-      assertThat(TimeUnit.NANOSECONDS.toMillis(end - start)).isLessThan(200);
+      assertThat(TimeUnit.NANOSECONDS.toMillis(end - start)).isLessThan(500);
+    }
+  }
+
+  @Test
+  void getWrappedElement_shouldNotWait() {
+    setTimeout(4000);
+    long start = System.nanoTime();
+    try {
+      assertThatThrownBy(() -> $("#not_exist").getWrappedElement())
+        .isInstanceOf(org.openqa.selenium.NoSuchElementException.class)
+        .hasMessageContaining("Unable to locate element:")
+        .hasMessageContaining("#not_exist");
+    }
+    finally {
+      long end = System.nanoTime();
+      assertThat(TimeUnit.NANOSECONDS.toMillis(end - start)).isLessThan(500);
     }
   }
 
