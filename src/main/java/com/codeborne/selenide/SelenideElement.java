@@ -823,9 +823,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getSearchCriteria();
 
   /**
-   * @return the original Selenium WebElement wrapped by this object
+   * @return the original Selenium {@link WebElement} wrapped by this object
    *
    * @see com.codeborne.selenide.commands.ToWebElement
+   * @throws org.openqa.selenium.NoSuchElementException if element does not exist (without waiting for the element)
    */
   @CheckReturnValue
   WebElement toWebElement();
@@ -833,6 +834,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * @return Underlying {@link WebElement}
    * @see com.codeborne.selenide.commands.GetWrappedElement
+   * @throws org.openqa.selenium.NoSuchElementException if element does not exist (without waiting for the element)
    */
   @Override
   @CheckReturnValue
