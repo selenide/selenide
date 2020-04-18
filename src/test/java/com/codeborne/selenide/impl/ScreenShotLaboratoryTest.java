@@ -21,7 +21,7 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   private final SelenideConfig config = new SelenideConfig().savePageSource(false);
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
 
-  private ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
+  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
     public String takeScreenShot(Driver driver, String fileName) {
       addToHistory(new File(fileName));
@@ -108,6 +108,51 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   }
 
   @Test
+  void collectsAllThreadScreenshots() {
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
+    screenshots.finishContext();
+    screenshots.startContext("ui/YourTest/test_another_method/");
+    screenshots.takeScreenShot(null);
+    screenshots.finishContext();
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
+
+    List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
+    assertThat(allThreadScreenshots)
+      .hasSize(5);
+    assertThat(allThreadScreenshots.get(0))
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+    assertThat(allThreadScreenshots.get(1))
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+    assertThat(allThreadScreenshots.get(2))
+      .isEqualTo(new File("ui/YourTest/test_another_method/12356789.2"));
+    assertThat(allThreadScreenshots.get(3))
+      .hasToString("12356789.3");
+    assertThat(allThreadScreenshots.get(4))
+      .hasToString("12356789.4");
+  }
+
+  @Test
+  void collectsContextScreenshots() {
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(null);
+
+    List<File> contextScreenshots = screenshots.getContextScreenshots();
+    assertThat(contextScreenshots)
+      .hasSize(3);
+
+    screenshots.finishContext();
+    assertThat(contextScreenshots)
+      .hasSize(3);
+    assertThat(screenshots.getContextScreenshots())
+      .isEmpty();
+  }
+
+  @Test
   void canGetLastScreenshot() {
     assertThat(screenshots.getLastScreenshot())
       .isNull();
@@ -123,6 +168,45 @@ class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastScreenshot())
       .hasToString("12356789.2");
+  }
+
+  @Test
+  void canGetLastThreadScreenshot() {
+    assertThat(screenshots.getLastThreadScreenshot())
+      .isNull();
+
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastThreadScreenshot())
+      .hasToString("12356789.0");
+
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastThreadScreenshot())
+      .hasToString("12356789.1");
+
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastThreadScreenshot())
+      .hasToString("12356789.2");
+  }
+
+  @Test
+  void canGetLastContextScreenshot() {
+    assertThat(screenshots.getLastContextScreenshot())
+      .isNull();
+
+    screenshots.startContext("ui/MyTest/test_some_method/");
+    assertThat(screenshots.getLastContextScreenshot())
+      .isNull();
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastContextScreenshot())
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastContextScreenshot())
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+
+    screenshots.takeScreenShot(null);
+    assertThat(screenshots.getLastContextScreenshot())
+      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.2"));
   }
 
   @Test

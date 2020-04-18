@@ -37,6 +37,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.io.File.separatorChar;
+import static java.lang.ThreadLocal.withInitial;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
@@ -52,6 +53,7 @@ public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
+  protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
   }
@@ -250,7 +252,14 @@ public class ScreenShotLaboratory {
     synchronized (allScreenshots) {
       allScreenshots.add(screenshot);
     }
+    addScreenshotToCurrentThread(screenshot);
     return screenshot;
+  }
+
+  private void addScreenshotToCurrentThread(File screenshot) {
+    List<File> files = threadScreenshots.get();
+    files.add(screenshot);
+    threadScreenshots.set(files);
   }
 
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
@@ -332,10 +341,35 @@ public class ScreenShotLaboratory {
     }
   }
 
+  public List<File> getThreadScreenshots() {
+    return Collections.unmodifiableList(threadScreenshots.get());
+  }
+
+  public List<File> getContextScreenshots() {
+    List<File> screenshots = currentContextScreenshots.get();
+    return Collections.unmodifiableList(screenshots == null
+      ? Collections.emptyList()
+      : screenshots);
+  }
+
   public File getLastScreenshot() {
     synchronized (allScreenshots) {
       return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
     }
+  }
+
+  public File getLastThreadScreenshot() {
+    List<File> screenshots = threadScreenshots.get();
+    return screenshots.isEmpty()
+      ? null
+      : screenshots.get(screenshots.size() - 1);
+  }
+
+  public File getLastContextScreenshot() {
+    List<File> screenshots = currentContextScreenshots.get();
+    return screenshots == null || screenshots.isEmpty()
+      ? null
+      : screenshots.get(screenshots.size() - 1);
   }
 
   public String formatScreenShotPath(Driver driver) {
