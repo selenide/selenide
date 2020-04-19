@@ -1,11 +1,22 @@
 # Changelog
 
-## 5.11.0
-* #368 $("#missingElement").shouldNotHave(text("whatever")) now throws an exception    --  NB! It's a breaking change! See PR #1116
+## 5.11.0 (released 19.04.2020)
+
+Breaking changes:
+* #368 $("#missingElement").shouldNotHave(text("whatever")) now throws an exception    -- See PR #1116
+* #1114 throw a clear error message if SLF4J is not properly configured  --  see PR #1115
+* #1015 $.getWrappedElement() does not wait for timeout if element doesn't exist  --  see PR #1124
+
+Features & bugfixes:
 * #996 Add MatchAttributeWithValue condition -- thanks to Dmytro Stekanov for PR #1100
+* #1029 Add opportunity to get screenshots for the current thread -- thanks to Dmytro Stekanov for PR #1125 
 * Add CheckReturnValue annotation for methods that only return value  --  thanks to Yuriy Artamonov for PR #1106
 * Add missing byTagName to Selectors to make it consistent with By  --  thanks to Yuriy Artamonov for PR #1104
-* #1114 throw a clear error message if SLF4J is not properly configured  --  see PR #1115
+* #1072 Normalize reports URL with spaces -- thanks to Dmytro Stekanov for PR #1098
+* #1119 disable annoying popup about extensions in Chrome  --  see PR #1120
+* make selectorMode and assertionMode configurable via system properties  --  see commit 231597eb6229e
+
+See https://github.com/selenide/selenide/milestone/94?closed=1
 
 ## 5.10.0 (released 18.03.2020)
 * #1014 Add support for Shadow DOM  --  thanks to Dmytro Stekanov for #1090
