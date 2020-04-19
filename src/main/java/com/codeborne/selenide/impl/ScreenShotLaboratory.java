@@ -32,11 +32,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.io.File.separatorChar;
+import static java.lang.ThreadLocal.withInitial;
 import static org.openqa.selenium.OutputType.FILE;
 
 public class ScreenShotLaboratory {
@@ -52,6 +54,7 @@ public class ScreenShotLaboratory {
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = ThreadLocal.withInitial(() -> "");
   protected ThreadLocal<List<File>> currentContextScreenshots = new ThreadLocal<>();
+  protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
   }
@@ -250,6 +253,7 @@ public class ScreenShotLaboratory {
     synchronized (allScreenshots) {
       allScreenshots.add(screenshot);
     }
+    threadScreenshots.get().add(screenshot);
     return screenshot;
   }
 
@@ -332,10 +336,37 @@ public class ScreenShotLaboratory {
     }
   }
 
+  public List<File> getThreadScreenshots() {
+    return Collections.unmodifiableList(threadScreenshots.get());
+  }
+
+  public List<File> getContextScreenshots() {
+    List<File> screenshots = currentContextScreenshots.get();
+    return screenshots == null
+      ? Collections.emptyList()
+      : Collections.unmodifiableList(screenshots);
+  }
+
   public File getLastScreenshot() {
     synchronized (allScreenshots) {
       return allScreenshots.isEmpty() ? null : allScreenshots.get(allScreenshots.size() - 1);
     }
+  }
+
+  public Optional<File> getLastThreadScreenshot() {
+    List<File> screenshots = threadScreenshots.get();
+    return getLastScreenshot(screenshots);
+  }
+
+  public Optional<File> getLastContextScreenshot() {
+    List<File> screenshots = currentContextScreenshots.get();
+    return getLastScreenshot(screenshots);
+  }
+
+  private Optional<File> getLastScreenshot(List<File> screenshots) {
+    return screenshots == null || screenshots.isEmpty()
+      ? Optional.empty()
+      : Optional.of(screenshots.get(screenshots.size() - 1));
   }
 
   public String formatScreenShotPath(Driver driver) {
