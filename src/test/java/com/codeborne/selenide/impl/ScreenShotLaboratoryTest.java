@@ -173,40 +173,40 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void canGetLastThreadScreenshot() {
     assertThat(screenshots.getLastThreadScreenshot())
-      .isNull();
+      .isEmpty();
 
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasToString("12356789.0");
+      .hasValue(new File("12356789.0"));
 
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasToString("12356789.1");
+      .hasValue(new File("12356789.1"));
 
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasToString("12356789.2");
+      .hasValue(new File("12356789.2"));
   }
 
   @Test
   void canGetLastContextScreenshot() {
     assertThat(screenshots.getLastContextScreenshot())
-      .isNull();
+      .isEmpty();
 
     screenshots.startContext("ui/MyTest/test_some_method/");
     assertThat(screenshots.getLastContextScreenshot())
-      .isNull();
+      .isEmpty();
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastContextScreenshot())
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+      .hasValue(new File("ui/MyTest/test_some_method/12356789.0"));
 
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastContextScreenshot())
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+      .hasValue(new File("ui/MyTest/test_some_method/12356789.1"));
 
     screenshots.takeScreenShot(null);
     assertThat(screenshots.getLastContextScreenshot())
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.2"));
+      .hasValue(new File("ui/MyTest/test_some_method/12356789.2"));
   }
 
   @Test

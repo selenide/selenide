@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -252,14 +253,8 @@ public class ScreenShotLaboratory {
     synchronized (allScreenshots) {
       allScreenshots.add(screenshot);
     }
-    addScreenshotToCurrentThread(screenshot);
+    threadScreenshots.get().add(screenshot);
     return screenshot;
-  }
-
-  private void addScreenshotToCurrentThread(File screenshot) {
-    List<File> files = threadScreenshots.get();
-    files.add(screenshot);
-    threadScreenshots.set(files);
   }
 
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
@@ -347,9 +342,9 @@ public class ScreenShotLaboratory {
 
   public List<File> getContextScreenshots() {
     List<File> screenshots = currentContextScreenshots.get();
-    return Collections.unmodifiableList(screenshots == null
+    return screenshots == null
       ? Collections.emptyList()
-      : screenshots);
+      : Collections.unmodifiableList(screenshots);
   }
 
   public File getLastScreenshot() {
@@ -358,18 +353,20 @@ public class ScreenShotLaboratory {
     }
   }
 
-  public File getLastThreadScreenshot() {
+  public Optional<File> getLastThreadScreenshot() {
     List<File> screenshots = threadScreenshots.get();
-    return screenshots.isEmpty()
-      ? null
-      : screenshots.get(screenshots.size() - 1);
+    return getLastScreenshot(screenshots);
   }
 
-  public File getLastContextScreenshot() {
+  public Optional<File> getLastContextScreenshot() {
     List<File> screenshots = currentContextScreenshots.get();
+    return getLastScreenshot(screenshots);
+  }
+
+  private Optional<File> getLastScreenshot(List<File> screenshots) {
     return screenshots == null || screenshots.isEmpty()
-      ? null
-      : screenshots.get(screenshots.size() - 1);
+      ? Optional.empty()
+      : Optional.of(screenshots.get(screenshots.size() - 1));
   }
 
   public String formatScreenShotPath(Driver driver) {
