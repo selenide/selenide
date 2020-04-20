@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

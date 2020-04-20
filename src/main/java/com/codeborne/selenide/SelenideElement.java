@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
-import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;

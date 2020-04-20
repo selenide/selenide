@@ -15,7 +15,6 @@ dependencies {
   }
   api('io.github.bonigarcia:webdrivermanager:3.8.1')
 
-  compileOnly('org.checkerframework:checker:3.2.0')
   compileOnly('com.browserup:browserup-proxy-core:2.0.1')
   testCompile('com.browserup:browserup-proxy-core:2.0.1')
   compileOnly('io.netty:netty-all:4.1.48.Final')
