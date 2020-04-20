@@ -17,7 +17,7 @@ public class ByShadow {
    * Find target elements inside shadow-root that attached to shadow-host.
    * <br/> Supports inner shadow-hosts.
    *
-   * <br/> For example: shadow-host > inner-shadow-host > target-element
+   * <br/> For example: shadow-host &gt; inner-shadow-host &gt; target-element
    * (each shadow-host must be specified explicitly).
    *
    * @param target           CSS expression of target element
