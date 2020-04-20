@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByShadow;
-import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 

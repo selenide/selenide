@@ -28,7 +28,7 @@ import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
-import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Predicate;

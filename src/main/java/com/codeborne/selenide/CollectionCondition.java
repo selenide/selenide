@@ -14,7 +14,7 @@ import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.com.google.errorprone.annotations.CheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
