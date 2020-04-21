@@ -20,6 +20,11 @@ public class ExplainedCondition extends Condition {
   }
 
   @Override
+  public Condition negate() {
+    return delegate.negate().because(message);
+  }
+
+  @Override
   public String actualValue(Driver driver, WebElement element) {
     return delegate.actualValue(driver, element);
   }

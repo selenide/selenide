@@ -20,7 +20,7 @@ public class Visible extends Condition {
   }
 
   @Override
-  protected Condition negate() {
+  public Condition negate() {
     return new Not(this, true);
   }
 }

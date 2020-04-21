@@ -21,7 +21,7 @@ public class Hidden extends Condition {
   }
 
   @Override
-  protected Condition negate() {
+  public Condition negate() {
     return new Not(this, false);
   }
 }
