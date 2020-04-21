@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.11.1 (released 21.04.2020)
+* #1130 fix "because" condition for unexisting elements
+
 ## 5.11.0 (released 19.04.2020)
 
 Breaking changes:

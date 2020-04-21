@@ -25,6 +25,11 @@ public class NamedCondition extends Condition {
   }
 
   @Override
+  public Condition negate() {
+    return delegate.negate();
+  }
+
+  @Override
   public String toString() {
     return prefix + ' ' + delegate.toString();
   }

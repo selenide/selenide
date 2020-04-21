@@ -413,7 +413,7 @@ public abstract class Condition {
     return condition.negate();
   }
 
-  protected Condition negate() {
+  public Condition negate() {
     return new Not(this, absentElementMatchesCondition);
   }
 

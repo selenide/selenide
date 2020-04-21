@@ -1,6 +1,5 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -9,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class VisibleTest {
-  private final VisibleForTest condition = new VisibleForTest();
+  private final Visible condition = new Visible();
   private final WebElement element = mock(WebElement.class);
 
   @Test
@@ -45,12 +44,5 @@ class VisibleTest {
   void actualValue_visible() {
     when(element.isDisplayed()).thenReturn(true);
     assertThat(condition.actualValue(null, element)).isEqualTo("visible:true");
-  }
-
-  private static class VisibleForTest extends Visible {
-    @Override
-    protected Condition negate() {
-      return super.negate();
-    }
   }
 }
