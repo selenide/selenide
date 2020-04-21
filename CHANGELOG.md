@@ -2,6 +2,7 @@
 
 ## 5.11.1 (released 21.04.2020)
 * #1130 fix "because" condition for unexisting elements
+* #1114 strictly require slf4j only when using @TextReport rule/extension/listener
 
 ## 5.11.0 (released 19.04.2020)
 
