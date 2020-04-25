@@ -64,8 +64,9 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(2);
+    assertThat(prefsMap).hasSize(3);
     assertThat(prefsMap).containsEntry("key1", 1);
+    assertThat(prefsMap).containsEntry("credentials_enable_service", false);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File("/blah/downloads").getAbsolutePath());
   }
@@ -77,8 +78,9 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(2);
+    assertThat(prefsMap).hasSize(3);
     assertThat(prefsMap).containsEntry("key1", 1);
+    assertThat(prefsMap).containsEntry("credentials_enable_service", false);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File("/blah/downloads").getAbsolutePath());
   }
