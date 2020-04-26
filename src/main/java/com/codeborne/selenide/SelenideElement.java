@@ -42,7 +42,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement setValue(String text);
 
   /**
-   * Same as #setValue(java.lang.String)
+   * Same as {@link #setValue(java.lang.String)}
    * @see com.codeborne.selenide.commands.Val
    */
   SelenideElement val(String text);
@@ -152,7 +152,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get the "value" attribute of the element
-   * Same as #getValue()
+   * Same as {@link #getValue()}
    * @return attribute "value" value or null if attribute is missing
    *
    * @see com.codeborne.selenide.commands.Val
@@ -260,7 +260,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * 4 seconds until element meets the conditions. It's extremely useful for dynamic content.
    * </p>
    *
-   * <p>Timeout is configurable via Configuration#timeout</p>
+   * <p>Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}</p>
    *
    * <p>For example: {@code
    *   $("#errorMessage").should(appear);
@@ -275,7 +275,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement should(Condition... condition);
 
   /**
-   * <p>Synonym for #should. Useful for better readability.</p>
+   * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    *   $("#errorMessage").shouldHave(text("Hello"), text("World"));
    * }</p>
@@ -286,7 +286,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldHave(Condition... condition);
 
   /**
-   * <p>Synonym for #should. Useful for better readability.</p>
+   * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    *   $("#errorMessage").shouldBe(visible, enabled);
    * }</p>
@@ -304,7 +304,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * 4 seconds until element does not meet the conditions. It's extremely useful for dynamic content.
    * </p>
    *
-   * <p>Timeout is configurable via Configuration#timeout</p>
+   * <p>Timeout is configurable via {@link com.codeborne.selenide.Configuration#timeout}</p>
    *
    * <p>For example: {@code
    *   $("#errorMessage").should(exist);
@@ -316,7 +316,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNot(Condition... condition);
 
   /**
-   * <p>Synonym for #shouldNot. Useful for better readability.</p>
+   * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    *   $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
    * }</p>
@@ -327,7 +327,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotHave(Condition... condition);
 
   /**
-   * <p>Synonym for #shouldNot. Useful for better readability.</p>
+   * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    *   $("#errorMessage").shouldNotBe(visible, enabled);
    * }</p>
