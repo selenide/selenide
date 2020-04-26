@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -20,13 +21,25 @@ class ChromeDriverFactoryTest implements WithAssertions {
   private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
 
-  private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
+  private final Proxy proxy = mock(Proxy.class);
+  private final SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
 
+  @BeforeEach
   @AfterEach
   void tearDown() {
     System.clearProperty(CHROME_OPTIONS_ARGS);
     System.clearProperty(CHROME_OPTIONS_PREFS);
+  }
+
+  @Test
+  void defaultChromeOptions() {
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(prefsMap).hasSize(2);
+    assertThat(prefsMap).containsEntry("credentials_enable_service", false);
+    assertThat(prefsMap).containsEntry("download.default_directory",
+      new File("/blah/downloads").getAbsolutePath());
   }
 
   @Test
@@ -64,10 +77,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
-    assertThat(prefsMap).containsEntry("download.default_directory",
-      new File("/blah/downloads").getAbsolutePath());
+    assertThat(prefsMap).doesNotContainKey("key2");
   }
 
   @Test
@@ -77,10 +88,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
     ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("key1", 1);
-    assertThat(prefsMap).containsEntry("download.default_directory",
-      new File("/blah/downloads").getAbsolutePath());
+    assertThat(prefsMap).doesNotContainKeys("key2", "key2=", "key2=1", "key2=1=", "key2=1=false");
   }
 
   @Test
