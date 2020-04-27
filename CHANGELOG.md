@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.12.0
+* #1133 disable annoying "save password?" dialog  --  see PR #1134
+* upgrade to browserup-proxy-core:2.1.0
+
 ## 5.11.1 (released 21.04.2020)
 * #1130 fix "because" condition for unexisting elements
 * #1114 strictly require slf4j only when using @TextReport rule/extension/listener
