@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class ErrorMessagesForMissingElementTest extends IntegrationTest {
+class MissingElementTest extends IntegrationTest {
   private PageObject pageObject;
   private String reportsUrl;
   private String reportsFolder;
@@ -44,7 +44,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
     reportsUrl = Configuration.reportsUrl;
     reportsFolder = Configuration.reportsFolder;
     Configuration.reportsUrl = "http://ci.org/";
-    Configuration.reportsFolder = "build/reports/tests/EMFMET";
+    Configuration.reportsFolder = "build/reports/tests";
   }
 
   @AfterEach
@@ -60,7 +60,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
-      String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+      String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementNotFound";
       assertThat(expected)
         .hasMessageMatching(String.format("Element not found \\{h9}%n" +
           "Expected: text 'expected text'%n" +
@@ -74,7 +74,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void elementTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementTextDoesNotMatch";
     assertThatThrownBy(() ->
       $("h2").shouldHave(text("expected text"))
     )
@@ -88,7 +88,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void elementAttributeDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/elementAttributeDoesNotMatch";
     assertThatThrownBy(() ->
       $("h2").shouldHave(attribute("name", "header"))
     )
@@ -103,7 +103,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void wrapperTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/wrapperTextDoesNotMatch";
     assertThatThrownBy(() ->
       $(element(By.tagName("h2"))).shouldHave(text("expected text"))
     )
@@ -117,7 +117,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void clickHiddenElement() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/clickHiddenElement";
     assertThatThrownBy(() ->
       $("#theHiddenElement").click()
     )
@@ -133,7 +133,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void pageObjectElementTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/pageObjectElementTextDoesNotMatch";
     assertThatThrownBy(() ->
       $(pageObject.header1).shouldHave(text("expected text"))
     )
@@ -147,7 +147,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void pageObjectWrapperTextDoesNotMatch() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/pageObjectWrapperTextDoesNotMatch";
     assertThatThrownBy(() ->
       $(pageObject.header2).shouldHave(text("expected text"))
     )
@@ -170,7 +170,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void clickUnexistingWrappedElement() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/clickUnexistingWrappedElement";
     assertThatThrownBy(() ->
       $(pageObject.categoryDropdown).click()
     ).isInstanceOf(ElementNotFound.class)
@@ -184,7 +184,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void existingElementShouldNotExist() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/existingElementShouldNotExist";
     assertThatThrownBy(() ->
       $("h2").shouldNot(exist)
     )
@@ -198,7 +198,7 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
 
   @Test
   void nonExistingElementShouldNotBeHidden() {
-    String path = "http://ci.org/build/reports/tests/EMFMET/integration/errormessages/ErrorMessagesForMissingElementTest/emptyMethod";
+    String path = "http://ci.org/build/reports/tests/integration/errormessages/MissingElementTest/nonExistingElementShouldNotBeHidden";
     assertThatThrownBy(() ->
       $("h14").shouldNotBe(hidden)
     )
@@ -222,8 +222,8 @@ class ErrorMessagesForMissingElementTest extends IntegrationTest {
       .hasMessageContainingAll(
         "is not clickable at point",
         "Other element would receive the click",
-        "Screenshot: http://ci.org/build/reports/tests/EMFMET",
-        "Page source: http://ci.org/build/reports/tests/EMFMET"
+        "Screenshot: http://ci.org/build/reports/tests",
+        "Page source: http://ci.org/build/reports/tests"
       );
   }
 

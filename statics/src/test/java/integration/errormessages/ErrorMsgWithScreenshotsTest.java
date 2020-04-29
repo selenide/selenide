@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
+class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
   private String reportsFolder;
 
@@ -36,7 +36,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   void mockScreenshots() {
     reportsUrl = Configuration.reportsUrl;
     reportsFolder = Configuration.reportsFolder;
-    Configuration.reportsFolder = "build/reports/tests/ErrorMessagesWithScreenshotsTest";
+    Configuration.reportsFolder = "build/reports/tests/ErrorMsgWithScreenshotsTest";
     Configuration.reportsUrl = "http://ci.org/";
     Screenshots.screenshots = new ScreenShotLaboratory() {
       @Override
@@ -66,7 +66,7 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
   }
 
   @Test
-  void itShouldBeReportedWhichParentElementIsNotFound() {
+  void reportWhichParentElementIsNotFound() {
     assertThatThrownBy(() ->
       $("#multirowTable")
         .find("thead")
@@ -77,14 +77,14 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining("Element not found {thead}")
       .matches(e -> {
-        String path = "/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod";
+        String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportWhichParentElementIsNotFound";
         return ((ElementNotFound) e).getScreenshot()
-          .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
+          .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
       });
   }
 
   @Test
-  void itShouldBeReportedIfParentCollectionIsNotFound() {
+  void reportIfParentCollectionIsNotFound() {
     try {
       $("#multirowTable")
         .findAll("thead")
@@ -96,9 +96,9 @@ class ErrorMessagesWithScreenshotsTest extends IntegrationTest {
     catch (ElementNotFound e) {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
-      String path = "/integration/errormessages/ErrorMessagesWithScreenshotsTest/emptyMethod";
+      String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportIfParentCollectionIsNotFound";
       assertThat(e.getScreenshot())
-        .matches("http://ci\\.org/build/reports/tests/ErrorMessagesWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
+        .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
     }
   }
 
