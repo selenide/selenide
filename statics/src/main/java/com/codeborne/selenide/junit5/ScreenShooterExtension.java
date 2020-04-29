@@ -3,9 +3,8 @@ package com.codeborne.selenide.junit5;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.ex.UIAssertionError;
-import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +56,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
-public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallback, AfterAllCallback {
+public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCallback {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooterExtension.class);
 
   private final boolean captureSuccessfulTests;
@@ -85,15 +84,13 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
   }
 
   @Override
-  public void beforeAll(final ExtensionContext context) {
+  public void beforeEach(final ExtensionContext context) {
     final Optional<Class<?>> testClass = context.getTestClass();
-    final String className = testClass.isPresent()
-      ? testClass.get().getName()
-      : "EmptyClass";
+    final String className = testClass.map(Class::getName).orElse("EmptyClass");
+
     final Optional<Method> testMethod = context.getTestMethod();
-    final String methodName = testMethod.isPresent()
-      ? testMethod.get().getName()
-      : "emptyMethod";
+    final String methodName = testMethod.map(Method::getName).orElse("emptyMethod");
+
     Screenshots.startContext(className, methodName);
   }
 
@@ -108,10 +105,6 @@ public class ScreenShooterExtension implements BeforeAllCallback, AfterEachCallb
         }
       });
     }
-  }
-
-  @Override
-  public void afterAll(final ExtensionContext context) {
     Screenshots.finishContext();
   }
 }
