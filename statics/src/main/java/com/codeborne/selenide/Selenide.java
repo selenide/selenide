@@ -9,6 +9,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +27,7 @@ import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
  * You start with methods {@link #open(String)} for opening the tested application page and
  * {@link #$(String)} for searching web elements.
  */
+@ParametersAreNonnullByDefault
 public class Selenide {
 
   /**
@@ -133,6 +137,7 @@ public class Selenide {
    * Open a web page and create PageObject for it.
    * @return PageObject of given class
    */
+  @Nonnull
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(relativeOrAbsoluteUrl, pageObjectClassClass);
@@ -142,6 +147,7 @@ public class Selenide {
    * Open a web page and create PageObject for it.
    * @return PageObject of given class
    */
+  @Nonnull
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(absoluteUrl, pageObjectClassClass);
@@ -151,6 +157,7 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
+  @Nonnull
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
@@ -161,6 +168,7 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
+  @Nonnull
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
     return getSelenideDriver().open(absoluteUrl, domain, login, password, pageObjectClassClass);
@@ -242,6 +250,7 @@ public class Selenide {
    * @param fileName Name of file (without extension) to save HTML and PNG to
    * @return The name of resulting file
    */
+  @Nonnull
   public static String screenshot(String fileName) {
     return Screenshots.takeScreenShot(fileName);
   }
@@ -254,6 +263,7 @@ public class Selenide {
    * @return given WebElement wrapped into SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(WebElement webElement) {
     return getSelenideDriver().$(webElement);
   }
@@ -265,6 +275,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(String cssSelector) {
     return getSelenideDriver().find(cssSelector);
   }
@@ -276,6 +287,7 @@ public class Selenide {
    * @return SelenideElement which locates elements via XPath
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $x(String xpathExpression) {
     return getSelenideDriver().$x(xpathExpression);
   }
@@ -287,6 +299,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(By seleniumSelector) {
     return getSelenideDriver().find(seleniumSelector);
   }
@@ -295,6 +308,7 @@ public class Selenide {
    * @see #getElement(By, int)
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(By seleniumSelector, int index) {
     return getSelenideDriver().find(seleniumSelector, index);
   }
@@ -311,6 +325,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @Deprecated
+  @Nonnull
   public static SelenideElement $(WebElement parent, String cssSelector) {
     return getSelenideDriver().$(parent).find(cssSelector);
   }
@@ -323,6 +338,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
   }
@@ -341,6 +357,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(WebElement parent, String cssSelector, int index) {
     return getSelenideDriver().$(parent).find(cssSelector, index);
   }
@@ -358,6 +375,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(WebElement parent, By seleniumSelector) {
     return getSelenideDriver().$(parent).find(seleniumSelector);
   }
@@ -376,6 +394,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
     return getSelenideDriver().$(parent).find(seleniumSelector, index);
   }
@@ -384,6 +403,7 @@ public class Selenide {
    * Initialize collection with Elements
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
   }
@@ -399,6 +419,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
   }
@@ -413,6 +434,7 @@ public class Selenide {
    * @return ElementsCollection which locates elements via XPath
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$x(String xpathExpression) {
     return getSelenideDriver().$$x(xpathExpression);
   }
@@ -428,6 +450,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
   }
@@ -449,6 +472,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$(WebElement parent, String cssSelector) {
     return getSelenideDriver().$(parent).findAll(cssSelector);
   }
@@ -464,6 +488,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
     return getSelenideDriver().$(parent).findAll(seleniumSelector);
   }
@@ -476,6 +501,7 @@ public class Selenide {
    * @return given WebElement wrapped into SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement element(WebElement webElement) {
     return getSelenideDriver().$(webElement);
   }
@@ -487,6 +513,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement element(String cssSelector) {
     return getSelenideDriver().$(cssSelector);
   }
@@ -498,6 +525,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement element(By seleniumSelector) {
     return getSelenideDriver().$(seleniumSelector);
   }
@@ -510,6 +538,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement element(By seleniumSelector, int index) {
     return getSelenideDriver().$(seleniumSelector, index);
   }
@@ -522,6 +551,7 @@ public class Selenide {
    * @return SelenideElement
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement element(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
   }
@@ -534,6 +564,7 @@ public class Selenide {
    * @return given WebElement collection wrapped into SelenideElement collection
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection elements(Collection<? extends WebElement> elements) {
     return getSelenideDriver().$$(elements);
   }
@@ -549,6 +580,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection elements(String cssSelector) {
     return getSelenideDriver().$$(cssSelector);
   }
@@ -564,6 +596,7 @@ public class Selenide {
    * @return empty list if element was no found
    */
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection elements(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
   }
@@ -578,6 +611,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement getElement(By criteria) {
     return getSelenideDriver().find(criteria);
   }
@@ -593,6 +627,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static SelenideElement getElement(By criteria, int index) {
     return getSelenideDriver().find(criteria, index);
   }
@@ -607,6 +642,7 @@ public class Selenide {
    */
   @Deprecated
   @CheckReturnValue
+  @Nonnull
   public static ElementsCollection getElements(By criteria) {
     return getSelenideDriver().findAll(criteria);
   }
@@ -614,6 +650,7 @@ public class Selenide {
   /**
    * @see JavascriptExecutor#executeScript(java.lang.String, java.lang.Object...)
    */
+  @Nullable
   public static <T> T executeJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeJavaScript(jsCode, arguments);
   }
@@ -621,6 +658,7 @@ public class Selenide {
   /**
    * @see JavascriptExecutor#executeAsyncScript(java.lang.String, java.lang.Object...)
    */
+  @Nullable
   public static <T> T executeAsyncJavaScript(String jsCode, Object... arguments) {
     return getSelenideDriver().executeAsyncJavaScript(jsCode, arguments);
   }
@@ -630,6 +668,7 @@ public class Selenide {
    * @return null if nothing selected
    */
   @CheckReturnValue
+  @Nullable
   public static SelenideElement getSelectedRadio(By radioField) {
     return getSelenideDriver().getSelectedRadio(radioField);
   }
@@ -638,6 +677,7 @@ public class Selenide {
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'alert' or 'confirm').
    * @return actual dialog text
    */
+  @Nullable
   public static String confirm() {
     return getSelenideDriver().modal().confirm();
   }
@@ -649,7 +689,8 @@ public class Selenide {
    * @throws DialogTextMismatch if confirmation message differs from expected message
    * @return actual dialog text
    */
-  public static String confirm(String expectedDialogText) {
+  @Nullable
+  public static String confirm(@Nullable String expectedDialogText) {
     return getSelenideDriver().modal().confirm(expectedDialogText);
   }
 
@@ -657,6 +698,7 @@ public class Selenide {
    * Accept (Click "Yes" or "Ok") in the confirmation dialog (javascript 'prompt').
    * @return actual dialog text
    */
+  @Nullable
   public static String prompt() {
     return getSelenideDriver().modal().prompt();
   }
@@ -666,7 +708,8 @@ public class Selenide {
    * @param inputText if not null, sets value in prompt dialog input
    * @return actual dialog text
    */
-  public static String prompt(String inputText) {
+  @Nullable
+  public static String prompt(@Nullable String inputText) {
     return getSelenideDriver().modal().prompt(inputText);
   }
 
@@ -678,7 +721,8 @@ public class Selenide {
    * @throws DialogTextMismatch if confirmation message differs from expected message
    * @return actual dialog text
    */
-  public static String prompt(String expectedDialogText, String inputText) {
+  @Nullable
+  public static String prompt(@Nullable String expectedDialogText, @Nullable String inputText) {
     return getSelenideDriver().modal().prompt(expectedDialogText, inputText);
   }
 
@@ -686,6 +730,7 @@ public class Selenide {
    * Dismiss (click "No" or "Cancel") in the confirmation dialog (javascript 'alert' or 'confirm').
    * @return actual dialog text
    */
+  @Nullable
   public static String dismiss() {
     return getSelenideDriver().modal().dismiss();
   }
@@ -697,7 +742,8 @@ public class Selenide {
    * @throws DialogTextMismatch if confirmation message differs from expected message
    * @return actual dialog text
    */
-  public static String dismiss(String expectedDialogText) {
+  @Nullable
+  public static String dismiss(@Nullable String expectedDialogText) {
     return getSelenideDriver().modal().dismiss(expectedDialogText);
   }
 
@@ -710,6 +756,7 @@ public class Selenide {
    *
    * @return SelenideTargetLocator
    */
+  @Nonnull
   public static SelenideTargetLocator switchTo() {
     return getSelenideDriver().driver().switchTo();
   }
@@ -719,6 +766,7 @@ public class Selenide {
    * @return WebElement, not SelenideElement! which has focus on it
    */
   @CheckReturnValue
+  @Nullable
   public static WebElement getFocusedElement() {
     return getSelenideDriver().getFocusedElement();
   }
@@ -727,6 +775,7 @@ public class Selenide {
    * Create a Page Object instance
    */
   @CheckReturnValue
+  @Nonnull
   public static <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
     return getSelenideDriver().page(pageObjectClass);
   }
@@ -735,6 +784,7 @@ public class Selenide {
    * Initialize a given Page Object instance
    */
   @CheckReturnValue
+  @Nonnull
   public static <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
     return getSelenideDriver().page(pageObject);
   }
@@ -750,6 +800,7 @@ public class Selenide {
    * @return instance of org.openqa.selenium.support.ui.FluentWait
    */
   @CheckReturnValue
+  @Nonnull
   public static SelenideWait Wait() {
     return getSelenideDriver().Wait();
   }
@@ -768,6 +819,7 @@ public class Selenide {
    * </pre>
    */
   @CheckReturnValue
+  @Nonnull
   public static Actions actions() {
     return getSelenideDriver().driver().actions();
   }
@@ -843,6 +895,7 @@ public class Selenide {
    *
    * @return browser user agent
    */
+  @Nonnull
   public static String getUserAgent() {
     return getSelenideDriver().driver().getUserAgent();
   }
@@ -867,6 +920,7 @@ public class Selenide {
    * @return downloaded File in folder `Configuration.reportsFolder`
    * @throws IOException if failed to download file
    */
+  @Nonnull
   public static File download(String url) throws IOException {
     return getSelenideDriver().download(url);
   }
@@ -883,6 +937,7 @@ public class Selenide {
    * @return downloaded File in folder `Configuration.reportsFolder`
    * @throws IOException if failed to download file
    */
+  @Nonnull
   public static File download(String url, long timeoutMs) throws IOException {
     return getSelenideDriver().download(url, timeoutMs);
   }

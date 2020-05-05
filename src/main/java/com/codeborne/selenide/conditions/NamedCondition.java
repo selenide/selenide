@@ -4,6 +4,10 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class NamedCondition extends Condition {
   private final String prefix;
   private final Condition delegate;
@@ -24,6 +28,7 @@ public class NamedCondition extends Condition {
     return delegate.actualValue(driver, element);
   }
 
+  @Nonnull
   @Override
   public Condition negate() {
     return delegate.negate();

@@ -4,10 +4,12 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static java.util.stream.Collectors.joining;
 
+@ParametersAreNonnullByDefault
 public class Or extends Condition {
 
   private final List<Condition> conditions;

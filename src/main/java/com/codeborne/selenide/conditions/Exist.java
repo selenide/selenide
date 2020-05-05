@@ -5,6 +5,10 @@ import com.codeborne.selenide.Driver;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class Exist extends Condition {
   public Exist() {
     super("exist");
@@ -21,6 +25,7 @@ public class Exist extends Condition {
     }
   }
 
+  @Nonnull
   @Override
   public Condition negate() {
     return new Not(this, true);

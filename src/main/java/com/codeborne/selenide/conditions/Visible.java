@@ -4,6 +4,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+
 public class Visible extends Condition {
   public Visible() {
     super("visible");
@@ -19,6 +21,7 @@ public class Visible extends Condition {
     return String.format("visible:%s", element.isDisplayed());
   }
 
+  @Nonnull
   @Override
   public Condition negate() {
     return new Not(this, true);

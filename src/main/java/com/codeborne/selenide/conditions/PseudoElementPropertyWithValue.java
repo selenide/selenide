@@ -4,9 +4,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
+@ParametersAreNonnullByDefault
 public class PseudoElementPropertyWithValue extends Condition {
 
   static final String JS_CODE = "return window.getComputedStyle(arguments[0], arguments[1])" +
@@ -16,7 +20,7 @@ public class PseudoElementPropertyWithValue extends Condition {
   private final String propertyName;
   private final String expectedPropertyValue;
 
-  public PseudoElementPropertyWithValue(String pseudoElementName, String propertyName, String expectedPropertyValue) {
+  public PseudoElementPropertyWithValue(String pseudoElementName, String propertyName, @Nullable String expectedPropertyValue) {
     super("pseudo-element");
     this.pseudoElementName = pseudoElementName;
     this.propertyName = propertyName;

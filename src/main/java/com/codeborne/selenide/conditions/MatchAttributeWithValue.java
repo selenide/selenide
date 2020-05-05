@@ -4,8 +4,10 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Pattern;
 
+@ParametersAreNonnullByDefault
 public class MatchAttributeWithValue extends Condition {
   private final String attributeName;
   private final Pattern attributeRegex;

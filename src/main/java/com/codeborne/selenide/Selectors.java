@@ -5,6 +5,8 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
+import javax.annotation.Nonnull;
+
 public class Selectors {
   private static final String NORMALIZE_SPACE_XPATH = "normalize-space(translate(string(.), '\t\n\r\u00a0', '    '))";
 
@@ -18,6 +20,7 @@ public class Selectors {
    * @return standard selenium By criteria`
    */
   @CheckReturnValue
+  @Nonnull
   public static By withText(String elementText) {
     return new WithText(elementText);
   }
@@ -32,6 +35,7 @@ public class Selectors {
    * @return standard selenium By criteria
    */
   @CheckReturnValue
+  @Nonnull
   public static By byText(String elementText) {
     return new ByText(elementText);
   }
@@ -66,6 +70,7 @@ public class Selectors {
    * @return standard selenium By cssSelector criteria
    */
   @CheckReturnValue
+  @Nonnull
   public static By byAttribute(String attributeName, String attributeValue) {
     String escapedAttributeValue = attributeValue.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
     return By.cssSelector(String.format("[%s=\"%s\"]", attributeName, escapedAttributeValue));
@@ -76,6 +81,7 @@ public class Selectors {
    * @since 5.10
    */
   @CheckReturnValue
+  @Nonnull
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
     return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
   }
@@ -84,6 +90,7 @@ public class Selectors {
    * Synonym for #byAttribute
    */
   @CheckReturnValue
+  @Nonnull
   public static By by(String attributeName, String attributeValue) {
     return byAttribute(attributeName, attributeValue);
   }
@@ -92,6 +99,7 @@ public class Selectors {
    * Find element with given title ("title" attribute)
    */
   @CheckReturnValue
+  @Nonnull
   public static By byTitle(String title) {
     return byAttribute("title", title);
   }
@@ -100,6 +108,7 @@ public class Selectors {
    * Find input element with given value ("value" attribute)
    */
   @CheckReturnValue
+  @Nonnull
   public static By byValue(String value) {
     return byAttribute("value", value);
   }
@@ -145,6 +154,7 @@ public class Selectors {
    * @since 3.1
    */
   @CheckReturnValue
+  @Nonnull
   public static By byName(String name) {
     return By.name(name);
   }
@@ -154,6 +164,7 @@ public class Selectors {
    * @since 3.1
    */
   @CheckReturnValue
+  @Nonnull
   public static By byXpath(String xpath) {
     return By.xpath(xpath);
   }
@@ -163,6 +174,7 @@ public class Selectors {
    * @since 3.1
    */
   @CheckReturnValue
+  @Nonnull
   public static By byLinkText(String linkText) {
     return By.linkText(linkText);
   }
@@ -172,6 +184,7 @@ public class Selectors {
    * @since 3.1
    */
   @CheckReturnValue
+  @Nonnull
   public static By byPartialLinkText(String partialLinkText) {
     return By.partialLinkText(partialLinkText);
   }
@@ -181,6 +194,7 @@ public class Selectors {
    * @since 3.1
    */
   @CheckReturnValue
+  @Nonnull
   public static By byId(String id) {
     return By.id(id);
   }
@@ -190,6 +204,7 @@ public class Selectors {
    * @since 3.8
    */
   @CheckReturnValue
+  @Nonnull
   public static By byCssSelector(String css) {
     return By.cssSelector(css);
   }
@@ -199,6 +214,7 @@ public class Selectors {
    * @since 3.8
    */
   @CheckReturnValue
+  @Nonnull
   public static By byClassName(String className) {
     return By.className(className);
   }
@@ -208,6 +224,7 @@ public class Selectors {
    * @since 5.11
    */
   @CheckReturnValue
+  @Nonnull
   public static By byTagName(String tagName) {
     return By.tagName(tagName);
   }
