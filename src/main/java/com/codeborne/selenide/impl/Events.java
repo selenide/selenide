@@ -17,7 +17,7 @@ public class Events {
     this.log = log;
   }
 
-  private final String jsCodeToTriggerEvent =
+  private static final String JS_CODE_TO_TRIGGER_EVENT =
       "var webElement = arguments[0];\n" +
           "var eventNames = arguments[1];\n" +
           "for (var i = 0; i < eventNames.length; i++) {" +
@@ -32,7 +32,7 @@ public class Events {
           "  }\n" +
           '}';
 
-  public void fireEvent(Driver driver, WebElement element, final String... event) {
+  public void fireEvent(Driver driver, WebElement element, String... event) {
     try {
       executeJavaScript(driver, element, event);
     }
@@ -44,6 +44,6 @@ public class Events {
   }
 
   void executeJavaScript(Driver driver, WebElement element, String... event) {
-    driver.executeJavaScript(jsCodeToTriggerEvent, element, event);
+    driver.executeJavaScript(JS_CODE_TO_TRIGGER_EVENT, element, event);
   }
 }
