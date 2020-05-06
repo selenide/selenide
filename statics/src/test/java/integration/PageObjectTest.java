@@ -144,7 +144,7 @@ class PageObjectTest extends IntegrationTest {
       .isInstanceOf(ElementNotFound.class);
   }
 
-  private static class SelectsPage {
+  public static class SelectsPage {
     @FindBy(xpath = "//select[@name='domain']")
     WebElement domainSelect;
 
@@ -187,7 +187,7 @@ class PageObjectTest extends IntegrationTest {
     SelenideElement lastLogin;
   }
 
-  static class UserInfo extends ElementsContainer {
+  public static class UserInfo extends ElementsContainer {
     @FindBy(className = "firstname")
     SelenideElement firstName;
     @FindBy(className = "lastname")
@@ -196,7 +196,7 @@ class PageObjectTest extends IntegrationTest {
     SelenideElement age;
   }
 
-  static class MissingSelectsPage {
+  public static class MissingSelectsPage {
     @FindBy(xpath = "//select[@name='wrong-select-name']")
     WebElement domainSelect;
     @FindBy(id = "wrong-id")

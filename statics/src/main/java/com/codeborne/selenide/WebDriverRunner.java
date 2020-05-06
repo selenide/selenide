@@ -8,6 +8,8 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import java.util.concurrent.Callable;
+
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 
@@ -151,6 +153,16 @@ public class WebDriverRunner implements Browsers {
       finally {
         webdriverContainer.resetWebDriver();
       }
+    }
+  }
+
+  public static <V> V using(Driver driver, Callable<V> lambda) throws Exception {
+    setWebDriver(driver.getWebDriver(), driver.getProxy());
+    try {
+      return lambda.call();
+    }
+    finally {
+      webdriverContainer.resetWebDriver();
     }
   }
 
