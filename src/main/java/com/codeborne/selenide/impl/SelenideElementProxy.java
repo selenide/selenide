@@ -35,11 +35,6 @@ class SelenideElementProxy implements InvocationHandler {
       "getSearchCriteria"
   ));
 
-  private static final Set<String> methodOverridesFromWebElement = new HashSet<>(asList(
-    "getCssValue",
-    "getAttribute"
-  ));
-
   private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
       "should",
       "shouldBe",
@@ -101,7 +96,7 @@ class SelenideElementProxy implements InvocationHandler {
     Throwable lastError;
     do {
       try {
-        if (isSelenideElementMethod(method)) {
+        if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
           return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
@@ -137,11 +132,6 @@ class SelenideElementProxy implements InvocationHandler {
       throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
-  }
-
-  private boolean isSelenideElementMethod(Method method) {
-    return SelenideElement.class.isAssignableFrom(method.getDeclaringClass())
-        && !methodOverridesFromWebElement.contains(method.getName());
   }
 
   private boolean isElementNotClickableException(Throwable e) {
