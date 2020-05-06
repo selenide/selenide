@@ -54,7 +54,7 @@
     <!--<module name="MutableException"/>-->
     <module name="ClassFanOutComplexity">
       <property name="max" value="29"/>
-      <property name="excludedPackages" value="com.codeborne.selenide.conditions"/>
+      <property name="excludedPackages" value="com.codeborne.selenide.conditions,com.google.errorprone.annotations,javax.annotation"/>
     </module>
     <module name="CyclomaticComplexity">
       <property name="max" value="11"/>
