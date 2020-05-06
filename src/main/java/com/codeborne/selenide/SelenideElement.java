@@ -265,9 +265,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Check if this element exists and visible.
    *
    * @return false if element does not exists, is invisible, browser is closed or any WebDriver exception happened.
-   * @see com.codeborne.selenide.commands.IsDisplayed
    */
   @Override
+  @CheckReturnValue
   boolean isDisplayed();
 
   /**
