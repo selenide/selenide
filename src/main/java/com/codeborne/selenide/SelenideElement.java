@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -92,6 +93,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.PressTab
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement pressTab();
 
   /**
@@ -105,6 +107,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.PressEscape
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement pressEscape();
 
   /**
@@ -201,7 +204,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return the property value or "" if the property is missing
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   String pseudo(String pseudoElementName, String propertyName);
 
   /**
@@ -222,6 +225,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.SelectRadio
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement selectRadio(String value);
 
   /**
@@ -233,12 +237,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nullable
   String data(String dataAttributeName);
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @Nullable
+  @CheckReturnValue
   String getAttribute(String name);
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  @Nullable
+  @Nonnull
+  @CheckReturnValue
   String getCssValue(String propertyName);
 
   /**
@@ -417,6 +429,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.ShouldNotBe
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
 
   /**
@@ -431,6 +444,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.ShouldNotBe
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
 
   /**
@@ -967,6 +981,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DragAndDropTo
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement dragAndDropTo(String targetCssSelector);
 
   /**
@@ -979,6 +994,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.DragAndDropTo
    */
   @Nonnull
+  @CanIgnoreReturnValue
   SelenideElement dragAndDropTo(WebElement target);
 
   /**
@@ -1006,7 +1022,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return file with screenshot (*.png)
    * @see com.codeborne.selenide.commands.TakeScreenshot
    */
-  @Nonnull
+  @Nullable
   File screenshot();
 
   /**
@@ -1016,6 +1032,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.TakeScreenshotAsImage
    */
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   BufferedImage screenshotAsImage();
 }

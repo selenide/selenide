@@ -342,7 +342,7 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public String url() {
     return getWebDriver().getCurrentUrl();
   }
