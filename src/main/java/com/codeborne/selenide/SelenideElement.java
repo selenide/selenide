@@ -54,7 +54,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement val(@Nullable String text);
 
   /**
-   * Append given test to the text field and trigger "change" event.
+   * Append given text to the text field and trigger "change" event.
    * <p>
    * Implementation details:
    * This is the same as
