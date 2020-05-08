@@ -33,7 +33,7 @@ dependencies {
   testImplementation('org.mockito:mockito-core:3.3.3')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0')
-  testImplementation("org.assertj:assertj-core:3.15.0")
+  testImplementation("org.assertj:assertj-core:3.16.0")
 
   implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
