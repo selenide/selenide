@@ -6,7 +6,7 @@ Selenide adaptor for Appium framework.
 
 * Run the emulator:
 
-  > open Android Stuiod -> "Android Virtual Device Manager" -> Run
+  > open Android Studio -> "Android Virtual Device Manager" -> Run
 
 * Run appium server:
    > appium
