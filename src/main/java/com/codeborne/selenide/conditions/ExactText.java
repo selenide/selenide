@@ -5,6 +5,9 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ExactText extends Condition {
   private final String expectedText;
 

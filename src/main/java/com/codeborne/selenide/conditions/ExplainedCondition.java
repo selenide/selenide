@@ -4,6 +4,10 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ExplainedCondition extends Condition {
   private final Condition delegate;
   private final String message;
@@ -19,6 +23,7 @@ public class ExplainedCondition extends Condition {
     return delegate.apply(driver, element);
   }
 
+  @Nonnull
   @Override
   public Condition negate() {
     return delegate.negate().because(message);

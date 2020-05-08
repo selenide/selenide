@@ -4,13 +4,17 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
+@ParametersAreNonnullByDefault
 public class CssValue extends Condition {
   private final String propertyName;
   private final String expectedValue;
 
-  public CssValue(String propertyName, String expectedValue) {
+  public CssValue(String propertyName, @Nullable String expectedValue) {
     super("css value");
     this.propertyName = propertyName;
     this.expectedValue = expectedValue;

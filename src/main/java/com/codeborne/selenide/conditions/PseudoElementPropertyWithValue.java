@@ -4,9 +4,12 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
+@ParametersAreNonnullByDefault
 public class PseudoElementPropertyWithValue extends Condition {
 
   static final String JS_CODE = "return window.getComputedStyle(arguments[0], arguments[1])" +

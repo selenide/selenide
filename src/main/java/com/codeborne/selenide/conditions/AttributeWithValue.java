@@ -4,6 +4,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AttributeWithValue extends Condition {
   private final String attributeName;
   private final String expectedAttributeValue;

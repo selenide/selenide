@@ -5,6 +5,10 @@ import com.codeborne.selenide.Driver;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class Hidden extends Condition {
   public Hidden() {
     super("hidden", true);
@@ -20,6 +24,7 @@ public class Hidden extends Condition {
     }
   }
 
+  @Nonnull
   @Override
   public Condition negate() {
     return new Not(this, false);
