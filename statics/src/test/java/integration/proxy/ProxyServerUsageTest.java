@@ -16,8 +16,8 @@ import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProxyServerUsageTest extends IntegrationTest {
-  private List<String> requests = new ArrayList<>();
-  private List<String> responses = new ArrayList<>();
+  private final List<String> requests = new ArrayList<>();
+  private final List<String> responses = new ArrayList<>();
 
   @BeforeEach
   @AfterEach
@@ -35,6 +35,7 @@ class ProxyServerUsageTest extends IntegrationTest {
     selenideProxy.addRequestFilter("proxy-usages.request", (request, contents, messageInfo) -> {
       String url = messageInfo.getUrl();
       if (!isBrowserOwnTechnicalRequest(url)) {
+        request.headers().add("User-Agent", "hacker");
         requests.add(url + "\n\n" + contents.getTextContents());
       }
       return null;
