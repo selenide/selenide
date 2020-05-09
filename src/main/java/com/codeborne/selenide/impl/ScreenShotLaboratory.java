@@ -18,10 +18,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -283,7 +280,7 @@ public class ScreenShotLaboratory {
       File scrFile = driver.getScreenshotAs(FILE);
       File imageFile = new File(config.reportsFolder(), fileName + ".png");
       try {
-        copyFile(scrFile, imageFile);
+        FileHelper.copyFile(scrFile, imageFile);
       } catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);
       }
@@ -293,25 +290,6 @@ public class ScreenShotLaboratory {
       return null;
     }
   }
-
-  protected void copyFile(File sourceFile, File targetFile) throws IOException {
-    try (FileInputStream in = new FileInputStream(sourceFile)) {
-      copyFile(in, targetFile);
-    }
-  }
-
-  protected void copyFile(InputStream in, File targetFile) throws IOException {
-    ensureFolderExists(targetFile);
-
-    try (FileOutputStream out = new FileOutputStream(targetFile)) {
-      byte[] buffer = new byte[1024];
-      int len;
-      while ((len = in.read(buffer)) != -1) {
-        out.write(buffer, 0, len);
-      }
-    }
-  }
-
 
   public void startContext(String className, String methodName) {
     String context = className.replace('.', separatorChar) + separatorChar + methodName + separatorChar;
