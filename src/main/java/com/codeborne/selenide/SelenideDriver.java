@@ -301,6 +301,12 @@ public class SelenideDriver {
 
   @CheckReturnValue
   @Nonnull
+  public ElementsCollection findAll(String cssSelector) {
+    return new ElementsCollection(driver(), By.cssSelector(cssSelector));
+  }
+
+  @CheckReturnValue
+  @Nonnull
   public ElementsCollection $$(By criteria) {
     return findAll(criteria);
   }
