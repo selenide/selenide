@@ -29,6 +29,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  *
  *   Example: homepage=http://google.com,"intl.allowed_languages=en,ru,es"
  * </p>
+ * <p>
+ *  <b>chromeoptions.debuggerAddress</b> - Set an address of a Chrome debugger server to connect to for chrome
+ *  options, in the form of <hostname/ip:port>
+ *
+ *   Example: debuggerAddress=localhost:9222
+ * </p>
  */
 public class Configuration {
   private static final SelenideConfig defaults = new SelenideConfig();

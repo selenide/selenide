@@ -71,6 +71,9 @@ class ChromeDriverFactory extends AbstractDriverFactory {
     }
     currentChromeOptions.setExperimentalOption("prefs", chromePreferences);
 
+    if (System.getProperty("chromeoptions.debuggerAddress") != null) {
+      currentChromeOptions.setExperimentalOption("debuggerAddress", System.getProperty("chromeoptions.debuggerAddress"));
+    }
     if (System.getProperty("chromeoptions.mobileEmulation") != null) {
       Map<String, Object> prefs = parsePreferencesFromString(System.getProperty("chromeoptions.mobileEmulation"));
       currentChromeOptions.setExperimentalOption("mobileEmulation", prefs);
@@ -103,6 +106,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
   /**
    * parse parameters which can come from command-line interface
+   *
    * @param csvString comma-separated values, quotes can be used to mask spaces and commas
    *                  Example: 123,"foo bar","bar,foo"
    * @return values as array, quotes are preserved
@@ -114,6 +118,7 @@ class ChromeDriverFactory extends AbstractDriverFactory {
 
   /**
    * Converts String to Boolean\Integer or returns original String.
+   *
    * @param value string to convert
    * @return string's object representation
    */

@@ -13,13 +13,13 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
-import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.*;
 import static org.mockito.Mockito.mock;
 
 class ChromeDriverFactoryTest implements WithAssertions {
   private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
+  private static final String CHROME_OPTIONS_DEBUGGER_ADDRESS = "chromeoptions.debuggerAddress";
 
   private final Proxy proxy = mock(Proxy.class);
   private final SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
@@ -29,6 +29,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void tearDown() {
     System.clearProperty(CHROME_OPTIONS_ARGS);
     System.clearProperty(CHROME_OPTIONS_PREFS);
+    System.clearProperty(CHROME_OPTIONS_DEBUGGER_ADDRESS);
   }
 
   @Test
@@ -110,5 +111,16 @@ class ChromeDriverFactoryTest implements WithAssertions {
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless");
+  }
+
+  @Test
+  void debuggerAddressCanBeSet() {
+    String hostAndPort = "localhost:12345";
+    System.setProperty(CHROME_OPTIONS_DEBUGGER_ADDRESS, hostAndPort);
+
+    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    String debuggerAddress = getBrowserLaunchDebuggerAddress(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(debuggerAddress).isEqualTo(hostAndPort);
   }
 }
