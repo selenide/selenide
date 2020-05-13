@@ -21,12 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FileDownloadViaProxyTest extends IntegrationTest {
-  private File folder = new File(Configuration.downloadsFolder);
+  private final File folder = new File(Configuration.downloadsFolder);
 
   @BeforeEach
   void setUp() {
     useProxy(true);
     openFile("page_with_uploads.html");
+    timeout = 1000;
   }
 
   @Test
@@ -63,6 +64,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadMissingFile() {
+    timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
       .isInstanceOf(FileNotFoundException.class);
   }
