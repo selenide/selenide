@@ -14,7 +14,7 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.hc.core5.http.HttpStatus.SC_OK;
 
 class FileUploadHandler extends BaseHandler {
   private static final Logger log = LoggerFactory.getLogger(FileUploadHandler.class);
