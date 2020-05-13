@@ -44,7 +44,7 @@ class UnopenedBrowserTest extends IntegrationTest {
 
   @Test
   void dollarsShouldNotOpenBrowser() {
-    WebDriverManager webDriverManager = WebDriverManager.chromedriver().avoidPreferences();
+    WebDriverManager webDriverManager = WebDriverManager.chromedriver().avoidBrowserDetection();
     webDriverManager.setup();
 
     assertThatThrownBy(() ->
