@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -910,19 +912,31 @@ public class Selenide {
   }
 
   /**
-   * Download file using a direct link.
-   * This method download file like it would be done in currently opened browser:
-   * it adds all cookies and "User-Agent" header to the downloading request.
+   * NB! URL must be properly encoded.
+   * E.g. instead of "/files/ж.txt", it should be "/files/%D0%B6.txt"
    *
+   * @see #download(String, long)
    * Download fails if default timeout (Configuration.timeout) is exceeded
-   *
-   * @param url either relative or absolute url
-   * @return downloaded File in folder `Configuration.reportsFolder`
-   * @throws IOException if failed to download file
    */
   @Nonnull
-  public static File download(String url) throws IOException {
+  public static File download(String url) throws IOException, URISyntaxException {
     return getSelenideDriver().download(url);
+  }
+
+  /**
+   * @see #download(String)
+   */
+  @Nonnull
+  public static File download(URI url) throws IOException {
+    return getSelenideDriver().download(url);
+  }
+
+  /**
+   * @see #download(String, long)
+   */
+  @Nonnull
+  public static File download(URI url, long timeoutMs) throws IOException {
+    return getSelenideDriver().download(url, timeoutMs);
   }
 
   /**
@@ -933,12 +947,15 @@ public class Selenide {
    * Download fails if specified timeout is exceeded
    *
    * @param url either relative or absolute url
+   *            NB! URL must be properly encoded.
+   *            E.g. instead of "/files/ж.txt", it should be "/files/%D0%B6.txt"
    * @param timeoutMs specific timeout in ms
    * @return downloaded File in folder `Configuration.reportsFolder`
    * @throws IOException if failed to download file
+   * @throws URISyntaxException if given url has invalid syntax
    */
   @Nonnull
-  public static File download(String url, long timeoutMs) throws IOException {
-    return getSelenideDriver().download(url, timeoutMs);
+  public static File download(String url, long timeoutMs) throws IOException, URISyntaxException {
+    return getSelenideDriver().download(new URI(url), timeoutMs);
   }
 }

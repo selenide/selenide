@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
 
@@ -67,6 +68,10 @@ public class DownloadFileWithHttpRequest {
     }
 
     return download(driver, fileToDownloadLocation, timeout, fileFilter);
+  }
+
+  public File download(Driver driver, URI url, long timeout, FileFilter fileFilter) throws IOException {
+    return download(driver, url.toASCIIString(), timeout, fileFilter);
   }
 
   public File download(Driver driver, String relativeOrAbsoluteUrl, long timeout, FileFilter fileFilter) throws IOException {
