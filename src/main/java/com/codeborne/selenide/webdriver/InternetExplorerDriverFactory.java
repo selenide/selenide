@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -19,11 +20,14 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
-    return createInternetExplorerDriver(config, proxy);
+  public void setupBinary() {
+    if (isSystemPropertyNotSet("webdriver.ie.driver")) {
+      WebDriverManager.iedriver().setup();
+    }
   }
 
-  private WebDriver createInternetExplorerDriver(Config config, Proxy proxy) {
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {

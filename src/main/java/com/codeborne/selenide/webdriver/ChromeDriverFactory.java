@@ -2,7 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
-import org.apache.commons.lang3.math.NumberUtils;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,17 +22,25 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
-    ChromeOptions options = createChromeOptions(config, proxy);
-    return new ChromeDriver(options);
-  }
-
-  @Override
   boolean supports(Config config, Browser browser) {
     return browser.isChrome();
   }
 
-  ChromeOptions createChromeOptions(Config config, Proxy proxy) {
+  @Override
+  public void setupBinary() {
+    if (isSystemPropertyNotSet("webdriver.chrome.driver")) {
+      WebDriverManager.chromedriver().setup();
+    }
+  }
+
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+    ChromeOptions chromeOptions = createChromeOptions(config, proxy);
+    log.debug("Chrome options: {}", chromeOptions.toString());
+    return new ChromeDriver(chromeOptions);
+  }
+
+  protected ChromeOptions createChromeOptions(Config config, Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -43,16 +51,14 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     options.addArguments("--proxy-bypass-list=<-loopback>");
     options.merge(createCommonCapabilities(config, proxy));
     transferChromeOptionsFromSystemProperties(config, options);
-    log.debug("Chrome options: {}", options.toString());
     return options;
   }
-
 
   /**
    * This method only handles so-called "arguments" and "preferences"
    * for ChromeOptions (there is also "Extensions" etc.)
    */
-  private void transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
+  protected void transferChromeOptionsFromSystemProperties(Config config, ChromeOptions currentChromeOptions) {
     if (System.getProperty("chromeoptions.args") != null) {
       Stream<String> params = Arrays.stream(parseCSVhandlingQuotes(System.getProperty("chromeoptions.args")));
       List<String> args = params
@@ -77,7 +83,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  private Map<String, Object> parsePreferencesFromString(String preferencesString) {
+  protected Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
     String[] allPrefs = parseCSVhandlingQuotes(preferencesString);
     for (String pref : allPrefs) {
@@ -107,28 +113,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
    *                  Example: 123,"foo bar","bar,foo"
    * @return values as array, quotes are preserved
    */
-  private String[] parseCSVhandlingQuotes(String csvString) {
+  protected String[] parseCSVhandlingQuotes(String csvString) {
     // Regexp from https://stackoverflow.com/a/15739087/1110503 to handle commas in values
     return csvString.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-  }
-
-  /**
-   * Converts String to Boolean\Integer or returns original String.
-   * @param value string to convert
-   * @return string's object representation
-   */
-  private Object convertStringToNearestObjectType(String value) {
-    switch (value) {
-      case "true":
-        return true;
-      case "false":
-        return false;
-      default: {
-        if (NumberUtils.isParsable(value)) {
-          return Integer.parseInt(value);
-        }
-        return value;
-      }
-    }
   }
 }

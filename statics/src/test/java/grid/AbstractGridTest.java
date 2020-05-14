@@ -1,9 +1,7 @@
 package grid;
 
-import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.webdriver.WebDriverBinaryManager;
 import integration.IntegrationTest;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.grid.selenium.GridLauncherV3;
@@ -29,7 +27,7 @@ abstract class AbstractGridTest extends IntegrationTest {
       "-hub", "http://localhost:" + hubPort + "/grid/register"
     });
 
-    new WebDriverBinaryManager().setupBinaryPath(new Browser(Configuration.browser, Configuration.headless));
+    WebDriverManager.chromedriver().setup();
   }
 
   @AfterEach

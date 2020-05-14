@@ -28,8 +28,6 @@ public class WebDriverFactory {
       new OperaDriverFactory()
   );
 
-  protected WebDriverBinaryManager webDriverBinaryManager = new WebDriverBinaryManager();
-
   protected BrowserResizer browserResizer = new BrowserResizer();
 
   public WebDriver createWebDriver(Config config, Proxy proxy) {
@@ -41,18 +39,18 @@ public class WebDriverFactory {
 
     Browser browser = new Browser(config.browser(), config.headless());
 
-    if (config.driverManagerEnabled() && config.remote() == null) {
-      webDriverBinaryManager.setupBinaryPath(browser);
-    }
-
-    WebDriver webdriver = factories.stream()
+    DriverFactory webdriverFactory = factories.stream()
         .filter(factory -> factory.supports(config, browser))
         .findAny()
-        .map(driverFactory -> driverFactory.create(config, proxy))
-        .orElseGet(() -> new DefaultDriverFactory().create(config, proxy));
+        .orElseGet(DefaultDriverFactory::new);
 
-    webdriver = browserResizer.adjustBrowserSize(config, browser, webdriver);
-    webdriver = browserResizer.adjustBrowserPosition(config, webdriver);
+    if (config.driverManagerEnabled()) {
+      webdriverFactory.setupBinary();
+    }
+
+    WebDriver webdriver = webdriverFactory.create(config, browser, proxy);
+    browserResizer.adjustBrowserSize(config, webdriver);
+    browserResizer.adjustBrowserPosition(config, webdriver);
 
     logBrowserVersion(webdriver);
     log.info("Selenide v. {}", SelenideDriver.class.getPackage().getImplementationVersion());

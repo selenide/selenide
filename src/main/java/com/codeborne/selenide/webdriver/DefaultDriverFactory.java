@@ -21,11 +21,15 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
-    return createInstanceOf(config.browser(), config, proxy);
+  public void setupBinary() {
   }
 
-  WebDriver createInstanceOf(String className, Config config, Proxy proxy) {
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+    return createInstanceOf(config.browser(), config, browser, proxy);
+  }
+
+  private WebDriver createInstanceOf(String className, Config config, Browser browser, Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
       capabilities.setJavascriptEnabled(true);
@@ -37,7 +41,11 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
         return createInstanceOf(WebDriverProvider.class, clazz).createDriver(capabilities);
       }
       else if (DriverFactory.class.isAssignableFrom(clazz)) {
-        return createInstanceOf(DriverFactory.class, clazz).create(config, proxy);
+        DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
+        if (config.driverManagerEnabled()) {
+          factory.setupBinary();
+        }
+        return factory.create(config, browser, proxy);
       }
       else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
