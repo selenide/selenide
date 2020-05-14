@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,6 +38,8 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
       .isEqualTo("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
+
+    getWebDriver().quit();
   }
 
   @Test
