@@ -1,6 +1,5 @@
 package com.codeborne.selenide.webdriver;
 
-import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory;
 class BrowserResizer {
   private static final Logger log = LoggerFactory.getLogger(BrowserResizer.class);
 
-  WebDriver adjustBrowserPosition(Config config, WebDriver driver) {
+  void adjustBrowserPosition(Config config, WebDriver driver) {
     if (config.browserPosition() != null) {
       log.info("Set browser position to {}", config.browserPosition());
       String[] coordinates = config.browserPosition().split("x");
@@ -22,10 +21,9 @@ class BrowserResizer {
         driver.manage().window().setPosition(target);
       }
     }
-    return driver;
   }
 
-  WebDriver adjustBrowserSize(Config config, Browser browser, WebDriver driver) {
+  void adjustBrowserSize(Config config, WebDriver driver) {
     if (config.browserSize() != null && !config.startMaximized()) {
       log.info("Set browser size to {}", config.browserSize());
       String[] dimension = config.browserSize().split("x");
@@ -41,6 +39,5 @@ class BrowserResizer {
         log.warn("Cannot maximize {}: {}", driver.getClass().getSimpleName(), cannotMaximize);
       }
     }
-    return driver;
   }
 }

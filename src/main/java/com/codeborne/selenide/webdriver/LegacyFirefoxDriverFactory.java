@@ -15,13 +15,17 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
+  public void setupBinary() {
+  }
+
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
     return createLegacyFirefoxDriver(config, proxy);
   }
 
-  private WebDriver createLegacyFirefoxDriver(Config config, Proxy proxy) {
+  protected WebDriver createLegacyFirefoxDriver(Config config, Proxy proxy) {
     FirefoxOptions firefoxOptions = createFirefoxOptions(config, proxy);
     firefoxOptions.setLegacy(true);
     return new FirefoxDriver(firefoxOptions);

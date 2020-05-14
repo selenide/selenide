@@ -1,11 +1,13 @@
 package grid;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -15,20 +17,20 @@ import java.net.URL;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
+public class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
-    MyProvider.port = hubPort;
-    Configuration.browser = MyProvider.class.getName();
+    MyFactory.port = hubPort;
+    Configuration.browser = MyFactory.class.getName();
     openFile("page_with_selects_without_jquery.html");
     $$("#radioButtons input").shouldHave(size(4));
   }
 
-  static class MyProvider implements WebDriverProvider {
+  static class MyFactory extends ChromeDriverFactory {
     static int port;
 
     @Override
-    public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
+    public WebDriver create(Config config, Browser browser, Proxy proxy) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(true);
       addSslErrorIgnoreCapabilities(options);

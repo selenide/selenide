@@ -26,13 +26,13 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
-    return createRemoteDriver(config, proxy);
+  public void setupBinary() {
   }
 
-  private WebDriver createRemoteDriver(Config config, Proxy proxy) {
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = getDriverCapabilities(config, new Browser(config.browser(), false), proxy);
+      DesiredCapabilities capabilities = getDriverCapabilities(config, browser, proxy);
       RemoteWebDriver webDriver = new RemoteWebDriver(new URL(config.remote()), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
@@ -41,7 +41,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  DesiredCapabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
+  protected DesiredCapabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
     capabilities.setBrowserName(getBrowserNameForGrid(config, browser));
     if (config.headless()) {
@@ -53,7 +53,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
     return capabilities;
   }
 
-  Capabilities getBrowserBinaryCapabilities(Config config, Browser browser) {
+  protected Capabilities getBrowserBinaryCapabilities(Config config, Browser browser) {
     log.info("Using browser binary: {}", config.browserBinary());
     if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
@@ -69,7 +69,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  private Capabilities getHeadlessCapabilities(Config config, Browser browser) {
+  protected Capabilities getHeadlessCapabilities(Config config, Browser browser) {
     log.info("Starting in headless mode");
     if (browser.isChrome()) {
       ChromeOptions options = new ChromeOptions();
@@ -85,7 +85,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
     return new DesiredCapabilities();
   }
 
-  String getBrowserNameForGrid(Config config, Browser browser) {
+  protected String getBrowserNameForGrid(Config config, Browser browser) {
     if (browser.isLegacyFirefox()) {
       return BrowserType.FIREFOX;
     }

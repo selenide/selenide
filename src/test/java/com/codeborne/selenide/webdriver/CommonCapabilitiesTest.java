@@ -25,7 +25,11 @@ public class CommonCapabilitiesTest implements WithAssertions {
     }
 
     @Override
-    public WebDriver create(Config config, Proxy proxy) {
+    public void setupBinary() {
+    }
+
+    @Override
+    public WebDriver create(Config config, Browser browser, Proxy proxy) {
       return null;
     }
   };

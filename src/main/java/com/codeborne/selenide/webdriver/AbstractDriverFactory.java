@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
@@ -20,7 +21,7 @@ abstract class AbstractDriverFactory implements DriverFactory {
 
   abstract boolean supports(Config config, Browser browser);
 
-  DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
+  protected DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
@@ -36,35 +37,39 @@ abstract class AbstractDriverFactory implements DriverFactory {
       browserCapabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
     transferCapabilitiesFromSystemProperties(browserCapabilities);
-    browserCapabilities = mergeCapabilitiesFromConfiguration(config, browserCapabilities);
-    return browserCapabilities;
+    return mergeCapabilitiesFromConfiguration(config, browserCapabilities);
   }
 
-  DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
+  protected DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
     return currentCapabilities.merge(config.browserCapabilities());
   }
 
-  private void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
+  protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
     String prefix = "capabilities.";
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         log.debug("Use {}={}", key, value);
-        transferCapability(currentBrowserCapabilities, capability, value);
+        currentBrowserCapabilities.setCapability(capability, convertStringToNearestObjectType(value));
       }
     }
   }
 
-  private void transferCapability(DesiredCapabilities currentBrowserCapabilities, String capability, String value) {
+  /**
+   * Converts String to Boolean\Integer or returns original String.
+   * @param value string to convert
+   * @return string's object representation
+   */
+  protected Object convertStringToNearestObjectType(String value) {
     if (isBoolean(value)) {
-      currentBrowserCapabilities.setCapability(capability, Boolean.valueOf(value));
+      return Boolean.valueOf(value);
     }
     else if (isInteger(value)) {
-      currentBrowserCapabilities.setCapability(capability, Integer.parseInt(value));
+      return Integer.parseInt(value);
     }
     else {
-      currentBrowserCapabilities.setCapability(capability, value);
+      return value;
     }
   }
 
@@ -74,5 +79,9 @@ abstract class AbstractDriverFactory implements DriverFactory {
 
   protected boolean isBoolean(String value) {
     return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
+  }
+
+  protected boolean isSystemPropertyNotSet(String key) {
+    return isBlank(System.getProperty(key, ""));
   }
 }

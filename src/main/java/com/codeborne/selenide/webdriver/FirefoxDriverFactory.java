@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -28,18 +29,20 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Proxy proxy) {
+  public void setupBinary() {
+    if (isSystemPropertyNotSet("webdriver.gecko.driver")) {
+      WebDriverManager.firefoxdriver().setup();
+    }
+  }
+
+  @Override
+  public WebDriver create(Config config, Browser browser, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return createFirefoxDriver(config, proxy);
+    return new FirefoxDriver(createFirefoxOptions(config, proxy));
   }
 
-  private WebDriver createFirefoxDriver(Config config, Proxy proxy) {
-    FirefoxOptions options = createFirefoxOptions(config, proxy);
-    return new FirefoxDriver(options);
-  }
-
-  FirefoxOptions createFirefoxOptions(Config config, Proxy proxy) {
+  protected FirefoxOptions createFirefoxOptions(Config config, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -65,7 +68,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     return firefoxOptions;
   }
 
-  private void setupDownloadsFolder(Config config, FirefoxProfile profile) {
+  protected void setupDownloadsFolder(Config config, FirefoxProfile profile) {
     if (profile.getStringPreference("browser.download.dir", "").isEmpty()) {
       profile.setPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
       profile.setPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
@@ -74,7 +77,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  String popularContentTypes() {
+  protected String popularContentTypes() {
     try {
       return String.join(";", IOUtils.readLines(getClass().getResourceAsStream("/content-types.properties"), UTF_8));
     }
@@ -84,7 +87,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  private void transferFirefoxProfileFromSystemProperties(FirefoxProfile profile) {
+  protected void transferFirefoxProfileFromSystemProperties(FirefoxProfile profile) {
     String prefix = "firefoxprofile.";
 
     for (String key : System.getProperties().stringPropertyNames()) {
@@ -92,16 +95,20 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         log.debug("Use {}={}", key, value);
-        if (isBoolean(value)) {
-          profile.setPreference(capability, parseBoolean(value));
-        }
-        else if (isInteger(value)) {
-          profile.setPreference(capability, parseInt(value));
-        }
-        else {
-          profile.setPreference(capability, value);
-        }
+        setCapability(profile, capability, value);
       }
+    }
+  }
+
+  protected void setCapability(FirefoxProfile profile, String capability, String value) {
+    if (isBoolean(value)) {
+      profile.setPreference(capability, parseBoolean(value));
+    }
+    else if (isInteger(value)) {
+      profile.setPreference(capability, parseInt(value));
+    }
+    else {
+      profile.setPreference(capability, value);
     }
   }
 }
