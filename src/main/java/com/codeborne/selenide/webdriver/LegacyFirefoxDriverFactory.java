@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
+public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
 
   @Override
   boolean supports(Config config, Browser browser) {
@@ -15,7 +15,7 @@ class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
     return createLegacyFirefoxDriver(config, proxy);

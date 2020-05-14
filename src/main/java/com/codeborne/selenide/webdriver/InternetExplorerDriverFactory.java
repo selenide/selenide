@@ -10,7 +10,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class InternetExplorerDriverFactory extends AbstractDriverFactory {
+public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
 
   @Override
@@ -19,7 +19,7 @@ class InternetExplorerDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     return createInternetExplorerDriver(config, proxy);
   }
 

@@ -10,7 +10,7 @@ import org.openqa.selenium.opera.OperaOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class OperaDriverFactory extends AbstractDriverFactory {
+public class OperaDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(OperaDriverFactory.class);
 
   @Override
@@ -19,7 +19,7 @@ class OperaDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     OperaOptions operaOptions = createOperaOptions(config, proxy);
     return new OperaDriver(operaOptions);
   }
