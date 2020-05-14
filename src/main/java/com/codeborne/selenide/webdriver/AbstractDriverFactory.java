@@ -3,22 +3,22 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.regex.Pattern;
 
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
 
-abstract class AbstractDriverFactory {
+abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
+  private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
 
   abstract boolean supports(Config config, Browser browser);
-
-  abstract WebDriver create(Config config, Proxy proxy);
 
   DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
@@ -51,14 +51,28 @@ abstract class AbstractDriverFactory {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
         log.debug("Use {}={}", key, value);
-        if (value.equals("true") || value.equals("false")) {
-          currentBrowserCapabilities.setCapability(capability, Boolean.valueOf(value));
-        } else if (value.matches("^-?\\d+$")) { //if integer
-          currentBrowserCapabilities.setCapability(capability, Integer.parseInt(value));
-        } else {
-          currentBrowserCapabilities.setCapability(capability, value);
-        }
+        transferCapability(currentBrowserCapabilities, capability, value);
       }
     }
+  }
+
+  private void transferCapability(DesiredCapabilities currentBrowserCapabilities, String capability, String value) {
+    if (isBoolean(value)) {
+      currentBrowserCapabilities.setCapability(capability, Boolean.valueOf(value));
+    }
+    else if (isInteger(value)) {
+      currentBrowserCapabilities.setCapability(capability, Integer.parseInt(value));
+    }
+    else {
+      currentBrowserCapabilities.setCapability(capability, value);
+    }
+  }
+
+  protected boolean isInteger(String value) {
+    return REGEX_SIGNED_INTEGER.matcher(value).matches();
+  }
+
+  protected boolean isBoolean(String value) {
+    return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
   }
 }

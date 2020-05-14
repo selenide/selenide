@@ -19,7 +19,7 @@ import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-class FirefoxDriverFactory extends AbstractDriverFactory {
+public class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
 
   @Override
@@ -28,7 +28,7 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
     return createFirefoxDriver(config, proxy);
@@ -103,13 +103,5 @@ class FirefoxDriverFactory extends AbstractDriverFactory {
         }
       }
     }
-  }
-
-  private boolean isBoolean(String value) {
-    return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
-  }
-
-  private boolean isInteger(String value) {
-    return value.matches("^-?\\d+$");
   }
 }

@@ -4,34 +4,32 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import static com.codeborne.selenide.Browsers.*;
+import static com.codeborne.selenide.Browsers.EDGE;
+import static com.codeborne.selenide.Browsers.IE;
+import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static org.mockito.Mockito.mock;
-import static org.openqa.selenium.remote.CapabilityType.*;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
+import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 
 public class CommonCapabilitiesTest implements WithAssertions {
-  private AbstractDriverFactory driverFactory;
-  private Proxy proxy = mock(Proxy.class);
+  private final AbstractDriverFactory driverFactory = new AbstractDriverFactory() {
+    @Override
+    boolean supports(Config config, Browser browser) {
+      return false;
+    }
 
-  @BeforeEach
-  void createFactory() {
-    driverFactory = new AbstractDriverFactory() {
-      @Override
-      boolean supports(Config config, Browser browser) {
-        return false;
-      }
-
-      @Override
-      WebDriver create(Config config, Proxy proxy) {
-        return null;
-      }
-    };
-  }
+    @Override
+    public WebDriver create(Config config, Proxy proxy) {
+      return null;
+    }
+  };
+  private final Proxy proxy = mock(Proxy.class);
 
   @Test
   void transferCapabilitiesFromConfiguration() {

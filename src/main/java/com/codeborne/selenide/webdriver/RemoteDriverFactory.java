@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-class RemoteDriverFactory extends AbstractDriverFactory {
+public class RemoteDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(RemoteDriverFactory.class);
 
   @Override
@@ -26,7 +26,7 @@ class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     return createRemoteDriver(config, proxy);
   }
 

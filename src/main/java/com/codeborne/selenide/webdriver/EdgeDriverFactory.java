@@ -10,11 +10,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class EdgeDriverFactory extends AbstractDriverFactory {
+public class EdgeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     return createEdgeDriver(config, proxy);
   }
 

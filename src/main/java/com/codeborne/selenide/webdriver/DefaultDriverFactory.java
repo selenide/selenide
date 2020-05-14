@@ -21,7 +21,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     return createInstanceOf(config.browser(), config, proxy);
   }
 
@@ -34,10 +34,12 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        Constructor<?> constructor = clazz.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        return ((WebDriverProvider) constructor.newInstance()).createDriver(capabilities);
-      } else {
+        return createInstanceOf(WebDriverProvider.class, clazz).createDriver(capabilities);
+      }
+      else if (DriverFactory.class.isAssignableFrom(clazz)) {
+        return createInstanceOf(DriverFactory.class, clazz).create(config, proxy);
+      }
+      else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
         return (WebDriver) constructor.newInstance(capabilities);
       }
@@ -46,6 +48,13 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
     } catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T> T createInstanceOf(Class<T> resultClass, Class<?> clazz) throws Exception {
+    Constructor<?> constructor = clazz.getDeclaredConstructor();
+    constructor.setAccessible(true);
+    return (T) constructor.newInstance();
   }
 
   private RuntimeException runtime(Throwable exception) {

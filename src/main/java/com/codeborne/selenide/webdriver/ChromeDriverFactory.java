@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class ChromeDriverFactory extends AbstractDriverFactory {
+public class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
 
   @Override
-  WebDriver create(Config config, Proxy proxy) {
+  public WebDriver create(Config config, Proxy proxy) {
     ChromeOptions options = createChromeOptions(config, proxy);
     return new ChromeDriver(options);
   }
