@@ -14,6 +14,8 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.PROXY;
+import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
+import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
 abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
@@ -22,21 +24,25 @@ abstract class AbstractDriverFactory implements DriverFactory {
   abstract boolean supports(Config config, Browser browser);
 
   protected DesiredCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
-    DesiredCapabilities browserCapabilities = new DesiredCapabilities();
+    DesiredCapabilities capabilities = new DesiredCapabilities();
     if (proxy != null) {
-      browserCapabilities.setCapability(PROXY, proxy);
+      capabilities.setCapability(PROXY, proxy);
     }
     if (config.browserVersion() != null && !config.browserVersion().isEmpty()) {
-      browserCapabilities.setVersion(config.browserVersion());
+      capabilities.setVersion(config.browserVersion());
     }
-    browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
-    browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
+    capabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
+    capabilities.setCapability(ACCEPT_SSL_CERTS, true);
 
     if (browser.supportsInsecureCerts()) {
-      browserCapabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
+      capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
-    transferCapabilitiesFromSystemProperties(browserCapabilities);
-    return browserCapabilities.merge(config.browserCapabilities());
+    capabilities.setJavascriptEnabled(true);
+    capabilities.setCapability(TAKES_SCREENSHOT, true);
+    capabilities.setCapability(SUPPORTS_ALERTS, true);
+
+    transferCapabilitiesFromSystemProperties(capabilities);
+    return capabilities.merge(config.browserCapabilities());
   }
 
   protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {

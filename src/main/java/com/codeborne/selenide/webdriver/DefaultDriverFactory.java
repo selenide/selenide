@@ -11,9 +11,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
-import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
-
 public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
   boolean supports(Config config, Browser browser) {
@@ -32,9 +29,6 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   private WebDriver createInstanceOf(String className, Config config, Browser browser, Proxy proxy) {
     try {
       DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
-      capabilities.setJavascriptEnabled(true);
-      capabilities.setCapability(TAKES_SCREENSHOT, true);
-      capabilities.setCapability(SUPPORTS_ALERTS, true);
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
