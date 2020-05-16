@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -28,7 +29,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createInstanceOf(String className, Config config, Browser browser, Proxy proxy) {
     try {
-      Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
+      Capabilities capabilities = createCapabilities(config, browser, proxy);
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
@@ -50,6 +51,11 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
     } catch (Exception invalidClassName) {
       throw new IllegalArgumentException(invalidClassName);
     }
+  }
+
+  @Override
+  public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
+    return createCommonCapabilities(config, browser, proxy);
   }
 
   @SuppressWarnings("unchecked")

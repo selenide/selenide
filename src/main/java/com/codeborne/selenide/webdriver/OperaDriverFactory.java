@@ -28,10 +28,11 @@ public class OperaDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    return new OperaDriver(createOperaOptions(config, browser, proxy));
+    return new OperaDriver(createCapabilities(config, browser, proxy));
   }
 
-  protected OperaOptions createOperaOptions(Config config, Browser browser, Proxy proxy) {
+  @Override
+  public OperaOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
     OperaOptions operaOptions = new OperaOptions();
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");

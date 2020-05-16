@@ -28,6 +28,12 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
+    EdgeOptions options = createCapabilities(config, browser, proxy);
+    return new EdgeDriver(options);
+  }
+
+  @Override
+  public EdgeOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
     Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
@@ -35,6 +41,6 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
-    return new EdgeDriver(options);
+    return options;
   }
 }

@@ -4,17 +4,18 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.BrowserType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Map;
 
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+
 class RemoteDriverFactoryTest implements WithAssertions {
-  private RemoteDriverFactory factory = new RemoteDriverFactory();
-  private SelenideConfig config = new SelenideConfig();
+  private final RemoteDriverFactory factory = new RemoteDriverFactory();
+  private final SelenideConfig config = new SelenideConfig().remote("https://some.grid:1234/wd/");
 
   @Test
   void getBrowserNameForGrid_legacy_firefox() {
@@ -61,8 +62,11 @@ class RemoteDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSetForFirefox() {
     config.browser("firefox");
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = factory.getBrowserBinaryCapabilities(config, new Browser("firefox", false));
-    Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
+
+    factory.setupCapabilities(config, browser(), firefoxOptions);
+
+    Map options = (Map) firefoxOptions.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
     assertThat(options.get("binary"))
       .isEqualTo("c:/browser.exe");
   }
@@ -71,23 +75,28 @@ class RemoteDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSetForChrome() {
     config.browser("chrome");
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = factory.getBrowserBinaryCapabilities(config, new Browser("chrome", false));
-    Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
+
+    factory.setupCapabilities(config, browser(), chromeOptions);
+
+    Map options = (Map) chromeOptions.asMap().get(ChromeOptions.CAPABILITY);
     assertThat(options.get("binary"))
       .isEqualTo("c:/browser.exe");
   }
 
   @Test
-  void browserBinaryCanNotBeSetForOtherBrowsers() {
-    config.browserBinary("c:/browser.exe");
-    config.browser("opera");
-    assertThat(factory.getBrowserBinaryCapabilities(config, new Browser("opera", false)))
-      .isEqualTo(new DesiredCapabilities());
+  void downloadsFolderShouldNotBeSetForChrome() {
+    config.browser("chrome");
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
 
-    assertThat(factory.getBrowserBinaryCapabilities(config, new Browser("edge", false)))
-      .isEqualTo(new DesiredCapabilities());
+    factory.setupCapabilities(config, browser(), chromeOptions);
 
-    assertThat(factory.getBrowserBinaryCapabilities(config, new Browser("ie", false)))
-      .isEqualTo(new DesiredCapabilities());
+    Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(prefsMap).doesNotContainKey("download.default_directory");
+  }
+
+  private Browser browser() {
+    return new Browser(config.browser(), config.headless());
   }
 }

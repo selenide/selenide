@@ -21,7 +21,7 @@ class OperaDriverFactoryTest implements WithAssertions {
   @Test
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = new OperaDriverFactory().createOperaOptions(config, browser, proxy);
+    Capabilities caps = new OperaDriverFactory().createCapabilities(config, browser, proxy);
     Map options = (Map) caps.asMap().get(OperaOptions.CAPABILITY);
     assertThat(options.get("binary"))
       .isEqualTo("c:/browser.exe");
@@ -30,7 +30,7 @@ class OperaDriverFactoryTest implements WithAssertions {
   @Test
   void headlessCanNotBeSet() {
     config.headless(true);
-    assertThatThrownBy(() -> new OperaDriverFactory().createOperaOptions(config, browser, proxy))
+    assertThatThrownBy(() -> new OperaDriverFactory().createCapabilities(config, browser, proxy))
       .isInstanceOf(InvalidArgumentException.class);
   }
 }

@@ -28,12 +28,18 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
+    InternetExplorerOptions options = createCapabilities(config, browser, proxy);
+    return new InternetExplorerDriver(options);
+  }
+
+  @Override
+  public InternetExplorerOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
     Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in InternetExplorer, setting will be ignored.");
     }
-    return new InternetExplorerDriver(options);
+    return options;
   }
 }

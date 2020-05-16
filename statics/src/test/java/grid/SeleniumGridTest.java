@@ -19,11 +19,13 @@ class SeleniumGridTest extends AbstractGridTest {
     Configuration.browser = "chrome";
     Configuration.headless = true;
     Configuration.proxyEnabled = true;
+    System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
   }
 
   @AfterEach
   void tearDown() {
     Configuration.remote = null;
+    System.clearProperty("chromeoptions.mobileEmulation");
   }
 
   @Test

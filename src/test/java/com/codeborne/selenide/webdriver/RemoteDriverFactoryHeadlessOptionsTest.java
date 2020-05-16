@@ -4,28 +4,26 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Proxy;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.List;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
-import static org.mockito.Mockito.mock;
 
 class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
-  private RemoteDriverFactory factory = new RemoteDriverFactory();
-  private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig().headless(false);
+  private final RemoteDriverFactory factory = new RemoteDriverFactory();
+  private final SelenideConfig config = new SelenideConfig().headless(false);
 
   @Test
-  void shouldNotAddChromeHeadlessOptions() {
+  void shouldAddChromeHeadlessOptions() {
     config.headless(true);
     config.browser("chrome");
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(config, new Browser("chrome", true), proxy);
-    List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
+    factory.setupCapabilities(config, browser(), chromeOptions);
+    List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(launchArguments).contains("--headless");
     assertThat(launchArguments).contains("--disable-gpu");
@@ -35,19 +33,22 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldNotAddFirefoxHeadlessOptions() {
     config.headless(true);
     config.browser("firefox");
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(config, new Browser("firefox", true), proxy);
-    List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
+    factory.setupCapabilities(config, browser(), firefoxOptions);
+    List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
 
     assertThat(launchArguments).doesNotContain("--headless");
   }
 
   @Test
-  void shouldAddChromeHeadlessOptions() {
+  void shouldNotAddChromeHeadlessOptions() {
     config.browser("chrome");
+    config.headless(false);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(config, new Browser("chrome", false), proxy);
-    List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, headlessCapabilities);
+    factory.setupCapabilities(config, browser(), chromeOptions);
+    List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(launchArguments).doesNotContain("--headless");
     assertThat(launchArguments).doesNotContain("--disable-gpu");
@@ -56,10 +57,16 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   @Test
   void shouldAddFirefoxHeadlessOptions() {
     config.browser("firefox");
+    config.headless(false);
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
 
-    Capabilities headlessCapabilities = factory.getDriverCapabilities(config, new Browser("firefox", false), proxy);
-    List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, headlessCapabilities);
+    factory.setupCapabilities(config, browser(), firefoxOptions);
+    List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
 
     assertThat(launchArguments).doesNotContain("--headless");
+  }
+
+  private Browser browser() {
+    return new Browser(config.browser(), config.headless());
   }
 }

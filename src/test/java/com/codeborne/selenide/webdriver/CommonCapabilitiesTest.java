@@ -6,8 +6,10 @@ import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.IE;
@@ -26,6 +28,11 @@ public class CommonCapabilitiesTest implements WithAssertions {
 
     @Override
     public void setupWebdriverBinary() {
+    }
+
+    @Override
+    public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
+      return new DesiredCapabilities();
     }
 
     @Override

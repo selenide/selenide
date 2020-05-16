@@ -39,10 +39,11 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return new FirefoxDriver(createFirefoxOptions(config, browser, proxy));
+    return new FirefoxDriver(createCapabilities(config, browser, proxy));
   }
 
-  protected FirefoxOptions createFirefoxOptions(Config config, Browser browser, Proxy proxy) {
+  @Override
+  public FirefoxOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     setupBrowserBinary(config, firefoxOptions);
@@ -76,7 +77,9 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
   protected void setupDownloadsFolder(Config config, FirefoxProfile profile) {
     if (profile.getStringPreference("browser.download.dir", "").isEmpty()) {
-      profile.setPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
+      if (config.remote() == null) {
+        profile.setPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
+      }
       profile.setPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
       profile.setPreference("pdfjs.disabled", true);  // disable the built-in viewer
       profile.setPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
