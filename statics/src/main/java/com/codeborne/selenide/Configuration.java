@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.MutableCapabilities;
 
 /**
  * Configuration settings for Selenide default browser
@@ -131,7 +131,7 @@ public class Configuration {
    * <br>
    * Default value: DesiredCapabilities::new
    */
-  public static DesiredCapabilities browserCapabilities = defaults.browserCapabilities();
+  public static MutableCapabilities browserCapabilities = defaults.browserCapabilities();
 
   /**
    * Should webdriver wait until page is completely loaded.

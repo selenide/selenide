@@ -28,11 +28,11 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
 
   private WebDriver createInstanceOf(String className, Config config, Browser browser, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
+      Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        return createInstanceOf(WebDriverProvider.class, clazz).createDriver(capabilities);
+        return createInstanceOf(WebDriverProvider.class, clazz).createDriver(new DesiredCapabilities(capabilities));
       }
       else if (DriverFactory.class.isAssignableFrom(clazz)) {
         DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);

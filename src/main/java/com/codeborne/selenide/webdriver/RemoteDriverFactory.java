@@ -3,11 +3,13 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -32,7 +34,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     try {
-      DesiredCapabilities capabilities = getDriverCapabilities(config, browser, proxy);
+      Capabilities capabilities = getDriverCapabilities(config, browser, proxy);
       RemoteWebDriver webDriver = new RemoteWebDriver(new URL(config.remote()), capabilities);
       webDriver.setFileDetector(new LocalFileDetector());
       return webDriver;
@@ -41,9 +43,9 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  protected DesiredCapabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
-    capabilities.setBrowserName(getBrowserNameForGrid(config, browser));
+  protected Capabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
+    MutableCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
+    capabilities.setCapability(CapabilityType.BROWSER_NAME, getBrowserNameForGrid(config, browser));
     if (config.headless()) {
       capabilities.merge(getHeadlessCapabilities(config, browser));
     }

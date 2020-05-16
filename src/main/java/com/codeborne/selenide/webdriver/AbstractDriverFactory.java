@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ abstract class AbstractDriverFactory implements DriverFactory {
 
   abstract boolean supports(Config config, Browser browser);
 
-  protected DesiredCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
+  protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     if (proxy != null) {
       capabilities.setCapability(PROXY, proxy);
@@ -42,7 +43,7 @@ abstract class AbstractDriverFactory implements DriverFactory {
     capabilities.setCapability(SUPPORTS_ALERTS, true);
 
     transferCapabilitiesFromSystemProperties(capabilities);
-    return capabilities.merge(config.browserCapabilities());
+    return new MergeableCapabilities(capabilities, config.browserCapabilities());
   }
 
   protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
