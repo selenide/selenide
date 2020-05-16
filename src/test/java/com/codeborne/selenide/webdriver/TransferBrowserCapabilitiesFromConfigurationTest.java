@@ -1,5 +1,7 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -13,8 +15,9 @@ import static org.mockito.Mockito.mock;
 class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
   private static final String SOME_CAP = "some.cap";
   private AbstractDriverFactory driverFactory;
-  private Proxy proxy = mock(Proxy.class);
-  private SelenideConfig config = new SelenideConfig();
+  private final Proxy proxy = mock(Proxy.class);
+  private final SelenideConfig config = new SelenideConfig();
+  private final Browser browser = new Browser(config.browser(), config.headless());
 
   @AfterEach
   void clearConfiguration() {
@@ -31,7 +34,7 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
   void transferCapabilitiesFromConfiguration() {
     DesiredCapabilities someCapabilities = new DesiredCapabilities();
     someCapabilities.setCapability(SOME_CAP, "SOME_VALUE");
-    DesiredCapabilities mergedCapabilities = driverFactory.mergeCapabilitiesFromConfiguration(config, someCapabilities);
+    DesiredCapabilities mergedCapabilities = someCapabilities.merge(((Config) config).browserCapabilities());
 
     assertThat(mergedCapabilities.getCapability(SOME_CAP))
       .isEqualTo("SOME_VALUE_FROM_CONFIGURATION");
@@ -40,7 +43,7 @@ class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions
   @Test
   void overrideCapabilitiesFromConfiguration() {
     System.setProperty(SOME_CAP, "SOME_VALUE_FROM_ENV_VARIABLE");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability(SOME_CAP))
+    assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability(SOME_CAP))
       .isEqualTo("SOME_VALUE_FROM_CONFIGURATION");
   }
 }

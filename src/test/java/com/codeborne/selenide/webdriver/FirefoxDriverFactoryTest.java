@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -17,9 +18,10 @@ import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBro
 import static org.mockito.Mockito.mock;
 
 class FirefoxDriverFactoryTest implements WithAssertions {
-  private Proxy proxy = mock(Proxy.class);
-  private FirefoxDriverFactory driverFactory = new FirefoxDriverFactory();
-  private SelenideConfig config = new SelenideConfig();
+  private final Proxy proxy = mock(Proxy.class);
+  private final FirefoxDriverFactory driverFactory = new FirefoxDriverFactory();
+  private final SelenideConfig config = new SelenideConfig();
+  private final Browser browser = new Browser(config.browser(), config.headless());
 
   @AfterEach
   void tearDown() {
@@ -30,20 +32,20 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transfersStringCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "abcd");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap")).isEqualTo("abcd");
+    assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability("some.cap")).isEqualTo("abcd");
   }
 
   @Test
   void transfersBooleanCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "true");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap"))
+    assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability("some.cap"))
       .isEqualTo(true);
   }
 
   @Test
   void transfersIntegerCapabilitiesFromSystemPropsToDriver() {
     System.setProperty("capabilities.some.cap", "25");
-    assertThat(driverFactory.createCommonCapabilities(config, proxy).getCapability("some.cap")).isEqualTo(25);
+    assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability("some.cap")).isEqualTo(25);
   }
 
   @Test
@@ -54,7 +56,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
     System.setProperty("firefoxprofile.some.cap", "25");
 
-    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, browser, proxy).getProfile();
 
     assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
     assertThat(profile.getIntegerPreference("some.conf.cap", 0)).isEqualTo(42);
@@ -63,7 +65,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap", "25");
-    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, browser, proxy).getProfile();
     assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
   }
 
@@ -71,7 +73,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap1", "faLSe");
     System.setProperty("firefoxprofile.some.cap2", "TRue");
-    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, browser, proxy).getProfile();
     assertThat(profile.getBooleanPreference("some.cap1", true)).isEqualTo(false);
     assertThat(profile.getBooleanPreference("some.cap2", false)).isEqualTo(true);
   }
@@ -79,14 +81,14 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
     System.setProperty("firefoxprofile.some.cap", "abdd");
-    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createFirefoxOptions(config, browser, proxy).getProfile();
     assertThat(profile.getStringPreference("some.cap", "sjlj")).isEqualTo("abdd");
   }
 
   @Test
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = driverFactory.createFirefoxOptions(config, proxy);
+    Capabilities caps = driverFactory.createFirefoxOptions(config, browser, proxy);
     Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
   }
@@ -94,14 +96,14 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void headlessCanBeSet() {
     config.headless(true);
-    FirefoxOptions options = driverFactory.createFirefoxOptions(config, proxy);
+    FirefoxOptions options = driverFactory.createFirefoxOptions(config, browser, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, options);
     assertThat(optionArguments).contains("-headless");
   }
 
   @Test
   void enablesProxyForLocalAddresses() {
-    FirefoxOptions options = driverFactory.createFirefoxOptions(config, proxy);
+    FirefoxOptions options = driverFactory.createFirefoxOptions(config, browser, proxy);
     FirefoxProfile firefoxProfile = (FirefoxProfile) options.asMap().get("firefox_profile");
     assertThat(firefoxProfile.getStringPreference("network.proxy.no_proxies_on", "localhost")).isEqualTo("");
     assertThat(firefoxProfile.getBooleanPreference("network.proxy.allow_hijacking_localhost", false)).isTrue();

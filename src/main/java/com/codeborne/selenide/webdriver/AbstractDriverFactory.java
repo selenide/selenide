@@ -21,7 +21,7 @@ abstract class AbstractDriverFactory implements DriverFactory {
 
   abstract boolean supports(Config config, Browser browser);
 
-  protected DesiredCapabilities createCommonCapabilities(Config config, Proxy proxy) {
+  protected DesiredCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities browserCapabilities = new DesiredCapabilities();
     if (proxy != null) {
       browserCapabilities.setCapability(PROXY, proxy);
@@ -32,16 +32,11 @@ abstract class AbstractDriverFactory implements DriverFactory {
     browserCapabilities.setCapability(PAGE_LOAD_STRATEGY, config.pageLoadStrategy());
     browserCapabilities.setCapability(ACCEPT_SSL_CERTS, true);
 
-    Browser browser = new Browser(config.browser(), config.headless());
     if (browser.supportsInsecureCerts()) {
       browserCapabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
     transferCapabilitiesFromSystemProperties(browserCapabilities);
-    return mergeCapabilitiesFromConfiguration(config, browserCapabilities);
-  }
-
-  protected DesiredCapabilities mergeCapabilitiesFromConfiguration(Config config, DesiredCapabilities currentCapabilities) {
-    return currentCapabilities.merge(config.browserCapabilities());
+    return browserCapabilities.merge(config.browserCapabilities());
   }
 
   protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
