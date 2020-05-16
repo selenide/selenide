@@ -7,14 +7,13 @@ import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
@@ -48,6 +47,7 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
   void downloadsFilesToCustomFolder() throws IOException {
     openFile("page_with_uploads.html");
     $(byText("Download me")).shouldBe(visible);
+    closeWebDriver();
 
     String log = readFileToString(chromedriverLog, UTF_8);
     assertThat(log).contains("\"excludeSwitches\": [ \"enable-automation\" ]");
@@ -66,19 +66,21 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
 
   private static class MyFactory extends ChromeDriverFactory {
     @Override
-    public WebDriver create(Config config, Browser browser, Proxy proxy) {
-      System.setProperty("webdriver.chrome.logfile", chromedriverLog.getAbsolutePath());
-      System.setProperty("webdriver.chrome.verboseLogging", "true");
-      return super.create(config, browser, proxy);
+    protected ChromeDriverService buildService() {
+      return new ChromeDriverService.Builder()
+        .withLogFile(chromedriverLog)
+        .withVerbose(true)
+        .build();
     }
 
     @Override
-    protected ChromeOptions createChromeOptions(Config config, Browser browser, Proxy proxy) {
-      ChromeOptions options = super.createChromeOptions(config, browser, proxy);
-      options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-      options.addArguments(asList("--no-sandbox", "--disable-3d-apis"));
+    protected String[] excludeSwitches() {
+      return new String[]{"enable-automation"};
+    }
 
-      return options;
+    @Override
+    protected List<String> createChromeArguments(Config config, Browser browser) {
+      return asList("--proxy-bypass-list=<-loopback>", "--no-sandbox", "--disable-3d-apis");
     }
   }
 }

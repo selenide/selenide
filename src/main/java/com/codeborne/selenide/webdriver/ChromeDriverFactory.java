@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -44,8 +45,9 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    ChromeOptions chromeOptions = createChromeOptions(config, browser, proxy);
+    MutableCapabilities chromeOptions = createChromeOptions(config, browser, proxy);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(), chromeOptions);
   }
@@ -54,7 +56,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return ChromeDriverService.createDefaultService();
   }
 
-  protected ChromeOptions createChromeOptions(Config config, Browser browser, Proxy proxy) {
+  protected MutableCapabilities createChromeOptions(Config config, Browser browser, Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -64,9 +66,9 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     options.addArguments(createChromeArguments(config, browser));
     options.setExperimentalOption("excludeSwitches", excludeSwitches());
     options.setExperimentalOption("prefs", prefs(config));
-    options.merge(createCommonCapabilities(config, browser, proxy));
     setMobileEmulation(config, options);
-    return options;
+
+    return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
   }
 
   protected List<String> createChromeArguments(Config config, Browser browser) {

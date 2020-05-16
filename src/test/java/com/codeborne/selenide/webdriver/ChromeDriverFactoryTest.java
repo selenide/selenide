@@ -38,7 +38,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   @Test
   void defaultChromeOptions() {
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).hasSize(2);
@@ -51,7 +51,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionArgumentsFromSystemPropsToDriver() {
     System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\"");
 
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments)
@@ -63,7 +63,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=stringval,key2=1,key3=false,key4=true," +
       "\"key5=abc,555\",key6=\"555 abc\"");
 
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap)
@@ -79,7 +79,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverNoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2");
 
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -90,7 +90,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverTwoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2=1=false");
 
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -111,7 +111,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void headlessCanBeSet() {
     config.headless(true);
 
-    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
+    Capabilities chromeOptions = factory.createChromeOptions(config, browser, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless");
