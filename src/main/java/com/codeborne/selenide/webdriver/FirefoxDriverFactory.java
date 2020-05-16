@@ -45,10 +45,25 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   protected FirefoxOptions createFirefoxOptions(Config config, Browser browser, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
+    setupBrowserBinary(config, firefoxOptions);
+    setupPreferences(firefoxOptions);
+    firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
+
+    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
+    transferFirefoxProfileFromSystemProperties(profile);
+    setupDownloadsFolder(config, profile);
+    firefoxOptions.setProfile(profile);
+    return firefoxOptions;
+  }
+
+  protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       firefoxOptions.setBinary(config.browserBinary());
     }
+  }
+
+  protected void setupPreferences(FirefoxOptions firefoxOptions) {
     firefoxOptions.addPreference("network.automatic-ntlm-auth.trusted-uris", "http://,https://");
     firefoxOptions.addPreference("network.automatic-ntlm-auth.allow-non-fqdn", true);
     firefoxOptions.addPreference("network.negotiate-auth.delegation-uris", "http://,https://");
@@ -57,15 +72,6 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("security.csp.enable", false);
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
-
-    firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
-
-    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
-    setupDownloadsFolder(config, profile);
-    transferFirefoxProfileFromSystemProperties(profile);
-    firefoxOptions.setProfile(profile);
-
-    return firefoxOptions;
   }
 
   protected void setupDownloadsFolder(Config config, FirefoxProfile profile) {

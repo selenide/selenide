@@ -3,8 +3,6 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
@@ -19,15 +17,9 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
-    System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return createLegacyFirefoxDriver(config, browser, proxy);
-  }
-
-  protected WebDriver createLegacyFirefoxDriver(Config config, Browser browser, Proxy proxy) {
-    FirefoxOptions firefoxOptions = createFirefoxOptions(config, browser, proxy);
+  protected FirefoxOptions createFirefoxOptions(Config config, Browser browser, Proxy proxy) {
+    FirefoxOptions firefoxOptions = super.createFirefoxOptions(config, browser, proxy);
     firefoxOptions.setLegacy(true);
-    return new FirefoxDriver(firefoxOptions);
+    return firefoxOptions;
   }
 }
