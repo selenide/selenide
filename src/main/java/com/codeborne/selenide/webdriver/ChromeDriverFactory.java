@@ -47,7 +47,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @Override
   @SuppressWarnings("deprecation")
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    MutableCapabilities chromeOptions = createChromeOptions(config, browser, proxy);
+    MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(), chromeOptions);
   }
@@ -56,7 +56,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return ChromeDriverService.createDefaultService();
   }
 
-  protected MutableCapabilities createChromeOptions(Config config, Browser browser, Proxy proxy) {
+  @Override
+  public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -97,7 +98,9 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   protected Map<String, Object> prefs(Config config) {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
-    chromePreferences.put("download.default_directory", downloadsFolder(config));
+    if (config.remote() == null) {
+      chromePreferences.put("download.default_directory", downloadsFolder(config));
+    }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));
     return chromePreferences;
   }

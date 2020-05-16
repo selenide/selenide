@@ -17,8 +17,8 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   }
 
   @Override
-  protected FirefoxOptions createFirefoxOptions(Config config, Browser browser, Proxy proxy) {
-    FirefoxOptions firefoxOptions = super.createFirefoxOptions(config, browser, proxy);
+  public FirefoxOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
+    FirefoxOptions firefoxOptions = super.createCapabilities(config, browser, proxy);
     firefoxOptions.setLegacy(true);
     return firefoxOptions;
   }
