@@ -28,7 +28,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+    DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());

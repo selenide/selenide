@@ -1,5 +1,6 @@
 package com.codeborne.selenide.webdriver;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,8 @@ import java.util.Map;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 
 class ChromeDriverFactoryTest implements WithAssertions {
@@ -23,6 +26,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   private final Proxy proxy = mock(Proxy.class);
   private final SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
+  private final Browser browser = new Browser(config.browser(), config.headless());
+  private final ChromeDriverFactory factory = new ChromeDriverFactory();
 
   @BeforeEach
   @AfterEach
@@ -33,7 +38,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   @Test
   void defaultChromeOptions() {
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).hasSize(2);
@@ -46,7 +51,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionArgumentsFromSystemPropsToDriver() {
     System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\"");
 
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments)
@@ -58,7 +63,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=stringval,key2=1,key3=false,key4=true," +
       "\"key5=abc,555\",key6=\"555 abc\"");
 
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap)
@@ -74,7 +79,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverNoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2");
 
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -85,7 +90,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverTwoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2=1=false");
 
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -96,7 +101,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
 
-    Capabilities caps = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    Capabilities caps = factory.createChromeOptions(config, browser, proxy);
     Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
 
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
@@ -106,9 +111,27 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void headlessCanBeSet() {
     config.headless(true);
 
-    ChromeOptions chromeOptions = new ChromeDriverFactory().createChromeOptions(config, proxy);
+    ChromeOptions chromeOptions = factory.createChromeOptions(config, browser, proxy);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless");
+  }
+
+  @Test
+  void parseCSV() {
+    assertThat(factory.parseCSV("123")).isEqualTo(singletonList("123"));
+    assertThat(factory.parseCSV("foo bar")).isEqualTo(singletonList("foo bar"));
+    assertThat(factory.parseCSV("bar,foo")).isEqualTo(asList("bar", "foo"));
+  }
+
+  @Test
+  void parseCSV_empty() {
+    assertThat(factory.parseCSV("")).isEmpty();
+  }
+
+  @Test
+  void parseCSV_handles_quotes() {
+    assertThat(factory.parseCSV("abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\""))
+      .isEqualTo(asList("abdd", "--abcd", "\"snc,snc\"", "xcvcd=123", "\"abc emd\""));
   }
 }

@@ -39,10 +39,10 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return new FirefoxDriver(createFirefoxOptions(config, proxy));
+    return new FirefoxDriver(createFirefoxOptions(config, browser, proxy));
   }
 
-  protected FirefoxOptions createFirefoxOptions(Config config, Proxy proxy) {
+  protected FirefoxOptions createFirefoxOptions(Config config, Browser browser, Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -58,7 +58,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.proxy.no_proxies_on", "");
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
 
-    firefoxOptions.merge(createCommonCapabilities(config, proxy));
+    firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
 
     FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
     setupDownloadsFolder(config, profile);

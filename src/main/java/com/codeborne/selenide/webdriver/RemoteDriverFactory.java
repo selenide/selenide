@@ -42,7 +42,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   protected DesiredCapabilities getDriverCapabilities(Config config, Browser browser, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+    DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
     capabilities.setBrowserName(getBrowserNameForGrid(config, browser));
     if (config.headless()) {
       capabilities.merge(getHeadlessCapabilities(config, browser));

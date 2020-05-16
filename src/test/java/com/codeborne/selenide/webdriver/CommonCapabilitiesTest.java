@@ -39,7 +39,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
   void transferCapabilitiesFromConfiguration() {
     SelenideConfig config = new SelenideConfig();
     config.pageLoadStrategy("foo");
-    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
+    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isTrue();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
     assertThat(commonCapabilities.getCapability(PAGE_LOAD_STRATEGY)).isEqualTo(config.pageLoadStrategy());
@@ -49,7 +49,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
   void transferCapabilitiesFromConfigurationInternetExplorer() {
     SelenideConfig config = new SelenideConfig();
     config.browser(INTERNET_EXPLORER);
-    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
+    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -58,7 +58,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
   void transferCapabilitiesFromConfigurationIE() {
     SelenideConfig config = new SelenideConfig();
     config.browser(IE);
-    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
+    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -67,7 +67,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
   void transferCapabilitiesFromConfigurationEdge() {
     SelenideConfig config = new SelenideConfig();
     config.browser(EDGE);
-    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, proxy);
+    DesiredCapabilities commonCapabilities = driverFactory.createCommonCapabilities(config, browser(config), proxy);
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_INSECURE_CERTS))).isFalse();
     assertThat(asBool(commonCapabilities.getCapability(ACCEPT_SSL_CERTS))).isTrue();
   }
@@ -81,5 +81,9 @@ public class CommonCapabilitiesTest implements WithAssertions {
       }
     }
     return false;
+  }
+
+  private Browser browser(SelenideConfig config) {
+    return new Browser(config.browser(), config.headless());
   }
 }

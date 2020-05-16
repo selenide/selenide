@@ -28,10 +28,10 @@ public class OperaDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    return new OperaDriver(createOperaOptions(config, proxy));
+    return new OperaDriver(createOperaOptions(config, browser, proxy));
   }
 
-  protected OperaOptions createOperaOptions(Config config, Proxy proxy) {
+  protected OperaOptions createOperaOptions(Config config, Browser browser, Proxy proxy) {
     OperaOptions operaOptions = new OperaOptions();
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");
@@ -40,7 +40,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       operaOptions.setBinary(config.browserBinary());
     }
-    operaOptions.merge(createCommonCapabilities(config, proxy));
+    operaOptions.merge(createCommonCapabilities(config, browser, proxy));
     return operaOptions;
   }
 }

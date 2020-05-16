@@ -73,8 +73,8 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
     }
 
     @Override
-    protected ChromeOptions createChromeOptions(Config config, Proxy proxy) {
-      ChromeOptions options = super.createChromeOptions(config, proxy);
+    protected ChromeOptions createChromeOptions(Config config, Browser browser, Proxy proxy) {
+      ChromeOptions options = super.createChromeOptions(config, browser, proxy);
       options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
       options.addArguments(asList("--no-sandbox", "--disable-3d-apis"));
 

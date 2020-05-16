@@ -22,11 +22,11 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return createLegacyFirefoxDriver(config, proxy);
+    return createLegacyFirefoxDriver(config, browser, proxy);
   }
 
-  protected WebDriver createLegacyFirefoxDriver(Config config, Proxy proxy) {
-    FirefoxOptions firefoxOptions = createFirefoxOptions(config, proxy);
+  protected WebDriver createLegacyFirefoxDriver(Config config, Browser browser, Proxy proxy) {
+    FirefoxOptions firefoxOptions = createFirefoxOptions(config, browser, proxy);
     firefoxOptions.setLegacy(true);
     return new FirefoxDriver(firefoxOptions);
   }

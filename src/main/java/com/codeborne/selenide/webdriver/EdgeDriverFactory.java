@@ -28,7 +28,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    DesiredCapabilities capabilities = createCommonCapabilities(config, proxy);
+    DesiredCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
     EdgeOptions options = new EdgeOptions();
     options.merge(capabilities);
     if (!config.browserBinary().isEmpty()) {
