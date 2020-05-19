@@ -38,7 +38,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.chrome.driver")) {
       WebDriverManager.chromedriver().setup();
     }

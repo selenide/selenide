@@ -13,7 +13,7 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
   }
 
   @Override

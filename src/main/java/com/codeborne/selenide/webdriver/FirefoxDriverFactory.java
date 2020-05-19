@@ -29,7 +29,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.gecko.driver")) {
       WebDriverManager.firefoxdriver().setup();
     }

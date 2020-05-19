@@ -20,7 +20,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.edge.driver")) {
       WebDriverManager.edgedriver().setup();
     }

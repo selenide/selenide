@@ -20,7 +20,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.ie.driver")) {
       WebDriverManager.iedriver().setup();
     }

@@ -45,7 +45,7 @@ public class WebDriverFactory {
         .orElseGet(DefaultDriverFactory::new);
 
     if (config.driverManagerEnabled()) {
-      webdriverFactory.setupBinary();
+      webdriverFactory.setupWebdriverBinary();
     }
 
     WebDriver webdriver = webdriverFactory.create(config, browser, proxy);

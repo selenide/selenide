@@ -6,6 +6,6 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
 public interface DriverFactory {
-  void setupBinary();
+  void setupWebdriverBinary();
   WebDriver create(Config config, Browser browser, Proxy proxy);
 }
