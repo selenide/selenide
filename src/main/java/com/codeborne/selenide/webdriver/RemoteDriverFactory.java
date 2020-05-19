@@ -28,7 +28,7 @@ public class RemoteDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
   }
 
   @Override

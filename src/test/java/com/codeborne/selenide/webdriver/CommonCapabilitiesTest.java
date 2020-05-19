@@ -25,7 +25,7 @@ public class CommonCapabilitiesTest implements WithAssertions {
     }
 
     @Override
-    public void setupBinary() {
+    public void setupWebdriverBinary() {
     }
 
     @Override

@@ -20,7 +20,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.opera.driver")) {
       WebDriverManager.operadriver().setup();
     }

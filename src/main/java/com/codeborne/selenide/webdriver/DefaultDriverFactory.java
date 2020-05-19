@@ -18,7 +18,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public void setupBinary() {
+  public void setupWebdriverBinary() {
   }
 
   @Override
@@ -37,7 +37,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
       else if (DriverFactory.class.isAssignableFrom(clazz)) {
         DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
         if (config.driverManagerEnabled()) {
-          factory.setupBinary();
+          factory.setupWebdriverBinary();
         }
         return factory.create(config, browser, proxy);
       }
