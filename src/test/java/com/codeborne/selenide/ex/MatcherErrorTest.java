@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
+import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,31 +20,31 @@ class MatcherErrorTest {
   @Test
   void message() {
     assertThat(new MatcherError("foo", "blah", null, mockCollection(".rows"), actualElements, ex, 4000).getMessage()).isEqualTo(
-      "Collection matcher error\n" +
-        "Expected: foo of elements to match [blah] predicate\n" +
-        "Collection: .rows\n" +
-        "Elements: [\n" +
-        "\t<div displayed:false>mr. %First</div>,\n" +
-        "\t<div displayed:false>mr. %Second</div>\n" +
-        "]\n" +
-        "Screenshot: null\n" +
-        "Timeout: 4 s.\n" +
+      "Collection matcher error" + lineSeparator() +
+        "Expected: foo of elements to match [blah] predicate" + lineSeparator() +
+        "Collection: .rows" + lineSeparator() +
+        "Elements: [" + lineSeparator() +
+        "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
+        "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
+        "]" + lineSeparator() +
+        "Screenshot: null" + lineSeparator() +
+        "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
 
   @Test
   void message_whtExplanation() {
     assertThat(new MatcherError("foo", "blah", "I think so", mockCollection(".rows"), actualElements, ex, 4000).getMessage()).isEqualTo(
-      "Collection matcher error\n" +
-        "Expected: foo of elements to match [blah] predicate\n" +
-        "Because: I think so\n" +
-        "Collection: .rows\n" +
-        "Elements: [\n" +
-        "\t<div displayed:false>mr. %First</div>,\n" +
-        "\t<div displayed:false>mr. %Second</div>\n" +
-        "]\n" +
-        "Screenshot: null\n" +
-        "Timeout: 4 s.\n" +
+      "Collection matcher error" + lineSeparator() +
+        "Expected: foo of elements to match [blah] predicate" + lineSeparator() +
+        "Because: I think so" + lineSeparator() +
+        "Collection: .rows" + lineSeparator() +
+        "Elements: [" + lineSeparator() +
+        "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
+        "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
+        "]" + lineSeparator() +
+        "Screenshot: null" + lineSeparator() +
+        "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
 }
