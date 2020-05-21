@@ -24,11 +24,6 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isFirefox();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.gecko.driver")) {
       WebDriverManager.firefoxdriver().setup();

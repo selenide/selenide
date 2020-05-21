@@ -15,11 +15,6 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(OperaDriverFactory.class);
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isOpera();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.opera.driver")) {
       WebDriverManager.operadriver().setup();

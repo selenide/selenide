@@ -22,11 +22,6 @@ import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 public class CommonCapabilitiesTest implements WithAssertions {
   private final AbstractDriverFactory driverFactory = new AbstractDriverFactory() {
     @Override
-    boolean supports(Config config, Browser browser) {
-      return false;
-    }
-
-    @Override
     public void setupWebdriverBinary() {
     }
 
