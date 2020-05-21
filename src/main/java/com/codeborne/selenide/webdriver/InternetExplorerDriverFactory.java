@@ -15,11 +15,6 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isIE();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.ie.driver")) {
       WebDriverManager.iedriver().setup();

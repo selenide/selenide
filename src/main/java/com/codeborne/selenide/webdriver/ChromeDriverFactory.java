@@ -33,11 +33,6 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Pattern REGEX_REMOVE_QUOTES = Pattern.compile("\"", Pattern.LITERAL);
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isChrome();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.chrome.driver")) {
       WebDriverManager.chromedriver().setup();

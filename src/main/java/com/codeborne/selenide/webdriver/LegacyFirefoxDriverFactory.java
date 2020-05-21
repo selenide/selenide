@@ -8,11 +8,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isLegacyFirefox();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
   }
 

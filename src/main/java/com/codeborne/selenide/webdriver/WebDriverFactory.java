@@ -12,23 +12,35 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.util.Arrays.asList;
+import static com.codeborne.selenide.Browsers.CHROME;
+import static com.codeborne.selenide.Browsers.EDGE;
+import static com.codeborne.selenide.Browsers.FIREFOX;
+import static com.codeborne.selenide.Browsers.IE;
+import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
+import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
+import static com.codeborne.selenide.Browsers.OPERA;
 
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
 
-  protected List<AbstractDriverFactory> factories = asList(
-      new ChromeDriverFactory(),
-      new LegacyFirefoxDriverFactory(),
-      new FirefoxDriverFactory(),
-      new EdgeDriverFactory(),
-      new InternetExplorerDriverFactory(),
-      new OperaDriverFactory()
-  );
+  protected Map<String, AbstractDriverFactory> factories = factories();
   protected RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
   protected BrowserResizer browserResizer = new BrowserResizer();
+
+  private Map<String, AbstractDriverFactory> factories() {
+    Map<String, AbstractDriverFactory> result = new HashMap<>();
+    result.put(CHROME, new ChromeDriverFactory());
+    result.put(LEGACY_FIREFOX, new LegacyFirefoxDriverFactory());
+    result.put(FIREFOX, new FirefoxDriverFactory());
+    result.put(EDGE, new EdgeDriverFactory());
+    result.put(INTERNET_EXPLORER, new InternetExplorerDriverFactory());
+    result.put(IE, new InternetExplorerDriverFactory());
+    result.put(OPERA, new OperaDriverFactory());
+    return result;
+  }
 
   public WebDriver createWebDriver(Config config, Proxy proxy) {
     log.debug("browser={}", config.browser());
@@ -50,7 +62,7 @@ public class WebDriverFactory {
   }
 
   private WebDriver createWebDriverInstance(Config config, Proxy proxy, Browser browser) {
-    DriverFactory webdriverFactory = findFactory(config, browser);
+    DriverFactory webdriverFactory = findFactory(browser);
 
     if (config.remote() != null) {
       MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy);
@@ -64,11 +76,8 @@ public class WebDriverFactory {
     }
   }
 
-  private DriverFactory findFactory(Config config, Browser browser) {
-    return factories.stream()
-          .filter(factory -> factory.supports(config, browser))
-          .findAny()
-          .orElseGet(DefaultDriverFactory::new);
+  private DriverFactory findFactory(Browser browser) {
+    return factories.computeIfAbsent(browser.name.toLowerCase(), browserName -> new DefaultDriverFactory());
   }
 
   protected void logSeleniumInfo(Config config) {

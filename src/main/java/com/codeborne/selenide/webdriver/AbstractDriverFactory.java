@@ -22,8 +22,6 @@ abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
 
-  abstract boolean supports(Config config, Browser browser);
-
   protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     if (proxy != null) {

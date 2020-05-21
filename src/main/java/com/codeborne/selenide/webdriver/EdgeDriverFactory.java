@@ -15,11 +15,6 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
 
   @Override
-  boolean supports(Config config, Browser browser) {
-    return browser.isEdge();
-  }
-
-  @Override
   public void setupWebdriverBinary() {
     if (isSystemPropertyNotSet("webdriver.edge.driver")) {
       WebDriverManager.edgedriver().setup();

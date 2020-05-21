@@ -14,11 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
-  boolean supports(Config config, Browser browser) {
-    return true;
-  }
-
-  @Override
   public void setupWebdriverBinary() {
   }
 
