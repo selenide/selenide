@@ -28,6 +28,8 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   void tearDown() {
     System.clearProperty("capabilities.some.cap");
     System.clearProperty("firefoxprofile.some.cap");
+    System.clearProperty("firefoxprofile.some.cap1");
+    System.clearProperty("firefoxprofile.some.cap2");
   }
 
   @Test
@@ -105,9 +107,11 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void enablesProxyForLocalAddresses() {
     FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
-    FirefoxProfile firefoxProfile = (FirefoxProfile) options.asMap().get("firefox_profile");
-    assertThat(firefoxProfile.getStringPreference("network.proxy.no_proxies_on", "localhost")).isEqualTo("");
-    assertThat(firefoxProfile.getBooleanPreference("network.proxy.allow_hijacking_localhost", false)).isTrue();
+
+    Map<String, Object> prefs = prefs(options);
+    assertThat(prefs.get("network.proxy.no_proxies_on")).isEqualTo("");
+    assertThat(prefs.get("network.proxy.allow_hijacking_localhost")).isEqualTo(true);
+    assertThat(options.asMap().get("firefox_profile")).isNull();
   }
 
   @Test
@@ -126,11 +130,12 @@ class FirefoxDriverFactoryTest implements WithAssertions {
 
     FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
 
-    FirefoxProfile profile = options.getProfile();
-    assertThat(profile.getStringPreference("browser.download.dir", "")).isEqualTo(new File("/blah/downloads").getAbsolutePath());
-    assertThat(profile.getStringPreference("browser.helperApps.neverAsk.saveToDisk", "")).contains("application/pdf");
-    assertThat(profile.getBooleanPreference("pdfjs.disabled", false)).isTrue();
-    assertThat(profile.getIntegerPreference("browser.download.folderList", 0)).isEqualTo(2);
+    Map<String, Object> prefs = prefs(options);
+    assertThat(prefs.get("browser.download.dir")).isEqualTo(new File("/blah/downloads").getAbsolutePath());
+    assertThat((String) prefs.get("browser.helperApps.neverAsk.saveToDisk")).contains("application/pdf");
+    assertThat(prefs.get("pdfjs.disabled")).isEqualTo(true);
+    assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
+    assertThat(options.getProfile()).isNull();
   }
 
   @Test
@@ -140,10 +145,17 @@ class FirefoxDriverFactoryTest implements WithAssertions {
 
     FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
 
-    FirefoxProfile profile = options.getProfile();
-    assertThat(profile.getStringPreference("browser.download.dir", "")).isEqualTo("");
-    assertThat(profile.getStringPreference("browser.helperApps.neverAsk.saveToDisk", "")).contains("application/pdf");
-    assertThat(profile.getBooleanPreference("pdfjs.disabled", false)).isTrue();
-    assertThat(profile.getIntegerPreference("browser.download.folderList", 0)).isEqualTo(2);
+    Map<String, Object> prefs = prefs(options);
+    assertThat(prefs.get("browser.download.dir")).isNull();
+    assertThat((String) prefs.get("browser.helperApps.neverAsk.saveToDisk")).contains("application/pdf");
+    assertThat(prefs.get("pdfjs.disabled")).isEqualTo(true);
+    assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
+    assertThat(options.getProfile()).isNull();
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> prefs(FirefoxOptions options) {
+    Map<String, Object> firefoxOptions = (Map<String, Object>) options.asMap().get("moz:firefoxOptions");
+    return (Map<String, Object>) firefoxOptions.get("prefs");
   }
 }

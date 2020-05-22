@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.Boolean.parseBoolean;
@@ -45,10 +47,12 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     setupPreferences(firefoxOptions);
     firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
 
-    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
-    transferFirefoxProfileFromSystemProperties(profile);
-    setupDownloadsFolder(config, profile);
-    firefoxOptions.setProfile(profile);
+    setupDownloadsFolder(config, firefoxOptions);
+
+    Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
+    if (!ffProfile.isEmpty()) {
+      transferFirefoxProfileFromSystemProperties(firefoxOptions, ffProfile);
+    }
     return firefoxOptions;
   }
 
@@ -70,15 +74,13 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
   }
 
-  protected void setupDownloadsFolder(Config config, FirefoxProfile profile) {
-    if (profile.getStringPreference("browser.download.dir", "").isEmpty()) {
-      if (config.remote() == null) {
-        profile.setPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
-      }
-      profile.setPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
-      profile.setPreference("pdfjs.disabled", true);  // disable the built-in viewer
-      profile.setPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
+  protected void setupDownloadsFolder(Config config, FirefoxOptions firefoxOptions) {
+    if (config.remote() == null) {
+      firefoxOptions.addPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
     }
+    firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
+    firefoxOptions.addPreference("pdfjs.disabled", true);  // disable the built-in viewer
+    firefoxOptions.addPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
   }
 
   protected String popularContentTypes() {
@@ -91,17 +93,32 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
-  protected void transferFirefoxProfileFromSystemProperties(FirefoxProfile profile) {
+  protected Map<String, String> collectFirefoxProfileFromSystemProperties() {
     String prefix = "firefoxprofile.";
 
+    Map<String, String> result = new HashMap<>();
     for (String key : System.getProperties().stringPropertyNames()) {
       if (key.startsWith(prefix)) {
         String capability = key.substring(prefix.length());
         String value = System.getProperties().getProperty(key);
-        log.debug("Use {}={}", key, value);
-        setCapability(profile, capability, value);
+        result.put(capability, value);
       }
     }
+
+    return result;
+  }
+
+  protected void transferFirefoxProfileFromSystemProperties(FirefoxOptions firefoxOptions, Map<String, String> ffProfile) {
+    FirefoxProfile profile = Optional.ofNullable(firefoxOptions.getProfile()).orElseGet(FirefoxProfile::new);
+
+    for (Map.Entry<String, String> entry : ffProfile.entrySet()) {
+      String capability = entry.getKey();
+      String value = entry.getValue();
+      log.debug("Use {}={}", capability, value);
+      setCapability(profile, capability, value);
+    }
+
+    firefoxOptions.setProfile(profile);
   }
 
   protected void setCapability(FirefoxProfile profile, String capability, String value) {
