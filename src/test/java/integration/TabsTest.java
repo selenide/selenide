@@ -22,13 +22,12 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class TabsTest extends ITest {
   @BeforeEach
   void setUp() {
+    setTimeout(1000);
     openFile("page_with_tabs.html");
   }
 
   @Test
   void userCanBrowseTabs_webdriver_api() {
-    setTimeout(1000);
-
     WebDriver driver = driver().getWebDriver();
 
     $(byText("Page1: uploads")).click();
