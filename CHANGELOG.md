@@ -1,8 +1,19 @@
 # Changelog
 
-## 5.12.0
+## 5.12.0 (released 23.05.2020)
 * #1133 disable annoying "save password?" dialog  --  see PR #1134
+* #676, #1097 Allow passing of driver-specific options from a configuration  --  see PR #1155.
+  * Thanks to Boris Osipov for PR #1103 
+  * Thanks to @SeleniumTestAB for PR #1095 
+* #1109 Enable "mobile emulation" mode in grid --  see PR #1163
+* #1139 Cannot set Firefox preference via system properties  --  see PR #1165
+* #1093 Enable "ACCEPT_INSECURE_CERTS" setting for chromium-based Edge versions  --  see PR #1167
+* #1149 Upgrade to WebDriverManager 4.0.0
 * upgrade to browserup-proxy-core:2.1.0
+* #1138 fix 'emptyMethod' folder name  --  thanks to Denis Gaievskyi for PR #1138
+* #1140 Nullity annotations for the most used APIs  --  thanks to Yuriy Artamonov for PR #1140 and #1144
+* refactoring: Extract duplicated code  --  thanks to Yuriy Artamonov for PR #1143
+* Add missing findAll with CSS selector to SelenideDriver  --  thanks to Yuriy Artamonov for PR #1145
 
 ## 5.11.1 (released 21.04.2020)
 * #1130 fix "because" condition for unexisting elements
