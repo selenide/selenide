@@ -8,8 +8,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
@@ -21,6 +23,7 @@ import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
+  private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
 
   protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -66,7 +69,7 @@ abstract class AbstractDriverFactory implements DriverFactory {
       return Boolean.valueOf(value);
     }
     else if (isInteger(value)) {
-      return Integer.parseInt(value);
+      return parseInt(value);
     }
     else {
       return value;
@@ -83,5 +86,11 @@ abstract class AbstractDriverFactory implements DriverFactory {
 
   protected boolean isSystemPropertyNotSet(String key) {
     return isBlank(System.getProperty(key, ""));
+  }
+
+  protected int majorVersion(String browserVersion) {
+    if (isBlank(browserVersion)) return 0;
+    Matcher matcher = REGEX_VERSION.matcher(browserVersion);
+    return matcher.matches() ? parseInt(matcher.replaceFirst("$1")) : 0;
   }
 }
