@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.12.1
+## 5.12.1 (released 25.05.2020)
 * Enable running Selenide without "selenium-ie-driver.jar" "selenium-opera-driver.jar" etc.
 * #1170 fixed Concurrent modification exception in WebDriverFactory  -- see PR #1171
 * #1169 fix merging capabilities of types Array and List  --  see PR #1174
