@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+
 /**
  * A subclass of MutableCapabilities which has fixed `merge` method:
  * it can properly merge all these ChromeOptions etc. with their Maps inside of Maps.
@@ -71,6 +73,12 @@ public class MergeableCapabilities extends MutableCapabilities {
     }
     else if (baseValue.getClass().isArray() && extraValue.getClass().isArray()) {
       return mergeArrays((Object[]) baseValue, (Object[]) extraValue);
+    }
+    else if (baseValue.getClass().isArray() && extraValue instanceof List) {
+      return mergeLists(asList((Object[]) baseValue), (List<Object>) extraValue);
+    }
+    else if (baseValue instanceof List && extraValue.getClass().isArray()) {
+      return mergeLists((List<Object>) baseValue, asList((Object[]) extraValue));
     }
     else if (baseValue.getClass() != extraValue.getClass()) {
       throw new IllegalArgumentException("Cannot merge values of different types: " + baseValue + " vs " + extraValue);
