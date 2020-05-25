@@ -78,8 +78,8 @@ public class WebDriverFactory {
   }
 
   private DriverFactory findFactory(Browser browser) {
-    Class<? extends AbstractDriverFactory> factoryClass = factories.computeIfAbsent(
-      browser.name.toLowerCase(), browserName -> DefaultDriverFactory.class);
+    Class<? extends AbstractDriverFactory> factoryClass = factories.getOrDefault(
+      browser.name.toLowerCase(), DefaultDriverFactory.class);
     try {
       return factoryClass.getConstructor().newInstance();
     }
