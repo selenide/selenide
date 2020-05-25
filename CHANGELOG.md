@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.12.1
+* Enable running Selenide without "selenium-ie-driver.jar" "selenium-opera-driver.jar" etc.
+
 ## 5.12.0 (released 23.05.2020)
 * #1133 disable annoying "save password?" dialog  --  see PR #1134
 * #676, #1097 Allow passing of driver-specific options from a configuration  --  see PR #1155.

@@ -34,8 +34,6 @@ import static java.util.Collections.emptyList;
 @ParametersAreNonnullByDefault
 public class SelenideDriver {
   private static final Navigator navigator = new Navigator();
-  private static final SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private static final DownloadFileWithHttpRequest downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
 
   private final Config config;
   private final Driver driver;
@@ -128,13 +126,13 @@ public class SelenideDriver {
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return pageFactory.page(driver(), pageObjectClass);
+    return pageFactory().page(driver(), pageObjectClass);
   }
 
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    return pageFactory.page(driver(), pageObject);
+    return pageFactory().page(driver(), pageObject);
   }
 
   public void refresh() {
@@ -390,6 +388,19 @@ public class SelenideDriver {
 
   @Nonnull
   public File download(URI url, long timeoutMs) throws IOException {
-    return downloadFileWithHttpRequest.download(driver(), url, timeoutMs, none());
+    return downloadFileWithHttpRequest().download(driver(), url, timeoutMs, none());
+  }
+
+  private static SelenidePageFactory pageFactory;
+  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
+
+  private static synchronized SelenidePageFactory pageFactory() {
+    if (pageFactory == null) pageFactory = new SelenidePageFactory();
+    return pageFactory;
+  }
+
+  private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
+    if (downloadFileWithHttpRequest == null) downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
+    return downloadFileWithHttpRequest;
   }
 }

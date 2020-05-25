@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,19 +27,19 @@ import static com.codeborne.selenide.Browsers.OPERA;
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
 
-  protected Map<String, AbstractDriverFactory> factories = factories();
+  protected Map<String, Class<? extends AbstractDriverFactory>> factories = factories();
   protected RemoteDriverFactory remoteDriverFactory = new RemoteDriverFactory();
   protected BrowserResizer browserResizer = new BrowserResizer();
 
-  private Map<String, AbstractDriverFactory> factories() {
-    Map<String, AbstractDriverFactory> result = new HashMap<>();
-    result.put(CHROME, new ChromeDriverFactory());
-    result.put(LEGACY_FIREFOX, new LegacyFirefoxDriverFactory());
-    result.put(FIREFOX, new FirefoxDriverFactory());
-    result.put(EDGE, new EdgeDriverFactory());
-    result.put(INTERNET_EXPLORER, new InternetExplorerDriverFactory());
-    result.put(IE, new InternetExplorerDriverFactory());
-    result.put(OPERA, new OperaDriverFactory());
+  private Map<String, Class<? extends AbstractDriverFactory>> factories() {
+    Map<String, Class<? extends AbstractDriverFactory>> result = new HashMap<>();
+    result.put(CHROME, ChromeDriverFactory.class);
+    result.put(LEGACY_FIREFOX, LegacyFirefoxDriverFactory.class);
+    result.put(FIREFOX, FirefoxDriverFactory.class);
+    result.put(EDGE, EdgeDriverFactory.class);
+    result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
+    result.put(IE, InternetExplorerDriverFactory.class);
+    result.put(OPERA, OperaDriverFactory.class);
     return result;
   }
 
@@ -77,7 +78,14 @@ public class WebDriverFactory {
   }
 
   private DriverFactory findFactory(Browser browser) {
-    return factories.computeIfAbsent(browser.name.toLowerCase(), browserName -> new DefaultDriverFactory());
+    Class<? extends AbstractDriverFactory> factoryClass = factories.computeIfAbsent(
+      browser.name.toLowerCase(), browserName -> DefaultDriverFactory.class);
+    try {
+      return factoryClass.getConstructor().newInstance();
+    }
+    catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+      throw new RuntimeException("Failed to initialize " + factoryClass.getName(), e);
+    }
   }
 
   protected void logSeleniumInfo(Config config) {
