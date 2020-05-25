@@ -42,4 +42,34 @@ class MergeableCapabilitiesTest {
     Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
     assertThat(excludeSwitches).isEqualTo(new String[]{"foo", "bar", "zzz"});
   }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void mergesArrayAndList() {
+    ChromeOptions base = new ChromeOptions();
+    base.setExperimentalOption("excludeSwitches", new String[]{"foo", "bar"});
+    ChromeOptions extra = new ChromeOptions();
+    extra.setExperimentalOption("excludeSwitches", asList("blah", "bluh"));
+
+    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+
+    assertThat(result.asMap()).containsKeys("goog:chromeOptions");
+    Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
+    assertThat(excludeSwitches).isEqualTo(asList("foo", "bar", "blah", "bluh"));
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void mergesListAndArray() {
+    ChromeOptions base = new ChromeOptions();
+    base.setExperimentalOption("excludeSwitches", asList("foo", "bar"));
+    ChromeOptions extra = new ChromeOptions();
+    extra.setExperimentalOption("excludeSwitches", new String[]{"blah", "bluh"});
+
+    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+
+    assertThat(result.asMap()).containsKeys("goog:chromeOptions");
+    Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
+    assertThat(excludeSwitches).isEqualTo(asList("foo", "bar", "blah", "bluh"));
+  }
 }

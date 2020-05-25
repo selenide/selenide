@@ -2,6 +2,8 @@
 
 ## 5.12.1
 * Enable running Selenide without "selenium-ie-driver.jar" "selenium-opera-driver.jar" etc.
+* #1170 fixed Concurrent modification exception in WebDriverFactory  -- see PR #1171
+* #1169 fix merging capabilities of types Array and List  --  see PR #1174
 
 ## 5.12.0 (released 23.05.2020)
 * #1133 disable annoying "save password?" dialog  --  see PR #1134
