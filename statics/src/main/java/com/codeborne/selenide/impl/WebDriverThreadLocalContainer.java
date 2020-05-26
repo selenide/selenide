@@ -130,7 +130,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       threadProxyServer.put(threadId, result.selenideProxyServer);
     }
     if (config.holdBrowserOpen()) {
-      log.info("Hold browser and proxy open: {} -> {}, {}", threadId, result.webDriver, result.selenideProxyServer);
+      log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
+        threadId, result.webDriver, result.selenideProxyServer);
     }
     else {
       markForAutoClose(currentThread());
