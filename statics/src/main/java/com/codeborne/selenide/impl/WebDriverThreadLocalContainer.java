@@ -30,8 +30,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
   private final List<WebDriverEventListener> listeners = new ArrayList<>();
-  private final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
-  private final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
+  final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
+  final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
   private Proxy userProvidedProxy;
 
@@ -41,7 +41,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand();
 
-  private final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
+  final AtomicBoolean cleanupThreadStarted = new AtomicBoolean(false);
 
   @Override
   public void addListener(WebDriverEventListener listener) {
@@ -124,11 +124,18 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   private WebDriver createDriver() {
     CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
-    threadWebDriver.put(currentThread().getId(), result.webDriver);
+    long threadId = currentThread().getId();
+    threadWebDriver.put(threadId, result.webDriver);
     if (result.selenideProxyServer != null) {
-      threadProxyServer.put(currentThread().getId(), result.selenideProxyServer);
+      threadProxyServer.put(threadId, result.selenideProxyServer);
     }
-    markForAutoClose(currentThread());
+    if (config.holdBrowserOpen()) {
+      log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
+        threadId, result.webDriver, result.selenideProxyServer);
+    }
+    else {
+      markForAutoClose(currentThread());
+    }
     return result.webDriver;
   }
 

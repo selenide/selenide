@@ -19,6 +19,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
   @BeforeEach
   void mockWebDriver() {
     WebDriverRunner.setProxy(null);
+    Configuration.holdBrowserOpen = false;
     Configuration.reopenBrowserOnFail = true;
     Configuration.browserSize = null;
     Configuration.startMaximized = false;
@@ -27,6 +28,7 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
 
   @AfterEach
   void resetSetting() {
+    Configuration.holdBrowserOpen = false;
     Configuration.reopenBrowserOnFail = true;
     Configuration.browser = "firefox";
   }
@@ -76,6 +78,28 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     container.closeWebDriver();
 
     assertThat(container.hasWebDriverStarted()).isFalse();
+  }
+
+  @Test
+  void holdsAllBrowsers_toAutomaticallyCloseThem() {
+    WebDriver webDriver = container.getAndCheckWebDriver();
+
+    assertThat(webDriver).isNotNull();
+    assertThat(container.allWebDriverThreads).hasSize(1);
+    assertThat(container.threadWebDriver).hasSize(1);
+    assertThat(container.threadWebDriver.get(container.allWebDriverThreads.iterator().next().getId())).isSameAs(webDriver);
+    assertThat(container.cleanupThreadStarted.get()).isTrue();
+  }
+
+  @Test
+  void doesNotCloseBrowsers_ifHoldBrowserOpenSettingIsTrue() {
+    Configuration.holdBrowserOpen = true;
+
+    WebDriver webDriver = container.getAndCheckWebDriver();
+
+    assertThat(webDriver).isNotNull();
+    assertThat(container.allWebDriverThreads).hasSize(0);
+    assertThat(container.cleanupThreadStarted.get()).isFalse();
   }
 
   private static class DummyProvider implements WebDriverProvider {
