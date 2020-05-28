@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class GetSelectedValue implements Command<String> {
@@ -19,6 +20,7 @@ public class GetSelectedValue implements Command<String> {
   }
 
   @Override
+  @Nullable
   public String execute(SelenideElement proxy, WebElementSource selectElement, Object[] args) throws IOException {
     WebElement option = getSelectedOption.execute(proxy, selectElement, args);
     return option == null ? null : option.getAttribute("value");

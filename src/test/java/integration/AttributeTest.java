@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,14 +59,16 @@ public class AttributeTest extends ITest {
 
   @Test
   void userCanGetAttr() {
-    assertThat($(by("readonly", "readonly")).attr("name"))
-      .isEqualTo("username");
+    SelenideElement element = $(by("readonly", "readonly"));
+    assertThat(element.attr("name")).isEqualTo("username");
+    assertThat(element.attr("value")).isEqualTo("");
+    assertThat(element.attr("foo")).isNull();
   }
 
   @Test
   void userCanGetNameAttribute() {
-    assertThat($(by("readonly", "readonly")).name())
-      .isEqualTo("username");
+    assertThat($(by("readonly", "readonly")).name()).isEqualTo("username");
+    assertThat($("h2").name()).isNull();
   }
 
   @Test

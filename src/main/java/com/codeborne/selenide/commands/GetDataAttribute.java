@@ -4,8 +4,11 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
+import javax.annotation.Nullable;
+
 public class GetDataAttribute implements Command<String> {
   @Override
+  @Nullable
   public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     return locator.getWebElement().getAttribute("data-" + args[0]);
   }

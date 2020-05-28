@@ -4,6 +4,8 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
+import javax.annotation.Nullable;
+
 public class Val implements Command<Object> {
   private final GetValue getValue;
   private final SetValue setValue;
@@ -19,6 +21,7 @@ public class Val implements Command<Object> {
   }
 
   @Override
+  @Nullable
   public Object execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
     if (args == null || args.length == 0) {
       return getValue.execute(proxy, locator, NO_ARGS);

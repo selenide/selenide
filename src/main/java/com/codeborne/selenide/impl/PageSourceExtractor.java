@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@ParametersAreNonnullByDefault
 public class PageSourceExtractor {
   private static final Logger log = LoggerFactory.getLogger(PageSourceExtractor.class);
   protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
@@ -29,6 +32,7 @@ public class PageSourceExtractor {
     this.fileName = fileName;
   }
 
+  @Nonnull
   protected File extract(boolean retryIfAlert) {
     File pageSource = new File(config.reportsFolder(), fileName + ".html");
     try {
@@ -49,7 +53,6 @@ public class PageSourceExtractor {
     }
     return pageSource;
   }
-
 
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
