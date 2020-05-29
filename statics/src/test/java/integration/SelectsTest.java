@@ -140,6 +140,18 @@ class SelectsTest extends IntegrationTest {
   }
 
   @Test
+  void getSelectedText_cannotBeNull() {
+    SelenideElement select = $("select#gender");
+    assertThat(select.getSelectedText()).isEqualTo("");
+
+    select.selectOptionContainingText("emal");
+    assertThat(select.getSelectedText()).isEqualTo("Female");
+
+    assertThatThrownBy(() -> $("select#missing").getSelectedText())
+      .isInstanceOf(ElementNotFound.class);
+  }
+
+  @Test
   void getTextReturnsTextsOfSelectedOptions() {
     assertThat($("#hero").getText())
       .isEqualTo("-- Select your hero --");

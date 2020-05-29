@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.cssClass;
@@ -40,7 +41,7 @@ class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     Configuration.reportsUrl = "http://ci.org/";
     Screenshots.screenshots = new ScreenShotLaboratory() {
       @Override
-      public String takeScreenShot(Driver driver) {
+      public String takeScreenShot(@Nonnull Driver driver) {
         return new File(reportsFolder, "1.jpg").getAbsolutePath();
       }
     };

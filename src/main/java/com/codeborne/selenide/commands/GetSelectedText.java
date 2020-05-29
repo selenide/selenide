@@ -5,10 +5,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+
 public class GetSelectedText implements Command<String> {
   private final GetSelectedOption getSelectedOption;
 
-  public GetSelectedText(GetSelectedOption getSelectedOption) {
+  GetSelectedText(@Nonnull GetSelectedOption getSelectedOption) {
     this.getSelectedOption = getSelectedOption;
   }
 
@@ -17,8 +19,9 @@ public class GetSelectedText implements Command<String> {
   }
 
   @Override
+  @Nonnull
   public String execute(SelenideElement proxy, WebElementSource selectElement, Object[] args) {
     WebElement option = getSelectedOption.execute(proxy, selectElement, NO_ARGS);
-    return option == null ? null : option.getText();
+    return option.getText();
   }
 }

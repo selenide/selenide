@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.List;
 
@@ -23,7 +24,7 @@ class ScreenShotLaboratoryTest implements WithAssertions {
 
   private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
     @Override
-    public String takeScreenShot(Driver driver, String fileName) {
+    public String takeScreenShot(@Nonnull Driver driver, @Nonnull String fileName) {
       addToHistory(new File(fileName));
       return fileName;
     }
@@ -234,5 +235,10 @@ class ScreenShotLaboratoryTest implements WithAssertions {
 
     assertThat(screenShotPath)
       .contains("http://ci.org/path%20with%spaces/");
+  }
+
+  @Test
+  void encodePath() {
+    assertThat(screenshots.encodePath("/foo bar/boom room/pdf")).isEqualTo("/foo%20bar/boom%20room/pdf");
   }
 }

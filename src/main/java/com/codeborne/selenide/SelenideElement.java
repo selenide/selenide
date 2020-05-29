@@ -117,18 +117,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return The innerText of this element
    * @see com.codeborne.selenide.commands.GetText
    */
-  @Nullable
+  @Nonnull
   @Override
   String getText();
 
   /**
-   * Short form of getText()
+   * Short form of {@link #getText()}
    *
    * @see WebElement#getText()
    * @see com.codeborne.selenide.commands.GetText
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   String text();
 
   /**
@@ -139,7 +139,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetInnerText
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   String innerText();
 
   /**
@@ -150,11 +150,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetInnerHtml
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   String innerHtml();
 
   /**
-   * Get the attribute of the element. Synonym for getAttribute(String).
+   * Get the attribute of the element. Synonym for {@link #getAttribute(String)}
    *
    * @return null if attribute is missing
    * @see com.codeborne.selenide.commands.GetAttribute
@@ -763,6 +763,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Get value of selected option in select field
    *
    * @see com.codeborne.selenide.commands.GetSelectedValue
+   * @return null if the selected option doesn't have "value" attribute
    */
   @CheckReturnValue
   @Nullable
@@ -774,7 +775,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.commands.GetSelectedText
    */
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   String getSelectedText();
 
   /**
@@ -1001,10 +1002,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Execute custom implemented command
    *
    * @param command custom command
-   * @return this element
+   * @return whatever the command returns
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
    */
+  @Nullable
   <ReturnType> ReturnType execute(Command<ReturnType> command);
 
   /**
@@ -1020,6 +1022,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Take screenshot of this element
    *
    * @return file with screenshot (*.png)
+   * or null if Selenide failed to take a screenshot (due to some technical problem)
    * @see com.codeborne.selenide.commands.TakeScreenshot
    */
   @Nullable
