@@ -55,12 +55,12 @@ if (project.hasProperty("signing.keyId")) {
           name archivesBaseName
           packaging 'jar'
           description 'Selenide = concise API for Selenium WebDriver'
-          url 'https://github.com/codeborne/selenide'
+          url 'https://github.com/selenide/selenide'
 
           scm {
-            url 'scm:git@github.com:codeborne/selenide.git'
-            connection 'scm:git@github.com:codeborne/selenide.git'
-            developerConnection 'scm:git@github.com:codeborne/selenide.git'
+            url 'scm:git@github.com:selenide/selenide.git'
+            connection 'scm:git@github.com:selenide/selenide.git'
+            developerConnection 'scm:git@github.com:selenide/selenide.git'
           }
 
           licenses {

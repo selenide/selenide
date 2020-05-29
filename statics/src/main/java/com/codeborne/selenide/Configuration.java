@@ -215,7 +215,7 @@ public class Configuration {
    * Some people reported 150% speedup (because sending characters one-by-one was especially
    * slow via network to Selenium Grid on cloud).
    * <br>
-   * https://github.com/codeborne/selenide/issues/135
+   * https://github.com/selenide/selenide/issues/135
    * Can be configured either programmatically or by system property "-Dselenide.fastSetValue=true".
    * <br>
    * Default value: false
@@ -230,7 +230,7 @@ public class Configuration {
    * With this property being set to true, tests may no longer be dependent on actual control implementation in html and
    * be more abstract.
    * <br>
-   * https://github.com/codeborne/selenide/issues/508
+   * https://github.com/selenide/selenide/issues/508
    * Can be configured either programmatically or by system property "-Dselenide.versatileSetValue=true".
    * <br>
    * Default value: false
