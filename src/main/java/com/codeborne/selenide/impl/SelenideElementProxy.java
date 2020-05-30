@@ -28,23 +28,11 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
 
 class SelenideElementProxy implements InvocationHandler {
-  private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
-      "toWebElement",
-      "getWrappedElement",
-      "toString",
-      "getSearchCriteria"
-  ));
+  private static final Set<String> methodsToSkipLogging = new HashSet<>(
+      asList("toWebElement", "getWrappedElement", "toString", "getSearchCriteria"));
 
-  private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
-      "should",
-      "shouldBe",
-      "shouldHave",
-      "shouldNot",
-      "shouldNotHave",
-      "shouldNotBe",
-      "waitUntil",
-      "waitWhile"
-  ));
+  private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList("should", "shouldBe", "shouldHave",
+      "shouldNot", "shouldNotHave", "shouldNotBe", "waitUntil", "waitWhile"));
 
   private final WebElementSource webElementSource;
 
@@ -66,16 +54,14 @@ class SelenideElementProxy implements InvocationHandler {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
       return result;
-    }
-    catch (Error error) {
+    } catch (Error error) {
       Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
       if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
         return proxy;
       else
         throw wrappedError;
-    }
-    catch (RuntimeException error) {
+    } catch (RuntimeException error) {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
@@ -89,46 +75,41 @@ class SelenideElementProxy implements InvocationHandler {
     return driver().config();
   }
 
-  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
-                                    Object proxy, Method method, Object[] args) throws Throwable {
+  protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs, Object proxy, Method method, Object[] args)
+      throws Throwable {
     Stopwatch stopwatch = new Stopwatch(timeoutMs);
 
     Throwable lastError;
     do {
       try {
         if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
+          if (method.getName().equals("$"))
+            return Commands.getInstance().execute(null, webElementSource, method.getName(), args);
           return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
         return method.invoke(webElementSource.getWebElement(), args);
-      }
-      catch (InvocationTargetException e) {
+      } catch (InvocationTargetException e) {
         lastError = e.getTargetException();
-      }
-      catch (WebDriverException | IndexOutOfBoundsException | AssertionError e) {
+      } catch (WebDriverException | IndexOutOfBoundsException | AssertionError e) {
         lastError = e;
       }
 
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
         throw Cleanup.of.wrap(lastError);
-      }
-      else if (!shouldRetryAfterError(lastError)) {
+      } else if (!shouldRetryAfterError(lastError)) {
         throw lastError;
       }
       stopwatch.sleep(pollingIntervalMs);
-    }
-    while (!stopwatch.isTimeoutReached());
+    } while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof UIAssertionError) {
       throw lastError;
-    }
-    else if (lastError instanceof InvalidElementStateException) {
+    } else if (lastError instanceof InvalidElementStateException) {
       throw new InvalidStateException(driver(), lastError);
-    }
-    else if (isElementNotClickableException(lastError)) {
+    } else if (isElementNotClickableException(lastError)) {
       throw new ElementIsNotClickableException(driver(), lastError);
-    }
-    else if (lastError instanceof WebDriverException) {
+    } else if (lastError instanceof WebDriverException) {
       throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
@@ -139,18 +120,21 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   static boolean shouldRetryAfterError(Throwable e) {
-    if (e instanceof FileNotFoundException) return false;
-    if (e instanceof IllegalArgumentException) return false;
-    if (e instanceof ReflectiveOperationException) return false;
-    if (e instanceof JavascriptException) return false;
+    if (e instanceof FileNotFoundException)
+      return false;
+    if (e instanceof IllegalArgumentException)
+      return false;
+    if (e instanceof ReflectiveOperationException)
+      return false;
+    if (e instanceof JavascriptException)
+      return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }
 
   private long getTimeoutMs(Method method, Object[] args) {
-    return isWaitCommand(method) ?
-      args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
-      config().timeout();
+    return isWaitCommand(method) ? args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1]
+        : config().timeout();
   }
 
   private long getPollingIntervalMs(Method method, Object[] args) {
