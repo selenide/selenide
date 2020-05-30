@@ -525,4 +525,14 @@ public class ScreenShotLaboratory {
   private int getElementHeight(WebElement element) {
     return element.getSize().getHeight();
   }
+   // Add methods for working with current context and screenshots without remove it.
+   public File getCurrentThreadLatestScreenshot() {
+    List<File> result = currentContextScreenshots.get();
+    return result == null ? null : result.get(result.size() - 1);
+  }
+
+  public List<File> getCurrentThreadAllScreenshots() {
+    List<File> allScreenshots = currentContextScreenshots.get();
+    return allScreenshots == null ? null : Collections.unmodifiableList(allScreenshots);
+  }
 }
