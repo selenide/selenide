@@ -31,7 +31,15 @@ public class Screenshots {
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(driver(), fileName);
   }
-
+ /**
+   * Take screenshot and give it filename
+   * @param driver The webdriver of the corresponding page
+   * @param fileName Name of files (without extension) to save HTML and PNG to
+   * @return The name of last saved screenshot or null if failed to create screenshot
+   */
+  public static String takeScreenShot(Driver driver, String fileName) {
+    return screenshots.takeScreenShot(driver,fileName);
+  }
   /**
    * Take screenshot and return as a file
    * @return a temporary file, not guaranteed to be stored after tests complete.
