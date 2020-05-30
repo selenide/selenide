@@ -29,6 +29,7 @@ import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
 import javax.annotation.CheckReturnValue;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
@@ -272,10 +273,15 @@ public abstract class Condition {
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
    * @param text expected text of HTML element
+   *
+   * @throws IllegalArgumentException if given text is null or empty
    */
   @CheckReturnValue
   @Nonnull
   public static Condition text(String text) {
+    if (StringUtils.isBlank(text)) {
+      throw new IllegalArgumentException("No expected text given");
+    }
     return new Text(text);
   }
 

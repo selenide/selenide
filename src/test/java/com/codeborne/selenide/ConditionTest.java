@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +9,8 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -403,4 +406,15 @@ class ConditionTest {
     Condition condition = attribute("name").because("it's awesome");
     assertThat(condition).hasToString("attribute name (because it's awesome)");
   }
+
+  @Test
+  void shouldGetExceptionIfGivenTextIsNullOrEmpty() {
+    IllegalArgumentException exceptionWhenNull = assertThrows(IllegalArgumentException.class, () -> text(null));
+    IllegalArgumentException exceptionWhenEmpty = assertThrows(IllegalArgumentException.class, () -> text(StringUtils.EMPTY));
+    assertAll(() -> {
+      assertThat(exceptionWhenNull.getMessage()).hasToString("No expected text given");
+      assertThat(exceptionWhenEmpty.getMessage()).hasToString("No expected text given");
+    });
+  }
+
 }
