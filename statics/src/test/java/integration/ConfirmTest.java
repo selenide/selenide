@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConfirmTest extends IntegrationTest {
-  private final String userName = "John Mc'Clane";
+  private static final String USER_NAME = "John Mc'Clane";
 
   @AfterAll
   static void tearDown() {
@@ -31,7 +31,7 @@ class ConfirmTest extends IntegrationTest {
     timeout = 1000;
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
-    $(By.name("username")).val(userName);
+    $(By.name("username")).val(USER_NAME);
   }
 
   @Test
@@ -46,7 +46,7 @@ class ConfirmTest extends IntegrationTest {
   @Video
   void canSubmitConfirmDialogAndCheckText() {
     $(byText("Confirm button")).click();
-    confirm("Get out of this page, " + userName + '?');
+    confirm("Get out of this page, " + USER_NAME + '?');
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
@@ -54,8 +54,8 @@ class ConfirmTest extends IntegrationTest {
   @Video
   void canCancelConfirmDialog() {
     $(byText("Confirm button")).click();
-    dismiss("Get out of this page, " + userName + '?');
-    $("#message").shouldHave(text("Stay here, " + userName));
+    dismiss("Get out of this page, " + USER_NAME + '?');
+    $("#message").shouldHave(text("Stay here, " + USER_NAME));
     $("#container").shouldNotBe(empty);
   }
 
@@ -77,7 +77,7 @@ class ConfirmTest extends IntegrationTest {
   void confirmReturnsActualDialogText() {
     $(byText("Confirm button")).click();
     assertThat(confirm())
-      .isEqualTo(String.format("Get out of this page, %s?", userName));
+      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
   }
 
   @Test
@@ -85,7 +85,7 @@ class ConfirmTest extends IntegrationTest {
   void dismissReturnsActualDialogText() {
     $(byText("Confirm button")).click();
     assertThat(dismiss())
-      .isEqualTo(String.format("Get out of this page, %s?", userName));
+      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
   }
 
   @Test
@@ -96,6 +96,6 @@ class ConfirmTest extends IntegrationTest {
     String confirmDialogText = confirm();
 
     assertThat(confirmDialogText)
-      .isEqualTo(String.format("Get out of this page, %s?", userName));
+      .isEqualTo(String.format("Get out of this page, %s?", USER_NAME));
   }
 }

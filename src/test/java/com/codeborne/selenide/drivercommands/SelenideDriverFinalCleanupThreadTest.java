@@ -18,7 +18,7 @@ class SelenideDriverFinalCleanupThreadTest {
     SelenideProxyServer proxy = mock(SelenideProxyServer.class);
     CloseDriverCommand closeDriverCommand = mock(CloseDriverCommand.class);
 
-    new SelenideDriverFinalCleanupThread(config, driver, proxy, closeDriverCommand).run();
+    new SelenideDriverFinalCleanupThread(config, driver, proxy, closeDriverCommand).start();
 
     verify(closeDriverCommand).closeAsync(config, driver, proxy);
     verifyNoMoreInteractions(closeDriverCommand);

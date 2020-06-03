@@ -11,6 +11,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +24,10 @@ import static org.mockito.Mockito.mock;
 class ChromeDriverFactoryTest implements WithAssertions {
   private static final String CHROME_OPTIONS_PREFS = "chromeoptions.prefs";
   private static final String CHROME_OPTIONS_ARGS = "chromeoptions.args";
+  private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
 
   private final Proxy proxy = mock(Proxy.class);
-  private final SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
+  private final SelenideConfig config = new SelenideConfig().downloadsFolder(DOWNLOADS_FOLDER);
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final ChromeDriverFactory factory = new ChromeDriverFactory();
 
@@ -44,7 +46,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
     assertThat(prefsMap).hasSize(2);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
     assertThat(prefsMap).containsEntry("download.default_directory",
-      new File("/blah/downloads").getAbsolutePath());
+      new File(DOWNLOADS_FOLDER).getAbsolutePath());
   }
 
   @Test

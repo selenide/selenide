@@ -1,5 +1,12 @@
 package com.codeborne.selenide.webdriver;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
@@ -11,21 +18,17 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
 
 class FirefoxDriverFactoryTest implements WithAssertions {
+  private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
+
   private final Proxy proxy = mock(Proxy.class);
   private final FirefoxDriverFactory driverFactory = new FirefoxDriverFactory();
-  private final SelenideConfig config = new SelenideConfig().downloadsFolder("/blah/downloads");
+  private final SelenideConfig config = new SelenideConfig().downloadsFolder(DOWNLOADS_FOLDER);
   private final Browser browser = new Browser(config.browser(), config.headless());
-  private Set<String> systemProperties = new HashSet<>();
+  private final Set<String> systemProperties = new HashSet<>();
 
   @AfterEach
   void tearDown() {
@@ -138,7 +141,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
 
     Map<String, Object> prefs = prefs(options);
-    assertThat(prefs.get("browser.download.dir")).isEqualTo(new File("/blah/downloads").getAbsolutePath());
+    assertThat(prefs.get("browser.download.dir")).isEqualTo(new File(DOWNLOADS_FOLDER).getAbsolutePath());
     assertThat((String) prefs.get("browser.helperApps.neverAsk.saveToDisk")).contains("application/pdf");
     assertThat(prefs.get("pdfjs.disabled")).isEqualTo(true);
     assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
