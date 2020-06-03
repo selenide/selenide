@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.12.3
+* upgraded to BrowserUpProxy 2.1.1
+
 ## 5.12.2 (released 29.05.2020)
 * #1172 don't close browser if `holdBrowserOpen=true`  --  see PR #1176
 * #1179 fix @Nonnull annotation for methods getText(), innerText(), innerHtml(), getSelectedText()  --  see PR #1181
