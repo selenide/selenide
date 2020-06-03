@@ -4,7 +4,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 
-public class SelenideDriverFinalCleanupThread extends Thread {
+public class SelenideDriverFinalCleanupThread implements Runnable {
   private final Config config;
   private final WebDriver driver;
   private final SelenideProxyServer proxy;
