@@ -6,7 +6,7 @@ ext {
   testngVersion = '7.1.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.6.2'
-  jettyVersion = '9.4.28.v20200408'
+  jettyVersion = '9.4.29.v20200521'
 }
 
 dependencies {
