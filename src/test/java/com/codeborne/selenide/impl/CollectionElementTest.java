@@ -72,13 +72,13 @@ class CollectionElementTest implements WithAssertions {
     WebElementsCollection collection = mock(WebElementsCollection.class);
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn("Collection description");
-    CollectionElement collectionElement = new CollectionElement(collection, 1);
+    CollectionElement collectionElement = new CollectionElement(collection, 33);
 
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage(String.format("Element not found {Collection description}%n" +
+      .hasMessage(String.format("Element not found {Collection description[33]}%n" +
         "Expected: visible%n" +
         "Screenshot: null%n" +
         "Timeout: 0 ms.%n" +

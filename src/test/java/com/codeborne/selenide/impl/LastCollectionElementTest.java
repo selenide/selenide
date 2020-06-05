@@ -1,6 +1,5 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.assertj.core.api.WithAssertions;
@@ -9,16 +8,19 @@ import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.Collections;
 
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
+import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 class LastCollectionElementTest implements WithAssertions {
-  private SelenideElement element1 = mockElement("Hello");
-  private SelenideElement element2 = mockElement("World");
-  private WebElementsCollection collection = mockCollection("Collection description", element1, element2);
-  private LastCollectionElement lastCollectionElement = new LastCollectionElement(collection);
+  private final SelenideElement element1 = mockElement("Hello");
+  private final SelenideElement element2 = mockElement("World");
+  private final WebElementsCollection collection = mockCollection("ul#employees li.employee", element1, element2);
+  private final LastCollectionElement lastCollectionElement = new LastCollectionElement(collection);
 
   @Test
   void getElementMethod() {
@@ -44,24 +46,24 @@ class LastCollectionElementTest implements WithAssertions {
 
   @Test
   void createElementNotFoundErrorMethodWhenCollectionIsEmpty() {
-    when(collection.getElements()).thenReturn(Collections.emptyList());
+    when(collection.getElements()).thenReturn(emptyList());
     ElementNotFound notFoundError = lastCollectionElement
-      .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
+      .createElementNotFoundError(be(empty), new StaleElementReferenceException("stale error"));
     assertThat(notFoundError)
-      .hasMessageStartingWith(String.format("Element not found {Collection description}%nExpected: visible"));
+      .hasMessageStartingWith(String.format("Element not found {ul#employees li.employee:last}%nExpected: visible"));
   }
 
   @Test
   void createElementNotFoundErrorMethodWhenCollectionIsNotEmpty() {
     ElementNotFound notFoundError = lastCollectionElement
-      .createElementNotFoundError(Condition.be(Condition.empty), new StaleElementReferenceException("stale error"));
+      .createElementNotFoundError(be(empty), new StaleElementReferenceException("stale error"));
     assertThat(notFoundError)
-      .hasMessageStartingWith(String.format("Element not found {Collection description.last}%nExpected: be empty"));
+      .hasMessageStartingWith(String.format("Element not found {ul#employees li.employee:last}%nExpected: be empty"));
   }
 
   @Test
   void testToString() {
     assertThat(lastCollectionElement)
-      .hasToString("Collection description.last");
+      .hasToString("ul#employees li.employee:last");
   }
 }

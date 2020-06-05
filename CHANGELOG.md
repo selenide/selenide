@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.12.3
+* #967 improve error messages for collections
 * upgraded to BrowserUpProxy 2.1.1
 
 ## 5.12.2 (released 29.05.2020)

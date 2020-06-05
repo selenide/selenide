@@ -22,7 +22,7 @@ public class TailOfCollection implements WebElementsCollection {
 
   @Override
   public String description() {
-    return originalCollection.description() + ".last(" + size + ')';
+    return originalCollection.description() + ":last(" + size + ')';
   }
 
   @Override

@@ -76,7 +76,7 @@ class CollectionWaitTest extends IntegrationTest {
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining(String.format("Actual: [Element #18, Element #19]%n" +
         "Expected: [Element, #wrong]%n" +
-        "Collection: #collection li.last(2)"));
+        "Collection: #collection li:last(2)"));
   }
 
   @Test

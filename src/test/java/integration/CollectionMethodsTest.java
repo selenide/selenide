@@ -402,7 +402,7 @@ class CollectionMethodsTest extends ITest {
   void errorWhenFindCollectionInLastElementOfEmptyCollection() {
     assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(1))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {#not_exist.last/#multirowTable}")
+      .hasMessageStartingWith("Element not found {#not_exist:last/#multirowTable}")
       .hasCauseInstanceOf(IndexOutOfBoundsException.class);
   }
 

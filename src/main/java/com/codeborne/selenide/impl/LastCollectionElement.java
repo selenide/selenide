@@ -40,13 +40,13 @@ public class LastCollectionElement extends WebElementSource {
 
   @Override
   public String getSearchCriteria() {
-    return collection.description() + ".last";
+    return collection.description() + ":last";
   }
 
   @Override
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.driver(), collection.description(), visible, lastError);
+      return new ElementNotFound(collection.driver(), getSearchCriteria(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
   }
