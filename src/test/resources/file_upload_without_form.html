@@ -16,10 +16,11 @@
 <input type="submit" id="uploadButton" />
 
 <script>
-  document.getElementById('uploadButton').addEventListener("click", function (e) {
+  document.getElementById('uploadButton').addEventListener("click", function () {
     let files = document.getElementById('fileInput').files;
     document.getElementById('status').innerText = 'Uploading ' + files.length + ' files...';
 
+    let status = document.getElementById('status');
     let promises = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -30,7 +31,9 @@
     }
 
     Promise.all(promises).then(() => {
-      document.getElementById('status').innerText = 'Uploaded ' + promises.length + ' files';
+      status.innerText = 'Uploaded ' + promises.length + ' files';
+    }).catch((error) => {
+      status.innerText = 'Failed to upload ' + promises.length + ' files: ' + error;
     });
   }, false);
 </script>
