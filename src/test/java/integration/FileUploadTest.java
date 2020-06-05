@@ -96,6 +96,26 @@ class FileUploadTest extends ITest {
   }
 
   @Test
+  void userCanUploadMultipleFiles_withoutForm() {
+    openFile("file_upload_without_form.html");
+    $("#fileInput").uploadFile(
+      new File("src/test/java/../resources/файл-с-русским-названием.txt"),
+      new File("src/test/java/../resources/hello_world.txt"),
+      new File("src/test/resources/child_frame.txt"));
+
+    $("#uploadButton").click();
+    $("h3").shouldHave(text("Uploaded 3 files").because("Actual files: " + server.getUploadedFiles()));
+
+    assertThat(server.getUploadedFiles())
+      .extracting(f -> f.getName())
+      .containsExactlyInAnyOrder("файл-с-русским-названием.txt", "hello_world.txt", "child_frame.txt");
+
+    assertThat(server.getUploadedFiles())
+      .extracting(f -> f.getString("UTF-8"))
+      .containsExactlyInAnyOrder("Превед медвед!", "Hello, WinRar!", "This is last frame!");
+  }
+
+  @Test
   void uploadUnexistingFile() {
     assertThatThrownBy(() ->
       $("input[type='file'][id='cv']").uploadFile(new File("src/goodbye_world.txt"))

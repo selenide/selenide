@@ -12,47 +12,59 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 public class UploadFile implements Command<File> {
   @Override
   public File execute(SelenideElement proxy, WebElementSource locator, Object[] args) throws IOException {
-    File[] file;
-    if (args instanceof File[]) {
-      file = (File[]) args;
-    }
-    else {
-      file = (File[]) args[0];
-    }
+    File[] file = getFiles(args);
+    checkFilesGiven(file);
+    checkFilesExist(file);
+
+    WebElement inputField = locator.getWebElement();
+    Driver driver = locator.driver();
+    checkValidInputField(driver, inputField);
+
+    String fileNames = Stream.of(file).map(this::canonicalPath).collect(joining("\n"));
+    uploadFiles(driver.config(), inputField, fileNames);
+    return file[0].getCanonicalFile();
+  }
+
+  private void checkFilesGiven(File[] file) {
     if (file.length == 0) {
       throw new IllegalArgumentException("No files to upload");
     }
-
-    WebElement inputField = locator.getWebElement();
-    File uploadedFile = uploadFile(locator.driver(), inputField, file[0]);
-
-    if (file.length > 1) {
-      SelenideElement form = proxy.closest("form");
-      List<WebElement> newInputs = cloneInputField(locator.driver(), form, inputField, file.length - 1);
-
-      Config config = locator.driver().config();
-      Stopwatch stopwatch = new Stopwatch(config.timeout());
-
-      for (int i = 1; i < file.length; i++) {
-        WebElement newInput = newInputs.get(i - 1);
-        uploadSingleFile(config, file[i], stopwatch, newInput);
-      }
-    }
-
-    return uploadedFile;
-
   }
 
-  private void uploadSingleFile(Config config, File file, Stopwatch stopwatch, WebElement newInput) throws IOException {
+  private void checkFilesExist(File[] file) {
+    for (File f : file) {
+      if (!f.exists()) {
+        throw new IllegalArgumentException("File not found: " + f.getAbsolutePath());
+      }
+    }
+  }
+
+  @SuppressWarnings("SuspiciousArrayCast")
+  private File[] getFiles(Object[] args) {
+    return args instanceof File[] ? (File[]) args : (File[]) args[0];
+  }
+
+  private String canonicalPath(File file) {
+    try {
+      return file.getCanonicalPath();
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Cannot get canonical path of file " + file, e);
+    }
+  }
+
+  protected void uploadFiles(Config config, WebElement inputField, String fileNames) {
+    Stopwatch stopwatch = new Stopwatch(config.timeout());
     do {
       try {
-        newInput.sendKeys(file.getCanonicalPath());
-        return;
+        inputField.sendKeys(fileNames);
+        break;
       }
       catch (ElementNotInteractableException notInteractable) {
         if (stopwatch.isTimeoutReached()) {
@@ -63,35 +75,9 @@ public class UploadFile implements Command<File> {
     } while (!stopwatch.isTimeoutReached());
   }
 
-  protected File uploadFile(Driver driver, WebElement inputField, File file) throws IOException {
+  private void checkValidInputField(Driver driver, WebElement inputField) {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
       throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(driver, inputField) + " is not an INPUT");
     }
-
-    if (!file.exists()) {
-      throw new IllegalArgumentException("File not found: " + file.getAbsolutePath());
-    }
-
-    String canonicalPath = file.getCanonicalPath();
-    inputField.sendKeys(canonicalPath);
-    return new File(canonicalPath);
-  }
-
-  protected List<WebElement> cloneInputField(Driver driver, SelenideElement form, WebElement inputField, int count) {
-    return driver.executeJavaScript(String.format("" +
-        "var newInputs = [];" +
-        "for (var i = 1; i <= arguments[2]; i++) {" +
-        "  var id = '___selenide___id___' + arguments[1].getAttribute('name') + '___' + i + '___%s';" +
-        "  var fileInput = document.createElement('input');" +
-        "  fileInput.setAttribute('type', arguments[1].getAttribute('type'));" +
-        "  fileInput.setAttribute('name', arguments[1].getAttribute('name'));" +
-        "  fileInput.setAttribute('id', id);" +
-        "  fileInput.style.width = '1px';" +
-        "  fileInput.style.height = '1px';" +
-        "  arguments[0].appendChild(fileInput);" +
-        "  newInputs.push(fileInput);" +
-        "}" +
-        "return newInputs;", System.nanoTime()),
-      form, inputField, count);
   }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::file upload without form</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<h1>Multi-file upload</h1>
+<h3 id="status"></h3>
+
+<br/>
+
+<input type="file" id="fileInput" name="multiFile" multiple/>
+<input type="submit" id="uploadButton" />
+
+<script>
+  document.getElementById('uploadButton').addEventListener("click", function () {
+    let files = document.getElementById('fileInput').files;
+    document.getElementById('status').innerText = 'Uploading ' + files.length + ' files...';
+
+    let status = document.getElementById('status');
+    let promises = [];
+
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+      let formData = new FormData();
+      formData.append("multiFile", file);
+      promises.push(fetch('/upload', {method: "POST", body: formData}));
+    }
+
+    Promise.all(promises).then(() => {
+      status.innerText = 'Uploaded ' + promises.length + ' files';
+    }).catch((error) => {
+      status.innerText = 'Failed to upload ' + promises.length + ' files: ' + error;
+    });
+  }, false);
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 
 ## 5.12.3
 * upgraded to BrowserUpProxy 2.1.1
+* #943 upload multiple files without JS tricks (just using newline character)  --  see PR #1188
 
 ## 5.12.2 (released 29.05.2020)
 * #1172 don't close browser if `holdBrowserOpen=true`  --  see PR #1176
