@@ -9,11 +9,9 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ConditionTest {
   private WebDriver webDriver = mock(WebDriver.class);
@@ -409,11 +407,14 @@ class ConditionTest {
 
   @Test
   void shouldGetExceptionIfGivenTextIsNullOrEmpty() {
-    IllegalArgumentException exceptionWhenNull = assertThrows(IllegalArgumentException.class, () -> text(null));
-    IllegalArgumentException exceptionWhenEmpty = assertThrows(IllegalArgumentException.class, () -> text(StringUtils.EMPTY));
     assertAll(() -> {
-      assertThat(exceptionWhenNull.getMessage()).hasToString("No expected text given");
-      assertThat(exceptionWhenEmpty.getMessage()).hasToString("No expected text given");
+      assertThatThrownBy(() -> text(null))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("No expected text given");
+
+      assertThatThrownBy(() -> text(StringUtils.EMPTY))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("No expected text given");
     });
   }
 
