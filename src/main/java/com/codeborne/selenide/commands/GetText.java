@@ -5,8 +5,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class GetText implements Command<String> {
   private final GetSelectedText getSelectedText;
 
@@ -19,8 +23,9 @@ public class GetText implements Command<String> {
   }
 
   @Override
+  @CheckReturnValue
   @Nonnull
-  public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement element = locator.getWebElement();
     return "select".equalsIgnoreCase(element.getTagName()) ?
         getSelectedText.execute(proxy, locator, args) :

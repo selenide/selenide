@@ -1,10 +1,13 @@
 package com.codeborne.selenide.impl;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.DOTALL;
 
+@ParametersAreNonnullByDefault
 public class Html {
+  private static final Pattern REGEX_SPACES = Pattern.compile("[\\s\\n\\r\u00a0]+");
   public static Html text = new Html();
 
   public boolean matches(String text, String regex) {
@@ -28,6 +31,6 @@ public class Html {
   }
 
   String reduceSpaces(String text) {
-    return text.replaceAll("[\\s\\n\\r\u00a0]+", " ").trim();
+    return REGEX_SPACES.matcher(text).replaceAll(" ").trim();
   }
 }

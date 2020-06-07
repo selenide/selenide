@@ -7,12 +7,20 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.exist;
 
+@ParametersAreNonnullByDefault
 public class SelectOptionByTextOrIndex implements Command<Void> {
   @Override
-  public Void execute(SelenideElement proxy, WebElementSource selectField, Object[] args) {
-    if (args[0] instanceof String[]) {
+  @Nullable
+  public Void execute(SelenideElement proxy, WebElementSource selectField, @Nullable Object[] args) {
+    if (args == null || args.length == 0) {
+      throw new IllegalArgumentException("Missing arguments");
+    }
+    else if (args[0] instanceof String[]) {
       selectOptionsByTexts(selectField, (String[]) args[0]);
     }
     else if (args[0] instanceof int[]) {

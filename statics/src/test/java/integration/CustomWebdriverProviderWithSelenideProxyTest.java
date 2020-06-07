@@ -15,6 +15,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -45,8 +49,11 @@ public class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTes
     $("body").shouldHave(text("Hello, scott:tiger!"));
   }
 
+  @ParametersAreNonnullByDefault
   private static class MyWebDriverProvider implements WebDriverProvider {
     @Override
+    @CheckReturnValue
+    @Nonnull
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
       return isChrome() ? chrome(desiredCapabilities) : firefox(desiredCapabilities);
     }

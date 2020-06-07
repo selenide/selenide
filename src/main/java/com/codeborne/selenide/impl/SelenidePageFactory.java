@@ -3,6 +3,9 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -11,7 +14,10 @@ import java.lang.reflect.Field;
  *
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
+@ParametersAreNonnullByDefault
 public class SelenidePageFactory {
+  @CheckReturnValue
+  @Nonnull
   public <PageObjectClass> PageObjectClass page(Driver driver, Class<PageObjectClass> pageObjectClass) {
     try {
       Constructor<PageObjectClass> constructor = pageObjectClass.getDeclaredConstructor();
@@ -23,6 +29,8 @@ public class SelenidePageFactory {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
     initElements(new SelenideFieldDecorator(this, driver, driver.getWebDriver()), pageObject);
     return pageObject;

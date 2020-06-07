@@ -8,9 +8,17 @@ import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebDriverException;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ToString implements Command<String> {
   @Override
-  public String execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  @CheckReturnValue
+  @Nonnull
+  public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     try {
       return Describe.describe(locator.driver(), locator.getWebElement());
     } catch (WebDriverException elementDoesNotExist) {

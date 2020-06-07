@@ -1,9 +1,13 @@
 package com.codeborne.selenide.logevents;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class EventsCollector implements LogEventListener {
   private final List<LogEvent> logEvents = new ArrayList<>();
 
@@ -17,6 +21,8 @@ public class EventsCollector implements LogEventListener {
     //ignore
   }
 
+  @CheckReturnValue
+  @Nonnull
   public List<LogEvent> events() {
     return Collections.unmodifiableList(logEvents);
   }

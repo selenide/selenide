@@ -14,6 +14,10 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ import java.util.Set;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
+@ParametersAreNonnullByDefault
 public class SelenideTargetLocator implements TargetLocator {
   private final WebDriver webDriver;
   private final Config config;
@@ -34,6 +39,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   @Override
+  @Nonnull
   public WebDriver frame(int index) {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(index));
@@ -47,6 +53,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   @Override
+  @Nonnull
   public WebDriver frame(String nameOrId) {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
@@ -58,6 +65,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   @Override
+  @Nonnull
   public WebDriver frame(WebElement frameElement) {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
@@ -77,21 +85,25 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   @Override
+  @Nonnull
   public WebDriver parentFrame() {
     return delegate.parentFrame();
   }
 
   @Override
+  @Nonnull
   public WebDriver defaultContent() {
     return delegate.defaultContent();
   }
 
   @Override
+  @Nonnull
   public WebElement activeElement() {
     return delegate.activeElement();
   }
 
   @Override
+  @Nonnull
   public Alert alert() {
     try {
       return Wait().until(alertIsPresent());
@@ -103,6 +115,7 @@ public class SelenideTargetLocator implements TargetLocator {
   /**
    * Switch to the inner frame (last child frame in given sequence)
    */
+  @Nonnull
   public WebDriver innerFrame(String... frames) {
     delegate.defaultContent();
 
@@ -122,17 +135,18 @@ public class SelenideTargetLocator implements TargetLocator {
   private static ExpectedCondition<WebDriver> frameToBeAvailableAndSwitchToIt_fixed(final By locator) {
     return new ExpectedCondition<WebDriver>() {
       @Override
-      public WebDriver apply(WebDriver driver) {
+      @Nullable
+      public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
         try {
           return driver.switchTo().frame(driver.findElement(locator));
-        } catch (NoSuchFrameException e) {
-          return null;
         } catch (WebDriverException e) {
           return null;
         }
       }
 
       @Override
+      @CheckReturnValue
+      @Nonnull
       public String toString() {
         return "frame to be available: " + locator;
       }
@@ -142,7 +156,8 @@ public class SelenideTargetLocator implements TargetLocator {
   private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(String nameOrHandleOrTitle) {
     return new ExpectedCondition<WebDriver>() {
       @Override
-      public WebDriver apply(WebDriver driver) {
+      @Nullable
+      public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
         try {
           return driver.switchTo().window(nameOrHandleOrTitle);
         } catch (NoSuchWindowException windowWithNameOrHandleNotFound) {
@@ -155,6 +170,8 @@ public class SelenideTargetLocator implements TargetLocator {
       }
 
       @Override
+      @CheckReturnValue
+      @Nonnull
       public String toString() {
         return "window to be available by name or handle or title: " + nameOrHandleOrTitle;
       }
@@ -164,7 +181,8 @@ public class SelenideTargetLocator implements TargetLocator {
   private static ExpectedCondition<WebDriver> windowToBeAvailableAndSwitchToIt(final int index) {
     return new ExpectedCondition<WebDriver>() {
       @Override
-      public WebDriver apply(WebDriver driver) {
+      @Nullable
+      public WebDriver apply(@SuppressWarnings("NullableProblems") WebDriver driver) {
         try {
           List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
           return driver.switchTo().window(windowHandles.get(index));
@@ -174,6 +192,8 @@ public class SelenideTargetLocator implements TargetLocator {
       }
 
       @Override
+      @CheckReturnValue
+      @Nonnull
       public String toString() {
         return "window to be available by index: " + index;
       }
@@ -185,6 +205,8 @@ public class SelenideTargetLocator implements TargetLocator {
    * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
    * @param index index of window (0-based)
    */
+  @CheckReturnValue
+  @Nonnull
   public WebDriver window(int index) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
@@ -200,6 +222,8 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param index index of window (0-based)
    * @param duration the timeout duration. It overrides default Config.timeout()
    */
+  @CheckReturnValue
+  @Nonnull
   public WebDriver window(int index, Duration duration) {
     try {
       return Wait(duration).until(windowToBeAvailableAndSwitchToIt(index));
@@ -213,6 +237,8 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    */
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
@@ -226,6 +252,8 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    * @param duration the timeout duration. It overrides default Config.timeout()
    */
+  @CheckReturnValue
+  @Nonnull
   public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
     try {
       return Wait(duration).until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
@@ -238,6 +266,8 @@ public class SelenideTargetLocator implements TargetLocator {
    * Switch to window/tab by name/handle/title except some windows handles
    * @param title title of window/tab
    */
+  @CheckReturnValue
+  @Nonnull
   protected static WebDriver windowByTitle(WebDriver driver, String title) {
     Set<String> windowHandles = driver.getWindowHandles();
 

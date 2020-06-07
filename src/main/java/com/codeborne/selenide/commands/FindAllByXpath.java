@@ -7,11 +7,21 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.By;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.commands.Util.firstOf;
+
+@ParametersAreNonnullByDefault
 public class FindAllByXpath implements Command<ElementsCollection> {
 
   @Override
-  public ElementsCollection execute(SelenideElement parent, WebElementSource locator, Object... args) {
-    return new ElementsCollection(new BySelectorCollection(locator.driver(), parent, By.xpath((String) args[0])));
+  @CheckReturnValue
+  @Nonnull
+  public ElementsCollection execute(SelenideElement parent, WebElementSource locator, @Nullable Object... args) {
+    String xpath = firstOf(args);
+    return new ElementsCollection(new BySelectorCollection(locator.driver(), parent, By.xpath(xpath)));
   }
-
 }

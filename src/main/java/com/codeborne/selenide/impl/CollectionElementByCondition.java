@@ -6,13 +6,19 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 
+@ParametersAreNonnullByDefault
 public class CollectionElementByCondition extends WebElementSource {
 
+  @CheckReturnValue
+  @Nonnull
   public static SelenideElement wrap(WebElementsCollection collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
         collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
@@ -28,11 +34,15 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Driver driver() {
     return collection.driver();
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebElement getWebElement() {
     List<WebElement> list = collection.getElements();
 
@@ -46,12 +56,15 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getSearchCriteria() {
     return collection.description() + ".findBy(" + condition + ")";
   }
 
-
   @Override
+  @CheckReturnValue
+  @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
       return new ElementNotFound(driver(), getSearchCriteria(), visible, lastError);
@@ -60,8 +73,9 @@ public class CollectionElementByCondition extends WebElementSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String toString() {
     return getSearchCriteria();
   }
-
 }

@@ -8,12 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OverrideCommandsTest extends ITest {
-  private AtomicInteger clickCounter = new AtomicInteger();
+  private final AtomicInteger clickCounter = new AtomicInteger();
 
   @BeforeEach
   void openTestPageWithImages() {
@@ -33,6 +34,7 @@ class OverrideCommandsTest extends ITest {
     assertThat(clickCounter.get()).isEqualTo(2);
   }
 
+  @ParametersAreNonnullByDefault
   private class MyClick extends Click {
     @Override
     protected void click(Driver driver, WebElement element) {

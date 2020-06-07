@@ -4,10 +4,15 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ParametersAreNonnullByDefault
 public class Commands {
   private static Commands collection;
 
@@ -140,13 +145,21 @@ public class Commands {
     commands.put(method, command);
   }
 
+  @Nullable
+  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName,
+                       @Nullable Object[] args) throws IOException {
+    Command<T> command = getCommand(methodName);
+    return command.execute((SelenideElement) proxy, webElementSource, args);
+  }
+
   @SuppressWarnings("unchecked")
-  public <T> T execute(Object proxy, WebElementSource webElementSource, String methodName, Object[] args)
-      throws IOException {
-    Command<?> command = commands.get(methodName);
+  @CheckReturnValue
+  @Nonnull
+  private <T> Command<T> getCommand(String methodName) {
+    Command<T> command = (Command<T>) commands.get(methodName);
     if (command == null) {
       throw new IllegalArgumentException("Unknown Selenide method: " + methodName);
     }
-    return (T) command.execute((SelenideElement) proxy, webElementSource, args);
+    return command;
   }
 }

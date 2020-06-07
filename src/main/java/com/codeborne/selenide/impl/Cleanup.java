@@ -2,14 +2,26 @@ package com.codeborne.selenide.impl;
 
 import org.openqa.selenium.InvalidSelectorException;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static java.util.Objects.requireNonNull;
+
+@ParametersAreNonnullByDefault
 public class Cleanup {
   public static Cleanup of = new Cleanup();
 
+  @CheckReturnValue
+  @Nonnull
   public String webdriverExceptionMessage(Throwable webDriverException) {
-    return webdriverExceptionMessage(webDriverException.toString());
+    return requireNonNull(webdriverExceptionMessage(webDriverException.toString()));
   }
 
-  public String webdriverExceptionMessage(String webDriverExceptionInfo) {
+  @CheckReturnValue
+  @Nullable
+  public String webdriverExceptionMessage(@Nullable String webDriverExceptionInfo) {
     return webDriverExceptionInfo == null || webDriverExceptionInfo.indexOf('\n') == -1 ?
       webDriverExceptionInfo :
       webDriverExceptionInfo
@@ -19,7 +31,7 @@ public class Cleanup {
         .trim();
   }
 
-  public boolean isInvalidSelectorError(Throwable error) {
+  public boolean isInvalidSelectorError(@Nullable Throwable error) {
     if (error == null) return false;
 
     String message = error.getMessage();

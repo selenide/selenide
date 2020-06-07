@@ -4,8 +4,12 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 
+@ParametersAreNonnullByDefault
 public class WebElementWrapper extends WebElementSource {
   public static SelenideElement wrap(Driver driver, WebElement element) {
     return element instanceof SelenideElement ?
@@ -24,21 +28,29 @@ public class WebElementWrapper extends WebElementSource {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebElement getWebElement() {
     return delegate;
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getSearchCriteria() {
     return Describe.shortly(driver, delegate);
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String toString() {
     return Describe.describe(driver(), delegate);
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Driver driver() {
     return driver;
   }

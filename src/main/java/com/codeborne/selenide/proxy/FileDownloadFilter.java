@@ -13,6 +13,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@ParametersAreNonnullByDefault
 public class FileDownloadFilter implements ResponseFilter {
   private static final Logger log = LoggerFactory.getLogger(FileDownloadFilter.class);
 
@@ -104,6 +108,8 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return list of all downloaded files since activation.
    */
+  @CheckReturnValue
+  @Nonnull
   public List<DownloadedFile> getDownloadedFiles() {
     return downloadedFiles;
   }
@@ -111,10 +117,14 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return list of downloaded files matching given criteria
    */
+  @CheckReturnValue
+  @Nonnull
   public List<DownloadedFile> getDownloadedFiles(FileFilter fileFilter) {
     return downloadedFiles.stream().filter(fileFilter::match).collect(toList());
   }
 
+  @CheckReturnValue
+  @Nonnull
   private String getFileName(Response response) {
     return httpHelper.getFileNameFromContentDisposition(response.headers)
       .orElseGet(() -> {
@@ -131,6 +141,8 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return all intercepted http response (as a string) - it can be useful for debugging
    */
+  @CheckReturnValue
+  @Nonnull
   public String responsesAsString() {
     StringBuilder sb = new StringBuilder();
     sb.append("Intercepted ").append(responses.size()).append(" responses:\n");
@@ -145,6 +157,8 @@ public class FileDownloadFilter implements ResponseFilter {
   /**
    * @return all downloaded files (as a string) - it can be useful for debugging
    */
+  @CheckReturnValue
+  @Nonnull
   public String downloadedFilesAsString() {
     StringBuilder sb = new StringBuilder();
     sb.append("Downloaded ").append(downloadedFiles.size()).append(" files:\n");
@@ -156,6 +170,7 @@ public class FileDownloadFilter implements ResponseFilter {
     return sb.toString();
   }
 
+  @ParametersAreNonnullByDefault
   private static class Response {
     private final String url;
     private final int code;
@@ -175,6 +190,8 @@ public class FileDownloadFilter implements ResponseFilter {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public String toString() {
       return url + " -> " + code + " \"" + reasonPhrase + "\" " + headers + " " +
           contentType + " " + " (" + content.length() + " bytes)";

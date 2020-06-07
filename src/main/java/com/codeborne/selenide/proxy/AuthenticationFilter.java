@@ -9,11 +9,16 @@ import com.browserup.bup.filters.RequestFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AuthenticationFilter implements RequestFilter {
   private AuthenticationType authenticationType;
   private Credentials credentials;
 
   @Override
+  @Nullable
   public HttpResponse filterRequest(HttpRequest request, HttpMessageContents contents, HttpMessageInfo messageInfo) {
     if (authenticationType != null) {
       String authorization = String.format("%s %s", authenticationType.getValue(), credentials.encode());
@@ -24,7 +29,7 @@ public class AuthenticationFilter implements RequestFilter {
     return null;
   }
 
-  public void setAuthentication(AuthenticationType authenticationType, Credentials credentials) {
+  public void setAuthentication(@Nullable AuthenticationType authenticationType, @Nullable Credentials credentials) {
     this.authenticationType = authenticationType;
     this.credentials = credentials;
   }

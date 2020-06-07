@@ -6,9 +6,15 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class PressEnter implements Command<WebElement> {
   @Override
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  @Nonnull
+  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     locator.findAndAssertElementIsInteractable().sendKeys(Keys.ENTER);
     return proxy;
   }

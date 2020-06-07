@@ -33,9 +33,6 @@ class ExistsCommandTest implements WithAssertions {
 
   @Test
   void testExistExecuteMethod() {
-    when(locator.getWebElement()).thenReturn(null);
-    assertThat(existsCommand.execute(proxy, locator, null))
-      .isFalse();
     when(locator.getWebElement()).thenReturn(element);
     assertThat(existsCommand.execute(proxy, locator, null))
       .isTrue();

@@ -6,7 +6,10 @@ import org.junit.rules.ExternalResource;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Rule for assert selenide verification softly.
@@ -16,6 +19,7 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASS
  * <br>
  * 2. Configure selenide to assert softly: {@code Configuration.assertionMode = SOFT;}
  */
+@ParametersAreNonnullByDefault
 public class SoftAsserts extends ExternalResource {
   private Description currentTest;
 
@@ -32,7 +36,7 @@ public class SoftAsserts extends ExternalResource {
 
   @Override
   protected void after() {
-    ErrorsCollector errorsCollector = SelenideLogger.removeListener(LISTENER_SOFT_ASSERT);
+    ErrorsCollector errorsCollector = requireNonNull(SelenideLogger.removeListener(LISTENER_SOFT_ASSERT));
     errorsCollector.failIfErrors(currentTest.getDisplayName());
   }
 }

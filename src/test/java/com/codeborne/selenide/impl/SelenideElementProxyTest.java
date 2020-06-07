@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -23,6 +24,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,13 +46,13 @@ import static org.mockito.Mockito.when;
 class SelenideElementProxyTest implements WithAssertions {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
-  private RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
-  private WebElement element = mock(WebElement.class);
-  private SelenideConfig config = new SelenideConfig()
+  private final RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
+  private final WebElement element = mock(WebElement.class);
+  private final SelenideConfig config = new SelenideConfig()
     .screenshots(false)
     .timeout(3)
     .pollingInterval(1);
-  private SelenideDriver driver = new SelenideDriver(config, webdriver, null);
+  private final SelenideDriver driver = new SelenideDriver(config, webdriver, null);
 
   @BeforeEach
   void mockWebDriver() {
@@ -80,7 +82,7 @@ class SelenideElementProxyTest implements WithAssertions {
 
   @Test
   void elementNotFound() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
+    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new NotFoundException());
     assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible))
       .isInstanceOf(ElementNotFound.class);
   }
@@ -111,7 +113,7 @@ class SelenideElementProxyTest implements WithAssertions {
 
   @Test
   void elementNotFoundAsExpected() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(null);
+    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new NotFoundException());
     driver.find("#firstName").shouldNotBe(exist);
     driver.find("#firstName").should(disappear);
     driver.find("#firstName").shouldNotBe(visible);
@@ -164,6 +166,7 @@ class SelenideElementProxyTest implements WithAssertions {
     selEl.setValue("ABC");
   }
 
+  @ParametersAreNonnullByDefault
   private class TestEventListener implements LogEventListener {
 
     private final String expectSelector;

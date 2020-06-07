@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
 import org.slf4j.helpers.NOPLoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.OptionalInt;
 
@@ -14,6 +17,7 @@ import java.util.OptionalInt;
  *
  * Class is thread-safe: the same instance of SimpleReport can be reused by different threads simultaneously.
  */
+@ParametersAreNonnullByDefault
 public class SimpleReport {
   private static final Logger log = LoggerFactory.getLogger(SimpleReport.class);
 
@@ -60,6 +64,8 @@ public class SimpleReport {
     SelenideLogger.removeListener("simpleReport");
   }
 
+  @CheckReturnValue
+  @Nonnull
   private String line(int count) {
     return String.join("", Collections.nCopies(count, "-"));
   }

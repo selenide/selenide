@@ -8,6 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -39,6 +40,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
     SelenideLogger.removeListener("SoftAssertTestLogListener");
   }
 
+  @ParametersAreNonnullByDefault
   private static class TestLogListener implements LogEventListener {
 
     private final List<LogEvent> events = new ArrayList<>();

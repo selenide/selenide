@@ -2,6 +2,10 @@ package com.codeborne.selenide.impl;
 
 import org.apache.commons.io.FilenameUtils;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Collection;
@@ -14,14 +18,20 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.left;
 
+@ParametersAreNonnullByDefault
 public class HttpHelper {
 
-  private final Pattern pattern = Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
+  private static final Pattern pattern =
+    Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
+  @CheckReturnValue
+  @Nonnull
   public Optional<String> getFileNameFromContentDisposition(Map<String, String> headers) {
     return getFileNameFromContentDisposition(headers.entrySet());
   }
 
+  @CheckReturnValue
+  @Nonnull
   public Optional<String> getFileNameFromContentDisposition(Collection<Map.Entry<String, String>> headers) {
     for (Map.Entry<String, String> header : headers) {
       Optional<String> fileName = getFileNameFromContentDisposition(header.getKey(), header.getValue());
@@ -32,7 +42,9 @@ public class HttpHelper {
     return Optional.empty();
   }
 
-  public Optional<String> getFileNameFromContentDisposition(String headerName, String headerValue) {
+  @CheckReturnValue
+  @Nonnull
+  public Optional<String> getFileNameFromContentDisposition(String headerName, @Nullable String headerValue) {
     if (!"Content-Disposition".equalsIgnoreCase(headerName) || headerValue == null) {
       return Optional.empty();
     }
@@ -59,7 +71,7 @@ public class HttpHelper {
 
   private String trimQuery(String filenameWithQuery) {
     return filenameWithQuery.contains("?")
-      ? left(filenameWithQuery, filenameWithQuery.indexOf("?"))
+      ? left(filenameWithQuery, filenameWithQuery.indexOf('?'))
       : filenameWithQuery;
   }
 }

@@ -3,8 +3,10 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class Texts extends ExactTexts {
   public Texts(String... expectedTexts) {
     super(expectedTexts);

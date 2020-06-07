@@ -11,10 +11,15 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+@ParametersAreNonnullByDefault
 public class Describe {
   private static final Logger log = LoggerFactory.getLogger(Describe.class);
 
@@ -36,6 +41,7 @@ public class Describe {
     }
     catch (NoSuchElementException | UnsupportedOperationException | UnsupportedCommandException |
       StaleElementReferenceException browserDoesNotSupportJavaScript) {
+      // ignore
     }
     catch (WebDriverException probablyBrowserDoesNotSupportJavaScript) {
       if (!probablyBrowserDoesNotSupportJavaScript.getMessage().toLowerCase().contains("method is not implemented")) {
@@ -99,7 +105,7 @@ public class Describe {
     }
   }
 
-  private Describe attr(String attributeName, String attributeValue) {
+  private Describe attr(String attributeName, @Nullable String attributeValue) {
     if (attributeValue != null) {
       if (attributeValue.length() > 0) {
         sb.append(' ').append(attributeName).append("=\"").append(attributeValue).append('"');
@@ -117,6 +123,8 @@ public class Describe {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String toString() {
     return sb.toString();
   }
@@ -125,7 +133,9 @@ public class Describe {
     return sb.append('>').toString();
   }
 
-  public static String describe(Driver driver, WebElement element) {
+  @CheckReturnValue
+  @Nonnull
+  public static String describe(Driver driver, @Nullable WebElement element) {
     try {
       if (element == null) {
         return "null";
@@ -143,7 +153,9 @@ public class Describe {
     }
   }
 
-  static String shortly(Driver driver, WebElement element) {
+  @CheckReturnValue
+  @Nonnull
+  static String shortly(Driver driver, @Nonnull WebElement element) {
     try {
       if (element == null) {
         return "null";
@@ -181,6 +193,8 @@ public class Describe {
     return this;
   }
 
+  @CheckReturnValue
+  @Nonnull
   static String shortly(By selector) {
     if (selector instanceof By.ByCssSelector) {
       return selector.toString()
@@ -190,6 +204,8 @@ public class Describe {
     return selector.toString();
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static String selector(By selector) {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")

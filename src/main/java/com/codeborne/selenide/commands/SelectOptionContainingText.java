@@ -9,12 +9,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.commands.Util.firstOf;
+
+@ParametersAreNonnullByDefault
 public class SelectOptionContainingText implements Command<Void> {
   @Override
-  public Void execute(SelenideElement proxy, WebElementSource selectField, Object[] args) {
-    String text = (String) args[0];
+  @Nullable
+  public Void execute(SelenideElement proxy, WebElementSource selectField, @Nullable Object[] args) {
+    String text = firstOf(args);
     WebElement element = selectField.getWebElement();
     Select select = new Select(element);
 

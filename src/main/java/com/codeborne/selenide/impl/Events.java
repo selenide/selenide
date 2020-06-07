@@ -6,8 +6,11 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static java.util.Arrays.asList;
 
+@ParametersAreNonnullByDefault
 public class Events {
   public static Events events = new Events(LoggerFactory.getLogger(Events.class));
 

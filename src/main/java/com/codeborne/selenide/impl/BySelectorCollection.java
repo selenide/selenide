@@ -6,8 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class BySelectorCollection implements WebElementsCollection {
 
   private final Driver driver;
@@ -18,19 +23,23 @@ public class BySelectorCollection implements WebElementsCollection {
     this(driver, null, selector);
   }
 
-  public BySelectorCollection(Driver driver, SearchContext parent, By selector) {
+  public BySelectorCollection(Driver driver, @Nullable SearchContext parent, By selector) {
     this.driver = driver;
     this.parent = parent;
     this.selector = selector;
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public List<WebElement> getElements() {
     SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
     return WebElementSelector.instance.findElements(driver, searchContext, selector);
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
     return parent == null ? Describe.selector(selector) :
         (parent instanceof SelenideElement) ?
@@ -39,6 +48,8 @@ public class BySelectorCollection implements WebElementsCollection {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Driver driver() {
     return driver;
   }

@@ -2,6 +2,8 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.proxy.DownloadedFile;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,12 +21,14 @@ import static java.util.Arrays.asList;
  * 4. The first file (alphabetically) wins
  * </p>
  */
+@ParametersAreNonnullByDefault
 public class DownloadDetector implements Comparator<DownloadedFile>, Serializable {
   private static final Set<String> LOW_RANK_CONTENT_TYPES = new HashSet<>(asList(
     "text/html", "text/plain", "text/css", "text/javascript", "application/json"
   ));
 
   @Override
+  @CheckReturnValue
   public int compare(DownloadedFile file1, DownloadedFile file2) {
     int result = Boolean.compare(file2.hasContentDispositionHeader(), file1.hasContentDispositionHeader());
     if (result == 0) {

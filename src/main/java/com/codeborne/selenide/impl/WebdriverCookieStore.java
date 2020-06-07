@@ -5,10 +5,12 @@ import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
 import static org.apache.hc.client5.http.cookie.Cookie.DOMAIN_ATTR;
 
+@ParametersAreNonnullByDefault
 class WebdriverCookieStore extends BasicCookieStore {
   WebdriverCookieStore(WebDriver webDriver) {
     Set<Cookie> seleniumCookieSet = webDriver.manage().getCookies();

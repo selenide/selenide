@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
@@ -27,6 +29,7 @@ import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
+@ParametersAreNonnullByDefault
 public class SoftAssertsExtension implements BeforeEachCallback, AfterEachCallback {
   private final ErrorsCollector errorsCollector;
 

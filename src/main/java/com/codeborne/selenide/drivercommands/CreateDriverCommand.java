@@ -10,16 +10,21 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static java.lang.Thread.currentThread;
 
+@ParametersAreNonnullByDefault
 public class CreateDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CreateDriverCommand.class);
 
+  @Nonnull
   public Result createDriver(Config config,
                              WebDriverFactory factory,
-                             Proxy userProvidedProxy,
+                             @Nullable Proxy userProvidedProxy,
                              List<WebDriverEventListener> listeners) {
     if (!config.reopenBrowserOnFail()) {
       throw new IllegalStateException("No webdriver is bound to current thread: " + currentThread().getId() +
@@ -54,6 +59,7 @@ public class CreateDriverCommand {
     return new Result(webDriver, selenideProxyServer);
   }
 
+  @Nonnull
   private WebDriver addListeners(WebDriver webdriver, List<WebDriverEventListener> listeners) {
     if (listeners.isEmpty()) {
       return webdriver;
@@ -71,7 +77,7 @@ public class CreateDriverCommand {
     public final WebDriver webDriver;
     public final SelenideProxyServer selenideProxyServer;
 
-    public Result(WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+    public Result(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer) {
       this.webDriver = webDriver;
       this.selenideProxyServer = selenideProxyServer;
     }

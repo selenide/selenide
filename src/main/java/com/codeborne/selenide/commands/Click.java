@@ -6,14 +6,23 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.commands.Util.firstOf;
+
+@ParametersAreNonnullByDefault
 public class Click implements Command<Void> {
   @Override
-  public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  @Nullable
+  public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     if (args == null || args.length == 0) {
       click(locator.driver(), locator.findAndAssertElementIsInteractable());
     }
     else if (args.length == 2) {
-      click(locator.driver(), locator.findAndAssertElementIsInteractable(), (int) args[0], (int) args[1]);
+      Integer offsetX = firstOf(args);
+      Integer offsetY = (Integer) args[1];
+      click(locator.driver(), locator.findAndAssertElementIsInteractable(), offsetX, offsetY);
     }
     return null;
   }

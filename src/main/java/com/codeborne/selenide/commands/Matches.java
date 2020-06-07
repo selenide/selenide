@@ -9,10 +9,18 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.commands.Util.firstOf;
+
+@ParametersAreNonnullByDefault
 public class Matches implements Command<Boolean> {
   @Override
-  public Boolean execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    Condition condition = (Condition) args[0];
+  @CheckReturnValue
+  public Boolean execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    Condition condition = firstOf(args);
     WebElement element = getElementOrNull(locator);
     if (element != null) {
       return condition.apply(locator.driver(), element);
@@ -21,6 +29,8 @@ public class Matches implements Command<Boolean> {
     return condition.applyNull();
   }
 
+  @CheckReturnValue
+  @Nullable
   protected WebElement getElementOrNull(WebElementSource locator) {
     try {
       return locator.getWebElement();

@@ -9,6 +9,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -24,10 +27,13 @@ public class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
     $$("#radioButtons input").shouldHave(size(4));
   }
 
+  @ParametersAreNonnullByDefault
   static class MyProvider implements WebDriverProvider {
     static int port;
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(true);

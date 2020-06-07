@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
@@ -8,6 +10,7 @@ import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
 
+@ParametersAreNonnullByDefault
 public class Browser {
   public final String name;
   public final boolean headless;

@@ -7,7 +7,7 @@ import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import com.google.errorprone.annotations.CheckReturnValue;
+import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,7 +51,7 @@ public class SelenideDriver {
     this.driver = driver;
   }
 
-  public SelenideDriver(Config config, WebDriver webDriver, SelenideProxyServer selenideProxy) {
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
     this.config = config;
     this.driver = new WebDriverWrapper(config, webDriver, selenideProxy);
   }

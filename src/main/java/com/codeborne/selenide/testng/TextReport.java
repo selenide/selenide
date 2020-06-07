@@ -7,6 +7,8 @@ import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
 import org.testng.internal.ConstructorOrMethod;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Reports for all method of annotated class in the suite.
  * Annotate any test class in your suite with {@code @Listeners({TextReport.class})}
@@ -15,12 +17,13 @@ import org.testng.internal.ConstructorOrMethod;
  *
  * Use either {@link TextReport} or {@link GlobalTextReport}, never both
  */
+@ParametersAreNonnullByDefault
 public class TextReport implements IInvokedMethodListener {
   protected SimpleReport report = new SimpleReport();
 
   public static boolean onFailedTest = true;
   public static boolean onSucceededTest = true;
-  
+
   @Override
   public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
     if (onFailedTest || onSucceededTest) {

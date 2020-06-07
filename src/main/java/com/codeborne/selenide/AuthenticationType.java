@@ -1,10 +1,15 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Authentication schemes.
  *
  * @see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes">Web HTTP reference</a>
  */
+@ParametersAreNonnullByDefault
 public enum AuthenticationType {
   BASIC("Basic"),
   BEARER("Bearer"),
@@ -19,6 +24,8 @@ public enum AuthenticationType {
     this.value = value;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public String getValue() {
     return value;
   }

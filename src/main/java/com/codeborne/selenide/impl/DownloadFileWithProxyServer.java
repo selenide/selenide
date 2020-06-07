@@ -11,6 +11,9 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public class DownloadFileWithProxyServer {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithProxyServer.class);
 
@@ -31,12 +35,16 @@ public class DownloadFileWithProxyServer {
     this(new Waiter());
   }
 
+  @CheckReturnValue
+  @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, SelenideProxyServer proxyServer, long timeout,
                        FileFilter fileFilter) throws FileNotFoundException {
     return clickAndInterceptFileByProxyServer(anyClickableElement, clickable, proxyServer, timeout, fileFilter);
   }
 
+  @CheckReturnValue
+  @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   SelenideProxyServer proxyServer, long timeout,
                                                   FileFilter fileFilter) throws FileNotFoundException {
@@ -87,6 +95,7 @@ public class DownloadFileWithProxyServer {
     }
   }
 
+  @ParametersAreNonnullByDefault
   private static class HasDownloads implements Predicate<FileDownloadFilter> {
     private final FileFilter fileFilter;
 
@@ -100,6 +109,7 @@ public class DownloadFileWithProxyServer {
     }
   }
 
+  @ParametersAreNonnullByDefault
   private static class PreviousDownloadsCompleted implements Predicate<FileDownloadFilter> {
     private int downloadsCount = -1;
 
@@ -114,8 +124,12 @@ public class DownloadFileWithProxyServer {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   private File firstDownloadedFile(WebElementSource anyClickableElement,
-                                   FileDownloadFilter filter, long timeout, FileFilter fileFilter) throws FileNotFoundException {
+                                   FileDownloadFilter filter,
+                                   long timeout,
+                                   FileFilter fileFilter) throws FileNotFoundException {
     List<DownloadedFile> files = filter.getDownloadedFiles();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +

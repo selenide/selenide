@@ -10,15 +10,23 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.util.stream.Collectors.joining;
 
+@ParametersAreNonnullByDefault
 public class UploadFile implements Command<File> {
   @Override
-  public File execute(SelenideElement proxy, WebElementSource locator, Object[] args) throws IOException {
+  @CheckReturnValue
+  @Nonnull
+  public File execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) throws IOException {
     File[] file = getFiles(args);
     checkFilesGiven(file);
     checkFilesExist(file);
@@ -47,8 +55,10 @@ public class UploadFile implements Command<File> {
   }
 
   @SuppressWarnings("SuspiciousArrayCast")
-  private File[] getFiles(Object[] args) {
-    return args instanceof File[] ? (File[]) args : (File[]) args[0];
+  @CheckReturnValue
+  @Nonnull
+  private File[] getFiles(@Nullable Object[] args) {
+    return args instanceof File[] ? (File[]) args : firstOf(args);
   }
 
   private String canonicalPath(File file) {

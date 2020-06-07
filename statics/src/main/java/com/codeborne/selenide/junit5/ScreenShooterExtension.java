@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -56,6 +58,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * @author Aliaksandr Rasolka
  * @since 4.12.2
  */
+@ParametersAreNonnullByDefault
 public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCallback {
   private static final Logger log = LoggerFactory.getLogger(ScreenShooterExtension.class);
 
@@ -78,6 +81,7 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
    * @param folderWithScreenshots Folder to put screenshots to
    * @return current extension instance
    */
+  @Nonnull
   public ScreenShooterExtension to(final String folderWithScreenshots) {
     Configuration.reportsFolder = folderWithScreenshots;
     return this;

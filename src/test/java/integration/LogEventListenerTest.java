@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class LogEventListenerTest extends BaseIntegrationTest {
     sa.assertAll();
   }
 
+  @ParametersAreNonnullByDefault
   private class SelenideListener implements LogEventListener {
     @Override
     public void afterEvent(LogEvent logEvent) {

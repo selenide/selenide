@@ -7,8 +7,14 @@ import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Events.events;
 
+@ParametersAreNonnullByDefault
 public class SetValue implements Command<WebElement> {
   private final SelectOptionByValue selectOptionByValue;
   private final SelectRadio selectRadio;
@@ -24,8 +30,9 @@ public class SetValue implements Command<WebElement> {
   }
 
   @Override
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    String text = (String) args[0];
+  @Nonnull
+  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    String text = firstOf(args);
     WebElement element = locator.findAndAssertElementIsInteractable();
 
     if (locator.driver().config().versatileSetValue()

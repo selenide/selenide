@@ -7,13 +7,13 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LocalHttpServer {
-  private final List<FileItem> uploadedFiles = new ArrayList<>(2);
+  private final List<FileItem> uploadedFiles = new CopyOnWriteArrayList<>();
   private final Set<String> sessions = new ConcurrentSkipListSet<>();
   private final Server server;
 

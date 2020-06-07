@@ -3,12 +3,14 @@ package com.codeborne.selenide.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@ParametersAreNonnullByDefault
 public final class FileHelper {
   private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
 
