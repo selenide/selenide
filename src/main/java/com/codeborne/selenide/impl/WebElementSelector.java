@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
@@ -36,7 +37,7 @@ public class WebElementSelector {
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
-      return context.findElement(selector);
+      return findElement(context, selector);
     }
 
     List<WebElement> webElements = evaluateSizzleSelector(driver, context, (ByCssSelector) selector);
@@ -52,10 +53,22 @@ public class WebElementSelector {
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
-      return context.findElements(selector);
+      return findElements(context, selector);
     }
 
     return evaluateSizzleSelector(driver, context, (ByCssSelector) selector);
+  }
+
+  private WebElement findElement(SearchContext context, By selector) {
+    return context instanceof SelenideElement ?
+      ((SelenideElement) context).getWrappedElement().findElement(selector) :
+      context.findElement(selector);
+  }
+
+  private List<WebElement> findElements(SearchContext context, By selector) {
+    return context instanceof SelenideElement ?
+      ((SelenideElement) context).getWrappedElement().findElements(selector) :
+      context.findElements(selector);
   }
 
   protected void checkThatXPathNotStartingFromSlash(SearchContext context, By selector) {

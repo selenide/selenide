@@ -19,6 +19,13 @@ public class Mocks {
     return element;
   }
 
+  public static WebElement mockWebElement(String tag, String text) {
+    WebElement element = mock(WebElement.class);
+    when(element.getTagName()).thenReturn(tag);
+    when(element.getText()).thenReturn(text);
+    return element;
+  }
+
   public static WebElementsCollection mockCollection(String description, WebElement... elements) {
     Driver driver = mock(Driver.class);
     when(driver.config()).thenReturn(new SelenideConfig());
