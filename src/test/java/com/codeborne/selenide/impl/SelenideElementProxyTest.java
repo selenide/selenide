@@ -35,6 +35,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.impl.SelenideElementProxy.isSelenideElementMethod;
 import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
@@ -271,5 +272,14 @@ class SelenideElementProxyTest implements WithAssertions {
   void shouldRetry_onAnyOtherException() {
     assertThat(shouldRetryAfterError(new Exception("bla")))
       .isTrue();
+  }
+
+  @Test
+  void detectsIfMethodsBelongsToWebElementOrSelenideElement() throws NoSuchMethodException {
+    assertThat(isSelenideElementMethod(SelenideElement.class.getMethod("click"))).isTrue();
+    assertThat(isSelenideElementMethod(SelenideElement.class.getMethod("findAll", String.class))).isTrue();
+
+    assertThat(isSelenideElementMethod(WebElement.class.getMethod("click"))).isFalse();
+    assertThat(isSelenideElementMethod(WebElement.class.getMethod("findElements", By.class))).isFalse();
   }
 }
