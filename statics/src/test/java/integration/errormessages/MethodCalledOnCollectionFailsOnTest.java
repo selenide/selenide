@@ -43,7 +43,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul .nonexistent}");
       assertThat(expected)
-        .hasMessageContaining("Expected: [Miller, Julie Mao]");
+        .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isNull();
@@ -77,7 +77,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse')}");
       assertThat(expected)
-        .hasMessageContaining("Expected: [Miller, Julie Mao]");
+        .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isNull();
@@ -102,7 +102,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent')}");
       assertThat(expected)
-        .hasMessageContaining("Expected: [Miller, Julie Mao]");
+        .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isNull();
@@ -125,9 +125,9 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Element not found {.nonexistent}");
+        .hasMessageStartingWith("Element not found {.nonexistent/li}");
       assertThat(expected)
-        .hasMessageContaining("Expected: exist"); // todo - is it correct?
+        .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isInstanceOf(NoSuchElementException.class);
@@ -163,7 +163,7 @@ class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul/.nonexistent}");
       assertThat(expected)
-        .hasMessageContaining("Expected: [Miller, Julie Mao]");
+        .hasMessageContaining("Expected: Exact texts [Miller, Julie Mao]");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isNull();

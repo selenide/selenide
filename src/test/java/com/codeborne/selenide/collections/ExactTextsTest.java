@@ -61,13 +61,13 @@ class ExactTextsTest implements WithAssertions {
 
   private void failOnEmptyOrNullElementsList(List<WebElement> elements) {
     ExactTexts exactTexts = new ExactTexts("One");
-    Exception cause = new Exception("Exception method");
+    RuntimeException cause = new IllegalArgumentException("bad thing happened");
 
     assertThatThrownBy(() -> exactTexts.fail(mockCollection("Collection description"), elements, cause, 10000))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage(String.format("Element not found {Collection description}%nExpected: [One]%nScreenshot: null%n" +
+      .hasMessage(String.format("Element not found {Collection description}%nExpected: Exact texts [One]%nScreenshot: null%n" +
         "Timeout: 10 s.%n" +
-        "Caused by: java.lang.Exception: Exception method"));
+        "Caused by: java.lang.IllegalArgumentException: bad thing happened"));
   }
 
   @Test

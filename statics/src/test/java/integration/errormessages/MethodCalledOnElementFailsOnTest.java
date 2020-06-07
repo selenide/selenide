@@ -134,7 +134,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {.nonexistent.findBy(css class 'the-expanse')}");
       assertThat(expected)
-        .hasMessageContaining("Expected: visible");
+        .hasMessageContaining("Expected: exist");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isInstanceOf(ElementNotFound.class);
@@ -249,7 +249,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul .nonexistent.filter(css class 'the-expanse').findBy(css class 'detective')}");
       assertThat(expected)
-        .hasMessageContaining("Expected: visible");
+        .hasMessageContaining("Expected: exist");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isInstanceOf(ElementNotFound.class);
@@ -269,7 +269,7 @@ class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul li.filter(css class 'nonexistent').findBy(css class 'detective')}");
       assertThat(expected)
-        .hasMessageContaining("Expected: visible"); //todo - is it correct?
+        .hasMessageContaining("Expected: exist");
       assertScreenshot(expected);
       assertThat(expected.getCause())
         .isInstanceOf(ElementNotFound.class);

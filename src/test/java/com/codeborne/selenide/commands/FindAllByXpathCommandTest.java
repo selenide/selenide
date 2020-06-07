@@ -8,46 +8,59 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-import java.util.Collections;
-
+import static com.codeborne.selenide.Mocks.mockElement;
+import static com.codeborne.selenide.Mocks.mockWebElement;
+import static java.util.Collections.singletonList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class FindAllByXpathCommandTest implements WithAssertions {
-  private SelenideElement parent = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SelenideElement element1 = mock(SelenideElement.class);
-  private FindAllByXpath findAllByXpathCommand = new FindAllByXpath();
-  private String defaultText = "Default Text";
+  private final WebElement parentWebElement = mockWebElement("div", "I am parent");
+  private final SelenideElement parentSelenideElement = mockElement("div", "I am parent");
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final WebElement webElement = mockWebElement("div", "Default Text");
+  private final SelenideElement selenideElement = mockElement("div", "Default Text");
+  private final FindAllByXpath findAllByXpathCommand = new FindAllByXpath();
 
   @BeforeEach
   void setup() {
-    when(element1.getText()).thenReturn(defaultText);
-    when(element1.isSelected()).thenReturn(true);
+    when(parentSelenideElement.getWrappedElement()).thenReturn(parentWebElement);
+    when(selenideElement.getWrappedElement()).thenReturn(webElement);
+    when(selenideElement.isSelected()).thenReturn(true);
     when(locator.driver()).thenReturn(new DriverStub());
   }
 
   @Test
-  void testExecuteMethodWithNoArgsPassed() {
-    assertThatThrownBy(() -> findAllByXpathCommand.execute(parent, locator))
+  void executeMethodWithNoArgsPassed() {
+    assertThatThrownBy(() -> findAllByXpathCommand.execute(parentSelenideElement, locator))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Missing arguments");
   }
 
   @Test
-  void testExecuteMethodWithZeroLengthArgs() {
-    when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
-    ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".");
-    assertThat(findAllCommandCollection.first().getText())
-      .isEqualTo(defaultText);
+  void executeMethodWithZeroLengthArgs() {
+    when(parentWebElement.findElements(any())).thenReturn(singletonList(webElement));
+    ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parentSelenideElement, locator, ".");
+
+    assertThat(findAllCommandCollection.first().getText()).isEqualTo("Default Text");
+
+    verify(parentWebElement).findElements(By.xpath("."));
+    verify(parentSelenideElement, never()).findElements(any());
   }
 
   @Test
-  void testExecuteMethodWithMoreThenOneArgsList() {
-    when(parent.findElements(By.xpath("."))).thenReturn(Collections.singletonList(element1));
-    ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parent, locator, ".", "/..");
-    assertThat(findAllCommandCollection.first().getText())
-      .isEqualTo(defaultText);
+  void executeMethodWithMoreThenOneArgsList() {
+    when(parentWebElement.findElements(any())).thenReturn(singletonList(webElement));
+    ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parentSelenideElement, locator, ".", "/..");
+
+    assertThat(findAllCommandCollection.first().getText()).isEqualTo("Default Text");
+
+    verify(parentWebElement).findElements(By.xpath("."));
+    verify(parentSelenideElement, never()).findElements(any());
   }
 }

@@ -3,6 +3,7 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -56,10 +57,10 @@ class ElementNotFoundTest implements WithAssertions {
     List<String> expectedStrings = asList("One", "Two", "Three");
 
     ElementNotFound elementNotFoundById = new ElementNotFound(webElementCollectionMock,
-      expectedStrings,
+      new ExactTexts(expectedStrings).toString(),
       new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {mock collection description}%n" +
-      "Expected: [One, Two, Three]%n" +
+      "Expected: Exact texts [One, Two, Three]%n" +
       "Screenshot: null%n" +
       "Timeout: 0 ms.%n" +
       "Caused by: java.lang.Throwable: Error message");
