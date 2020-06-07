@@ -5,11 +5,19 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.commands.Util.firstOf;
+
+@ParametersAreNonnullByDefault
 public class Append implements Command<WebElement> {
   @Override
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  @Nonnull
+  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement input = locator.getWebElement();
-    input.sendKeys((String) args[0]);
+    input.sendKeys((String) firstOf(args));
     return proxy;
   }
 }

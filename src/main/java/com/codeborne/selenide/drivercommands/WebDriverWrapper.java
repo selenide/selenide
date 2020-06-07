@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.Objects.requireNonNull;
 
@@ -18,6 +19,7 @@ import static java.util.Objects.requireNonNull;
  * It doesn't open a new browser.
  * It doesn't start a new proxy.
  */
+@ParametersAreNonnullByDefault
 public class WebDriverWrapper implements Driver {
   private static final Logger log = LoggerFactory.getLogger(WebDriverWrapper.class);
 
@@ -27,12 +29,12 @@ public class WebDriverWrapper implements Driver {
   private final BrowserHealthChecker browserHealthChecker;
   private final CloseDriverCommand closeDriverCommand;
 
-  public WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
+  public WebDriverWrapper(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
     this(config, webDriver, selenideProxy, new BrowserHealthChecker(), new CloseDriverCommand());
   }
 
-  private WebDriverWrapper(@Nonnull Config config, @Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
-                   @Nonnull BrowserHealthChecker browserHealthChecker, @Nonnull CloseDriverCommand closeDriverCommand) {
+  private WebDriverWrapper(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                   BrowserHealthChecker browserHealthChecker, CloseDriverCommand closeDriverCommand) {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
 
@@ -44,11 +46,13 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
+  @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
+  @Nonnull
   public Browser browser() {
     return new Browser(config.browser(), config.headless());
   }
@@ -59,16 +63,19 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
+  @Nonnull
   public WebDriver getWebDriver() {
     return webDriver;
   }
 
   @Override
+  @Nullable
   public SelenideProxyServer getProxy() {
     return selenideProxy;
   }
 
   @Override
+  @Nullable
   public WebDriver getAndCheckWebDriver() {
     if (webDriver != null && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
       log.info("Webdriver has been closed meanwhile");

@@ -9,11 +9,14 @@ import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
+@ParametersAreNonnullByDefault
 public class ExactTexts extends CollectionCondition {
   protected final List<String> expectedTexts;
 
@@ -45,7 +48,7 @@ public class ExactTexts extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
+  public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
       ElementNotFound elementNotFound = new ElementNotFound(collection, expectedTexts, lastError);
       elementNotFound.timeoutMs = timeoutMs;

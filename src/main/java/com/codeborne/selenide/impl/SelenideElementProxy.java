@@ -14,6 +14,9 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +30,7 @@ import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertion
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
 
+@ParametersAreNonnullByDefault
 class SelenideElementProxy implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
       "toWebElement",
@@ -53,7 +57,7 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   @Override
-  public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
+  public Object invoke(Object proxy, Method method, @Nullable Object... args) throws Throwable {
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
@@ -134,10 +138,12 @@ class SelenideElementProxy implements InvocationHandler {
     throw lastError;
   }
 
+  @CheckReturnValue
   private boolean isElementNotClickableException(Throwable e) {
     return e instanceof WebDriverException && e.getMessage().contains("is not clickable");
   }
 
+  @CheckReturnValue
   static boolean shouldRetryAfterError(Throwable e) {
     if (e instanceof FileNotFoundException) return false;
     if (e instanceof IllegalArgumentException) return false;
@@ -147,16 +153,19 @@ class SelenideElementProxy implements InvocationHandler {
     return e instanceof Exception || e instanceof AssertionError;
   }
 
-  private long getTimeoutMs(Method method, Object[] args) {
+  @CheckReturnValue
+  private long getTimeoutMs(Method method, @Nullable Object[] args) {
     return isWaitCommand(method) ?
       args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
       config().timeout();
   }
 
+  @CheckReturnValue
   private long getPollingIntervalMs(Method method, Object[] args) {
     return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : config().pollingInterval();
   }
 
+  @CheckReturnValue
   private boolean isWaitCommand(Method method) {
     return "waitUntil".equals(method.getName()) || "waitWhile".equals(method.getName());
   }

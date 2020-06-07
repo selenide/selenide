@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -63,17 +64,20 @@ public class ScreenShotLaboratory {
   protected ScreenShotLaboratory() {
   }
 
+  @CheckReturnValue
   @Nullable
   public String takeScreenShot(Driver driver, String className, String methodName) {
     return takeScreenShot(driver, getScreenshotFileName(className, methodName));
   }
 
+  @CheckReturnValue
   @Nonnull
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
       methodName + '.' + timestamp();
   }
 
+  @CheckReturnValue
   @Nullable
   public String takeScreenShot(Driver driver) {
     return takeScreenShot(driver, generateScreenshotFileName());
@@ -86,6 +90,7 @@ public class ScreenShotLaboratory {
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
    */
+  @CheckReturnValue
   @Nullable
   public String takeScreenShot(Driver driver, String fileName) {
     return ifWebDriverStarted(driver, webDriver ->
@@ -93,6 +98,7 @@ public class ScreenShotLaboratory {
         takeScreenShot(config, webDriver, fileName)));
   }
 
+  @CheckReturnValue
   @Nullable
   private String takeScreenShot(Config config, WebDriver webDriver, String fileName) {
     File screenshot = null;
@@ -110,6 +116,7 @@ public class ScreenShotLaboratory {
     return addToHistory(screenshot).getAbsolutePath();
   }
 
+  @CheckReturnValue
   @Nullable
   public File takeScreenshot(Driver driver, WebElement element) {
     try {
@@ -123,6 +130,7 @@ public class ScreenShotLaboratory {
     return null;
   }
 
+  @CheckReturnValue
   @Nullable
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement element) {
     return ifWebDriverStarted(driver, webdriver ->
@@ -130,6 +138,7 @@ public class ScreenShotLaboratory {
         takeScreenshotAsImage(webdriver, element)));
   }
 
+  @CheckReturnValue
   @Nullable
   private BufferedImage takeScreenshotAsImage(WebDriver webdriver, WebElement element) {
     if (!(webdriver instanceof TakesScreenshot)) {
@@ -155,6 +164,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   @Nonnull
   protected String generateScreenshotFileName() {
     return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
@@ -174,6 +184,7 @@ public class ScreenShotLaboratory {
     return System.currentTimeMillis();
   }
 
+  @CheckReturnValue
   @Nullable
   public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
     try {
@@ -187,6 +198,7 @@ public class ScreenShotLaboratory {
     return null;
   }
 
+  @CheckReturnValue
   @Nonnull
   private File writeToFile(Driver driver, BufferedImage destination) throws IOException {
     File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
@@ -195,6 +207,7 @@ public class ScreenShotLaboratory {
     return screenshotOfElement;
   }
 
+  @CheckReturnValue
   @Nullable
   public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
     WebDriver webdriver = checkIfFullyValidDriver(driver);
@@ -232,11 +245,13 @@ public class ScreenShotLaboratory {
     return img;
   }
 
+  @CheckReturnValue
   @Nullable
   private WebDriver checkIfFullyValidDriver(Driver driver) {
     return ifWebDriverStarted(driver, this::checkIfFullyValidDriver);
   }
 
+  @CheckReturnValue
   @Nullable
   private WebDriver checkIfFullyValidDriver(WebDriver webdriver) {
     if (!(webdriver instanceof TakesScreenshot)) {
@@ -249,11 +264,13 @@ public class ScreenShotLaboratory {
     return webdriver;
   }
 
+  @CheckReturnValue
   @Nullable
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, this::takeScreenShotAsFile);
   }
 
+  @CheckReturnValue
   @Nullable
   private File takeScreenShotAsFile(WebDriver webdriver) {
     //File pageSource = savePageSourceToFile(fileName, webdriver); - temporary not available
@@ -264,6 +281,7 @@ public class ScreenShotLaboratory {
     return scrFile;
   }
 
+  @CheckReturnValue
   @Nullable
   protected File getPageImage(WebDriver webdriver) {
     return webdriver instanceof TakesScreenshot ? takeScreenshotInMemory((TakesScreenshot) webdriver) : null;
@@ -281,6 +299,7 @@ public class ScreenShotLaboratory {
     return screenshot;
   }
 
+  @CheckReturnValue
   @Nullable
   protected File takeScreenshotInMemory(TakesScreenshot driver) {
     try {
@@ -291,6 +310,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   @Nullable
   protected File savePageImageToFile(Config config, String fileName, WebDriver webdriver) {
     if (webdriver instanceof TakesScreenshot) {
@@ -299,11 +319,13 @@ public class ScreenShotLaboratory {
     return null;
   }
 
+  @CheckReturnValue
   @Nonnull
   protected File savePageSourceToFile(Config config, String fileName, WebDriver webdriver) {
     return new PageSourceExtractor(config, webdriver, fileName).extract(true);
   }
 
+  @CheckReturnValue
   @Nullable
   protected File takeScreenshotImage(Config config, TakesScreenshot driver, String fileName) {
     try {
@@ -339,6 +361,7 @@ public class ScreenShotLaboratory {
     return result;
   }
 
+  @CheckReturnValue
   @Nonnull
   public List<File> getScreenshots() {
     synchronized (allScreenshots) {
@@ -346,18 +369,21 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   @Nonnull
   public List<File> getThreadScreenshots() {
     List<File> screenshots = threadScreenshots.get();
     return screenshots == null ? emptyList() : unmodifiableList(screenshots);
   }
 
+  @CheckReturnValue
   @Nonnull
   public List<File> getContextScreenshots() {
     List<File> screenshots = currentContextScreenshots.get();
     return screenshots == null ? emptyList() : unmodifiableList(screenshots);
   }
 
+  @CheckReturnValue
   @Nullable
   public File getLastScreenshot() {
     synchronized (allScreenshots) {
@@ -365,18 +391,21 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   @Nonnull
   public Optional<File> getLastThreadScreenshot() {
     List<File> screenshots = threadScreenshots.get();
     return getLastScreenshot(screenshots);
   }
 
+  @CheckReturnValue
   @Nonnull
   public Optional<File> getLastContextScreenshot() {
     List<File> screenshots = currentContextScreenshots.get();
     return getLastScreenshot(screenshots);
   }
 
+  @CheckReturnValue
   @Nonnull
   private Optional<File> getLastScreenshot(@Nullable List<File> screenshots) {
     return screenshots == null || screenshots.isEmpty()
@@ -384,6 +413,7 @@ public class ScreenShotLaboratory {
       : Optional.of(screenshots.get(screenshots.size() - 1));
   }
 
+  @CheckReturnValue
   @Nonnull
   public String formatScreenShotPath(Driver driver) {
     if (!driver.config().screenshots()) {
@@ -410,6 +440,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   @Nonnull
   private String formatScreenShotURL(String reportsURL, String screenshot) {
     Path current = Paths.get(System.getProperty("user.dir"));
@@ -423,16 +454,19 @@ public class ScreenShotLaboratory {
     return normalizeURL(reportsURL, screenShotPath);
   }
 
+  @CheckReturnValue
   @Nonnull
   private String normalizeURL(String reportsURL, String path) {
     return appendSlash(reportsURL) + encodePath(path);
   }
 
+  @CheckReturnValue
   @Nonnull
   private String appendSlash(String url) {
     return url.endsWith("/") ? url : url + "/";
   }
 
+  @CheckReturnValue
   @Nonnull
   String encodePath(String path) {
     return REGEX_PLUS.matcher(Arrays.stream(path.split("/"))
@@ -440,6 +474,7 @@ public class ScreenShotLaboratory {
       .collect(joining("/"))).replaceAll("%20");
   }
 
+  @CheckReturnValue
   @Nonnull
   private String encode(String str) {
     try {
@@ -450,10 +485,12 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private static boolean isInsideFolder(Path root, Path other) {
     return other.startsWith(root.toAbsolutePath());
   }
 
+  @CheckReturnValue
   @Nullable
   private <T> T ifWebDriverStarted(Driver driver, Function<WebDriver, T> lambda) {
     if (!driver.hasWebDriverStarted()) {
@@ -463,6 +500,7 @@ public class ScreenShotLaboratory {
     return lambda.apply(driver.getWebDriver());
   }
 
+  @CheckReturnValue
   @Nullable
   private <T> T ifReportsFolderNotNull(Config config, Function<Config, T> lambda) {
     if (config.reportsFolder() == null) {
@@ -472,6 +510,7 @@ public class ScreenShotLaboratory {
     return lambda.apply(config);
   }
 
+  @CheckReturnValue
   private int getRescaledElementWidth(WebElement element, int iframeWidth) {
     int elementWidth = getElementWidth(element);
     if (elementWidth > iframeWidth) {
@@ -481,6 +520,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private int getRescaledElementHeight(WebElement element, int iframeHeight) {
     int elementHeight = getElementHeight(element);
     if (elementHeight > iframeHeight) {
@@ -490,6 +530,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private int getRescaledElementWidth(WebElement element, BufferedImage image) {
     if (getElementWidth(element) > image.getWidth()) {
       return image.getWidth() - element.getLocation().getX();
@@ -498,6 +539,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private int getRescaledElementHeight(WebElement element, BufferedImage image) {
     if (getElementHeight(element) > image.getHeight()) {
       return image.getHeight() - element.getLocation().getY();
@@ -506,6 +548,7 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private int getRescaledIframeWidth(WebElement iframe, BufferedImage image, WebDriver driver) {
     if (getIframeWidth(driver) > image.getWidth()) {
       return image.getWidth() - iframe.getLocation().getX();
@@ -514,14 +557,17 @@ public class ScreenShotLaboratory {
     }
   }
 
+  @CheckReturnValue
   private int getIframeWidth(WebDriver driver) {
     return ((Long) ((JavascriptExecutor) driver).executeScript("return document.body.clientWidth")).intValue();
   }
 
+  @CheckReturnValue
   private int getElementWidth(WebElement element) {
     return element.getSize().getWidth();
   }
 
+  @CheckReturnValue
   private int getElementHeight(WebElement element) {
     return element.getSize().getHeight();
   }

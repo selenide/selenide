@@ -12,42 +12,39 @@ import static org.mockito.Mockito.when;
 
 class TextsTest implements WithAssertions {
   @Test
-  void testApplyWithEmptyList() {
+  void applyWithEmptyList() {
     assertThat(new Texts("One", "Two", "Three").test(emptyList()))
       .isFalse();
   }
 
   @Test
-  void testApplyWithWrongSizeList() {
+  void applyWithWrongSizeList() {
     Texts texts = new Texts(asList("One", "Two", "Three"));
-    assertThat(texts.test(singletonList(mock(WebElement.class))))
+    assertThat(texts.test(singletonList(element(""))))
       .isFalse();
   }
 
   @Test
-  void testApplyWithMatchOnPartialText() {
-    testApplyMethod(true);
-  }
-
-  private void testApplyMethod(boolean shouldMatch) {
+  void applyWithMatchOnPartialText() {
     Texts texts = new Texts(asList("One", "Two"));
-    WebElement mockElement1 = mock(WebElement.class);
-    WebElement mockElement2 = mock(WebElement.class);
-
-    when(mockElement1.getText()).thenReturn(shouldMatch ? "OneThing" : "Three");
-    when(mockElement2.getText()).thenReturn(shouldMatch ? "Two" : "Selenide");
-    assertThat(texts.test(asList(mockElement1, mockElement2)))
-      .isEqualTo(shouldMatch);
+    assertThat(texts.test(asList(element("OneThing"), element("Two")))).isEqualTo(true);
   }
 
   @Test
-  void testApplyWithNoMatchOnPartialText() {
-    testApplyMethod(false);
+  void applyWithNoMatchOnPartialText() {
+    Texts texts = new Texts(asList("One", "Two"));
+    assertThat(texts.test(asList(element("Three"), element("Selenide")))).isEqualTo(false);
   }
 
   @Test
   void testToString() {
     assertThat(new Texts(asList("One", "Two")))
       .hasToString("Texts [One, Two]");
+  }
+
+  private WebElement element(String text) {
+    WebElement webElement = mock(WebElement.class);
+    when(webElement.getText()).thenReturn(text);
+    return webElement;
   }
 }

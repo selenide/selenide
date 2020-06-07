@@ -1,7 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import com.google.errorprone.annotations.CheckReturnValue;
+import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -139,6 +139,7 @@ public class Selenide {
    * Open a web page and create PageObject for it.
    * @return PageObject of given class
    */
+  @CheckReturnValue
   @Nonnull
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
@@ -149,6 +150,7 @@ public class Selenide {
    * Open a web page and create PageObject for it.
    * @return PageObject of given class
    */
+  @CheckReturnValue
   @Nonnull
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl,
                                                        Class<PageObjectClass> pageObjectClassClass) {
@@ -159,6 +161,7 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
+  @CheckReturnValue
   @Nonnull
   public static <PageObjectClass> PageObjectClass open(String relativeOrAbsoluteUrl,
                                                        String domain, String login, String password,
@@ -170,6 +173,7 @@ public class Selenide {
    * Open a web page using Basic Auth credentials and create PageObject for it.
    * @return PageObject of given class
    */
+  @CheckReturnValue
   @Nonnull
   public static <PageObjectClass> PageObjectClass open(URL absoluteUrl, String domain, String login, String password,
                                                        Class<PageObjectClass> pageObjectClassClass) {
@@ -230,6 +234,7 @@ public class Selenide {
    * @return title of the page
    */
   @CheckReturnValue
+  @Nullable
   public static String title() {
     return getSelenideDriver().title();
   }
@@ -252,7 +257,8 @@ public class Selenide {
    * @param fileName Name of file (without extension) to save HTML and PNG to
    * @return The name of resulting file
    */
-  @Nonnull
+  @CheckReturnValue
+  @Nullable
   public static String screenshot(String fileName) {
     return Screenshots.takeScreenShot(fileName);
   }

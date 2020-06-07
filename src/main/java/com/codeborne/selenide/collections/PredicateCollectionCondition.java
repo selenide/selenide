@@ -6,9 +6,12 @@ import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public abstract class PredicateCollectionCondition extends CollectionCondition {
   protected final String matcher;
   protected final String description;
@@ -21,7 +24,7 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
+  public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
       ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
       elementNotFound.timeoutMs = timeoutMs;

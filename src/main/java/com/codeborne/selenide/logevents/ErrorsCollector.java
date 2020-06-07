@@ -3,6 +3,7 @@ package com.codeborne.selenide.logevents;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.ex.SoftAssertionError;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static java.lang.System.lineSeparator;
 
+@ParametersAreNonnullByDefault
 public class ErrorsCollector implements LogEventListener {
   public static final String LISTENER_SOFT_ASSERT = "softAssert";
 

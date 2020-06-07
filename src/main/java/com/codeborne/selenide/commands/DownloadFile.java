@@ -12,11 +12,16 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 
+@ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
   private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
@@ -33,7 +38,9 @@ public class DownloadFile implements Command<File> {
   }
 
   @Override
-  public File execute(SelenideElement proxy, WebElementSource linkWithHref, Object[] args) throws IOException {
+  @CheckReturnValue
+  @Nonnull
+  public File execute(SelenideElement proxy, WebElementSource linkWithHref, @Nullable Object[] args) throws IOException {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
 
@@ -54,7 +61,8 @@ public class DownloadFile implements Command<File> {
     return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.driver().getProxy(), timeout, fileFilter);
   }
 
-  long getTimeout(Config config, Object[] args) {
+  @CheckReturnValue
+  long getTimeout(Config config, @Nullable Object[] args) {
     if (args != null && args.length > 0 && args[0] instanceof Long) {
       return (long) args[0];
     }
@@ -63,7 +71,9 @@ public class DownloadFile implements Command<File> {
     }
   }
 
-  FileFilter getFileFilter(Object[] args) {
+  @CheckReturnValue
+  @Nonnull
+  FileFilter getFileFilter(@Nullable Object[] args) {
     if (args != null && args.length > 0 && args[0] instanceof FileFilter) {
       return (FileFilter) args[0];
     }

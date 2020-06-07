@@ -11,6 +11,9 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import static java.lang.Thread.currentThread;
  * A `Driver` implementation which opens browser on demand (on a first call).
  * May be created with its own config, proxy and listeners.
  */
+@ParametersAreNonnullByDefault
 public class LazyDriver implements Driver {
   private static final Logger log = LoggerFactory.getLogger(LazyDriver.class);
 
@@ -36,12 +40,12 @@ public class LazyDriver implements Driver {
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
 
-  public LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
+  public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
       new CreateDriverCommand(), new CloseDriverCommand());
   }
 
-  LazyDriver(Config config, Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
+  LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners,
              WebDriverFactory factory, BrowserHealthChecker browserHealthChecker,
              CreateDriverCommand createDriverCommand, CloseDriverCommand closeDriverCommand) {
     this.config = config;
@@ -55,11 +59,13 @@ public class LazyDriver implements Driver {
   }
 
   @Override
+  @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
+  @Nonnull
   public Browser browser() {
     return browser;
   }
@@ -70,6 +76,7 @@ public class LazyDriver implements Driver {
   }
 
   @Override
+  @Nonnull
   public synchronized WebDriver getWebDriver() {
     if (closed) {
       throw new IllegalStateException("Webdriver has been closed. You need to call open(url) to open a browser again.");
@@ -82,11 +89,13 @@ public class LazyDriver implements Driver {
   }
 
   @Override
+  @Nullable
   public SelenideProxyServer getProxy() {
     return selenideProxyServer;
   }
 
   @Override
+  @Nonnull
   public synchronized WebDriver getAndCheckWebDriver() {
     if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
       log.info("Webdriver has been closed meanwhile. Let's re-create it.");

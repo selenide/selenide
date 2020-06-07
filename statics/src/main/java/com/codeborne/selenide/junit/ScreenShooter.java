@@ -8,6 +8,10 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.WebDriverRunner.driver;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 
@@ -22,6 +26,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  * <pre>  {@literal @}Rule
  * public ScreenShooter makeScreenshotOnEveryTest = ScreenShooter.failedTests().to("test-results/img/");</pre>
  */
+@ParametersAreNonnullByDefault
 public class ScreenShooter extends TestWatcher {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -30,10 +35,13 @@ public class ScreenShooter extends TestWatcher {
   private ScreenShooter() {
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static ScreenShooter failedTests() {
     return new ScreenShooter();
   }
 
+  @Nonnull
   public ScreenShooter succeededTests() {
     captureSuccessfulTests = true;
     return this;
@@ -68,6 +76,7 @@ public class ScreenShooter extends TestWatcher {
    *
    * @param folderWithScreenshots Folder to put screenshots to
    */
+  @Nonnull
   public ScreenShooter to(String folderWithScreenshots) {
     Configuration.reportsFolder = folderWithScreenshots;
     return this;

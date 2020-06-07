@@ -28,7 +28,7 @@ import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
-import com.google.errorprone.annotations.CheckReturnValue;
+import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;

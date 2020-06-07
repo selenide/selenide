@@ -7,11 +7,16 @@ import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 
+@ParametersAreNonnullByDefault
 public class SelectRadio implements Command<SelenideElement> {
   private final Click click;
 
@@ -24,8 +29,9 @@ public class SelectRadio implements Command<SelenideElement> {
   }
 
   @Override
-  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
-    String value = (String) args[0];
+  @Nonnull
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+    String value = firstOf(args);
     List<WebElement> matchingRadioButtons = locator.findAll();
     for (WebElement radio : matchingRadioButtons) {
       if (value.equals(radio.getAttribute("value"))) {

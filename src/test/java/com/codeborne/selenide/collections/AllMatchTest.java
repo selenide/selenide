@@ -12,10 +12,10 @@ import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Collections.emptyList;
 
 class AllMatchTest implements WithAssertions {
-  private SelenideElement element1 = mockElement("Test-One");
-  private SelenideElement element2 = mockElement("Test-Two");
-  private SelenideElement element3 = mockElement("Test-Three");
-  private WebElementsCollection collection = mockCollection("Collection description", element1, element2, element3);
+  private final SelenideElement element1 = mockElement("Test-One");
+  private final SelenideElement element2 = mockElement("Test-Two");
+  private final SelenideElement element3 = mockElement("Test-Three");
+  private final WebElementsCollection collection = mockCollection("Collection description", element1, element2, element3);
 
   @Test
   void applyWithEmptyList() {

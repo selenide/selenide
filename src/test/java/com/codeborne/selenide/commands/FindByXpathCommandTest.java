@@ -27,7 +27,8 @@ class FindByXpathCommandTest implements WithAssertions {
   @Test
   void testExecuteMethodWithNoArgsPassed() {
     assertThatThrownBy(() -> findByXpathCommand.execute(proxy, locator))
-      .isInstanceOf(ArrayIndexOutOfBoundsException.class);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Missing arguments");
   }
 
   @Test

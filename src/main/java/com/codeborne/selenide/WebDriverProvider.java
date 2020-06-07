@@ -3,6 +3,9 @@ package com.codeborne.selenide;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+
 /**
  * <p>
  *   Interface for using custom WebDriver in your tests
@@ -24,10 +27,12 @@ public interface WebDriverProvider {
    * this instance in method implementation. Also don't cache the instance in static variable, as <a
    * href="http://code.google.com/p/selenium/wiki/FrequentlyAskedQuestions#Q:_Is_WebDriver_thread-safe?">WebDriver
    * instance is not thread-safe</a>.
-   * 
+   *
    * @param desiredCapabilities set of desired capabilities as suggested by Selenide framework; method implementation is
    * recommended to pass this variable to {@link WebDriver}, probably modifying it according to specific needs
    * @return new {@link WebDriver} instance
    */
-  WebDriver createDriver(DesiredCapabilities desiredCapabilities);
+  @CheckReturnValue
+  @Nonnull
+  WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities);
 }

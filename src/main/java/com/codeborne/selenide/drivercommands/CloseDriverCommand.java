@@ -9,10 +9,14 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  public void closeAsync(Config config, WebDriver webDriver, SelenideProxyServer selenideProxyServer) {
+  public void closeAsync(Config config, @Nullable WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer) {
     long threadId = Thread.currentThread().getId();
     if (config.holdBrowserOpen()) {
       log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, selenideProxyServer);
@@ -45,7 +49,7 @@ public class CloseDriverCommand {
     }
   }
 
-  private void close(WebDriver webdriver, SelenideProxyServer proxy) {
+  private void close(WebDriver webdriver, @Nullable SelenideProxyServer proxy) {
     try {
       log.info("Trying to close the browser {} ...", webdriver.getClass().getSimpleName());
       webdriver.quit();

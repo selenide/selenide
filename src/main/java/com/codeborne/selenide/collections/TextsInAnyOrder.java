@@ -3,8 +3,10 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class TextsInAnyOrder extends ExactTexts {
   public TextsInAnyOrder(String... expectedTexts) {
     super(expectedTexts);
@@ -20,15 +22,14 @@ public class TextsInAnyOrder extends ExactTexts {
       return false;
     }
 
-    for (int i = 0; i < expectedTexts.size(); i++) {
-      String expectedText = expectedTexts.get(i);
-      boolean bFound = false;
-      for (WebElement element: elements) {
+    for (String expectedText : expectedTexts) {
+      boolean found = false;
+      for (WebElement element : elements) {
         if (Html.text.contains(element.getText(), expectedText)) {
-          bFound = true;
+          found = true;
         }
       }
-      if (bFound == false) {
+      if (!found) {
         return false;
       }
     }

@@ -6,10 +6,14 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * @author Aliaksandr Rasolka
  * @since 1.0.0
  */
+@ParametersAreNonnullByDefault
 public class TextReportExtension implements BeforeEachCallback, AfterEachCallback, AfterAllCallback {
   private final SimpleReport report;
   private boolean onFailedTest;
@@ -31,6 +35,7 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    *
    * @return current extension instance
    */
+  @Nonnull
   public TextReportExtension onFailedTest(final boolean onFailedTest) {
     this.onFailedTest = onFailedTest;
     return this;
@@ -43,6 +48,7 @@ public class TextReportExtension implements BeforeEachCallback, AfterEachCallbac
    *
    * @return current extension instance
    */
+  @Nonnull
   public TextReportExtension onSucceededTest(final boolean onSucceededTest) {
     this.onSucceededTest = onSucceededTest;
     return this;

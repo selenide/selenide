@@ -7,6 +7,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
@@ -15,6 +16,7 @@ import static java.util.Arrays.asList;
 /**
  * Annotate your test class with {@code @Listeners({ SoftAsserts.class})}
  */
+@ParametersAreNonnullByDefault
 public class SoftAsserts extends ExitCodeListener {
   @Override
   public void onTestStart(ITestResult result) {

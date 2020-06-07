@@ -1,12 +1,14 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByShadow;
-import com.google.errorprone.annotations.CheckReturnValue;
+import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class Selectors {
   private static final String NORMALIZE_SPACE_XPATH = "normalize-space(translate(string(.), '\t\n\r\u00a0', '    '))";
 
@@ -113,6 +115,7 @@ public class Selectors {
     return byAttribute("value", value);
   }
 
+  @ParametersAreNonnullByDefault
   public static class ByText extends By.ByXPath {
     protected final String elementText;
 
@@ -122,15 +125,20 @@ public class Selectors {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public String toString() {
       return "by text: " + elementText;
     }
 
+    @CheckReturnValue
+    @Nonnull
     String getXPath() {
       return super.toString().replace("By.xpath: ", "");
     }
   }
 
+  @ParametersAreNonnullByDefault
   public static class WithText extends By.ByXPath {
     protected final String elementText;
 
@@ -140,10 +148,14 @@ public class Selectors {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public String toString() {
       return "with text: " + elementText;
     }
 
+    @CheckReturnValue
+    @Nonnull
     String getXPath() {
       return super.toString().replace("By.xpath: ", "");
     }

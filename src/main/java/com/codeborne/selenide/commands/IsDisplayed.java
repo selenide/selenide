@@ -8,18 +8,26 @@ import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class IsDisplayed implements Command<Boolean> {
   @Override
-  public Boolean execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+  @CheckReturnValue
+  public Boolean execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     try {
       WebElement element = locator.getWebElement();
-      return element != null && element.isDisplayed();
-    } catch (WebDriverException | ElementNotFound elementNotFound) {
+      return element.isDisplayed();
+    }
+    catch (WebDriverException | ElementNotFound elementNotFound) {
       if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
         throw Cleanup.of.wrap(elementNotFound);
       }
       return false;
-    } catch (IndexOutOfBoundsException invalidElementIndex) {
+    }
+    catch (IndexOutOfBoundsException invalidElementIndex) {
       return false;
     }
   }

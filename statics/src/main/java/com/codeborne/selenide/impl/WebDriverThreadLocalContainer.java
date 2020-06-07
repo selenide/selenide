@@ -12,8 +12,10 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +28,7 @@ import static com.codeborne.selenide.Configuration.reopenBrowserOnFail;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static java.lang.Thread.currentThread;
 
+@ParametersAreNonnullByDefault
 public class WebDriverThreadLocalContainer implements WebDriverContainer {
   private static final Logger log = LoggerFactory.getLogger(WebDriverThreadLocalContainer.class);
 
@@ -33,7 +36,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
-  private Proxy userProvidedProxy;
+  @Nullable private Proxy userProvidedProxy;
 
   private final Config config = new StaticConfig();
   private final BrowserHealthChecker browserHealthChecker = new BrowserHealthChecker();
@@ -92,12 +95,15 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    * @return true iff webdriver is started in current thread
    */
   @Override
+  @CheckReturnValue
   public boolean hasWebDriverStarted() {
     WebDriver webDriver = threadWebDriver.get(currentThread().getId());
     return webDriver != null;
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getWebDriver() {
     long threadId = currentThread().getId();
     if (!threadWebDriver.containsKey(threadId)) {
@@ -107,6 +113,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     WebDriver webDriver = threadWebDriver.get(currentThread().getId());
 
@@ -122,6 +130,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return webDriver;
   }
 
+  @CheckReturnValue
+  @Nonnull
   private WebDriver createDriver() {
     CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     long threadId = currentThread().getId();
@@ -140,6 +150,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  @CheckReturnValue
+  @Nullable
   public SelenideProxyServer getProxyServer() {
     return threadProxyServer.get(currentThread().getId());
   }
@@ -170,16 +182,22 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getPageSource() {
     return getWebDriver().getPageSource();
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getCurrentUrl() {
     return getWebDriver().getCurrentUrl();
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getCurrentFrameUrl() {
     return executeJavaScript("return window.location.href").toString();
   }

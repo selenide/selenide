@@ -7,10 +7,14 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class ByShadow {
 
   /**
@@ -25,10 +29,13 @@ public class ByShadow {
    * @param innerShadowHosts subsequent inner shadow-hosts
    * @return A By which locates elements by CSS inside shadow-root.
    */
+  @CheckReturnValue
+  @Nonnull
   public static By cssSelector(String target, String shadowHost, String... innerShadowHosts) {
     return new ByShadowCss(target, shadowHost, innerShadowHosts);
   }
 
+  @ParametersAreNonnullByDefault
   public static class ByShadowCss extends By implements Serializable {
     private static final long serialVersionUID = -1230258723099459239L;
 
@@ -37,6 +44,7 @@ public class ByShadow {
     private final String target;
 
     ByShadowCss(String target, String shadowHost, String... innerShadowHosts) {
+      //noinspection ConstantConditions
       if (shadowHost == null || target == null) {
         throw new IllegalArgumentException("Cannot find elements when the selector is null");
       }
@@ -46,6 +54,8 @@ public class ByShadow {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public WebElement findElement(SearchContext context) {
       WebElement host = context.findElement(By.cssSelector(shadowHost));
       for (String innerHost : innerShadowHosts) {
@@ -56,6 +66,8 @@ public class ByShadow {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public List<WebElement> findElements(SearchContext context) {
       WebElement host = context.findElement(By.cssSelector(shadowHost));
       for (String innerHost : innerShadowHosts) {
@@ -99,6 +111,8 @@ public class ByShadow {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     public String toString() {
       StringBuilder sb = new StringBuilder("By.cssSelector: ");
       sb.append(shadowHost).append(" ");

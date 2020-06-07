@@ -3,14 +3,20 @@ package com.codeborne.selenide.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@ParametersAreNonnullByDefault
 public class CiReportUrl {
   private static final Logger log = LoggerFactory.getLogger(CiReportUrl.class);
 
-  public String getReportsUrl(String reportsUrl) {
+  @CheckReturnValue
+  @Nullable
+  public String getReportsUrl(@Nullable String reportsUrl) {
     if (!isEmpty(reportsUrl)) {
       log.debug("Using variable selenide.reportsUrl={}", reportsUrl);
       return resolveUrlSource(reportsUrl);
@@ -29,6 +35,7 @@ public class CiReportUrl {
     return reportsUrl;
   }
 
+  @Nullable
   private String getTeamCityUrl() {
     String url = System.getProperty("teamcity.serverUrl");
     String build_type = System.getProperty("teamcity.buildType.id");
@@ -39,6 +46,7 @@ public class CiReportUrl {
     return resolveUrlSource("%s/repository/download/%s/%s:id/", url, build_type, build_number);
   }
 
+  @Nullable
   private String getJenkinsReportsUrl() {
     String build_url = System.getProperty("BUILD_URL");
     if (!isEmpty(build_url)) {
@@ -56,6 +64,7 @@ public class CiReportUrl {
     }
   }
 
+  @Nullable
   private String resolveUrlSource(String base, Object... format) {
     if (format.length != 0) {
       base = String.format(base, format);
@@ -68,7 +77,7 @@ public class CiReportUrl {
     }
   }
 
-  private boolean isEmpty(String s) {
+  private boolean isEmpty(@Nullable String s) {
     return s == null || s.trim().isEmpty();
   }
 }

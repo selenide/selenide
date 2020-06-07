@@ -12,6 +12,9 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.URL;
 import java.util.regex.Pattern;
 
@@ -19,6 +22,7 @@ import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.regex.Pattern.DOTALL;
 
+@ParametersAreNonnullByDefault
 public class Navigator {
   private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
 
@@ -49,6 +53,7 @@ public class Navigator {
     return selenideProxy.requestFilter("authentication");
   }
 
+  @Nonnull
   String absoluteUrl(Config config, String relativeOrAbsoluteUrl) {
     return isAbsoluteUrl(relativeOrAbsoluteUrl) ? relativeOrAbsoluteUrl : config.baseUrl() + relativeOrAbsoluteUrl;
   }
@@ -103,7 +108,7 @@ public class Navigator {
     }
   }
 
-  private void checkThatProxyIsStarted(SelenideProxyServer selenideProxy) {
+  private void checkThatProxyIsStarted(@Nullable SelenideProxyServer selenideProxy) {
     if (selenideProxy == null) {
       throw new IllegalStateException("config.proxyEnabled == true but proxy server is not created. " +
         "You need to call `setWebDriver(webDriver, selenideProxy)` instead of `setWebDriver(webDriver)` if you need to use proxy.");
@@ -113,7 +118,7 @@ public class Navigator {
     }
   }
 
-  private void beforeNavigateTo(Config config, SelenideProxyServer selenideProxy,
+  private void beforeNavigateTo(Config config, @Nullable SelenideProxyServer selenideProxy,
                                 AuthenticationType authenticationType, String domain, String login, String password) {
     if (config.proxyEnabled()) {
       checkThatProxyIsStarted(selenideProxy);

@@ -31,7 +31,8 @@ class FindAllByXpathCommandTest implements WithAssertions {
   @Test
   void testExecuteMethodWithNoArgsPassed() {
     assertThatThrownBy(() -> findAllByXpathCommand.execute(parent, locator))
-      .isInstanceOf(ArrayIndexOutOfBoundsException.class);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Missing arguments");
   }
 
   @Test

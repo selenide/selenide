@@ -13,8 +13,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 class AnyMatchTest implements WithAssertions {
-  private SelenideElement element1 = mockElement("Hello");
-  private SelenideElement element2 = mockElement("World");
+  private final SelenideElement element1 = mockElement("Hello");
+  private final SelenideElement element2 = mockElement("World");
 
   @Test
   void applyWithEmptyList() {

@@ -5,8 +5,11 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class SizeGreaterThanOrEqual extends CollectionCondition {
   protected final int expectedSize;
 
@@ -20,7 +23,7 @@ public class SizeGreaterThanOrEqual extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
+  public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
     throw new ListSizeMismatch(collection.driver(), ">=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 

@@ -1,6 +1,11 @@
 package com.codeborne.selenide.drivercommands;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 class BasicAuthUrl {
+  @Nonnull
   String appendBasicAuthToURL(String url, String domain, String login, String password) {
     if (!domain.isEmpty()) domain += "%5C";
     if (!login.isEmpty()) login += ":";

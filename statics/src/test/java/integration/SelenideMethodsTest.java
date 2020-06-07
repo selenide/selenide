@@ -16,6 +16,10 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
@@ -604,15 +608,18 @@ class SelenideMethodsTest extends IntegrationTest {
     assertThat(value).isEqualTo(10);
   }
 
+  @ParametersAreNonnullByDefault
   static class DoubleClick implements Command<Void> {
     @Override
-    public Void execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+    @Nullable
+    public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
       locator.driver().actions().doubleClick(locator.findAndAssertElementIsInteractable()).perform();
       return null;
 
     }
   }
 
+  @ParametersAreNonnullByDefault
   static class Replace implements Command<SelenideElement> {
     private final String replacement;
 
@@ -625,7 +632,8 @@ class SelenideMethodsTest extends IntegrationTest {
     }
 
     @Override
-    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, Object[] args) {
+    @Nonnull
+    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
       proxy.clear();
       proxy.sendKeys(replacement);
       return proxy;

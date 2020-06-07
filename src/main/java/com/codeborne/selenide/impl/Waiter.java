@@ -1,9 +1,12 @@
 package com.codeborne.selenide.impl;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static java.lang.System.currentTimeMillis;
 
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public class Waiter {
   public <T> void wait(T subject, Predicate<T> condition, long timeout, long pollingInterval) {
     for (long start = currentTimeMillis();
