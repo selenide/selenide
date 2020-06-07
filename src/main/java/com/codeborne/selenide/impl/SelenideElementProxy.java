@@ -100,7 +100,7 @@ class SelenideElementProxy implements InvocationHandler {
     Throwable lastError;
     do {
       try {
-        if (SelenideElement.class.isAssignableFrom(method.getDeclaringClass())) {
+        if (isSelenideElementMethod(method)) {
           return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
         }
 
@@ -136,6 +136,11 @@ class SelenideElementProxy implements InvocationHandler {
       throw webElementSource.createElementNotFoundError(exist, lastError);
     }
     throw lastError;
+  }
+
+  @CheckReturnValue
+  static boolean isSelenideElementMethod(Method method) {
+    return SelenideElement.class.isAssignableFrom(method.getDeclaringClass());
   }
 
   @CheckReturnValue
