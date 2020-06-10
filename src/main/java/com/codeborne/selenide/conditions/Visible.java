@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -14,18 +15,21 @@ public class Visible extends Condition {
   }
 
   @Override
+  @CheckReturnValue
   public boolean apply(Driver driver, WebElement element) {
     return element.isDisplayed();
   }
 
-  @Nonnull
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String actualValue(Driver driver, WebElement element) {
     return String.format("visible:%s", element.isDisplayed());
   }
 
-  @Nonnull
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Condition negate() {
     return new Not(this, true);
   }
