@@ -39,11 +39,13 @@ public class SelenideProxyServer {
    *
    * @param outsideProxy another proxy server used by test author for his own need (can be null)
    */
-  public SelenideProxyServer(Config config, Proxy outsideProxy) {
+  public SelenideProxyServer(Config config, @Nullable Proxy outsideProxy) {
     this(config, outsideProxy, new InetAddressResolver(), new BrowserUpProxyServerUnlimited());
   }
 
-  protected SelenideProxyServer(Config config, Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserUpProxy proxy) {
+  protected SelenideProxyServer(Config config, @Nullable Proxy outsideProxy,
+                                InetAddressResolver inetAddressResolver,
+                                BrowserUpProxy proxy) {
     this.config = config;
     this.outsideProxy = outsideProxy;
     this.inetAddressResolver = inetAddressResolver;

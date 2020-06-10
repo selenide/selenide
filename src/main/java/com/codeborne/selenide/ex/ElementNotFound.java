@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.By;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ElementNotFound extends UIAssertionError {
@@ -30,7 +31,7 @@ public class ElementNotFound extends UIAssertionError {
         "%nExpected: %s", collection.description(), expectedTexts), lastError);
   }
 
-  public ElementNotFound(WebElementsCollection collection, String description, Throwable lastError) {
+  public ElementNotFound(WebElementsCollection collection, String description, @Nullable Throwable lastError) {
     super(collection.driver(),
       String.format("Element not found {%s}" +
         "%nExpected: %s", collection.description(), description), lastError);

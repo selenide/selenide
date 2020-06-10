@@ -6,7 +6,6 @@ import org.openqa.selenium.logging.LogEntry;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -52,13 +51,6 @@ public class WebDriverLogs {
   @CheckReturnValue
   @Nonnull
   private <T> List<String> listToString(List<T> objects) {
-    if (objects == null || objects.isEmpty()) {
-      return emptyList();
-    }
-    List<String> result = new ArrayList<>(objects.size());
-    for (T object : objects) {
-      result.add(object.toString());
-    }
-    return result;
+    return objects.stream().map(Object::toString).collect(toList());
   }
 }

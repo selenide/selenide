@@ -199,6 +199,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   public String getCurrentFrameUrl() {
+    //noinspection ConstantConditions
     return executeJavaScript("return window.location.href").toString();
   }
 

@@ -17,7 +17,8 @@ public class ListSizeMismatch extends UIAssertionError {
                           @Nullable String explanation,
                           WebElementsCollection collection,
                           @Nullable List<WebElement> actualElements,
-                          Exception lastError, long timeoutMs) {
+                          @Nullable Exception lastError,
+                          long timeoutMs) {
     super(driver,
       "List size mismatch: expected: " + operator + ' ' + expectedSize +
         (explanation == null ? "" : " (because " + explanation + ")") +
