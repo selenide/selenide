@@ -13,6 +13,10 @@ import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +25,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class SelenideFieldDecorator extends DefaultFieldDecorator {
   private final SelenidePageFactory pageFactory;
   private final Driver driver;
@@ -34,6 +39,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   }
 
   @Override
+  @CheckReturnValue
+  @Nullable
   public Object decorate(ClassLoader loader, Field field) {
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
@@ -55,10 +62,16 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     return super.decorate(loader, field);
   }
 
+  @CheckReturnValue
+  @Nonnull
   private List<ElementsContainer> createElementsContainerList(Field field) {
+    List<ElementsContainer> result = new ArrayList<>();
+    Class<?> listType = getListGenericType(field);
+    if (listType == null) {
+      throw new IllegalArgumentException("Cannot detect list type for " + field);
+    }
+
     try {
-      List<ElementsContainer> result = new ArrayList<>();
-      Class<?> listType = getListGenericType(field);
       List<SelenideElement> selfList = SelenideElementListProxy.wrap(driver, factory.createLocator(field));
       for (SelenideElement element : selfList) {
         result.add(initElementsContainer(listType, element));
@@ -69,6 +82,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
       SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
@@ -78,6 +93,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   private ElementsContainer initElementsContainer(Class<?> type, SelenideElement self)
       throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
     Constructor<?> constructor = type.getDeclaredConstructor();
@@ -88,6 +105,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     return result;
   }
 
+  @CheckReturnValue
   private boolean isDecoratableList(Field field, Class<?> type) {
     if (!List.class.isAssignableFrom(field.getType())) {
       return false;
@@ -99,6 +117,8 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
         && (field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null);
   }
 
+  @CheckReturnValue
+  @Nullable
   private Class<?> getListGenericType(Field field) {
     Type genericType = field.getGenericType();
     if (!(genericType instanceof ParameterizedType)) return null;

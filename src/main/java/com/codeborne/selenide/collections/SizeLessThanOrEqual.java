@@ -23,7 +23,10 @@ public class SizeLessThanOrEqual extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
+  public void fail(WebElementsCollection collection,
+                   @Nullable List<WebElement> elements,
+                   @Nullable Exception lastError,
+                   long timeoutMs) {
     throw new ListSizeMismatch(collection.driver(), "<=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 

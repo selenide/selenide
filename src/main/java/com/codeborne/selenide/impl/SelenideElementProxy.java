@@ -57,13 +57,14 @@ class SelenideElementProxy implements InvocationHandler {
 
   @Override
   public Object invoke(Object proxy, Method method, @Nullable Object... args) throws Throwable {
+    Arguments arguments = new Arguments(args);
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
     validateAssertionMode(config());
 
-    long timeoutMs = getTimeoutMs(method, args);
-    long pollingIntervalMs = getPollingIntervalMs(method, args);
+    long timeoutMs = getTimeoutMs(method, arguments);
+    long pollingIntervalMs = getPollingIntervalMs(method, arguments);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
@@ -93,7 +94,7 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   protected Object dispatchAndRetry(long timeoutMs, long pollingIntervalMs,
-                                    Object proxy, Method method, Object[] args) throws Throwable {
+                                    Object proxy, Method method, @Nullable Object[] args) throws Throwable {
     Stopwatch stopwatch = new Stopwatch(timeoutMs);
 
     Throwable lastError;
@@ -158,15 +159,13 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   @CheckReturnValue
-  private long getTimeoutMs(Method method, @Nullable Object[] args) {
-    return isWaitCommand(method) ?
-      args.length == 3 ? (Long) args[args.length - 2] : (Long) args[args.length - 1] :
-      config().timeout();
+  private long getTimeoutMs(Method method, Arguments arguments) {
+    return isWaitCommand(method) ? arguments.nth(1) : config().timeout();
   }
 
   @CheckReturnValue
-  private long getPollingIntervalMs(Method method, Object[] args) {
-    return isWaitCommand(method) && args.length == 3 ? (Long) args[args.length - 1] : config().pollingInterval();
+  private long getPollingIntervalMs(Method method, Arguments arguments) {
+    return isWaitCommand(method) && arguments.length() == 3 ? arguments.nth(2) : config().pollingInterval();
   }
 
   @CheckReturnValue

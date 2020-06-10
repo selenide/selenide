@@ -13,9 +13,9 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.WebElementsCollection;
-import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -27,7 +27,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
 
   public abstract void fail(WebElementsCollection collection,
                             @Nullable List<WebElement> elements,
-                            Exception lastError,
+                            @Nullable Exception lastError,
                             long timeoutMs);
 
   public static CollectionCondition empty = size(0);
@@ -177,7 +177,10 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
+    public void fail(WebElementsCollection collection,
+                     @Nullable List<WebElement> elements,
+                     @Nullable Exception lastError,
+                     long timeoutMs) {
       delegate.fail(collection, elements, lastError, timeoutMs);
     }
 

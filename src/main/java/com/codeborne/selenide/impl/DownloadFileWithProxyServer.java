@@ -54,6 +54,9 @@ public class DownloadFileWithProxyServer {
     Set<String> currentWindows = webDriver.getWindowHandles();
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
+    if (filter == null) {
+      throw new IllegalStateException("Cannot download file: download filter is not activated");
+    }
     filter.activate();
     try {
       waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());

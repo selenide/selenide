@@ -7,6 +7,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.reporters.ExitCodeListener;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 
@@ -64,7 +65,7 @@ public class SoftAsserts extends ExitCodeListener {
     return listenersAnnotation != null && asList(listenersAnnotation.value()).contains(SoftAsserts.class);
   }
 
-  boolean shouldIntercept(Method testMethod) {
+  boolean shouldIntercept(@Nullable Method testMethod) {
     if (testMethod == null) return false;
 
     Test annotation = testMethod.getAnnotation(Test.class);

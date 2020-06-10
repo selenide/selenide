@@ -78,7 +78,7 @@ public abstract class WebElementSource {
       lastError = e;
     }
 
-    if (Cleanup.of.isInvalidSelectorError(lastError)) {
+    if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrap(lastError);
     }
 

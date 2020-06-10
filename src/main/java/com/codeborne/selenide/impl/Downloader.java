@@ -19,6 +19,8 @@ public class Downloader {
     this.random = random;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public String randomFileName() {
     return random.text();
   }

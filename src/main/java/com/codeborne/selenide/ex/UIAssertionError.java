@@ -4,11 +4,15 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
 import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
+@ParametersAreNonnullByDefault
 public class UIAssertionError extends AssertionError {
   private final Driver driver;
 
@@ -20,7 +24,7 @@ public class UIAssertionError extends AssertionError {
     this.driver = driver;
   }
 
-  protected UIAssertionError(Driver driver, String message, Throwable cause) {
+  protected UIAssertionError(Driver driver, String message, @Nullable Throwable cause) {
     super(message, cause);
     this.driver = driver;
   }

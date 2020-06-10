@@ -24,7 +24,10 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection, @Nullable List<WebElement> elements, Exception lastError, long timeoutMs) {
+  public void fail(WebElementsCollection collection,
+                   @Nullable List<WebElement> elements,
+                   @Nullable Exception lastError,
+                   long timeoutMs) {
     if (elements == null || elements.isEmpty()) {
       ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
       elementNotFound.timeoutMs = timeoutMs;
