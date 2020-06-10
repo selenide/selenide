@@ -49,36 +49,34 @@ class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void getSearchCriteria() {
-    String collectionDescription = "Collection description";
     WebElementsCollection collection = mock(WebElementsCollection.class);
-    when(collection.description()).thenReturn(collectionDescription);
+    when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, Condition.visible);
     assertThat(collectionElement)
-      .hasToString(String.format("%s.findBy(visible)", collectionDescription));
+      .hasToString(String.format("%s.findBy(visible)", "ul#employees li.employee"));
   }
 
   @Test
   void testToString() {
     WebElementsCollection collection = mock(WebElementsCollection.class);
-    String collectionDescription = "Collection description";
-    when(collection.description()).thenReturn(collectionDescription);
+    when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, Condition.visible);
     assertThat(collectionElement)
-      .hasToString(String.format("%s.findBy(visible)", collectionDescription));
+      .hasToString(String.format("%s.findBy(visible)", "ul#employees li.employee"));
   }
 
   @Test
   void createElementNotFoundErrorWithEmptyCollection() {
     WebElementsCollection collection = mock(WebElementsCollection.class);
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("Collection description");
+    when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, Condition.visible);
 
     Condition mockedCollection = mock(Condition.class);
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage(String.format("Element not found {Collection description}%n" +
+      .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
         "Expected: visible%n" +
         "Screenshot: null%n" +
         "Timeout: 0 ms.%n" +
@@ -89,7 +87,7 @@ class CollectionElementByConditionTest implements WithAssertions {
   void createElementNotFoundErrorWithNonEmptyCollection() {
     WebElementsCollection collection = mock(WebElementsCollection.class);
     when(collection.driver()).thenReturn(driver);
-    when(collection.description()).thenReturn("Collection description");
+    when(collection.description()).thenReturn("ul#employees li.employee");
     when(collection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, Condition.visible);
 
@@ -98,7 +96,7 @@ class CollectionElementByConditionTest implements WithAssertions {
     ElementNotFound elementNotFoundError = collectionElement.createElementNotFoundError(mockedCollection, new Error("Error message"));
 
     assertThat(elementNotFoundError)
-      .hasMessage(String.format("Element not found {Collection description.findBy(visible)}%n" +
+      .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
         "Expected: Reason description%n" +
         "Screenshot: null%n" +
         "Timeout: 0 ms.%n" +
