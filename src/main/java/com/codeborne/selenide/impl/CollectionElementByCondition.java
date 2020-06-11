@@ -12,8 +12,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.visible;
-
 @ParametersAreNonnullByDefault
 public class CollectionElementByCondition extends WebElementSource {
 
@@ -60,16 +58,6 @@ public class CollectionElementByCondition extends WebElementSource {
   @Nonnull
   public String getSearchCriteria() {
     return collection.description() + ".findBy(" + condition + ")";
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(driver(), getSearchCriteria(), visible, lastError);
-    }
-    return super.createElementNotFoundError(condition, lastError);
   }
 
   @Override
