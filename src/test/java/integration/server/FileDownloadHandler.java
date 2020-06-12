@@ -1,5 +1,7 @@
 package integration.server;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
@@ -42,8 +44,9 @@ class FileDownloadHandler extends BaseHandler {
       }
     }
 
+    String outputFileName = StringUtils.defaultIfBlank(request.getParameter("fileName"), fileName);
     Map<String, String> map = new HashMap<>();
-    map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+    map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(outputFileName, "UTF-8"));
     return new Result(SC_OK, getContentType(fileName), fileContent, map);
   }
 

@@ -55,6 +55,17 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithCyrillicNameAndQuotes() throws IOException {
+    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name")).download();
+    assertThat(downloadedFile.getName())
+      .isEqualTo("файл+с+кавычками_+и+LT_+и+GT_+COL_+SLASH_+QUEST_+ASTERISK_.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед медвед!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadMissingFile() {
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
       .isInstanceOf(FileNotFoundException.class)
