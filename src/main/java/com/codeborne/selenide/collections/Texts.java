@@ -34,6 +34,6 @@ public class Texts extends ExactTexts {
 
   @Override
   public String toString() {
-    return "Texts " + expectedTexts;
+    return "texts " + expectedTexts;
   }
 }
