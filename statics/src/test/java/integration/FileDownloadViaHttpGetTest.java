@@ -55,12 +55,14 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithCyrillicNameAndQuotes() throws IOException {
+  void downloadsFileWithForbiddenCharactersInName() throws IOException {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name")).download();
     assertThat(downloadedFile.getName())
-      .isEqualTo("файл+с+кавычками_+и+LT_+и+GT_+COL_+SLASH_+QUEST_+ASTERISK_.txt");
+      .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
+        "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
+        "_colon,_at,_plus,_backtick,_pipe,_equal.txt");
     assertThat(readFileToString(downloadedFile, "UTF-8"))
-      .isEqualTo("Превед медвед!");
+      .isEqualTo("Превед \"короед\"! Амперсанды &everywhere&&;$#`\n");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
   }

@@ -204,7 +204,7 @@ public class DownloadFileWithHttpRequest {
     for (Header header : response.getHeaders()) {
       Optional<String> fileName = httpHelper.getFileNameFromContentDisposition(header.getName(), header.getValue());
       if (fileName.isPresent()) {
-        return fileName.get();
+        return httpHelper.normalize(fileName.get());
       }
     }
 
