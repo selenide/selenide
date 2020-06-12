@@ -50,4 +50,4 @@ after_failure: "./.upload_reports.sh"
 notifications:
   slack:
     rooms:
-      secure: "a+W3yrcab0GVRhmIUXsdV1KpNxX6Qe7LnX6vq4Ou4mCSSaBln0mL0y4Gs1GSPdiq5PWhYrcIgAsESQiCDbi5JoW//GyEovZvY+WDgnhrskoOLFgWqxhT1yInDkLRfkQZAdL/5uWOBDSr1d+2/1qqeciWMebQQZoEezeKoKwPtdQ="
+      secure: "gMxIayQqFmMjmEH8ruv5xvAG49yOKFZ4bzGaxeHOfxWWnk6Mwm8x2rwCUulXbAFwcnWeZRLvOZlsRrxV1aNBrfBH8+T3aBODbzG8U/iDEIxOzi3Gs/DKfdyZKxqdXSLUJItEQYwpCuun0pN3ZV0CuioBQ86q9JA+SUD1eNzXxoQ="
