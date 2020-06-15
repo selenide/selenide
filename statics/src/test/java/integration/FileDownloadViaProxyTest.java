@@ -55,6 +55,19 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithForbiddenCharactersInName() throws IOException {
+    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name")).download();
+    assertThat(downloadedFile.getName())
+      .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
+        "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
+        "_colon,_at,_plus,_backtick,_pipe,_equal.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед \"короед\"! Амперсанды &everywhere&&;$#`\n");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("http://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();

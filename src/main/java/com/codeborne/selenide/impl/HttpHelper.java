@@ -21,8 +21,11 @@ import static org.apache.commons.lang3.StringUtils.left;
 @ParametersAreNonnullByDefault
 public class HttpHelper {
 
-  private static final Pattern pattern =
+  private static final Pattern FILENAME_IN_CONTENT_DISPOSITION_HEADER =
     Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
+
+  private static final Pattern FILENAME_FORBIDDEN_CHARACTERS =
+    Pattern.compile("[#%&{}\\\\<>*?$!'\":@+`|=]");
 
   @CheckReturnValue
   @Nonnull
@@ -48,7 +51,7 @@ public class HttpHelper {
     if (!"Content-Disposition".equalsIgnoreCase(headerName) || headerValue == null) {
       return Optional.empty();
     }
-    Matcher regex = pattern.matcher(headerValue);
+    Matcher regex = FILENAME_IN_CONTENT_DISPOSITION_HEADER.matcher(headerValue);
     if (!regex.matches()) {
       return Optional.empty();
     }
@@ -57,6 +60,8 @@ public class HttpHelper {
     return Optional.of(decodeHttpHeader(fileName, encoding));
   }
 
+  @CheckReturnValue
+  @Nonnull
   private String decodeHttpHeader(String encoded, String encoding) {
     try {
       return URLDecoder.decode(encoded, defaultIfEmpty(encoding, "UTF-8"));
@@ -65,13 +70,26 @@ public class HttpHelper {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   public String getFileName(String url) {
-    return trimQuery(FilenameUtils.getName(url));
+    return normalize(trimQuery(FilenameUtils.getName(url)));
   }
 
+  @CheckReturnValue
+  @Nonnull
   private String trimQuery(String filenameWithQuery) {
     return filenameWithQuery.contains("?")
       ? left(filenameWithQuery, filenameWithQuery.indexOf('?'))
       : filenameWithQuery;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public String normalize(String fileName) {
+    if (fileName.contains("/")) {
+      throw new IllegalArgumentException("File name cannot contain slash: " + fileName);
+    }
+    return FILENAME_FORBIDDEN_CHARACTERS.matcher(fileName).replaceAll("_").replace(' ', '+');
   }
 }

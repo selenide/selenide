@@ -1,13 +1,13 @@
 package integration.server;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
@@ -42,6 +42,9 @@ class FileDownloadHandler extends BaseHandler {
       }
     }
 
+    if ("файл-с-запрещёнными-символами.txt".equals(fileName)) fileName = "имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
+      "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
+      ":colon,@at,+plus,`backtick,|pipe,=equal.txt";
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
     return new Result(SC_OK, getContentType(fileName), fileContent, map);

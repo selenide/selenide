@@ -85,7 +85,6 @@ public class FileDownloadFilter implements ResponseFilter {
     if (response.status().code() < 200 || response.status().code() >= 300) return;
 
     String fileName = getFileName(r);
-    if (fileName == null) return;
 
     File file = downloader.prepareTargetFile(config, fileName);
     try {
@@ -127,6 +126,7 @@ public class FileDownloadFilter implements ResponseFilter {
   @Nonnull
   private String getFileName(Response response) {
     return httpHelper.getFileNameFromContentDisposition(response.headers)
+      .map(httpHelper::normalize)
       .orElseGet(() -> {
         log.info("Cannot extract file name from http headers. Found headers: ");
         for (Map.Entry<String, String> header : response.headers.entrySet()) {
