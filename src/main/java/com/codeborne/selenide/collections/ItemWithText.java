@@ -26,7 +26,8 @@ public class ItemWithText extends CollectionCondition {
 
   @Override
   public void fail(WebElementsCollection collection, List<WebElement> elements, Exception lastError, long timeoutMs) {
-    throw new TextsMismatch(collection, ElementsCollection.texts(elements), Collections.singletonList(expectedText), explanation, timeoutMs);
+    throw new TextsMismatch(
+      collection, ElementsCollection.texts(elements), Collections.singletonList(expectedText), explanation, timeoutMs);
   }
 
   @Override
