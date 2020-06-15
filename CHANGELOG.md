@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.12.3
+* #997 Avoid logging redundant `findElements` calls when executing `$.findAll()`  --  see PR #1193
 * #967 improve error messages for collections
 * upgraded to BrowserUpProxy 2.1.1
 * #943 upload multiple files without JS tricks (just using newline character)  --  see PR #1188
@@ -219,12 +220,12 @@ Technical changes (probably should not affect end users):
 
 ## 4.14.1 (released 06.09.2018)
 * Upgrade to WebDriverManager 3.0.0
-* #794 Removed unused setting `Configuration.dismissModalDialogs`  -- see PR https://github.com/codeborne/selenide/pull/795
+* #794 Removed unused setting `Configuration.dismissModalDialogs`  -- see PR https://github.com/selenide/selenide/pull/795
 * Removed unused setting Configuration.openBrowserTimeoutMs
-* #798 Remove deprecated method $.followLink()  -- see PR https://github.com/codeborne/selenide/pull/799
+* #798 Remove deprecated method $.followLink()  -- see PR https://github.com/selenide/selenide/pull/799
 
 ## 4.14.0 (released 29.08.2018)
-* #784 Enable BasicAuth through Selenide proxy server  -- see https://github.com/codeborne/selenide/pull/785
+* #784 Enable BasicAuth through Selenide proxy server  -- see https://github.com/selenide/selenide/pull/785
 * #788 Add setting to enable/disable proxy server
 * #789 Remove `?timestamp` parameter for IE
 
@@ -245,15 +246,15 @@ Technical changes (probably should not affect end users):
 * #778 Fixed Selenide tests for FireFox
 
 ## 4.12.3 (released 17.07.2018)
-* [#696](https://github.com/codeborne/selenide/issues/696) Reload collection on every method call
-* [#758](https://github.com/codeborne/selenide/issues/758) Timeout for downloading files  --  thanks to Yuri Ivanov @YuriIvanov
-* [#757](https://github.com/codeborne/selenide/pull/757) Add support for JUnit5  --  thanks to Aliaksandr Rasolka @rosolko
-* [#757](https://github.com/codeborne/selenide/pull/757) Upgrade Selenide own tests to JUnit5 and AssertJ  --  thanks to Aliaksandr Rasolka @rosolko
+* [#696](https://github.com/selenide/selenide/issues/696) Reload collection on every method call
+* [#758](https://github.com/selenide/selenide/issues/758) Timeout for downloading files  --  thanks to Yuri Ivanov @YuriIvanov
+* [#757](https://github.com/selenide/selenide/pull/757) Add support for JUnit5  --  thanks to Aliaksandr Rasolka @rosolko
+* [#757](https://github.com/selenide/selenide/pull/757) Upgrade Selenide own tests to JUnit5 and AssertJ  --  thanks to Aliaksandr Rasolka @rosolko
 
 ## 4.12.2
 
-* [#749](https://github.com/codeborne/selenide/pull/749) Added because method to CollectionCondition -- thanks to Mikhail Sidelnikov @sidelnikovmike
-* [#695](https://github.com/codeborne/selenide/issues/695) Do not open a browser if `Configuration.reopenBrowserOnFail` is `false` and user has not set webdriver manually 
+* [#749](https://github.com/selenide/selenide/pull/749) Added because method to CollectionCondition -- thanks to Mikhail Sidelnikov @sidelnikovmike
+* [#695](https://github.com/selenide/selenide/issues/695) Do not open a browser if `Configuration.reopenBrowserOnFail` is `false` and user has not set webdriver manually 
 * Upgrade selenium to 3.13.0 version
 * Upgrade webdrivermanager to 2.2.3 version
 
