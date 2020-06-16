@@ -946,7 +946,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * @return Underlying {@link WebElement}
-   * @throws org.openqa.selenium.NoSuchElementException if element does not exist (without waiting for the element)
+   * @throws com.codeborne.selenide.ex.ElementNotFound if element does not exist (after waiting for N seconds)
    * @see com.codeborne.selenide.commands.GetWrappedElement
    */
   @Override
