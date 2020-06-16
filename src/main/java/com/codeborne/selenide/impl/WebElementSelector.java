@@ -61,13 +61,13 @@ public class WebElementSelector {
 
   private WebElement findElement(SearchContext context, By selector) {
     return context instanceof SelenideElement ?
-      ((SelenideElement) context).getWrappedElement().findElement(selector) :
+      ((SelenideElement) context).toWebElement().findElement(selector) :
       context.findElement(selector);
   }
 
   private List<WebElement> findElements(SearchContext context, By selector) {
     return context instanceof SelenideElement ?
-      ((SelenideElement) context).getWrappedElement().findElements(selector) :
+      ((SelenideElement) context).toWebElement().findElements(selector) :
       context.findElements(selector);
   }
 

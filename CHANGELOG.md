@@ -3,6 +3,7 @@
 ## 5.12.3
 * #997 Avoid logging redundant `findElements` calls when executing `$.findAll()`  --  see PR #1193
 * #967 improve error messages for collections
+* #1191 $.getWrappedElement waits again for the element  --  see PR #1203
 * upgraded to BrowserUpProxy 2.1.1
 * #943 upload multiple files without JS tricks (just using newline character)  --  see PR #1188
 
