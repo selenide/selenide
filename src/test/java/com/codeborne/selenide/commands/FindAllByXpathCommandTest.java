@@ -29,8 +29,8 @@ class FindAllByXpathCommandTest implements WithAssertions {
 
   @BeforeEach
   void setup() {
-    when(parentSelenideElement.getWrappedElement()).thenReturn(parentWebElement);
-    when(selenideElement.getWrappedElement()).thenReturn(webElement);
+    when(parentSelenideElement.toWebElement()).thenReturn(parentWebElement);
+    when(selenideElement.toWebElement()).thenReturn(webElement);
     when(selenideElement.isSelected()).thenReturn(true);
     when(locator.driver()).thenReturn(new DriverStub());
   }
