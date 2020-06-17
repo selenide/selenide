@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.cdt.DownloadFileWithCDT;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
@@ -31,14 +32,15 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class DownloadFileTest implements WithAssertions {
-  private Config config = mock(Config.class);
-  private Driver driver = mock(Driver.class);
-  private DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
-  private DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
-  private DownloadFile command = new DownloadFile(httpget, proxy);
-  private WebElementSource linkWithHref = mock(WebElementSource.class);
-  private WebElement link = mock(WebElement.class);
-  private File file = new File("some-file.yxy");
+  private final Config config = mock(Config.class);
+  private final Driver driver = mock(Driver.class);
+  private final DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
+  private final DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
+  private final DownloadFileWithCDT cdt = mock(DownloadFileWithCDT.class);
+  private final DownloadFile command = new DownloadFile(httpget, proxy, cdt);
+  private final WebElementSource linkWithHref = mock(WebElementSource.class);
+  private final WebElement link = mock(WebElement.class);
+  private final File file = new File("some-file.yxy");
 
   @BeforeEach
   void setUp() {

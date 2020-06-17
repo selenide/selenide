@@ -27,6 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class SelenideProxyServer {
   private final Config config;
   private final InetAddressResolver inetAddressResolver;
+  @Nullable
   private final Proxy outsideProxy;
   private final BrowserUpProxy proxy;
   private final Map<String, RequestFilter> requestFilters = new HashMap<>();
@@ -43,7 +44,8 @@ public class SelenideProxyServer {
     this(config, outsideProxy, new InetAddressResolver(), new BrowserUpProxyServerUnlimited());
   }
 
-  protected SelenideProxyServer(Config config, Proxy outsideProxy, InetAddressResolver inetAddressResolver, BrowserUpProxy proxy) {
+  protected SelenideProxyServer(Config config, @Nullable Proxy outsideProxy,
+                                InetAddressResolver inetAddressResolver, BrowserUpProxy proxy) {
     this.config = config;
     this.outsideProxy = outsideProxy;
     this.inetAddressResolver = inetAddressResolver;

@@ -105,7 +105,7 @@ public class DownloadFileWithProxyServer {
 
     @Override
     public boolean test(FileDownloadFilter filter) {
-      return !filter.getDownloadedFiles(fileFilter).isEmpty();
+      return !filter.downloads().files(fileFilter).isEmpty();
     }
   }
 
@@ -116,10 +116,10 @@ public class DownloadFileWithProxyServer {
     @Override
     public boolean test(FileDownloadFilter filter) {
       try {
-        return downloadsCount == filter.getDownloadedFiles().size();
+        return downloadsCount == filter.downloads().size();
       }
       finally {
-        downloadsCount = filter.getDownloadedFiles().size();
+        downloadsCount = filter.downloads().size();
       }
     }
   }
@@ -130,16 +130,17 @@ public class DownloadFileWithProxyServer {
                                    FileDownloadFilter filter,
                                    long timeout,
                                    FileFilter fileFilter) throws FileNotFoundException {
-    List<DownloadedFile> files = filter.getDownloadedFiles();
+    Downloads downloads = filter.downloads();
+    List<DownloadedFile> files = downloads.files();
     if (files.isEmpty()) {
       throw new FileNotFoundException("Failed to download file " + anyClickableElement +
         " in " + timeout + " ms." + filter.responsesAsString());
     }
 
-    log.info(filter.downloadedFilesAsString());
+    log.info(downloads.filesAsString());
     log.info("Just in case, all intercepted responses: {}", filter.responsesAsString());
 
-    return files.stream().filter(fileFilter::match).sorted(new DownloadDetector()).findFirst()
+    return downloads.firstMatchingFile(fileFilter)
       .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms.%s %n%s",
         anyClickableElement, timeout, fileFilter.description(), filter.responsesAsString())
         )

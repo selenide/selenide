@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
+import com.codeborne.selenide.cdt.DownloadFileWithCDT;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -19,22 +20,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
-
 @ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
   private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
   private final DownloadFileWithProxyServer downloadFileWithProxyServer;
+  private final DownloadFileWithCDT downloadFileWithCDT;
 
   public DownloadFile() {
-    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer());
+    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), new DownloadFileWithCDT());
   }
 
-  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy) {
+  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy, DownloadFileWithCDT cdt) {
     downloadFileWithHttpRequest = httpget;
     downloadFileWithProxyServer = proxy;
+    this.downloadFileWithCDT = cdt;
   }
 
   @Override
@@ -47,18 +48,29 @@ public class DownloadFile implements Command<File> {
     long timeout = getTimeout(config, args);
     FileFilter fileFilter = getFileFilter(args);
 
-    if (config.fileDownload() == HTTPGET) {
-      log.debug("selenide.fileDownload = {} download file via http get", System.getProperty("selenide.fileDownload"));
-      return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, fileFilter);
-    }
-    if (!config.proxyEnabled()) {
-      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
-    }
-    if (linkWithHref.driver().getProxy() == null) {
-      throw new IllegalStateException("Cannot download file: proxy server is not started");
-    }
+    switch (config.fileDownload()) {
+      case HTTPGET: {
+        log.debug("selenide.fileDownload = {} download file via http get", System.getProperty("selenide.fileDownload"));
+        return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, fileFilter);
+      }
+      case CDT: {
+        log.debug("selenide.fileDownload = {} download file via cdt", System.getProperty("selenide.fileDownload"));
+        return downloadFileWithCDT.download(linkWithHref, link, timeout, fileFilter);
+      }
+      case PROXY: {
+        if (!config.proxyEnabled()) {
+          throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
+        }
+        if (linkWithHref.driver().getProxy() == null) {
+          throw new IllegalStateException("Cannot download file: proxy server is not started");
+        }
 
-    return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.driver().getProxy(), timeout, fileFilter);
+        return downloadFileWithProxyServer.download(linkWithHref, link, linkWithHref.driver().getProxy(), timeout, fileFilter);
+      }
+      default: {
+        throw new IllegalArgumentException("Unknown file download mode: " + config.fileDownload());
+      }
+    }
   }
 
   @CheckReturnValue

@@ -4,8 +4,8 @@ import com.browserup.bup.filters.ResponseFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Config;
-import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
+import com.codeborne.selenide.impl.Downloads;
 import com.codeborne.selenide.impl.HttpHelper;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponse;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @ParametersAreNonnullByDefault
@@ -35,7 +34,7 @@ public class FileDownloadFilter implements ResponseFilter {
 
   private final HttpHelper httpHelper = new HttpHelper();
   private boolean active;
-  private final List<DownloadedFile> downloadedFiles = new CopyOnWriteArrayList<>();
+  private final Downloads downloads = new Downloads();
   private final List<Response> responses = new CopyOnWriteArrayList<>();
 
   public FileDownloadFilter(Config config) {
@@ -57,7 +56,7 @@ public class FileDownloadFilter implements ResponseFilter {
   }
 
   public void reset() {
-    downloadedFiles.clear();
+    downloads.clear();
     responses.clear();
   }
 
@@ -89,7 +88,7 @@ public class FileDownloadFilter implements ResponseFilter {
     File file = downloader.prepareTargetFile(config, fileName);
     try {
       FileUtils.writeByteArrayToFile(file, contents.getBinaryContents());
-      downloadedFiles.add(new DownloadedFile(file, r.headers));
+      downloads.add(new DownloadedFile(file, r.headers));
     }
     catch (IOException e) {
       log.error("Failed to save downloaded file to {} for url {}", file.getAbsolutePath(), messageInfo.getUrl(), e);
@@ -109,17 +108,8 @@ public class FileDownloadFilter implements ResponseFilter {
    */
   @CheckReturnValue
   @Nonnull
-  public List<DownloadedFile> getDownloadedFiles() {
-    return downloadedFiles;
-  }
-
-  /**
-   * @return list of downloaded files matching given criteria
-   */
-  @CheckReturnValue
-  @Nonnull
-  public List<DownloadedFile> getDownloadedFiles(FileFilter fileFilter) {
-    return downloadedFiles.stream().filter(fileFilter::match).collect(toList());
+  public Downloads downloads() {
+    return downloads;
   }
 
   @CheckReturnValue
@@ -150,22 +140,6 @@ public class FileDownloadFilter implements ResponseFilter {
     int i = 0;
     for (Response response : responses) {
       sb.append("  #").append(++i).append("  ").append(response).append("\n");
-    }
-    return sb.toString();
-  }
-
-  /**
-   * @return all downloaded files (as a string) - it can be useful for debugging
-   */
-  @CheckReturnValue
-  @Nonnull
-  public String downloadedFilesAsString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Downloaded ").append(downloadedFiles.size()).append(" files:\n");
-
-    int i = 0;
-    for (DownloadedFile file : downloadedFiles) {
-      sb.append("  #").append(++i).append("  ").append(file.getFile().getAbsolutePath()).append("\n");
     }
     return sb.toString();
   }
