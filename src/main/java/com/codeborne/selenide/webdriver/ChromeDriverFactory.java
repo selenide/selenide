@@ -44,11 +44,13 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy);
     log.debug("Chrome options: {}", chromeOptions);
-    return new ChromeDriver(buildService(), chromeOptions);
+    return new ChromeDriver(buildService(config), chromeOptions);
   }
 
-  protected ChromeDriverService buildService() {
-    return ChromeDriverService.createDefaultService();
+  protected ChromeDriverService buildService(Config config) {
+    return new ChromeDriverService.Builder()
+      .withLogFile(webdriverLog(config))
+      .build();
   }
 
   @Override

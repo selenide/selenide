@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.GeckoDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +35,14 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    String logFilePath = System.getProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
-    System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, logFilePath);
-    return new FirefoxDriver(createCapabilities(config, browser, proxy));
+    return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy));
+  }
+
+  protected GeckoDriverService createDriverService(Config config) {
+    File logFile = webdriverLog(config);
+    return new GeckoDriverService.Builder()
+      .withLogFile(logFile)
+      .build();
   }
 
   @Override

@@ -8,10 +8,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.System.currentTimeMillis;
+import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
@@ -24,6 +27,18 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
   private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
+
+  protected File webdriverLog(Config config) {
+    String pid = getRuntimeMXBean().getName().replaceFirst("(.*)@.*", "$1");
+    File logFolder = new File(config.reportsFolder());
+    if (!logFolder.exists()) {
+      logFolder.mkdirs();
+    }
+    String logFileName = String.format("%sdriver.%s_%s.log", config.browser(), currentTimeMillis(), pid);
+    File logFile = new File(logFolder, logFileName);
+    log.info("Write webdriver logs to: {}", logFile.getAbsolutePath());
+    return logFile;
+  }
 
   protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
