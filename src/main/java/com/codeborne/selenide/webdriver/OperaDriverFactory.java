@@ -7,6 +7,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaDriverService;
 import org.openqa.selenium.opera.OperaOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,13 @@ public class OperaDriverFactory extends AbstractDriverFactory {
 
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
-    return new OperaDriver(createCapabilities(config, browser, proxy));
+    return new OperaDriver(createDriverService(config), createCapabilities(config, browser, proxy));
+  }
+
+  private OperaDriverService createDriverService(Config config) {
+    return new OperaDriverService.Builder()
+      .withLogFile(webdriverLog(config))
+      .build();
   }
 
   @Override

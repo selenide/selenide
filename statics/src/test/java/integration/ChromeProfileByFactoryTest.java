@@ -66,7 +66,7 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
 
   private static class MyFactory extends ChromeDriverFactory {
     @Override
-    protected ChromeDriverService buildService() {
+    protected ChromeDriverService buildService(Config config) {
       return new ChromeDriverService.Builder()
         .withLogFile(chromedriverLog)
         .withVerbose(true)

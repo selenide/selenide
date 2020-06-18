@@ -7,6 +7,7 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,13 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     EdgeOptions options = createCapabilities(config, browser, proxy);
-    return new EdgeDriver(options);
+    return new EdgeDriver(createDriverService(config), options);
+  }
+
+  private EdgeDriverService createDriverService(Config config) {
+    return new EdgeDriverService.Builder()
+      .withLogFile(webdriverLog(config))
+      .build();
   }
 
   @Override
