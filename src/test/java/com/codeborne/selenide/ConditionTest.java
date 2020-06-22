@@ -410,11 +410,11 @@ class ConditionTest {
     assertAll(() -> {
       assertThatThrownBy(() -> text(null))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("No expected text given");
+        .hasMessage("Text condition must not be null or empty string");
 
       assertThatThrownBy(() -> text(StringUtils.EMPTY))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("No expected text given");
+        .hasMessage("Text condition must not be null or empty string");
     });
   }
 
