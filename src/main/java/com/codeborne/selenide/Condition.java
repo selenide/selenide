@@ -280,7 +280,7 @@ public abstract class Condition {
   @Nonnull
   public static Condition text(String text) {
     if (StringUtils.isBlank(text)) {
-      throw new IllegalArgumentException("No expected text given");
+      throw new IllegalArgumentException("Text condition must not be null or empty string");
     }
     return new Text(text);
   }
