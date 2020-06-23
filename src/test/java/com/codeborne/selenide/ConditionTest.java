@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -8,9 +9,9 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.*;
 
 class ConditionTest {
   private WebDriver webDriver = mock(WebDriver.class);
@@ -403,4 +404,18 @@ class ConditionTest {
     Condition condition = attribute("name").because("it's awesome");
     assertThat(condition).hasToString("attribute name (because it's awesome)");
   }
+
+  @Test
+  void shouldGetExceptionIfGivenTextIsNullOrEmpty() {
+    assertAll(() -> {
+      assertThatThrownBy(() -> text(null))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Text condition must not be null or empty string");
+
+      assertThatThrownBy(() -> text(StringUtils.EMPTY))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Text condition must not be null or empty string");
+    });
+  }
+
 }
