@@ -1,23 +1,46 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.and;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.attributeMatching;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.checked;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.have;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.id;
+import static com.codeborne.selenide.Condition.matchesText;
+import static com.codeborne.selenide.Condition.name;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.or;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.textCaseSensitive;
+import static com.codeborne.selenide.Condition.type;
+import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ConditionTest {
-  private WebDriver webDriver = mock(WebDriver.class);
-  private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private SelenideConfig config = new SelenideConfig();
-  private Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
+  private final WebDriver webDriver = mock(WebDriver.class);
+  private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private final SelenideConfig config = new SelenideConfig();
+  private final Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
 
   @Test
   void displaysHumanReadableName() {
@@ -322,7 +345,7 @@ class ConditionTest {
 
   @Test
   void elementAndCondition() {
-    WebElement element = elementWithSelectedAndText(true, "text");
+    WebElement element = mockElement(true, "text");
     assertThat(and("selected with text", be(selected), have(text("text"))).apply(driver, element))
       .isTrue();
     assertThat(and("selected with text", not(be(selected)), have(text("text")))
@@ -332,16 +355,9 @@ class ConditionTest {
       .isFalse();
   }
 
-  private WebElement elementWithSelectedAndText(boolean isSelected, String text) {
-    WebElement element = mock(WebElement.class);
-    when(element.isSelected()).thenReturn(isSelected);
-    when(element.getText()).thenReturn(text);
-    return element;
-  }
-
   @Test
   void elementAndConditionActualValue() {
-    WebElement element = elementWithSelectedAndText(false, "text");
+    WebElement element = mockElement(false, "text");
     Condition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition.actualValue(driver, element)).isNullOrEmpty();
     assertThat(condition.apply(driver, element)).isFalse();
@@ -350,7 +366,7 @@ class ConditionTest {
 
   @Test
   void elementAndConditionToString() {
-    WebElement element = elementWithSelectedAndText(false, "text");
+    WebElement element = mockElement(false, "text");
     Condition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text");
     assertThat(condition.apply(driver, element)).isFalse();
@@ -359,7 +375,7 @@ class ConditionTest {
 
   @Test
   void elementOrCondition() {
-    WebElement element = elementWithSelectedAndText(false, "text");
+    WebElement element = mockElement(false, "text");
     when(element.isDisplayed()).thenReturn(true);
     assertThat(or("Visible, not Selected", visible, checked).apply(driver, element)).isTrue();
     assertThat(or("Selected with text", checked, text("incorrect")).apply(driver, element)).isFalse();
@@ -367,7 +383,7 @@ class ConditionTest {
 
   @Test
   void elementOrConditionActualValue() {
-    WebElement element = elementWithSelectedAndText(false, "text");
+    WebElement element = mockElement(false, "text");
     Condition condition = or("selected with text", be(selected), have(text("text")));
     assertThat(condition.actualValue(driver, element)).isEqualTo("false, null");
     assertThat(condition.apply(driver, element)).isTrue();
@@ -375,7 +391,7 @@ class ConditionTest {
 
   @Test
   void elementOrConditionToString() {
-    WebElement element = elementWithSelectedAndText(false, "text");
+    WebElement element = mockElement(false, "text");
     Condition condition = or("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected or have text 'text'");
     assertThat(condition.apply(driver, element)).isTrue();
@@ -406,16 +422,32 @@ class ConditionTest {
   }
 
   @Test
-  void shouldGetExceptionIfGivenTextIsNullOrEmpty() {
-    assertAll(() -> {
-      assertThatThrownBy(() -> text(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Text condition must not be null or empty string");
-
-      assertThatThrownBy(() -> text(StringUtils.EMPTY))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Text condition must not be null or empty string");
-    });
+  void shouldHaveText_doesNotAccept_nullParameter() {
+    //noinspection ConstantConditions
+    assertThatThrownBy(() -> text(null))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Argument must not be null or empty string. Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");
   }
 
+  @Test
+  void shouldHaveText_doesNotAccept_emptyString() {
+    assertThatThrownBy(() -> text(""))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Argument must not be null or empty string. Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");
+  }
+
+  @Test
+  void shouldHaveText_accepts_blankNonEmptyString() {
+    text(" ");
+    text("  ");
+    text("\t");
+    text("\n");
+  }
+
+  private WebElement mockElement(boolean isSelected, String text) {
+    WebElement element = mock(WebElement.class);
+    when(element.isSelected()).thenReturn(isSelected);
+    when(element.getText()).thenReturn(text);
+    return element;
+  }
 }

@@ -9,12 +9,19 @@ import org.openqa.selenium.support.ui.Select;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 @ParametersAreNonnullByDefault
 public class Text extends Condition {
   protected final String text;
   public Text(final String text) {
     super("text");
     this.text = text;
+
+    if (isEmpty(text)) {
+      throw new IllegalArgumentException("Argument must not be null or empty string. " +
+        "Use $.shouldBe(empty) or $.shouldHave(exactText(\"\").");
+    }
   }
 
   @Override

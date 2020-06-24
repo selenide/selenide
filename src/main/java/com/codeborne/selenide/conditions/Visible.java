@@ -5,7 +5,9 @@ import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class Visible extends Condition {
   public Visible() {
     super("visible");
@@ -16,6 +18,7 @@ public class Visible extends Condition {
     return element.isDisplayed();
   }
 
+  @Nonnull
   @Override
   public String actualValue(Driver driver, WebElement element) {
     return String.format("visible:%s", element.isDisplayed());

@@ -28,10 +28,9 @@ import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
-import javax.annotation.CheckReturnValue;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -42,6 +41,7 @@ import static java.util.Arrays.asList;
 /**
  * Conditions to match web elements: checks for visibility, text etc.
  */
+@SuppressWarnings("StaticInitializerReferencesSubClass")
 @ParametersAreNonnullByDefault
 public abstract class Condition {
   /**
@@ -265,28 +265,28 @@ public abstract class Condition {
   }
 
   /**
-   * Assert that element contains given text as a substring
+   * <p>
+   * Assert that element contains given text as a substring.
+   * </p>
+   *
    * <p>Sample: <code>$("h1").shouldHave(text("Hello\s*John"))</code></p>
    *
    * <p>NB! Case insensitive</p>
-   *
    * <p>NB! Ignores multiple whitespaces between words</p>
    *
-   * @param text expected text of HTML element
+   * @param text expected text of HTML element.
+   *             NB! Empty string is not allowed (because any element does contain an empty text).
    *
    * @throws IllegalArgumentException if given text is null or empty
    */
   @CheckReturnValue
   @Nonnull
   public static Condition text(String text) {
-    if (StringUtils.isBlank(text)) {
-      throw new IllegalArgumentException("Text condition must not be null or empty string");
-    }
     return new Text(text);
   }
 
   /**
-   * Checks on a element that exactly given text is selected (=marked with mouse/keybord)
+   * Checks on a element that exactly given text is selected (=marked with mouse/keyboard)
    *
    * <p>Sample: {@code $("input").shouldHave(selectedText("Text"))}</p>
    *
@@ -418,7 +418,7 @@ public abstract class Condition {
   public static final Condition disabled = new Disabled();
 
   /**
-   * Checks that element is selected (inputs like dropdowns etc.)
+   * Checks that element is selected (inputs like drop-downs etc.)
    *
    * @see WebElement#isSelected()
    */

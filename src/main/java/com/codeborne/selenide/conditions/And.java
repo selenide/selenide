@@ -4,6 +4,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class And extends Condition {
     this.conditions = conditions;
   }
 
+  @CheckReturnValue
   @Override
   public boolean apply(Driver driver, WebElement element) {
     lastFailedCondition = null;
@@ -31,11 +34,14 @@ public class And extends Condition {
     return true;
   }
 
+  @CheckReturnValue
   @Override
   public String actualValue(Driver driver, WebElement element) {
     return lastFailedCondition == null ? null : lastFailedCondition.actualValue(driver, element);
   }
 
+  @Nonnull
+  @CheckReturnValue
   @Override
   public String toString() {
     return lastFailedCondition == null ? super.toString() : lastFailedCondition.toString();
