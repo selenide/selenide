@@ -15,9 +15,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SelenideProxyServerTest implements WithAssertions {
-  private BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
-  private Config config = mock(Config.class);
-  private SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
+  private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
+  private final Config config = mock(Config.class);
+  private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);
 
   @Test
   void canInterceptResponses() {
@@ -28,7 +28,7 @@ class SelenideProxyServerTest implements WithAssertions {
     verify(bmp).start(0);
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
-    assertThat(filter.getDownloadedFiles()).hasSize(0);
+    assertThat(filter.downloads().files()).hasSize(0);
   }
 
   @Test

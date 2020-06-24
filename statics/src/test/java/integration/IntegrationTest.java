@@ -65,6 +65,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     useProxy(true);
+    Configuration.fileDownload = HTTPGET;
   }
 
   protected void openFile(String fileName) {
