@@ -38,14 +38,14 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class DownloadFileWithProxyServerTest implements WithAssertions {
-  private Waiter waiter = mock(Waiter.class);
-  private DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
+  private final Waiter waiter = mock(Waiter.class);
+  private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
   private final SelenideConfig config = new SelenideConfig();
-  private WebDriver webdriver = mock(WebDriver.class);
-  private SelenideProxyServer proxy = mock(SelenideProxyServer.class);
-  private WebElementSource linkWithHref = mock(WebElementSource.class);
-  private WebElement link = mock(WebElement.class);
-  private FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().downloadsFolder("build/downloads")));
+  private final WebDriver webdriver = mock(WebDriver.class);
+  private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+  private final WebElementSource linkWithHref = mock(WebElementSource.class);
+  private final WebElement link = mock(WebElement.class);
+  private final FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().downloadsFolder("build/downloads")));
 
   @BeforeEach
   void setUp() {
@@ -73,7 +73,7 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
   private void emulateServerResponseWithFiles(final File... files) {
     doAnswer(invocation -> {
-      filter.getDownloadedFiles().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
+      filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
       return null;
     }).when(link).click();
   }

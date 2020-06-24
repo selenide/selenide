@@ -27,6 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class SelenideProxyServer {
   private final Config config;
   private final InetAddressResolver inetAddressResolver;
+  @Nullable
   private final Proxy outsideProxy;
   private final BrowserUpProxy proxy;
   private final Map<String, RequestFilter> requestFilters = new HashMap<>();

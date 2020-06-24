@@ -31,14 +31,14 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class DownloadFileTest implements WithAssertions {
-  private Config config = mock(Config.class);
-  private Driver driver = mock(Driver.class);
-  private DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
-  private DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
-  private DownloadFile command = new DownloadFile(httpget, proxy);
-  private WebElementSource linkWithHref = mock(WebElementSource.class);
-  private WebElement link = mock(WebElement.class);
-  private File file = new File("some-file.yxy");
+  private final Config config = mock(Config.class);
+  private final Driver driver = mock(Driver.class);
+  private final DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);
+  private final DownloadFileWithProxyServer proxy = mock(DownloadFileWithProxyServer.class);
+  private final DownloadFile command = new DownloadFile(httpget, proxy);
+  private final WebElementSource linkWithHref = mock(WebElementSource.class);
+  private final WebElement link = mock(WebElement.class);
+  private final File file = new File("some-file.yxy");
 
   @BeforeEach
   void setUp() {
