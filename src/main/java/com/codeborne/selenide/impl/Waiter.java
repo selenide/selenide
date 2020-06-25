@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.lang.System.currentTimeMillis;
@@ -7,8 +8,10 @@ import static java.lang.System.currentTimeMillis;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
-public class Waiter {
+class Waiter {
+  @CheckReturnValue
   public <T> void wait(T subject, Predicate<T> condition, long timeout, long pollingInterval) {
+    sleep(pollingInterval);
     for (long start = currentTimeMillis();
          !isTimeoutExceeded(timeout, start) && !condition.test(subject); ) {
       sleep(pollingInterval);
@@ -19,7 +22,7 @@ public class Waiter {
     return currentTimeMillis() - start > timeout;
   }
 
-  void sleep(long milliseconds) {
+  private void sleep(long milliseconds) {
     try {
       Thread.sleep(milliseconds);
     } catch (InterruptedException e) {

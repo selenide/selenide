@@ -6,6 +6,8 @@ import com.codeborne.selenide.proxy.DownloadedFile;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -57,5 +59,19 @@ public class Downloads {
 
   public int size() {
     return files.size();
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public File firstDownloadedFile(String context, long timeout, FileFilter fileFilter) throws FileNotFoundException {
+    if (size() == 0) {
+      throw new FileNotFoundException("Failed to download file " + context + " in " + timeout + " ms.");
+    }
+
+    return firstMatchingFile(fileFilter)
+      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms.%s",
+        context, timeout, fileFilter.description())
+        )
+      ).getFile();
   }
 }
