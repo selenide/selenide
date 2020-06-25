@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
 import static com.codeborne.selenide.Configuration.fastSetValue;
+import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -44,6 +45,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   public void restoreDefaultProperties() {
     timeout = 1;
     clickViaJs = false;
+    downloadsFolder = "build/downloads";
   }
 
   @AfterAll

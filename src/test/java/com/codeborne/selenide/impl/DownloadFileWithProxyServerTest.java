@@ -6,13 +6,10 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.proxy.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import java.util.HashSet;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -21,37 +18,29 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.files.FileFilters.none;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.anyLong;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class DownloadFileWithProxyServerTest implements WithAssertions {
-  private final Waiter waiter = mock(Waiter.class);
-  private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter);
+  private final Waiter waiter = new DummyWaiter();
+  private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
+  private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = mock(WebDriver.class);
   private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
-  private final FileDownloadFilter filter = spy(new FileDownloadFilter(new SelenideConfig().downloadsFolder("build/downloads")));
+  private final FileDownloadFilter filter = spy(new FileDownloadFilter(config));
 
   @BeforeEach
   void setUp() {
-    doNothing().when(waiter).wait(any(), any(), anyLong(), anyLong());
-    when(webdriver.switchTo()).thenReturn(mock(TargetLocator.class));
-
     when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
@@ -62,13 +51,31 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
   void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, proxy, 3000, none());
-    assertThat(file.getName())
-      .isEqualTo("report.pdf");
+    File file = command.download(linkWithHref, link, 3000, none());
 
+    assertThat(file.getName()).isEqualTo("report.pdf");
     verify(filter).activate();
     verify(link).click();
     verify(filter).deactivate();
+  }
+
+  @Test
+  void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
+    emulateServerResponseWithFiles(new File("report.pdf"));
+
+    File file = command.download(linkWithHref, link, 3000, none());
+
+    assertThat(file.getName()).isEqualTo("report.pdf");
+    verify(windowsCloser).runAndCloseArisedWindows(same(webdriver), any());
+  }
+
+  @Test
+  void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
+    emulateServerResponseWithFiles();
+
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none()))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }
 
   private void emulateServerResponseWithFiles(final File... files) {
@@ -76,54 +83,5 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
       filter.downloads().files().addAll(Stream.of(files).map(file -> new DownloadedFile(file, emptyMap())).collect(toList()));
       return null;
     }).when(link).click();
-  }
-
-  @Test
-  void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
-    emulateServerResponseWithFiles(new File("report.pdf"));
-    when(webdriver.getWindowHandle()).thenReturn("tab1");
-    when(webdriver.getWindowHandles())
-      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
-      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
-
-    File file = command.download(linkWithHref, link, proxy, 3000, none());
-    assertThat(file.getName())
-      .isEqualTo("report.pdf");
-
-    verify(webdriver.switchTo()).window("tab-with-pdf");
-    verify(webdriver).close();
-    verify(webdriver.switchTo()).window("tab1");
-    verifyNoMoreInteractions(webdriver.switchTo());
-  }
-
-  @Test
-  void ignoresErrorIfWindowHasAlreadyBeenClosedMeanwhile() throws IOException {
-    TargetLocator targetLocator = mock(TargetLocator.class);
-    doReturn(targetLocator).when(webdriver).switchTo();
-    doThrow(new NoSuchWindowException("no window: tab-with-pdf")).when(targetLocator).window("tab-with-pdf");
-
-    emulateServerResponseWithFiles(new File("report.pdf"));
-    when(webdriver.getWindowHandle()).thenReturn("tab1");
-    when(webdriver.getWindowHandles())
-      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3")))
-      .thenReturn(new HashSet<>(asList("tab1", "tab2", "tab3", "tab-with-pdf")));
-
-    File file = command.download(linkWithHref, link, proxy, 3000, none());
-    assertThat(file.getName())
-      .isEqualTo("report.pdf");
-
-    verify(webdriver.switchTo()).window("tab-with-pdf");
-    verify(webdriver, never()).close();
-    verify(webdriver.switchTo()).window("tab1");
-    verifyNoMoreInteractions(webdriver.switchTo());
-  }
-
-  @Test
-  void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
-    emulateServerResponseWithFiles();
-
-    assertThatThrownBy(() -> command.download(linkWithHref, link, proxy, 3000, none()))
-      .isInstanceOf(FileNotFoundException.class)
-      .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }
 }
