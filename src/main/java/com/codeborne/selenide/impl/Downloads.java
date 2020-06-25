@@ -18,6 +18,13 @@ import static java.util.stream.Collectors.toList;
 public class Downloads {
   private final List<DownloadedFile> files = new CopyOnWriteArrayList<>();
 
+  public Downloads() {
+  }
+
+  public Downloads(List<DownloadedFile> files) {
+    this.files.addAll(files);
+  }
+
   public void clear() {
     files.clear();
   }

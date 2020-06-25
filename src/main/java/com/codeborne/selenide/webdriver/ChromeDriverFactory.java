@@ -12,7 +12,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,10 +99,6 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));
     return chromePreferences;
-  }
-
-  protected String downloadsFolder(Config config) {
-    return new File(config.downloadsFolder()).getAbsolutePath();
   }
 
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {

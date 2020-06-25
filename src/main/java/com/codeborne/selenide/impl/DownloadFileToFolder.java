@@ -85,25 +85,25 @@ public class DownloadFileToFolder {
   @ParametersAreNonnullByDefault
   private static class HasDownloads implements Predicate<File> {
     private final FileFilter fileFilter;
-    private final List<File> previousFiles;
+    private final Downloads previousFiles;
     Downloads downloads;
 
     private HasDownloads(FileFilter fileFilter, List<File> previousFiles) {
       this.fileFilter = fileFilter;
-      this.previousFiles = previousFiles;
+      this.previousFiles = toDownloads(previousFiles);
     }
 
     @Override
     public boolean test(File folder) {
-      List<File> files = allDownloadedFiles(folder);
-      List<File> newFiles = diff(files, previousFiles);
-      downloads = toDownloads(newFiles);
+      Downloads files = toDownloads(allDownloadedFiles(folder));
+      List<DownloadedFile> newFiles = diff(files, previousFiles);
+      downloads = new Downloads(newFiles);
       return !downloads.files(fileFilter).isEmpty();
     }
 
-    private List<File> diff(List<File> currentFiles, List<File> previousFiles) {
-      List<File> newFiles = new ArrayList<>(currentFiles);
-      newFiles.removeAll(previousFiles);
+    private List<DownloadedFile> diff(Downloads currentFiles, Downloads previousFiles) {
+      List<DownloadedFile> newFiles = new ArrayList<>(currentFiles.files());
+      newFiles.removeAll(previousFiles.files());
       return newFiles;
     }
 
