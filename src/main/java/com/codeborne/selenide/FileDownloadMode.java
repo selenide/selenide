@@ -13,5 +13,10 @@ public enum FileDownloadMode {
    * Works for any elements (e.g. form submission).
    * Doesn't work if you are using custom webdriver without selenide proxy server.
    */
-  PROXY
+  PROXY,
+
+  /**
+   * Download files to a local "downloads" folder
+   */
+  FOLDER
 }

@@ -3,5 +3,9 @@
   <Match>
     <Bug code="MS,RV,ST,DE,Nm,NP,It,UuF,DC,RCN,EI2"/>
   </Match>
+  <Match>
+    <Class name="~.*\.*Test"/>
+    <Bug code="SS"/>
+  </Match>
 </FindBugsFilter>
 
