@@ -5,6 +5,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.files.FileFilters;
+import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -19,22 +20,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
-
 @ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
   private static final Logger log = LoggerFactory.getLogger(DownloadFile.class);
 
   private final DownloadFileWithHttpRequest downloadFileWithHttpRequest;
   private final DownloadFileWithProxyServer downloadFileWithProxyServer;
+  private final DownloadFileToFolder downloadFileToFolder;
 
   public DownloadFile() {
-    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer());
+    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), new DownloadFileToFolder());
   }
 
-  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy) {
+  DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy, DownloadFileToFolder folder) {
     downloadFileWithHttpRequest = httpget;
     downloadFileWithProxyServer = proxy;
+    downloadFileToFolder = folder;
   }
 
   @Override
@@ -54,6 +55,9 @@ public class DownloadFile implements Command<File> {
       }
       case PROXY: {
         return downloadFileWithProxyServer.download(linkWithHref, link, timeout, fileFilter);
+      }
+      case FOLDER: {
+        return downloadFileToFolder.download(linkWithHref, link, timeout, fileFilter);
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + config.fileDownload());
