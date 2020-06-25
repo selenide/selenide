@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
@@ -41,6 +42,8 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
+    config.proxyEnabled(true);
+    config.fileDownload(PROXY);
     when(proxy.responseFilter("download")).thenReturn(filter);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, proxy));
     when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
@@ -76,6 +79,26 @@ class DownloadFileWithProxyServerTest implements WithAssertions {
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none()))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
+  }
+
+  @Test
+  void proxyServerShouldBeEnabled() {
+    config.proxyEnabled(false);
+    config.fileDownload(PROXY);
+
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none()))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining("Cannot download file: proxy server is not enabled");
+  }
+
+  @Test
+  void proxyServerShouldBeStarted() {
+    SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(Browser.class), mock(WebDriver.class), null));
+
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none()))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining("Cannot download file: proxy server is not started");
   }
 
   private void emulateServerResponseWithFiles(final File... files) {

@@ -43,39 +43,22 @@ public class DownloadFile implements Command<File> {
   public File execute(SelenideElement selenideElement, WebElementSource linkWithHref, @Nullable Object[] args) throws IOException {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
-
     long timeout = getTimeout(config, args);
     FileFilter fileFilter = getFileFilter(args);
 
+    log.debug("fileDownloadMode={}, timeout={} ms, fileFilter='{}'", config.fileDownload(), timeout, fileFilter);
+
     switch (config.fileDownload()) {
       case HTTPGET: {
-        log.debug("selenide.fileDownload = {} download file via http get", config.fileDownload());
         return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, fileFilter);
       }
       case PROXY: {
-        return downloadViaProxy(linkWithHref, link, timeout, fileFilter);
+        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, fileFilter);
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + config.fileDownload());
       }
     }
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private File downloadViaProxy(WebElementSource linkWithHref, WebElement link,
-                                long timeout, FileFilter fileFilter) throws FileNotFoundException {
-    Config config = linkWithHref.driver().config();
-    log.debug("selenide.fileDownload = {} download file via proxy", config.fileDownload());
-
-    if (!config.proxyEnabled()) {
-      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
-    }
-    if (linkWithHref.driver().getProxy() == null) {
-      throw new IllegalStateException("Cannot download file: proxy server is not started");
-    }
-
-    return downloadFileWithProxyServer.download(linkWithHref, link, timeout, fileFilter);
   }
 
   @CheckReturnValue

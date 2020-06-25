@@ -48,12 +48,20 @@ public class DownloadFileWithProxyServer {
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   long timeout, FileFilter fileFilter) throws FileNotFoundException {
     Config config = anyClickableElement.driver().config();
+    if (!config.proxyEnabled()) {
+      throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
+    }
+
     SelenideProxyServer proxyServer = anyClickableElement.driver().getProxy();
+    if (proxyServer == null) {
+      throw new IllegalStateException("Cannot download file: proxy server is not started");
+    }
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     if (filter == null) {
       throw new IllegalStateException("Cannot download file: download filter is not activated");
     }
+
     filter.activate();
     try {
       waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
