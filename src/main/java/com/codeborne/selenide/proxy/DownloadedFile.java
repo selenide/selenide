@@ -10,6 +10,7 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 public class DownloadedFile {
   private final File file;
+  private final long lastModifiedAt;
   private final Map<String, String> headers;
 
   /**
@@ -18,6 +19,7 @@ public class DownloadedFile {
    */
   public DownloadedFile(File file, Map<String, String> headers) {
     this.file = file;
+    this.lastModifiedAt = file.lastModified();
     this.headers = headers;
   }
 
@@ -35,5 +37,18 @@ public class DownloadedFile {
   @Nullable
   public String getContentType() {
     return headers.get("content-type");
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * file.hashCode() + Long.hashCode(lastModifiedAt);
+  }
+
+  public boolean equals(Object obj) {
+    return obj instanceof DownloadedFile && equals((DownloadedFile) obj);
+  }
+
+  private boolean equals(DownloadedFile other) {
+    return file.equals(other.file) && lastModifiedAt == other.lastModifiedAt;
   }
 }

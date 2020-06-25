@@ -62,6 +62,10 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     return new MergeableCapabilities(capabilities, config.browserCapabilities());
   }
 
+  protected String downloadsFolder(Config config) {
+    return new File(config.downloadsFolder()).getAbsolutePath();
+  }
+
   protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
     String prefix = "capabilities.";
     for (String key : System.getProperties().stringPropertyNames()) {

@@ -17,7 +17,8 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 public class EdgeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(EdgeDriverFactory.class);
   private static final int FIRST_VERSION_BASED_ON_CHROMIUM = 75;
-  private String browserVersion = null;
+  private static String browserVersion = null;
+  private final CdpClient cdpClient = new CdpClient();
 
   @Override
   public void setupWebdriverBinary() {
@@ -31,7 +32,21 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   public WebDriver create(Config config, Browser browser, Proxy proxy) {
     EdgeOptions options = createCapabilities(config, browser, proxy);
-    return new EdgeDriver(createDriverService(config), options);
+    EdgeDriverService driverService = createDriverService(config);
+    EdgeDriver driver = new EdgeDriver(driverService, options);
+    if (isChromiumBased()) {
+      setDownloadsFolder(config, driverService, driver);
+    }
+    return driver;
+  }
+
+  private void setDownloadsFolder(Config config, EdgeDriverService driverService, EdgeDriver driver) {
+    try {
+      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder(config));
+    }
+    catch (RuntimeException e) {
+      log.error("Failed to set downloads folder");
+    }
   }
 
   private EdgeDriverService createDriverService(Config config) {
@@ -43,7 +58,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   public EdgeOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
     MutableCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
-    if (browserVersion != null && majorVersion(browserVersion) >= FIRST_VERSION_BASED_ON_CHROMIUM) {
+    if (isChromiumBased()) {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
 
@@ -53,6 +68,11 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
+
     return options;
+  }
+
+  private boolean isChromiumBased() {
+    return browserVersion == null || majorVersion(browserVersion) >= FIRST_VERSION_BASED_ON_CHROMIUM;
   }
 }
