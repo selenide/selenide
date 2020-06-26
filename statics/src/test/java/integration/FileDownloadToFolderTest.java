@@ -121,4 +121,11 @@ public class FileDownloadToFolderTest  extends IntegrationTest {
       closeWebDriver();
     }
   }
+
+  @Test
+  void downloadsPdfFile() throws IOException {
+    File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
+
+    assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
+  }
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
@@ -113,12 +114,27 @@ class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
-    String downloadsFolder = "build/custom-folder";
-    Configuration.downloadsFolder = downloadsFolder;
+    closeWebDriver();
 
-    File downloadedFile = $(byText("Download me")).download();
+    try {
+      String downloadsFolder = "build/custom-folder";
+      Configuration.downloadsFolder = downloadsFolder;
+      openFile("page_with_uploads.html");
 
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(new File(downloadsFolder).getAbsolutePath());
+      File downloadedFile = $(byText("Download me")).download();
+
+      assertThat(downloadedFile.getAbsolutePath())
+        .startsWith(new File(downloadsFolder).getAbsolutePath());
+    }
+    finally {
+      closeWebDriver();
+    }
+  }
+
+  @Test
+  void downloadsPdfFile() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
   }
 }
