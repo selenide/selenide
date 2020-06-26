@@ -66,7 +66,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
-    useProxy(true);
+    useProxy(false);
     Configuration.fileDownload = HTTPGET;
   }
 
