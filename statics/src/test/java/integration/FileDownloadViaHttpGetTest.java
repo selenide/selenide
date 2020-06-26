@@ -2,7 +2,6 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.TimeoutException;
-import com.codeborne.selenide.files.FileFilters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,8 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static com.codeborne.selenide.files.FileFilters.withName;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -38,8 +38,6 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
       .isEqualTo("Hello, WinRar!");
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(folder.getAbsolutePath());
-
-    getWebDriver().quit();
   }
 
   @Test
@@ -77,7 +75,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadFileByName() {
-    assertThatThrownBy(() -> $(byText("Download me")).download(FileFilters.withName("good_bye_world.txt")))
+    assertThatThrownBy(() -> $(byText("Download me")).download(withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 1000 ms." +
         " with file name \"good_bye_world.txt\" " + System.lineSeparator() + "; actually downloaded: .+hello_world.txt");
@@ -127,5 +125,12 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
     assertThat(downloadedFile.getAbsolutePath())
       .startsWith(new File(downloadsFolder).getAbsolutePath());
+  }
+
+  @Test
+  void downloadsPdfFile() throws FileNotFoundException {
+    File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
   }
 }
