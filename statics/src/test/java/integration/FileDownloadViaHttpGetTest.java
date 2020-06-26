@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
@@ -23,7 +24,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    useProxy(false);
+    Configuration.fileDownload = HTTPGET;
     Configuration.timeout = 1000;
     openFile("page_with_uploads.html");
   }

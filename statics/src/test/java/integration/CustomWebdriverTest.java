@@ -38,7 +38,7 @@ class CustomWebdriverTest extends IntegrationTest {
 
   @BeforeEach
   void setUpTwoBrowsers() {
-    useProxy(false);
+    closeWebDriver();
 
     browser1 = isFirefox() ?
       new FirefoxDriver(addSslErrorIgnoreCapabilities(addHeadless(new FirefoxOptions()))) :
