@@ -8,12 +8,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.currentThread;
 import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
@@ -23,24 +28,31 @@ import static org.openqa.selenium.remote.CapabilityType.PROXY;
 import static org.openqa.selenium.remote.CapabilityType.SUPPORTS_ALERTS;
 import static org.openqa.selenium.remote.CapabilityType.TAKES_SCREENSHOT;
 
+@ParametersAreNonnullByDefault
 public abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
   private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
+  private static final Pattern REGEX_MXBEAN_NAME = Pattern.compile("(.*)@.*");
 
+  @CheckReturnValue
+  @Nonnull
   protected File webdriverLog(Config config) {
-    String pid = getRuntimeMXBean().getName().replaceFirst("(.*)@.*", "$1");
     File logFolder = new File(config.reportsFolder());
     if (!logFolder.exists()) {
-      logFolder.mkdirs();
+      if (!logFolder.mkdirs()) {
+        log.warn("Failed to create folder for webdriver logs: {}", logFolder.getAbsolutePath());
+      }
     }
-    String logFileName = String.format("%sdriver.%s_%s.log", config.browser(), currentTimeMillis(), pid);
+    String logFileName = String.format("webdriver.%s_%s_%s.log", currentTimeMillis(), pid(), currentThread().getId());
     File logFile = new File(logFolder, logFileName);
     log.info("Write webdriver logs to: {}", logFile.getAbsolutePath());
     return logFile;
   }
 
-  protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  protected MutableCapabilities createCommonCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     if (proxy != null) {
       capabilities.setCapability(PROXY, proxy);
@@ -62,6 +74,8 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     return new MergeableCapabilities(capabilities, config.browserCapabilities());
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected String downloadsFolder(Config config) {
     return new File(config.downloadsFolder()).getAbsolutePath();
   }
@@ -83,6 +97,8 @@ public abstract class AbstractDriverFactory implements DriverFactory {
    * @param value string to convert
    * @return string's object representation
    */
+  @CheckReturnValue
+  @Nonnull
   protected Object convertStringToNearestObjectType(String value) {
     if (isBoolean(value)) {
       return Boolean.valueOf(value);
@@ -95,21 +111,31 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     }
   }
 
+  @CheckReturnValue
   protected boolean isInteger(String value) {
     return REGEX_SIGNED_INTEGER.matcher(value).matches();
   }
 
+  @CheckReturnValue
   protected boolean isBoolean(String value) {
     return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
   }
 
+  @CheckReturnValue
   protected boolean isSystemPropertyNotSet(String key) {
     return isBlank(System.getProperty(key, ""));
   }
 
-  protected int majorVersion(String browserVersion) {
+  @CheckReturnValue
+  protected int majorVersion(@Nullable String browserVersion) {
     if (isBlank(browserVersion)) return 0;
     Matcher matcher = REGEX_VERSION.matcher(browserVersion);
     return matcher.matches() ? parseInt(matcher.replaceFirst("$1")) : 0;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected String pid() {
+    return REGEX_MXBEAN_NAME.matcher(getRuntimeMXBean().getName()).replaceFirst("$1");
   }
 }
