@@ -79,7 +79,7 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   @Test
   void downloadMissingFile() {
     timeout = 100;
-    assertThatThrownBy(() -> $(byText("Download missing file")).download())
+    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension(".pdf")))
       .isInstanceOf(FileNotFoundException.class);
   }
 
