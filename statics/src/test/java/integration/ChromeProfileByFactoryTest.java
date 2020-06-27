@@ -11,6 +11,9 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -64,8 +67,11 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
     }
   }
 
+  @ParametersAreNonnullByDefault
   private static class MyFactory extends ChromeDriverFactory {
     @Override
+    @CheckReturnValue
+    @Nonnull
     protected ChromeDriverService buildService(Config config) {
       return new ChromeDriverService.Builder()
         .withLogFile(chromedriverLog)
@@ -74,11 +80,15 @@ class ChromeProfileByFactoryTest extends IntegrationTest {
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     protected String[] excludeSwitches() {
       return new String[]{"enable-automation"};
     }
 
     @Override
+    @CheckReturnValue
+    @Nonnull
     protected List<String> createChromeArguments(Config config, Browser browser) {
       return asList("--proxy-bypass-list=<-loopback>", "--no-sandbox", "--disable-3d-apis");
     }

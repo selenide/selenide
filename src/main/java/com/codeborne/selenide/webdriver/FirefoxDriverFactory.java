@@ -13,6 +13,10 @@ import org.openqa.selenium.firefox.GeckoDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +27,7 @@ import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@ParametersAreNonnullByDefault
 public class FirefoxDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(FirefoxDriverFactory.class);
 
@@ -34,10 +39,14 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
     return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy));
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected GeckoDriverService createDriverService(Config config) {
     File logFile = webdriverLog(config);
     return new GeckoDriverService.Builder()
@@ -46,7 +55,9 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public FirefoxOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public FirefoxOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     setupBrowserBinary(config, firefoxOptions);
@@ -89,6 +100,8 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("browser.download.folderList", 2); // 0=Desktop, 1=Downloads, 2="reuse last location"
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected String popularContentTypes() {
     try {
       return String.join(";", IOUtils.readLines(getClass().getResourceAsStream("/content-types.properties"), UTF_8));
@@ -99,6 +112,8 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected Map<String, String> collectFirefoxProfileFromSystemProperties() {
     String prefix = "firefoxprofile.";
 

@@ -11,6 +11,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -26,11 +30,14 @@ public class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     $$("#radioButtons input").shouldHave(size(4));
   }
 
+  @ParametersAreNonnullByDefault
   static class MyFactory extends ChromeDriverFactory {
     static int port;
 
     @Override
-    public WebDriver create(Config config, Browser browser, Proxy proxy) {
+    @CheckReturnValue
+    @Nonnull
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(true);
       addSslErrorIgnoreCapabilities(options);
@@ -40,6 +47,8 @@ public class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
       return webDriver;
     }
 
+    @CheckReturnValue
+    @Nonnull
     private static URL toURL(String url) {
       try {
         return new URL(url);

@@ -11,6 +11,12 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(InternetExplorerDriverFactory.class);
 
@@ -22,13 +28,17 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
     InternetExplorerOptions options = createCapabilities(config, browser, proxy);
     return new InternetExplorerDriver(options);
   }
 
   @Override
-  public InternetExplorerOptions createCapabilities(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public InternetExplorerOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
     Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {

@@ -11,6 +11,11 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
@@ -20,21 +25,7 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 
 public class CommonCapabilitiesTest implements WithAssertions {
-  private final AbstractDriverFactory driverFactory = new AbstractDriverFactory() {
-    @Override
-    public void setupWebdriverBinary() {
-    }
-
-    @Override
-    public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
-      return new DesiredCapabilities();
-    }
-
-    @Override
-    public WebDriver create(Config config, Browser browser, Proxy proxy) {
-      return null;
-    }
-  };
+  private final AbstractDriverFactory driverFactory = new DummyDriverFactory();
   private final Proxy proxy = mock(Proxy.class);
 
   @Test
@@ -87,5 +78,26 @@ public class CommonCapabilitiesTest implements WithAssertions {
 
   private Browser browser(SelenideConfig config) {
     return new Browser(config.browser(), config.headless());
+  }
+
+  @ParametersAreNonnullByDefault
+  private static class DummyDriverFactory extends AbstractDriverFactory {
+    @Override
+    public void setupWebdriverBinary() {
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+      return new DesiredCapabilities();
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
+      return mock(WebDriver.class);
+    }
   }
 }

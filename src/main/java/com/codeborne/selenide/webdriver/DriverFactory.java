@@ -6,8 +6,18 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public interface DriverFactory {
   void setupWebdriverBinary();
-  MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy);
-  WebDriver create(Config config, Browser browser, Proxy proxy);
+
+  @CheckReturnValue
+  @Nonnull
+  MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy);
+
+  @CheckReturnValue
+  @Nonnull
+  WebDriver create(Config config, Browser browser, @Nullable Proxy proxy);
 }
