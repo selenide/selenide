@@ -9,20 +9,29 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+@ParametersAreNonnullByDefault
 public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
   public void setupWebdriverBinary() {
   }
 
   @Override
-  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
     return createInstanceOf(config.browser(), config, browser, proxy);
   }
 
-  private WebDriver createInstanceOf(String className, Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  private WebDriver createInstanceOf(String className, Config config, Browser browser, @Nullable Proxy proxy) {
     try {
       Capabilities capabilities = createCapabilities(config, browser, proxy);
 
@@ -49,11 +58,13 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
     return createCommonCapabilities(config, browser, proxy);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "unused"})
   private <T> T createInstanceOf(Class<T> resultClass, Class<?> clazz) throws Exception {
     Constructor<?> constructor = clazz.getDeclaredConstructor();
     constructor.setAccessible(true);

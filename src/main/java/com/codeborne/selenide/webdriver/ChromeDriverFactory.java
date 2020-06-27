@@ -12,6 +12,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +28,7 @@ import static java.util.regex.Matcher.quoteReplacement;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@ParametersAreNonnullByDefault
 public class ChromeDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(ChromeDriverFactory.class);
 
@@ -39,13 +44,17 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   @SuppressWarnings("deprecation")
-  public WebDriver create(Config config, Browser browser, Proxy proxy) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
     MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(config), chromeOptions);
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected ChromeDriverService buildService(Config config) {
     return new ChromeDriverService.Builder()
       .withLogFile(webdriverLog(config))
@@ -53,7 +62,9 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   }
 
   @Override
-  public MutableCapabilities createCapabilities(Config config, Browser browser, Proxy proxy) {
+  @CheckReturnValue
+  @Nonnull
+  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -68,6 +79,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected List<String> createChromeArguments(Config config, Browser browser) {
     List<String> arguments = new ArrayList<>();
     arguments.add("--proxy-bypass-list=<-loopback>");
@@ -75,6 +88,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return arguments;
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected String[] excludeSwitches() {
     return new String[]{"enable-automation", "load-extension"};
   }
@@ -86,11 +101,15 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected Map<String, Object> mobileEmulation(Config config) {
     String mobileEmulation = System.getProperty("chromeoptions.mobileEmulation", "");
     return parsePreferencesFromString(mobileEmulation);
   }
 
+  @CheckReturnValue
+  @Nonnull
   protected Map<String, Object> prefs(Config config) {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
@@ -101,6 +120,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return chromePreferences;
   }
 
+  @CheckReturnValue
+  @Nonnull
   private Map<String, Object> parsePreferencesFromString(String preferencesString) {
     Map<String, Object> prefs = new HashMap<>();
     List<String> allPrefs = parseCSV(preferencesString);
@@ -123,12 +144,16 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return prefs;
   }
 
+  @CheckReturnValue
+  @Nonnull
   private List<String> parseArguments(String arguments) {
     return parseCSV(arguments).stream()
       .map(this::removeQuotes)
       .collect(toList());
   }
 
+  @CheckReturnValue
+  @Nonnull
   private String removeQuotes(String value) {
     return REGEX_REMOVE_QUOTES.matcher(value).replaceAll(quoteReplacement(""));
   }
@@ -139,6 +164,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
    *                  Example: 123,"foo bar","bar,foo"
    * @return values as array, quotes are preserved
    */
+  @CheckReturnValue
+  @Nonnull
   final List<String> parseCSV(String csvString) {
     return isBlank(csvString) ? emptyList() : asList(REGEX_COMMAS_IN_VALUES.split(csvString));
   }
