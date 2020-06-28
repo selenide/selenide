@@ -20,6 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class OperaDriverFactory extends AbstractDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(OperaDriverFactory.class);
+  private final CdpClient cdpClient = new CdpClient();
 
   @Override
   public void setupWebdriverBinary() {
@@ -32,13 +33,27 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    return new OperaDriver(createDriverService(config), createCapabilities(config, browser, proxy));
+    OperaDriverService driverService = createDriverService(config);
+    OperaOptions capabilities = createCapabilities(config, browser, proxy);
+    OperaDriver driver = new OperaDriver(driverService, capabilities);
+    setDownloadsFolder(config, driverService, driver);
+    return driver;
   }
 
   private OperaDriverService createDriverService(Config config) {
     return new OperaDriverService.Builder()
       .withLogFile(webdriverLog(config))
       .build();
+  }
+
+  private void setDownloadsFolder(Config config, OperaDriverService driverService, OperaDriver driver) {
+    String downloadsFolder = downloadsFolder(config);
+    try {
+      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder);
+    }
+    catch (RuntimeException e) {
+      log.error("Failed to set downloads folder to {}", downloadsFolder, e);
+    }
   }
 
   @Override
