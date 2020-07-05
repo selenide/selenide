@@ -9,12 +9,14 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.BrowserType;
 
+import java.io.File;
 import java.util.Map;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 
 class RemoteDriverFactoryTest implements WithAssertions {
   private final RemoteDriverFactory factory = new RemoteDriverFactory();
+  private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().remote("https://some.grid:1234/wd/");
 
   @Test
@@ -62,7 +64,7 @@ class RemoteDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSetForFirefox() {
     config.browser("firefox");
     config.browserBinary("c:/browser.exe");
-    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), firefoxOptions);
 
@@ -75,7 +77,7 @@ class RemoteDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSetForChrome() {
     config.browser("chrome");
     config.browserBinary("c:/browser.exe");
-    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), chromeOptions);
 
@@ -87,7 +89,7 @@ class RemoteDriverFactoryTest implements WithAssertions {
   @Test
   void downloadsFolderShouldNotBeSetForChrome() {
     config.browser("chrome");
-    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), chromeOptions);
 

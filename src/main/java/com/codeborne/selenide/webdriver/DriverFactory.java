@@ -9,15 +9,16 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 
 public interface DriverFactory {
   void setupWebdriverBinary();
 
   @CheckReturnValue
   @Nonnull
-  MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy);
+  MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder);
 
   @CheckReturnValue
   @Nonnull
-  WebDriver create(Config config, Browser browser, @Nullable Proxy proxy);
+  WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder);
 }

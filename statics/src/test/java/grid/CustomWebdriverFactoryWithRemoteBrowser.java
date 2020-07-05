@@ -15,6 +15,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -37,7 +38,7 @@ public class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
       ChromeOptions options = new ChromeOptions();
       options.setHeadless(true);
       addSslErrorIgnoreCapabilities(options);

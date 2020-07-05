@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +54,7 @@ class SelenideElementProxyTest implements WithAssertions {
     .screenshots(false)
     .timeout(3)
     .pollingInterval(1);
-  private final SelenideDriver driver = new SelenideDriver(config, webdriver, null);
+  private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new File("build/downloads/123"));
 
   @BeforeEach
   void mockWebDriver() {

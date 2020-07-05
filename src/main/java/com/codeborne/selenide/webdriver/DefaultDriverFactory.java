@@ -13,6 +13,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -25,15 +26,16 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    return createInstanceOf(config.browser(), config, browser, proxy);
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    return createInstanceOf(config.browser(), config, browser, proxy, browserDownloadsFolder);
   }
 
   @CheckReturnValue
   @Nonnull
-  private WebDriver createInstanceOf(String className, Config config, Browser browser, @Nullable Proxy proxy) {
+  private WebDriver createInstanceOf(String className, Config config, Browser browser,
+                                     @Nullable Proxy proxy, File browserDownloadsFolder) {
     try {
-      Capabilities capabilities = createCapabilities(config, browser, proxy);
+      Capabilities capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
       Class<?> clazz = Class.forName(className);
       if (WebDriverProvider.class.isAssignableFrom(clazz)) {
@@ -44,7 +46,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
         if (config.driverManagerEnabled()) {
           factory.setupWebdriverBinary();
         }
-        return factory.create(config, browser, proxy);
+        return factory.create(config, browser, proxy, browserDownloadsFolder);
       }
       else {
         Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
@@ -60,7 +62,7 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     return createCommonCapabilities(config, browser, proxy);
   }
 

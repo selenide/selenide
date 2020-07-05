@@ -15,6 +15,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 @ParametersAreNonnullByDefault
 public class InternetExplorerDriverFactory extends AbstractDriverFactory {
@@ -30,15 +31,16 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    InternetExplorerOptions options = createCapabilities(config, browser, proxy);
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    InternetExplorerOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     return new InternetExplorerDriver(options);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
-  public InternetExplorerOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public InternetExplorerOptions createCapabilities(Config config, Browser browser,
+                                                    @Nullable Proxy proxy, File browserDownloadsFolder) {
     Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {

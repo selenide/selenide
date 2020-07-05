@@ -27,15 +27,15 @@ class DownloadFileToFolderTest {
   private final Waiter waiter = new DummyWaiter();
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
   private final DownloadFileToFolder command = new DownloadFileToFolder(waiter, windowsCloser);
-  private final String downloadsFolder = "build/downloads1";
-  private final SelenideConfig config = new SelenideConfig().downloadsFolder(downloadsFolder);
+  private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = mock(WebDriver.class);
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
+  private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null);
 
   @BeforeEach
   void setUp() {
-    when(linkWithHref.driver()).thenReturn(new DriverStub(config, new Browser("opera", false), webdriver, null));
+    when(linkWithHref.driver()).thenReturn(driver);
     when(linkWithHref.findAndAssertElementIsInteractable()).thenReturn(link);
     when(linkWithHref.toString()).thenReturn("<a href='report.pdf'>report</a>");
   }
@@ -44,14 +44,14 @@ class DownloadFileToFolderTest {
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = UUID.randomUUID().toString() + ".txt";
     doAnswer((Answer<Void>) i -> {
-      writeStringToFile(new File(downloadsFolder, newFileName), "Hello Bingo-Bongo", UTF_8);
+      writeStringToFile(new File(driver.browserDownloadsFolder(), newFileName), "Hello Bingo-Bongo", UTF_8);
       return null;
     }).when(link).click();
 
     File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
-    assertThat(downloadedFile.getParent()).isEqualTo(downloadsFolder);
+    assertThat(downloadedFile.getParentFile().getAbsolutePath()).isEqualTo(driver.browserDownloadsFolder().getAbsolutePath());
     assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
 }

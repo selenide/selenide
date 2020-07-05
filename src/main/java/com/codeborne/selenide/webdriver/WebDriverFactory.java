@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,15 +44,16 @@ public class WebDriverFactory {
     return result;
   }
 
-  public WebDriver createWebDriver(Config config, Proxy proxy) {
+  public WebDriver createWebDriver(Config config, Proxy proxy, File browserDownloadsFolder) {
     log.debug("browser={}", config.browser());
     log.debug("browser.version={}", config.browserVersion());
     log.debug("remote={}", config.remote());
     log.debug("browserSize={}", config.browserSize());
     log.debug("startMaximized={}", config.startMaximized());
+    log.debug("downloadsFolder={}", browserDownloadsFolder.getAbsolutePath());
 
     Browser browser = new Browser(config.browser(), config.headless());
-    WebDriver webdriver = createWebDriverInstance(config, proxy, browser);
+    WebDriver webdriver = createWebDriverInstance(config, proxy, browser, browserDownloadsFolder);
 
     browserResizer.adjustBrowserSize(config, webdriver);
     browserResizer.adjustBrowserPosition(config, webdriver);
@@ -62,18 +64,18 @@ public class WebDriverFactory {
     return webdriver;
   }
 
-  private WebDriver createWebDriverInstance(Config config, Proxy proxy, Browser browser) {
+  private WebDriver createWebDriverInstance(Config config, Proxy proxy, Browser browser, File browserDownloadsFolder) {
     DriverFactory webdriverFactory = findFactory(browser);
 
     if (config.remote() != null) {
-      MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy);
+      MutableCapabilities capabilities = webdriverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
       return remoteDriverFactory.create(config, browser, capabilities);
     }
     else {
       if (config.driverManagerEnabled()) {
         webdriverFactory.setupWebdriverBinary();
       }
-      return webdriverFactory.create(config, browser, proxy);
+      return webdriverFactory.create(config, browser, proxy, browserDownloadsFolder);
     }
   }
 

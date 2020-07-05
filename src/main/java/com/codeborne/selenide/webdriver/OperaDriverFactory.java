@@ -16,6 +16,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 @ParametersAreNonnullByDefault
 public class OperaDriverFactory extends AbstractDriverFactory {
@@ -32,11 +33,11 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     OperaDriverService driverService = createDriverService(config);
-    OperaOptions capabilities = createCapabilities(config, browser, proxy);
+    OperaOptions capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     OperaDriver driver = new OperaDriver(driverService, capabilities);
-    cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder(config));
+    cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
     return driver;
   }
 
@@ -49,7 +50,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public OperaOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public OperaOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     OperaOptions operaOptions = new OperaOptions();
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");

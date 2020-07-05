@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.DownloadedFile;
 import org.openqa.selenium.WebDriver;
@@ -55,8 +56,9 @@ public class DownloadFileToFolder {
   private File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
                                                         long timeout,
                                                         FileFilter fileFilter) throws FileNotFoundException {
-    Config config = anyClickableElement.driver().config();
-    File folder = new File(config.downloadsFolder());
+    Driver driver = anyClickableElement.driver();
+    Config config = driver.config();
+    File folder = driver.browserDownloadsFolder();
 
     PreviousDownloadsCompleted previousFiles = new PreviousDownloadsCompleted();
     waiter.wait(folder, previousFiles, timeout, config.pollingInterval());

@@ -27,7 +27,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
   private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
 
   private final Proxy proxy = mock(Proxy.class);
-  private final SelenideConfig config = new SelenideConfig().downloadsFolder(DOWNLOADS_FOLDER);
+  private final SelenideConfig config = new SelenideConfig().downloadsFolder("build/should-not-be-used");
+  private final File browserDownloadsFolder = new File(DOWNLOADS_FOLDER);
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final ChromeDriverFactory factory = new ChromeDriverFactory();
 
@@ -40,7 +41,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
 
   @Test
   void defaultChromeOptions() {
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).hasSize(3);
@@ -54,7 +55,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void shouldNotSetupDownloadFolder_forRemoteWebdriver() {
     config.remote("https://some.remote:1234/wd");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
@@ -65,7 +66,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionArgumentsFromSystemPropsToDriver() {
     System.setProperty(CHROME_OPTIONS_ARGS, "abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\"");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments)
@@ -77,7 +78,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=stringval,key2=1,key3=false,key4=true," +
       "\"key5=abc,555\",key6=\"555 abc\"");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap)
@@ -93,7 +94,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverNoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -104,7 +105,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void transferChromeOptionPreferencesFromSystemPropsToDriverTwoAssignmentStatement() {
     System.setProperty(CHROME_OPTIONS_PREFS, "key1=1,key2=1=false");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(prefsMap).containsEntry("key1", 1);
@@ -115,7 +116,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
 
-    Capabilities caps = factory.createCapabilities(config, browser, proxy);
+    Capabilities caps = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
     Map<String, Object> options = getChromeOptions(caps);
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
@@ -125,7 +126,7 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void headlessCanBeSet() {
     config.headless(true);
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
 
     assertThat(optionArguments).contains("--headless");

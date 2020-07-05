@@ -8,6 +8,8 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 
@@ -104,6 +106,10 @@ public class WebDriverRunner implements Browsers {
 
   public static Driver driver() {
     return getSelenideDriver().driver();
+  }
+
+  public static File getBrowserDownloadsFolder() {
+    return webdriverContainer.getBrowserDownloadsFolder();
   }
 
   /**
