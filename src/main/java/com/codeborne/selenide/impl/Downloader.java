@@ -7,6 +7,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
+import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
+
 @ParametersAreNonnullByDefault
 public class Downloader {
   private final Randomizer random;
@@ -32,10 +34,7 @@ public class Downloader {
     if (uniqueFolder.exists()) {
       throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
     }
-    if (!uniqueFolder.mkdirs()) {
-      throw new RuntimeException("Failed to create folder " + uniqueFolder.getAbsolutePath());
-    }
-
+    ensureFolderExists(uniqueFolder);
     return new File(uniqueFolder, fileName);
   }
 }

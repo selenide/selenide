@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
@@ -186,16 +187,6 @@ public class ScreenShotLaboratory {
     return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
-  protected void ensureFolderExists(File targetFile) {
-    File folder = targetFile.getParentFile();
-    if (!folder.exists()) {
-      log.info("Creating folder: {}", folder);
-      if (!folder.mkdirs()) {
-        log.error("Failed to create {}", folder);
-      }
-    }
-  }
-
   protected long timestamp() {
     return System.currentTimeMillis();
   }
@@ -218,7 +209,7 @@ public class ScreenShotLaboratory {
   @Nonnull
   private File writeToFile(Driver driver, BufferedImage destination) throws IOException {
     File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
-    ensureFolderExists(screenshotOfElement);
+    ensureParentFolderExists(screenshotOfElement);
     ImageIO.write(destination, "png", screenshotOfElement);
     return screenshotOfElement;
   }
