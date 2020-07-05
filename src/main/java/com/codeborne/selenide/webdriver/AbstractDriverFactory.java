@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
@@ -36,13 +37,8 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   @CheckReturnValue
   @Nonnull
   protected File webdriverLog(Config config) {
-    File logFolder = new File(config.reportsFolder());
-    if (!logFolder.exists()) {
-      if (!logFolder.mkdirs()) {
-        log.warn("Failed to create folder for webdriver logs: {}", logFolder.getAbsolutePath());
-      }
-    }
-    String logFileName = String.format("webdriver.%s_%s_%s.log", currentTimeMillis(), pid(), currentThread().getId());
+    File logFolder = ensureFolderExists(new File(config.reportsFolder()));
+    String logFileName = String.format("webdriver.%s.log", fileNamer.generateFileName());
     File logFile = new File(logFolder, logFileName);
     log.info("Write webdriver logs to: {}", logFile.getAbsolutePath());
     return logFile;
