@@ -113,10 +113,14 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   protected Map<String, Object> prefs(Config config) {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
+    chromePreferences.put("plugins.always_open_pdf_externally", true);
+
     if (config.remote() == null) {
       chromePreferences.put("download.default_directory", downloadsFolder(config));
     }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));
+
+    log.debug("Using chrome preferences: {}", chromePreferences);
     return chromePreferences;
   }
 

@@ -43,8 +43,9 @@ class ChromeDriverFactoryTest implements WithAssertions {
     Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy);
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
 
-    assertThat(prefsMap).hasSize(2);
+    assertThat(prefsMap).hasSize(3);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);
+    assertThat(prefsMap).containsEntry("plugins.always_open_pdf_externally", true);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File(DOWNLOADS_FOLDER).getAbsolutePath());
   }
@@ -115,8 +116,8 @@ class ChromeDriverFactoryTest implements WithAssertions {
     config.browserBinary("c:/browser.exe");
 
     Capabilities caps = factory.createCapabilities(config, browser, proxy);
-    Map options = (Map) caps.asMap().get(ChromeOptions.CAPABILITY);
 
+    Map<String, Object> options = getChromeOptions(caps);
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
   }
 
@@ -146,5 +147,10 @@ class ChromeDriverFactoryTest implements WithAssertions {
   void parseCSV_handles_quotes() {
     assertThat(factory.parseCSV("abdd,--abcd,\"snc,snc\",xcvcd=123,\"abc emd\""))
       .isEqualTo(asList("abdd", "--abcd", "\"snc,snc\"", "xcvcd=123", "\"abc emd\""));
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> getChromeOptions(Capabilities caps) {
+    return (Map<String, Object>) caps.asMap().get(ChromeOptions.CAPABILITY);
   }
 }
