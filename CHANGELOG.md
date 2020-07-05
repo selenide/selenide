@@ -1,11 +1,15 @@
 # Changelog
 
-## 5.12.3
+## 5.13.0
+* #1212 add file download mode FOLDER  --  see PR #1213 and #1215
+* #1156 Method text("") fails if null or empty string is given  -- thanks to Roman S.A. for PR #1186
 * #997 Avoid logging redundant `findElements` calls when executing `$.findAll()`  --  see PR #1193
-* #967 improve error messages for collections
+* #967 improve error messages for collections  --  see PR #1189
 * #1191 $.getWrappedElement waits again for the element  --  see PR #1203
 * upgraded to BrowserUpProxy 2.1.1
 * #943 upload multiple files without JS tricks (just using newline character)  --  see PR #1188
+* #1196 Download files with forbidden characters in name (those characters are replaced with underscore)  -- see PR #1199
+* #1206 write webdriver log to a file  --  see PR #1207
 
 ## 5.12.2 (released 29.05.2020)
 * #1172 don't close browser if `holdBrowserOpen=true`  --  see PR #1176
