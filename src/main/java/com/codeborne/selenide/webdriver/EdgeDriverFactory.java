@@ -17,6 +17,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import java.io.File;
+
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
 @ParametersAreNonnullByDefault
@@ -38,12 +40,12 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    EdgeOptions options = createCapabilities(config, browser, proxy);
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    EdgeOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     EdgeDriverService driverService = createDriverService(config);
     EdgeDriver driver = new EdgeDriver(driverService, options);
     if (isChromiumBased()) {
-      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder(config));
+      cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
     }
     return driver;
   }
@@ -57,7 +59,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public EdgeOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public EdgeOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     MutableCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
     if (isChromiumBased()) {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);

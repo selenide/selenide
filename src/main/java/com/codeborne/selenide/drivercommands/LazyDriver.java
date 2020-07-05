@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class LazyDriver implements Driver {
   private boolean closed;
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
+  private File browserDownloadsFolder;
 
   public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
@@ -109,10 +111,16 @@ public class LazyDriver implements Driver {
     return getWebDriver();
   }
 
+  @Override
+  public File browserDownloadsFolder() {
+    return browserDownloadsFolder;
+  }
+
   void createDriver() {
     CreateDriverCommand.Result result = createDriverCommand.createDriver(config, factory, userProvidedProxy, listeners);
     this.webDriver = result.webDriver;
     this.selenideProxyServer = result.selenideProxyServer;
+    this.browserDownloadsFolder = result.browserDownloadsFolder;
     this.closed = false;
   }
 
@@ -121,6 +129,7 @@ public class LazyDriver implements Driver {
     closeDriverCommand.closeAsync(config, webDriver, selenideProxyServer);
     webDriver = null;
     selenideProxyServer = null;
+    browserDownloadsFolder = null;
     closed = true;
   }
 }

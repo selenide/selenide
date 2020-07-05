@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 /**
  * A `Driver` implementation which uses thread-local
@@ -59,6 +60,11 @@ public class StaticDriver implements Driver {
   @Override
   public WebDriver getAndCheckWebDriver() {
     return WebDriverRunner.getAndCheckWebDriver();
+  }
+
+  @Override
+  public File browserDownloadsFolder() {
+    return WebDriverRunner.getBrowserDownloadsFolder();
   }
 
   @Override

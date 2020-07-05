@@ -41,7 +41,8 @@ class FirefoxWithProfileTest extends BaseIntegrationTest {
     if (browser().isHeadless()) options.setHeadless(true);
     WebDriver firefox = new FirefoxDriver(options);
 
-    customFirefox = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()), firefox, null);
+    SelenideConfig config = new SelenideConfig().browser("firefox").baseUrl(getBaseUrl());
+    customFirefox = new SelenideDriver(config, firefox, null, new File("build/downloads/456"));
     customFirefox.open("/page_with_selects_without_jquery.html");
     customFirefox.$("#non-clickable-element").shouldBe(visible);
 

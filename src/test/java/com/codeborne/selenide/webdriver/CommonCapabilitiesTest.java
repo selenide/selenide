@@ -15,6 +15,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.IE;
@@ -89,14 +90,14 @@ public class CommonCapabilitiesTest implements WithAssertions {
     @Override
     @CheckReturnValue
     @Nonnull
-    public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+    public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
       return new DesiredCapabilities();
     }
 
     @Override
     @CheckReturnValue
     @Nonnull
-    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
+    public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
       return mock(WebDriver.class);
     }
   }

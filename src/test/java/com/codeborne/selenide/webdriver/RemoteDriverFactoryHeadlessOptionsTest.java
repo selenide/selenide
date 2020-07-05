@@ -8,19 +8,21 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.io.File;
 import java.util.List;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 
 class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   private final RemoteDriverFactory factory = new RemoteDriverFactory();
+  private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().headless(false);
 
   @Test
   void shouldAddChromeHeadlessOptions() {
     config.headless(true);
     config.browser("chrome");
-    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), chromeOptions);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
@@ -33,7 +35,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldNotAddFirefoxHeadlessOptions() {
     config.headless(true);
     config.browser("firefox");
-    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), firefoxOptions);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
@@ -45,7 +47,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldNotAddChromeHeadlessOptions() {
     config.browser("chrome");
     config.headless(false);
-    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities chromeOptions = new ChromeDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), chromeOptions);
     List<String> launchArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
@@ -58,7 +60,7 @@ class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   void shouldAddFirefoxHeadlessOptions() {
     config.browser("firefox");
     config.headless(false);
-    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null);
+    MutableCapabilities firefoxOptions = new FirefoxDriverFactory().createCapabilities(config, browser(), null, browserDownloadsFolder);
 
     factory.setupCapabilities(config, browser(), firefoxOptions);
     List<String> launchArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);

@@ -1,12 +1,15 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.impl.DummyFileNamer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+
+import java.io.File;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,16 +21,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class LazyDriverTest implements WithAssertions {
-  private Config config = mock(Config.class);
-  private WebDriver webdriver = mock(WebDriver.class);
-  private WebDriverFactory factory = mock(WebDriverFactory.class);
-  private BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
-  private CreateDriverCommand createDriverCommand = new CreateDriverCommand();
-  private CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
+  private final Config config = mock(Config.class);
+  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriverFactory factory = mock(WebDriverFactory.class);
+  private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
+  private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));
+  private final CloseDriverCommand closeDriverCommand = new CloseDriverCommand();
   private LazyDriver driver;
 
   @BeforeEach
   void mockLogging() {
+    when(config.downloadsFolder()).thenReturn("build/down");
     when(config.reopenBrowserOnFail()).thenReturn(true);
     when(config.proxyEnabled()).thenReturn(true);
     driver = new LazyDriver(config, null, emptyList(), factory, browserHealthChecker, createDriverCommand, closeDriverCommand);
@@ -35,8 +39,8 @@ class LazyDriverTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
-    doReturn(webdriver).when(factory).createWebDriver(any(), any());
-    doReturn(webdriver).when(factory).createWebDriver(any(), isNull());
+    doReturn(webdriver).when(factory).createWebDriver(any(), any(), any());
+    doReturn(webdriver).when(factory).createWebDriver(any(), isNull(), any());
   }
 
   @Test
@@ -45,7 +49,7 @@ class LazyDriverTest implements WithAssertions {
 
     driver.createDriver();
 
-    verify(factory).createWebDriver(config, null);
+    verify(factory).createWebDriver(config, null, new File("build/down/123_456_78"));
   }
 
   @Test
@@ -55,7 +59,7 @@ class LazyDriverTest implements WithAssertions {
     driver.createDriver();
 
     assertThat(driver.getProxy()).isNotNull();
-    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy());
+    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(), new File("build/down/123_456_78"));
   }
 
   @Test

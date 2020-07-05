@@ -41,8 +41,8 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy));
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    return new FirefoxDriver(createDriverService(config), createCapabilities(config, browser, proxy, browserDownloadsFolder));
   }
 
   @CheckReturnValue
@@ -57,14 +57,14 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public FirefoxOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public FirefoxOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     FirefoxOptions firefoxOptions = new FirefoxOptions();
     firefoxOptions.setHeadless(config.headless());
     setupBrowserBinary(config, firefoxOptions);
     setupPreferences(firefoxOptions);
     firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
 
-    setupDownloadsFolder(config, firefoxOptions);
+    setupDownloadsFolder(config, firefoxOptions, browserDownloadsFolder);
 
     Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
     if (!ffProfile.isEmpty()) {
@@ -91,9 +91,9 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.addPreference("network.proxy.allow_hijacking_localhost", true);
   }
 
-  protected void setupDownloadsFolder(Config config, FirefoxOptions firefoxOptions) {
+  protected void setupDownloadsFolder(Config config, FirefoxOptions firefoxOptions, File browserDownloadsFolder) {
     if (config.remote() == null) {
-      firefoxOptions.addPreference("browser.download.dir", new File(config.downloadsFolder()).getAbsolutePath());
+      firefoxOptions.addPreference("browser.download.dir", browserDownloadsFolder.getAbsolutePath());
     }
     firefoxOptions.addPreference("browser.helperApps.neverAsk.saveToDisk", popularContentTypes());
     firefoxOptions.addPreference("pdfjs.disabled", true);  // disable the built-in viewer

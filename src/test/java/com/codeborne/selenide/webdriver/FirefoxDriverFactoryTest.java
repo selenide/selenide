@@ -26,7 +26,8 @@ class FirefoxDriverFactoryTest implements WithAssertions {
 
   private final Proxy proxy = mock(Proxy.class);
   private final FirefoxDriverFactory driverFactory = new FirefoxDriverFactory();
-  private final SelenideConfig config = new SelenideConfig().downloadsFolder(DOWNLOADS_FOLDER);
+  private final SelenideConfig config = new SelenideConfig().downloadsFolder("build/should-not-be-used");
+  private final File browserDownloadsFolder = new File(DOWNLOADS_FOLDER);
   private final Browser browser = new Browser(config.browser(), config.headless());
   private final Set<String> systemProperties = new HashSet<>();
 
@@ -69,7 +70,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
     givenSystemProperty("firefoxprofile.some.cap", "25");
 
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
 
     assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
     assertThat(profile.getIntegerPreference("some.conf.cap", 0)).isEqualTo(42);
@@ -78,7 +79,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transferIntegerFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap", "25");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
     assertThat(profile.getIntegerPreference("some.cap", 0)).isEqualTo(25);
   }
 
@@ -86,7 +87,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   void transferBooleanFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap1", "faLSe");
     givenSystemProperty("firefoxprofile.some.cap2", "TRue");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
     assertThat(profile.getBooleanPreference("some.cap1", true)).isEqualTo(false);
     assertThat(profile.getBooleanPreference("some.cap2", false)).isEqualTo(true);
   }
@@ -94,14 +95,14 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void transferStringFirefoxProfilePreferencesFromSystemPropsToDriver() {
     givenSystemProperty("firefoxprofile.some.cap", "abdd");
-    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy).getProfile();
+    FirefoxProfile profile = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder).getProfile();
     assertThat(profile.getStringPreference("some.cap", "sjlj")).isEqualTo("abdd");
   }
 
   @Test
   void browserBinaryCanBeSet() {
     config.browserBinary("c:/browser.exe");
-    Capabilities caps = driverFactory.createCapabilities(config, browser, proxy);
+    Capabilities caps = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     Map options = (Map) caps.asMap().get(FirefoxOptions.FIREFOX_OPTIONS);
     assertThat(options.get("binary")).isEqualTo("c:/browser.exe");
   }
@@ -109,14 +110,14 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   @Test
   void headlessCanBeSet() {
     config.headless(true);
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     List<String> optionArguments = getBrowserLaunchArgs(FirefoxOptions.FIREFOX_OPTIONS, options);
     assertThat(optionArguments).contains("-headless");
   }
 
   @Test
   void enablesProxyForLocalAddresses() {
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("network.proxy.no_proxies_on")).isEqualTo("");
@@ -138,7 +139,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
   void configuresDownloadFolder() {
     config.headless(true);
 
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("browser.download.dir")).isEqualTo(new File(DOWNLOADS_FOLDER).getAbsolutePath());
@@ -153,7 +154,7 @@ class FirefoxDriverFactoryTest implements WithAssertions {
     config.headless(true);
     config.remote("https://some.remote.blah:1234/wd");
 
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy);
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
 
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("browser.download.dir")).isNull();

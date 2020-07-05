@@ -16,6 +16,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +48,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   @SuppressWarnings("deprecation")
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy) {
-    MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy);
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    MutableCapabilities chromeOptions = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     log.debug("Chrome options: {}", chromeOptions);
     return new ChromeDriver(buildService(config), chromeOptions);
   }
@@ -64,7 +65,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy) {
+  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -73,7 +74,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     }
     options.addArguments(createChromeArguments(config, browser));
     options.setExperimentalOption("excludeSwitches", excludeSwitches());
-    options.setExperimentalOption("prefs", prefs(config));
+    options.setExperimentalOption("prefs", prefs(config, browserDownloadsFolder));
     setMobileEmulation(config, options);
 
     return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
@@ -110,13 +111,13 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected Map<String, Object> prefs(Config config) {
+  protected Map<String, Object> prefs(Config config, File browserDownloadsFolder) {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
     chromePreferences.put("plugins.always_open_pdf_externally", true);
 
     if (config.remote() == null) {
-      chromePreferences.put("download.default_directory", downloadsFolder(config));
+      chromePreferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
     }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));
 

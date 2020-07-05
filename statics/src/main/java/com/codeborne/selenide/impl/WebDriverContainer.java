@@ -9,12 +9,14 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 @ParametersAreNonnullByDefault
 public interface WebDriverContainer {
   void addListener(WebDriverEventListener listener);
   void setWebDriver(WebDriver webDriver);
-  void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy);
+  void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
+  void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder);
   void resetWebDriver();
 
   @CheckReturnValue
@@ -30,6 +32,10 @@ public interface WebDriverContainer {
   @CheckReturnValue
   @Nonnull
   WebDriver getAndCheckWebDriver();
+
+  @CheckReturnValue
+  @Nonnull
+  File getBrowserDownloadsFolder();
 
   void closeWindow();
   void closeWebDriver();

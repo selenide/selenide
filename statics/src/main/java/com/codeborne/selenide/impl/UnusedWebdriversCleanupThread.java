@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
@@ -14,12 +15,16 @@ class UnusedWebdriversCleanupThread extends Thread {
   private final Collection<Thread> allWebDriverThreads;
   private final Map<Long, WebDriver> threadWebDriver;
   private final Map<Long, SelenideProxyServer> threadProxyServer;
+  private final Map<Long, File> threadDownloadsFolder;
 
-  UnusedWebdriversCleanupThread(Collection<Thread> allWebDriverThreads, Map<Long, WebDriver> threadWebDriver,
-                                Map<Long, SelenideProxyServer> threadProxyServer) {
+  UnusedWebdriversCleanupThread(Collection<Thread> allWebDriverThreads,
+                                Map<Long, WebDriver> threadWebDriver,
+                                Map<Long, SelenideProxyServer> threadProxyServer,
+                                Map<Long, File> threadDownloadsFolder) {
     this.allWebDriverThreads = allWebDriverThreads;
     this.threadWebDriver = threadWebDriver;
     this.threadProxyServer = threadProxyServer;
+    this.threadDownloadsFolder = threadDownloadsFolder;
     setDaemon(true);
     setName("Webdrivers killer thread");
   }
@@ -62,6 +67,8 @@ class UnusedWebdriversCleanupThread extends Thread {
     if (proxy != null) {
       proxy.shutdown();
     }
+
+    threadDownloadsFolder.remove(thread.getId());
   }
 }
 

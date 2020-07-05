@@ -16,24 +16,24 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getBrowserDownloadsFolder;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static com.codeborne.selenide.impl.FileHelper.cleanupFolder;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class FileDownloadToFolderTest  extends IntegrationTest {
-  private final File folder = new File(Configuration.downloadsFolder);
+  private final File folder = new File(downloadsFolder);
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws IOException {
     Configuration.fileDownload = FileDownloadMode.FOLDER;
     openFile("page_with_uploads.html");
     timeout = 4000;
-    new File(downloadsFolder, "hello_world.txt").delete();
-    new File(downloadsFolder, "some-file.txt").delete();
-    new File(downloadsFolder, "файл-с-русским-названием.txt").delete();
+    cleanupFolder(getBrowserDownloadsFolder());
   }
 
   @Test
@@ -107,15 +107,15 @@ public class FileDownloadToFolderTest  extends IntegrationTest {
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
-    String downloadsFolder = "build/custom-folder";
-    Configuration.downloadsFolder = downloadsFolder;
+    String customDownloadsFolder = "build/custom-folder-" + System.currentTimeMillis();
+    downloadsFolder = customDownloadsFolder;
 
     try {
       openFile("page_with_uploads.html");
       File downloadedFile = $(byText("Download me")).download();
 
       assertThat(downloadedFile.getAbsolutePath())
-        .startsWith(new File(downloadsFolder).getAbsolutePath());
+        .startsWith(new File(customDownloadsFolder).getAbsolutePath());
     }
     finally {
       closeWebDriver();

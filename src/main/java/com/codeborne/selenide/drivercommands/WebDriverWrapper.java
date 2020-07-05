@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,21 +27,25 @@ public class WebDriverWrapper implements Driver {
   private final Config config;
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxy;
+  private final File browserDownloadsFolder;
   private final BrowserHealthChecker browserHealthChecker;
   private final CloseDriverCommand closeDriverCommand;
 
-  public WebDriverWrapper(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    this(config, webDriver, selenideProxy, new BrowserHealthChecker(), new CloseDriverCommand());
+  public WebDriverWrapper(Config config, WebDriver webDriver,
+                          @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder) {
+    this(config, webDriver, selenideProxy, browserDownloadsFolder, new BrowserHealthChecker(), new CloseDriverCommand());
   }
 
-  private WebDriverWrapper(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
-                   BrowserHealthChecker browserHealthChecker, CloseDriverCommand closeDriverCommand) {
+  private WebDriverWrapper(Config config, WebDriver webDriver,
+                           @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder,
+                           BrowserHealthChecker browserHealthChecker, CloseDriverCommand closeDriverCommand) {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
 
     this.config = config;
     this.webDriver = webDriver;
     this.selenideProxy = selenideProxy;
+    this.browserDownloadsFolder = browserDownloadsFolder;
     this.browserHealthChecker = browserHealthChecker;
     this.closeDriverCommand = closeDriverCommand;
   }
@@ -85,9 +90,14 @@ public class WebDriverWrapper implements Driver {
     return webDriver;
   }
 
+  @Override
+  public File browserDownloadsFolder() {
+    return browserDownloadsFolder;
+  }
+
   /**
    * Close the webdriver.
-   *
+   * <p>
    * NB! The behaviour was changed in Selenide 5.4.0
    * Even if webdriver was created by user - it will be closed.
    * It may hurt if you try to use this browser after closing.

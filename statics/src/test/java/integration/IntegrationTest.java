@@ -41,6 +41,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     resetSettings();
   }
 
+  @BeforeEach
   @AfterEach
   public void restoreDefaultProperties() {
     timeout = 1;

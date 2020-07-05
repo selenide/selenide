@@ -16,6 +16,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +37,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
+  private final Map<Long, File> threadDownloadsFolder = new ConcurrentHashMap<>(4);
   @Nullable private Proxy userProvidedProxy;
 
   private final Config config = new StaticConfig();
@@ -56,6 +58,11 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     setWebDriver(webDriver, null);
   }
 
+  @Override
+  public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
+    setWebDriver(webDriver, selenideProxy, new File(config.downloadsFolder()));
+  }
+
   /**
    * Make Selenide use given webdriver [and proxy] in the current thread.
    *
@@ -64,9 +71,10 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    *
    * @param webDriver any webdriver created by user
    * @param selenideProxy any proxy created by user (or null if proxy is not needed)
+   * @param browserDownloadsFolder downloads folder - unique for the given browser instance
    */
   @Override
-  public void setWebDriver(@Nonnull WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
+  public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder) {
     resetWebDriver();
 
     long threadId = currentThread().getId();
@@ -74,6 +82,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
       threadProxyServer.put(threadId, selenideProxy);
     }
     threadWebDriver.put(threadId, webDriver);
+    threadDownloadsFolder.put(threadId, browserDownloadsFolder);
   }
 
   /**
@@ -84,6 +93,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     long threadId = currentThread().getId();
     threadProxyServer.remove(threadId);
     threadWebDriver.remove(threadId);
+    threadDownloadsFolder.remove(threadId);
   }
 
   @Override
@@ -130,6 +140,12 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     return webDriver;
   }
 
+  @Nonnull
+  @Override
+  public File getBrowserDownloadsFolder() {
+    return threadDownloadsFolder.get(currentThread().getId());
+  }
+
   @CheckReturnValue
   @Nonnull
   private WebDriver createDriver() {
@@ -139,6 +155,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (result.selenideProxyServer != null) {
       threadProxyServer.put(threadId, result.selenideProxyServer);
     }
+    threadDownloadsFolder.put(threadId, result.browserDownloadsFolder);
     if (config.holdBrowserOpen()) {
       log.info("Browser and proxy will stay open due to holdBrowserOpen=true: {} -> {}, {}",
         threadId, result.webDriver, result.selenideProxyServer);
@@ -209,7 +226,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     if (!cleanupThreadStarted.get()) {
       synchronized (this) {
         if (!cleanupThreadStarted.get()) {
-          new UnusedWebdriversCleanupThread(allWebDriverThreads, threadWebDriver, threadProxyServer).start();
+          new UnusedWebdriversCleanupThread(allWebDriverThreads, threadWebDriver, threadProxyServer, threadDownloadsFolder).start();
           cleanupThreadStarted.set(true);
         }
       }

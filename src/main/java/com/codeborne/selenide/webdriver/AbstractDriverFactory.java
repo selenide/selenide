@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.impl.FileNamer;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -17,9 +18,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.System.currentTimeMillis;
-import static java.lang.Thread.currentThread;
-import static java.lang.management.ManagementFactory.getRuntimeMXBean;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
@@ -33,7 +31,7 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   private static final Logger log = LoggerFactory.getLogger(AbstractDriverFactory.class);
   private static final Pattern REGEX_SIGNED_INTEGER = Pattern.compile("^-?\\d+$");
   private static final Pattern REGEX_VERSION = Pattern.compile("(\\d+)(\\..*)?");
-  private static final Pattern REGEX_MXBEAN_NAME = Pattern.compile("(.*)@.*");
+  private final FileNamer fileNamer = new FileNamer();
 
   @CheckReturnValue
   @Nonnull
@@ -72,12 +70,6 @@ public abstract class AbstractDriverFactory implements DriverFactory {
 
     transferCapabilitiesFromSystemProperties(capabilities);
     return new MergeableCapabilities(capabilities, config.browserCapabilities());
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  protected String downloadsFolder(Config config) {
-    return new File(config.downloadsFolder()).getAbsolutePath();
   }
 
   protected void transferCapabilitiesFromSystemProperties(DesiredCapabilities currentBrowserCapabilities) {
@@ -131,11 +123,5 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     if (isBlank(browserVersion)) return 0;
     Matcher matcher = REGEX_VERSION.matcher(browserVersion);
     return matcher.matches() ? parseInt(matcher.replaceFirst("$1")) : 0;
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  protected String pid() {
-    return REGEX_MXBEAN_NAME.matcher(getRuntimeMXBean().getName()).replaceFirst("$1");
   }
 }
