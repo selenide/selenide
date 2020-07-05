@@ -36,7 +36,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
     OperaDriverService driverService = createDriverService(config);
     OperaOptions capabilities = createCapabilities(config, browser, proxy);
     OperaDriver driver = new OperaDriver(driverService, capabilities);
-    setDownloadsFolder(config, driverService, driver);
+    cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder(config));
     return driver;
   }
 
@@ -44,16 +44,6 @@ public class OperaDriverFactory extends AbstractDriverFactory {
     return new OperaDriverService.Builder()
       .withLogFile(webdriverLog(config))
       .build();
-  }
-
-  private void setDownloadsFolder(Config config, OperaDriverService driverService, OperaDriver driver) {
-    String downloadsFolder = downloadsFolder(config);
-    try {
-      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder);
-    }
-    catch (RuntimeException e) {
-      log.error("Failed to set downloads folder to {}", downloadsFolder, e);
-    }
   }
 
   @Override

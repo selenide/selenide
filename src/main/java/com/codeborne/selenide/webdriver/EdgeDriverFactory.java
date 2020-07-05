@@ -43,19 +43,9 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
     EdgeDriverService driverService = createDriverService(config);
     EdgeDriver driver = new EdgeDriver(driverService, options);
     if (isChromiumBased()) {
-      setDownloadsFolder(config, driverService, driver);
+      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder(config));
     }
     return driver;
-  }
-
-  private void setDownloadsFolder(Config config, EdgeDriverService driverService, EdgeDriver driver) {
-    String downloadsFolder = downloadsFolder(config);
-    try {
-      cdpClient.setDownloadsFolder(driverService, driver, downloadsFolder);
-    }
-    catch (RuntimeException e) {
-      log.error("Failed to set downloads folder to {}", downloadsFolder, e);
-    }
   }
 
   private EdgeDriverService createDriverService(Config config) {
