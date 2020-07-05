@@ -47,7 +47,7 @@ public class DownloadFile implements Command<File> {
     long timeout = getTimeout(config, args);
     FileFilter fileFilter = getFileFilter(args);
 
-    log.debug("fileDownloadMode={}, timeout={} ms, fileFilter='{}'", config.fileDownload(), timeout, fileFilter);
+    log.debug("fileDownloadMode={}, timeout={} ms, fileFilter='{}'", config.fileDownload(), timeout, fileFilter.description());
 
     switch (config.fileDownload()) {
       case HTTPGET: {
