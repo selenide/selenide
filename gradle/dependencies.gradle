@@ -35,7 +35,7 @@ dependencies {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
-  testImplementation("org.testng:testng:$testngVersion")
+  testImplementation("org.testng:testng:$testngVersion") { transitive = false }
   testImplementation('org.mockito:mockito-core:3.3.3')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
