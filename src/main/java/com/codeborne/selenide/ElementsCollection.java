@@ -139,7 +139,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   protected void waitUntil(CollectionCondition condition, long timeoutMs) {
-    Exception lastError = null;
+    Throwable lastError = null;
     List<WebElement> actualElements = null;
     Stopwatch stopwatch = new Stopwatch(timeoutMs);
     do {
@@ -152,24 +152,28 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       catch (JavascriptException e) {
         throw e;
       }
-      catch (WebDriverException elementNotFound) {
-        lastError = elementNotFound;
-
+      catch (WebDriverException | IndexOutOfBoundsException | UIAssertionError elementNotFound) {
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
           throw Cleanup.of.wrap(elementNotFound);
         }
-      }
-      catch (IndexOutOfBoundsException outOfCollection) {
         if (condition.applyNull()) {
           return;
         }
-
-        throw new ElementNotFound(collection.driver(), collection.description(), exist, outOfCollection);
+        lastError = elementNotFound;
       }
       sleep(driver().config().pollingInterval());
     }
     while (!stopwatch.isTimeoutReached());
-    condition.fail(collection, actualElements, lastError, timeoutMs);
+
+    if (lastError instanceof IndexOutOfBoundsException) {
+      throw new ElementNotFound(collection.driver(), collection.description(), exist, lastError);
+    }
+    else if (lastError instanceof UIAssertionError) {
+      throw (UIAssertionError) lastError;
+    }
+    else {
+      condition.fail(collection, actualElements, (Exception) lastError, timeoutMs);
+    }
   }
 
   void sleep(long ms) {
