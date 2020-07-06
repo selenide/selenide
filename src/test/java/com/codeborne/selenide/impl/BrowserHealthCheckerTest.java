@@ -13,8 +13,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 class BrowserHealthCheckerTest implements WithAssertions {
-  private WebDriver webdriver = mock(WebDriver.class);
-  private BrowserHealthChecker checker = new BrowserHealthChecker();
+  private final WebDriver webdriver = mock(WebDriver.class);
+  private final BrowserHealthChecker checker = new BrowserHealthChecker();
 
   @Test
   void checksIfBrowserIsStillAlive_byCallingGetTitle() {
@@ -25,21 +25,21 @@ class BrowserHealthCheckerTest implements WithAssertions {
 
   @Test
   void isBrowserStillOpen_UnreachableBrowserException() {
-    doThrow(UnreachableBrowserException.class).when(webdriver).getTitle();
+    doThrow(new UnreachableBrowserException("oops")).when(webdriver).getTitle();
 
     assertThat(checker.isBrowserStillOpen(webdriver)).isFalse();
   }
 
   @Test
   void isBrowserStillOpen_NoSuchWindowException() {
-    doThrow(NoSuchWindowException.class).when(webdriver).getTitle();
+    doThrow(new NoSuchWindowException("oops")).when(webdriver).getTitle();
 
     assertThat(checker.isBrowserStillOpen(webdriver)).isFalse();
   }
 
   @Test
   void isBrowserStillOpen_NoSuchSessionException() {
-    doThrow(NoSuchSessionException.class).when(webdriver).getTitle();
+    doThrow(new NoSuchSessionException("oops")).when(webdriver).getTitle();
 
     assertThat(checker.isBrowserStillOpen(webdriver)).isFalse();
   }
