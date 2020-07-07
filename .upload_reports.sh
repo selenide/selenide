@@ -14,14 +14,14 @@ FAILURE_MESSAGE="\nBUILD FAILED. PLEASE READ CHECKSTYLE AND TEST RESULT REPORTS 
 SUCCESS_MESSAGE="\nYOU CAN FIND TEST RESULTS REPORTS ON THE LINK ABOVE\n"
 
 echo "COMPRESSING build artifacts."
-cd ${ARTIFACTS_DIR}
-tar -zcf ${ARTIFACTS_FILE} *
+cd "${ARTIFACTS_DIR}" || exit 2
+tar -zcf "${ARTIFACTS_FILE}" *
 
 echo "Uploading build artifacts"
-curl --upload-file ${ARTIFACTS_FILE} https://transfer.sh/
+curl -F "file=@${ARTIFACTS_FILE}" -s -w "\n"  https://file.io
 if [ $TRAVIS_TEST_RESULT -eq 0 ];
 then
-	echo -e ${SUCCESS_MESSAGE}
+	echo -e "${SUCCESS_MESSAGE}"
 else
-	echo -e ${FAILURE_MESSAGE}
+	echo -e "${FAILURE_MESSAGE}"
 fi
