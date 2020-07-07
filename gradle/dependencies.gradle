@@ -6,7 +6,7 @@ ext {
   testngVersion = '7.1.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.6.2'
-  jettyVersion = '9.4.29.v20200521'
+  jettyVersion = '9.4.30.v20200611'
 }
 
 dependencies {
@@ -17,7 +17,7 @@ dependencies {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.0') {
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.0.1') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
