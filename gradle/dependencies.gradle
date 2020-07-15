@@ -13,7 +13,7 @@ dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
-  api('io.github.bonigarcia:webdrivermanager:4.0.0') {
+  api('io.github.bonigarcia:webdrivermanager:4.1.0') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
@@ -23,8 +23,8 @@ dependencies {
 
   compileOnly('com.browserup:browserup-proxy-core:2.1.1')
   testCompile('com.browserup:browserup-proxy-core:2.1.1')
-  compileOnly('io.netty:netty-all:4.1.50.Final')
-  testCompile('io.netty:netty-all:4.1.50.Final')
+  compileOnly('io.netty:netty-all:4.1.51.Final')
+  testCompile('io.netty:netty-all:4.1.51.Final')
   compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
@@ -36,7 +36,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.3.3')
+  testImplementation('org.mockito:mockito-core:3.4.0')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'

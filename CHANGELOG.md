@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.14.0
+* upgraded to WebDriverManager 4.1.0
+
 ## 5.13.0 (released 08.07.2020)
 * #1156 Method text("") fails if null or empty string is given  -- thanks to Roman S.A. for PR #1186
 * #997 Avoid logging redundant `findElements` calls when executing `$.findAll()`  --  see PR #1193
