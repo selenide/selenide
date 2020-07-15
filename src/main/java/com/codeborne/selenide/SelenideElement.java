@@ -955,6 +955,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   WebElement getWrappedElement();
 
   /**
+   * Click the element using {@link com.codeborne.selenide.ClickOptions}
+   *
+   * @see com.codeborne.selenide.commands.Click
+   */
+  void click(ClickOptions clickOption);
+
+  /**
+   * Click the element using {@link com.codeborne.selenide.ClickOptions}
+   * with a relative offset from the center of the element
+   *
+   * @see com.codeborne.selenide.commands.Click
+   */
+  void click(ClickOptions clickOption, int offsetX, int offsetY);
+
+  /**
    * Click the element
    *
    * <p>
