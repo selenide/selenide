@@ -25,12 +25,11 @@ public class Screenshots {
   }
 
   /**
-   * Take screenshot and give it filename
-   *
-   * @return absolute path of the screenshot taken or null if failed to create screenshot
+   * @deprecated Use either {@link Selenide#screenshot(java.lang.String)} or {@link SelenideDriver#screenshot(java.lang.String)}
    */
   @CheckReturnValue
   @Nullable
+  @Deprecated
   public static String takeScreenShot(String fileName) {
     return screenshots.takeScreenShot(driver(), fileName);
   }

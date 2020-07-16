@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.14.0
+* #1166 add method `SelenideDriver.screenshot(fileName)`
 * upgraded to WebDriverManager 4.1.0
 
 ## 5.13.0 (released 08.07.2020)
