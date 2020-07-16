@@ -260,7 +260,7 @@ public class Selenide {
   @CheckReturnValue
   @Nullable
   public static String screenshot(String fileName) {
-    return Screenshots.takeScreenShot(fileName);
+    return getSelenideDriver().screenshot(fileName);
   }
 
   /**

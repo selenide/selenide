@@ -5,6 +5,7 @@ import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import javax.annotation.CheckReturnValue;
@@ -34,6 +35,7 @@ import static java.util.Collections.emptyList;
 @ParametersAreNonnullByDefault
 public class SelenideDriver {
   private static final Navigator navigator = new Navigator();
+  private static ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
   private final Config config;
   private final Driver driver;
@@ -369,6 +371,18 @@ public class SelenideDriver {
   @Nonnull
   public String getUserAgent() {
     return driver().getUserAgent();
+  }
+
+  /**
+   * Take a screenshot of the current page
+   *
+   * @return absolute path of the screenshot taken or null if failed to create screenshot
+   * @since 5.14.0
+   */
+  @CheckReturnValue
+  @Nullable
+  public String screenshot(String fileName) {
+    return screenshots.takeScreenShot(driver(), fileName);
   }
 
   @Nonnull
