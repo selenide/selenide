@@ -83,7 +83,6 @@ final class FramesTest extends ITest {
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-
   @Test
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByElement() {
     assertThat(driver().title()).isEqualTo("Test::frames");

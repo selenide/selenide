@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static com.codeborne.selenide.impl.WebElementUtils.unwrap;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
@@ -225,7 +226,9 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nullable
-  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iFrame, WebElement element) {
+    WebElement iframe = unwrap(iFrame);
+
     WebDriver webdriver = checkIfFullyValidDriver(driver);
     if (webdriver == null) {
       return null;
