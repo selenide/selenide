@@ -39,7 +39,7 @@ class TextsTest implements WithAssertions {
   @Test
   void testToString() {
     assertThat(new Texts(asList("One", "Two")))
-      .hasToString("Texts [One, Two]");
+      .hasToString("texts [One, Two]");
   }
 
   private WebElement element(String text) {
