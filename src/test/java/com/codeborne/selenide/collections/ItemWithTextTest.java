@@ -2,6 +2,7 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.assertj.core.api.WithAssertions;
@@ -52,9 +53,9 @@ class ItemWithTextTest implements WithAssertions {
     assertThatThrownBy(() -> new ItemWithText(expectedText)
       .fail(collection,
         collection.getElements(),
-        new Exception("Exception message"), 10000)).isInstanceOf(TextsMismatch.class)
+        new Exception("Exception message"), 10000)).isInstanceOf(ElementWithTextNotFound.class)
       .hasMessageContaining(
-        String.format(String.format("Texts mismatch" +
+        String.format(String.format("Element with text not found" +
           "%nActual: %s" +
           "%nExpected: %s", ElementsCollection.texts(collection.getElements()), Collections.singletonList(expectedText))));
   }

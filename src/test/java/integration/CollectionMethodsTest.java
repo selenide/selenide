@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -473,17 +474,17 @@ class CollectionMethodsTest extends ITest {
 
   @Test
   void shouldItemWithText() {
-    $$("#user-table tbody tr  td.firstname")
+    $$("#user-table tbody tr td.firstname")
       .shouldBe(itemWithText("Bob"));
   }
 
   @Test
   void errorWhenItemWithTextNotMatchedButShouldBe() {
     String expectedText = "Luis";
-    assertThatThrownBy(()  -> $$("#user-table tbody tr  td.firstname").shouldBe(itemWithText(expectedText)))
-      .isInstanceOf(TextsMismatch.class)
+    assertThatThrownBy(()  -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
+      .isInstanceOf(ElementWithTextNotFound.class)
       .hasMessageContaining(
-        String.format(String.format("Texts mismatch" +
+        String.format(String.format("Element with text not found" +
           "%nActual: %s" +
           "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText))));
   }
