@@ -64,7 +64,7 @@ class CollectionConditionTest implements WithAssertions {
       .isInstanceOf(Texts.class);
     assertThat(collectionCondition)
       .as("Texts content")
-      .hasToString("Texts [One, Two, Three]");
+      .hasToString("texts [One, Two, Three]");
   }
 
   @Test
@@ -74,7 +74,7 @@ class CollectionConditionTest implements WithAssertions {
       .isInstanceOf(Texts.class);
     assertThat(collectionCondition)
       .as("Texts content")
-      .hasToString("Texts [One, Two, Three]");
+      .hasToString("texts [One, Two, Three]");
   }
 
   @Test
@@ -122,6 +122,6 @@ class CollectionConditionTest implements WithAssertions {
     CollectionCondition collectionCondition = CollectionCondition.texts("One").because("should be");
     assertThat(collectionCondition)
       .as("Should contain explanation")
-      .hasToString("Texts [One] (because should be)");
+      .hasToString("texts [One] (because should be)");
   }
 }
