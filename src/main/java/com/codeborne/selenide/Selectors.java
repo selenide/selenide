@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByShadow;
+import com.codeborne.selenide.selector.ByShadowRoot;
 import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Quotes;
@@ -86,6 +87,16 @@ public class Selectors {
   @Nonnull
   public static By shadowCss(String target, String shadowHost, String... innerShadowHosts) {
     return ByShadow.cssSelector(target, shadowHost, innerShadowHosts);
+  }
+
+  /**
+   * @see ByShadowRoot#cssSelector(java.lang.String, java.lang.String)
+   * @since 5.13
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By shadowRoot(String shadowHost, String target) {
+    return ByShadowRoot.cssSelector(shadowHost, target);
   }
 
   /**
