@@ -12,6 +12,7 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
+import com.codeborne.selenide.collections.ItemWithText;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
@@ -156,6 +157,16 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition noneMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new NoneMatch(description, predicate);
+  }
+
+  /**
+   * Checks if given collection has given text
+   *
+   * @param expectedText The expected text in the collection
+   */
+  @CheckReturnValue
+  public static CollectionCondition itemWithText(String expectedText) {
+    return new ItemWithText(expectedText);
   }
 
   /**

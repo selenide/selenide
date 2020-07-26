@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
+import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -15,12 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.noneMatch;
+import static com.codeborne.selenide.CollectionCondition.itemWithText;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -388,6 +392,10 @@ class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
       .as(description, "texts").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(itemWithText("any text")))
+      .as(description, "itemWithText").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
@@ -462,6 +470,23 @@ class CollectionMethodsTest extends ITest {
       .isInstanceOf(MatcherError.class)
       .hasMessageContaining(String.format("Collection matcher error" +
         "%nExpected: none of elements to match [value==cat] predicate"));
+  }
+
+  @Test
+  void shouldItemWithText() {
+    $$("#user-table tbody tr td.firstname")
+      .shouldBe(itemWithText("Bob"));
+  }
+
+  @Test
+  void errorWhenItemWithTextNotMatchedButShouldBe() {
+    String expectedText = "Luis";
+    assertThatThrownBy(()  -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
+      .isInstanceOf(ElementWithTextNotFound.class)
+      .hasMessageContaining(
+        String.format(String.format("Element with text not found" +
+          "%nActual: %s" +
+          "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText))));
   }
 
 }
