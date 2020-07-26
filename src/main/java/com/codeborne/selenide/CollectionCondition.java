@@ -160,7 +160,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   /**
-   * Checks if given collection has given text
+   * Checks if given collection has an element with given text.
+   * The condition is satisfied if one or more elements in this collection have exactly the given text.
    *
    * @param expectedText The expected text in the collection
    */
