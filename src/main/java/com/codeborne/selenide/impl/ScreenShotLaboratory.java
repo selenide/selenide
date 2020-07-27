@@ -100,6 +100,22 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nullable
+  public <T> T takeScreenShot(Driver driver, OutputType<T> outputType) {
+    return ifWebDriverStarted(driver, webDriver -> {
+        if (driver.getWebDriver() instanceof TakesScreenshot) {
+          T screenshot = ((TakesScreenshot) driver.getWebDriver()).getScreenshotAs(outputType);
+          if (outputType == OutputType.FILE) {
+            addToHistory((File) screenshot);
+          }
+          return screenshot;
+        }
+        return null;
+      }
+    );
+  }
+
+  @CheckReturnValue
+  @Nullable
   private String takeScreenShot(Config config, WebDriver webDriver, String fileName) {
     File screenshot = null;
     if (config.savePageSource()) {
