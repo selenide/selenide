@@ -2,7 +2,8 @@
 
 ## 5.14.0
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
-* #1166 added method `SelenideDriver.screenshot(fileName)`
+* #1166 added method `SelenideDriver.screenshot(fileName)`  --  see PR #1227
+* #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231 
 * upgraded to WebDriverManager 4.1.0
 
 ## 5.13.0 (released 08.07.2020)

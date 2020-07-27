@@ -4,6 +4,7 @@ import com.codeborne.selenide.ex.DialogTextMismatch;
 import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -261,6 +262,18 @@ public class Selenide {
   @Nullable
   public static String screenshot(String fileName) {
     return getSelenideDriver().screenshot(fileName);
+  }
+
+  /**
+   * Take the screenshot of current page and return it.
+   * @param outputType type of the returned screenshot
+   * @return The screenshot (as bytes, base64 or temporary file)
+   *         or null if webdriver does not support taking screenshots.
+   */
+  @CheckReturnValue
+  @Nullable
+  public static <T> T screenshot(OutputType<T> outputType) {
+    return getSelenideDriver().screenshot(outputType);
   }
 
   /**

@@ -10,6 +10,7 @@ import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -383,6 +384,18 @@ public class SelenideDriver {
   @Nullable
   public String screenshot(String fileName) {
     return screenshots.takeScreenShot(driver(), fileName);
+  }
+
+  /**
+   * Take a screenshot of the current page
+   *
+   * @return The screenshot (as bytes, base64 or temporary file)
+   * @since 5.14.0
+   */
+  @CheckReturnValue
+  @Nullable
+  public <T> T screenshot(OutputType<T> outputType) {
+    return screenshots.takeScreenShot(driver(), outputType);
   }
 
   @Nonnull
