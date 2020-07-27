@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.ClickOptions.JS;
+import static com.codeborne.selenide.ClickParams.usingJavaScript;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -27,7 +27,7 @@ class ClickUsingJavascriptTest extends IntegrationTest {
   @Test
   void userCanClickUsingJavaScript_viaClickOptions() {
     $(By.name("rememberMe")).shouldNotBe(selected);
-    $(By.name("rememberMe")).click(JS);
+    $(By.name("rememberMe")).click(usingJavaScript());
     $(By.name("rememberMe")).shouldBe(selected);
   }
 }

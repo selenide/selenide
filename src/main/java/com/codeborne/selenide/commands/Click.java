@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.ClickOptions;
+import com.codeborne.selenide.ClickParams;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
@@ -25,19 +25,13 @@ public class Click implements Command<Void> {
       click(driver, webElement);
     }
     else if (args.length == 1) {
-      ClickOptions clickOption = firstOf(args);
-      click(driver, webElement, clickOption, 0, 0);
+      ClickParams clickParams = firstOf(args);
+      click(driver, webElement, clickParams);
     }
     else if (args.length == 2) {
       Integer offsetX = firstOf(args);
       Integer offsetY = (Integer) args[1];
       click(driver, webElement, offsetX, offsetY);
-    }
-    else if (args.length == 3) {
-      ClickOptions clickOption = firstOf(args);
-      Integer offsetX = (Integer) args[1];
-      Integer offsetY = (Integer) args[2];
-      click(driver, webElement, clickOption, offsetX, offsetY);
     }
     return null;
   }
@@ -64,14 +58,14 @@ public class Click implements Command<Void> {
     }
   }
 
-  private void click(Driver driver, WebElement webElement, ClickOptions clickOption, int offsetX, int offsetY) {
-    switch (clickOption) {
+  private void click(Driver driver, WebElement webElement, ClickParams clickParams) {
+    switch (clickParams.clickOption()) {
       case JS: {
-        clickViaJS(driver, webElement, offsetX, offsetY);
+        clickViaJS(driver, webElement, clickParams.offsetX(), clickParams.offsetY());
         break;
       }
       default: {
-        throw new IllegalArgumentException("Unknown click option: " + clickOption);
+        throw new IllegalArgumentException("Unknown click option: " + clickParams.clickOption());
       }
     }
   }

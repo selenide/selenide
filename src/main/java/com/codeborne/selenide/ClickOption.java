@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-public enum ClickOptions {
+public enum ClickOption {
 
   /**
    * Click the element via JavaScript
