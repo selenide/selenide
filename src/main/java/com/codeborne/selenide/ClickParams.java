@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import static com.codeborne.selenide.ClickOption.*;
+import static com.codeborne.selenide.ClickOption.JS;
 
 public class ClickParams {
 
