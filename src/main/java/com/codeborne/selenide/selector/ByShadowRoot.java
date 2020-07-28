@@ -67,13 +67,13 @@ public class ByShadowRoot {
         final List<WebElement> hosts = getShadowRoots(root, shadowHost, -1);
         final WebElement targetWebElement = getElementInsideShadowTree(hosts, target);
         if (targetWebElement == null) {
-          throw new NoSuchElementException("The element was not found: " + toString());
+          throw new NoSuchElementException("The element was not found: {" + getSelectorString() + "}");
         }
         return targetWebElement;
       }
       final List<WebElement> hosts = getShadowRoots(root, shadowHost, 1);
       if (0 == hosts.size()) {
-        throw new NoSuchElementException("The element was not found: " + toString());
+        throw new NoSuchElementException("The element was not found: {" + getSelectorString() + "}");
       }
       return hosts.get(0);
     }
@@ -165,8 +165,21 @@ public class ByShadowRoot {
     @CheckReturnValue
     @Nonnull
     public String toString() {
-      final StringBuilder sb = new StringBuilder("By.ByShadowRoot: ");
-      sb.append(null != shadowHost ? shadowHost : "null").append(" ").append(null != target ? target : "null");
+      final StringBuilder sb = new StringBuilder("By.cssSelector: ");
+      sb.append(getSelectorString());
+      return sb.toString();
+    }
+    private String getSelectorString() {
+      final StringBuilder sb = new StringBuilder();
+      if (null != shadowHost) {
+        sb.append("[");
+        sb.append(shadowHost);
+        sb.append("]");
+      }
+      if (null != target) {
+        sb.append(" ");
+        sb.append(target);
+      }
       return sb.toString();
     }
   }

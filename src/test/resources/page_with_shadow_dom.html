@@ -39,7 +39,24 @@
       p2.appendChild(text2);
       shadow2.appendChild(p2);
     });
-
+    $(function () {
+      let shadow = document.getElementById('next-shadow-host').attachShadow( { mode: "open" } );
+      let div = document.createElement("div");
+      shadow.appendChild(div);
+      let shadow2 = div.attachShadow( { mode: "open" } );
+      let div2 = document.createElement("div");
+      shadow2.appendChild(div2);
+      for(let i=0;i<5;i++){
+        $(div2).append('<div class="third-shadow-host"><h2>--therd:'+(i+1)+'</h2><div class="fourth-shadow-host" /><div class="fourth-shadow-host" /></div>');
+      }
+      $(div2).find("div.fourth-shadow-host").each(function(i){
+        let shadow = this.attachShadow( { mode: "open" } );
+        shadow.appendChild($('<h2>----fourth:'+(i+1)+'</h2>')[0]);
+        shadow.appendChild($('<p>line 1</p>')[0]);
+        shadow.appendChild($('<p>line 2</p>')[0]);
+        shadow.appendChild($('<p>line 3</p>')[0]);
+      });
+    });
 
 
   </script>
@@ -50,5 +67,6 @@
 <div id="shadow-host">
 </div>
 
+<div id="next-shadow-host">
 </body>
 </html>

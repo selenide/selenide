@@ -52,16 +52,16 @@ public class ShadowRootElementTest extends ITest {
     assertThatThrownBy(() -> $(shadowRoot("h1", "p")).text())
       .isInstanceOf(ElementNotFound.class)
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .hasMessageContaining("The element is not a shadow host or has 'closed' shadow-dom mode:");
+      .hasMessageContaining("The element was not found: {[h1] p}");
   }
 
   @Test
   void throwErrorWhenInnerShadowHostAbsent() {
     assertThatThrownBy(() -> $(shadowRoot("#shadow-host/#nonexistent", "p")).text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#shadow-host [#nonexistent] p}")
+      .hasMessageContaining("Element not found {[#shadow-host/#nonexistent] p}")
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .hasMessageContaining("The element was not found: #nonexistent");
+      .hasMessageContaining("The element was not found: {[#shadow-host/#nonexistent] p}");
   }
 
   @Test
@@ -80,5 +80,53 @@ public class ShadowRootElementTest extends ITest {
   void getNonExistingTargetElementsInsideShadowHost() {
     $$(shadowRoot("#shadow-host", "#nonexistent"))
       .shouldHaveSize(0);
+  }
+
+  @Test
+  void getAllShadowHost() {
+    $$(shadowRoot("//*", null))
+      .shouldHaveSize(14);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost2() {
+    $$(shadowRoot("//*", "h2"))
+      .shouldHaveSize(15);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost3() {
+    $$(shadowRoot("//*", "p"))
+      .shouldHaveSize(32);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost4() {
+    $$(shadowRoot("#next-shadow-host/div", "h2"))
+      .shouldHaveSize(5);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost5() {
+    $$(shadowRoot("#next-shadow-host/div.fourth-shadow-host", "p"))
+      .shouldHaveSize(0);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost6() {
+    $$(shadowRoot("#next-shadow-host//div.fourth-shadow-host", "p"))
+      .shouldHaveSize(30);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost7() {
+    $$(shadowRoot("#next-shadow-host/div/div.fourth-shadow-host", "p"))
+      .shouldHaveSize(30);
+  }
+
+  @Test
+  void getElementsInsideInnerShadowHost8() {
+    $(shadowRoot("//div.fourth-shadow-host", null)).$$(shadowRoot(null, "p"))
+      .shouldHaveSize(3);
   }
 }
