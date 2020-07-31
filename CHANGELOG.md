@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.13.1 (released 31.08.2020)
+* #1235 escape downloads path on Windows
+
 ## 5.13.0 (released 08.08.2020)
 * #1156 Method text("") fails if null or empty string is given  -- thanks to Roman S.A. for PR #1186
 * #997 Avoid logging redundant `findElements` calls when executing `$.findAll()`  --  see PR #1193

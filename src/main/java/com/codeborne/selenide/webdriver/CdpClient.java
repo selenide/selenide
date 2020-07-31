@@ -16,14 +16,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.URL;
-import java.util.regex.Pattern;
-
-import static java.util.regex.Matcher.quoteReplacement;
 
 @ParametersAreNonnullByDefault
 public class CdpClient {
   private static final Logger log = LoggerFactory.getLogger(CdpClient.class);
-  private static final Pattern REGEX_ENCODE_FOR_JSON = Pattern.compile("\"", Pattern.LITERAL);
 
   public void setDownloadsFolder(DriverService driverService, RemoteWebDriver driver, String downloadsFolder) {
     setDownloadsFolder(driverService.getUrl(), driver.getSessionId(), downloadsFolder);
@@ -53,8 +49,9 @@ public class CdpClient {
         "}";
   }
 
+  @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
   String escapeForJson(String text) {
-    return REGEX_ENCODE_FOR_JSON.matcher(text).replaceAll(quoteReplacement("\\\""));
+    return text.replace("\\", "\\\\").replace("\"", "\\\"");
   }
 
   @CheckReturnValue
