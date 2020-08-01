@@ -955,16 +955,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   WebElement getWrappedElement();
 
   /**
-   * Click the element using {@link ClickParams}: {@code $("#username").click(ClickParams.usingJavaScript())}
+   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}
    *
    * <p>
-   * You can specify a relative offset from the center of the element inside ClickParams:
+   * You can specify a relative offset from the center of the element inside ClickOptions:
    * e.g. {@code $("#username").click(usingJavaScript().offset(123, 222))}
    * </p>
    *
    * @see com.codeborne.selenide.commands.Click
    */
-  void click(ClickParams clickOption);
+  void click(ClickOptions clickOption);
 
   /**
    * Click the element

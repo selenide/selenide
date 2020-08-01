@@ -1,6 +1,6 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.ClickParams;
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
@@ -25,8 +25,8 @@ public class Click implements Command<Void> {
       click(driver, webElement);
     }
     else if (args.length == 1) {
-      ClickParams clickParams = firstOf(args);
-      click(driver, webElement, clickParams);
+      ClickOptions clickOptions = firstOf(args);
+      click(driver, webElement, clickOptions);
     }
     else if (args.length == 2) {
       Integer offsetX = firstOf(args);
@@ -58,14 +58,14 @@ public class Click implements Command<Void> {
     }
   }
 
-  private void click(Driver driver, WebElement webElement, ClickParams clickParams) {
-    switch (clickParams.clickOption()) {
+  private void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
+    switch (clickOptions.clickOption()) {
       case JS: {
-        clickViaJS(driver, webElement, clickParams.offsetX(), clickParams.offsetY());
+        clickViaJS(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
         break;
       }
       default: {
-        throw new IllegalArgumentException("Unknown click option: " + clickParams.clickOption());
+        throw new IllegalArgumentException("Unknown click option: " + clickOptions.clickOption());
       }
     }
   }
