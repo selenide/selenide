@@ -5,7 +5,8 @@
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
 * #1166 added method `SelenideDriver.screenshot(fileName)`  --  see PR #1227
-* #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231 
+* #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231
+* #1190 take screenshot if `switchTo(frame)` or `switchTo(window)` or `switchTo(alert)` failed  --  see PR #1240
 * upgraded to WebDriverManager 4.1.0
 
 ## 5.13.1 (released 31.07.2020)

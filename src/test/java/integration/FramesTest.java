@@ -1,8 +1,8 @@
 package integration;
 
+import com.codeborne.selenide.ex.FrameNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.NoSuchFrameException;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
@@ -92,7 +92,9 @@ class FramesTest extends ITest {
       switchTo().frame("mainFrame");
       // $("#log") is present, but not frame.
       switchTo().frame($("#log"));
-    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with element: <div id=\"log\" displayed:false></div>");
+    })
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with element: <div id=\"log\" displayed:false></div>");
   }
 
   @Test
@@ -100,7 +102,9 @@ class FramesTest extends ITest {
     assertThat(driver().title()).isEqualTo("Test::frames");
     assertThatThrownBy(() -> {
       switchTo().frame("absentFrame");
-    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with id/name: absentFrame");
+    })
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with id/name: absentFrame");
   }
 
   @Test
@@ -109,6 +113,18 @@ class FramesTest extends ITest {
 
     assertThatThrownBy(() -> {
       switchTo().frame(Integer.MAX_VALUE);
-    }).isInstanceOf(NoSuchFrameException.class).hasMessage("No frame found with index: " + Integer.MAX_VALUE);
+    })
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: " + Integer.MAX_VALUE);
+  }
+
+  @Test
+  void attachesScreenshotWhenCannotFrameNotFound() {
+    assertThatThrownBy(() -> switchTo().frame(33))
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: 33")
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 }

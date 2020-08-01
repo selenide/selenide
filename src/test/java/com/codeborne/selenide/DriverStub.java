@@ -96,7 +96,7 @@ public class DriverStub implements Driver {
 
   @Override
   public SelenideTargetLocator switchTo() {
-    return new SelenideTargetLocator(config(), getWebDriver());
+    return new SelenideTargetLocator(this);
   }
 
   @Override
