@@ -1,12 +1,13 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.ex.AlertNotFoundException;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
 
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.text;
@@ -89,22 +90,31 @@ class AlertTest extends IntegrationTest {
 
   @Test
   void alertThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
-    assertThatThrownBy(() -> {
-      switchTo().alert();
-    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
+    assertThatThrownBy(() -> switchTo().alert())
+      .isInstanceOf(AlertNotFoundException.class)
+      .hasMessageStartingWith("Alert not found")
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 
   @Test
   void confirmThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
-    assertThatThrownBy(() -> {
-      confirm();
-    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
+    assertThatThrownBy(Selenide::confirm)
+      .isInstanceOf(AlertNotFoundException.class)
+      .hasMessageStartingWith("Alert not found")
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 
   @Test
   void promptThrowsNoAlertPresentExceptionWhenAlertIsNotPresent() {
-    assertThatThrownBy(() -> {
-      prompt();
-    }).isInstanceOf(NoAlertPresentException.class).hasMessage("Alert not found");
+    assertThatThrownBy(Selenide::prompt)
+      .isInstanceOf(AlertNotFoundException.class)
+      .hasMessageStartingWith("Alert not found")
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 }

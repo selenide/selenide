@@ -1,12 +1,12 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.AlertNotFoundException;
 import com.codeborne.selenide.ex.FrameNotFoundException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.ex.WindowNotFoundException;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.TimeoutException;
@@ -119,7 +119,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(alertIsPresent());
     } catch (TimeoutException e) {
-      throw new NoAlertPresentException("Alert not found", e);
+      throw alertNotFoundError(e);
     }
   }
 
@@ -306,6 +306,11 @@ public class SelenideTargetLocator implements TargetLocator {
 
   private Error windowNotFoundError(String message, Throwable cause) {
     WindowNotFoundException error = new WindowNotFoundException(driver, message, cause);
+    return UIAssertionError.wrap(driver, error, config.timeout());
+  }
+
+  private Error alertNotFoundError(Throwable cause) {
+    AlertNotFoundException error = new AlertNotFoundException(driver, "Alert not found", cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 }
