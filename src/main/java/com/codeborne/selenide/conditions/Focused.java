@@ -27,8 +27,8 @@ public class Focused extends Condition {
   @Override
   public String actualValue(Driver driver, WebElement webElement) {
     WebElement focusedElement = getFocusedElement(driver);
-    return focusedElement == null ? "No focused focusedElement found " :
-      "Focused focusedElement: " + Describe.describe(driver, focusedElement) +
-        ", current focusedElement: " + Describe.describe(driver, webElement);
+    return focusedElement == null ? "No focused element found " :
+      "Focused element: " + Describe.describe(driver, focusedElement) +
+        ", current element: " + Describe.describe(driver, webElement);
   }
 }
