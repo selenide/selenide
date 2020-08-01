@@ -31,7 +31,7 @@ public class Describe {
   private Describe(Driver driver, WebElement element) {
     this.driver = driver;
     this.element = element;
-    sb.append('<').append(safeCall("tagName", element::getTagName));
+    sb.append('<').append(element.getTagName());
   }
 
   private Describe appendAttributes() {
@@ -147,10 +147,10 @@ public class Describe {
           .isDisplayed(element)
           .serialize();
     } catch (WebDriverException elementDoesNotExist) {
-      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
+      return failedToDescribe(Cleanup.of.webdriverExceptionMessage(elementDoesNotExist));
     }
-    catch (IndexOutOfBoundsException e) {
-      return e.toString();
+    catch (RuntimeException e) {
+      return failedToDescribe(e.toString());
     }
   }
 
@@ -166,11 +166,16 @@ public class Describe {
       }
       return new Describe(driver, element).attr("id").attr("name").flush();
     } catch (WebDriverException elementDoesNotExist) {
-      return Cleanup.of.webdriverExceptionMessage(elementDoesNotExist);
+      return failedToDescribe(Cleanup.of.webdriverExceptionMessage(elementDoesNotExist));
     }
-    catch (IndexOutOfBoundsException e) {
-      return e.toString();
+    catch (RuntimeException e) {
+      return failedToDescribe(e.toString());
     }
+  }
+
+  @Nonnull
+  private static String failedToDescribe(String s2) {
+    return "Ups, failed to described the element [caused by: " + s2 + ']';
   }
 
   private Describe isSelected(WebElement element) {

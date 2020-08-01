@@ -10,6 +10,7 @@
 * #1241 make $.toString() more safe  --  see PR #1245
 * upgraded to WebDriverManager 4.1.0
 * #434 support working Sizzle together with Dojo.js, troop.js and JQuery  --  see PR #1242
+* #1013 improve error message when Selenide fails to describe an element  --  see PR #1239
 
 ## 5.13.1 (released 31.07.2020)
 * #1235 escape downloads path on Windows

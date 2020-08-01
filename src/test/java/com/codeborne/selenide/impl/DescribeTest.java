@@ -41,7 +41,7 @@ class DescribeTest implements WithAssertions {
     doThrow(new ElementShould(driver, null, null, visible, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(Describe.shortly(driver, selenideElement))
-      .isEqualTo("<StaleElementReferenceException: disappeared>");
+      .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: disappeared]");
   }
 
   @Test
@@ -53,11 +53,31 @@ class DescribeTest implements WithAssertions {
   }
 
   @Test
-  void attribute_with_empty_value() {
+  void describe_attribute_with_empty_value() {
     Driver driver = mock(Driver.class);
     SelenideElement selenideElement = element("input", "readonly", "");
 
     assertThat(Describe.describe(driver, selenideElement)).isEqualTo("<input readonly>Hello yo</input>");
+  }
+
+  @Test
+  void describe_elementHasDisappeared() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("input", "readonly", "");
+    doThrow(new StaleElementReferenceException("Booo")).when(selenideElement).getTagName();
+
+    assertThat(Describe.describe(driver, selenideElement))
+      .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: Booo]");
+  }
+
+  @Test
+  void describe_collectionHasResized() {
+    Driver driver = mock(Driver.class);
+    SelenideElement selenideElement = element("input", "readonly", "");
+    doThrow(new IndexOutOfBoundsException("Fooo")).when(selenideElement).getTagName();
+
+    assertThat(Describe.describe(driver, selenideElement))
+      .isEqualTo("Ups, failed to described the element [caused by: java.lang.IndexOutOfBoundsException: Fooo]");
   }
 
   @Test
