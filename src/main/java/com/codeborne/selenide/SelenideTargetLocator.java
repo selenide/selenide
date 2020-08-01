@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.FrameNotFoundException;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.ex.WindowNotFoundException;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
@@ -222,7 +223,7 @@ public class SelenideTargetLocator implements TargetLocator {
       return Wait().until(windowToBeAvailableAndSwitchToIt(index));
     }
     catch (TimeoutException e) {
-      throw new NoSuchWindowException("No window found with index: " + index, e);
+      throw windowNotFoundError("No window found with index: " + index, e);
     }
   }
 
@@ -238,7 +239,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait(duration).until(windowToBeAvailableAndSwitchToIt(index));
     } catch (TimeoutException e) {
-      throw new NoSuchWindowException("No window found with index: " + index, e);
+      throw windowNotFoundError("No window found with index: " + index, e);
     }
   }
 
@@ -253,7 +254,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
     } catch (TimeoutException e) {
-      throw new NoSuchWindowException("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
+      throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
     }
   }
 
@@ -268,7 +269,7 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait(duration).until(windowToBeAvailableAndSwitchToIt(nameOrHandleOrTitle));
     } catch (TimeoutException e) {
-      throw new NoSuchWindowException("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
+      throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
     }
   }
 
@@ -278,7 +279,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @CheckReturnValue
   @Nonnull
-  protected static WebDriver windowByTitle(WebDriver driver, String title) {
+  private static WebDriver windowByTitle(WebDriver driver, String title) {
     Set<String> windowHandles = driver.getWindowHandles();
 
     for (String windowHandle : windowHandles) {
@@ -299,7 +300,12 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error frameNotFoundError(String message, Throwable cause) {
-    FrameNotFoundException frameNotFoundException = new FrameNotFoundException(driver, message, cause);
-    return UIAssertionError.wrap(driver, frameNotFoundException, config.timeout());
+    FrameNotFoundException error = new FrameNotFoundException(driver, message, cause);
+    return UIAssertionError.wrap(driver, error, config.timeout());
+  }
+
+  private Error windowNotFoundError(String message, Throwable cause) {
+    WindowNotFoundException error = new WindowNotFoundException(driver, message, cause);
+    return UIAssertionError.wrap(driver, error, config.timeout());
   }
 }
