@@ -1,9 +1,9 @@
 package integration;
 
+import com.codeborne.selenide.ex.WindowNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.NoSuchWindowException;
 
 import java.time.Duration;
 
@@ -28,14 +28,14 @@ class TabsCustomWaitTest extends ITest {
   void waitsUntilTabAppears_withoutCustomTimeout() {
     $("#open-new-tab-with-delay").click();
     assertThatThrownBy(() -> switchTo().window(1))
-      .isInstanceOf(NoSuchWindowException.class);
+      .isInstanceOf(WindowNotFoundException.class);
   }
 
   @Test
   void waitsUntilTabAppears_withLowerTimeout() {
     $("#open-new-tab-with-delay").click();
     assertThatThrownBy(() -> switchTo().window(1, Duration.ofSeconds(1)))
-      .isInstanceOf(NoSuchWindowException.class);
+      .isInstanceOf(WindowNotFoundException.class);
   }
 
   @AfterEach

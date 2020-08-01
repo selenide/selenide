@@ -1,10 +1,10 @@
 package integration;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ex.WindowNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -141,8 +141,11 @@ class TabsTest extends ITest {
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> switchTo().window("absentWindow"))
-      .isInstanceOf(NoSuchWindowException.class)
-      .hasMessage("No window found with name or handle or title: absentWindow");
+      .isInstanceOf(WindowNotFoundException.class)
+      .hasMessageStartingWith("No window found with name or handle or title: absentWindow")
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 
   @Test
@@ -151,8 +154,11 @@ class TabsTest extends ITest {
       .isEqualTo("Test::tabs");
 
     assertThatThrownBy(() -> switchTo().window(Integer.MAX_VALUE))
-      .isInstanceOf(NoSuchWindowException.class)
-      .hasMessage("No window found with index: " + Integer.MAX_VALUE);
+      .isInstanceOf(WindowNotFoundException.class)
+      .hasMessageStartingWith("No window found with index: " + Integer.MAX_VALUE)
+      .hasMessageContaining("Screenshot: file:")
+      .hasMessageContaining("Page source: file:")
+      .hasMessageContaining("Caused by: TimeoutException:");
   }
 
   @AfterEach
