@@ -24,6 +24,7 @@ import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
+import static com.codeborne.selenide.Browsers.SAFARI;
 
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
@@ -41,6 +42,7 @@ public class WebDriverFactory {
     result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
     result.put(IE, InternetExplorerDriverFactory.class);
     result.put(OPERA, OperaDriverFactory.class);
+    result.put(SAFARI, SafariDriverFactory.class);
     return result;
   }
 
