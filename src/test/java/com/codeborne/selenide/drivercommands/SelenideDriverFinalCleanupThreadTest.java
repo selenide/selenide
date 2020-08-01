@@ -5,6 +5,8 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -16,11 +18,12 @@ class SelenideDriverFinalCleanupThreadTest {
     Config config = mock(Config.class);
     WebDriver driver = mock(WebDriver.class);
     SelenideProxyServer proxy = mock(SelenideProxyServer.class);
+    File browserDownloadsFolder = mock(File.class);
     CloseDriverCommand closeDriverCommand = mock(CloseDriverCommand.class);
 
-    new SelenideDriverFinalCleanupThread(config, driver, proxy, closeDriverCommand).run();
+    new SelenideDriverFinalCleanupThread(config, driver, proxy, browserDownloadsFolder, closeDriverCommand).run();
 
-    verify(closeDriverCommand).closeAsync(config, driver, proxy);
+    verify(closeDriverCommand).closeAsync(config, driver, proxy, browserDownloadsFolder);
     verifyNoMoreInteractions(closeDriverCommand);
     verifyNoInteractions(config);
     verifyNoInteractions(driver);

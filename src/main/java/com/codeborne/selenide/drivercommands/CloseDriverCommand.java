@@ -11,12 +11,16 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
+
+import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 
 @ParametersAreNonnullByDefault
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  public void closeAsync(Config config, @Nullable WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer) {
+  public void closeAsync(Config config, @Nullable WebDriver webDriver,
+                         @Nullable SelenideProxyServer selenideProxyServer, @Nullable File browserDownloadsFolder) {
     long threadId = Thread.currentThread().getId();
     if (config.holdBrowserOpen()) {
       log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, selenideProxyServer);
@@ -29,7 +33,7 @@ public class CloseDriverCommand {
 
       long start = System.currentTimeMillis();
 
-      Thread t = new Thread(() -> close(webDriver, selenideProxyServer));
+      Thread t = new Thread(() -> close(webDriver, selenideProxyServer, browserDownloadsFolder));
       t.setDaemon(true);
       t.start();
 
@@ -49,7 +53,7 @@ public class CloseDriverCommand {
     }
   }
 
-  private void close(WebDriver webdriver, @Nullable SelenideProxyServer proxy) {
+  private void close(WebDriver webdriver, @Nullable SelenideProxyServer proxy, @Nullable File browserDownloadsFolder) {
     try {
       log.info("Trying to close the browser {} ...", webdriver.getClass().getSimpleName());
       webdriver.quit();
@@ -66,5 +70,7 @@ public class CloseDriverCommand {
       log.info("Trying to shutdown {} ...", proxy);
       proxy.shutdown();
     }
+
+    deleteFolderIfEmpty(browserDownloadsFolder);
   }
 }

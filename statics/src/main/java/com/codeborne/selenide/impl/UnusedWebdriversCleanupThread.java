@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
+
 class UnusedWebdriversCleanupThread extends Thread {
   private static final Logger log = LoggerFactory.getLogger(UnusedWebdriversCleanupThread.class);
 
@@ -68,7 +70,8 @@ class UnusedWebdriversCleanupThread extends Thread {
       proxy.shutdown();
     }
 
-    threadDownloadsFolder.remove(thread.getId());
+    File downloadsFolder = threadDownloadsFolder.remove(thread.getId());
+    deleteFolderIfEmpty(downloadsFolder);
   }
 }
 

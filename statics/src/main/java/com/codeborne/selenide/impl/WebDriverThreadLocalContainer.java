@@ -186,7 +186,8 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
     long threadId = currentThread().getId();
     WebDriver driver = threadWebDriver.get(threadId);
     SelenideProxyServer proxy = threadProxyServer.get(threadId);
-    closeDriverCommand.closeAsync(config, driver, proxy);
+    File downloadsFolder = threadDownloadsFolder.get(threadId);
+    closeDriverCommand.closeAsync(config, driver, proxy, downloadsFolder);
 
     resetWebDriver();
   }

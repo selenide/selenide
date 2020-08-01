@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,6 +57,19 @@ public final class FileHelper {
   public static void cleanupFolder(File folder) throws IOException {
     if (folder.isDirectory()) {
       cleanDirectory(folder);
+    }
+  }
+
+  public static void deleteFolderIfEmpty(@Nullable File folder) {
+    if (folder != null && folder.isDirectory()) {
+      File[] files = folder.listFiles();
+      if (files == null || files.length == 0) {
+        if (folder.delete()) {
+          log.info("Deleted empty downloads folder: {}", folder.getAbsolutePath());
+        } else {
+          log.error("Failed to delete empty downloads folder: {}", folder.getAbsolutePath());
+        }
+      }
     }
   }
 }
