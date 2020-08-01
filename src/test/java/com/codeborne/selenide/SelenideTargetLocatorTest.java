@@ -1,9 +1,9 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.FrameNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -16,14 +16,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SelenideTargetLocatorTest {
-  private Config config = new SelenideConfig();
-  private WebDriver webdriver = mock(WebDriver.class);
-  private SelenideTargetLocator switchTo = new SelenideTargetLocator(config, webdriver);
-  private TargetLocator targetLocator = mock(TargetLocator.class);
+  private final Config config = new SelenideConfig();
+  private final WebDriver webdriver = mock(WebDriver.class);
+  private final DriverStub driver = new DriverStub(config, new Browser("zopera", true), webdriver, null);
+  private final SelenideTargetLocator switchTo = new SelenideTargetLocator(driver);
+  private final TargetLocator targetLocator = mock(TargetLocator.class);
 
   @BeforeEach
   void setUp() {
     when(webdriver.switchTo()).thenReturn(targetLocator);
+    when(webdriver.getPageSource()).thenReturn("<html><h42/></html>");
   }
 
   @Test
@@ -40,8 +42,8 @@ class SelenideTargetLocatorTest {
     when(targetLocator.frame(anyInt())).thenThrow(new NoSuchElementException("ups"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(NoSuchFrameException.class)
-      .hasMessage("No frame found with index: 666");
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
   }
@@ -51,8 +53,8 @@ class SelenideTargetLocatorTest {
     when(targetLocator.frame(anyInt())).thenThrow(new TimeoutException("ups"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(NoSuchFrameException.class)
-      .hasMessage("No frame found with index: 666");
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
   }
@@ -64,8 +66,8 @@ class SelenideTargetLocatorTest {
         "  (Session info: headless chrome=75.0.3770.90)\n"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(NoSuchFrameException.class)
-      .hasMessage("No frame found with index: 666");
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
   }
@@ -77,8 +79,8 @@ class SelenideTargetLocatorTest {
         "  (Session info: headless chrome=75.0.3770.90)\n"));
 
     assertThatThrownBy(() -> switchTo.frame(666))
-      .isInstanceOf(NoSuchFrameException.class)
-      .hasMessage("No frame found with index: 666");
+      .isInstanceOf(FrameNotFoundException.class)
+      .hasMessageStartingWith("No frame found with index: 666");
 
     verify(targetLocator).frame(666);
   }

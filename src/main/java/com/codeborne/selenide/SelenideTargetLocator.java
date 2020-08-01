@@ -1,11 +1,12 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.FrameNotFoundException;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -28,13 +29,15 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailab
 
 @ParametersAreNonnullByDefault
 public class SelenideTargetLocator implements TargetLocator {
+  private final Driver driver;
   private final WebDriver webDriver;
   private final Config config;
   private final TargetLocator delegate;
 
-  public SelenideTargetLocator(Config config, WebDriver webDriver) {
-    this.config = config;
-    this.webDriver = webDriver;
+  public SelenideTargetLocator(Driver driver) {
+    this.driver = driver;
+    this.config = driver.config();
+    this.webDriver = driver.getWebDriver();
     this.delegate = webDriver.switchTo();
   }
 
@@ -44,11 +47,12 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(index));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("No frame found with index: " + index, e);
+      throw frameNotFoundError("No frame found with index: " + index, e);
     } catch (InvalidArgumentException e) {
-      throw isFirefox62Bug(e) || isChrome75Error(e)
-        ? new NoSuchFrameException("No frame found with index: " + index, e)
-        : e;
+      if (isFirefox62Bug(e) || isChrome75Error(e)) {
+        throw frameNotFoundError("No frame found with index: " + index, e);
+      }
+      throw e;
     }
   }
 
@@ -58,9 +62,12 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("No frame found with id/name: " + nameOrId, e);
+      throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);
     } catch (InvalidArgumentException e) {
-      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with id/name: " + nameOrId, e) : e;
+      if (isFirefox62Bug(e)) {
+        throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);
+      }
+      throw e;
     }
   }
 
@@ -70,9 +77,12 @@ public class SelenideTargetLocator implements TargetLocator {
     try {
       return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
     } catch (NoSuchElementException | TimeoutException e) {
-      throw new NoSuchFrameException("No frame found with element: " + frameElement, e);
+      throw frameNotFoundError("No frame found with element: " + frameElement, e);
     } catch (InvalidArgumentException e) {
-      throw isFirefox62Bug(e) ? new NoSuchFrameException("No frame found with element: " + frameElement, e) : e;
+      if (isFirefox62Bug(e)) {
+        throw frameNotFoundError("No frame found with element: " + frameElement, e);
+      }
+      throw e;
     }
   }
 
@@ -125,7 +135,7 @@ public class SelenideTargetLocator implements TargetLocator {
         Wait().until(frameToBeAvailableAndSwitchToIt_fixed(By.cssSelector(selector)));
       }
       catch (NoSuchElementException | TimeoutException e) {
-        throw new NoSuchFrameException("No frame found with id/name = " + frame, e);
+        throw frameNotFoundError("No frame found with id/name = " + frame, e);
       }
     }
 
@@ -286,5 +296,10 @@ public class SelenideTargetLocator implements TargetLocator {
 
   private SelenideWait Wait(Duration timeout) {
     return new SelenideWait(webDriver, timeout.toMillis(), config.pollingInterval());
+  }
+
+  private Error frameNotFoundError(String message, Throwable cause) {
+    FrameNotFoundException frameNotFoundException = new FrameNotFoundException(driver, message, cause);
+    return UIAssertionError.wrap(driver, frameNotFoundException, config.timeout());
   }
 }

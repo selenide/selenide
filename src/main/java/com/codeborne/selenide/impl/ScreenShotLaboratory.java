@@ -234,7 +234,7 @@ public class ScreenShotLaboratory {
       return null;
     }
     int iframeHeight = getRescaledElementHeight(iframe, img);
-    SelenideTargetLocator switchTo = new SelenideTargetLocator(driver.config(), driver.getWebDriver());
+    SelenideTargetLocator switchTo = new SelenideTargetLocator(driver);
     switchTo.frame(iframe);
     int iframeWidth = getRescaledIframeWidth(iframe, img, webdriver);
 
