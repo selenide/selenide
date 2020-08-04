@@ -18,6 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public class Describe {
@@ -30,7 +31,7 @@ public class Describe {
   private Describe(Driver driver, WebElement element) {
     this.driver = driver;
     this.element = element;
-    sb.append('<').append(element.getTagName());
+    sb.append('<').append(safeCall("tagName", element::getTagName));
   }
 
   private Describe appendAttributes() {
@@ -117,8 +118,8 @@ public class Describe {
   }
 
   private String serialize() {
-    String text = element.getText();
-    sb.append('>').append(text == null ? "" : text).append("</").append(element.getTagName()).append('>');
+    String text = safeCall("text", element::getText);
+    sb.append('>').append(text == null ? "" : text).append("</").append(safeCall("tagName", element::getTagName)).append('>');
     return sb.toString();
   }
 
@@ -187,7 +188,13 @@ public class Describe {
       if (!element.isDisplayed()) {
         sb.append(' ').append("displayed:false");
       }
-    } catch (UnsupportedOperationException | WebDriverException e) {
+    }
+    catch (UnsupportedOperationException | WebDriverException e) {
+      log.debug("Failed to check visibility", e);
+      sb.append(' ').append("displayed:").append(Cleanup.of.webdriverExceptionMessage(e));
+    }
+    catch (RuntimeException e) {
+      log.error("Failed to check visibility", e);
       sb.append(' ').append("displayed:").append(Cleanup.of.webdriverExceptionMessage(e));
     }
     return this;
@@ -210,5 +217,19 @@ public class Describe {
     return selector.toString()
         .replaceFirst("By\\.selector:\\s*", "")
         .replaceFirst("By\\.cssSelector:\\s*", "");
+  }
+
+  private String safeCall(String name, Supplier<String> method) {
+    try {
+      return method.get();
+    }
+    catch (WebDriverException e) {
+      log.debug("Failed to get {}", name, e);
+      return Cleanup.of.webdriverExceptionMessage(e);
+    }
+    catch (RuntimeException e) {
+      log.error("Failed to get {}", name, e);
+      return "?";
+    }
   }
 }
