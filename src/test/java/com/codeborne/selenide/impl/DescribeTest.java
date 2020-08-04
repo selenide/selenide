@@ -41,7 +41,7 @@ class DescribeTest implements WithAssertions {
     doThrow(new ElementShould(driver, null, null, visible, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(Describe.shortly(driver, selenideElement))
-      .isEqualTo("StaleElementReferenceException: disappeared");
+      .isEqualTo("<StaleElementReferenceException: disappeared>");
   }
 
   @Test
