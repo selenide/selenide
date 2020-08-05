@@ -58,4 +58,17 @@ public final class FileHelper {
       cleanDirectory(folder);
     }
   }
+
+  public static void deleteFolderIfEmpty(@Nonnull File folder) {
+    if (folder.isDirectory()) {
+      File[] files = folder.listFiles();
+      if (files == null || files.length == 0) {
+        if (folder.delete()) {
+          log.info("Deleted empty downloads folder: {}", folder.getAbsolutePath());
+        } else {
+          log.error("Failed to delete empty downloads folder: {}", folder.getAbsolutePath());
+        }
+      }
+    }
+  }
 }

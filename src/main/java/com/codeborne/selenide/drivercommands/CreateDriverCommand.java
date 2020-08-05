@@ -17,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Thread.currentThread;
 
@@ -69,6 +70,9 @@ public class CreateDriverCommand {
     WebDriver webDriver = addListeners(webdriver, listeners);
     Runtime.getRuntime().addShutdownHook(
       new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
+    );
+    Runtime.getRuntime().addShutdownHook(
+      new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
     );
     return new Result(webDriver, selenideProxyServer, browserDownloadsFolder);
   }
