@@ -24,9 +24,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 class DownloadFileToFolderTest {
+  private final Downloader downloader = new Downloader();
   private final Waiter waiter = new DummyWaiter();
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
-  private final DownloadFileToFolder command = new DownloadFileToFolder(waiter, windowsCloser);
+  private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webdriver = mock(WebDriver.class);
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
@@ -51,7 +52,7 @@ class DownloadFileToFolderTest {
     File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
-    assertThat(downloadedFile.getParentFile().getAbsolutePath()).isEqualTo(driver.browserDownloadsFolder().getAbsolutePath());
+    assertThat(downloadedFile.getParentFile().getAbsolutePath()).isNotEqualTo(driver.browserDownloadsFolder().getAbsolutePath());
     assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
 }

@@ -17,6 +17,10 @@ public interface Driver {
   File browserDownloadsFolder();
   void close();
 
+  default boolean isDownloadsFolderUnique() {
+    return false;
+  }
+
   default boolean supportsJavascript() {
     return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
   }

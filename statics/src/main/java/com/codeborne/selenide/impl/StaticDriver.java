@@ -68,6 +68,11 @@ public class StaticDriver implements Driver {
   }
 
   @Override
+  public boolean isDownloadsFolderUnique() {
+    return true;
+  }
+
+  @Override
   public void close() {
     WebDriverRunner.closeWebDriver();
   }

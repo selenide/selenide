@@ -53,9 +53,14 @@ public final class FileHelper {
     return folder;
   }
 
-  public static void cleanupFolder(File folder) throws IOException {
-    if (folder.isDirectory()) {
-      cleanDirectory(folder);
+  public static void cleanupFolder(File folder) {
+    try {
+      if (folder.isDirectory()) {
+        cleanDirectory(folder);
+      }
+    }
+    catch (IOException e) {
+      throw new IllegalStateException("Failed to cleanup folder " + folder.getAbsolutePath(), e);
     }
   }
 

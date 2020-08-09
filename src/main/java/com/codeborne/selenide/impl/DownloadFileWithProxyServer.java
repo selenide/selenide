@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -36,7 +37,7 @@ public class DownloadFileWithProxyServer {
   @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
-                       FileFilter fileFilter) throws FileNotFoundException {
+                       FileFilter fileFilter) throws IOException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->

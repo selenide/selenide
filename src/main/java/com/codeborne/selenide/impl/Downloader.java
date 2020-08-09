@@ -30,11 +30,17 @@ public class Downloader {
   @CheckReturnValue
   @Nonnull
   public File prepareTargetFile(Config config, String fileName) {
+    File uniqueFolder = prepareTargetFolder(config);
+    return new File(uniqueFolder, fileName);
+  }
+
+  @Nonnull
+  public File prepareTargetFolder(Config config) {
     File uniqueFolder = new File(config.downloadsFolder(), random.text());
     if (uniqueFolder.exists()) {
       throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
     }
     ensureFolderExists(uniqueFolder);
-    return new File(uniqueFolder, fileName);
+    return uniqueFolder;
   }
 }

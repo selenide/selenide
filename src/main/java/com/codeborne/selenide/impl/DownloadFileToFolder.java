@@ -13,37 +13,41 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.codeborne.selenide.impl.FileHelper.cleanupFolder;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static org.apache.commons.io.FileUtils.moveFile;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
 
+  private final Downloader downloader;
   private final Waiter waiter;
   private final WindowsCloser windowsCloser;
 
-  DownloadFileToFolder(Waiter waiter, WindowsCloser windowsCloser) {
+  DownloadFileToFolder(Downloader downloader, Waiter waiter, WindowsCloser windowsCloser) {
+    this.downloader = downloader;
     this.waiter = waiter;
     this.windowsCloser = windowsCloser;
   }
 
   public DownloadFileToFolder() {
-    this(new Waiter(), new WindowsCloser());
+    this(new Downloader(), new Waiter(), new WindowsCloser());
   }
 
   @CheckReturnValue
   @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
-                       FileFilter fileFilter) throws FileNotFoundException {
+                       FileFilter fileFilter) throws IOException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
@@ -55,7 +59,7 @@ public class DownloadFileToFolder {
   @Nonnull
   private File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
                                                         long timeout,
-                                                        FileFilter fileFilter) throws FileNotFoundException {
+                                                        FileFilter fileFilter) throws IOException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     File folder = driver.browserDownloadsFolder();
@@ -63,6 +67,9 @@ public class DownloadFileToFolder {
     PreviousDownloadsCompleted previousFiles = new PreviousDownloadsCompleted();
     waiter.wait(folder, previousFiles, timeout, config.pollingInterval());
 
+    if (driver.isDownloadsFolderUnique()) {
+      cleanupFolder(driver.browserDownloadsFolder());
+    }
     clickable.click();
 
     HasDownloads hasDownloads = new HasDownloads(fileFilter, previousFiles.previousFiles);
@@ -71,7 +78,11 @@ public class DownloadFileToFolder {
     if (log.isInfoEnabled()) {
       log.info(hasDownloads.downloads.filesAsString());
     }
-    return hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    File downloadedFile = hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    File movedFile = new File(uniqueFolder, downloadedFile.getName());
+    moveFile(downloadedFile, movedFile);
+    return movedFile;
   }
 
   @CheckReturnValue

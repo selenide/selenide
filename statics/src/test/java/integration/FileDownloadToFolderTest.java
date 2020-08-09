@@ -29,7 +29,7 @@ public class FileDownloadToFolderTest  extends IntegrationTest {
   private final File folder = new File(downloadsFolder);
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() {
     Configuration.fileDownload = FileDownloadMode.FOLDER;
     openFile("page_with_uploads.html");
     timeout = 4000;
