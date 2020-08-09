@@ -133,6 +133,14 @@ class ChromeDriverFactoryTest implements WithAssertions {
   }
 
   @Test
+  void disablesUsingDevSharedMemory() {
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    List<String> optionArguments = getBrowserLaunchArgs(ChromeOptions.CAPABILITY, chromeOptions);
+
+    assertThat(optionArguments).contains("--disable-dev-shm-usage");
+  }
+
+  @Test
   void parseCSV() {
     assertThat(factory.parseCSV("123")).isEqualTo(singletonList("123"));
     assertThat(factory.parseCSV("foo bar")).isEqualTo(singletonList("foo bar"));

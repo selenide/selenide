@@ -9,6 +9,7 @@
 * #1190 take screenshot if `switchTo(frame)` or `switchTo(window)` or `switchTo(alert)` failed  --  see PR #1240
 * #1241 make $.toString() more safe  --  see PR #1245
 * upgraded to WebDriverManager 4.1.0
+* Add chrome option "--disable-dev-shm-usage" to avoid crashing Chrome because of out of memory error
 * #434 support working Sizzle together with Dojo.js, troop.js and JQuery  --  see PR #1242
 
 ## 5.13.1 (released 31.07.2020)
