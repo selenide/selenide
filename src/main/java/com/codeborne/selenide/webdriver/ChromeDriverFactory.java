@@ -85,6 +85,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   protected List<String> createChromeArguments(Config config, Browser browser) {
     List<String> arguments = new ArrayList<>();
     arguments.add("--proxy-bypass-list=<-loopback>");
+    arguments.add("--disable-dev-shm-usage");
     arguments.addAll(parseArguments(System.getProperty("chromeoptions.args")));
     return arguments;
   }
