@@ -1,15 +1,20 @@
 package com.codeborne.selenide;
 
+import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 
 public class ClickOptions {
 
-  private int offsetX;
-  private int offsetY;
+  private int offsetX = Integer.MAX_VALUE;
+  private int offsetY = Integer.MAX_VALUE;
   private final ClickMethod clickMethod;
 
   private ClickOptions(ClickMethod clickMethod) {
     this.clickMethod = clickMethod;
+  }
+
+  public static ClickOptions usingDefaultMethod() {
+    return new ClickOptions(DEFAULT);
   }
 
   public static ClickOptions usingJavaScript() {

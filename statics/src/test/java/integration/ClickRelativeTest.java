@@ -38,11 +38,20 @@ class ClickRelativeTest extends IntegrationTest {
   }
 
   @Test
-  void userCanClickElementWithOffsetPosition_withClickOptionJS() {
+  void userCanClickElementWithOffsetPositions_withClickOptionJS() {
     Configuration.clickViaJs = false;
 
     $("#page").click(usingJavaScript().offset(123, 222));
 
     $("#coords").should(matchText("(523, 522)"));
+  }
+
+  @Test
+  void userCanClickElementWithOffsetXPosition_withClickOptionJS() {
+    Configuration.clickViaJs = false;
+
+    $("#page").click(usingJavaScript().offsetX(123));
+
+    $("#coords").should(matchText("(523, 300)"));
   }
 }

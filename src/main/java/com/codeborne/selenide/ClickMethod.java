@@ -5,5 +5,10 @@ public enum ClickMethod {
   /**
    * Click the element via JavaScript
    */
-  JS
+  JS,
+
+  /**
+   * Click the element via WebDriver default click
+   */
+  DEFAULT
 }

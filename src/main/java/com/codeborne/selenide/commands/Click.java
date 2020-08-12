@@ -45,6 +45,7 @@ public class Click implements Command<Void> {
     }
   }
 
+  // should be removed after deleting SelenideElement.click(int offsetX, int offsetY);
   protected void click(Driver driver, WebElement element, int offsetX, int offsetY) {
     if (driver.config().clickViaJs()) {
       clickViaJS(driver, element, offsetX, offsetY);
@@ -60,6 +61,10 @@ public class Click implements Command<Void> {
 
   private void click(Driver driver, WebElement webElement, ClickOptions clickOptions) {
     switch (clickOptions.clickOption()) {
+      case DEFAULT: {
+        defaultClick(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
+        break;
+      }
       case JS: {
         clickViaJS(driver, webElement, clickOptions.offsetX(), clickOptions.offsetY());
         break;
@@ -67,6 +72,18 @@ public class Click implements Command<Void> {
       default: {
         throw new IllegalArgumentException("Unknown click option: " + clickOptions.clickOption());
       }
+    }
+  }
+
+  private void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
+    if (offsetX == Integer.MAX_VALUE && offsetY == Integer.MAX_VALUE) {
+      element.click();
+    } else {
+      driver.actions()
+        .moveToElement(element, resolveOffset(offsetX), resolveOffset(offsetY))
+        .click()
+        .build()
+        .perform();
     }
   }
 
@@ -81,7 +98,15 @@ public class Click implements Command<Void> {
         " 'clientY': rect.top + rect.height/2 + arguments[2]" +
         "}))",
       element,
-      offsetX,
-      offsetY);
+      resolveOffset(offsetX),
+      resolveOffset(offsetY));
+  }
+
+  private int resolveOffset(int offset) {
+    if (offset == Integer.MAX_VALUE) {
+      return 0;
+    } else {
+      return offset;
+    }
   }
 }
