@@ -3,33 +3,31 @@ package com.codeborne.selenide.proxy;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyMap;
-import static org.apache.commons.io.FileUtils.writeStringToFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DownloadedFileTest {
   @Test
-  void twoFilesAreEqual_ifNameAndModificationTimeEqual() throws IOException {
-    File theFile = new File("build/downloads/some.txt");
-    writeStringToFile(theFile, "some content", UTF_8);
-    DownloadedFile file1 = new DownloadedFile(theFile, emptyMap());
-    DownloadedFile file2 = new DownloadedFile(theFile, emptyMap());
-
-    assertThat(file1).isEqualTo(file2);
+  void hasContentDispositionHeader() {
+    DownloadedFile file1 = new DownloadedFile(new File("x"), header("content-disposition", "filename=prices.csv"));
+    DownloadedFile file2 = new DownloadedFile(new File("x"), header("", ""));
+    assertThat(file1.hasContentDispositionHeader()).isTrue();
+    assertThat(file2.hasContentDispositionHeader()).isFalse();
   }
 
   @Test
-  void twoFilesAreDifferent_ifOneOverridesOther() throws IOException {
-    File theFile = new File("build/downloads/some.txt");
-    writeStringToFile(theFile, "first content", UTF_8);
-    DownloadedFile file1 = new DownloadedFile(theFile, emptyMap());
+  void getContentType() {
+    DownloadedFile file1 = new DownloadedFile(new File("x"), header("content-type", "application/pdf"));
+    DownloadedFile file2 = new DownloadedFile(new File("x"), header("", ""));
+    assertThat(file1.getContentType()).isEqualTo("application/pdf");
+    assertThat(file2.getContentType()).isNull();
+  }
 
-    theFile.setLastModified(System.currentTimeMillis() - 1001);
-    DownloadedFile file2 = new DownloadedFile(theFile, emptyMap());
-
-    assertThat(file1).isNotEqualTo(file2);
+  private Map<String, String> header(String name, String value) {
+    Map<String, String> headers = new HashMap<>();
+    headers.put(name, value);
+    return headers;
   }
 }
