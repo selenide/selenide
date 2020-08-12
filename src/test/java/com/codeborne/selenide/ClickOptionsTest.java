@@ -24,8 +24,8 @@ class ClickOptionsTest implements WithAssertions {
   void testDefaultUnchangedOffsets() {
     ClickOptions clickOptions = ClickOptions
       .usingDefaultMethod();
-    assertThat(clickOptions.offsetX()).isEqualTo(Integer.MAX_VALUE);
-    assertThat(clickOptions.offsetY()).isEqualTo(Integer.MAX_VALUE);
+    assertThat(clickOptions.offsetX()).isEqualTo(0);
+    assertThat(clickOptions.offsetY()).isEqualTo(0);
   }
 
   @Test
@@ -43,6 +43,6 @@ class ClickOptionsTest implements WithAssertions {
       .usingDefaultMethod()
       .offsetX(1);
     assertThat(clickOptions.offsetX()).isEqualTo(1);
-    assertThat(clickOptions.offsetY()).isEqualTo(Integer.MAX_VALUE);
+    assertThat(clickOptions.offsetY()).isEqualTo(0);
   }
 }

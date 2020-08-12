@@ -5,8 +5,8 @@ import static com.codeborne.selenide.ClickMethod.JS;
 
 public class ClickOptions {
 
-  private int offsetX = Integer.MAX_VALUE;
-  private int offsetY = Integer.MAX_VALUE;
+  private int offsetX;
+  private int offsetY;
   private final ClickMethod clickMethod;
 
   private ClickOptions(ClickMethod clickMethod) {
