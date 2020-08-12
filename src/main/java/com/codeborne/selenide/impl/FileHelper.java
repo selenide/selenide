@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +54,24 @@ public final class FileHelper {
     return folder;
   }
 
-  public static void cleanupFolder(File folder) throws IOException {
-    if (folder.isDirectory()) {
-      cleanDirectory(folder);
+  public static void moveFile(File srcFile, File destFile) {
+    try {
+      FileUtils.moveFile(srcFile, destFile);
+    }
+    catch (IOException e) {
+      throw new IllegalStateException("Failed to move file " + srcFile.getAbsolutePath() +
+        " to " + destFile.getAbsolutePath(), e);
+    }
+  }
+
+  public static void cleanupFolder(File folder) {
+    try {
+      if (folder.isDirectory()) {
+        cleanDirectory(folder);
+      }
+    }
+    catch (IOException e) {
+      throw new IllegalStateException("Failed to cleanup folder " + folder.getAbsolutePath(), e);
     }
   }
 
@@ -64,9 +80,9 @@ public final class FileHelper {
       File[] files = folder.listFiles();
       if (files == null || files.length == 0) {
         if (folder.delete()) {
-          log.info("Deleted empty downloads folder: {}", folder.getAbsolutePath());
+          log.info("Deleted empty folder: {}", folder.getAbsolutePath());
         } else {
-          log.error("Failed to delete empty downloads folder: {}", folder.getAbsolutePath());
+          log.error("Failed to delete empty folder: {}", folder.getAbsolutePath());
         }
       }
     }

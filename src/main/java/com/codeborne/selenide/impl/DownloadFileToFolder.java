@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
@@ -26,16 +27,18 @@ import static java.util.Collections.emptyMap;
 public class DownloadFileToFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileToFolder.class);
 
+  private final Downloader downloader;
   private final Waiter waiter;
   private final WindowsCloser windowsCloser;
 
-  DownloadFileToFolder(Waiter waiter, WindowsCloser windowsCloser) {
+  DownloadFileToFolder(Downloader downloader, Waiter waiter, WindowsCloser windowsCloser) {
+    this.downloader = downloader;
     this.waiter = waiter;
     this.windowsCloser = windowsCloser;
   }
 
   public DownloadFileToFolder() {
-    this(new Waiter(), new WindowsCloser());
+    this(new Downloader(), new Waiter(), new WindowsCloser());
   }
 
   @CheckReturnValue
@@ -59,6 +62,8 @@ public class DownloadFileToFolder {
     Config config = driver.config();
     DownloadsFolder folder = driver.browserDownloadsFolder();
 
+    folder.cleanupBeforeDownload();
+
     PreviousDownloadsCompleted previousFiles = new PreviousDownloadsCompleted();
     waiter.wait(folder, previousFiles, timeout, config.pollingInterval());
 
@@ -70,7 +75,16 @@ public class DownloadFileToFolder {
     if (log.isInfoEnabled()) {
       log.info(hasDownloads.downloads.filesAsString());
     }
-    return hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    File downloadedFile = hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    return archiveFile(config, downloadedFile);
+  }
+
+  @Nonnull
+  private File archiveFile(Config config, File downloadedFile) {
+    File uniqueFolder = downloader.prepareTargetFolder(config);
+    File archivedFile = new File(uniqueFolder, downloadedFile.getName());
+    moveFile(downloadedFile, archivedFile);
+    return archivedFile;
   }
 
   @ParametersAreNonnullByDefault
@@ -86,7 +100,7 @@ public class DownloadFileToFolder {
 
     @Override
     public boolean test(DownloadsFolder folder) {
-      Downloads files = toDownloads(folder.allDownloadedFiles());
+      Downloads files = toDownloads(folder.files());
       List<DownloadedFile> newFiles = diff(files, previousFiles);
       downloads = new Downloads(newFiles);
       return !downloads.files(fileFilter).isEmpty();
@@ -115,7 +129,7 @@ public class DownloadFileToFolder {
 
     @Override
     public boolean test(DownloadsFolder folder) {
-      List<File> files = folder.allDownloadedFiles();
+      List<File> files = folder.files();
 
       try {
         return previousFiles.size() == files.size();
