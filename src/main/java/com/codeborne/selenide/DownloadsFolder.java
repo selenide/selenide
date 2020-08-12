@@ -17,7 +17,7 @@ import static java.util.Collections.emptyList;
 public class DownloadsFolder {
   private static final Logger log = LoggerFactory.getLogger(DownloadsFolder.class);
 
-  private final File folder;
+  protected final File folder;
 
   public DownloadsFolder(File folder) {
     this.folder = folder;
@@ -33,11 +33,14 @@ public class DownloadsFolder {
 
   @CheckReturnValue
   @Nonnull
-  public List<File> allDownloadedFiles() {
+  public List<File> files() {
     File[] files = folder.listFiles();
     if (log.isDebugEnabled()) {
       log.debug("all downloaded files in {}: {}", folder.getAbsolutePath(), Arrays.toString(files));
     }
     return files == null ? emptyList() : asList(files);
+  }
+
+  public void cleanupBeforeDownload() {
   }
 }
