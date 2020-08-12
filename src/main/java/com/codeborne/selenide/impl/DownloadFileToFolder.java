@@ -15,13 +15,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class DownloadFileToFolder {
@@ -63,20 +62,25 @@ public class DownloadFileToFolder {
     DownloadsFolder folder = driver.browserDownloadsFolder();
 
     folder.cleanupBeforeDownload();
-
-    PreviousDownloadsCompleted previousFiles = new PreviousDownloadsCompleted();
-    waiter.wait(folder, previousFiles, timeout, config.pollingInterval());
+    long downloadStartedAt = System.currentTimeMillis();
 
     clickable.click();
 
-    HasDownloads hasDownloads = new HasDownloads(fileFilter, previousFiles.previousFiles);
+    Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
+    File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
+    return archiveFile(config, downloadedFile);
+  }
+
+  @Nonnull
+  private Downloads waitForNewFiles(long timeout, FileFilter fileFilter, Config config,
+                                    DownloadsFolder folder, long clickMoment) {
+    HasDownloads hasDownloads = new HasDownloads(fileFilter, clickMoment);
     waiter.wait(folder, hasDownloads, timeout, config.pollingInterval());
 
     if (log.isInfoEnabled()) {
       log.info(hasDownloads.downloads.filesAsString());
     }
-    File downloadedFile = hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
-    return archiveFile(config, downloadedFile);
+    return hasDownloads.downloads;
   }
 
   @Nonnull
@@ -90,53 +94,26 @@ public class DownloadFileToFolder {
   @ParametersAreNonnullByDefault
   private static class HasDownloads implements Predicate<DownloadsFolder> {
     private final FileFilter fileFilter;
-    private final Downloads previousFiles;
+    private final long downloadStartedAt;
     Downloads downloads;
 
-    private HasDownloads(FileFilter fileFilter, List<File> previousFiles) {
+    private HasDownloads(FileFilter fileFilter, long downloadStartedAt) {
       this.fileFilter = fileFilter;
-      this.previousFiles = toDownloads(previousFiles);
+      this.downloadStartedAt = downloadStartedAt;
     }
 
     @Override
     public boolean test(DownloadsFolder folder) {
-      Downloads files = toDownloads(folder.files());
-      List<DownloadedFile> newFiles = diff(files, previousFiles);
-      downloads = new Downloads(newFiles);
+      downloads = new Downloads(newFiles(folder));
       return !downloads.files(fileFilter).isEmpty();
     }
 
-    private List<DownloadedFile> diff(Downloads currentFiles, Downloads previousFiles) {
-      List<DownloadedFile> newFiles = new ArrayList<>(currentFiles.files());
-      newFiles.removeAll(previousFiles.files());
-      return newFiles;
-    }
-
-    private Downloads toDownloads(List<File> newFiles) {
-      Downloads downloads = new Downloads();
-      for (File file : newFiles) {
-        if (file.exists()) {
-          downloads.add(new DownloadedFile(file, emptyMap()));
-        }
-      }
-      return downloads;
-    }
-  }
-
-  @ParametersAreNonnullByDefault
-  private static class PreviousDownloadsCompleted implements Predicate<DownloadsFolder> {
-    List<File> previousFiles = emptyList();
-
-    @Override
-    public boolean test(DownloadsFolder folder) {
-      List<File> files = folder.files();
-
-      try {
-        return previousFiles.size() == files.size();
-      }
-      finally {
-        previousFiles = files;
-      }
+    private List<DownloadedFile> newFiles(DownloadsFolder folder) {
+      return folder.files().stream()
+        .filter(File::isFile)
+        .filter(file -> file.lastModified() >= downloadStartedAt)
+        .map(file -> new DownloadedFile(file, emptyMap()))
+        .collect(toList());
     }
   }
 }
