@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.DownloadedFile;
@@ -15,11 +16,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
@@ -58,7 +57,7 @@ public class DownloadFileToFolder {
                                                         FileFilter fileFilter) throws FileNotFoundException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
-    File folder = driver.browserDownloadsFolder();
+    DownloadsFolder folder = driver.browserDownloadsFolder();
 
     PreviousDownloadsCompleted previousFiles = new PreviousDownloadsCompleted();
     waiter.wait(folder, previousFiles, timeout, config.pollingInterval());
@@ -74,18 +73,8 @@ public class DownloadFileToFolder {
     return hasDownloads.downloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private static List<File> allDownloadedFiles(File folder) {
-    File[] files = folder.listFiles();
-    if (log.isDebugEnabled()) {
-      log.debug("all downloaded files in {}: {}", folder.getAbsolutePath(), Arrays.toString(files));
-    }
-    return files == null ? emptyList() : asList(files);
-  }
-
   @ParametersAreNonnullByDefault
-  private static class HasDownloads implements Predicate<File> {
+  private static class HasDownloads implements Predicate<DownloadsFolder> {
     private final FileFilter fileFilter;
     private final Downloads previousFiles;
     Downloads downloads;
@@ -96,8 +85,8 @@ public class DownloadFileToFolder {
     }
 
     @Override
-    public boolean test(File folder) {
-      Downloads files = toDownloads(allDownloadedFiles(folder));
+    public boolean test(DownloadsFolder folder) {
+      Downloads files = toDownloads(folder.allDownloadedFiles());
       List<DownloadedFile> newFiles = diff(files, previousFiles);
       downloads = new Downloads(newFiles);
       return !downloads.files(fileFilter).isEmpty();
@@ -121,12 +110,12 @@ public class DownloadFileToFolder {
   }
 
   @ParametersAreNonnullByDefault
-  private static class PreviousDownloadsCompleted implements Predicate<File> {
+  private static class PreviousDownloadsCompleted implements Predicate<DownloadsFolder> {
     List<File> previousFiles = emptyList();
 
     @Override
-    public boolean test(File folder) {
-      List<File> files = allDownloadedFiles(folder);
+    public boolean test(DownloadsFolder folder) {
+      List<File> files = folder.allDownloadedFiles();
 
       try {
         return previousFiles.size() == files.size();

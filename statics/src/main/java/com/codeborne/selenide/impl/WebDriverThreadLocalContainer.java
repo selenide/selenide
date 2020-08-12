@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
@@ -16,7 +17,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +37,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
   final Collection<Thread> allWebDriverThreads = new ConcurrentLinkedQueue<>();
   final Map<Long, WebDriver> threadWebDriver = new ConcurrentHashMap<>(4);
   private final Map<Long, SelenideProxyServer> threadProxyServer = new ConcurrentHashMap<>(4);
-  private final Map<Long, File> threadDownloadsFolder = new ConcurrentHashMap<>(4);
+  private final Map<Long, DownloadsFolder> threadDownloadsFolder = new ConcurrentHashMap<>(4);
   @Nullable private Proxy userProvidedProxy;
 
   private final Config config = new StaticConfig();
@@ -60,7 +60,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    setWebDriver(webDriver, selenideProxy, new File(config.downloadsFolder()));
+    setWebDriver(webDriver, selenideProxy, new DownloadsFolder(config.downloadsFolder()));
   }
 
   /**
@@ -74,7 +74,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
    * @param browserDownloadsFolder downloads folder - unique for the given browser instance
    */
   @Override
-  public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder) {
+  public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     resetWebDriver();
 
     long threadId = currentThread().getId();
@@ -142,7 +142,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Nonnull
   @Override
-  public File getBrowserDownloadsFolder() {
+  public DownloadsFolder getBrowserDownloadsFolder() {
     return threadDownloadsFolder.get(currentThread().getId());
   }
 

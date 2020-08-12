@@ -16,11 +16,9 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.getBrowserDownloadsFolder;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
-import static com.codeborne.selenide.impl.FileHelper.cleanupFolder;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,11 +27,10 @@ public class FileDownloadToFolderTest  extends IntegrationTest {
   private final File folder = new File(downloadsFolder);
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() {
     Configuration.fileDownload = FileDownloadMode.FOLDER;
     openFile("page_with_uploads.html");
     timeout = 4000;
-    cleanupFolder(getBrowserDownloadsFolder());
   }
 
   @Test

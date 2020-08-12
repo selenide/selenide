@@ -1,6 +1,8 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
+import com.codeborne.selenide.UniqueDownloadsFolder;
 import com.codeborne.selenide.impl.FileNamer;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -74,7 +76,7 @@ public class CreateDriverCommand {
     Runtime.getRuntime().addShutdownHook(
       new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
     );
-    return new Result(webDriver, selenideProxyServer, browserDownloadsFolder);
+    return new Result(webDriver, selenideProxyServer, new UniqueDownloadsFolder(browserDownloadsFolder));
   }
 
   @Nonnull
@@ -94,9 +96,9 @@ public class CreateDriverCommand {
   public static class Result {
     public final WebDriver webDriver;
     public final SelenideProxyServer selenideProxyServer;
-    public final File browserDownloadsFolder;
+    public final DownloadsFolder browserDownloadsFolder;
 
-    public Result(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer, File browserDownloadsFolder) {
+    public Result(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer, DownloadsFolder browserDownloadsFolder) {
       this.webDriver = webDriver;
       this.selenideProxyServer = selenideProxyServer;
       this.browserDownloadsFolder = browserDownloadsFolder;

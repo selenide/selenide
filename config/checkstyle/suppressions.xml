@@ -26,6 +26,7 @@
     <suppress checks="JavadocMethod" files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="AvoidStarImport" files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="ClassFanOutComplexity" files=".*[/\\]Commands.java|.*[/\\]DownloadFileWithHttpRequest.java"/>
+    <suppress checks="ClassFanOutComplexity" files=".*[/\\]SelenideDriver.java"/>
     <suppress checks="RedundantModifier" files=".*[/\\]Browsers.java"/>
     <suppress checks="NPathComplexity" files=".*[/\\]ScreenShotLaboratory.java"/>
 </suppressions>

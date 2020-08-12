@@ -44,7 +44,7 @@ class DownloadFileToFolderTest {
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = UUID.randomUUID().toString() + ".txt";
     doAnswer((Answer<Void>) i -> {
-      writeStringToFile(new File(driver.browserDownloadsFolder(), newFileName), "Hello Bingo-Bongo", UTF_8);
+      writeStringToFile(new File(driver.browserDownloadsFolder().getAbsolutePath(), newFileName), "Hello Bingo-Bongo", UTF_8);
       return null;
     }).when(link).click();
 

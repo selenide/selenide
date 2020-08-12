@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -10,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
 
 /**
  * A `Driver` implementation which uses thread-local
@@ -63,7 +63,7 @@ public class StaticDriver implements Driver {
   }
 
   @Override
-  public File browserDownloadsFolder() {
+  public DownloadsFolder browserDownloadsFolder() {
     return WebDriverRunner.getBrowserDownloadsFolder();
   }
 

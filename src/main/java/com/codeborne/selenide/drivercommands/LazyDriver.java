@@ -2,6 +2,7 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class LazyDriver implements Driver {
   private boolean closed;
   private WebDriver webDriver;
   private SelenideProxyServer selenideProxyServer;
-  private File browserDownloadsFolder;
+  private DownloadsFolder browserDownloadsFolder;
 
   public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
@@ -112,7 +112,7 @@ public class LazyDriver implements Driver {
   }
 
   @Override
-  public File browserDownloadsFolder() {
+  public DownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
   }
 
