@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -9,14 +10,13 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
 
 @ParametersAreNonnullByDefault
 public interface WebDriverContainer {
   void addListener(WebDriverEventListener listener);
   void setWebDriver(WebDriver webDriver);
   void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy);
-  void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder);
+  void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder);
   void resetWebDriver();
 
   @CheckReturnValue
@@ -35,7 +35,7 @@ public interface WebDriverContainer {
 
   @CheckReturnValue
   @Nonnull
-  File getBrowserDownloadsFolder();
+  DownloadsFolder getBrowserDownloadsFolder();
 
   void closeWindow();
   void closeWebDriver();

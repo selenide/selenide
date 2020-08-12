@@ -2,6 +2,7 @@ package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,17 +27,17 @@ public class WebDriverWrapper implements Driver {
   private final Config config;
   private final WebDriver webDriver;
   private final SelenideProxyServer selenideProxy;
-  private final File browserDownloadsFolder;
+  private final DownloadsFolder browserDownloadsFolder;
   private final BrowserHealthChecker browserHealthChecker;
   private final CloseDriverCommand closeDriverCommand;
 
   public WebDriverWrapper(Config config, WebDriver webDriver,
-                          @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder) {
+                          @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder) {
     this(config, webDriver, selenideProxy, browserDownloadsFolder, new BrowserHealthChecker(), new CloseDriverCommand());
   }
 
   private WebDriverWrapper(Config config, WebDriver webDriver,
-                           @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder,
+                           @Nullable SelenideProxyServer selenideProxy, DownloadsFolder browserDownloadsFolder,
                            BrowserHealthChecker browserHealthChecker, CloseDriverCommand closeDriverCommand) {
     requireNonNull(config, "config must not be null");
     requireNonNull(webDriver, "webDriver must not be null");
@@ -91,7 +91,7 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
-  public File browserDownloadsFolder() {
+  public DownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
   }
 

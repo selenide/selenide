@@ -5,8 +5,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import java.io.File;
-
 public interface Driver {
   Config config();
   Browser browser();
@@ -14,7 +12,7 @@ public interface Driver {
   WebDriver getWebDriver();
   SelenideProxyServer getProxy();
   WebDriver getAndCheckWebDriver();
-  File browserDownloadsFolder();
+  DownloadsFolder browserDownloadsFolder();
   void close();
 
   default boolean supportsJavascript() {

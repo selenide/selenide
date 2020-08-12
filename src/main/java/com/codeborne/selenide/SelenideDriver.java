@@ -8,13 +8,13 @@ import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.SelenidePageFactory;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -55,11 +55,11 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    this.config = config;
-    this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, new File(config.downloadsFolder()));
+    this(config, webDriver, selenideProxy, new DownloadsFolder(config.downloadsFolder()));
   }
 
-  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy, File browserDownloadsFolder) {
+  public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,
+                        DownloadsFolder browserDownloadsFolder) {
     this.config = config;
     this.driver = new WebDriverWrapper(config, webDriver, selenideProxy, browserDownloadsFolder);
   }

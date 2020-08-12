@@ -1,11 +1,11 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
@@ -15,12 +15,12 @@ class UnusedWebdriversCleanupThread extends Thread {
   private final Collection<Thread> allWebDriverThreads;
   private final Map<Long, WebDriver> threadWebDriver;
   private final Map<Long, SelenideProxyServer> threadProxyServer;
-  private final Map<Long, File> threadDownloadsFolder;
+  private final Map<Long, DownloadsFolder> threadDownloadsFolder;
 
   UnusedWebdriversCleanupThread(Collection<Thread> allWebDriverThreads,
                                 Map<Long, WebDriver> threadWebDriver,
                                 Map<Long, SelenideProxyServer> threadProxyServer,
-                                Map<Long, File> threadDownloadsFolder) {
+                                Map<Long, DownloadsFolder> threadDownloadsFolder) {
     this.allWebDriverThreads = allWebDriverThreads;
     this.threadWebDriver = threadWebDriver;
     this.threadProxyServer = threadProxyServer;
