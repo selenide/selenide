@@ -76,11 +76,11 @@ public class Click implements Command<Void> {
   }
 
   private void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-    if (offsetX == Integer.MAX_VALUE && offsetY == Integer.MAX_VALUE) {
+    if (offsetX == 0 && offsetY == 0) {
       element.click();
     } else {
       driver.actions()
-        .moveToElement(element, resolveOffset(offsetX), resolveOffset(offsetY))
+        .moveToElement(element, offsetX, offsetY)
         .click()
         .build()
         .perform();
@@ -98,15 +98,7 @@ public class Click implements Command<Void> {
         " 'clientY': rect.top + rect.height/2 + arguments[2]" +
         "}))",
       element,
-      resolveOffset(offsetX),
-      resolveOffset(offsetY));
-  }
-
-  private int resolveOffset(int offset) {
-    if (offset == Integer.MAX_VALUE) {
-      return 0;
-    } else {
-      return offset;
-    }
+      offsetX,
+      offsetY);
   }
 }
