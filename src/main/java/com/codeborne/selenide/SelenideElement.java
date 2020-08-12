@@ -984,7 +984,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Click the element with a relative offset from the center of the element
+   *
+   * @deprecated use {@link #click(ClickOptions)} with offsets
    */
+  @Deprecated
   void click(int offsetX, int offsetY);
 
   /**
