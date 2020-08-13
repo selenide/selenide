@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.FileFilters;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.codeborne.selenide.impl.DownloadFileToFolder.isFileModifiedLaterThan;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
@@ -43,7 +45,7 @@ class DownloadFileToFolderTest {
 
   @Test
   void tracksForNewFilesInDownloadsFolder() throws IOException {
-    String newFileName = UUID.randomUUID().toString() + ".txt";
+    String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {
       writeStringToFile(new File(driver.browserDownloadsFolder().getAbsolutePath(), newFileName), "Hello Bingo-Bongo", UTF_8);
       return null;
@@ -54,5 +56,26 @@ class DownloadFileToFolderTest {
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile().getAbsolutePath()).isNotEqualTo(driver.browserDownloadsFolder().getAbsolutePath());
     assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
+  }
+
+  @Test
+  void fileModificationCheck() throws IOException {
+    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597333000L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597332999L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1597333000L), 1597334000L)).isFalse();
+  }
+
+  @Test
+  void fileModificationCheck_workWithSecondsPrecision() throws IOException {
+    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111000L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111111999L)).isTrue();
+    assertThat(isFileModifiedLaterThan(file(1111111000L), 1111112000L)).isFalse();
+  }
+
+  private File file(long modifiedAt) throws IOException {
+    File file = new File("build", UUID.randomUUID().toString());
+    FileUtils.touch(file);
+    file.setLastModified(modifiedAt);
+    return file;
   }
 }

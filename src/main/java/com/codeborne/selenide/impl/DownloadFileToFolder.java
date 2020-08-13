@@ -111,9 +111,17 @@ public class DownloadFileToFolder {
     private List<DownloadedFile> newFiles(DownloadsFolder folder) {
       return folder.files().stream()
         .filter(File::isFile)
-        .filter(file -> file.lastModified() >= downloadStartedAt)
+        .filter(file -> isFileModifiedLaterThan(file, downloadStartedAt))
         .map(file -> new DownloadedFile(file, emptyMap()))
         .collect(toList());
     }
+  }
+
+  /**
+   * Depending on OS, file modification time can have seconds precision, not milliseconds.
+   * We have to ignore the difference in milliseconds.
+   */
+  static boolean isFileModifiedLaterThan(File file, long timestamp) {
+    return file.lastModified() >= timestamp / 1000L * 1000L;
   }
 }
