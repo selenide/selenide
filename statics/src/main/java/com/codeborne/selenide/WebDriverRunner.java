@@ -8,6 +8,8 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
+import javax.annotation.Nullable;
+
 import static com.codeborne.selenide.Configuration.browser;
 import static com.codeborne.selenide.Configuration.headless;
 
@@ -63,6 +65,12 @@ public class WebDriverRunner implements Browsers {
 
   public static void setWebDriver(WebDriver webDriver, SelenideProxyServer selenideProxy) {
     webdriverContainer.setWebDriver(webDriver, selenideProxy);
+  }
+
+  public static void setWebDriver(WebDriver webDriver,
+                                  @Nullable SelenideProxyServer selenideProxy,
+                                  DownloadsFolder browserDownloadsFolder) {
+    webdriverContainer.setWebDriver(webDriver, selenideProxy, browserDownloadsFolder);
   }
 
   /**
