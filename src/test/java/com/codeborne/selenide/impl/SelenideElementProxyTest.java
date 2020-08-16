@@ -1,9 +1,9 @@
 package com.codeborne.selenide.impl;
 
-import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.logevents.LogEvent;
@@ -54,7 +54,7 @@ class SelenideElementProxyTest implements WithAssertions {
     .screenshots(false)
     .timeout(3)
     .pollingInterval(1);
-  private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new DownloadsFolder("build/downloads/123"));
+  private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new SharedDownloadsFolder("build/downloads/123"));
 
   @BeforeEach
   void mockWebDriver() {

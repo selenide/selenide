@@ -55,7 +55,7 @@ public class SelenideDriver {
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    this(config, webDriver, selenideProxy, new DownloadsFolder(config.downloadsFolder()));
+    this(config, webDriver, selenideProxy, new SharedDownloadsFolder(config.downloadsFolder()));
   }
 
   public SelenideDriver(Config config, WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy,

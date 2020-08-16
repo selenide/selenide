@@ -12,8 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.apache.commons.io.FileUtils.cleanDirectory;
-
 @ParametersAreNonnullByDefault
 public final class FileHelper {
   private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
@@ -61,17 +59,6 @@ public final class FileHelper {
     catch (IOException e) {
       throw new IllegalStateException("Failed to move file " + srcFile.getAbsolutePath() +
         " to " + destFile.getAbsolutePath(), e);
-    }
-  }
-
-  public static void cleanupFolder(File folder) {
-    try {
-      if (folder.isDirectory()) {
-        cleanDirectory(folder);
-      }
-    }
-    catch (IOException e) {
-      throw new IllegalStateException("Failed to cleanup folder " + folder.getAbsolutePath(), e);
     }
   }
 

@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
+import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
 import com.codeborne.selenide.drivercommands.CloseDriverCommand;
 import com.codeborne.selenide.drivercommands.CreateDriverCommand;
@@ -60,7 +61,7 @@ public class WebDriverThreadLocalContainer implements WebDriverContainer {
 
   @Override
   public void setWebDriver(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxy) {
-    setWebDriver(webDriver, selenideProxy, new DownloadsFolder(config.downloadsFolder()));
+    setWebDriver(webDriver, selenideProxy, new SharedDownloadsFolder(config.downloadsFolder()));
   }
 
   /**

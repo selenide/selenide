@@ -47,14 +47,14 @@ class DownloadFileToFolderTest {
   void tracksForNewFilesInDownloadsFolder() throws IOException {
     String newFileName = "bingo-bongo.txt";
     doAnswer((Answer<Void>) i -> {
-      writeStringToFile(new File(driver.browserDownloadsFolder().getAbsolutePath(), newFileName), "Hello Bingo-Bongo", UTF_8);
+      writeStringToFile(driver.browserDownloadsFolder().file(newFileName), "Hello Bingo-Bongo", UTF_8);
       return null;
     }).when(link).click();
 
     File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
-    assertThat(downloadedFile.getParentFile().getAbsolutePath()).isNotEqualTo(driver.browserDownloadsFolder().getAbsolutePath());
+    assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());
     assertThat(readFileToString(downloadedFile, UTF_8)).isEqualTo("Hello Bingo-Bongo");
   }
 
