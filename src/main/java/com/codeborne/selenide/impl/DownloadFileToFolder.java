@@ -80,6 +80,9 @@ public class DownloadFileToFolder {
     if (log.isInfoEnabled()) {
       log.info(hasDownloads.downloads.filesAsString());
     }
+    if (log.isDebugEnabled()) {
+      log.debug("All downloaded files in {}: {}", folder, folder.files());
+    }
     return hasDownloads.downloads;
   }
 

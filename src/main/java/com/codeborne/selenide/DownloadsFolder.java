@@ -1,46 +1,39 @@
 package com.codeborne.selenide;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
-@ParametersAreNonnullByDefault
-public class DownloadsFolder {
-  private static final Logger log = LoggerFactory.getLogger(DownloadsFolder.class);
-
+public abstract class DownloadsFolder {
   protected final File folder;
 
-  public DownloadsFolder(File folder) {
+  protected DownloadsFolder(File folder) {
     this.folder = folder;
   }
 
-  public DownloadsFolder(String folder) {
-    this.folder = new File(folder);
-  }
-
-  public final String getAbsolutePath() {
-    return folder.getAbsolutePath();
+  public File toFile() {
+    return folder;
   }
 
   @CheckReturnValue
   @Nonnull
   public List<File> files() {
     File[] files = folder.listFiles();
-    if (log.isDebugEnabled()) {
-      log.debug("all downloaded files in {}: {}", folder.getAbsolutePath(), Arrays.toString(files));
-    }
     return files == null ? emptyList() : asList(files);
   }
 
-  public void cleanupBeforeDownload() {
+  public abstract void cleanupBeforeDownload();
+
+  public File file(String fileName) {
+    return new File(folder, fileName);
+  }
+
+  @Override
+  public String toString() {
+    return folder.getAbsolutePath();
   }
 }

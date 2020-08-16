@@ -13,7 +13,7 @@ public class DriverStub implements Driver {
   private final Browser browser;
   private final WebDriver webDriver;
   private final SelenideProxyServer proxy;
-  private final DownloadsFolder browserDownloadsFolder = new DownloadsFolder("build/downloads/45");
+  private final DownloadsFolder browserDownloadsFolder = new SharedDownloadsFolder("build/downloads/45");
 
   public DriverStub() {
     this("zopera");
