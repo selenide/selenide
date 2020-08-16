@@ -1,17 +1,17 @@
 # Changelog
 
-## 5.14.0
-* #1236 add support for Safari browser  --  see PR #1237
+## 5.14.0 (released 17.08.2020)
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
+* #1236 add support for Safari browser  --  see PR #1237
 * #1166 added method `SelenideDriver.screenshot(fileName)`  --  see PR #1227
 * #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231
 * #1190 take screenshot if `switchTo(frame)` or `switchTo(window)` or `switchTo(alert)` failed  --  see PR #1240
-* #1241 make $.toString() more safe  --  see PR #1245
-* upgraded to WebDriverManager 4.1.0
 * Add chrome option "--disable-dev-shm-usage" to avoid crashing Chrome because of out of memory error
 * #434 support working Sizzle together with Dojo.js, troop.js and JQuery  --  see PR #1242
+* #1241 make $.toString() more safe  --  see PR #1245
 * #1013 improve error message when Selenide fails to describe an element  --  see PR #1239
+* upgraded to WebDriverManager 4.1.0
 
 ## 5.13.1 (released 31.07.2020)
 * #1235 escape downloads path on Windows
