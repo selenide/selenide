@@ -1,8 +1,5 @@
 # Changelog
 
-## 5.14.1 (released 21.08.2020)
-* Upgrade commons-compress to 1.20 because previous versions have security issue https://snyk.io/vuln/SNYK-JAVA-ORGAPACHECOMMONS-460507
-
 ## 5.14.0 (released 17.08.2020)
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
