@@ -16,7 +16,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.io.File;
 
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
@@ -33,7 +32,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
     if (isSystemPropertyNotSet("webdriver.edge.driver")) {
       WebDriverManager manager = WebDriverManager.edgedriver();
       manager.setup();
-      browserVersion = manager.getDownloadedVersion();
+      browserVersion = manager.getDownloadedDriverVersion();
     }
   }
 
