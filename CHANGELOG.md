@@ -1,7 +1,12 @@
 # Changelog
 
+## 5.14.2 (released 22.08.2020)
+* upgraded commons-compress to v1.20 because of security issue https://snyk.io/vuln/SNYK-JAVA-ORGAPACHECOMMONS-460507 
+* upgraded org.rauschig:jarchivelib to v1.1.0
+
 ## 5.14.1 (released 21.08.2020)
 * Upgrade commons-compress to 1.20 because previous versions have security issue https://snyk.io/vuln/SNYK-JAVA-ORGAPACHECOMMONS-460507
+  * UPD The upgrade didn't work :)
 
 ## 5.14.0 (released 17.08.2020)
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221

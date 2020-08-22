@@ -15,6 +15,10 @@ dependencies {
   }
   api('io.github.bonigarcia:webdrivermanager:4.1.0') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
+    exclude group: 'org.rauschig', module: 'jarchivelib'
+  }
+  implementation('org.rauschig:jarchivelib:1.1.0') {
+    because 'used by webdrivermanager'
   }
 
   implementation('org.apache.httpcomponents.client5:httpclient5:5.0.1') {
@@ -36,7 +40,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.5.0')
+  testImplementation('org.mockito:mockito-core:3.5.2')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'
@@ -46,12 +50,6 @@ dependencies {
   implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
-
-  constraints {
-    implementation('org.apache.commons:commons-compress:1.20') {
-      because 'versions 1.15-1.19 have a security bug SNYK-JAVA-ORGAPACHECOMMONS-460507'
-    }
-  }
 }
 
 task libsProd(type: Sync) {
