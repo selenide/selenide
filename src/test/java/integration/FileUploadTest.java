@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class FileUploadTest extends ITest {
   @BeforeEach
   void openFileUploadForm() {
+    setTimeout(4000);
     if (browser().isIE()) {
       driver().close();
     }
