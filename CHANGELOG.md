@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.15.0
+* #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
+
 ## 5.14.2 (released 22.08.2020)
 * upgraded to WebDriverManager 4.2.0
 * upgraded commons-compress to v1.20 because of security issue https://snyk.io/vuln/SNYK-JAVA-ORGAPACHECOMMONS-460507 
