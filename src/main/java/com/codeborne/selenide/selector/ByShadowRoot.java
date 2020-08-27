@@ -14,6 +14,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @ParametersAreNonnullByDefault
 public class ByShadowRoot {
@@ -45,6 +48,92 @@ public class ByShadowRoot {
   public static By cssSelector(final String shadowHost, final String target) {
     return new ByShadowRootCss(shadowHost, target);
   }
+  public static class ShadowRootFinder {
+    private Function<SearchContext, Boolean> func;
+    private boolean finished = false;
+    public static void find(final SearchContext host, String selector, Function<SearchContext, Boolean> func) {
+      selector = selector.replace("\\(>{3,}\\)", "(>>)").trim();
+      if(0<selector.length()){
+        if(!Pattern.compile("^\\s*\\(>+\\)").matcher(selector).find()){
+          selector = "(>)"+selector;
+        }
+      }
+      ShadowRootFinder finder = new ShadowRootFinder();
+      finder.func = func;
+      if(isShadowRootAttached(host)){
+        finder.findShadow(host, selector);
+      } else {
+        finder.findDeeply(host, selector);
+      }
+    }
+    
+    private void findShadow(final SearchContext host, final String selector) {
+      if(finished || !isShadowRootAttached(host)){
+        return;
+      }
+      if(0==selector.length()) {
+        if(this.func.apply(host)){
+          finished = true;
+        }
+        return;
+      }
+      findDeeply(host, selector);
+    }
+
+    private void findDeeply(final SearchContext host, final String selector) {
+      final Pattern ptn = Pattern.compile("\\s*(\\(>+\\))\\s*(.*?)(\\(>+\\).*$|$)");
+      final Matcher m = ptn.matcher(selector);
+      if (!m.find()) {
+          return;
+      }
+      final String breakkey = m.group(1);
+      final String query = m.group(2);
+      final String nextSelector = m.group(3);
+
+      if ("(>)".equals(breakkey)) {
+        findElementsByCss(host, query).forEach(elm -> {
+          findShadow(elm, nextSelector);
+        });
+      }
+      if ("(>>)".equals(breakkey)) {
+        findElementsByCss(host, query).forEach(elm -> {
+          findShadow(elm, nextSelector);
+        });
+        findElementsByCss(host, "*").forEach(elm -> {
+          findShadow(elm, selector);
+        });
+      }
+    }
+
+    private static JavascriptExecutor getJavascriptExecutor(final SearchContext context) {
+      JavascriptExecutor jsExecutor;
+      if (context instanceof JavascriptExecutor) {
+        jsExecutor = (JavascriptExecutor) context;
+      } else {
+        jsExecutor = (JavascriptExecutor) ((WrapsDriver) context).getWrappedDriver();
+      }
+      return jsExecutor;
+    }
+
+    private static boolean isShadowRootAttached(final SearchContext host) {
+      return getJavascriptExecutor(host).executeScript("return arguments[0].shadowRoot", host) != null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<SearchContext> findElementsByCss(final SearchContext host, final String css) {
+      return (List<SearchContext>) getJavascriptExecutor(host)
+          .executeScript("return (arguments[0].shadowRoot||arguments[0]).querySelectorAll(arguments[1])", host, css);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<SearchContext> findElementsByXpath(final SearchContext host, final String xpath) {
+      final StringBuilder sb = new StringBuilder();
+      sb.append("const r=[],x=document.evaluate(arguments[1], arguments[0].shadowRoot||arguments[0], null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);");
+      sb.append("while(n=result.iterateNext()){r.push(n)}return r;");
+      return (List<SearchContext>) getJavascriptExecutor(host)
+          .executeScript(sb.toString(), host, xpath);
+    }
+  }
 
   @ParametersAreNonnullByDefault
   public static class ByShadowRootCss extends By implements Serializable {
@@ -62,7 +151,7 @@ public class ByShadowRoot {
     @CheckReturnValue
     @Nonnull
     public WebElement findElement(final SearchContext context) {
-      final SearchContext root = context instanceof JavascriptExecutor ? context.findElement(By.xpath("/*")) : context;
+      final SearchContext root = context instanceof WebElement ? context : context.findElement(By.xpath("/*"));
       if (null != this.target && 0 < this.target.length()) {
         final List<WebElement> hosts = getShadowRoots(root, shadowHost, -1);
         final WebElement targetWebElement = getElementInsideShadowTree(hosts, target);
@@ -82,7 +171,7 @@ public class ByShadowRoot {
     @CheckReturnValue
     @Nonnull
     public List<WebElement> findElements(final SearchContext context) {
-      final SearchContext root = context instanceof JavascriptExecutor ? context.findElement(By.xpath("/*")) : context;
+      final SearchContext root = context instanceof WebElement ? context : context.findElement(By.xpath("/*"));
       final List<WebElement> hosts = getShadowRoots(root, shadowHost, -1);
       if (null != this.target && 0 < this.target.length()) {
         return getElementsInsideShadowTree(hosts, target);
@@ -142,8 +231,18 @@ public class ByShadowRoot {
       })(document, '*', -1));
       */
       if (null == sh) sh = "";
+      //sh = sh.replaceAll("/{3,}","//").replaceAll("^/([^/])","$1").replaceAll("^/+","/");
+      sh = sh.replace("//", " (>>) ").replace("/", " (>) ");
+      ArrayList<WebElement> elems = new ArrayList<WebElement>();
+      ShadowRootFinder.find(host, sh, (elem) ->{
+        elems.add((WebElement)elem);
+        return 0<limit && limit <= elems.size();
+      });
+      System.out.println("elems.size:"+elems.size());
+      return elems;
+      /*System.out.println("ddddddddddddddddddddddddddddddddddd");
       final StringBuilder sb = new StringBuilder();
-      sb.append("const sh=arguments[1].replace(/\\/{3,}/g,'//').replace(/^\\/([^\\/])/,'$1').replace(/^\\/+/,'/'),");
+      sb.append("const sh=arguments[1],");
       sb.append("ptn=/(^[^\\/]*)\\/?(.*$)/,es=[],doc=arguments[0],lmt=arguments[2],f1=function(e,s){");
       sb.append("  const rt=e.shadowRoot;");
       sb.append("  if(rt&&(0>=lmt||lmt>es.length))0==s.length?(es[es.length]=e):f2(rt,s);");
@@ -158,8 +257,12 @@ public class ByShadowRoot {
       sb.append("};");
       sb.append("(doc.shadowRoot?f1:f2)(doc,sh);");
       sb.append("return es;");
-      return (List<WebElement>) getJavascriptExecutor(host).executeScript(sb.toString(), host, sh, limit);
+      return (List<WebElement>) getJavascriptExecutor(host).executeScript(sb.toString(), host, sh, limit);*/
+      
     }
+    /*private List<WebElement> aaa(final SearchContext host, String sh) {
+      return (List<WebElement>) getJavascriptExecutor(host).executeScript("return arguments[0].shadowRoot.querySelectorAll(arguments[1])", host, sh);
+    }*/
 
     @Override
     @CheckReturnValue

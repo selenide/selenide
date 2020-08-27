@@ -31,7 +31,7 @@ public class ShadowRootElementTest extends ITest {
 
   @Test
   void getElementInsideInnerShadowHost() {
-    $(shadowRoot("#shadow-host/#inner-shadow-host", "p"))
+    $(shadowRoot("#shadow-host (>) #inner-shadow-host", "p"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
   }
 
@@ -57,11 +57,11 @@ public class ShadowRootElementTest extends ITest {
 
   @Test
   void throwErrorWhenInnerShadowHostAbsent() {
-    assertThatThrownBy(() -> $(shadowRoot("#shadow-host/#nonexistent", "p")).text())
+    assertThatThrownBy(() -> $(shadowRoot("#shadow-host (>) #nonexistent", "p")).text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {[#shadow-host/#nonexistent] p}")
+      .hasMessageContaining("Element not found {[#shadow-host (>) #nonexistent] p}")
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .hasMessageContaining("The element was not found: {[#shadow-host/#nonexistent] p}");
+      .hasMessageContaining("The element was not found: {[#shadow-host (>) #nonexistent] p}");
   }
 
   @Test
@@ -72,7 +72,7 @@ public class ShadowRootElementTest extends ITest {
 
   @Test
   void getElementsInsideInnerShadowHost() {
-    $$(shadowRoot("#shadow-host/#inner-shadow-host", "p"))
+    $$(shadowRoot("#shadow-host (>) #inner-shadow-host", "p"))
       .shouldHaveSize(1);
   }
 
@@ -84,49 +84,49 @@ public class ShadowRootElementTest extends ITest {
 
   @Test
   void getAllShadowHost() {
-    $$(shadowRoot("//*", null))
+    $$(shadowRoot("(>>) *", null))
       .shouldHaveSize(14);
   }
 
   @Test
   void getElementsInsideInnerShadowHost2() {
-    $$(shadowRoot("//*", "h2"))
+    $$(shadowRoot("(>>) *", "h2"))
       .shouldHaveSize(15);
   }
 
   @Test
   void getElementsInsideInnerShadowHost3() {
-    $$(shadowRoot("//*", "p"))
+    $$(shadowRoot("(>>) *", "p"))
       .shouldHaveSize(32);
   }
 
   @Test
   void getElementsInsideInnerShadowHost4() {
-    $$(shadowRoot("#next-shadow-host/div", "h2"))
+    $$(shadowRoot("#next-shadow-host (>) div", "h2"))
       .shouldHaveSize(5);
   }
 
   @Test
   void getElementsInsideInnerShadowHost5() {
-    $$(shadowRoot("#next-shadow-host/div.fourth-shadow-host", "p"))
+    $$(shadowRoot("#next-shadow-host (>) div.fourth-shadow-host", "p"))
       .shouldHaveSize(0);
   }
 
   @Test
   void getElementsInsideInnerShadowHost6() {
-    $$(shadowRoot("#next-shadow-host//div.fourth-shadow-host", "p"))
+    $$(shadowRoot("#next-shadow-host (>>) div.fourth-shadow-host", "p"))
       .shouldHaveSize(30);
   }
 
   @Test
   void getElementsInsideInnerShadowHost7() {
-    $$(shadowRoot("#next-shadow-host/div/div.fourth-shadow-host", "p"))
+    $$(shadowRoot("#next-shadow-host (>) div (>) div.fourth-shadow-host", "p"))
       .shouldHaveSize(30);
   }
 
   @Test
   void getElementsInsideInnerShadowHost8() {
-    $(shadowRoot("//div.fourth-shadow-host", null)).$$(shadowRoot(null, "p"))
+    $(shadowRoot("(>>) div.fourth-shadow-host", null)).$$(shadowRoot(null, "p"))
       .shouldHaveSize(3);
   }
 }
