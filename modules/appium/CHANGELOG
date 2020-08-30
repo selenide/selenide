@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.4.6
+* upgrade to selenide:5.14.2
+
 === 1.4.5 (release 25.05.2020)
 * upgrade to selenide:5.12.1
 
