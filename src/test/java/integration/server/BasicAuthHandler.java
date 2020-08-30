@@ -13,7 +13,10 @@ import static org.apache.hc.core5.http.HttpStatus.SC_UNAUTHORIZED;
 class BasicAuthHandler extends BaseHandler {
   @Override
   public Result get(HttpServletRequest request, HttpServletResponse response) {
-    try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ignore) {
+    }
 
     List<String> authorizationHeaders = Collections.list(request.getHeaders("Authorization"));
     if (authorizationHeaders.isEmpty()) {

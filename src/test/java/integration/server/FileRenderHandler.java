@@ -23,7 +23,10 @@ class FileRenderHandler extends BaseHandler {
 
   @Override
   public Result get(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ignore) {
+    }
 
     String fileName = getFilenameFromRequest(request);
     byte[] fileContent = readFileContent(fileName);

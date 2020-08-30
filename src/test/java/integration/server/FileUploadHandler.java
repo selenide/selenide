@@ -26,7 +26,10 @@ class FileUploadHandler extends BaseHandler {
 
   @Override
   public Result post(HttpServletRequest request, HttpServletResponse response) {
-    try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ignore) {
+    }
 
     DiskFileItemFactory factory = new DiskFileItemFactory();
     factory.setRepository(new File(System.getProperty("java.io.tmpdir")));

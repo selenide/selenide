@@ -10,7 +10,10 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 class HeadersPrinterHandler extends BaseHandler {
   @Override
   public Result get(HttpServletRequest request, HttpServletResponse response) {
-    try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ignore) {
+    }
 
     List<String> headers = list(request.getHeaderNames());
 
