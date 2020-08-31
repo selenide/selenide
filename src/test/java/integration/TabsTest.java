@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class TabsTest extends ITest {
   @BeforeEach
   void setUp() {
-    setTimeout(1000);
+    setTimeout(4000);
     openFile("page_with_tabs.html");
   }
 
@@ -140,6 +140,7 @@ class TabsTest extends ITest {
     assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
+    setTimeout(1);
     assertThatThrownBy(() -> switchTo().window("absentWindow"))
       .isInstanceOf(WindowNotFoundException.class)
       .hasMessageStartingWith("No window found with name or handle or title: absentWindow")
@@ -153,6 +154,7 @@ class TabsTest extends ITest {
     assertThat(driver().title())
       .isEqualTo("Test::tabs");
 
+    setTimeout(1);
     assertThatThrownBy(() -> switchTo().window(Integer.MAX_VALUE))
       .isInstanceOf(WindowNotFoundException.class)
       .hasMessageStartingWith("No window found with index: " + Integer.MAX_VALUE)

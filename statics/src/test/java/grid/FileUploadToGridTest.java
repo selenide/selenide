@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +19,7 @@ class FileUploadToGridTest extends AbstractGridTest {
     Configuration.browser = "chrome";
     Configuration.headless = true;
     Configuration.proxyEnabled = true;
+    timeout = 4000;
 
     openFile("file_upload_form.html");
   }

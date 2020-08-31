@@ -28,7 +28,7 @@ class ConfirmTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
-    timeout = 1000;
+    timeout = 4000;
     openFile("page_with_alerts.html");
     $("h1").shouldHave(text("Page with alerts"));
     $(By.name("username")).val(USER_NAME);
@@ -63,6 +63,7 @@ class ConfirmTest extends IntegrationTest {
   @Video
   void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
+    timeout = 1;
     assertThatThrownBy(() -> confirm("Get out of this page, Maria?"))
       .isInstanceOf(DialogTextMismatch.class)
       .hasMessageContaining("Actual: Get out of this page, John Mc'Clane?")
@@ -91,7 +92,6 @@ class ConfirmTest extends IntegrationTest {
   @Test
   @Video
   void waitsUntilConfirmDialogAppears() {
-    timeout = 2000;
     $(byText("Slow confirm")).click();
     String confirmDialogText = confirm();
 

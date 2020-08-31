@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
@@ -23,6 +24,7 @@ class ProxyServerUsageTest extends IntegrationTest {
   @AfterEach
   void setUp() {
     closeWebDriver();
+    timeout = 4000;
     useProxy(true);
   }
 

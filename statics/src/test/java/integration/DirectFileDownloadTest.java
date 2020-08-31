@@ -39,7 +39,7 @@ public class DirectFileDownloadTest extends IntegrationTest {
   @Test
   void downloadFileWithCustomTimeout() throws IOException, URISyntaxException {
     Configuration.timeout = 10;
-    File file = download("/files/hello_world.txt?pause=1000", 1500);
+    File file = download("/files/hello_world.txt?pause=1000", 2500);
     assertThat(file.getName()).isEqualTo("hello_world.txt");
     assertThat(readFileToString(file, UTF_8)).isEqualTo("Hello, WinRar!");
   }
