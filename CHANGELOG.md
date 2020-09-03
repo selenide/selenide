@@ -2,6 +2,7 @@
 
 ## 5.15.0
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
+* #1259 Add new download via `DownloadOptions`  --  see PR #1260
 
 ## 5.14.2 (released 22.08.2020)
 * upgraded to WebDriverManager 4.2.0

@@ -926,6 +926,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   File download(long timeout, FileFilter fileFilter) throws FileNotFoundException;
 
+  @CheckReturnValue
+  @Nonnull
+  File download(DownloadOptions options) throws FileNotFoundException;
+
   /**
    * Return criteria by which this element is located
    *
