@@ -10,6 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.FileDownloadMode.FOLDER;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -136,5 +139,17 @@ class FileDownloadViaProxyTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
+  }
+
+  @Test
+  void downloadWithOptions() throws IOException {
+    Configuration.fileDownload = FOLDER;
+    Configuration.timeout = 1;
+
+    File downloadedFile = $(byText("Download me")).download(using(PROXY)
+      .withFilter(withExtension("txt"))
+      .withTimeout(4000));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 }

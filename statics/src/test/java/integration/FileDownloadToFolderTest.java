@@ -1,7 +1,6 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.FileDownloadMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -12,6 +11,9 @@ import java.io.IOException;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.FileDownloadMode.FOLDER;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -28,7 +30,7 @@ public class FileDownloadToFolderTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {
-    Configuration.fileDownload = FileDownloadMode.FOLDER;
+    Configuration.fileDownload = FOLDER;
     openFile("page_with_uploads.html");
     timeout = 4000;
   }
@@ -124,5 +126,20 @@ public class FileDownloadToFolderTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
+  }
+
+  @Test
+  void downloadWithOptions() throws IOException {
+    Configuration.fileDownload = PROXY;
+    Configuration.timeout = 1;
+
+    File downloadedFile = $(byText("Download me")).download(using(FOLDER)
+      .withFilter(withExtension("txt"))
+      .withTimeout(4000)
+    );
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8")).isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath()).startsWith(folder.getAbsolutePath());
   }
 }
