@@ -4,21 +4,22 @@ import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 
 public class ClickOptions {
-
-  private int offsetX;
-  private int offsetY;
+  private final int offsetX;
+  private final int offsetY;
   private final ClickMethod clickMethod;
 
-  private ClickOptions(ClickMethod clickMethod) {
+  private ClickOptions(ClickMethod clickMethod, int offsetX, int offsetY) {
     this.clickMethod = clickMethod;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
   }
 
   public static ClickOptions usingDefaultMethod() {
-    return new ClickOptions(DEFAULT);
+    return new ClickOptions(DEFAULT, 0, 0);
   }
 
   public static ClickOptions usingJavaScript() {
-    return new ClickOptions(JS);
+    return new ClickOptions(JS, 0, 0);
   }
 
   public int offsetX() {
@@ -34,18 +35,14 @@ public class ClickOptions {
   }
 
   public ClickOptions offsetX(int offsetX) {
-    this.offsetX = offsetX;
-    return this;
+    return new ClickOptions(clickMethod, offsetX, offsetY);
   }
 
   public ClickOptions offsetY(int offsetY) {
-    this.offsetY = offsetY;
-    return this;
+    return new ClickOptions(clickMethod, offsetX, offsetY);
   }
 
   public ClickOptions offset(int offsetX, int offsetY) {
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    return this;
+    return new ClickOptions(clickMethod, offsetX, offsetY);
   }
 }
