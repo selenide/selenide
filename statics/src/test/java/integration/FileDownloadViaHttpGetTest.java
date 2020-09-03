@@ -25,7 +25,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     Configuration.fileDownload = HTTPGET;
-    Configuration.timeout = 1000;
+    Configuration.timeout = 3000;
     openFile("page_with_uploads.html");
   }
 
@@ -78,7 +78,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
   void downloadFileByName() {
     assertThatThrownBy(() -> $(byText("Download me")).download(withName("good_bye_world.txt")))
       .isInstanceOf(FileNotFoundException.class)
-      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 1000 ms." +
+      .hasMessageMatching("Failed to download file from http.+/files/hello_world.txt in 3000 ms." +
         " with file name \"good_bye_world.txt\" " + System.lineSeparator() + "; actually downloaded: .+hello_world.txt");
   }
 
@@ -91,7 +91,7 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadWithCustomTimeout() throws IOException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(5000);
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");

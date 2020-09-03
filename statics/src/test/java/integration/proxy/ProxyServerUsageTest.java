@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +33,8 @@ class ProxyServerUsageTest extends IntegrationTest {
   @Test
   void canAddInterceptorsToProxyServer() {
     openFile("file_upload_form.html");
+    sleep(1000);
+    $("h1").shouldHave(text("File upload form"));
 
     SelenideProxyServer selenideProxy = getSelenideProxy();
 

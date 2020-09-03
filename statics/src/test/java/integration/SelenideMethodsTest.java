@@ -235,7 +235,7 @@ class SelenideMethodsTest extends IntegrationTest {
       .isEqualTo(-1);
     $(By.name("password")).val("Going to press ENTER").pressEnter();
 
-    sleep(500);
+    sleep(2500);
     assertThat(url())
       .contains("#submitted-form");
   }
