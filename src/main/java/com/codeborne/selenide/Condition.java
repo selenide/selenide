@@ -10,6 +10,7 @@ import com.codeborne.selenide.conditions.CssValue;
 import com.codeborne.selenide.conditions.CustomMatch;
 import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Enabled;
+import com.codeborne.selenide.conditions.ExactOwnText;
 import com.codeborne.selenide.conditions.ExactText;
 import com.codeborne.selenide.conditions.ExactTextCaseSensitive;
 import com.codeborne.selenide.conditions.Exist;
@@ -22,6 +23,7 @@ import com.codeborne.selenide.conditions.MatchText;
 import com.codeborne.selenide.conditions.NamedCondition;
 import com.codeborne.selenide.conditions.Not;
 import com.codeborne.selenide.conditions.Or;
+import com.codeborne.selenide.conditions.OwnText;
 import com.codeborne.selenide.conditions.PseudoElementPropertyWithValue;
 import com.codeborne.selenide.conditions.Selected;
 import com.codeborne.selenide.conditions.SelectedText;
@@ -328,6 +330,36 @@ public abstract class Condition {
   @Nonnull
   public static Condition exactText(String text) {
     return new ExactText(text);
+  }
+
+  /**
+   * Assert that element contains given text (without checking child elements).
+   * <p>Sample: <code>$("h1").shouldHave(ownText("Hello"))</code></p>
+   *
+   * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
+   * @param text expected text of HTML element without its children
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition ownText(String text) {
+    return new OwnText(text);
+  }
+
+  /**
+   * Assert that element has given text (without checking child elements).
+   * <p>Sample: <code>$("h1").shouldHave(ownText("Hello"))</code></p>
+   *
+   * <p>Case insensitive</p>
+   * <p>NB! Ignores multiple whitespaces between words</p>
+   *
+   * @param text expected text of HTML element without its children
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition exactOwnText(String text) {
+    return new ExactOwnText(text);
   }
 
   /**

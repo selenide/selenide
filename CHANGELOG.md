@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.15.0
+* #1261 Add conditions `ownText`, `exactOwnText`  --  see PR #1262
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
 
 ## 5.14.2 (released 22.08.2020)
