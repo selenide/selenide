@@ -137,10 +137,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String text();
 
   /**
+   * Get the text of the element WITHOUT children.
+   *
+   * @see com.codeborne.selenide.commands.GetOwnText
+   */
+  @CheckReturnValue
+  @Nonnull
+  String getOwnText();
+
+  /**
    * Get the text code of the element with children.
    * <p>
+   * It can be used to get the text of a hidden element.
+   * <p>
    * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
-   *
+   * <p>
    * @see com.codeborne.selenide.commands.GetInnerText
    */
   @CheckReturnValue
@@ -150,8 +161,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * Get the HTML code of the element with children.
    * <p>
+   * It can be used to get the html of a hidden element.
+   * <p>
    * Short form of getAttribute("innerHTML")
-   *
+   * <p>
    * @see com.codeborne.selenide.commands.GetInnerHtml
    */
   @CheckReturnValue

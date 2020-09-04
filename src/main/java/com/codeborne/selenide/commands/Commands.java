@@ -64,6 +64,7 @@ public class Commands {
     add("getCssValue", new GetCssValue());
     add("data", new GetDataAttribute());
     add("exists", new Exists());
+    add("getOwnText", new GetOwnText());
     add("innerText", new GetInnerText());
     add("innerHtml", new GetInnerHtml());
     add("has", new Matches());
