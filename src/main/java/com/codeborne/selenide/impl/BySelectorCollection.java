@@ -14,6 +14,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class BySelectorCollection implements WebElementsCollection {
+  private final ElementDescriber describe = Plugins.getElementDescriber();
 
   private final Driver driver;
   private final SearchContext parent;
@@ -52,10 +53,10 @@ public class BySelectorCollection implements WebElementsCollection {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return parent == null ? Describe.selector(selector) :
+    return parent == null ? describe.selector(selector) :
         (parent instanceof SelenideElement) ?
-            ((SelenideElement) parent).getSearchCriteria() + "/" + Describe.shortly(selector) :
-            Describe.shortly(selector);
+            ((SelenideElement) parent).getSearchCriteria() + "/" + describe.selector(selector) :
+          describe.selector(selector);
   }
 
   @Override

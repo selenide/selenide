@@ -21,6 +21,8 @@ import static java.lang.Thread.currentThread;
 
 @ParametersAreNonnullByDefault
 public class ElementFinder extends WebElementSource {
+  private final ElementDescriber describe = Plugins.getElementDescriber();
+
   @CheckReturnValue
   @Nonnull
   public static SelenideElement wrap(Driver driver, WebElement parent, String cssSelector) {
@@ -138,8 +140,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public String getSearchCriteria() {
     return index == 0 ?
-        Describe.selector(criteria) :
-        Describe.selector(criteria) + '[' + index + ']';
+        describe.selector(criteria) :
+        describe.selector(criteria) + '[' + index + ']';
   }
 
   @Override

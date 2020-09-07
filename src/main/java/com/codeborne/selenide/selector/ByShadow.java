@@ -37,8 +37,6 @@ public class ByShadow {
 
   @ParametersAreNonnullByDefault
   public static class ByShadowCss extends By implements Serializable {
-    private static final long serialVersionUID = -1230258723099459239L;
-
     private final String shadowHost;
     private final String[] innerShadowHosts;
     private final String target;

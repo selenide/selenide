@@ -6,13 +6,14 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
-import com.codeborne.selenide.impl.Describe;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
+import com.codeborne.selenide.impl.Plugins;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.TailOfCollection;
+import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -313,13 +314,14 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return "[]";
     }
 
+    ElementDescriber describe = Plugins.getElementDescriber();
     StringBuilder sb = new StringBuilder(256);
     sb.append("[").append(lineSeparator()).append("\t");
     for (WebElement element : elements) {
       if (sb.length() > 4) {
         sb.append(",").append(lineSeparator()).append("\t");
       }
-      sb.append(Describe.describe(driver, element));
+      sb.append(describe.fully(driver, element));
     }
     sb.append(lineSeparator()).append("]");
     return sb.toString();
