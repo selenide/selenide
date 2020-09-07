@@ -46,7 +46,7 @@ public final class FileHelper {
     if (!folder.exists()) {
       log.info("Creating folder: {}", folder.getAbsolutePath());
       if (!folder.mkdirs()) {
-        log.error("Failed to create folder: {}", folder.getAbsolutePath());
+        throw new IllegalArgumentException("Failed to create folder '" + folder.getAbsolutePath() + "'");
       }
     }
     return folder;
