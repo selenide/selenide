@@ -5,7 +5,8 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
-import com.codeborne.selenide.impl.Describe;
+import com.codeborne.selenide.impl.Plugins;
+import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebElement;
@@ -23,6 +24,8 @@ import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class UploadFile implements Command<File> {
+  private final ElementDescriber describe = Plugins.getElementDescriber();
+
   @Override
   @CheckReturnValue
   @Nonnull
@@ -87,7 +90,8 @@ public class UploadFile implements Command<File> {
 
   private void checkValidInputField(Driver driver, WebElement inputField) {
     if (!"input".equalsIgnoreCase(inputField.getTagName())) {
-      throw new IllegalArgumentException("Cannot upload file because " + Describe.describe(driver, inputField) + " is not an INPUT");
+      throw new IllegalArgumentException("Cannot upload file because " +
+        describe.briefly(driver, inputField) + " is not an INPUT");
     }
   }
 }

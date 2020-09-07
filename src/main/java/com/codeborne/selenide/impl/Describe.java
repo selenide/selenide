@@ -1,8 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnsupportedCommandException;
@@ -28,13 +26,13 @@ public class Describe {
   private final WebElement element;
   private final StringBuilder sb = new StringBuilder();
 
-  private Describe(Driver driver, WebElement element) {
+  public Describe(Driver driver, WebElement element) {
     this.driver = driver;
     this.element = element;
     sb.append('<').append(element.getTagName());
   }
 
-  private Describe appendAttributes() {
+  public Describe appendAttributes() {
     try {
       if (supportsJavascriptAttributes()) {
         return appendAllAttributes();
@@ -89,7 +87,7 @@ public class Describe {
     return driver.supportsJavascript();
   }
 
-  private Describe attr(String attributeName) {
+  public Describe attr(String attributeName) {
     try {
       String attributeValue = element.getAttribute(attributeName);
       return attr(attributeName, attributeValue);
@@ -117,7 +115,7 @@ public class Describe {
     return this;
   }
 
-  private String serialize() {
+  public String serialize() {
     String text = safeCall("text", element::getText);
     sb.append('>').append(text == null ? "" : text).append("</").append(safeCall("tagName", element::getTagName)).append('>');
     return sb.toString();
@@ -130,55 +128,11 @@ public class Describe {
     return sb.toString();
   }
 
-  private String flush() {
+  public String flush() {
     return sb.append('>').toString();
   }
 
-  @CheckReturnValue
-  @Nonnull
-  public static String describe(Driver driver, @Nullable WebElement element) {
-    try {
-      if (element == null) {
-        return "null";
-      }
-      return new Describe(driver, element)
-          .appendAttributes()
-          .isSelected(element)
-          .isDisplayed(element)
-          .serialize();
-    } catch (WebDriverException elementDoesNotExist) {
-      return failedToDescribe(Cleanup.of.webdriverExceptionMessage(elementDoesNotExist));
-    }
-    catch (RuntimeException e) {
-      return failedToDescribe(e.toString());
-    }
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  static String shortly(Driver driver, @Nonnull WebElement element) {
-    try {
-      if (element == null) {
-        return "null";
-      }
-      if (element instanceof SelenideElement) {
-        return shortly(driver, ((SelenideElement) element).toWebElement());
-      }
-      return new Describe(driver, element).attr("id").attr("name").flush();
-    } catch (WebDriverException elementDoesNotExist) {
-      return failedToDescribe(Cleanup.of.webdriverExceptionMessage(elementDoesNotExist));
-    }
-    catch (RuntimeException e) {
-      return failedToDescribe(e.toString());
-    }
-  }
-
-  @Nonnull
-  private static String failedToDescribe(String s2) {
-    return "Ups, failed to described the element [caused by: " + s2 + ']';
-  }
-
-  private Describe isSelected(WebElement element) {
+  public Describe isSelected(WebElement element) {
     try {
       if (element.isSelected()) {
         sb.append(' ').append("selected:true");
@@ -188,7 +142,7 @@ public class Describe {
     return this;
   }
 
-  private Describe isDisplayed(WebElement element) {
+  public Describe isDisplayed(WebElement element) {
     try {
       if (!element.isDisplayed()) {
         sb.append(' ').append("displayed:false");
@@ -203,25 +157,6 @@ public class Describe {
       sb.append(' ').append("displayed:").append(Cleanup.of.webdriverExceptionMessage(e));
     }
     return this;
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  static String shortly(By selector) {
-    if (selector instanceof By.ByCssSelector) {
-      return selector.toString()
-          .replaceFirst("By\\.selector:\\s*(.*)", "$1")
-          .replaceFirst("By\\.cssSelector:\\s*(.*)", "$1");
-    }
-    return selector.toString();
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  public static String selector(By selector) {
-    return selector.toString()
-        .replaceFirst("By\\.selector:\\s*", "")
-        .replaceFirst("By\\.cssSelector:\\s*", "");
   }
 
   private String safeCall(String name, Supplier<String> method) {
