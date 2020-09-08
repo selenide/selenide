@@ -25,6 +25,7 @@ import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
 import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class WebDriverFactory {
   private static final Logger log = LoggerFactory.getLogger(WebDriverFactory.class);
@@ -59,6 +60,7 @@ public class WebDriverFactory {
 
     browserResizer.adjustBrowserSize(config, webdriver);
     browserResizer.adjustBrowserPosition(config, webdriver);
+    webdriver.manage().timeouts().pageLoadTimeout(config.pageLoadTimeout(), MILLISECONDS);
 
     logBrowserVersion(webdriver);
     log.info("Selenide v. {}", SelenideDriver.class.getPackage().getImplementationVersion());
