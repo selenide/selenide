@@ -154,6 +154,15 @@ public class Configuration {
   public static String pageLoadStrategy = defaults.pageLoadStrategy();
 
   /**
+   * Timeout for loading a web page (in milliseconds).
+   * Default timeout in Selenium WebDriver is 300 seconds (which is incredibly long).
+   * Selenide default is 30 seconds.
+   *
+   * @since 5.15.0
+   */
+  public static long pageLoadTimeout = defaults.pageLoadTimeout();
+
+  /**
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
    * This solution may be helpful for testing in Internet Explorer.

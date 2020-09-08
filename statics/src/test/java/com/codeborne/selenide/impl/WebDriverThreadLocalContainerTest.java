@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class WebDriverThreadLocalContainerTest implements WithAssertions {
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer();
@@ -110,7 +111,11 @@ class WebDriverThreadLocalContainerTest implements WithAssertions {
     @CheckReturnValue
     @Nonnull
     public WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities) {
-      return mock(WebDriver.class);
+      WebDriver webdriver = mock(WebDriver.class);
+      WebDriver.Options options = mock(WebDriver.Options.class);
+      when(webdriver.manage()).thenReturn(options);
+      when(options.timeouts()).thenReturn(mock(WebDriver.Timeouts.class));
+      return webdriver;
     }
   }
 }

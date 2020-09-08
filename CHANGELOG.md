@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.15.0
+* #1268 Add setting `Configuration.pageLoadTimeout`  --  see PR #1269
 * #1261 Add conditions `ownText`, `exactOwnText`  --  see PR #1262
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
 * #1259 Add new download via `DownloadOptions`  --  see PR #1260

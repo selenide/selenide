@@ -13,6 +13,7 @@ public interface Config {
   boolean driverManagerEnabled();
   String browserBinary();
   String pageLoadStrategy();
+  long pageLoadTimeout();
   MutableCapabilities browserCapabilities();
 
   String baseUrl();

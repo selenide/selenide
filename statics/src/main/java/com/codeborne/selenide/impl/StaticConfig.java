@@ -162,6 +162,11 @@ public class StaticConfig implements Config {
   }
 
   @Override
+  public long pageLoadTimeout() {
+    return Configuration.pageLoadTimeout;
+  }
+
+  @Override
   public MutableCapabilities browserCapabilities() {
     return Configuration.browserCapabilities;
   }
