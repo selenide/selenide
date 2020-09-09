@@ -5,6 +5,7 @@ import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ListSize extends CollectionCondition {
     this.expectedSize = expectedSize;
   }
 
+  @CheckReturnValue
   @Override
   public boolean test(List<WebElement> elements) {
     return apply(elements.size());
@@ -30,11 +32,13 @@ public class ListSize extends CollectionCondition {
     throw new ListSizeMismatch(collection.driver(), "=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 
+  @CheckReturnValue
   @Override
   public boolean applyNull() {
     return apply(0);
   }
 
+  @CheckReturnValue
   @Override
   public String toString() {
     return String.format("size(%s)", expectedSize);
