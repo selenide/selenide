@@ -23,7 +23,22 @@ public class TailOfCollection implements WebElementsCollection {
   @Nonnull
   public List<WebElement> getElements() {
     List<WebElement> source = originalCollection.getElements();
-    return source.subList(source.size() - Math.min(source.size(), size), source.size());
+    int sourceCollectionSize = source.size();
+    return source.subList(startingIndex(sourceCollectionSize), sourceCollectionSize);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public WebElement getElement(int index) {
+    List<WebElement> source = originalCollection.getElements();
+    int sourceCollectionSize = source.size();
+    int startingIndex = startingIndex(sourceCollectionSize);
+    return originalCollection.getElement(startingIndex + index);
+  }
+
+  private int startingIndex(int sourceCollectionSize) {
+    return sourceCollectionSize - Math.min(sourceCollectionSize, this.size);
   }
 
   @Override

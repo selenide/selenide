@@ -30,6 +30,13 @@ public class WebElementsCollectionWrapper implements WebElementsCollection {
   @Override
   @CheckReturnValue
   @Nonnull
+  public WebElement getElement(int index) {
+    return elements.get(index);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
     return "$$(" + elements.size() + " elements)";
   }

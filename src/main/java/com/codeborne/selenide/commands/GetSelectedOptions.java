@@ -19,27 +19,50 @@ import java.util.List;
 public class GetSelectedOptions implements Command<ElementsCollection> {
   @Override
   public ElementsCollection execute(SelenideElement proxy, final WebElementSource selectElement, @Nullable Object[] args) {
-    return new ElementsCollection(new WebElementsCollection() {
-      @Override
-      @CheckReturnValue
-      @Nonnull
-      public List<WebElement> getElements() {
-        return new Select(selectElement.getWebElement()).getAllSelectedOptions();
-      }
+    return new ElementsCollection(new SelectedOptionsCollection(selectElement));
+  }
 
-      @Override
-      @CheckReturnValue
-      @Nonnull
-      public String description() {
-        return selectElement.getSearchCriteria() + " selected options";
-      }
+  private static class SelectedOptionsCollection implements WebElementsCollection {
+    private final WebElementSource selectElement;
 
-      @Override
-      @CheckReturnValue
-      @Nonnull
-      public Driver driver() {
-        return selectElement.driver();
-      }
-    });
+    private SelectedOptionsCollection(WebElementSource selectElement) {
+      this.selectElement = selectElement;
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public List<WebElement> getElements() {
+      return select(selectElement).getAllSelectedOptions();
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public WebElement getElement(int index) {
+      return index == 0 ?
+        select(selectElement).getFirstSelectedOption() :
+        select(selectElement).getAllSelectedOptions().get(index);
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private Select select(WebElementSource selectElement) {
+      return new Select(selectElement.getWebElement());
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public String description() {
+      return selectElement.getSearchCriteria() + " selected options";
+    }
+
+    @Override
+    @CheckReturnValue
+    @Nonnull
+    public Driver driver() {
+      return selectElement.driver();
+    }
   }
 }

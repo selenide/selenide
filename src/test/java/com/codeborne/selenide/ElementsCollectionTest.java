@@ -287,6 +287,8 @@ class ElementsCollectionTest implements WithAssertions {
   private ElementsCollection collection(String first, String second) {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
+    when(source.getElement(0)).thenReturn(element1);
+    when(source.getElement(1)).thenReturn(element2);
     when(element1.getText()).thenReturn(first);
     when(element2.getText()).thenReturn(second);
     return collection;
@@ -295,6 +297,9 @@ class ElementsCollectionTest implements WithAssertions {
   private ElementsCollection collection(String first, String second, String third) {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2, element3));
+    when(source.getElement(0)).thenReturn(element1);
+    when(source.getElement(1)).thenReturn(element2);
+    when(source.getElement(2)).thenReturn(element3);
     when(element1.getText()).thenReturn(first);
     when(element2.getText()).thenReturn(second);
     when(element3.getText()).thenReturn(third);

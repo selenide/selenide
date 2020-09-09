@@ -23,6 +23,7 @@ public class Mocks {
     WebElement element = mock(WebElement.class);
     when(element.getTagName()).thenReturn(tag);
     when(element.getText()).thenReturn(text);
+    when(element.isDisplayed()).thenReturn(true);
     return element;
   }
 
@@ -34,6 +35,9 @@ public class Mocks {
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn(description);
     when(collection.getElements()).thenReturn(asList(elements));
+    for (int i = 0; i < elements.length; i++) {
+      when(collection.getElement(i)).thenReturn(elements[i]);
+    }
     return collection;
   }
 }

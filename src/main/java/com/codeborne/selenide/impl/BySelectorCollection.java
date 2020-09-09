@@ -40,6 +40,14 @@ public class BySelectorCollection implements WebElementsCollection {
   @Override
   @CheckReturnValue
   @Nonnull
+  public WebElement getElement(int index) {
+    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
+    return WebElementSelector.instance.findElements(driver, searchContext, selector).get(index);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
     return parent == null ? Describe.selector(selector) :
         (parent instanceof SelenideElement) ?

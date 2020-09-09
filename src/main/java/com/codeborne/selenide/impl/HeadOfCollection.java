@@ -36,6 +36,16 @@ public class HeadOfCollection implements WebElementsCollection {
   @Override
   @CheckReturnValue
   @Nonnull
+  public WebElement getElement(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("Index: " + index + ", size: " + size);
+    }
+    return originalCollection.getElement(index);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
     return originalCollection.description() + ".first(" + size + ')';
   }

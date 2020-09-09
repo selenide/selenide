@@ -17,6 +17,13 @@ public interface WebElementsCollection {
   @Nonnull
   List<WebElement> getElements();
 
+  /**
+   * get Nth element of this collection
+   */
+  @CheckReturnValue
+  @Nonnull
+  WebElement getElement(int index);
+
   @CheckReturnValue
   @Nonnull
   String description();
