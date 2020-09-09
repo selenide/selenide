@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class SelenideElementListIteratorTest implements WithAssertions {
-  private WebElementsCollection collection = mockCollection("Collection description");
+  private final WebElement webElement = mockWebElement("a", "click me if you can");
+  private final WebElementsCollection collection = mockCollection("Collection description", webElement);
 
   @Test
   void hasPrevious() {
@@ -31,7 +33,7 @@ class SelenideElementListIteratorTest implements WithAssertions {
     SelenideElementListIterator selenideElementIterator = new SelenideElementListIterator(collection, 1);
     SelenideElement previous = selenideElementIterator.previous();
     assertThat(previous).isNotNull();
-    assertThat(previous).hasToString("<a>selenide</a>");
+    assertThat(previous).hasToString("<a>click me if you can</a>");
   }
 
   @Test

@@ -33,6 +33,17 @@ public class FilteringCollection implements WebElementsCollection {
   @Override
   @CheckReturnValue
   @Nonnull
+  public WebElement getElement(int index) {
+    return originalCollection.getElements().stream()
+      .filter(webElement -> filter.apply(originalCollection.driver(), webElement))
+      .skip(index)
+      .findFirst()
+      .orElseThrow(() -> new IndexOutOfBoundsException("Index: " + index));
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
   public String description() {
     return originalCollection.description() + ".filter(" + filter + ')';
   }

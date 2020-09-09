@@ -43,7 +43,7 @@ public class CollectionElement extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public WebElement getWebElement() {
-    return collection.getElements().get(index);
+    return collection.getElement(index);
   }
 
   @Override

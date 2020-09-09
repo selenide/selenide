@@ -3,28 +3,27 @@ package integration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
-import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.CollectionCondition.noneMatch;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
+import static com.codeborne.selenide.CollectionCondition.noneMatch;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
@@ -39,6 +38,7 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -315,14 +315,36 @@ class CollectionMethodsTest extends ITest {
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
       .map(SelenideElement::getText)
-      .collect(Collectors.toList()).subList(0, 2);
+      .collect(toList()).subList(0, 2);
 
     List<String> selenideSublist = collection.first(2).stream()
       .map(SelenideElement::getText)
-      .collect(Collectors.toList());
+      .collect(toList());
 
-    assertThat(selenideSublist)
-      .isEqualTo(regularSublist);
+    assertThat(selenideSublist).isEqualTo(regularSublist);
+  }
+
+  @Test
+  void canGetElementByIndex_fromFirstNElements() {
+    ElementsCollection collection = $$x("//select[@name='domain']/option").first(3).shouldHave(size(3));
+
+    collection.get(0).shouldHave(text("@livemail.ru"));
+    collection.get(1).shouldHave(text("@myrambler.ru"));
+    collection.get(2).shouldHave(text("@rusmail.ru"));
+  }
+
+  @Test
+  void canGetElementByIndex_fromFirstNElements_ofFilteredCollection() {
+    ElementsCollection collection = $$x("//select[@name='domain']/option")
+      .filterBy(text(".ru"))
+      .first(2)
+      .shouldHave(size(2));
+
+    collection.get(0).shouldHave(text("@livemail.ru"));
+    collection.get(1).shouldHave(text("@myrambler.ru"));
+    assertThatThrownBy(() -> collection.get(2).getText())
+      .isInstanceOf(IndexOutOfBoundsException.class)
+      .hasMessage("Index: 2, size: 2");
   }
 
   @Test
@@ -333,14 +355,30 @@ class CollectionMethodsTest extends ITest {
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
       .map(SelenideElement::getText)
-      .collect(Collectors.toList()).subList(2, collection.size());
+      .collect(toList()).subList(2, collection.size());
 
     List<String> selenideSublist = collection.last(2).stream()
       .map(SelenideElement::getText)
-      .collect(Collectors.toList());
+      .collect(toList());
 
-    assertThat(selenideSublist)
-      .isEqualTo(regularSublist);
+    assertThat(selenideSublist).isEqualTo(regularSublist);
+  }
+
+  @Test
+  void canGetElementByIndex_fromLastNElements_ofFilteredCollection() {
+    ElementsCollection collection = $$x("//select[@name='domain']/option")
+      .filterBy(text(".ru"))
+      .last(2)
+      .shouldHave(size(2));
+
+    collection.get(0).shouldHave(text("@myrambler.ru"));
+    collection.get(1).shouldHave(text("@rusmail.ru"));
+    assertThatThrownBy(() -> collection.get(2).getText())
+      .isInstanceOf(IndexOutOfBoundsException.class)
+      .hasMessage("Index: 3");
+    assertThatThrownBy(() -> collection.get(3).getText())
+      .isInstanceOf(IndexOutOfBoundsException.class)
+      .hasMessage("Index: 4");
   }
 
   @Test
@@ -353,8 +391,8 @@ class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void shouldThrowIndexOutOfBoundsException() {
-    ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
+  void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException() {
+    ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
 
     assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))

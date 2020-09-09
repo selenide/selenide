@@ -6,48 +6,41 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 
 class SelenideElementIteratorTest implements WithAssertions {
-  private WebElementsCollection collection = mockCollection("Collection description");
+  private final WebElement webElement = mockWebElement("a", "click me if you can");
 
   @Test
   void hasNext() {
-    when(collection.getElements()).thenReturn(singletonList(mock(WebElement.class)));
+    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
-    assertThat(selenideElementIterator.hasNext())
-      .isTrue();
+
+    assertThat(selenideElementIterator.hasNext()).isTrue();
   }
 
   @Test
   void doesNotHasNext() {
-    when(collection.getElements()).thenReturn(emptyList());
+    WebElementsCollection collection = mockCollection("empty collection");
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
-    assertThat(selenideElementIterator.hasNext())
-      .isFalse();
+
+    assertThat(selenideElementIterator.hasNext()).isFalse();
   }
 
   @Test
   void next() {
-    WebElement mockedWebElement = mock(WebElement.class);
-    when(mockedWebElement.isDisplayed()).thenReturn(true);
-    when(mockedWebElement.getTagName()).thenReturn("a");
-    when(mockedWebElement.getText()).thenReturn("selenide");
-
-    when(collection.getElements()).thenReturn(singletonList(mockedWebElement));
+    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
     SelenideElement nextElement = selenideElementIterator.next();
 
     assertThat(nextElement).isNotNull();
-    assertThat(nextElement).hasToString("<a>selenide</a>");
+    assertThat(nextElement).hasToString("<a>click me if you can</a>");
     assertThat(selenideElementIterator.hasNext()).isFalse();
   }
 
   @Test
   void remove() {
+    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
 
     assertThatThrownBy(selenideElementIterator::remove)

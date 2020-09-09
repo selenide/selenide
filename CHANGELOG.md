@@ -5,6 +5,7 @@
 * #1261 Add conditions `ownText`, `exactOwnText`  --  see PR #1262
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
 * #1259 Add new download via `DownloadOptions`  --  see PR #1260
+* #1266 Fix performance of big filtered collections  --  see PR #1270
 * #1272 Add check "href": `$("a").shouldHave(href("..."))`  --  see PR #1273
 * Add chrome option "--no-sandbox" (I hope it should make Chrome more stable)
 
