@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
+import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -391,6 +393,52 @@ class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException_first() {
+    ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
+    String description = "Check throwing ElementNotFound for %s";
+
+    assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))
+      .as(description, "shouldHaveSize").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
+      .as(description, "size").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThan(0)))
+      .as(description, "sizeGreaterThan").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeGreaterThanOrEqual(1)))
+      .as(description, "sizeGreaterThanOrEqual").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeNotEqual(0)))
+      .as(description, "sizeNotEqual").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThan(0)))
+      .as(description, "sizeLessThan").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(sizeLessThanOrEqual(-1)))
+      .as(description, "sizeLessThanOrEqual").isInstanceOf(ListSizeMismatch.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(exactTexts("any text")))
+      .as(description, "exactTexts").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(texts("any text")))
+      .as(description, "texts").isInstanceOf(ElementNotFound.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+
+    assertThatThrownBy(() -> elementsCollection.shouldHave(itemWithText("any text")))
+      .as(description, "itemWithText").isInstanceOf(ElementWithTextNotFound.class)
+      .hasCauseExactlyInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
   void shouldThrow_ElementNotFound_causedBy_IndexOutOfBoundsException() {
     ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
@@ -521,10 +569,8 @@ class CollectionMethodsTest extends ITest {
     String expectedText = "Luis";
     assertThatThrownBy(()  -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
       .isInstanceOf(ElementWithTextNotFound.class)
-      .hasMessageContaining(
-        String.format(String.format("Element with text not found" +
-          "%nActual: %s" +
-          "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText))));
+      .hasMessageContaining(String.format("Element with text not found" +
+        "%nActual: %s" +
+        "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
   }
-
 }

@@ -12,7 +12,6 @@ import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockElement;
 import static com.codeborne.selenide.Mocks.mockWebElement;
-import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -44,23 +43,23 @@ class FindAllByXpathCommandTest implements WithAssertions {
 
   @Test
   void executeMethodWithZeroLengthArgs() {
-    when(parentWebElement.findElements(any())).thenReturn(singletonList(webElement));
+    when(parentWebElement.findElement(any())).thenReturn(webElement);
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parentSelenideElement, locator, ".");
 
     assertThat(findAllCommandCollection.first().getText()).isEqualTo("Default Text");
 
-    verify(parentWebElement).findElements(By.xpath("."));
+    verify(parentWebElement).findElement(By.xpath("."));
     verify(parentSelenideElement, never()).findElements(any());
   }
 
   @Test
   void executeMethodWithMoreThenOneArgsList() {
-    when(parentWebElement.findElements(any())).thenReturn(singletonList(webElement));
+    when(parentWebElement.findElement(any())).thenReturn(webElement);
     ElementsCollection findAllCommandCollection = findAllByXpathCommand.execute(parentSelenideElement, locator, ".", "/..");
 
     assertThat(findAllCommandCollection.first().getText()).isEqualTo("Default Text");
 
-    verify(parentWebElement).findElements(By.xpath("."));
+    verify(parentWebElement).findElement(By.xpath("."));
     verify(parentSelenideElement, never()).findElements(any());
   }
 }
