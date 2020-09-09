@@ -36,7 +36,7 @@ public class ItemWithText extends CollectionCondition {
                    @Nullable Exception lastError,
                    long timeoutMs) {
     throw new ElementWithTextNotFound(
-      collection, ElementsCollection.texts(elements), singletonList(expectedText), explanation, timeoutMs);
+      collection, ElementsCollection.texts(elements), singletonList(expectedText), explanation, timeoutMs, lastError);
   }
 
   @CheckReturnValue
