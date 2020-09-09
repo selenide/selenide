@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.grid.selenium.GridLauncherV3;
 import org.openqa.grid.shared.Stoppable;
 
+import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
@@ -28,6 +29,7 @@ abstract class AbstractGridTest extends IntegrationTest {
     });
 
     WebDriverManager.chromedriver().setup();
+    timeout = 4000;
   }
 
   @AfterEach
