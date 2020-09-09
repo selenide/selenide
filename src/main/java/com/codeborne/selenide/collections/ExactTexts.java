@@ -9,6 +9,7 @@ import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -31,6 +32,7 @@ public class ExactTexts extends CollectionCondition {
     this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
+  @CheckReturnValue
   @Override
   public boolean test(List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {

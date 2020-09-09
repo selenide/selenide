@@ -160,7 +160,7 @@ class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void elementsToStringOnNullCollection() {
-    assertThat(ElementsCollection.elementsToString(null, null)).isEqualTo("[not loaded yet...]");
+    assertThat(ElementsCollection.elementsToString(driver, null)).isEqualTo("[not loaded yet...]");
   }
 
   @Test
