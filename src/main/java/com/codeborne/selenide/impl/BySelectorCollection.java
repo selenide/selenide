@@ -42,6 +42,9 @@ public class BySelectorCollection implements WebElementsCollection {
   @Nonnull
   public WebElement getElement(int index) {
     SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
+    if (index == 0) {
+      return WebElementSelector.instance.findElement(driver, searchContext, selector);
+    }
     return WebElementSelector.instance.findElements(driver, searchContext, selector).get(index);
   }
 
