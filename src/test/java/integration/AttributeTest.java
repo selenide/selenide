@@ -1,12 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.attributeMatching;
+import static com.codeborne.selenide.Condition.href;
 import static com.codeborne.selenide.Selectors.by;
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byText;
@@ -27,7 +27,14 @@ public class AttributeTest extends ITest {
   }
 
   @Test
+  void canVerifyAttributeValue() {
+    $("#domain-container").shouldHave(attribute("class", "container"));
+    $("#domain-container").shouldNotHave(attribute("class", "kopli"));
+  }
+
+  @Test
   void canVerifyAttributeMatching() {
+    $("#multirowTable").shouldHave(attributeMatching("class", ".*multirow_table.*"));
     $("#domain-container").shouldHave(attributeMatching("class", "contain.*"));
     $("#domain-container").shouldNotHave(attributeMatching("class", ".*another.*"));
     $("#domain-container").shouldNotHave(attributeMatching("foo", ".*contain.*"));
@@ -88,8 +95,6 @@ public class AttributeTest extends ITest {
 
   @Test
   void userCanSearchElementByDataAttribute() {
-    Assumptions.assumeFalse(browser().isChrome());
-
     assertThat($(by("data-mailServerId", "111")).data("mailServerId"))
       .isEqualTo("111");
     assertThat($(by("data-mailServerId", "222A")).data("mailServerId"))
@@ -104,5 +109,13 @@ public class AttributeTest extends ITest {
   void userCanSearchElementByTitleAttribute() {
     assertThat($(byTitle("Login form")).getTagName())
       .isEqualTo("fieldset");
+  }
+
+  @Test
+  void canCheckHyperReference() {
+    $("#non-clickable-element a").shouldHave(href("http://google.com"));
+    $("#clickable-element a").shouldHave(href("http://www.yandex.ru"));
+    $("#ajax-button").shouldHave(href("long_ajax_request.html"));
+    $("#empty h3 a").shouldHave(href("#"));
   }
 }

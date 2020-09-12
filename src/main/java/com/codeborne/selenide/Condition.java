@@ -17,6 +17,7 @@ import com.codeborne.selenide.conditions.Exist;
 import com.codeborne.selenide.conditions.ExplainedCondition;
 import com.codeborne.selenide.conditions.Focused;
 import com.codeborne.selenide.conditions.Hidden;
+import com.codeborne.selenide.conditions.Href;
 import com.codeborne.selenide.conditions.IsImageLoaded;
 import com.codeborne.selenide.conditions.MatchAttributeWithValue;
 import com.codeborne.selenide.conditions.MatchText;
@@ -142,6 +143,20 @@ public abstract class Condition {
   @Nonnull
   public static Condition attributeMatching(String attributeName, String attributeRegex) {
     return new MatchAttributeWithValue(attributeName, attributeRegex);
+  }
+
+  /**
+   * <p>Sample: <code>$("#mydiv").shouldHave(href("/one/two/three.pdf"));</code></p>
+   *
+   * It looks similar to `$.shouldHave(attribute("href", href))`, but
+   *   it overcomes the fact that Selenium returns full url (even if "href" attribute in html contains relative url).
+   *
+   * @param href expected value of "href" attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition href(String href) {
+    return new Href(href);
   }
 
   /**
