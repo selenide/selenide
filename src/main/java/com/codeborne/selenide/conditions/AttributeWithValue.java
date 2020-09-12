@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AttributeWithValue extends Condition {
   private final String attributeName;
-  private final String expectedAttributeValue;
+  protected final String expectedAttributeValue;
 
   public AttributeWithValue(String attributeName, String expectedAttributeValue) {
     super("attribute");
@@ -39,7 +39,7 @@ public class AttributeWithValue extends Condition {
     return String.format("%s %s=\"%s\"", getName(), attributeName, expectedAttributeValue);
   }
 
-  private String getAttributeValue(WebElement element) {
+  protected String getAttributeValue(WebElement element) {
     String attr = element.getAttribute(attributeName);
     return attr == null ? "" : attr;
   }
