@@ -5,7 +5,7 @@ repositories {
 ext {
   testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
-  junitVersion = '5.6.2'
+  junitVersion = '5.7.0'
   jettyVersion = '9.4.31.v20200723'
 }
 
@@ -27,8 +27,8 @@ dependencies {
 
   compileOnly('com.browserup:browserup-proxy-core:2.1.1')
   testCompile('com.browserup:browserup-proxy-core:2.1.1')
-  compileOnly('io.netty:netty-all:4.1.51.Final')
-  testCompile('io.netty:netty-all:4.1.51.Final')
+  compileOnly('io.netty:netty-all:4.1.52.Final')
+  testCompile('io.netty:netty-all:4.1.52.Final')
   compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
