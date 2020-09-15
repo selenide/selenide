@@ -1,9 +1,11 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.impl.WebElementPrinter;
+import com.codeborne.selenide.impl.ElementDescriber;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -19,10 +21,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * TODO Make all these calls "safe": if element has disappeared meanwhile, we should print at least of element details.
  */
 @ParametersAreNonnullByDefault
-public class AppiumWebElementPrinter implements WebElementPrinter {
+public class AppiumElementDescriber implements ElementDescriber {
   @Nonnull
   @Override
-  public String describe(Driver driver, @Nullable WebElement element) {
+  public String fully(Driver driver, @Nullable WebElement element) {
     String klass = element.getAttribute("class"); // android.widget.TextView
     String tagName = klass.replaceFirst(".+\\.(.+)", "$1");
     String id = element.getAttribute("resource-id");
@@ -45,11 +47,23 @@ public class AppiumWebElementPrinter implements WebElementPrinter {
 
   @Nonnull
   @Override
-  public String shortly(Driver driver, @Nonnull WebElement element) {
+  public String briefly(Driver driver, @Nonnull WebElement element) {
     String klass = element.getAttribute("class"); // android.widget.TextView
     String tagName = klass.replaceFirst(".+\\.(.+)", "$1");
     String id = element.getAttribute("resource-id");
     String text = element.getAttribute("text");
     return String.format("<%s class=\"%s\" id=\"%s\">%s</%s>", tagName, klass, id, text, tagName);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String selector(By selector) {
+    if (selector instanceof By.ByCssSelector) {
+      return selector.toString()
+        .replace("By.selector: ", "")
+        .replace("By.cssSelector: ", "");
+    }
+    return selector.toString();
   }
 }

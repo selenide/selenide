@@ -32,10 +32,16 @@ javadoc {
 repositories {
   jcenter()
   mavenCentral()
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+    mavenContent {
+      snapshotsOnly()
+    }
+  }
 }
 
 dependencies {
-  compile('com.codeborne:selenide:5.14.2')
+  compile('com.codeborne:selenide:5.15.0-SNAPSHOT')
   compile('io.appium:java-client:7.3.0')
   testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }
