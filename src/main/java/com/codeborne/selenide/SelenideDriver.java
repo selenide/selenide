@@ -423,6 +423,12 @@ public class SelenideDriver {
     return downloadFileWithHttpRequest().download(driver(), url, timeoutMs, none());
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public LocalStorage getLocalStorage() {
+    return new LocalStorage(driver());
+  }
+
   private static SelenidePageFactory pageFactory;
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
 

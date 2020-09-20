@@ -977,4 +977,15 @@ public class Selenide {
   public static File download(String url, long timeoutMs) throws IOException, URISyntaxException {
     return getSelenideDriver().download(new URI(url), timeoutMs);
   }
+
+  /**
+   * Access browser's local storage.
+   * Allows setting, getting, removing items as well as getting the size and clear the storage.
+   *
+   * @return LocalStorage
+   */
+  @Nonnull
+  public static LocalStorage localStorage() {
+    return getSelenideDriver().getLocalStorage();
+  }
 }
