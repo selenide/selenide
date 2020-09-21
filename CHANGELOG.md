@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.15.0
+* Add method to work with LocalStorage (add/remove/clear elements)  --  thanks to Dmytro Stekanov for PR #1274
 * #1268 Add setting `Configuration.pageLoadTimeout`  --  see PR #1269
 * #1261 Add conditions `ownText`, `exactOwnText`  --  see PR #1262
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
