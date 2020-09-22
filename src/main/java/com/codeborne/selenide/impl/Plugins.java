@@ -23,6 +23,10 @@ public class Plugins {
     return getPlugin(ElementDescriber.class, SelenideElementDescriber.class);
   }
 
+  public static Photographer getPhotographer() {
+    return getPlugin(Photographer.class, WebdriverPhotographer.class);
+  }
+
   @SuppressWarnings("unchecked")
   private static <T> T getPlugin(Class<T> klass, Class<? extends T> defaultImplementation) {
     return (T) cache.computeIfAbsent(klass, c -> loadPlugin(klass, defaultImplementation));
