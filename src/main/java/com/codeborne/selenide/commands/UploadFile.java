@@ -5,7 +5,6 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
-import com.codeborne.selenide.impl.Plugins;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.ElementNotInteractableException;
@@ -20,11 +19,12 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.commands.Util.firstOf;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class UploadFile implements Command<File> {
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @Override
   @CheckReturnValue

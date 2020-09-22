@@ -6,14 +6,13 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
+import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
-import com.codeborne.selenide.impl.Plugins;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.TailOfCollection;
-import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.WebElementsCollection;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
@@ -35,6 +34,7 @@ import java.util.ListIterator;
 
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.lineSeparator;
@@ -43,6 +43,7 @@ import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class ElementsCollection extends AbstractList<SelenideElement> {
+  private static final ElementDescriber describe = inject(ElementDescriber.class);
   private final WebElementsCollection collection;
 
   public ElementsCollection(WebElementsCollection collection) {
@@ -314,7 +315,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       return "[]";
     }
 
-    ElementDescriber describe = Plugins.getElementDescriber();
     StringBuilder sb = new StringBuilder(256);
     sb.append("[").append(lineSeparator()).append("\t");
     for (WebElement element : elements) {

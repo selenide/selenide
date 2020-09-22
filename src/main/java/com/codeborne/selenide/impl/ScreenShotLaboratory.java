@@ -38,6 +38,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.impl.FileHelper.ensureParentFolderExists;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.io.File.separatorChar;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
@@ -57,7 +58,7 @@ public class ScreenShotLaboratory {
     return instance;
   }
 
-  private final Photographer photographer = Plugins.getPhotographer();
+  private final Photographer photographer = inject(Photographer.class);
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");

@@ -41,6 +41,7 @@ import java.net.URI;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
@@ -50,7 +51,7 @@ import static org.apache.hc.client5.http.protocol.HttpClientContext.COOKIE_STORE
 @ParametersAreNonnullByDefault
 public class DownloadFileWithHttpRequest {
   private static final Logger log = LoggerFactory.getLogger(DownloadFileWithHttpRequest.class);
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   protected boolean ignoreSelfSignedCerts = true;
 
