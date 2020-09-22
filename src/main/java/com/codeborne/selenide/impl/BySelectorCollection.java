@@ -12,9 +12,11 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 @ParametersAreNonnullByDefault
 public class BySelectorCollection implements WebElementsCollection {
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private static final ElementDescriber describe = inject(ElementDescriber.class);
 
   private final Driver driver;
   private final SearchContext parent;

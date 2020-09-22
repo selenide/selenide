@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 @ParametersAreNonnullByDefault
 public class WebElementWrapper extends WebElementSource {
   public static SelenideElement wrap(Driver driver, WebElement element) {
@@ -19,7 +21,7 @@ public class WebElementWrapper extends WebElementSource {
             new SelenideElementProxy(new WebElementWrapper(driver, element)));
   }
 
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private final ElementDescriber describe = inject(ElementDescriber.class);
   private final Driver driver;
   private final WebElement delegate;
 

@@ -2,15 +2,16 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.impl.Plugins;
 import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 @ParametersAreNonnullByDefault
 public class Focused extends Condition {
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   public Focused() {
     super("focused");

@@ -17,11 +17,12 @@ import java.lang.reflect.Proxy;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static java.lang.Thread.currentThread;
 
 @ParametersAreNonnullByDefault
 public class ElementFinder extends WebElementSource {
-  private final ElementDescriber describe = Plugins.getElementDescriber();
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @CheckReturnValue
   @Nonnull
