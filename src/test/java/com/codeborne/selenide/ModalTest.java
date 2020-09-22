@@ -4,19 +4,21 @@ import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.openqa.selenium.OutputType.BYTES;
 
 class ModalTest {
   private static final String ALERT_TEXT = "You really want it?";
@@ -27,14 +29,13 @@ class ModalTest {
   private URI reportsBaseUri;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws IOException {
     when(webDriver.switchTo().alert()).thenReturn(alert);
     when(alert.getText()).thenReturn(ALERT_TEXT);
 
     config.reportsFolder("build/reports/tests/ModalTest");
     when(webDriver.getPageSource()).thenReturn("<html/>");
-    when(webDriver.getScreenshotAs(OutputType.FILE)).thenReturn(new File("src/test/resources/screenshot.png"));
-
+    when(webDriver.getScreenshotAs(BYTES)).thenReturn(resourceToByteArray("/screenshot.png"));
     reportsBaseUri = new File(System.getProperty("user.dir"), config.reportsFolder()).toURI();
   }
 

@@ -6,16 +6,18 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static java.io.File.separatorChar;
+import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.openqa.selenium.OutputType.BYTES;
 
 class ScreenShotLaboratoryTest implements WithAssertions {
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
@@ -211,9 +213,9 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   }
 
   @Test
-  void canFormatScreenShotPathWithSpaces() {
+  void canFormatScreenShotPathWithSpaces() throws IOException {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(OutputType.FILE);
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
     config.reportsUrl("http://ci.org/job/123/artifact");
     config.reportsFolder("build/reports/path with spaces/");
@@ -225,9 +227,9 @@ class ScreenShotLaboratoryTest implements WithAssertions {
   }
 
   @Test
-  void doNotEncodeReportsURL() {
+  void doNotEncodeReportsURL() throws IOException {
     ScreenShotLaboratory screenshots = new ScreenShotLaboratory();
-    doReturn(new File("src/test/resources/screenshot.png")).when(webDriver).getScreenshotAs(OutputType.FILE);
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
     config.reportsUrl("http://ci.org/path%20with%spaces/");
 
