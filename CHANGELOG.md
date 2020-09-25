@@ -1,14 +1,16 @@
 # Changelog
 
-## 5.15.0
+## 5.15.0 (released 25.09.2020)
 * Add method to work with LocalStorage (add/remove/clear elements)  --  thanks to Dmytro Stekanov for PR #1274
-* #1268 Add setting `Configuration.pageLoadTimeout`  --  see PR #1269
+* #1268 Add setting `Configuration.pageLoadTimeout`  --  see PR #1269  NB! Default value is now 30 seconds. 
 * #1261 Add conditions `ownText`, `exactOwnText`  --  see PR #1262
 * #1173 Add new click via `ClickOptions`  --  thanks to Dmytro Stekanov for PR #1226
 * #1259 Add new download via `DownloadOptions`  --  see PR #1260
 * #1266 Fix performance of big filtered collections  --  see PR #1270
 * #1272 Add check "href": `$("a").shouldHave(href("..."))`  --  see PR #1273
-* Add chrome option "--no-sandbox" (I hope it should make Chrome more stable)
+* Add chrome option "--no-sandbox" (I hope it should make Chrome more stable)  --  see commit 3293956d
+* #1265 report a clear error message if cannot create a downloads folder  --  see commit 94ece98f
+* upgraded to WebDriverManager 4.2.2  --  see commit 5da848d2
 
 ## 5.14.2 (released 22.08.2020)
 * upgraded to WebDriverManager 4.2.0
