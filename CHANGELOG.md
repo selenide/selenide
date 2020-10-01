@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.16.0 (planned to 1x.10.2020)
+* #1051 Selenide plugins system
+
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests
 * #1268 Make setting `Configuration.pageLoadTimeout` safe (don't crash in Appium or any other webdriver not supporting such a setting)
