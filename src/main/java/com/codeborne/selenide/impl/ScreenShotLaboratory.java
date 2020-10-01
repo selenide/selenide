@@ -59,6 +59,7 @@ public class ScreenShotLaboratory {
   }
 
   private final Photographer photographer = inject(Photographer.class);
+  private final PageSourceExtractor extractor = inject(PageSourceExtractor.class);
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");
@@ -344,7 +345,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   protected File savePageSourceToFile(Config config, String fileName, Driver driver) {
-    return new PageSourceExtractor(config, driver.getWebDriver(), fileName).extract(true);
+    return extractor.extract(config, driver.getWebDriver(), fileName);
   }
 
   public void startContext(String className, String methodName) {
