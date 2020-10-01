@@ -34,13 +34,21 @@ jobs:
   include:
     - script: ./gradlew check --no-daemon --console=plain
       name: "Check"
-    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
       name: "Chrome1"
-    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
       name: "Chrome2"
-    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
       name: "Chrome3"
-    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
       name: "Chrome4"
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
+      name: "Chrome5"
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
+      name: "Chrome6"
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
+      name: "Chrome7"
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
+      name: "Chrome8"
 
 after_failure: "./.upload_reports.sh"
