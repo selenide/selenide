@@ -34,19 +34,13 @@ jobs:
   include:
     - script: ./gradlew check --no-daemon --console=plain
       name: "Check"
-    - if: type != pull_request
-      script: ./gradlew jacocoTestReport sonarqube --no-daemon --console=plain -Dsonar.organization=${SONAR_ORG} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN} -Dsonar.branch.name=${TRAVIS_BRANCH}
-      name: "Check + Sonar"
-    - script: ./gradlew grid --no-daemon --console=plain -i
-      name: "Grid"
-    - script: ./gradlew firefox_headless --no-daemon --console=plain -i
-      name: "Firefox"
     - script: ./gradlew chrome_headless --no-daemon --console=plain -i
-      name: "Chrome"
+      name: "Chrome1"
+    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+      name: "Chrome2"
+    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+      name: "Chrome3"
+    - script: ./gradlew chrome_headless --no-daemon --console=plain -i
+      name: "Chrome4"
 
 after_failure: "./.upload_reports.sh"
-
-notifications:
-  slack:
-    rooms:
-      secure: "gMxIayQqFmMjmEH8ruv5xvAG49yOKFZ4bzGaxeHOfxWWnk6Mwm8x2rwCUulXbAFwcnWeZRLvOZlsRrxV1aNBrfBH8+T3aBODbzG8U/iDEIxOzi3Gs/DKfdyZKxqdXSLUJItEQYwpCuun0pN3ZV0CuioBQ86q9JA+SUD1eNzXxoQ="
