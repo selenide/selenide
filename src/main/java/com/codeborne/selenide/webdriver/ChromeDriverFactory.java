@@ -86,6 +86,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     List<String> arguments = new ArrayList<>();
     arguments.add("--proxy-bypass-list=<-loopback>");
     arguments.add("--disable-dev-shm-usage");
+    arguments.add("window-size=1024,768");
     arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(System.getProperty("chromeoptions.args")));
     return arguments;
