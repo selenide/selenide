@@ -59,6 +59,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   protected ChromeDriverService buildService(Config config) {
     return new ChromeDriverService.Builder()
       .withLogFile(webdriverLog(config))
+      .withWhitelistedIps("")
+      .withVerbose(true)
       .build();
   }
 
