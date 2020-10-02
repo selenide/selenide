@@ -30,6 +30,10 @@ before_install:
 
 install: true
 
+before_script:
+  - rm -rf /tmp/.org.chromium.Chromium*
+  - rm -rf /tmp/.com.google.Chrome*
+
 jobs:
   include:
     - script: ./gradlew check --no-daemon --console=plain
