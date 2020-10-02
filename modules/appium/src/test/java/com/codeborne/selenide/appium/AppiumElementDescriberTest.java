@@ -1,7 +1,7 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.impl.StaticDriver;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 public class AppiumElementDescriberTest {
   private final AppiumElementDescriber describer = new AppiumElementDescriber();
-  private final Driver driver = new DriverStub();
+  private final Driver driver = new StaticDriver();
   private final WebElement element = mock(WebElement.class);
 
   @Test
