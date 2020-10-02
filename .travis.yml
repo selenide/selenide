@@ -50,5 +50,7 @@ jobs:
       name: "Chrome7"
     - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
       name: "Chrome8"
+    - script: ./gradlew chrome_headless --fail-fast --no-daemon --console=plain -i
+      name: "Chrome9"
 
 after_failure: "./.upload_reports.sh"
