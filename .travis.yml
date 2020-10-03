@@ -27,7 +27,7 @@ cache:
     - $HOME/.sonar/cache/
 
 before_install:
-  - sudo apt-get install -y libappindicator1 fonts-liberation
+  - sudo apt-get install -y libappindicator1 fonts-liberation harfbuzz
   - export CHROME_BIN=/usr/bin/google-chrome
 
 install: true
