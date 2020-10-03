@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.15.1 (released 03.10.2020)
+* Fix creating logs dir in parallel tests
+
 ## 5.15.0 (released 25.09.2020)
 * Add method to work with LocalStorage (add/remove/clear elements)  --  thanks to Dmytro Stekanov for PR #1274
 * #1268 Add setting `Configuration.pageLoadTimeout`  --  see PR #1269  NB! Default value is now 30 seconds. 
