@@ -8,6 +8,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +61,24 @@ public class WebDriverFactory {
 
     browserResizer.adjustBrowserSize(config, webdriver);
     browserResizer.adjustBrowserPosition(config, webdriver);
-    webdriver.manage().timeouts().pageLoadTimeout(config.pageLoadTimeout(), MILLISECONDS);
+    setLoadTimeout(config, webdriver);
 
     logBrowserVersion(webdriver);
     log.info("Selenide v. {}", SelenideDriver.class.getPackage().getImplementationVersion());
     logSeleniumInfo(config);
     return webdriver;
+  }
+
+  private void setLoadTimeout(Config config, WebDriver webdriver) {
+    try {
+      webdriver.manage().timeouts().pageLoadTimeout(config.pageLoadTimeout(), MILLISECONDS);
+    }
+    catch (UnsupportedCommandException e) {
+      log.info("Failed to set page load timeout to {} ms: {}", config.pageLoadTimeout(), e.toString());
+    }
+    catch (RuntimeException e) {
+      log.error("Failed to set page load timeout to {} ms", config.pageLoadTimeout(), e);
+    }
   }
 
   private WebDriver createWebDriverInstance(Config config, Proxy proxy, Browser browser, File browserDownloadsFolder) {

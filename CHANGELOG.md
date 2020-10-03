@@ -2,6 +2,7 @@
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests
+* #1268 Make setting `Configuration.pageLoadTimeout` safe (don't crash in Appium or any other webdriver not supporting such a setting)
 
 ## 5.15.0 (released 25.09.2020)
 * Add method to work with LocalStorage (add/remove/clear elements)  --  thanks to Dmytro Stekanov for PR #1274
