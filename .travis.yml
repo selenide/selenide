@@ -3,6 +3,8 @@ conditions: v1
 git:
   depth: 99999
 
+dist: focal
+
 language: java
 
 jdk:
