@@ -10,9 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static integration.BaseIntegrationTest.browser;
+import static java.lang.Thread.currentThread;
+import static org.assertj.core.api.Assertions.fail;
 
 class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
   private static final Logger log = LoggerFactory.getLogger(LogTestNameExtension.class);
+
+  int previousChromedriversCount = 0;
 
   @Override
   public void beforeAll(ExtensionContext context) {
@@ -22,6 +26,16 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
   @Override
   public void afterAll(ExtensionContext context) {
     log.info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
+    int chromedrivers = CountChromeProcesses.count();
+    if (chromedrivers > 1) {
+      fail("***** Opened chromedrivers count " + chromedrivers + " is > 1 " +
+        "[thread:" + currentThread().getId() + ":" + currentThread().getName() + "]");
+    } else if (chromedrivers != previousChromedriversCount) {
+      log.warn("***** Opened browsers count changed from {} to {} [thread:{}:{}]", previousChromedriversCount,
+        chromedrivers, currentThread().getId(), currentThread().getName());
+    }
+    previousChromedriversCount = chromedrivers;
+
   }
 
   @Override
