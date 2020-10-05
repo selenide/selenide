@@ -30,8 +30,8 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
 
   private void assureNotTooManyOpenedBrowsers(ExtensionContext context) {
     int chromedrivers = CountChromeProcesses.count();
-    if (chromedrivers > 1) {
-      fail("***** Opened chromedrivers count " + chromedrivers + " is > 1 " +
+    if (chromedrivers > 2) {
+      fail("***** Opened chromedrivers count " + chromedrivers + " is > 2 " +
         "[thread:" + currentThread().getId() + ":" + currentThread().getName() + "]");
     } else if (chromedrivers != previousChromedriversCount) {
       log.warn("***** Opened browsers count changed from {} to {} [thread:{}:{}] in {}", previousChromedriversCount,
