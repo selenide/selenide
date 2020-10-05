@@ -48,14 +48,14 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    log.info("  starting {} (opened browsers: {})...", context.getDisplayName(), previousChromedriversCount);
+    log.info("  starting {}.{} (opened browsers: {})...", context.getTestClass().map(Class::getName).orElse(null), context.getDisplayName(), previousChromedriversCount);
     assureBrowserIsChrome();
     assureNotTooManyOpenedBrowsers(context);
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
-    log.info("  finished {} - {}...", context.getDisplayName(), verdict(context));
+    log.info("  finished {}.{} - {}...", context.getTestClass().map(Class::getName).orElse(null), context.getDisplayName(), verdict(context));
     assureBrowserIsChrome();
     assureNotTooManyOpenedBrowsers(context);
     log.info("  finished {} - {}.", context.getDisplayName(), verdict(context));
