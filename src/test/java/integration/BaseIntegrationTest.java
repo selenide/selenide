@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Browser;
 import integration.server.LocalHttpServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Boolean.parseBoolean;
+import static org.assertj.core.api.Assertions.fail;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({LogTestNameExtension.class})
@@ -63,5 +65,23 @@ public abstract class BaseIntegrationTest {
 
   protected static Browser browser() {
     return new Browser(browser, headless);
+  }
+
+  @BeforeEach
+  final void chromeBeforeTest() {
+    assureBrowserIsChrome();
+  }
+  @AfterEach
+  final void chromeAfterTest() {
+    assureBrowserIsChrome();
+  }
+
+  private void assureBrowserIsChrome() {
+    if (!"chrome".equals(System.getProperty("selenide.browser"))) {
+      fail("WTF! 'selenide.browser' has been changed to " + System.getProperty("selenide.browser"));
+    }
+    if (!browser().isChrome()) {
+      fail("WTF! 'selenide.browser' has been changed to " + browser().name);
+    }
   }
 }
