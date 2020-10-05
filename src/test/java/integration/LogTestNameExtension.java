@@ -21,11 +21,19 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
   @Override
   public void beforeAll(ExtensionContext context) {
     log.info("Starting {} @ {}", context.getDisplayName(), browser);
+    assureBrowserIsChrome();
+    assureNotTooManyOpenedBrowsers(context);
   }
 
   @Override
   public void afterAll(ExtensionContext context) {
     log.info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
+
+    assureBrowserIsChrome();
+    assureNotTooManyOpenedBrowsers(context);
+  }
+
+  private void assureNotTooManyOpenedBrowsers(ExtensionContext context) {
     int chromedrivers = CountChromeProcesses.count();
     if (chromedrivers > 1) {
       fail("***** Opened chromedrivers count " + chromedrivers + " is > 1 " +
@@ -35,7 +43,12 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
         chromedrivers, currentThread().getId(), currentThread().getName(), context.getDisplayName());
     }
     previousChromedriversCount = chromedrivers;
+  }
 
+  private void assureBrowserIsChrome() {
+    if (!"chrome".equals(System.getProperty("selenide.browser"))) {
+      fail("WTF! 'selenide.browser' has been changed to " + System.getProperty("selenide.browser"));
+    }
   }
 
   @Override
