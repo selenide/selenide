@@ -55,7 +55,9 @@ public class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTes
     @CheckReturnValue
     @Nonnull
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
-      return isChrome() ? chrome(desiredCapabilities) : firefox(desiredCapabilities);
+      if (browser().isChrome()) return chrome(desiredCapabilities);
+      if (browser().isFirefox()) return firefox(desiredCapabilities);
+      throw new IllegalStateException("Unsupported browser: " + browser().name);
     }
 
     private ChromeDriver chrome(DesiredCapabilities desiredCapabilities) {

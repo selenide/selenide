@@ -39,6 +39,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   }
 
   @BeforeEach
+  @AfterEach
   final void setUpEach() {
     resetSettings();
   }
