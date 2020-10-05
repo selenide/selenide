@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static java.lang.System.currentTimeMillis;
+
 @ParametersAreNonnullByDefault
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
@@ -20,27 +22,26 @@ public class CloseDriverCommand {
     long threadId = Thread.currentThread().getId();
     if (config.holdBrowserOpen()) {
       log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, selenideProxyServer);
+      return;
     }
-    else if (webDriver != null) {
-      log.info("Close webdriver: {} -> {}", threadId, webDriver);
-      if (selenideProxyServer != null) {
-        log.info("Close proxy server: {} -> {}", threadId, selenideProxyServer);
-      }
 
-      long start = System.currentTimeMillis();
-      close(webDriver, selenideProxyServer);
-      long duration = System.currentTimeMillis() - start;
-      log.info("Closed webdriver {} in {} ms", threadId, duration);
+    if (webDriver != null) {
+      long start = currentTimeMillis();
+      log.info("Close webdriver: {} -> {}...", threadId, webDriver);
+      close(webDriver);
+      log.info("Closed webdriver {} in {} ms", threadId, currentTimeMillis() - start);
     }
-    else if (selenideProxyServer != null) {
-      log.info("Close proxy server: {} -> {}", threadId, selenideProxyServer);
+
+    if (selenideProxyServer != null) {
+      long start = currentTimeMillis();
+      log.info("Close proxy server: {} -> {}...", threadId, selenideProxyServer);
       selenideProxyServer.shutdown();
+      log.info("Closed proxy server {} in {} ms", threadId, currentTimeMillis() - start);
     }
   }
 
-  private void close(WebDriver webdriver, @Nullable SelenideProxyServer proxy) {
+  private void close(WebDriver webdriver) {
     try {
-      log.info("Trying to close the browser {} ...", webdriver.getClass().getSimpleName());
       webdriver.quit();
     }
     catch (UnreachableBrowserException e) {
@@ -48,12 +49,10 @@ public class CloseDriverCommand {
       log.debug("Browser is unreachable", e);
     }
     catch (WebDriverException cannotCloseBrowser) {
-      log.error("Cannot close browser normally: {}", Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
+      log.error("Cannot close browser: {}", Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
     }
-
-    if (proxy != null) {
-      log.info("Trying to shutdown {} ...", proxy);
-      proxy.shutdown();
+    catch (RuntimeException e) {
+      log.error("Cannot close browser", e);
     }
   }
 }
