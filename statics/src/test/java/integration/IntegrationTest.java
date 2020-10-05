@@ -3,6 +3,7 @@ package integration;
 import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +27,7 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.isIE;
+import static org.assertj.core.api.Assertions.fail;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
@@ -120,5 +122,23 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
   private static void addSslErrorIgnoreOptions(MutableCapabilities options) {
     options.setCapability(ACCEPT_SSL_CERTS, true);
     options.setCapability(ACCEPT_INSECURE_CERTS, true);
+  }
+
+  @BeforeEach
+  final void chromeBeforeTestStatic() {
+    assureBrowserIsChrome();
+  }
+  @AfterEach
+  final void chromeAfterTestStatic() {
+    assureBrowserIsChrome();
+  }
+
+  private void assureBrowserIsChrome() {
+    if (!"chrome".equals(System.getProperty("selenide.browser"))) {
+      fail("WTF! 'selenide.browser' has been changed to " + System.getProperty("selenide.browser"));
+    }
+    if (!WebDriverRunner.isChrome()) {
+      fail("WTF! 'selenide.browser' has been changed to " + Configuration.browser);
+    }
   }
 }
