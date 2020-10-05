@@ -28,6 +28,6 @@ public class SelenideDriverFinalCleanupThread implements Runnable {
 
   @Override
   public void run() {
-    closeDriverCommand.closeAsync(config, driver, proxy);
+    closeDriverCommand.close(config, driver, proxy);
   }
 }

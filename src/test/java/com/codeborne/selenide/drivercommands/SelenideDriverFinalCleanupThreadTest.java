@@ -20,7 +20,7 @@ final class SelenideDriverFinalCleanupThreadTest {
 
     new SelenideDriverFinalCleanupThread(config, driver, proxy, closeDriverCommand).run();
 
-    verify(closeDriverCommand).closeAsync(config, driver, proxy);
+    verify(closeDriverCommand).close(config, driver, proxy);
     verifyNoMoreInteractions(closeDriverCommand);
     verifyNoInteractions(config);
     verifyNoInteractions(driver);

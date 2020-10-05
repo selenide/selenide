@@ -126,7 +126,7 @@ public class LazyDriver implements Driver {
 
   @Override
   public void close() {
-    closeDriverCommand.closeAsync(config, webDriver, selenideProxyServer);
+    closeDriverCommand.close(config, webDriver, selenideProxyServer);
     webDriver = null;
     selenideProxyServer = null;
     browserDownloadsFolder = null;
