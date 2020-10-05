@@ -37,7 +37,7 @@ public class CloseDriverCommand {
         t.join();
       } catch (InterruptedException e) {
         long duration = System.currentTimeMillis() - start;
-        log.debug("Failed to close webdriver {} in {} ms", threadId, duration, e);
+        log.error("Failed to close webdriver {} in {} ms", threadId, duration, e);
         Thread.currentThread().interrupt();
       }
 
@@ -56,7 +56,7 @@ public class CloseDriverCommand {
     }
     catch (UnreachableBrowserException e) {
       // It happens for Firefox. It's ok: browser is already closed.
-      log.debug("Browser is unreachable", e);
+      log.info("Browser is unreachable", e);
     }
     catch (WebDriverException cannotCloseBrowser) {
       log.error("Cannot close browser normally: {}", Cleanup.of.webdriverExceptionMessage(cannotCloseBrowser));
