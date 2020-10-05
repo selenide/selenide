@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.fail;
 class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
   private static final Logger log = LoggerFactory.getLogger(LogTestNameExtension.class);
 
-  int previousChromedriversCount = 0;
+  private static int previousChromedriversCount = 0;
 
   @Override
   public void beforeAll(ExtensionContext context) {
@@ -31,8 +31,8 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
       fail("***** Opened chromedrivers count " + chromedrivers + " is > 1 " +
         "[thread:" + currentThread().getId() + ":" + currentThread().getName() + "]");
     } else if (chromedrivers != previousChromedriversCount) {
-      log.warn("***** Opened browsers count changed from {} to {} [thread:{}:{}]", previousChromedriversCount,
-        chromedrivers, currentThread().getId(), currentThread().getName());
+      log.warn("***** Opened browsers count changed from {} to {} [thread:{}:{}] in {}", previousChromedriversCount,
+        chromedrivers, currentThread().getId(), currentThread().getName(), context.getDisplayName());
     }
     previousChromedriversCount = chromedrivers;
 
@@ -40,7 +40,7 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    log.info("  starting {} ...", context.getDisplayName());
+    log.info("  starting {} (opened browsers: {})...", context.getDisplayName(), previousChromedriversCount);
   }
 
   @Override

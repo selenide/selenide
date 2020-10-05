@@ -33,15 +33,10 @@ public class CountChromeProcesses {
       if (isNotBlank(err.getOutput())) {
         throw new IllegalStateException("Failed to check opened browsers count: " + err.getOutput());
       }
-      System.out.println(out.getOutput());
+      System.out.println("***** Exit code: " + exitCode + ", output: " + out.getOutput());
       return isBlank(out.getOutput()) ? 0 : out.getOutput().split("\n").length;
-    }
-    catch (IOException | InterruptedException e) {
+    } catch (IOException | InterruptedException e) {
       throw new IllegalStateException("Failed to check opened browsers count", e);
     }
-  }
-
-  public static void main(String[] args) throws IOException, InterruptedException {
-    count();
   }
 }
