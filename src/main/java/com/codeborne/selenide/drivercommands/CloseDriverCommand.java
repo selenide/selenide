@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CloseDriverCommand {
   private static final Logger log = LoggerFactory.getLogger(CloseDriverCommand.class);
 
-  public void closeAsync(Config config, @Nullable WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer) {
+  public void close(Config config, @Nullable WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer) {
     long threadId = Thread.currentThread().getId();
     if (config.holdBrowserOpen()) {
       log.info("Hold browser and proxy open: {} -> {}, {}", threadId, webDriver, selenideProxyServer);
@@ -28,22 +28,11 @@ public class CloseDriverCommand {
       }
 
       long start = System.currentTimeMillis();
-
-      Thread t = new Thread(() -> close(webDriver, selenideProxyServer));
-      t.setDaemon(true);
-      t.start();
-
-      try {
-        t.join();
-      } catch (InterruptedException e) {
-        long duration = System.currentTimeMillis() - start;
-        log.debug("Failed to close webdriver {} in {} ms", threadId, duration, e);
-        Thread.currentThread().interrupt();
-      }
-
+      close(webDriver, selenideProxyServer);
       long duration = System.currentTimeMillis() - start;
       log.info("Closed webdriver {} in {} ms", threadId, duration);
-    } else if (selenideProxyServer != null) {
+    }
+    else if (selenideProxyServer != null) {
       log.info("Close proxy server: {} -> {}", threadId, selenideProxyServer);
       selenideProxyServer.shutdown();
     }
