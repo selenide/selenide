@@ -3,7 +3,7 @@ conditions: v1
 git:
   depth: 99999
 
-dist: bionic
+dist: focal
 
 language: java
 
