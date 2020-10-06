@@ -15,13 +15,13 @@ public class CountChromeProcesses {
 
   public static int count() {
     ProcessBuilder builder = new ProcessBuilder();
-    builder.command("pgrep", "-i", "chromedriver");
+    builder.command("ps", "aux");
     builder.directory(new File(System.getProperty("user.home")));
 
     try {
       Process process = builder.start();
-      StreamGobbler out = new StreamGobbler(process.getInputStream());
-      StreamGobbler err = new StreamGobbler(process.getErrorStream());
+      StreamGobbler out = new StreamGobbler(process.getInputStream(), "chromedriver");
+      StreamGobbler err = new StreamGobbler(process.getErrorStream(), "");
 
       executorService1.submit(out);
       executorService2.submit(err);

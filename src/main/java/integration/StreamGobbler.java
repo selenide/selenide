@@ -8,20 +8,23 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 class StreamGobbler implements Runnable {
   private final InputStream inputStream;
-  private final StringBuilder consumer = new StringBuilder();
+  private final String filter;
+  private final StringBuilder result = new StringBuilder();
 
-  StreamGobbler(InputStream inputStream) {
+  StreamGobbler(InputStream inputStream, String filter) {
     this.inputStream = inputStream;
+    this.filter = filter;
   }
 
   @Override
   public void run() {
     new BufferedReader(new InputStreamReader(inputStream, UTF_8))
       .lines()
-      .forEach(line -> consumer.append(line).append('\n'));
+      .filter(line -> line.contains(filter))
+      .forEach(line -> result.append(line).append('\n'));
   }
 
   public String getOutput() {
-    return consumer.toString();
+    return result.toString();
   }
 }
