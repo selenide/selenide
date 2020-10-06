@@ -40,23 +40,15 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
     previousChromedriversCount = chromedrivers;
   }
 
-  private void assureBrowserIsChrome() {
-    if (!"chrome".equals(System.getProperty("selenide.browser"))) {
-      fail("WTF! 'selenide.browser' has been changed to " + System.getProperty("selenide.browser"));
-    }
-  }
-
   @Override
   public void beforeEach(ExtensionContext context) {
     log.info("  starting {}.{} (opened browsers: {})...", getTestClass(context), context.getDisplayName(), previousChromedriversCount);
-    assureBrowserIsChrome();
     assureNotTooManyOpenedBrowsers(context);
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
     log.info("  finished {}.{} - {}...", getTestClass(context), context.getDisplayName(), verdict(context));
-    assureBrowserIsChrome();
     assureNotTooManyOpenedBrowsers(context);
     log.info("  finished {} - {}.", context.getDisplayName(), verdict(context));
   }
