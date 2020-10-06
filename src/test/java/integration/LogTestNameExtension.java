@@ -9,6 +9,8 @@ import org.opentest4j.TestAbortedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+
 import static integration.BaseIntegrationTest.browser;
 import static java.lang.Thread.currentThread;
 import static org.assertj.core.api.Assertions.fail;
@@ -20,12 +22,18 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
 
   @Override
   public void beforeAll(ExtensionContext context) {
-    log.info("Starting {} @ {}", context.getDisplayName(), browser);
+    log.info("Starting {} {} @ {}", prefix(context), context.getDisplayName(), browser);
   }
 
   @Override
   public void afterAll(ExtensionContext context) {
-    log.info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
+    log.info("Finished {} {} @ {} - {}", prefix(context), context.getDisplayName(), browser, verdict(context));
+  }
+
+  @Nonnull
+  private String prefix(ExtensionContext context) {
+    return context.getTestClass().map(klass ->
+      ITest.class.isAssignableFrom(klass) ? "ITest" : "IntegrationTest").orElse("?Test");
   }
 
   private void assureNotTooManyOpenedBrowsers(ExtensionContext context) {
@@ -42,15 +50,18 @@ class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, Befor
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    log.info("  starting {}.{} (opened browsers: {})...", getTestClass(context), context.getDisplayName(), previousChromedriversCount);
+    log.info("  starting {} {}.{} (opened browsers: {})...",
+      prefix(context), getTestClass(context), context.getDisplayName(), previousChromedriversCount);
     assureNotTooManyOpenedBrowsers(context);
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
-    log.info("  finished {}.{} - {}...", getTestClass(context), context.getDisplayName(), verdict(context));
+    log.info("  finished {} {}.{} - {}...",
+      prefix(context), getTestClass(context), context.getDisplayName(), verdict(context));
     assureNotTooManyOpenedBrowsers(context);
-    log.info("  finished {} - {}.", context.getDisplayName(), verdict(context));
+    log.info("  finished {} {} - {}.",
+      prefix(context), context.getDisplayName(), verdict(context));
   }
 
   private String getTestClass(ExtensionContext context) {
