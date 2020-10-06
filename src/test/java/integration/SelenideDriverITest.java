@@ -21,6 +21,7 @@ final class SelenideDriverITest extends ITest {
 
   @BeforeEach
   void setUp() {
+    driver().close();
     browser1 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
     browser2 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
   }
