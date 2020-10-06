@@ -3,10 +3,13 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -32,7 +35,18 @@ class LazyEvaluationTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
+    Configuration.browser = "do not even try to open browser too early!";
     openFile("page_with_jquery.html");
+  }
+
+  @AfterEach
+  void tearDown() {
+    Configuration.browser = System.getProperty("selenide.browser", CHROME);
+  }
+
+  @AfterAll
+  static void afterAll() {
+    Configuration.browser = System.getProperty("selenide.browser", CHROME);
   }
 
   @Test
