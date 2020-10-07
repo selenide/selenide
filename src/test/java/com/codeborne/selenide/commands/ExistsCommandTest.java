@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
@@ -17,19 +16,11 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExistsCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private WebElement element;
-  private Exists existsCommand;
-
-  @BeforeEach
-  void setup() {
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    element = mock(WebElement.class);
-    existsCommand = new Exists();
-  }
+final class ExistsCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final WebElement element = mock(WebElement.class);
+  private final Exists existsCommand = new Exists();
 
   @Test
   void testExistExecuteMethod() {

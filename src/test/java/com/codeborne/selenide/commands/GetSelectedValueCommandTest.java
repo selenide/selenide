@@ -1,23 +1,23 @@
 package com.codeborne.selenide.commands;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedValueCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource selectElement = mock(WebElementSource.class);
-  private SelenideElement mockedElement = mock(SelenideElement.class);
+final class GetSelectedValueCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource selectElement = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
   private GetSelectedValue getSelectedValueCommand;
-  private GetSelectedOption getSelectedOptionCommand = mock(GetSelectedOption.class);
+  private final GetSelectedOption getSelectedOptionCommand = mock(GetSelectedOption.class);
 
   @BeforeEach
   void setup() {

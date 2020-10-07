@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.page;
 
-class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest {
+final class ElementsContainerWithManuallyInitializedFieldsTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {

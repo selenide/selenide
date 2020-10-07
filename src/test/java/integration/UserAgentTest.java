@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserAgentTest extends ITest {
+final class UserAgentTest extends ITest {
   @Test
   void currentUserAgentTest() {
     driver().open("/start_page.html");

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
-class PageWithJQuery extends IntegrationTest {
+final class PageWithJQuery extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_jquery.html");

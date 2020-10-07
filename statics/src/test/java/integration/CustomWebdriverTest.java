@@ -23,7 +23,7 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-class CustomWebdriverTest extends IntegrationTest {
+final class CustomWebdriverTest extends IntegrationTest {
   private WebDriver browser1;
   private WebDriver browser2;
 

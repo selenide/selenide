@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class ElementsCollectionTest implements WithAssertions {
+final class ElementsCollectionTest implements WithAssertions {
   private final DriverStub driver = new DriverStub();
   private final WebElementsCollection source = mock(WebElementsCollection.class);
   private final WebElement element1 = element("h1");
@@ -37,7 +37,7 @@ class ElementsCollectionTest implements WithAssertions {
   private final WebElement element3 = element("h3");
 
   @BeforeEach
-  final void mockWebDriver() {
+  void mockWebDriver() {
     when(source.driver()).thenReturn(driver);
   }
 

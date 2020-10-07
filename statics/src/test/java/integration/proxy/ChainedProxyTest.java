@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * This test verifies that both these proxies work well together.
  */
-class ChainedProxyTest extends IntegrationTest {
+final class ChainedProxyTest extends IntegrationTest {
   private BrowserUpProxy chainedProxy;
-  private List<String> visitedUrls = new ArrayList<>();
+  private final List<String> visitedUrls = new ArrayList<>();
 
   @AfterEach
   void tearDown() {

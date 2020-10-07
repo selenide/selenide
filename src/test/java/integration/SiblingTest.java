@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SiblingTest extends ITest {
+final class SiblingTest extends ITest {
   @BeforeEach
   void openTestPageWith() {
     openFile("page_with_selects_without_jquery.html");

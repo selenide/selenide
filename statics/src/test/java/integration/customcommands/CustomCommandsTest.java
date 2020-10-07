@@ -12,7 +12,7 @@ import static integration.customcommands.MyFramework.quadrupleClickCounter;
 import static integration.customcommands.MyFramework.tripleClickCounter;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CustomCommandsTest extends IntegrationTest {
+final class CustomCommandsTest extends IntegrationTest {
   @BeforeEach
   void setUpFramework() {
     MyFramework.setUp();

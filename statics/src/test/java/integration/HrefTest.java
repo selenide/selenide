@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class HrefTest extends IntegrationTest {
+final class HrefTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_uploads.html");

@@ -10,7 +10,7 @@ import static com.codeborne.selenide.impl.FileHelper.deleteFolderIfEmpty;
 import static org.apache.commons.io.FileUtils.touch;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FileHelperTest {
+final class FileHelperTest {
   @Test
   void deletesFolderIfItIsEmpty(@TempDir File folder) {
     assertThat(folder).exists();

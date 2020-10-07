@@ -16,7 +16,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-class EventsTest {
+final class EventsTest {
   private Logger log = mock(Logger.class);
   private Events events = spy(new Events(log));
   private WebElement element = mock(WebElement.class);

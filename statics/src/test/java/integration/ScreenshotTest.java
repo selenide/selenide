@@ -20,7 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ScreenshotTest extends IntegrationTest {
+final class ScreenshotTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_big_divs.html");

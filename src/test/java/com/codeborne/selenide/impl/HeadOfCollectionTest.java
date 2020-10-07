@@ -9,11 +9,11 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class HeadOfCollectionTest implements WithAssertions {
+final class HeadOfCollectionTest implements WithAssertions {
   private final WebElement element1 = mock(WebElement.class);
   private final WebElement element2 = mock(WebElement.class);
   private final WebElement element3 = mock(WebElement.class);
-  private WebElementsCollection originalCollection = mock(WebElementsCollection.class);
+  private final WebElementsCollection originalCollection = mock(WebElementsCollection.class);
 
   @BeforeEach
   void setUp() {

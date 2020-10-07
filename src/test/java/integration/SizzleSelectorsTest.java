@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SizzleSelectorsTest extends BaseIntegrationTest {
+final class SizzleSelectorsTest extends BaseIntegrationTest {
   SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle));
 
   @AfterEach

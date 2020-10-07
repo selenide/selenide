@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 
-class SelenidePageFactoryTest extends IntegrationTest {
+final class SelenidePageFactoryTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {

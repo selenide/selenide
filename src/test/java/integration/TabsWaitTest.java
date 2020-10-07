@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 
-class TabsWaitTest extends ITest {
+final class TabsWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs_with_delays.html");

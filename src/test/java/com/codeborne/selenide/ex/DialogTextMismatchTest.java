@@ -5,7 +5,7 @@ import com.codeborne.selenide.DriverStub;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class DialogTextMismatchTest implements WithAssertions {
+final class DialogTextMismatchTest implements WithAssertions {
   @Test
   void dialogMismatchTextStringTest() {
     Driver driver = new DriverStub();

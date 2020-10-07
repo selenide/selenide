@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 
-class FastSetValueTest extends IntegrationTest {
+final class FastSetValueTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_inputs_and_hints.html");

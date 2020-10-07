@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LocalStorageTest extends IntegrationTest {
+final class LocalStorageTest extends IntegrationTest {
   @AfterAll
   static void tearDown() {
     closeWebDriver();

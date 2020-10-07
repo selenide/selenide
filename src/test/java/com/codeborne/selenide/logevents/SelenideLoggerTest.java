@@ -19,8 +19,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class SelenideLoggerTest implements WithAssertions {
-  private WebDriver webdriver = mock(WebDriver.class);
+final class SelenideLoggerTest implements WithAssertions {
+  private final WebDriver webdriver = mock(WebDriver.class);
 
   @BeforeEach
   @AfterEach

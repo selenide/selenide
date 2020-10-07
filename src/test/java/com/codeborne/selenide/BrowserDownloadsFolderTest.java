@@ -9,7 +9,7 @@ import java.io.IOException;
 import static org.apache.commons.io.FileUtils.touch;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BrowserDownloadsFolderTest {
+final class BrowserDownloadsFolderTest {
   @Test
   void deletesAllFilesFromFolder(@TempDir File folder) throws IOException {
     touch(new File(folder, "file1"));

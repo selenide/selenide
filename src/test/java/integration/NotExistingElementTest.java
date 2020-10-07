@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class NotExistingElementTest extends ITest {
+final class NotExistingElementTest extends ITest {
   @BeforeEach
   void openPage() {
     openFile("elements_disappear_on_click.html");

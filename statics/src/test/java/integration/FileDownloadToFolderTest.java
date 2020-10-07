@@ -25,7 +25,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class FileDownloadToFolderTest extends IntegrationTest {
+final class FileDownloadToFolderTest extends IntegrationTest {
   private final File folder = new File(downloadsFolder);
 
   @BeforeEach

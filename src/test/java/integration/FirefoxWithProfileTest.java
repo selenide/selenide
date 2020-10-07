@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static java.lang.Thread.currentThread;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class FirefoxWithProfileTest extends BaseIntegrationTest {
+final class FirefoxWithProfileTest extends BaseIntegrationTest {
   private SelenideDriver customFirefox;
 
   @BeforeEach

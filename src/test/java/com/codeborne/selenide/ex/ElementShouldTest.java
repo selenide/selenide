@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import static java.lang.System.lineSeparator;
 import static org.mockito.Mockito.mock;
 
-class ElementShouldTest implements WithAssertions {
+final class ElementShouldTest implements WithAssertions {
   @Test
   void testToString() {
     String searchCriteria = "by.name: selenide";

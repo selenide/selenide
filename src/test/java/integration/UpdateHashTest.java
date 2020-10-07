@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.exactText;
 
-class UpdateHashTest extends ITest {
+final class UpdateHashTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_hash.html");

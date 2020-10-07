@@ -18,7 +18,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class FindAllByXpathCommandTest implements WithAssertions {
+final class FindAllByXpathCommandTest implements WithAssertions {
   private final WebElement parentWebElement = mockWebElement("div", "I am parent");
   private final SelenideElement parentSelenideElement = mockElement("div", "I am parent");
   private final WebElementSource locator = mock(WebElementSource.class);

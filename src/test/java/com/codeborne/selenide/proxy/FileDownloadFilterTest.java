@@ -24,13 +24,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class FileDownloadFilterTest implements WithAssertions {
-  private FileDownloadFilter filter = new FileDownloadFilter(
+final class FileDownloadFilterTest implements WithAssertions {
+  private final FileDownloadFilter filter = new FileDownloadFilter(
     new SelenideConfig().downloadsFolder("build/downloads"), new Downloader(new DummyRandomizer("random-text"))
   );
-  private HttpResponse response = mock(HttpResponse.class);
-  private HttpMessageContents contents = mock(HttpMessageContents.class);
-  private HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
+  private final HttpResponse response = mock(HttpResponse.class);
+  private final HttpMessageContents contents = mock(HttpMessageContents.class);
+  private final HttpMessageInfo messageInfo = mock(HttpMessageInfo.class);
 
   @BeforeEach
   void setUp() throws IOException {

@@ -14,7 +14,7 @@ import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CollectionBecauseTest extends IntegrationTest {
+final class CollectionBecauseTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     Configuration.timeout = 10;

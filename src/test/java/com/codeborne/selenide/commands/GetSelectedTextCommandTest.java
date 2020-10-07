@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static org.mockito.Mockito.*;
 
-class GetSelectedTextCommandTest implements WithAssertions {
+final class GetSelectedTextCommandTest implements WithAssertions {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource selectElement = mock(WebElementSource.class);
   private final GetSelectedOption getSelectedOptionCommand = mock(GetSelectedOption.class);

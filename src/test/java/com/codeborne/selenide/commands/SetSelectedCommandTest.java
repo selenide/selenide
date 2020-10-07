@@ -14,12 +14,12 @@ import java.lang.reflect.Field;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SetSelectedCommandTest implements WithAssertions {
-  private Click mockedClick = mock(Click.class);
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SetSelected setSelectedCommand = new SetSelected(mockedClick);
-  private WebElement mockedFoundElement = mock(WebElement.class);
+final class SetSelectedCommandTest implements WithAssertions {
+  private final Click mockedClick = mock(Click.class);
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SetSelected setSelectedCommand = new SetSelected(mockedClick);
+  private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {

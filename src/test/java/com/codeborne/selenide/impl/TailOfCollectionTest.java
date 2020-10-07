@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TailOfCollectionTest implements WithAssertions {
+final class TailOfCollectionTest implements WithAssertions {
   private final WebElement element1 = mock(WebElement.class);
   private final WebElement element2 = mock(WebElement.class);
   private final WebElement element3 = mock(WebElement.class);

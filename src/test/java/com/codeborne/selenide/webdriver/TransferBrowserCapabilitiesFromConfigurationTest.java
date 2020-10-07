@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static org.mockito.Mockito.mock;
 
-class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
+final class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
   private static final String SOME_CAP = "some.cap";
   private AbstractDriverFactory driverFactory;
   private final Proxy proxy = mock(Proxy.class);

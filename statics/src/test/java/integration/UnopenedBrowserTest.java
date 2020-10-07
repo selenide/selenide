@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class UnopenedBrowserTest extends IntegrationTest {
+final class UnopenedBrowserTest extends IntegrationTest {
   @BeforeEach
   void givenNoOpenedBrowsers() {
     closeWebDriver();

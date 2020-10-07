@@ -8,7 +8,7 @@ import java.io.File;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EmptyFileFilterTest {
+final class EmptyFileFilterTest {
   private final FileFilter filter = new EmptyFileFilter();
 
   @Test

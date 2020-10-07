@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BrowserTest {
+final class BrowserTest {
   @Test
   void browserNameIsCaseInsensitive() {
     assertThat(new Browser(CHROME, false).isChrome()).isTrue();

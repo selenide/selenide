@@ -8,7 +8,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsInAnyOrderTest implements WithAssertions {
+final class TextsInAnyOrderTest implements WithAssertions {
   @Test
   void testApplyWithSameOrder() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("One", "Two", "Three"));

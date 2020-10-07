@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExistTest {
+final class ExistTest {
   private final Exist condition = new Exist();
   private final WebElement element = mock(WebElement.class);
 

@@ -9,7 +9,7 @@ import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Selenide.$;
 
-class ClickUsingJavascriptTest extends IntegrationTest {
+final class ClickUsingJavascriptTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");

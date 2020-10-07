@@ -6,7 +6,7 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriverException;
 
-class ElementIsNotClickableExceptionTest implements WithAssertions {
+final class ElementIsNotClickableExceptionTest implements WithAssertions {
   @Test
   void errorMessage() {
     Driver driver = new DriverStub();

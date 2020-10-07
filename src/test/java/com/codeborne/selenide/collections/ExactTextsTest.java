@@ -17,7 +17,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExactTextsTest implements WithAssertions {
+final class ExactTextsTest implements WithAssertions {
   @Test
   void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");

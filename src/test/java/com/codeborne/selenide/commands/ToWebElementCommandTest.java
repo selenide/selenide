@@ -10,18 +10,14 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ToWebElementCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private ToWebElement toWebElementCommand;
-  private WebElement mockedFoundElement;
+final class ToWebElementCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final ToWebElement toWebElementCommand = new ToWebElement();
+  private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    toWebElementCommand = new ToWebElement();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedFoundElement = mock(WebElement.class);
     when(locator.getWebElement()).thenReturn(mockedFoundElement);
   }
 

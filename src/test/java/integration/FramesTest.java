@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class FramesTest extends ITest {
+final class FramesTest extends ITest {
   @BeforeEach
   void openPage() {
     openFile("page_with_frames.html");

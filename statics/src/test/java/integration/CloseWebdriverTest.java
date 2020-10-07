@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-class CloseWebdriverTest extends IntegrationTest {
+final class CloseWebdriverTest extends IntegrationTest {
   @BeforeEach
   void givenNoOpenedBrowsers() {
     assumeThat(isChrome() || isFirefox()).isTrue();

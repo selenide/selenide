@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExplainedConditionTest {
+final class ExplainedConditionTest {
   private final Condition visible = new Visible().because("I see it");
   private final Condition hidden = new Hidden().because("I don't see it");
   private final Condition text = new Text("blah").because("I typed it");

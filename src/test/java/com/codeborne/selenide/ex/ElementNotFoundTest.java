@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementNotFoundTest implements WithAssertions {
+final class ElementNotFoundTest implements WithAssertions {
   private Driver driver = new DriverStub();
 
   @Test

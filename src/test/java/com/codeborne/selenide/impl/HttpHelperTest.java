@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-class HttpHelperTest implements WithAssertions {
+final class HttpHelperTest implements WithAssertions {
   private final HttpHelper helper = new HttpHelper();
 
   @Test

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class DownloadFileWithProxyServerTest implements WithAssertions {
+final class DownloadFileWithProxyServerTest implements WithAssertions {
   private final Waiter waiter = new DummyWaiter();
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
   private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter, windowsCloser);

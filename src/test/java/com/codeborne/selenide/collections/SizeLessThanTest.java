@@ -12,7 +12,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 
-class SizeLessThanTest implements WithAssertions {
+final class SizeLessThanTest implements WithAssertions {
   @Test
   void applyWithWrongSizeList() {
     assertThat(new SizeLessThan(1).test(asList(mock(WebElement.class), mock(WebElement.class))))

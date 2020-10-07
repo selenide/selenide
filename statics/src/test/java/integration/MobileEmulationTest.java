@@ -14,7 +14,7 @@ import static com.codeborne.selenide.WebDriverRunner.isChrome;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-public class MobileEmulationTest {
+final class MobileEmulationTest {
   @BeforeEach
   void setUp() {
     assumeThat(isChrome()).isTrue();

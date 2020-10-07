@@ -11,7 +11,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementListIteratorTest implements WithAssertions {
+final class SelenideElementListIteratorTest implements WithAssertions {
   private final WebElement webElement = mockWebElement("a", "click me if you can");
   private final WebElementsCollection collection = mockCollection("Collection description", webElement);
 

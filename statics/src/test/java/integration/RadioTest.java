@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.getSelectedRadio;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RadioTest extends IntegrationTest {
+final class RadioTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");

@@ -10,16 +10,13 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetAttributeCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private WebElement mockedElement;
+final class GetAttributeCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final WebElement mockedElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedElement = mock(WebElement.class);
     when(locator.getWebElement()).thenReturn(mockedElement);
   }
 

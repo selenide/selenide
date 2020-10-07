@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
-class PageWithoutJQuery extends IntegrationTest {
+final class PageWithoutJQuery extends IntegrationTest {
   @BeforeEach
   void openTestPageWithOutJQuery() {
     openFile("page_with_selects_without_jquery.html");

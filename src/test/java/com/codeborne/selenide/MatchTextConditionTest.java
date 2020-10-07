@@ -7,8 +7,8 @@ import org.openqa.selenium.WebElement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchTextConditionTest implements WithAssertions {
-  private Driver driver = mock(Driver.class);
+final class MatchTextConditionTest implements WithAssertions {
+  private final Driver driver = mock(Driver.class);
 
   @Test
   void displaysHumanReadableName() {

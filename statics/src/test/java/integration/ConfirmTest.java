@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.dismiss;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ConfirmTest extends IntegrationTest {
+final class ConfirmTest extends IntegrationTest {
   private static final String USER_NAME = "John Mc'Clane";
 
   @AfterAll

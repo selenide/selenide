@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextTest implements WithAssertions {
+final class TextTest implements WithAssertions {
   private Driver driver = mock(Driver.class);
 
   @Test

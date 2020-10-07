@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.codeborne.selenide.WebDriverRunner.driver;
 
-public class MyFramework {
+final class MyFramework {
   static AtomicInteger tripleClickCounter = new AtomicInteger();
   static AtomicInteger quadrupleClickCounter = new AtomicInteger();
 

@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 
-public class DoubleClickTest extends ITest {
+final class DoubleClickTest extends ITest {
   @Test
   void userCanDoubleClickOnElement() {
     openFile("page_with_double_clickable_button.html");

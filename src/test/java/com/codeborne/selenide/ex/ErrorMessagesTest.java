@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
-class ErrorMessagesTest implements WithAssertions {
+final class ErrorMessagesTest implements WithAssertions {
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
   private final SelenideConfig config = new SelenideConfig().reportsFolder("build/reports/tests");
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);

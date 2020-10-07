@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 
-class RemoteDriverFactoryTest implements WithAssertions {
+final class RemoteDriverFactoryTest implements WithAssertions {
   private final RemoteDriverFactory factory = new RemoteDriverFactory();
   private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().remote("https://some.grid:1234/wd/");

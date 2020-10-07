@@ -13,7 +13,7 @@ import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MatcherErrorTest {
+final class MatcherErrorTest {
   private final List<WebElement> actualElements = asList(mockElement("mr. %First"), mockElement("mr. %Second"));
   private final WebDriverException ex = new NoSuchElementException(".third");
 

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-class ReadonlyElementsTest extends IntegrationTest {
+final class ReadonlyElementsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_readonly_elements.html");

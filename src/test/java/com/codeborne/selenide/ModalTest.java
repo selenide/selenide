@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
-class ModalTest {
+final class ModalTest {
   private static final String ALERT_TEXT = "You really want it?";
   private final Alert alert = mock(Alert.class);
   private final ChromeDriver webDriver = mock(ChromeDriver.class, RETURNS_DEEP_STUBS);

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
 
-class SelenideLogTest implements WithAssertions {
+final class SelenideLogTest implements WithAssertions {
   @Test
   void testGetSubject() {
     SelenideLog log = new SelenideLog("Element", "Subject");

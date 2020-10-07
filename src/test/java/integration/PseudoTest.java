@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.pseudo;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PseudoTest extends ITest {
+final class PseudoTest extends ITest {
 
   @BeforeEach
   void openTestPage() {

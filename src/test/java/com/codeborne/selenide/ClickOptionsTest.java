@@ -3,7 +3,7 @@ package com.codeborne.selenide;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class ClickOptionsTest implements WithAssertions {
+final class ClickOptionsTest implements WithAssertions {
   @Test
   void usingJavaScript() {
     ClickOptions clickOptions = ClickOptions

@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class TextsTest implements WithAssertions {
+final class TextsTest implements WithAssertions {
   @Test
   void reduceSpacesRemovesReplacesMultipleSpacesBySingleSpace() {
     assertThat(Html.text.reduceSpaces("Bruce   \n\t   Willis"))

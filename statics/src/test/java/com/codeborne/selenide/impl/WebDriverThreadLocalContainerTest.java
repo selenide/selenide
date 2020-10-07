@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class WebDriverThreadLocalContainerTest implements WithAssertions {
+final class WebDriverThreadLocalContainerTest implements WithAssertions {
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer();
 
   @BeforeEach

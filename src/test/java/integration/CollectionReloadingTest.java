@@ -8,7 +8,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.text;
 
-class CollectionReloadingTest extends ITest {
+final class CollectionReloadingTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("collection_with_delays.html");

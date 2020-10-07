@@ -14,7 +14,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DirectFileDownloadTest extends IntegrationTest {
+final class DirectFileDownloadTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_big_divs.html");

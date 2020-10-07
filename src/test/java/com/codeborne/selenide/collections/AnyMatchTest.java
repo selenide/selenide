@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-class AnyMatchTest implements WithAssertions {
+final class AnyMatchTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Hello");
   private final SelenideElement element2 = mockElement("World");
 

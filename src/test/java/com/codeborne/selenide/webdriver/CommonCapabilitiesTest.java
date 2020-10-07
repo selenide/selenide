@@ -25,7 +25,7 @@ import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 
-public class CommonCapabilitiesTest implements WithAssertions {
+final class CommonCapabilitiesTest implements WithAssertions {
   private final AbstractDriverFactory driverFactory = new DummyDriverFactory();
   private final Proxy proxy = mock(Proxy.class);
 

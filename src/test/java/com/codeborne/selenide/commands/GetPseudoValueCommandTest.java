@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GetPseudoValueCommandTest implements WithAssertions {
+final class GetPseudoValueCommandTest implements WithAssertions {
 
   private final Driver driver = mock(Driver.class);
   private final SelenideElement proxy = mock(SelenideElement.class);

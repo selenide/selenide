@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OverrideCommandsTest extends ITest {
+final class OverrideCommandsTest extends ITest {
   private final AtomicInteger clickCounter = new AtomicInteger();
 
   @BeforeEach

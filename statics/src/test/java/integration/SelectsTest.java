@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.$x;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SelectsTest extends IntegrationTest {
+final class SelectsTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {

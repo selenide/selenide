@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 
-class AbstractDriverFactoryTest {
+final class AbstractDriverFactoryTest {
   private final AbstractDriverFactory factory = spy(AbstractDriverFactory.class);
 
   @Test

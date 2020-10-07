@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.appear;
 import static java.lang.System.lineSeparator;
 import static org.mockito.Mockito.mock;
 
-class ElementShouldNotTest implements WithAssertions {
+final class ElementShouldNotTest implements WithAssertions {
   private final Driver driver = new DriverStub();
 
   @Test

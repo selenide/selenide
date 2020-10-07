@@ -11,7 +11,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 
-class ListSizeTest implements WithAssertions {
+final class ListSizeTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new ListSize(10).test(emptyList()))

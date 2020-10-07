@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Collections.emptyList;
 
-class NoneMatchTest implements WithAssertions {
+final class NoneMatchTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");

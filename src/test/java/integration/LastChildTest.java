@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class LastChildTest extends ITest {
+final class LastChildTest extends ITest {
 
   @BeforeEach
   void openTestPageWithJQuery() {

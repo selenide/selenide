@@ -19,7 +19,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class CustomWebDriverProviderTest extends IntegrationTest {
+final class CustomWebDriverProviderTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     assumeTrue("chrome".equalsIgnoreCase(browser));

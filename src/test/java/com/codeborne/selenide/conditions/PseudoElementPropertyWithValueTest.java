@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PseudoElementPropertyWithValueTest {
+final class PseudoElementPropertyWithValueTest {
 
   private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);

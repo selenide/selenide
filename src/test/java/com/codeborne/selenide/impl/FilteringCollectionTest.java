@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FilteringCollectionTest implements WithAssertions {
+final class FilteringCollectionTest implements WithAssertions {
   @Test
   void getActualElement() {
     WebElement mockedWebElement1 = mock(WebElement.class);

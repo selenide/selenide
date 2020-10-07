@@ -8,7 +8,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
 
-class MultipleSelectTest extends ITest {
+final class MultipleSelectTest extends ITest {
   private final SelenideElement select = $("#character");
 
   @BeforeEach

@@ -18,7 +18,7 @@ import java.net.URL;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
+final class CustomWebdriverProviderWithRemoteBrowser extends AbstractGridTest {
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
     MyProvider.port = hubPort;

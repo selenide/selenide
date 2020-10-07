@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-class ErrorMsgWithScreenshotsTest extends IntegrationTest {
+final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
   private String reportsUrl;
   private String reportsFolder;
 
   @BeforeEach
-  final void setTimeout() {
+  void setTimeout() {
     timeout = 0;
     openFile("page_with_selects_without_jquery.html");
   }

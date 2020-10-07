@@ -16,12 +16,12 @@ import java.util.Collections;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelectRadioCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SelectRadio selectRadioCommand = new SelectRadio(mock(Click.class));
-  private WebElement mockedFoundElement = mock(WebElement.class);
-  private String defaultElementValue = "ElementValue";
+final class SelectRadioCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelectRadio selectRadioCommand = new SelectRadio(mock(Click.class));
+  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final String defaultElementValue = "ElementValue";
 
   @BeforeEach
   void setup() {

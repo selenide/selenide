@@ -9,18 +9,14 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetNameCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private SelenideElement mockedElement;
-  private GetName getNameCommand;
+final class GetNameCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final GetName getNameCommand = new GetName();
 
   @BeforeEach
   void setup() {
-    getNameCommand = new GetName();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedElement = mock(SelenideElement.class);
     when(locator.getWebElement()).thenReturn(mockedElement);
   }
 

@@ -12,11 +12,11 @@ import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 
-class TextMismatchTest implements WithAssertions {
-  private WebElementsCollection collection = mockCollection("Collection description");
-  private List<String> actualTexts = asList("One", "Two", "Three");
-  private List<String> expectedTexts = asList("Four", "Five", "Six");
-  private long timeoutMs = 1000L;
+final class TextMismatchTest implements WithAssertions {
+  private final WebElementsCollection collection = mockCollection("Collection description");
+  private final List<String> actualTexts = asList("One", "Two", "Three");
+  private final List<String> expectedTexts = asList("Four", "Five", "Six");
+  private final long timeoutMs = 1000L;
 
   @BeforeEach
   void setUp() {

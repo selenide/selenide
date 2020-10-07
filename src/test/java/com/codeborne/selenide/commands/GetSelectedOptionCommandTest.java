@@ -13,11 +13,11 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedOptionCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private String mockedElement1Text = "Element text2";
-  private GetSelectedOption getSelectedOptionCommand = new GetSelectedOption();
+final class GetSelectedOptionCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final String mockedElement1Text = "Element text2";
+  private final GetSelectedOption getSelectedOptionCommand = new GetSelectedOption();
 
   @BeforeEach
   void setup() {

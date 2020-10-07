@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CdpClientTest {
+final class CdpClientTest {
   private final CdpClient cdp = new CdpClient();
 
   @Test

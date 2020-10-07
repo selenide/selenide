@@ -6,10 +6,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -19,17 +17,10 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
 import static java.lang.String.format;
 
-public class LogEventListenerTest extends BaseIntegrationTest {
-  private SelenideDriver driver;
-  private List<String> beforeEvents;
-  private List<String> afterEvents;
-
-  @BeforeEach
-  void setup() {
-    beforeEvents = new ArrayList<>();
-    afterEvents = new ArrayList<>();
-    driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()));
-  }
+final class LogEventListenerTest extends BaseIntegrationTest {
+  private final SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()));
+  private final List<String> beforeEvents = new ArrayList<>();
+  private final List<String> afterEvents = new ArrayList<>();
 
   @AfterEach
   void tearDown() {

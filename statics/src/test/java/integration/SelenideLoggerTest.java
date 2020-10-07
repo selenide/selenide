@@ -19,7 +19,7 @@ import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SelenideLoggerTest extends IntegrationTest {
+final class SelenideLoggerTest extends IntegrationTest {
   private static final String LISTENER = "SelenideLoggerTest";
   private final EventsCollector collector = new EventsCollector();
 

@@ -10,7 +10,7 @@ import org.openqa.selenium.By;
 
 import static java.lang.ThreadLocal.withInitial;
 
-public class ITest extends BaseIntegrationTest {
+public abstract class ITest extends BaseIntegrationTest {
   private final long longTimeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
 
   private static final ThreadLocal<SelenideConfig> config = withInitial(() ->

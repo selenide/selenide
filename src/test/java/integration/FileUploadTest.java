@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class FileUploadTest extends ITest {
+final class FileUploadTest extends ITest {
   @BeforeEach
   void openFileUploadForm() {
     setTimeout(4000);

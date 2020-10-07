@@ -3,7 +3,7 @@ package com.codeborne.selenide.logevents;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class EventsCollectorTest implements WithAssertions {
+final class EventsCollectorTest implements WithAssertions {
   @Test
   void testOnEvent() {
     EventsCollector eventsCollector = new EventsCollector();
