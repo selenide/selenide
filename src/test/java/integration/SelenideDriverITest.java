@@ -22,7 +22,7 @@ final class SelenideDriverITest extends ITest {
   @BeforeEach
   void setUp() {
     browser1 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
-    browser2 = new SelenideDriver(new SelenideConfig().browser("firefox").baseUrl(getBaseUrl()));
+    browser2 = new SelenideDriver(new SelenideConfig().browser(browser).baseUrl(getBaseUrl()));
   }
 
   @AfterEach
