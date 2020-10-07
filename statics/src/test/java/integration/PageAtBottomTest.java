@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Selenide.atBottom;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PageAtBottomTest extends IntegrationTest {
+final class PageAtBottomTest extends IntegrationTest {
   @BeforeEach
   void createScrollablePage() {
     openFile("empty.html");

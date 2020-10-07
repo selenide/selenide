@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MergeableCapabilitiesTest {
+final class MergeableCapabilitiesTest {
   @Test
   void mergesChromeOptions() {
     ChromeOptions base = new ChromeOptions();

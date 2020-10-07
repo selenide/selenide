@@ -19,7 +19,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.openqa.selenium.OutputType.BYTES;
 
-class ScreenShotLaboratoryTest implements WithAssertions {
+final class ScreenShotLaboratoryTest implements WithAssertions {
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
   private final SelenideConfig config = new SelenideConfig().savePageSource(false);
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);

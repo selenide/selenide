@@ -14,7 +14,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideProxyServerTest implements WithAssertions {
+final class SelenideProxyServerTest implements WithAssertions {
   private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
   private final Config config = mock(Config.class);
   private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);

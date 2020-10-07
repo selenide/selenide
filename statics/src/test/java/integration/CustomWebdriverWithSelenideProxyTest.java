@@ -23,7 +23,7 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-public class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
+final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
 
   @BeforeEach
   void setUp() {

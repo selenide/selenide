@@ -1,32 +1,22 @@
 package com.codeborne.selenide.commands;
 
-import java.lang.reflect.Field;
-
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ValCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private Val valCommand;
-  private GetValue mockedGetValue;
-  private SetValue mockedSetValue;
-
-  @BeforeEach
-  void setup() {
-    mockedGetValue = mock(GetValue.class);
-    mockedSetValue = mock(SetValue.class);
-    valCommand = new Val(mockedGetValue, mockedSetValue);
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-  }
+final class ValCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final GetValue mockedGetValue = mock(GetValue.class);
+  private final SetValue mockedSetValue = mock(SetValue.class);
+  private final Val valCommand = new Val(mockedGetValue, mockedSetValue);
 
   @Test
   void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {

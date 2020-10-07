@@ -8,7 +8,7 @@ import java.util.List;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
 
-class TextsMismatchTest implements WithAssertions {
+final class TextsMismatchTest implements WithAssertions {
   private final List<String> actualTexts = asList("Niff", "Naff", "Nuff");
   private final List<String> expectedTexts = asList("Piff", "Paff", "Puff");
 

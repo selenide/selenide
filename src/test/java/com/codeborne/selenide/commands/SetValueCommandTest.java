@@ -14,13 +14,13 @@ import java.lang.reflect.Field;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SetValueCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SelectOptionByValue mockedSelectByOption = mock(SelectOptionByValue.class);
-  private SelectRadio mockedSelectRadio = mock(SelectRadio.class);
-  private SetValue setValueCommand = new SetValue(mockedSelectByOption, mockedSelectRadio);
-  private WebElement mockedFoundElement = mock(WebElement.class);
+final class SetValueCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelectOptionByValue mockedSelectByOption = mock(SelectOptionByValue.class);
+  private final SelectRadio mockedSelectRadio = mock(SelectRadio.class);
+  private final SetValue setValueCommand = new SetValue(mockedSelectByOption, mockedSelectRadio);
+  private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {

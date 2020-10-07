@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 
-class UtilCommandTest implements WithAssertions {
+final class UtilCommandTest implements WithAssertions {
   @Test
   void testArgsToCondition() {
     List<Condition> conditions = Util.argsToConditions(new Object[]{

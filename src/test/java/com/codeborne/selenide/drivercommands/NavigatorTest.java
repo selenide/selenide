@@ -22,14 +22,14 @@ import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-class NavigatorTest implements WithAssertions {
-  private Navigator navigator = new Navigator();
-  private SelenideDriver selenideDriver = mock(SelenideDriver.class);
-  private WebDriver driver = mock(WebDriver.class);
-  private WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
-  private SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
-  private AuthenticationFilter authenticationFilter = mock(AuthenticationFilter.class);
-  private SelenideConfig config = new SelenideConfig().fileDownload(HTTPGET);
+final class NavigatorTest implements WithAssertions {
+  private final Navigator navigator = new Navigator();
+  private final SelenideDriver selenideDriver = mock(SelenideDriver.class);
+  private final WebDriver driver = mock(WebDriver.class);
+  private final WebDriver.Navigation navigation = mock(WebDriver.Navigation.class);
+  private final SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
+  private final AuthenticationFilter authenticationFilter = mock(AuthenticationFilter.class);
+  private final SelenideConfig config = new SelenideConfig().fileDownload(HTTPGET);
 
   @BeforeEach
   void setUp() {

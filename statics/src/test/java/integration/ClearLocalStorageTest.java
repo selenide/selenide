@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ClearLocalStorageTest extends IntegrationTest {
+final class ClearLocalStorageTest extends IntegrationTest {
   @BeforeEach
   void addDataToLocalStorage() {
     open("/start_page.html");

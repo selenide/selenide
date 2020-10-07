@@ -36,7 +36,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ConditionTest {
+final class ConditionTest {
   private final WebDriver webDriver = mock(WebDriver.class);
   private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private final SelenideConfig config = new SelenideConfig();

@@ -10,7 +10,7 @@ import java.time.Duration;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class TabsCustomWaitTest extends ITest {
+final class TabsCustomWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_tabs_with_big_delays.html");

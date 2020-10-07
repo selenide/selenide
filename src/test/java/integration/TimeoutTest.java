@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-class TimeoutTest extends ITest {
+final class TimeoutTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

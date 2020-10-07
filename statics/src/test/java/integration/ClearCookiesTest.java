@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ClearCookiesTest extends IntegrationTest {
+final class ClearCookiesTest extends IntegrationTest {
   @BeforeEach
   void addCookiesBeforeTest() throws MalformedURLException {
     open("/start_page.html");

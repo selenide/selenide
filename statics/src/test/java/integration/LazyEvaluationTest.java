@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 
-class LazyEvaluationTest extends IntegrationTest {
+final class LazyEvaluationTest extends IntegrationTest {
 
   private SelenideElement h1 = $("h1");
   private SelenideElement button = $("#some-button");

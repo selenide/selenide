@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 
-class OperaDriverFactoryTest implements WithAssertions {
+final class OperaDriverFactoryTest implements WithAssertions {
   private final Proxy proxy = mock(Proxy.class);
   private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().headless(false);

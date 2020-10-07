@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideTargetLocatorTest {
+final class SelenideTargetLocatorTest {
   private final Config config = new SelenideConfig();
   private final WebDriver webdriver = mock(WebDriver.class);
   private final DriverStub driver = new DriverStub(config, new Browser("zopera", true), webdriver, null);

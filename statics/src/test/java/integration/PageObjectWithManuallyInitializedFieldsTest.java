@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.page;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
+final class PageObjectWithManuallyInitializedFieldsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");

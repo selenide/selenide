@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CheckboxTest extends ITest {
+final class CheckboxTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

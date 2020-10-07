@@ -12,7 +12,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 
-class SizeGreaterThanOrEqualTest implements WithAssertions {
+final class SizeGreaterThanOrEqualTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new SizeGreaterThanOrEqual(10).test(emptyList()))

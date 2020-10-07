@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @Disabled
-class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest {
+final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     givenHtml(

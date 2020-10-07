@@ -20,7 +20,7 @@ import static integration.errormessages.Helper.assertScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
+final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     givenHtml(

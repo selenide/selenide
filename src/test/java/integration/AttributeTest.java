@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.byValue;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AttributeTest extends ITest {
+public final class AttributeTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");

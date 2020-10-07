@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class LongRunningAjaxRequestTest extends ITest {
+final class LongRunningAjaxRequestTest extends ITest {
   @BeforeEach
   void openTestPage() {
     setTimeout(4000);

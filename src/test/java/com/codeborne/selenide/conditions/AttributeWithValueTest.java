@@ -9,9 +9,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AttributeWithValueTest {
-  private Driver driver = mock(Driver.class);
-  private WebElement element = mock(WebElement.class);
+final class AttributeWithValueTest {
+  private final Driver driver = mock(Driver.class);
+  private final WebElement element = mock(WebElement.class);
 
   @BeforeEach
   void setUp() {

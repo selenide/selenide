@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import static integration.BaseIntegrationTest.browser;
 
-class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
+final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
   private static final Logger log = LoggerFactory.getLogger(LogTestNameExtension.class);
 
   @Override

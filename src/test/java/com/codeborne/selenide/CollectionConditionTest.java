@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 
-class CollectionConditionTest implements WithAssertions {
+final class CollectionConditionTest implements WithAssertions {
   @Test
   void testSizeIsEmptyListSize() {
     CollectionCondition collectionCondition = CollectionCondition.size(10);

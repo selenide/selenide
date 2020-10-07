@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DownloadedFileTest {
+final class DownloadedFileTest {
   @Test
   void hasContentDispositionHeader() {
     DownloadedFile file1 = new DownloadedFile(new File("x"), header("content-disposition", "filename=prices.csv"));

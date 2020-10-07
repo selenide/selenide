@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class TabsTest extends ITest {
+final class TabsTest extends ITest {
   @BeforeEach
   void setUp() {
     setTimeout(1000);

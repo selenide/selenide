@@ -10,7 +10,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TextsTest implements WithAssertions {
+final class TextsTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new Texts("One", "Two", "Three").test(emptyList()))

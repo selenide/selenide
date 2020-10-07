@@ -9,17 +9,14 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSearchCriteriaCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private GetSearchCriteria getSearchCriteriaCommand;
-  private String defaultSearchCriteria = "by.xpath";
+final class GetSearchCriteriaCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final GetSearchCriteria getSearchCriteriaCommand = new GetSearchCriteria();
+  private final String defaultSearchCriteria = "by.xpath";
 
   @BeforeEach
   void setup() {
-    getSearchCriteriaCommand = new GetSearchCriteria();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
     when(locator.getSearchCriteria()).thenReturn(defaultSearchCriteria);
   }
 

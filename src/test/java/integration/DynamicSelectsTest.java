@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DynamicSelectsTest extends ITest {
+final class DynamicSelectsTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_dynamic_select.html");

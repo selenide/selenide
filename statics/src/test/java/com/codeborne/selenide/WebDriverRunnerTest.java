@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-class WebDriverRunnerTest implements WithAssertions {
+final class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
 
   private URL url = currentThread().getContextClassLoader().getResource("start_page.html");

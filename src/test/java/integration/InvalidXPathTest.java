@@ -11,7 +11,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.Condition.exist;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class InvalidXPathTest extends ITest {
+final class InvalidXPathTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

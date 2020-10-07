@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FrameWaitTest extends ITest {
+final class FrameWaitTest extends ITest {
   @BeforeEach
   void setUp() {
     openFile("page_with_frames_with_delays.html");

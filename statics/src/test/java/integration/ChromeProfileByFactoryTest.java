@@ -30,7 +30,7 @@ import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-class ChromeProfileByFactoryTest extends IntegrationTest {
+final class ChromeProfileByFactoryTest extends IntegrationTest {
   private static final Logger logger = LoggerFactory.getLogger(ChromeProfileByFactoryTest.class);
   private static final File downloadsFolder = new File(Configuration.downloadsFolder);
   private static final File chromedriverLog = new File(downloadsFolder, "chromedriver." + nanoTime());

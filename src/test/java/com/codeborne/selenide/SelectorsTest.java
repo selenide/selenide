@@ -7,7 +7,7 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-class SelectorsTest implements WithAssertions {
+final class SelectorsTest implements WithAssertions {
   @Test
   void withTextUsesXPath() {
     By selector = Selectors.withText("john");

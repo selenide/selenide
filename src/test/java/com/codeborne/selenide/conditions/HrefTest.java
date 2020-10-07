@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ParametersAreNonnullByDefault
-class HrefTest {
+final class HrefTest {
   private final Driver driver = new DriverStub();
 
   @Test

@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GetWrappedElementTest extends IntegrationTest {
+final class GetWrappedElementTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     openFile("page_with_suslik.html");

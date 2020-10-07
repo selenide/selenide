@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 
-class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
+final class RemoteDriverFactoryHeadlessOptionsTest implements WithAssertions {
   private final RemoteDriverFactory factory = new RemoteDriverFactory();
   private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().headless(false);

@@ -21,7 +21,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
 
-class FirefoxDriverFactoryTest implements WithAssertions {
+final class FirefoxDriverFactoryTest implements WithAssertions {
   private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
 
   private final Proxy proxy = mock(Proxy.class);

@@ -22,7 +22,7 @@ import java.net.URL;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
+final class CustomWebdriverFactoryWithRemoteBrowser extends AbstractGridTest {
   @Test
   void customWebdriverProviderCanUseRemoteWebdriver() {
     MyFactory.port = hubPort;

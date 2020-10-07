@@ -15,22 +15,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-class SelectOptionContainingTextTest implements WithAssertions {
-  private SelectOptionContainingText command = new SelectOptionContainingText();
+final class SelectOptionContainingTextTest implements WithAssertions {
+  private final SelectOptionContainingText command = new SelectOptionContainingText();
 
-  private WebElement element;
-  private WebElement option1;
-  private WebElement option2;
-  private SelenideElement proxy;
-  private WebElementSource select;
+  private final WebElement element = mock(WebElement.class);
+  private final WebElement option1 = mock(WebElement.class);
+  private final WebElement option2 = mock(WebElement.class);
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource select = mock(WebElementSource.class);
 
   @BeforeEach
   void setUp() {
-    element = mock(WebElement.class);
-    option1 = mock(WebElement.class);
-    option2 = mock(WebElement.class);
-    proxy = mock(SelenideElement.class);
-    select = mock(WebElementSource.class);
     doReturn(element).when(select).getWebElement();
     doReturn("select").when(element).getTagName();
   }

@@ -28,13 +28,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class MissingElementTest extends IntegrationTest {
+final class MissingElementTest extends IntegrationTest {
   private PageObject pageObject;
   private String reportsUrl;
   private String reportsFolder;
 
   @BeforeEach
-  final void setTimeout() {
+  void setTimeout() {
     timeout = 15;
     pageObject = openFile("page_with_selects_without_jquery.html", PageObject.class);
   }

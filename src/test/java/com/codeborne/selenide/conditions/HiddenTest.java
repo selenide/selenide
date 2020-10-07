@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class HiddenTest {
+final class HiddenTest {
   private final Hidden condition = new Hidden();
   private final WebElement element = mock(WebElement.class);
 

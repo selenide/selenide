@@ -20,7 +20,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CollectionWaitTest extends IntegrationTest {
+final class CollectionWaitTest extends IntegrationTest {
   private final long startedAt = System.currentTimeMillis();
 
   @BeforeEach

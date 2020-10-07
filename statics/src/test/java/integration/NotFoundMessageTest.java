@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class NotFoundMessageTest extends IntegrationTest {
+final class NotFoundMessageTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_selects_without_jquery.html");

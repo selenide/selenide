@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.ITestResult.FAILURE;
 
-class SoftAssertsTest implements WithAssertions {
+final class SoftAssertsTest implements WithAssertions {
   private SoftAsserts listener = new SoftAsserts();
 
   @AfterEach

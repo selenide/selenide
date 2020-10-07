@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ChecksOnMissingParentElementTest extends IntegrationTest {
+final class ChecksOnMissingParentElementTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     Configuration.timeout = 10;

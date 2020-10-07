@@ -9,7 +9,7 @@ import static com.codeborne.selenide.files.FileFilters.none;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DownloadOptionsTest {
+final class DownloadOptionsTest {
   @Test
   void defaultOptions() {
     DownloadOptions options = using(PROXY);

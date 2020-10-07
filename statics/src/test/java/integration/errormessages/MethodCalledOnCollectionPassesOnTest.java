@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
+final class MethodCalledOnCollectionPassesOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     givenHtml(

@@ -15,7 +15,7 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static com.codeborne.selenide.WebDriverRunner.getSelenideProxy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ProxyServerUsageTest extends IntegrationTest {
+final class ProxyServerUsageTest extends IntegrationTest {
   private final List<String> requests = new ArrayList<>();
   private final List<String> responses = new ArrayList<>();
 

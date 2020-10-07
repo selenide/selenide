@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ByTextTest extends ITest {
+final class ByTextTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_selects_without_jquery.html");

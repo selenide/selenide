@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NotFoundException;
@@ -14,19 +13,11 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MatchesCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private SelenideElement mockedElement;
-  private Matches matchesCommand;
-
-  @BeforeEach
-  void setup() {
-    matchesCommand = new Matches();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedElement = mock(SelenideElement.class);
-  }
+final class MatchesCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final Matches matchesCommand = new Matches();
 
   @Test
   void testExecuteMethodWhenNoElementFound() {

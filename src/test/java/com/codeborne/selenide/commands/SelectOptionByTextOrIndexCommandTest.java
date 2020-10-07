@@ -17,14 +17,14 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource selectField = mock(WebElementSource.class);
-  private SelectOptionByTextOrIndex selectOptionByTextOrIndexCommand = new SelectOptionByTextOrIndex();
-  private WebElement mockedElement = mock(WebElement.class);
-  private String defaultElementText = "This is element text";
-  private WebElement mockedFoundElement = mock(WebElement.class);
-  private int defaultIndex = 1;
+final class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource selectField = mock(WebElementSource.class);
+  private final SelectOptionByTextOrIndex selectOptionByTextOrIndexCommand = new SelectOptionByTextOrIndex();
+  private final WebElement mockedElement = mock(WebElement.class);
+  private final String defaultElementText = "This is element text";
+  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final int defaultIndex = 1;
 
   @BeforeEach
   void setup() {

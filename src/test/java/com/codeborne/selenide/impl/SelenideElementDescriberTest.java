@@ -17,7 +17,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementDescriberTest implements WithAssertions {
+final class SelenideElementDescriberTest implements WithAssertions {
   private final SelenideElementDescriber describe = new SelenideElementDescriber();
 
   @Test

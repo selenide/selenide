@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SelenideConfigTest implements WithAssertions {
+final class SelenideConfigTest implements WithAssertions {
   @Test
   void getsReportsUrlFromSystemProperty() {
     System.setProperty("selenide.reportsUrl", "http://ci.org/job/123/artifact/");
@@ -26,12 +26,8 @@ class SelenideConfigTest implements WithAssertions {
     assertThat(new SelenideConfig().reportsUrl()).isEqualTo("http://ci.org/repository/download/my-build/1:id/");
   }
 
-  @AfterEach
-  void resetBuildUrl() {
-    setUp();
-  }
-
   @BeforeEach
+  @AfterEach
   void setUp() {
     System.setProperty("selenide.reportsUrl", "");
     System.setProperty("BUILD_URL", "");

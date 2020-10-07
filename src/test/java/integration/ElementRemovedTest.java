@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 /**
  * All checks in this class are equivalent
  */
-class ElementRemovedTest extends ITest {
+final class ElementRemovedTest extends ITest {
   @BeforeEach
   void clickRemovesElement() {
     openFile("elements_disappear_on_click.html");

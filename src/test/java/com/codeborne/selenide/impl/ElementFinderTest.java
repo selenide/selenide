@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ElementFinderTest implements WithAssertions {
+final class ElementFinderTest implements WithAssertions {
   private Driver driver = mock(Driver.class);
 
   @Test

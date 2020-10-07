@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ZoomTest extends ITest {
+final class ZoomTest extends ITest {
   @Test
   void canZoomInAndOut() {
     openFile("page_with_big_divs.html");

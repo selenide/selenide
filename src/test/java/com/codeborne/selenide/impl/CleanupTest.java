@@ -6,7 +6,7 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
-class CleanupTest implements WithAssertions {
+final class CleanupTest implements WithAssertions {
   @Test
   void cleansWebDriverExceptionMessage() {
     String webDriverException = "org.openqa.selenium.NoSuchElementException: " +

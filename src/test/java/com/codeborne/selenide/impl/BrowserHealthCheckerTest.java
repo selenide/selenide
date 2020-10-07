@@ -12,7 +12,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-class BrowserHealthCheckerTest implements WithAssertions {
+final class BrowserHealthCheckerTest implements WithAssertions {
   private final WebDriver webdriver = mock(WebDriver.class);
   private final BrowserHealthChecker checker = new BrowserHealthChecker();
 

@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class ShadowDomInsideIFrameTest extends IntegrationTest {
+final class ShadowDomInsideIFrameTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_shadow_dom_inside_iframe.html");

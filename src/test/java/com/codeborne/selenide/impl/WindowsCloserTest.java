@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class WindowsCloserTest {
+final class WindowsCloserTest {
   private final WebDriver webdriver = mock(WebDriver.class);
   private final WindowsCloser windowsCloser = new WindowsCloser();
 

@@ -16,7 +16,7 @@ import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-class LastCollectionElementTest implements WithAssertions {
+final class LastCollectionElementTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Hello");
   private final SelenideElement element2 = mockElement("World");
   private final WebElementsCollection collection = mockCollection("ul#employees li.employee", element1, element2);

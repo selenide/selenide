@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-class BasicAuthTest extends IntegrationTest {
+final class BasicAuthTest extends IntegrationTest {
   @Test
   void canPassBasicAuth_via_URL() {
     useProxy(false);

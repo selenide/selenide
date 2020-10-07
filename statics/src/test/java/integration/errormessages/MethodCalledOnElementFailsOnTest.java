@@ -22,7 +22,7 @@ import static integration.errormessages.Helper.assertScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-class MethodCalledOnElementFailsOnTest extends IntegrationTest {
+final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     givenHtml(

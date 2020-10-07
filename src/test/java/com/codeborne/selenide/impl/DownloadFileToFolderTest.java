@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-class DownloadFileToFolderTest {
+final class DownloadFileToFolderTest {
   private final Downloader downloader = new Downloader();
   private final Waiter waiter = new DummyWaiter();
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());

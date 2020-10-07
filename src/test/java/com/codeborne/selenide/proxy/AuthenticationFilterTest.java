@@ -12,7 +12,7 @@ import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-class AuthenticationFilterTest implements WithAssertions {
+final class AuthenticationFilterTest implements WithAssertions {
   private AuthenticationFilter filter = new AuthenticationFilter();
   private DefaultHttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/secured/page");
 

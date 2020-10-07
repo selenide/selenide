@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NamedConditionTest {
+final class NamedConditionTest {
   private final Visible visible = new Visible();
   private final Hidden hidden = new Hidden();
   private final Text text = new Text("blah");

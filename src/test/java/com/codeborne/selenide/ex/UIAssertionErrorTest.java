@@ -5,7 +5,7 @@ import com.codeborne.selenide.DriverStub;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-class UIAssertionErrorTest implements WithAssertions {
+final class UIAssertionErrorTest implements WithAssertions {
   @Test
   void errorMessage() {
     Driver driver = new DriverStub();

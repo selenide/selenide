@@ -45,7 +45,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SelenideElementProxyTest implements WithAssertions {
+final class SelenideElementProxyTest implements WithAssertions {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
   private final RemoteWebDriver webdriver = mock(RemoteWebDriver.class);

@@ -12,14 +12,14 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ErrorsCollectorTest implements WithAssertions {
+final class ErrorsCollectorTest implements WithAssertions {
   private ErrorsCollector errorsCollector;
-  private LogEvent mockedInProgressEvent = mock(LogEvent.class);
-  private LogEvent mockedPassedEvent = mock(LogEvent.class);
-  private LogEvent mockedFailedEvent = mock(LogEvent.class);
+  private final LogEvent mockedInProgressEvent = mock(LogEvent.class);
+  private final LogEvent mockedPassedEvent = mock(LogEvent.class);
+  private final LogEvent mockedFailedEvent = mock(LogEvent.class);
   private Field errorsField;
-  private String defaultErrorMessage = "Couldn't find an element";
-  private String defaultTestName = "ITestName";
+  private final String defaultErrorMessage = "Couldn't find an element";
+  private final String defaultTestName = "ITestName";
 
   @BeforeEach
   void setup() throws NoSuchFieldException {

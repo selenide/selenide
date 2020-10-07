@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ElementTextTest extends IntegrationTest {
+final class ElementTextTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_divs.html");

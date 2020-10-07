@@ -21,7 +21,7 @@ import static com.codeborne.selenide.Selenide.page;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class PageObjectTest extends IntegrationTest {
+final class PageObjectTest extends IntegrationTest {
   private SelectsPage pageWithSelects;
 
   @BeforeEach

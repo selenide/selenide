@@ -11,7 +11,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 
-class SizeNotEqualTest implements WithAssertions {
+final class SizeNotEqualTest implements WithAssertions {
   @Test
   void applyWithEmptyList() {
     assertThat(new SizeNotEqual(10).test(emptyList()))

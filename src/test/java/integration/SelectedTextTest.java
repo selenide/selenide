@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.selectedText;
 
 
-class SelectedTextTest extends ITest {
+final class SelectedTextTest extends ITest {
 
   @BeforeEach
   void before() {

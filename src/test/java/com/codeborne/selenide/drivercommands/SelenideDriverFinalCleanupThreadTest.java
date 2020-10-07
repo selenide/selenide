@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-class SelenideDriverFinalCleanupThreadTest {
+final class SelenideDriverFinalCleanupThreadTest {
   @Test
   void closesDriverAndProxy() {
     Config config = mock(Config.class);

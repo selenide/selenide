@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-class TransparencyAndOtherNonStandardVisibilityTest extends IntegrationTest {
+final class TransparencyAndOtherNonStandardVisibilityTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_transparent_elements.html");

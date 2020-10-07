@@ -8,7 +8,7 @@ import java.io.File;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ExtensionFilterTest {
+final class ExtensionFilterTest {
   private final FileFilter filter = new ExtensionFilter("pdf");
 
   @Test

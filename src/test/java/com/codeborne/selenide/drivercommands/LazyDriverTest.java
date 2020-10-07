@@ -20,7 +20,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class LazyDriverTest implements WithAssertions {
+final class LazyDriverTest implements WithAssertions {
   private final Config config = mock(Config.class);
   private final WebDriver webdriver = mock(WebDriver.class);
   private final WebDriverFactory factory = mock(WebDriverFactory.class);

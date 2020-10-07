@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockWebElement;
 
-class SelenideElementIteratorTest implements WithAssertions {
+final class SelenideElementIteratorTest implements WithAssertions {
   private final WebElement webElement = mockWebElement("a", "click me if you can");
 
   @Test

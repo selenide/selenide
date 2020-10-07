@@ -28,7 +28,7 @@ import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
-public class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest {
+final class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     assumeThat(isChrome() || isFirefox()).isTrue();

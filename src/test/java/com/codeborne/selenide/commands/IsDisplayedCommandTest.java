@@ -13,15 +13,14 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class IsDisplayedCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SelenideElement mockedElement = mock(SelenideElement.class);
-  private IsDisplayed isDisplayedCommand;
+final class IsDisplayedCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final IsDisplayed isDisplayedCommand = new IsDisplayed();
 
   @BeforeEach
   void setup() {
-    isDisplayedCommand = new IsDisplayed();
     when(locator.getWebElement()).thenReturn(mockedElement);
   }
 

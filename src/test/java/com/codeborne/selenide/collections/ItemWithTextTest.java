@@ -12,7 +12,7 @@ import java.util.Collections;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 
-class ItemWithTextTest implements WithAssertions {
+final class ItemWithTextTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");

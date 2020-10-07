@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 @Disabled
   // this test works on my machine, but fails on Jenkins. Need to investigate it.
-class AutoCompleteTest extends IntegrationTest {
+final class AutoCompleteTest extends IntegrationTest {
   @BeforeEach
   void openTestPageWithAutocomplete() {
     openFile("autocomplete.html");

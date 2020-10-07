@@ -17,12 +17,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ToStringCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private Driver driver = new DriverStub();
-  private WebElementSource locator = mock(WebElementSource.class);
-  private WebElement mockedFoundElement = mock(WebElement.class);
-  private ToString toStringCommand = new ToString();
+final class ToStringCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final Driver driver = new DriverStub();
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final ToString toStringCommand = new ToString();
 
   @BeforeEach
   void setup() {

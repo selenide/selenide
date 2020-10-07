@@ -14,7 +14,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CollectionElementTest implements WithAssertions {
+final class CollectionElementTest implements WithAssertions {
   private final Driver driver = new DriverStub();
 
   @Test

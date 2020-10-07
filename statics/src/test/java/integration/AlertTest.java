@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-class AlertTest extends IntegrationTest {
+final class AlertTest extends IntegrationTest {
   @AfterAll
   static void tearDown() {
     closeWebDriver();

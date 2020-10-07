@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.impl.Plugins.inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PluginsTest {
+final class PluginsTest {
   @Test
   void loadsDefaultImplementationsFromMetaInf() {
     assertThat(inject(ElementDescriber.class)).isInstanceOf(SelenideElementDescriber.class);

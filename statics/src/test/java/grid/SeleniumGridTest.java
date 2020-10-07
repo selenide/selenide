@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SeleniumGridTest extends AbstractGridTest {
+final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";

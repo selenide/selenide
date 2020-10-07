@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FileUploadToGridTest extends AbstractGridTest {
+final class FileUploadToGridTest extends AbstractGridTest {
   @BeforeEach
   void openFileUploadForm() {
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";

@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ParentTest extends ITest {
+final class ParentTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
     openFile("page_with_selects_without_jquery.html");

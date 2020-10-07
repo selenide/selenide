@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class GetPrecedingCommandTest implements WithAssertions {
+final class GetPrecedingCommandTest implements WithAssertions {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);

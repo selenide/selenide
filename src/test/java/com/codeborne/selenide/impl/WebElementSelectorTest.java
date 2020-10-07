@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class WebElementSelectorTest {
+final class WebElementSelectorTest {
   private WebElementSelector selector = new WebElementSelector();
   private Browser browser = new Browser("zopera", false);
   private JSWebDriver webDriver = mock(JSWebDriver.class);

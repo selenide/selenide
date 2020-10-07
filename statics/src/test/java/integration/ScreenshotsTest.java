@@ -17,7 +17,7 @@ import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ScreenshotsTest extends IntegrationTest {
+final class ScreenshotsTest extends IntegrationTest {
   @RegisterExtension static ScreenShooterExtension screenshotPerTest = new ScreenShooterExtension();
   private final ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 

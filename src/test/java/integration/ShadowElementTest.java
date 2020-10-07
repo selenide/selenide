@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.shadowCss;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ShadowElementTest extends ITest {
+final class ShadowElementTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_shadow_dom.html");

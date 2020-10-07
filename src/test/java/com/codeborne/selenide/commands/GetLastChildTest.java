@@ -13,20 +13,15 @@ import java.lang.reflect.Field;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GetLastChildTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private SelenideElement mockedElement;
-  private Find findMock;
-  private GetLastChild getLastChildCommand;
+final class GetLastChildTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final Find findMock = mock(Find.class);
+  private final GetLastChild getLastChildCommand = new GetLastChild(findMock);
 
   @BeforeEach
   void setup() {
-    findMock = mock(Find.class);
-    getLastChildCommand = new GetLastChild(findMock);
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedElement = mock(SelenideElement.class);
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(findMock.execute(proxy, locator, By.xpath("*[last()]"), 0)).thenReturn(mockedElement);
   }

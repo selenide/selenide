@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StopwatchTest {
-  private Stopwatch stopwatch = new Stopwatch(100);
+final class StopwatchTest {
+  private final Stopwatch stopwatch = new Stopwatch(100);
 
   @Test
   void timeout_is_not_reached() throws InterruptedException {

@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
  * Element '#page' is 800x600 -> its center is 400x300.
  * Click to (400+123, 300+222) -> (523, 522)
  */
-class ClickRelativeTest extends IntegrationTest {
+final class ClickRelativeTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_relative_click_position.html");

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class InputFieldTest extends ITest {
+final class InputFieldTest extends ITest {
   @BeforeEach
   void setup() {
     openFile("html5_input.html?" + System.currentTimeMillis());

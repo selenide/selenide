@@ -6,7 +6,7 @@ import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
-class InvalidStateExceptionTest implements WithAssertions {
+final class InvalidStateExceptionTest implements WithAssertions {
   private Driver driver = new DriverStub();
 
   @Test

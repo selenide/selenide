@@ -8,7 +8,7 @@ import java.io.File;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FilenameRegexFilterTest {
+final class FilenameRegexFilterTest {
   private final FileFilter filter = new FilenameRegexFilter("cv-\\d+.pdf");
 
   @Test

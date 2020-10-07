@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.value;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ReplacingElementTest extends ITest {
+final class ReplacingElementTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_replacing_elements.html");

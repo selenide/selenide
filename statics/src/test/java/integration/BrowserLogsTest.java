@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
-class BrowserLogsTest extends IntegrationTest {
+final class BrowserLogsTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     assumeFalse(isFirefox(),

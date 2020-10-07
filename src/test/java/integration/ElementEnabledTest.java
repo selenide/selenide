@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ElementEnabledTest extends ITest {
+final class ElementEnabledTest extends ITest {
 
   @BeforeEach
   void setUp() {

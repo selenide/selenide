@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-class BrowserResizerTest {
+final class BrowserResizerTest {
   private final BrowserResizer factory = spy(new BrowserResizer());
   private final WebDriver webdriver = mock(WebDriver.class, RETURNS_DEEP_STUBS);
   private final SelenideConfig config = new SelenideConfig();

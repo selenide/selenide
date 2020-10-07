@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class WebElementWrapperTest implements WithAssertions {
+final class WebElementWrapperTest implements WithAssertions {
   private SelenideConfig config = new SelenideConfig();
   private WebDriver webDriver = mock(FirefoxDriver.class);
   private Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);

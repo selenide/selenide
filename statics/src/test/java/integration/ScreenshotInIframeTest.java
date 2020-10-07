@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ScreenshotInIframeTest extends IntegrationTest {
+final class ScreenshotInIframeTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
     openFile("page_with_iframe.html");

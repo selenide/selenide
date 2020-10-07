@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class SelenideFieldDecoratorTest implements WithAssertions {
+final class SelenideFieldDecoratorTest implements WithAssertions {
   private TestPage page = new TestPage();
   private Config config = mock(Config.class);
   private WebDriver webDriver = mock(WebDriver.class);

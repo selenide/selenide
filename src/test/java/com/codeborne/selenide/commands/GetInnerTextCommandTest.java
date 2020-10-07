@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetInnerTextCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private SelenideElement mockedElement = mock(SelenideElement.class);
-  private GetInnerText getInnerTextCommand = new GetInnerText();
+final class GetInnerTextCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final GetInnerText getInnerTextCommand = new GetInnerText();
 
   @BeforeEach
   void setup() {

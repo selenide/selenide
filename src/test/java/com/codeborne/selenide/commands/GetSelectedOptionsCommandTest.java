@@ -1,8 +1,5 @@
 package com.codeborne.selenide.commands;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -13,14 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetSelectedOptionsCommandTest implements WithAssertions {
-  private SelenideElement proxy = mock(SelenideElement.class);
-  private WebElementSource locator = mock(WebElementSource.class);
-  private GetSelectedOptions getSelectedOptionsCommand = new GetSelectedOptions();
+final class GetSelectedOptionsCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final GetSelectedOptions getSelectedOptionsCommand = new GetSelectedOptions();
   private List<WebElement> mMockedElementsList;
 
   @BeforeEach

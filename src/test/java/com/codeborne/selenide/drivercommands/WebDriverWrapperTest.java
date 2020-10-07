@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-class WebDriverWrapperTest {
+final class WebDriverWrapperTest {
 
   @Test
   void close_closesTheBrowser() {

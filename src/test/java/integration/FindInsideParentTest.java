@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 
-class FindInsideParentTest extends ITest {
+final class FindInsideParentTest extends ITest {
   @BeforeEach
   void openTestPage() {
     openFile("long_ajax_request.html");

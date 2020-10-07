@@ -14,7 +14,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class BySelectorCollectionTest implements WithAssertions {
+final class BySelectorCollectionTest implements WithAssertions {
   private final Driver driver = mock(Driver.class);
   private final SelenideElement mockedWebElement = mock(SelenideElement.class);
 

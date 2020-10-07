@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-class DownloadFileTest implements WithAssertions {
+final class DownloadFileTest implements WithAssertions {
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = mock(Driver.class);
   private final DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);

@@ -15,13 +15,13 @@ import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 
-class ListSizeMismatchTest implements WithAssertions {
-  private int expectedSize = 10;
-  private Driver driver = new DriverStub();
-  private WebElementsCollection collection = mockCollection("Collection description");
-  private List<WebElement> actualElementsList = asList(mockElement("Niff"), mockElement("Naff"), mockElement("Nuff"));
-  private Exception exception = new Exception("Something happened");
-  private long timeoutMs = 1000L;
+final class ListSizeMismatchTest implements WithAssertions {
+  private final int expectedSize = 10;
+  private final Driver driver = new DriverStub();
+  private final WebElementsCollection collection = mockCollection("Collection description");
+  private final List<WebElement> actualElementsList = asList(mockElement("Niff"), mockElement("Naff"), mockElement("Nuff"));
+  private final Exception exception = new Exception("Something happened");
+  private final long timeoutMs = 1000L;
 
   @BeforeEach
   void setUp() {

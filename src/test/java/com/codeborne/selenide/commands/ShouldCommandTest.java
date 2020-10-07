@@ -1,7 +1,5 @@
 package com.codeborne.selenide.commands;
 
-import java.lang.reflect.Field;
-
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
@@ -10,21 +8,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import java.lang.reflect.Field;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ShouldCommandTest implements WithAssertions {
-  private SelenideElement proxy;
-  private WebElementSource locator;
-  private Should shouldCommand;
-  private WebElement mockedFoundElement;
+final class ShouldCommandTest implements WithAssertions {
+  private final SelenideElement proxy = mock(SelenideElement.class);
+  private final WebElementSource locator = mock(WebElementSource.class);
+  private final Should shouldCommand = new Should();
+  private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    shouldCommand = new Should();
-    proxy = mock(SelenideElement.class);
-    locator = mock(WebElementSource.class);
-    mockedFoundElement = mock(WebElement.class);
     when(locator.getWebElement()).thenReturn(mockedFoundElement);
   }
 

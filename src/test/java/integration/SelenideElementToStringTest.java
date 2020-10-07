@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SelenideElementToStringTest extends ITest {
+final class SelenideElementToStringTest extends ITest {
   @Test
   void toStringMethodShowsElementDetails() {
     openFile("page_with_selects_without_jquery.html");
