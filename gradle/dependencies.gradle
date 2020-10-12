@@ -6,7 +6,7 @@ ext {
   testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
-  jettyVersion = '9.4.31.v20200723'
+  jettyVersion = '9.4.32.v20200930'
 }
 
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
     because 'used by webdrivermanager'
   }
 
-  implementation('org.apache.httpcomponents.client5:httpclient5:5.0.1') {
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.0.3') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
@@ -32,7 +32,7 @@ dependencies {
   compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  compileOnly("junit:junit:4.13")
+  compileOnly("junit:junit:4.13.1")
   compileOnly("org.testng:testng:$testngVersion") { transitive = false }
 
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
