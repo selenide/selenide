@@ -3,6 +3,8 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
 import com.codeborne.selenide.collections.ExactTexts;
+import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
+import com.codeborne.selenide.collections.ItemWithText;
 import com.codeborne.selenide.collections.ListSize;
 import com.codeborne.selenide.collections.NoneMatch;
 import com.codeborne.selenide.collections.SizeGreaterThan;
@@ -12,15 +14,16 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-import com.codeborne.selenide.collections.ItemWithText;
 import com.codeborne.selenide.impl.WebElementsCollection;
+
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
@@ -168,6 +171,30 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition itemWithText(String expectedText) {
     return new ItemWithText(expectedText);
+  }
+
+  /**
+   * Checks that given collection has given texts in any order (each collection element EQUALS TO corresponding text)
+   *
+   * <p>NB! Case sensitive</p>
+   *
+   * @param expectedTexts Expected texts in any order in the collection
+   */
+  @CheckReturnValue
+  public static CollectionCondition exactTextsCaseSensitiveInAnyOrder(List<String> expectedTexts) {
+    return new ExactTextsCaseSensitiveInAnyOrder(expectedTexts);
+  }
+
+  /**
+   * Checks that given collection has given texts in any order (each collection element EQUALS TO corresponding text)
+   *
+   * <p>NB! Case sensitive</p>
+   *
+   * @param expectedTexts Expected texts in any order in the collection
+   */
+  @CheckReturnValue
+  public static CollectionCondition exactTextsCaseSensitiveInAnyOrder(String... expectedTexts) {
+    return new ExactTextsCaseSensitiveInAnyOrder(expectedTexts);
   }
 
   /**
