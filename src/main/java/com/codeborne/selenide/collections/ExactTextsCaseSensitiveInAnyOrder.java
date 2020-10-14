@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
 
@@ -22,10 +23,12 @@ public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
       return false;
     }
 
+    List<String> elementsTexts = elements.stream().map(WebElement::getText).collect(Collectors.toList());
+
     for (String expectedText : expectedTexts) {
       boolean found = false;
-      for (WebElement element : elements) {
-        if (Html.text.equalsCaseSensitive(element.getText(), expectedText)) {
+      for (String elementText : elementsTexts) {
+        if (Html.text.equalsCaseSensitive(elementText, expectedText)) {
           found = true;
         }
       }
