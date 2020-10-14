@@ -8,7 +8,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ExactTextsInAnyOrderTest implements WithAssertions {
+class ExactTextsCaseSensitiveInAnyOrderTest implements WithAssertions {
 
   @Test
   void shouldMatchWithSameOrder() {
