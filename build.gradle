@@ -37,13 +37,17 @@ repositories {
 dependencies {
   compile('com.codeborne:selenide:5.14.2')
   compile('io.appium:java-client:7.3.0')
-  testCompile('junit:junit:4.13')
+  testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }
 
 task libs(type: Sync) {
   from configurations.compileClasspath
   from configurations.testCompile
   into "$buildDir/lib"
+}
+
+tasks.withType(Test) {
+  useJUnitPlatform()
 }
 
 compileJava.dependsOn libs
