@@ -1,0 +1,25 @@
+name: Run tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  run-tests-job:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: actions/setup-node@v2-beta
+      with:
+        node-version: '12'
+    - name: Install appium
+      run: npm install -g appium@1.18.2
+    - name: Run appium
+      run: appium &
+    - name: Run tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 28
+        script: ./gradlew clean check --info
