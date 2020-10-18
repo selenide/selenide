@@ -12,26 +12,28 @@ import org.slf4j.LoggerFactory;
 import static integration.BaseIntegrationTest.browser;
 
 final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
-  private static final Logger log = LoggerFactory.getLogger(LogTestNameExtension.class);
-
   @Override
   public void beforeAll(ExtensionContext context) {
-    log.info("Starting {} @ {}", context.getDisplayName(), browser);
+    logger(context).info("Starting {} @ {}", context.getDisplayName(), browser);
   }
 
   @Override
   public void afterAll(ExtensionContext context) {
-    log.info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
+    logger(context).info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
   }
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    log.info("  starting {} ...", context.getDisplayName());
+    logger(context).info("  starting {} ...", context.getDisplayName());
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
-    log.info("  finished {} - {}", context.getDisplayName(), verdict(context));
+    logger(context).info("  finished {} - {}", context.getDisplayName(), verdict(context));
+  }
+
+  private Logger logger(ExtensionContext context) {
+    return LoggerFactory.getLogger(context.getTestClass().orElse(LogTestNameExtension.class));
   }
 
   private String verdict(ExtensionContext context) {
