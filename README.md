@@ -58,32 +58,18 @@ See [Frequently asked questions](http://selenide.org/faq.html)
 - Small step do dramatically improve your tests speed -- read a [post](https://medium.com/@rosolko/boost-you-autotests-with-fast-authorization-b3eee52ecc19) on medium
 - Another way to improve tests speed -- read a [post](https://medium.com/@rosolko/fast-authorization-level-local-storage-6c84e9b3cef1) on medium
 
-## How to build Selenide?
+## Contributing
 
-    git clone https://github.com/selenide/selenide.git
-    cd selenide
-    ./gradlew jar
-
-After build you'll find Selenide's .jar file under `build/libs/` directory.
-
-To build Selenide on Windows use `gradlew.bat jar` command.
+Contributions to Selenide are both welcomed and appreciated. 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for specific guidelines.
 
 Feel free to fork, clone, build, run tests and contribute pull requests for Selenide!
 
-## Run test locally inside docker containers
-
-- Syncing browser images from existing configuration file
-  - Install [jq](https://stedolan.github.io/jq)
-  - Extract image names from JSON and automatically pull them:
-     > cat /config/selenoid/browsers.json | jq -r '..|.image?|strings' | xargs -I{} docker pull {}
-- Start selenoid container
-  - Install [docker](https://www.docker.com/products/docker-desktop)
-  - Based on your operation system execute script. Check official [document](https://aerokube.com/selenoid/latest/#_option_2_start_selenoid_container) for correct script.
-- Start tests passing `selenide.remote` configuration variable with `http://localhost:4444/wd/hub` value
 
 ## Authors
 
-Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2015.
+Selenide was originally designed and developed by [Andrei Solntsev](http://asolntsev.github.io/) in 2011-2020
+ and is maintained by [a group of enthusiast](https://github.com/selenide/selenide/people).
 
 ## Thanks
 
