@@ -57,6 +57,7 @@ See [Frequently asked questions](http://selenide.org/faq.html)
 - Set-up environment with gradle, junit5, allure and selenide -- read a [post](https://medium.com/@rosolko/simple-allure-2-configuration-for-gradle-8cd3810658dd) on medium, grab from [github](https://github.com/rosolko/allure-gradle-configuration)
 - Small step do dramatically improve your tests speed -- read a [post](https://medium.com/@rosolko/boost-you-autotests-with-fast-authorization-b3eee52ecc19) on medium
 - Another way to improve tests speed -- read a [post](https://medium.com/@rosolko/fast-authorization-level-local-storage-6c84e9b3cef1) on medium
+- [Configure Selenide to work with Selenoid](https://medium.com/@rosolko/configure-selenide-to-work-with-selenoid-8835cd6dc7d2)
 
 ## Contributing
 

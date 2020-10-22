@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.16.0 (planned to 1x.10.2020)
+## 5.16.0 (planned to 2x.10.2020)
 * #1051 Selenide plugins system
 
 ## 5.15.1 (released 03.10.2020)
