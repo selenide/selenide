@@ -23,3 +23,8 @@ jobs:
       with:
         api-level: 28
         script: ./gradlew clean check --info
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: test-report
+        path: build/reports/
