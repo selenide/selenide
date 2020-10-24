@@ -6,7 +6,7 @@ ext {
   testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
-  jettyVersion = '9.4.32.v20200930'
+  jettyVersion = '9.4.33.v20201020'
 }
 
 dependencies {
@@ -27,8 +27,8 @@ dependencies {
 
   compileOnly('com.browserup:browserup-proxy-core:2.1.1')
   testCompile('com.browserup:browserup-proxy-core:2.1.1')
-  compileOnly('io.netty:netty-all:4.1.52.Final')
-  testCompile('io.netty:netty-all:4.1.52.Final')
+  compileOnly('io.netty:netty-all:4.1.53.Final')
+  testCompile('io.netty:netty-all:4.1.53.Final')
   compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
@@ -40,7 +40,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.5.13')
+  testImplementation('org.mockito:mockito-core:3.5.15')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'
