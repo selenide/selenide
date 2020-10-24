@@ -8,6 +8,8 @@ import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.util.Objects;
+
 import static org.apache.commons.lang3.StringUtils.substring;
 
 public class ErrorMessages {
@@ -39,10 +41,15 @@ public class ErrorMessages {
   }
 
   public static String screenshot(Driver driver) {
-    return screenshot(driver.config(), ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
+    String url = driver.getWebDriver().getCurrentUrl();
+    String screenshotPath = ScreenShotLaboratory.getInstance().formatScreenShotPath(driver);
+    return screenshot(driver.config(), screenshotPath);
+  }
+  public static String screenshot(Config config, String screenshotPath) {
+    return screenshot(config, null, screenshotPath);
   }
 
-  public static String screenshot(Config config, String screenshotPath) {
+  public static String screenshot(Config config, String url, String screenshotPath) {
     if (!config.screenshots()) {
       return "";
     }
@@ -53,7 +60,11 @@ public class ErrorMessages {
 
     if (config.savePageSource() && !screenshotPath.endsWith(".html")) {
       String htmlFilePath = getHtmlFilePath(screenshotPath);
-      return String.format("%nScreenshot: %s%nPage source: %s", screenshotPath, htmlFilePath);
+      if (Objects.nonNull(url)) {
+        return String.format("%nURL: %s%nScreenshot: %s%nPage source: %s", url, screenshotPath, htmlFilePath);
+      } else  {
+        return String.format("%nScreenshot: %s%nPage source: %s", screenshotPath, htmlFilePath);
+      }
     }
     else if (screenshotPath.endsWith(".html")) {
       return String.format("%nPage source: %s", screenshotPath);
