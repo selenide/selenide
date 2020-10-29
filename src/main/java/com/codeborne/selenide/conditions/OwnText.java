@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.GetOwnText.getOwnText;
@@ -33,4 +34,9 @@ public class OwnText extends Condition {
     return String.format("%s '%s'", getName(), expectedText);
   }
 
+  @Nullable
+  @Override
+  public String actualValue(Driver driver, WebElement element) {
+    return getOwnText(driver, element);
+  }
 }

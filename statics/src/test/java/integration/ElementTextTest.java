@@ -59,5 +59,6 @@ final class ElementTextTest extends IntegrationTest {
     $("#parent_div").shouldHave(exactOwnText("Big papa"));
     $("#parent_div").shouldNotHave(exactOwnText("papa"));
     $("#parent_div").shouldNotHave(exactOwnText("Son"));
-    $("#parent_div").shouldNotHave(exactOwnText("Daughter"));  }
+    $("#parent_div").shouldNotHave(exactOwnText("Daughter"));
+  }
 }
