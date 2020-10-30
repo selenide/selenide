@@ -39,6 +39,11 @@ final class HrefTest {
   }
 
   @Test
+  void hrefContainingEncodedSpace() {
+    assertThat(new Href("some%20file.pdf").apply(driver, link("https://dropbox.com/some%20file.pdf"))).isTrue();
+  }
+
+  @Test
   void decodesUrl() {
     Href condition = new Href("");
     assertThat(condition.decode("https://yandex.ee")).isEqualTo("https://yandex.ee");
