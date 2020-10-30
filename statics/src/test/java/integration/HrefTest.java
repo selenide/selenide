@@ -33,5 +33,6 @@ final class HrefTest extends IntegrationTest {
     $("a", 1).shouldHave(href("/files/hello_world.txt?pause=2000"));
     $("a", 2).shouldHave(href("/files/файл-с-русским-названием.txt"));
     $("a", 3).shouldHave(href("/files/файл-с-запрещёнными-символами.txt"));
+    $(byText("Check href value")).shouldHave(href("unexisting%20file%20encoded.png"));
   }
 }

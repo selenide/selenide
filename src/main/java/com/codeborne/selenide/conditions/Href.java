@@ -19,9 +19,11 @@ public class Href extends AttributeWithValue {
   @CheckReturnValue
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    String fullUrl = decode(getAttributeValue(element));
+    String href = getAttributeValue(element);
+    String fullUrl = decode(href);
     return fullUrl.endsWith(expectedAttributeValue) ||
-      fullUrl.endsWith(expectedAttributeValue + "/");
+      fullUrl.endsWith(expectedAttributeValue + "/") ||
+      href.endsWith(expectedAttributeValue);
   }
 
   String decode(String url) {
