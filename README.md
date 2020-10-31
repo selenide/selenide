@@ -9,7 +9,7 @@
 
 [![Join the chat at https://gitter.im/codeborne/selenide](https://img.shields.io/badge/welcome%20to-chat-green.svg)](https://gitter.im/codeborne/selenide?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Присоединяйся к чату https://gitter.im/codeborne/selenide-ru](https://img.shields.io/badge/%D0%B7%D0%B0%D1%85%D0%BE%D0%B4%D0%B8%20%D0%B2-%D1%87%D0%B0%D1%82-green.svg)](https://gitter.im/codeborne/selenide-ru?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Follow](https://img.shields.io/twitter/follow/jselenide.svg?style=social&label=Follow)](https://twitter.com/jselenide)
+[![Follow](https://img.shields.io/twitter/follow/selenide.svg?style=social&label=Follow)](https://twitter.com/selenide)
 [![Slack chat](https://img.shields.io/badge/slack-chat-yellow.svg)](https://testers.io/messages/selenide)
 [![Слак чат](https://img.shields.io/badge/слак-чат-yellow.svg)](https://softwaretesters.slack.com/messages/selenide_ru)
 [![Telegram чат](https://img.shields.io/badge/Telegram-%D1%87%D0%B0%D1%82-blue.svg)](https://t.me/selenide_ru)
@@ -19,7 +19,7 @@
 Selenide is a framework for writing easy-to-read and easy-to-maintain automated tests in Java.
 It defines concise fluent API, natural language assertions and does some magic for ajax-based applications to let you focus entirely on the business logic of your tests.
 
-Selenide is based on and is compatible to Selenium WebDriver 2.0 and 3.0
+Selenide is based on and is compatible to Selenium WebDriver 2.0+ and 3.0+
 
     @Test
     public void testLogin() {
