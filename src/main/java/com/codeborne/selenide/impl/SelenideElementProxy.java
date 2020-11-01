@@ -5,12 +5,9 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
-import com.codeborne.selenide.ex.ElementIsNotClickableException;
-import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 
@@ -25,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.logevents.ErrorsCollector.validateAssertionMode;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.Arrays.asList;
@@ -50,6 +46,7 @@ class SelenideElementProxy implements InvocationHandler {
   ));
 
   private final WebElementSource webElementSource;
+  private final ExceptionWrapper exceptionWrapper = new ExceptionWrapper();
 
   protected SelenideElementProxy(WebElementSource webElementSource) {
     this.webElementSource = webElementSource;
@@ -123,29 +120,12 @@ class SelenideElementProxy implements InvocationHandler {
     }
     while (!stopwatch.isTimeoutReached());
 
-    if (lastError instanceof UIAssertionError) {
-      throw lastError;
-    }
-    else if (lastError instanceof InvalidElementStateException) {
-      throw new InvalidStateException(driver(), lastError);
-    }
-    else if (isElementNotClickableException(lastError)) {
-      throw new ElementIsNotClickableException(driver(), lastError);
-    }
-    else if (lastError instanceof WebDriverException) {
-      throw webElementSource.createElementNotFoundError(exist, lastError);
-    }
-    throw lastError;
+    throw exceptionWrapper.wrap(lastError, webElementSource);
   }
 
   @CheckReturnValue
   static boolean isSelenideElementMethod(Method method) {
     return SelenideElement.class.isAssignableFrom(method.getDeclaringClass());
-  }
-
-  @CheckReturnValue
-  private boolean isElementNotClickableException(Throwable e) {
-    return e instanceof WebDriverException && e.getMessage().contains("is not clickable");
   }
 
   @CheckReturnValue
