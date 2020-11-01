@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static java.util.stream.Collectors.joining;
+
 @ParametersAreNonnullByDefault
 public class And extends Condition {
 
@@ -44,6 +46,11 @@ public class And extends Condition {
   @CheckReturnValue
   @Override
   public String toString() {
-    return lastFailedCondition == null ? super.toString() : lastFailedCondition.toString();
+    return lastFailedCondition == null ? getDefaultDescription() : lastFailedCondition.toString();
+  }
+
+  private String getDefaultDescription() {
+    String conditionsToString = conditions.stream().map(Condition::toString).collect(joining(" and "));
+    return String.format("%s: %s", getName(), conditionsToString);
   }
 }
