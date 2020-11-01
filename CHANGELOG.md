@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.16.0 (planned to 2x.10.2020)
+* Improve AND condition description
 * #1051 Selenide plugins system
 * #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)
 
