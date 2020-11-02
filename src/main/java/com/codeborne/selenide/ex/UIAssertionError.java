@@ -3,6 +3,7 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import org.openqa.selenium.WebDriverException;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,13 +54,14 @@ public class UIAssertionError extends AssertionError {
   }
 
   public static Error wrap(Driver driver, Error error, long timeoutMs) {
-    if (Cleanup.of.isInvalidSelectorError(error))
-      return error;
-
-    return wrapThrowable(driver, error, timeoutMs);
+    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
   }
 
-  private static Error wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
+  public static Throwable wrap(Driver driver, WebDriverException error, long timeoutMs) {
+    return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
+  }
+
+  private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
