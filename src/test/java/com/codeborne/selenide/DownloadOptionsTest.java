@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
+import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
@@ -44,5 +45,20 @@ final class DownloadOptionsTest {
     assertThat(options.getMethod()).isEqualTo(FOLDER);
     assertThat(options.getTimeout(4000)).isEqualTo(1234);
     assertThat(options.getFilter()).usingRecursiveComparison().isEqualTo(withExtension("ppt"));
+  }
+
+  @Test
+  void printsOptionsToTestReport() {
+    assertThat(using(PROXY))
+      .hasToString("method: PROXY");
+
+    assertThat(using(PROXY).withTimeout(9999))
+      .hasToString("method: PROXY, timeout: 9999 ms");
+
+    assertThat(using(HTTPGET).withTimeout(9999).withFilter(withExtension("ppt")))
+      .hasToString("method: HTTPGET, timeout: 9999 ms, filter: with extension \"ppt\"");
+
+    assertThat(using(FOLDER).withFilter(withExtension("exe")))
+      .hasToString("method: FOLDER, filter: with extension \"exe\"");
   }
 }

@@ -22,7 +22,11 @@ public class DownloadOptions {
   }
 
   public long getTimeout(long defaultValue) {
-    return timeout == UNSPECIFIED_TIMEOUT ? defaultValue : timeout;
+    return hasSpecifiedTimed() ? timeout : defaultValue;
+  }
+
+  private boolean hasSpecifiedTimed() {
+    return timeout != UNSPECIFIED_TIMEOUT;
   }
 
   public FileFilter getFilter() {
@@ -39,7 +43,14 @@ public class DownloadOptions {
 
   @Override
   public String toString() {
-    return String.format("method=%s, timeout=%s ms, filter='%s'", method, timeout, filter.description());
+    if (hasSpecifiedTimed() && !filter.isEmpty())
+      return String.format("method: %s, timeout: %s ms, filter:%s", method, timeout, filter.description());
+    else if (hasSpecifiedTimed())
+      return String.format("method: %s, timeout: %s ms", method, timeout);
+    else if (!filter.isEmpty())
+      return String.format("method: %s, filter:%s", method, filter.description());
+    else
+      return String.format("method: %s", method);
   }
 
   public static DownloadOptions using(FileDownloadMode method) {

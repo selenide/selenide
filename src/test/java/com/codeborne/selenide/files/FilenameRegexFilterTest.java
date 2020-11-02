@@ -23,4 +23,9 @@ final class FilenameRegexFilterTest {
   void description() {
     assertThat(filter.description()).isEqualTo(" with file name matching \"cv-\\d+.pdf\"");
   }
+
+  @Test
+  void isNotEmpty() {
+    assertThat(filter.isEmpty()).isFalse();
+  }
 }

@@ -28,4 +28,8 @@ final class ExtensionFilterTest {
     assertThat(filter.description()).isEqualTo(" with extension \"pdf\"");
   }
 
+  @Test
+  void isNotEmpty() {
+    assertThat(filter.isEmpty()).isFalse();
+  }
 }
