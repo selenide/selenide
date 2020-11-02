@@ -23,4 +23,9 @@ final class FilenameFilterTest {
   void description() {
     assertThat(filter.description()).isEqualTo(" with file name \"cv.pdf\"");
   }
+
+  @Test
+  void isNotEmpty() {
+    assertThat(filter.isEmpty()).isFalse();
+  }
 }

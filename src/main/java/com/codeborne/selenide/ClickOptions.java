@@ -45,4 +45,12 @@ public class ClickOptions {
   public ClickOptions offset(int offsetX, int offsetY) {
     return new ClickOptions(clickMethod, offsetX, offsetY);
   }
+
+  @Override
+  public String toString() {
+    if (offsetX == 0 && offsetY == 0)
+      return String.format("method: %s", clickMethod);
+    else
+      return String.format("method: %s, offsetX: %s, offsetY: %s", clickMethod, offsetX, offsetY);
+  }
 }

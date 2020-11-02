@@ -25,4 +25,8 @@ final class EmptyFileFilterTest {
     assertThat(filter.description()).isEqualTo("");
   }
 
+  @Test
+  void isEmpty() {
+    assertThat(filter.isEmpty()).isTrue();
+  }
 }
