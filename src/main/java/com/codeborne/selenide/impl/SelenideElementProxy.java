@@ -12,6 +12,7 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
@@ -69,17 +70,27 @@ class SelenideElementProxy implements InvocationHandler {
       return result;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
+      Throwable wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
       SelenideLogger.commitStep(log, wrappedError);
-      if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
-        return proxy;
-      else
-        throw wrappedError;
+      return continueOrBreak(proxy, method, wrappedError);
+    }
+    catch (WebDriverException error) {
+      Throwable wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
+      SelenideLogger.commitStep(log, wrappedError);
+      return continueOrBreak(proxy, method, wrappedError);
     }
     catch (RuntimeException error) {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
+  }
+
+  @Nonnull
+  private Object continueOrBreak(Object proxy, Method method, Throwable wrappedError) throws Throwable {
+    if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
+      return proxy;
+    else
+      throw wrappedError;
   }
 
   private Driver driver() {

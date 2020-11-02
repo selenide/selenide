@@ -1,12 +1,16 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
+import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Selenide.$;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Click with offset - calculates offset from the center of clicked element.
@@ -53,5 +57,19 @@ final class ClickRelativeTest extends IntegrationTest {
     $("#page").click(usingJavaScript().offsetX(123));
 
     $("#coords").should(matchText("(523, 300)"));
+  }
+
+  @Test
+  void screenshotIsTaken_ifClickWithOffset_getsOutsideOfElement() {
+    Configuration.timeout = 123;
+
+    assertThatThrownBy(() -> $("#page").click(usingDefaultMethod().offsetX(9999999)))
+      .isInstanceOf(UIAssertionError.class)
+      .hasMessageContaining("MoveTargetOutOfBoundsException")
+      .hasMessageContaining("out of bounds")
+      .hasMessageContaining("Screenshot:")
+      .hasMessageContaining("Page source:")
+      .hasMessageContaining("Timeout: 123 ms.")
+      .hasCauseInstanceOf(MoveTargetOutOfBoundsException.class);
   }
 }
