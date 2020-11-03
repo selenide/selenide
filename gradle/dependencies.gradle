@@ -40,7 +40,7 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.5.15')
+  testImplementation('org.mockito:mockito-core:3.6.0')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'
