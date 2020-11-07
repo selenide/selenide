@@ -1,7 +1,5 @@
 package com.codeborne.selenide.files;
 
-import com.codeborne.selenide.proxy.DownloadedFile;
-
 import static org.apache.commons.io.FilenameUtils.isExtension;
 
 class ExtensionFilter implements FileFilter {

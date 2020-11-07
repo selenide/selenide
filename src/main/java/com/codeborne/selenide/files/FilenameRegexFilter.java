@@ -1,7 +1,5 @@
 package com.codeborne.selenide.files;
 
-import com.codeborne.selenide.proxy.DownloadedFile;
-
 import java.util.regex.Pattern;
 
 class FilenameRegexFilter implements FileFilter {

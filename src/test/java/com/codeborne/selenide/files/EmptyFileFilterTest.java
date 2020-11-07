@@ -1,6 +1,5 @@
 package com.codeborne.selenide.files;
 
-import com.codeborne.selenide.proxy.DownloadedFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

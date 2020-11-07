@@ -4,6 +4,7 @@ import com.browserup.bup.filters.ResponseFilter;
 import com.browserup.bup.util.HttpMessageContents;
 import com.browserup.bup.util.HttpMessageInfo;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.Downloads;
 import com.codeborne.selenide.impl.HttpHelper;

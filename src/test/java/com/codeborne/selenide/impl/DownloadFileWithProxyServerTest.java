@@ -3,7 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
-import com.codeborne.selenide.proxy.DownloadedFile;
+import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.assertj.core.api.WithAssertions;

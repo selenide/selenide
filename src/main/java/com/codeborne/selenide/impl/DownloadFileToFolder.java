@@ -4,7 +4,7 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.files.FileFilter;
-import com.codeborne.selenide.proxy.DownloadedFile;
+import com.codeborne.selenide.files.DownloadedFile;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;

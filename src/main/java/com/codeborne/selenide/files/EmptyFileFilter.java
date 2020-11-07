@@ -1,7 +1,5 @@
 package com.codeborne.selenide.files;
 
-import com.codeborne.selenide.proxy.DownloadedFile;
-
 class EmptyFileFilter implements FileFilter {
   @Override
   public boolean match(DownloadedFile file) {

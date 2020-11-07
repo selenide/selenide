@@ -1,4 +1,4 @@
-package com.codeborne.selenide.proxy;
+package com.codeborne.selenide.files;
 
 import org.junit.jupiter.api.Test;
 
