@@ -24,4 +24,9 @@ public class Not extends Condition {
   public String actualValue(Driver driver, WebElement element) {
     return condition.actualValue(driver, element);
   }
+
+  @Override
+  public String toString() {
+    return "not " + condition.toString();
+  }
 }

@@ -34,6 +34,16 @@ final class TextTest implements WithAssertions {
     assertThat(new Text("Hello World").apply(driver, select("Hello", " World"))).isTrue();
   }
 
+  @Test
+  void to_string() {
+    assertThat(new Text("Hello World")).hasToString("text 'Hello World'");
+  }
+
+  @Test
+  void negate_to_string() {
+    assertThat(new Text("Hello World").negate()).hasToString("not text 'Hello World'");
+  }
+
   private WebElement elementWithText(String text) {
     WebElement webElement = mock(WebElement.class);
     when(webElement.getText()).thenReturn(text);
