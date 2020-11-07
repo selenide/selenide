@@ -216,7 +216,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * NB! Order of windows/tabs can be different in different browsers, see Selenide tests.
    * @param index index of window (0-based)
    */
-  @CheckReturnValue
   @Nonnull
   public WebDriver window(int index) {
     try {
@@ -233,7 +232,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param index index of window (0-based)
    * @param duration the timeout duration. It overrides default Config.timeout()
    */
-  @CheckReturnValue
   @Nonnull
   public WebDriver window(int index, Duration duration) {
     try {
@@ -248,7 +246,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    */
   @Override
-  @CheckReturnValue
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle) {
     try {
@@ -263,7 +260,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * @param nameOrHandleOrTitle name or handle or title of window/tab
    * @param duration the timeout duration. It overrides default Config.timeout()
    */
-  @CheckReturnValue
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
     try {
@@ -277,7 +273,6 @@ public class SelenideTargetLocator implements TargetLocator {
    * Switch to window/tab by name/handle/title except some windows handles
    * @param title title of window/tab
    */
-  @CheckReturnValue
   @Nonnull
   private static WebDriver windowByTitle(WebDriver driver, String title) {
     Set<String> windowHandles = driver.getWindowHandles();
