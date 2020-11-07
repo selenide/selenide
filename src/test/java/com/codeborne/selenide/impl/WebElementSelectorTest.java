@@ -23,10 +23,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class WebElementSelectorTest {
-  private WebElementSelector selector = new WebElementSelector();
-  private Browser browser = new Browser("zopera", false);
-  private JSWebDriver webDriver = mock(JSWebDriver.class);
-  private SearchContext parent = mock(WebElement.class);
+  private final WebElementSelector selector = new WebElementSelector();
+  private final Browser browser = new Browser("zopera", false);
+  private final JSWebDriver webDriver = mock(JSWebDriver.class);
+  private final SearchContext parent = mock(WebElement.class);
 
   @Test
   void findElement_byCss() {

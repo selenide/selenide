@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ElementFinderTest implements WithAssertions {
-  private Driver driver = mock(Driver.class);
+  private final Driver driver = mock(Driver.class);
 
   @Test
   void testToStringForFinderByCssSelectors() {

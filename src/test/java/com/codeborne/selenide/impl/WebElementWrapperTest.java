@@ -19,10 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class WebElementWrapperTest implements WithAssertions {
-  private SelenideConfig config = new SelenideConfig();
-  private WebDriver webDriver = mock(FirefoxDriver.class);
-  private Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);
-  private WebElement element = createWebElement();
+  private final SelenideConfig config = new SelenideConfig();
+  private final WebDriver webDriver = mock(FirefoxDriver.class);
+  private final Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);
+  private final WebElement element = createWebElement();
 
   private WebElement createWebElement() {
     WebElement element = mock(WebElement.class);

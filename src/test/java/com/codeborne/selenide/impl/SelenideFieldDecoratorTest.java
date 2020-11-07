@@ -23,12 +23,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 final class SelenideFieldDecoratorTest implements WithAssertions {
-  private TestPage page = new TestPage();
-  private Config config = mock(Config.class);
-  private WebDriver webDriver = mock(WebDriver.class);
-  private Driver driver = new DriverStub(config, null, webDriver, null);
-  private SelenidePageFactory pageFactory = new SelenidePageFactory();
-  private SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, driver, webDriver);
+  private final TestPage page = new TestPage();
+  private final Config config = mock(Config.class);
+  private final WebDriver webDriver = mock(WebDriver.class);
+  private final Driver driver = new DriverStub(config, null, webDriver, null);
+  private final SelenidePageFactory pageFactory = new SelenidePageFactory();
+  private final SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, driver, webDriver);
 
   @Test
   void usesDefaultElementLocatorFactory() throws NoSuchFieldException {

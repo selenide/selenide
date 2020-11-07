@@ -6,26 +6,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ErrorsCollectorTest implements WithAssertions {
-  private ErrorsCollector errorsCollector;
+  private final ErrorsCollector errorsCollector = new ErrorsCollector();
   private final LogEvent mockedInProgressEvent = mock(LogEvent.class);
   private final LogEvent mockedPassedEvent = mock(LogEvent.class);
   private final LogEvent mockedFailedEvent = mock(LogEvent.class);
-  private Field errorsField;
   private final String defaultErrorMessage = "Couldn't find an element";
   private final String defaultTestName = "ITestName";
 
   @BeforeEach
-  void setup() throws NoSuchFieldException {
-    errorsCollector = new ErrorsCollector();
-    errorsField = errorsCollector.getClass().getDeclaredField("errors");
-    errorsField.setAccessible(true);
+  void setup() {
     when(mockedInProgressEvent.getStatus()).thenReturn(LogEvent.EventStatus.IN_PROGRESS);
     when(mockedPassedEvent.getStatus()).thenReturn(LogEvent.EventStatus.PASS);
     when(mockedFailedEvent.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
@@ -33,8 +28,8 @@ final class ErrorsCollectorTest implements WithAssertions {
   }
 
   @Test
-  void testOnEvent() throws IllegalAccessException {
-    List<Throwable> errors = (List<Throwable>) errorsField.get(errorsCollector);
+  void onEvent() {
+    List<Throwable> errors = errorsCollector.getErrors();
 
     errorsCollector.afterEvent(mockedInProgressEvent);
     assertThat(errors)
@@ -55,8 +50,8 @@ final class ErrorsCollectorTest implements WithAssertions {
   }
 
   @Test
-  void testClearMethod() throws IllegalAccessException {
-    List<Throwable> errors = (List<Throwable>) errorsField.get(errorsCollector);
+  void clearMethod() {
+    List<Throwable> errors = errorsCollector.getErrors();
 
     errorsCollector.afterEvent(mockedFailedEvent);
     errorsCollector.afterEvent(mockedFailedEvent);
@@ -71,10 +66,11 @@ final class ErrorsCollectorTest implements WithAssertions {
   }
 
   @Test
-  void testFailIfErrorMethodWhenOnlyOneError() {
+  void failIfErrorMethodWhenOnlyOneError() {
     errorsCollector.afterEvent(mockedFailedEvent);
     try {
       errorsCollector.failIfErrors(defaultTestName);
+      fail("Expected SoftAssertionError");
     } catch (SoftAssertionError error) {
       assertThat(error)
         .withFailMessage("I couldn't find default error message in error message")
@@ -83,7 +79,7 @@ final class ErrorsCollectorTest implements WithAssertions {
   }
 
   @Test
-  void testFailIfErrorMethodWhenMoreThenOneError() {
+  void failIfErrorMethodWhenMoreThenOneError() {
     LogEvent mockedFailedEvent2 = mock(LogEvent.class);
     String failedEvent2Message = "Second failure";
     when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
@@ -93,6 +89,7 @@ final class ErrorsCollectorTest implements WithAssertions {
     errorsCollector.afterEvent(mockedFailedEvent2);
     try {
       errorsCollector.failIfErrors(defaultTestName);
+      fail("Expected SoftAssertionError");
     } catch (SoftAssertionError error) {
       assertThat(error)
         .as("Error title")

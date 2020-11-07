@@ -10,6 +10,7 @@ import java.util.List;
 import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static java.lang.System.lineSeparator;
+import static java.util.Collections.unmodifiableList;
 
 @ParametersAreNonnullByDefault
 public class ErrorsCollector implements LogEventListener {
@@ -31,6 +32,10 @@ public class ErrorsCollector implements LogEventListener {
 
   public void clear() {
     errors.clear();
+  }
+
+  List<Throwable> getErrors() {
+    return unmodifiableList(errors);
   }
 
   public void failIfErrors(String testName) {

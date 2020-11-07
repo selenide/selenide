@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 
 final class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
   private static final String SOME_CAP = "some.cap";
-  private AbstractDriverFactory driverFactory;
+  private final AbstractDriverFactory driverFactory = new ChromeDriverFactory();
   private final Proxy proxy = mock(Proxy.class);
   private final SelenideConfig config = new SelenideConfig();
   private final Browser browser = new Browser(config.browser(), config.headless());
@@ -26,7 +26,6 @@ final class TransferBrowserCapabilitiesFromConfigurationTest implements WithAsse
 
   @BeforeEach
   void createFactory() {
-    driverFactory = new ChromeDriverFactory();
     config.browserCapabilities().setCapability(SOME_CAP, "SOME_VALUE_FROM_CONFIGURATION");
   }
 

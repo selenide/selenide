@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class CollectionElementByConditionTest implements WithAssertions {
-  private Driver driver = new DriverStub();
+  private final Driver driver = new DriverStub();
 
   @Test
   void wrap() {
