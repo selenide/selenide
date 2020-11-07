@@ -28,7 +28,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
  */
 @ParametersAreNonnullByDefault
 public class ScreenShooter extends TestWatcher {
-  private final Logger log = LoggerFactory.getLogger(getClass());
+  private static final Logger log = LoggerFactory.getLogger(ScreenShooter.class);
 
   public boolean captureSuccessfulTests;
 
