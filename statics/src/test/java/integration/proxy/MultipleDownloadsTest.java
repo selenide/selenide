@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MultipleDownloadsTest extends IntegrationTest {
   @BeforeEach
   void setUp() {
-    closeWebDriver();
     useProxy(true);
   }
 
