@@ -117,6 +117,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
     chromePreferences.put("plugins.always_open_pdf_externally", true);
+    chromePreferences.put("profile.default_content_setting_values.automatic_downloads", 1);
 
     if (config.remote() == null) {
       chromePreferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
