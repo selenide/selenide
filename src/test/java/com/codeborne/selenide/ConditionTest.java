@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.have;
@@ -96,18 +95,6 @@ final class ConditionTest {
   @Test
   void textCaseSensitiveToString() {
     assertThat(textCaseSensitive("John Malcovich")).hasToString("textCaseSensitive 'John Malcovich'");
-  }
-
-  @Test
-  void exactTextIsCaseInsensitive() {
-    WebElement element = elementWithText("John Malkovich");
-    assertThat(exactText("john malkovich").apply(driver, element)).isTrue();
-    assertThat(exactText("john").apply(driver, element)).isFalse();
-  }
-
-  @Test
-  void exactTextToString() {
-    assertThat(exactText("John Malcovich")).hasToString("exact text 'John Malcovich'");
   }
 
   @Test
