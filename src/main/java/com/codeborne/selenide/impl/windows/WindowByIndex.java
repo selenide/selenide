@@ -6,9 +6,11 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class WindowByIndex implements ExpectedCondition<WebDriver> {
   private final int index;
 
