@@ -20,9 +20,9 @@ jobs:
       - name: Grid tests
         run: ./gradlew grid --no-daemon --console=plain --info --rerun-tasks
       - name: Chrome tests
-        run: ./gradlew chrome_headless --tests '**.*Frame*Test*' --info --rerun-tasks
+        run: ./gradlew chrome_headless --tests 'integration.**.*Frame*Test*' --info --rerun-tasks
       - name: Firefox tests
-        run: ./gradlew firefox_headless --tests '**.*Frame*Test*' --info --rerun-tasks
+        run: ./gradlew firefox_headless --tests 'integration.**.*Frame*Test*' --info --rerun-tasks
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
