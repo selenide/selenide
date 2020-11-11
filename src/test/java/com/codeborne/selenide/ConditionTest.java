@@ -15,7 +15,6 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
@@ -75,20 +74,6 @@ final class ConditionTest {
       .isTrue();
     assertThat(text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
       .isTrue();
-  }
-
-  @Test
-  void testExactTextCaseSensitive() {
-    WebElement element = elementWithText("John Malkovich");
-    assertThat(exactTextCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(exactTextCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
-    assertThat(exactTextCaseSensitive("John").apply(driver, element)).isFalse();
-  }
-
-  @Test
-  void exactTextCaseSensitiveToString() {
-    assertThat(exactTextCaseSensitive("John Malcovich"))
-      .hasToString("exact text case sensitive 'John Malcovich'");
   }
 
   @Test
