@@ -1,22 +1,20 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
-public class Text extends Condition {
-  protected final String text;
+public class Text extends TextCondition {
+
   public Text(final String text) {
-    super("text");
-    this.text = text;
+    super("text", text);
 
     if (isEmpty(text)) {
       throw new IllegalArgumentException("Argument must not be null or empty string. " +
@@ -25,11 +23,16 @@ public class Text extends Condition {
   }
 
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    String elementText = "select".equalsIgnoreCase(element.getTagName()) ?
-        getSelectedOptionsTexts(element) :
-        element.getText();
-    return Html.text.contains(elementText, this.text.toLowerCase());
+  protected boolean match(String actualText, String expectedText) {
+    return Html.text.contains(actualText, expectedText.toLowerCase());
+  }
+
+  @Nullable
+  @Override
+  protected String getText(WebElement element) {
+    return "select".equalsIgnoreCase(element.getTagName()) ?
+      getSelectedOptionsTexts(element) :
+      element.getText();
   }
 
   private String getSelectedOptionsTexts(WebElement element) {
@@ -39,10 +42,5 @@ public class Text extends Condition {
       sb.append(selectedOption.getText());
     }
     return sb.toString();
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s '%s'", getName(), text);
   }
 }

@@ -11,6 +11,9 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class TextTest implements WithAssertions {
@@ -42,6 +45,37 @@ final class TextTest implements WithAssertions {
   @Test
   void negate_to_string() {
     assertThat(new Text("Hello World").negate()).hasToString("not text 'Hello World'");
+  }
+
+  @Test
+  void shouldNotHaveActualValueBeforeAnyMatching() {
+    WebElement element = elementWithText("Hello");
+
+    assertThat(new Text("Hello World").actualValue(driver, element)).isNull();
+    verifyNoMoreInteractions(driver, element);
+  }
+
+  @Test
+  void shouldHaveCorrectActualValueAfterMatching() {
+    Text condition = new Text("Hello");
+    WebElement element = elementWithText("Hello World");
+    condition.apply(driver, element);
+
+    assertThat(condition.actualValue(driver, element)).isEqualTo("Hello World");
+    verify(element).getTagName();
+    verify(element).getText();
+    verifyNoMoreInteractions(driver, element);
+  }
+
+  @Test
+  void shouldHaveCorrectActualValueAfterSelectMatching() {
+    Text condition = new Text("Hello");
+    WebElement element = select("Hello", " World");
+    condition.apply(driver, element);
+
+    assertThat(condition.actualValue(driver, element)).isEqualTo("Hello World");
+    // One time in Text condition, second in selenium Select
+    verify(element, times(2)).getTagName();
   }
 
   private WebElement elementWithText(String text) {

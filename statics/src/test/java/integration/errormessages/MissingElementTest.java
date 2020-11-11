@@ -81,6 +81,7 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching(String.format("Element should have text 'expected text' \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: Dropdown list%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -110,6 +111,7 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: Dropdown list%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -140,6 +142,7 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: Dropdown list%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
@@ -154,6 +157,7 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementShould.class)
       .hasMessageMatching(String.format("Element should have text 'expected text' \\{By.tagName: h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: Dropdown list%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));
