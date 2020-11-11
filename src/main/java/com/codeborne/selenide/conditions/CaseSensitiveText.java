@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.joining;
 public class CaseSensitiveText extends TextCondition {
 
   public CaseSensitiveText(String expectedText) {
-    super("textCaseSensitive", expectedText);
+    super("text case sensitive", expectedText);
   }
 
   @Override
