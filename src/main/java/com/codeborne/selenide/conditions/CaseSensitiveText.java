@@ -8,7 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CaseSensitiveText extends TextCondition {
 
   public CaseSensitiveText(String expectedText) {
-    super("textCaseSensitive", expectedText);
+    super("text case sensitive", expectedText);
   }
 
   @Override
