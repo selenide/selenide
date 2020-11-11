@@ -1,6 +1,5 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
@@ -12,14 +11,18 @@ import java.util.List;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
-public class CaseSensitiveText extends Condition {
-  private final String expectedText;
+public class CaseSensitiveText extends TextCondition {
 
   public CaseSensitiveText(String expectedText) {
-    super("textCaseSensitive");
-    this.expectedText = expectedText;
+    super("textCaseSensitive", expectedText);
   }
 
+  @Override
+  protected boolean match(String actualText, String expectedText) {
+    return Html.text.containsCaseSensitive(actualText, expectedText);
+  }
+
+  ====================
   @Override
   public boolean apply(Driver driver, WebElement element) {
     String elementText = "select".equalsIgnoreCase(element.getTagName()) ?
@@ -33,8 +36,4 @@ public class CaseSensitiveText extends Condition {
     return selectedOptions.stream().map(WebElement::getText).collect(joining());
   }
 
-  @Override
-  public String toString() {
-    return String.format("%s '%s'", getName(), expectedText);
-  }
 }
