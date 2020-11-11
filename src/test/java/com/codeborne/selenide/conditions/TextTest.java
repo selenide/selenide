@@ -48,6 +48,26 @@ final class TextTest implements WithAssertions {
   }
 
   @Test
+  void apply_for_textInput_caseInsensitive() {
+    WebElement element = elementWithText("John Malkovich The First");
+    assertThat(new Text("john malkovich").apply(driver, element)).isTrue();
+  }
+
+  @Test
+  void apply_for_select_caseInsensitive() {
+    WebElement element = select("John", " Malkovich", " The First");
+    assertThat(new Text("john malkovich").apply(driver, element)).isTrue();
+  }
+
+  @Test
+  void apply_for_textInput_ignoresWhitespaces() {
+    assertThat(new Text("john the malkovich").apply(driver, elementWithText("John  the\n Malkovich")))
+      .isTrue();
+    assertThat(new Text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
+      .isTrue();
+  }
+
+  @Test
   void shouldNotHaveActualValueBeforeAnyMatching() {
     WebElement element = elementWithText("Hello");
 
