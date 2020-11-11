@@ -26,7 +26,6 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.visible;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,25 +75,6 @@ final class ConditionTest {
       .isTrue();
     assertThat(text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
       .isTrue();
-  }
-
-  @Test
-  void testTextCaseSensitive() {
-    WebElement element = elementWithText("John Malkovich The First");
-    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(textCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textCaseSensitiveIgnoresWhitespaces() {
-    WebElement element = elementWithText("John Malkovich\t The   \n First");
-    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(textCaseSensitive("John        Malkovich The   ").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textCaseSensitiveToString() {
-    assertThat(textCaseSensitive("John Malcovich")).hasToString("textCaseSensitive 'John Malcovich'");
   }
 
   @Test
