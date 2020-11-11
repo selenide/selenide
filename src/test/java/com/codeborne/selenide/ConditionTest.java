@@ -46,36 +46,6 @@ final class ConditionTest {
   }
 
   @Test
-  void textConditionChecksForSubstring() {
-    assertThat(text("John Malkovich The First").apply(driver, elementWithText("John Malkovich The First")))
-      .isTrue();
-    assertThat(text("John Malkovich First").apply(driver, elementWithText("John Malkovich The First")))
-      .isFalse();
-    assertThat(text("john bon jovi").apply(driver, elementWithText("John Malkovich The First")))
-      .isFalse();
-  }
-
-  private WebElement elementWithText(String text) {
-    WebElement element = mock(WebElement.class);
-    when(element.getText()).thenReturn(text);
-    return element;
-  }
-
-  @Test
-  void textConditionIsCaseInsensitive() {
-    WebElement element = elementWithText("John Malkovich The First");
-    assertThat(text("john malkovich").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textConditionIgnoresWhitespaces() {
-    assertThat(text("john the malkovich").apply(driver, elementWithText("John  the\n Malkovich")))
-      .isTrue();
-    assertThat(text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
-      .isTrue();
-  }
-
-  @Test
   void value() {
     WebElement element = elementWithAttribute("value", "John Malkovich");
     assertThat(Condition.value("Peter").apply(driver, element)).isFalse();
