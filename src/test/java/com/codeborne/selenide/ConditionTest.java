@@ -19,7 +19,6 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
-import static com.codeborne.selenide.Condition.matchesText;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
@@ -182,19 +181,6 @@ final class ConditionTest {
   void elementHasId() {
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide"))).isTrue();
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide is great"))).isFalse();
-  }
-
-  @Test
-  void elementMatchesText() {
-    assertThat(matchesText("selenide").apply(driver, elementWithText("selenidehello"))).isTrue();
-    assertThat(matchesText("selenide").apply(driver, elementWithText("  this is  selenide  the great "))).isTrue();
-    assertThat(matchesText("selenide\\s+hello\\s*").apply(driver, elementWithText("selenide    hello"))).isTrue();
-    assertThat(matchesText("selenide").apply(driver, elementWithText("selenite"))).isFalse();
-  }
-
-  @Test
-  void elementMatchTextToString() {
-    assertThat(matchesText("John Malcovich")).hasToString("match text 'John Malcovich'");
   }
 
   @Test
