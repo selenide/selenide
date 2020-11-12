@@ -9,24 +9,24 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SelectedText extends Condition {
   private final String expectedText;
+  private final ThreadLocal<String> actualResult = ThreadLocal.withInitial(() -> "");
 
   public SelectedText(String expectedText) {
     super("selectedText");
     this.expectedText = expectedText;
   }
 
-  private String actualResult = "";
-
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    actualResult = driver.executeJavaScript(
+    String selectedText = driver.executeJavaScript(
       "return arguments[0].value.substring(arguments[0].selectionStart, arguments[0].selectionEnd);", element);
-    return actualResult.equals(expectedText);
+    actualResult.set(selectedText);
+    return actualResult.get().equals(expectedText);
   }
 
   @Override
   public String actualValue(Driver driver, WebElement element) {
-    return "'" + actualResult + "'";
+    return "'" + actualResult.get() + "'";
   }
 
   @Override
