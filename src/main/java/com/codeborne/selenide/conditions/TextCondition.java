@@ -10,7 +10,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class TextCondition extends Condition {
   private final String expectedText;
-  private String actualText;
+  private final ThreadLocal<String> actualText = new ThreadLocal<>();
 
   public TextCondition(String name, String expectedText) {
     super(name);
@@ -25,14 +25,14 @@ public abstract class TextCondition extends Condition {
 
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    actualText = getText(element);
-    return match(actualText, expectedText);
+    actualText.set(getText(element));
+    return match(actualText.get(), expectedText);
   }
 
   @Nullable
   @Override
   public String actualValue(Driver driver, WebElement element) {
-    return actualText;
+    return actualText.get();
   }
 
   @Override
