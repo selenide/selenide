@@ -209,7 +209,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Element not found {.nonexistent}");
+        .hasMessageStartingWith("Element not found {ul/.nonexistent}");
       assertThat(expected)
         .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
@@ -228,7 +228,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Element not found {.nonexistent}");
+        .hasMessageStartingWith("Element not found {ul/.nonexistent}");
       assertThat(expected)
         .hasMessageContaining("Expected: visible");
       assertScreenshot(expected);
@@ -307,7 +307,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Element not found {.nonexistent}");
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse').findBy(css class 'detective')/.nonexistent}");
       assertThat(expected)
         .hasMessageContaining("Expected: exact text 'detective'");
       assertScreenshot(expected);
@@ -386,7 +386,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expected) {
       assertThat(expected)
-        .hasMessageStartingWith("Element not found {.nonexistent}");
+        .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse')[0]/.nonexistent}");
       assertThat(expected)
         .hasMessageContaining("Expected: exact text 'detective'");
       assertScreenshot(expected);
