@@ -33,6 +33,7 @@ public class Cleanup {
 
   public boolean isInvalidSelectorError(@Nullable Throwable error) {
     if (error == null) return false;
+    if (error instanceof AssertionError) return false;
 
     String message = error.getMessage();
     if (message == null) return false;

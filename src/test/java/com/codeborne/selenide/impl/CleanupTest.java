@@ -6,6 +6,10 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 final class CleanupTest implements WithAssertions {
   @Test
   void cleansWebDriverExceptionMessage() {
@@ -60,5 +64,13 @@ final class CleanupTest implements WithAssertions {
     NoSuchElementException error = new NoSuchElementException("Unable to locate element using css", cssException);
     assertThat(Cleanup.of.isInvalidSelectorError(error))
       .isTrue();
+  }
+
+  @Test
+  void shouldNotEvenCallGetMessageForAssertionErrors() {
+    AssertionError error = mock(AssertionError.class);
+    assertThat(Cleanup.of.isInvalidSelectorError(error)).isFalse();
+    verify(error, never()).getMessage();
+    verify(error, never()).getCause();
   }
 }
