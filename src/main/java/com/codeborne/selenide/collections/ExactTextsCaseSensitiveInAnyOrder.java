@@ -1,12 +1,15 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.impl.Html;
-
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
+@ParametersAreNonnullByDefault
 public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
 
   public ExactTextsCaseSensitiveInAnyOrder(String... exactTexts) {
@@ -17,13 +20,14 @@ public class ExactTextsCaseSensitiveInAnyOrder extends ExactTexts {
     super(exactTexts);
   }
 
+  @CheckReturnValue
   @Override
   public boolean test(List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {
       return false;
     }
 
-    List<String> elementsTexts = elements.stream().map(WebElement::getText).collect(Collectors.toList());
+    List<String> elementsTexts = elements.stream().map(WebElement::getText).collect(toList());
 
     for (String expectedText : expectedTexts) {
       boolean found = false;
