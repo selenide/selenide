@@ -5,6 +5,7 @@ import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -30,16 +31,19 @@ public class UIAssertionError extends AssertionError {
     this.driver = driver;
   }
 
+  @CheckReturnValue
   @Override
   public final String getMessage() {
     return super.getMessage() + uiDetails();
   }
 
+  @CheckReturnValue
   @Override
   public final String toString() {
     return getMessage();
   }
 
+  @CheckReturnValue
   protected String uiDetails() {
     return screenshot(driver.config(), screenshot) + timeout(timeoutMs) + causedBy(getCause());
   }
@@ -49,18 +53,22 @@ public class UIAssertionError extends AssertionError {
    *
    * @return empty string if screenshots are disabled
    */
+  @CheckReturnValue
   public String getScreenshot() {
     return screenshot;
   }
 
+  @CheckReturnValue
   public static Error wrap(Driver driver, Error error, long timeoutMs) {
     return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
   }
 
+  @CheckReturnValue
   public static Throwable wrap(Driver driver, WebDriverException error, long timeoutMs) {
     return Cleanup.of.isInvalidSelectorError(error) ? error : wrapThrowable(driver, error, timeoutMs);
   }
 
+  @CheckReturnValue
   private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(driver, error);
@@ -69,6 +77,7 @@ public class UIAssertionError extends AssertionError {
     return uiError;
   }
 
+  @CheckReturnValue
   private static UIAssertionError wrapToUIAssertionError(Driver driver, Throwable error) {
     String message = error.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(error.getMessage());
     return new UIAssertionError(driver, message, error);

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -19,6 +20,7 @@ public class TextsInAnyOrder extends ExactTexts {
     super(expectedTexts);
   }
 
+  @CheckReturnValue
   @Override
   public boolean test(List<WebElement> elements) {
     if (elements.size() != expectedTexts.size()) {

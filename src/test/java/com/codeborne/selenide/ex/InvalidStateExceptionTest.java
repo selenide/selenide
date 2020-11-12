@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
 final class InvalidStateExceptionTest implements WithAssertions {
-  private Driver driver = new DriverStub();
+  private final Driver driver = new DriverStub();
 
   @Test
   void constructorWithCause() {
