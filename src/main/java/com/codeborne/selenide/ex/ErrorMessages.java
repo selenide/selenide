@@ -1,7 +1,6 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
@@ -47,29 +46,10 @@ public class ErrorMessages {
 
   @CheckReturnValue
   public static String screenshot(Driver driver) {
-    return screenshot(driver.config(), ScreenShotLaboratory.getInstance().formatScreenShotPath(driver));
-  }
-
-  @CheckReturnValue
-  public static String screenshot(Config config, @Nullable String screenshotPath) {
-    if (!config.screenshots()) {
+    if (!driver.config().screenshots()) {
       return "";
     }
-
-    if (screenshotPath == null || screenshotPath.isEmpty()) {
-      return String.format("%nScreenshot: %s", screenshotPath);
-    }
-
-    if (config.savePageSource() && !screenshotPath.endsWith(".html")) {
-      String htmlFilePath = getHtmlFilePath(screenshotPath);
-      return String.format("%nScreenshot: %s%nPage source: %s", screenshotPath, htmlFilePath);
-    }
-    else if (screenshotPath.endsWith(".html")) {
-      return String.format("%nPage source: %s", screenshotPath);
-    }
-    else {
-      return String.format("%nScreenshot: %s", screenshotPath);
-    }
+    return ScreenShotLaboratory.getInstance().takeScreenshot(driver).summary();
   }
 
   @CheckReturnValue

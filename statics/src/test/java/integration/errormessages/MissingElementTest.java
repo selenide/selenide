@@ -68,7 +68,7 @@ final class MissingElementTest extends IntegrationTest {
           "Page source: " + path + html() + "%n" +
           "Timeout: 15 ms.%n" +
           "Caused by: NoSuchElementException:.*"));
-      assertThat(expected.getScreenshot()).matches(path + pngOrHtml());
+      assertThat(expected.getScreenshot().getImage()).matches(path + pngOrHtml());
     }
   }
 

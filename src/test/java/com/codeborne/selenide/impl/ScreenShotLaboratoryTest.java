@@ -42,37 +42,37 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void composesScreenshotNameFromTestClassAndMethod() {
     String expected = "/build/reports/tests/MyTest/helloWorldTest.12356789.png".replace('/', separatorChar);
-    assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest"))
-      .isEqualTo(workingDirectory + expected);
+    assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest").getImage())
+      .isEqualTo("file:" + workingDirectory + expected);
 
-    String expectedFileName = (workingDirectory + "/build/reports/tests/org/selenide/SelenideMethodsTest/" +
+    String expectedFileName = ("file:" + workingDirectory + "/build/reports/tests/org/selenide/SelenideMethodsTest/" +
       "userCanListMatchingSubElements.12356789.png").replace('/', separatorChar);
     assertThat(screenshots.takeScreenShot(
       driver,
       "org.selenide.SelenideMethodsTest",
-      "userCanListMatchingSubElements"))
+      "userCanListMatchingSubElements").getImage())
       .isEqualTo(expectedFileName);
   }
 
   @Test
   void composesScreenshotNameAsTimestampPlusCounter() {
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.0.png");
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.1.png");
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.2.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/12356789.0.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/12356789.1.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/12356789.2.png");
   }
 
   @Test
   void screenshotsCanByGroupedByTests() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
-    assertThat(screenshots.takeScreenShot(driver))
-      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
+    assertThat(screenshots.takeScreenshot(driver).getImage())
+      .isEqualTo("file:" + workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
 
     List<File> contextScreenshots = screenshots.finishContext();
     assertThat(contextScreenshots)
