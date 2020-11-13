@@ -45,7 +45,6 @@ final class ListSizeMismatchTest implements WithAssertions {
         "\t<div displayed:false>Naff</div>,%n" +
         "\t<div displayed:false>Nuff</div>%n" +
         "]%n" +
-        "Screenshot: null%n" +
         "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }
@@ -68,7 +67,6 @@ final class ListSizeMismatchTest implements WithAssertions {
         "\t<div displayed:false>Naff</div>,%n" +
         "\t<div displayed:false>Nuff</div>%n" +
         "]%n" +
-        "Screenshot: null%n" +
         "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }

@@ -80,7 +80,6 @@ final class CollectionElementByConditionTest implements WithAssertions {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
         "Expected: visible%n" +
-        "Screenshot: null%n" +
         "Timeout: 0 ms.%n" +
         "Caused by: NoSuchElementException: with class: employee"));
   }
@@ -100,7 +99,6 @@ final class CollectionElementByConditionTest implements WithAssertions {
     assertThat(elementNotFoundError)
       .hasMessage(String.format("Element not found {ul#employees li.employee.findBy(visible)}%n" +
         "Expected: Reason description%n" +
-        "Screenshot: null%n" +
         "Timeout: 0 ms.%n" +
         "Caused by: java.lang.Error: Error message"));
   }

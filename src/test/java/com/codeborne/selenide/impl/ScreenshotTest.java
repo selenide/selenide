@@ -15,8 +15,7 @@ class ScreenshotTest {
 
   @Test
   void summary_is_empty_if_no_files() {
-    assertThat(Screenshot.none().summary())
-      .isEqualTo(lineSeparator() + "Screenshot: null");
+    assertThat(Screenshot.none().summary()).isEqualTo("");
   }
 
   @Test

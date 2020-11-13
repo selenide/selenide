@@ -42,7 +42,7 @@ public class Screenshot {
       return String.format("%nScreenshot: %s", image);
     }
     else {
-      return String.format("%nScreenshot: null");
+      return "";
     }
   }
 

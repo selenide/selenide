@@ -31,7 +31,6 @@ final class TextMismatchTest implements WithAssertions {
       "Actual: [One, Two, Three]%n" +
       "Expected: [Four, Five, Six]%n" +
       "Collection: Collection description%n" +
-      "Screenshot: null%n" +
       "Timeout: 1 s."));
   }
 
@@ -44,7 +43,6 @@ final class TextMismatchTest implements WithAssertions {
       "Expected: [Four, Five, Six]%n" +
       "Because: it's said in doc%n" +
       "Collection: Collection description%n" +
-      "Screenshot: null%n" +
       "Timeout: 1 s."));
   }
 }
