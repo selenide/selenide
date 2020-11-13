@@ -58,8 +58,9 @@ public class ScreenShotLaboratory {
     return instance;
   }
 
-  private final Photographer photographer = inject(Photographer.class);
-  private final PageSourceExtractor extractor = inject(PageSourceExtractor.class);
+  private final Photographer photographer;
+  private final PageSourceExtractor extractor;
+  private final Clock clock;
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");
@@ -67,6 +68,13 @@ public class ScreenShotLaboratory {
   protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
+    this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
+  }
+
+  protected ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, Clock clock) {
+    this.photographer = photographer;
+    this.extractor = extractor;
+    this.clock = clock;
   }
 
   @CheckReturnValue
@@ -79,7 +87,7 @@ public class ScreenShotLaboratory {
   @Nonnull
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
-      methodName + '.' + timestamp();
+      methodName + '.' + clock.timestamp();
   }
 
   @CheckReturnValue
@@ -193,11 +201,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   protected String generateScreenshotFileName() {
-    return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
-  }
-
-  protected long timestamp() {
-    return System.currentTimeMillis();
+    return currentContext.get() + clock.timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
   @CheckReturnValue
