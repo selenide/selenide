@@ -24,7 +24,6 @@ final class ElementShouldTest implements WithAssertions {
       .hasMessage("Element should be visible {by.name: selenide}" + lineSeparator() +
         "Element: '<null displayed:false></null>'" + lineSeparator() +
         "Actual value: visible:false" + lineSeparator() +
-        "Screenshot: null" + lineSeparator() +
         "Timeout: 0 ms." + lineSeparator() +
         "Caused by: java.lang.Exception: Error message");
   }

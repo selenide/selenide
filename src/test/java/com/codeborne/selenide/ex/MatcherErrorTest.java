@@ -27,7 +27,6 @@ final class MatcherErrorTest {
         "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
         "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
         "]" + lineSeparator() +
-        "Screenshot: null" + lineSeparator() +
         "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }
@@ -43,7 +42,6 @@ final class MatcherErrorTest {
         "\t<div displayed:false>mr. %First</div>," + lineSeparator() +
         "\t<div displayed:false>mr. %Second</div>" + lineSeparator() +
         "]" + lineSeparator() +
-        "Screenshot: null" + lineSeparator() +
         "Timeout: 4 s." + lineSeparator() +
         "Caused by: NoSuchElementException: .third");
   }

@@ -46,9 +46,6 @@ public class ErrorMessages {
 
   @CheckReturnValue
   public static String screenshot(Driver driver) {
-    if (!driver.config().screenshots()) {
-      return "";
-    }
     return ScreenShotLaboratory.getInstance().takeScreenshot(driver).summary();
   }
 

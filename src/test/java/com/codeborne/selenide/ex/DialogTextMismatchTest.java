@@ -14,7 +14,6 @@ final class DialogTextMismatchTest implements WithAssertions {
     assertThat(dialogTextMismatch).hasMessage(String.format("Dialog text mismatch%n" +
       "Actual: Actual text%n" +
       "Expected: Expected text%n" +
-      "Screenshot: null%n" +
       "Timeout: 0 ms."));
   }
 }

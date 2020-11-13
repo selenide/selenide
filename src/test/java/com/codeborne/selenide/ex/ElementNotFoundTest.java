@@ -23,7 +23,6 @@ final class ElementNotFoundTest implements WithAssertions {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, By.id("Hello"), Condition.exist);
     String expectedMessage = String.format("Element not found {By.id: Hello}%n" +
       "Expected: exist%n" +
-      "Screenshot: null%n" +
       "Timeout: 0 ms.");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
@@ -33,7 +32,6 @@ final class ElementNotFoundTest implements WithAssertions {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist);
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
-      "Screenshot: null%n" +
       "Timeout: 0 ms.");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
   }
@@ -43,7 +41,6 @@ final class ElementNotFoundTest implements WithAssertions {
     ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist, new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
-      "Screenshot: null%n" +
       "Timeout: 0 ms.%n" +
       "Caused by: java.lang.Throwable: Error message");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);
@@ -61,7 +58,6 @@ final class ElementNotFoundTest implements WithAssertions {
       new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {mock collection description}%n" +
       "Expected: Exact texts [One, Two, Three]%n" +
-      "Screenshot: null%n" +
       "Timeout: 0 ms.%n" +
       "Caused by: java.lang.Throwable: Error message");
     assertThat(elementNotFoundById).hasMessage(expectedMessage);

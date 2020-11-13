@@ -65,7 +65,7 @@ final class ExactTextsTest implements WithAssertions {
 
     assertThatThrownBy(() -> exactTexts.fail(mockCollection("Collection description"), elements, cause, 10000))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessage(String.format("Element not found {Collection description}%nExpected: Exact texts [One]%nScreenshot: null%n" +
+      .hasMessage(String.format("Element not found {Collection description}%nExpected: Exact texts [One]%n" +
         "Timeout: 10 s.%n" +
         "Caused by: java.lang.IllegalArgumentException: bad thing happened"));
   }
@@ -90,7 +90,7 @@ final class ExactTextsTest implements WithAssertions {
         "Actual: [Hello]%n" +
         "Expected: [One]%n" +
         "Collection: Collection description%n" +
-        "Screenshot: null%nTimeout: 10 s."));
+        "Timeout: 10 s."));
   }
 
   @Test
@@ -105,7 +105,7 @@ final class ExactTextsTest implements WithAssertions {
       .isInstanceOf(TextsSizeMismatch.class)
       .hasMessageContaining("Actual: [One], List size: 1")
       .hasMessageContaining("Expected: [One, Two], List size: 2")
-      .hasMessageEndingWith(String.format("Collection: Collection description%nScreenshot: null%nTimeout: 10 s."));
+      .hasMessageEndingWith(String.format("Collection: Collection description%nTimeout: 10 s."));
   }
 
   @Test
