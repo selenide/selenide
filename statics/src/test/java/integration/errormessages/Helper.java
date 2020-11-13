@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Helper {
   public static void assertScreenshot(UIAssertionError expected) {
     if (WebDriverRunner.getWebDriver() instanceof TakesScreenshot) {
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
     }
   }

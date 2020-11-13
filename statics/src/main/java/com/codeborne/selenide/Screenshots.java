@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.ErrorMessages;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -25,8 +26,8 @@ public class Screenshots {
   }
 
   @CheckReturnValue
-  @Nullable
-  public static String takeScreenShot(String className, String methodName) {
+  @Nonnull
+  public static Screenshot takeScreenShot(String className, String methodName) {
     return screenshots.takeScreenShot(driver(), className, methodName);
   }
 

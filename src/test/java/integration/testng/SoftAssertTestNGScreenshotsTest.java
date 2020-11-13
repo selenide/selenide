@@ -61,7 +61,7 @@ public class SoftAssertTestNGScreenshotsTest extends AbstractSoftAssertTestNGTes
   }
 
   private void assertScreenshot(UIAssertionError expected) {
-    assertThat(expected.getScreenshot())
+    assertThat(expected.getScreenshot().getImage())
       .contains(driver.config().reportsFolder());
   }
 }
