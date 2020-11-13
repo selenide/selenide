@@ -5,144 +5,146 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.io.File.separatorChar;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
 final class ScreenShotLaboratoryTest implements WithAssertions {
+  private final String workingDirectory = System.getProperty("user.dir");
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
-  private final SelenideConfig config = new SelenideConfig().savePageSource(false);
+  private final SelenideConfig config = new SelenideConfig().savePageSource(false).reportsFolder("build/reports/tests");
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
+  private final Photographer photographer = mock(Photographer.class);
+  private final PageSourceExtractor extractor = mock(PageSourceExtractor.class);
+  private final Clock clock = new DummyClock(12356789L);
+  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory(photographer, extractor, clock);
 
-  private final ScreenShotLaboratory screenshots = new ScreenShotLaboratory() {
-    @Override
-    public String takeScreenShot(@Nonnull Driver driver, @Nonnull String fileName) {
-      addToHistory(new File(fileName));
-      return fileName;
-    }
-
-    @Override
-    protected long timestamp() {
-      return 12356789L;
-    }
-  };
+  @BeforeEach
+  void setUp() {
+    when(photographer.takeScreenshot(any(), eq(BYTES))).thenReturn(Optional.of("siski".getBytes(UTF_8)));
+  }
 
   @Test
   void composesScreenshotNameFromTestClassAndMethod() {
-    String expected = "MyTest/helloWorldTest.12356789".replace('/', separatorChar);
-    assertThat(screenshots.takeScreenShot(null, "MyTest", "helloWorldTest"))
-      .isEqualTo(expected);
+    String expected = "/build/reports/tests/MyTest/helloWorldTest.12356789.png".replace('/', separatorChar);
+    assertThat(screenshots.takeScreenShot(driver, "MyTest", "helloWorldTest"))
+      .isEqualTo(workingDirectory + expected);
 
-    String expectedFileName = ("com/codeborne/selenide/integrationtests/SelenideMethodsTest/" +
-      "userCanListMatchingSubElements.12356789").replace('/', separatorChar);
+    String expectedFileName = (workingDirectory + "/build/reports/tests/org/selenide/SelenideMethodsTest/" +
+      "userCanListMatchingSubElements.12356789.png").replace('/', separatorChar);
     assertThat(screenshots.takeScreenShot(
-      null,
-      "com.codeborne.selenide.integrationtests.SelenideMethodsTest",
+      driver,
+      "org.selenide.SelenideMethodsTest",
       "userCanListMatchingSubElements"))
       .isEqualTo(expectedFileName);
   }
 
   @Test
   void composesScreenshotNameAsTimestampPlusCounter() {
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("12356789.0");
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("12356789.1");
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("12356789.2");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.0.png");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.1.png");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/12356789.2.png");
   }
 
   @Test
   void screenshotsCanByGroupedByTests() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("ui/MyTest/test_some_method/12356789.0");
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("ui/MyTest/test_some_method/12356789.1");
-    assertThat(screenshots.takeScreenShot(null))
-      .isEqualTo("ui/MyTest/test_some_method/12356789.2");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
+    assertThat(screenshots.takeScreenShot(driver))
+      .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
 
     List<File> contextScreenshots = screenshots.finishContext();
     assertThat(contextScreenshots)
       .hasSize(3);
     assertThat(contextScreenshots.get(0))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
     assertThat(contextScreenshots.get(1))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
     assertThat(contextScreenshots.get(2))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.2"));
+      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
   }
 
   @Test
   void collectsAllScreenshots() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
     screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     screenshots.finishContext();
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
 
     List<File> allScreenshots = screenshots.getScreenshots();
     assertThat(allScreenshots)
       .hasSize(5);
     assertThat(allScreenshots.get(0))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
     assertThat(allScreenshots.get(1))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
     assertThat(allScreenshots.get(2))
-      .isEqualTo(new File("ui/YourTest/test_another_method/12356789.2"));
+      .isEqualTo(new File("build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
     assertThat(allScreenshots.get(3))
-      .hasToString("12356789.3");
+      .hasToString("build/reports/tests/12356789.3.png");
     assertThat(allScreenshots.get(4))
-      .hasToString("12356789.4");
+      .hasToString("build/reports/tests/12356789.4.png");
   }
 
   @Test
   void collectsAllThreadScreenshots() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
     screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     screenshots.finishContext();
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
 
     List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
     assertThat(allThreadScreenshots)
       .hasSize(5);
     assertThat(allThreadScreenshots.get(0))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.0"));
+      .hasToString("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
     assertThat(allThreadScreenshots.get(1))
-      .isEqualTo(new File("ui/MyTest/test_some_method/12356789.1"));
+      .hasToString("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
     assertThat(allThreadScreenshots.get(2))
-      .isEqualTo(new File("ui/YourTest/test_another_method/12356789.2"));
+      .hasToString("build/reports/tests/ui/YourTest/test_another_method/12356789.2.png");
     assertThat(allThreadScreenshots.get(3))
-      .hasToString("12356789.3");
+      .hasToString("build/reports/tests/12356789.3.png");
     assertThat(allThreadScreenshots.get(4))
-      .hasToString("12356789.4");
+      .hasToString("build/reports/tests/12356789.4.png");
   }
 
   @Test
   void collectsContextScreenshots() {
-    screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
-    screenshots.takeScreenShot(null);
+    screenshots.startContext("build/reports/tests/ui/MyTest/test_some_method/");
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenShot(driver);
 
     List<File> contextScreenshots = screenshots.getContextScreenshots();
     assertThat(contextScreenshots)
@@ -160,17 +162,17 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     assertThat(screenshots.getLastScreenshot())
       .isNull();
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString("12356789.0");
+      .hasToString("build/reports/tests/12356789.0.png");
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString("12356789.1");
+      .hasToString("build/reports/tests/12356789.1.png");
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .hasToString("12356789.2");
+      .hasToString("build/reports/tests/12356789.2.png");
   }
 
   @Test
@@ -178,17 +180,17 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     assertThat(screenshots.getLastThreadScreenshot())
       .isEmpty();
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("12356789.0"));
+      .hasValue(new File("build/reports/tests/12356789.0.png"));
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("12356789.1"));
+      .hasValue(new File("build/reports/tests/12356789.1.png"));
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("12356789.2"));
+      .hasValue(new File("build/reports/tests/12356789.2.png"));
   }
 
   @Test
@@ -199,17 +201,17 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.startContext("ui/MyTest/test_some_method/");
     assertThat(screenshots.getLastContextScreenshot())
       .isEmpty();
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("ui/MyTest/test_some_method/12356789.0"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("ui/MyTest/test_some_method/12356789.1"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
 
-    screenshots.takeScreenShot(null);
+    screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("ui/MyTest/test_some_method/12356789.2"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
   }
 
   @Test
