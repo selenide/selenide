@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.ex.ErrorMessages;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebElement;
 
@@ -17,6 +18,11 @@ import static com.codeborne.selenide.WebDriverRunner.driver;
 @ParametersAreNonnullByDefault
 public class Screenshots {
   public static ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
+
+  @CheckReturnValue
+  public static String saveScreenshotAndPageSource() {
+    return ErrorMessages.screenshot(driver());
+  }
 
   @CheckReturnValue
   @Nullable
