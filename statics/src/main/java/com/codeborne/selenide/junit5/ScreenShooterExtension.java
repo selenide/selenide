@@ -14,9 +14,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import static com.codeborne.selenide.WebDriverRunner.driver;
-import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
-
 /**
  * Use this class to automatically take screenshots in case of ANY errors in tests (not only Selenide errors).
  * <p>
@@ -101,11 +98,11 @@ public class ScreenShooterExtension implements BeforeEachCallback, AfterEachCall
   @Override
   public void afterEach(final ExtensionContext context) {
     if (captureSuccessfulTests) {
-      log.info(screenshot(driver()));
+      log.info(Screenshots.saveScreenshotAndPageSource());
     } else {
       context.getExecutionException().ifPresent(error -> {
         if (!(error instanceof UIAssertionError)) {
-          log.info(screenshot(driver()));
+          log.info(Screenshots.saveScreenshotAndPageSource());
         }
       });
     }
