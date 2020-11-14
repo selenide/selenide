@@ -5,6 +5,7 @@
 * Improve AND condition description
 * #1051 Selenide plugins system
 * #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)
+* #1307 Allow Chrome to download multiple files in one request (set as default setting)
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests
