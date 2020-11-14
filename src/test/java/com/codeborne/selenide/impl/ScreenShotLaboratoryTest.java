@@ -11,16 +11,20 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
 import static java.io.File.separatorChar;
+import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
@@ -244,5 +248,69 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void encodePath() {
     assertThat(screenshots.encodePath("/foo bar/boom room/pdf")).isEqualTo("/foo%20bar/boom%20room/pdf");
+  }
+
+  @Test
+  void convertsScreenshotFileNameToCIUrl() throws IOException {
+    config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
+
+    String screenshot = screenshots.takeScreenshot(driver).summary();
+    assertThat(screenshot)
+      .startsWith(String.format("%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
+      .endsWith(".png");
+  }
+
+  @Test
+  void convertsReportUrlForOutsideSavedScreenshot() throws IOException {
+    String reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
+    config.reportsUrl(reportsUrl);
+    config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath()); //directory, that not in 'user.dir'
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
+
+    String screenshot = screenshots.takeScreenshot(driver).summary();
+    assertThat(screenshot)
+      .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home directories")
+      .startsWith(String.format("%nScreenshot: %s", reportsUrl + new File(screenshot).getName()));
+  }
+
+  @Test
+  void returnsScreenshotFileName() throws IOException {
+    config.reportsUrl(null);
+    String currentDir = System.getProperty("user.dir");
+    if (separatorChar == '\\') {
+      currentDir = '/' + currentDir.replace('\\', '/');
+    }
+
+    currentDir = currentDir.replace(" ", "%20"); //the screenshot path uses %20 instead of the space character
+
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
+
+    String screenshot = screenshots.takeScreenshot(driver).summary();
+    assertThat(screenshot)
+      .startsWith(String.format("%nScreenshot: file:%s/build/reports/tests/", currentDir))
+      .endsWith(".png");
+  }
+
+  @Test
+  void doesNotAddScreenshot_if_screenshotsAreDisabled() {
+    config.screenshots(false);
+
+    String screenshot = screenshots.takeScreenshot(driver).summary();
+    assertThat(screenshot).isNullOrEmpty();
+    verify(webDriver, never()).getScreenshotAs(any());
+  }
+
+  @Test
+  void printHtmlPath_if_savePageSourceIsEnabled() throws IOException {
+    config.savePageSource(true);
+    config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
+    doReturn(new File("build/reports/page123.html")).when(extractor).extract(eq(config), eq(webDriver), any());
+    doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
+
+    Screenshot screenshot = screenshots.takeScreenshot(driver);
+    assertThat(screenshot.summary()).isEqualTo(
+      lineSeparator() + "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/12356789.0.png" +
+        lineSeparator() + "Page source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html");
   }
 }

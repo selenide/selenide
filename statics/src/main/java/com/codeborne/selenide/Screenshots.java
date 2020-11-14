@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.ErrorMessages;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebElement;
@@ -22,7 +21,7 @@ public class Screenshots {
 
   @CheckReturnValue
   public static String saveScreenshotAndPageSource() {
-    return ErrorMessages.screenshot(driver());
+    return screenshots.takeScreenshot(driver()).summary();
   }
 
   @CheckReturnValue

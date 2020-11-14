@@ -3,7 +3,6 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
-import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -42,11 +41,6 @@ public class ErrorMessages {
       }
     }
     return "";
-  }
-
-  @CheckReturnValue
-  public static String screenshot(Driver driver) {
-    return ScreenShotLaboratory.getInstance().takeScreenshot(driver).summary();
   }
 
   @CheckReturnValue
