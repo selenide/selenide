@@ -16,6 +16,7 @@ final class ElementFinderTest implements WithAssertions {
   void testToStringForFinderByCssSelectors() {
     SelenideElement parent = mock(SelenideElement.class);
     when(parent.toString()).thenReturn("table");
+    when(parent.getSearchCriteria()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
 
     assertThat(new ElementFinder(driver, null, By.id("app"), 0))
@@ -23,14 +24,15 @@ final class ElementFinderTest implements WithAssertions {
     assertThat(new ElementFinder(driver, null, By.id("app"), 3))
       .hasToString("{By.id: app[3]}");
     assertThat(new ElementFinder(driver, parent, By.id("app"), 0))
-      .hasToString("{By.id: app}");
+      .hasToString("{table/By.id: app}");
     assertThat(new ElementFinder(driver, parent, By.id("app"), 3))
-      .hasToString("{By.id: app[3]}");
+      .hasToString("{table/By.id: app[3]}");
   }
 
   @Test
   void testToStringForFinderByXpathExpiration() {
     SelenideElement parent = mock(SelenideElement.class);
+    when(parent.getSearchCriteria()).thenReturn("By.xpath: //table");
     when(parent.toString()).thenReturn("table");
     when(parent.getTagName()).thenReturn("table");
 
@@ -39,8 +41,8 @@ final class ElementFinderTest implements WithAssertions {
     assertThat(new ElementFinder(driver, null, By.xpath("//*[@id='app']"), 3))
       .hasToString("{By.xpath: //*[@id='app'][3]}");
     assertThat(new ElementFinder(driver, parent, By.xpath("//*[@id='app']"), 0))
-      .hasToString("{By.xpath: //*[@id='app']}");
+      .hasToString("{By.xpath: //table/By.xpath: //*[@id='app']}");
     assertThat(new ElementFinder(driver, parent, By.xpath("//*[@id='app']"), 3))
-      .hasToString("{By.xpath: //*[@id='app'][3]}");
+      .hasToString("{By.xpath: //table/By.xpath: //*[@id='app'][3]}");
   }
 }

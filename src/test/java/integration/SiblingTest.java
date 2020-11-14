@@ -30,7 +30,7 @@ final class SiblingTest extends ITest {
   void errorWhenSiblingAbsent() {
     assertThatThrownBy(() -> $("#multirowTableFirstRow").sibling(3).click())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.xpath: following-sibling::*[4]}");
+      .hasMessageStartingWith("Element not found {#multirowTableFirstRow/By.xpath: following-sibling::*[4]}");
   }
 
   @Test
@@ -48,6 +48,6 @@ final class SiblingTest extends ITest {
   void errorWhenPrecedingElementAbsent() {
     assertThatThrownBy(() -> $("#multirowTableSecondRow").preceding(3).click())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {By.xpath: preceding-sibling::*[4]}");
+      .hasMessageStartingWith("Element not found {#multirowTableSecondRow/By.xpath: preceding-sibling::*[4]}");
   }
 }

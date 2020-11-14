@@ -140,9 +140,18 @@ public class ElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
+    return parent == null ?
+      elementCriteria() :
+      (parent instanceof SelenideElement) ?
+        ((SelenideElement) parent).getSearchCriteria() + "/" + elementCriteria() :
+        elementCriteria();
+  }
+
+  @Nonnull
+  private String elementCriteria() {
     return index == 0 ?
-        describe.selector(criteria) :
-        describe.selector(criteria) + '[' + index + ']';
+      describe.selector(criteria) :
+      describe.selector(criteria) + '[' + index + ']';
   }
 
   @Override

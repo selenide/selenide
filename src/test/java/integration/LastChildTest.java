@@ -29,9 +29,11 @@ final class LastChildTest extends ITest {
 
   @Test
   void throwsExceptionWhenNoChildrenExist() {
+    String expectedError = String.format("Element not found {By.xpath: //span[@id='hello-world']" +
+      "/By.xpath: *[last()]}%nExpected: be visible");
     assertThatThrownBy(() -> $x("//span[@id='hello-world']").lastChild().should(be(visible)))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith(String.format("Element not found {By.xpath: *[last()]}%nExpected: be visible"));
+      .hasMessageStartingWith(expectedError);
   }
 
 }
