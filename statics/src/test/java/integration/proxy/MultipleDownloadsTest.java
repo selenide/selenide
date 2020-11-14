@@ -1,14 +1,18 @@
 package integration.proxy;
 
-import com.codeborne.selenide.files.FileFilters;
 import integration.IntegrationTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.FileFilters.withName;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MultipleDownloadsTest extends IntegrationTest {
   @BeforeEach
@@ -16,12 +20,16 @@ public class MultipleDownloadsTest extends IntegrationTest {
     closeWebDriver();
     useProxy(true);
   }
+
   @Test
   void downloadMultipleFiles() throws FileNotFoundException {
     open("/downloadMultipleFiles.html");
-    File text = $("#two-downloads").download(using(PROXY)
-      .withTimeout(6000).withFilter(FileFilters.withName("empty.html")));
-    Assertions.assertEquals("empty.html", text.getName());
-    Assertions.assertEquals(224, text.length());
+
+    File text = $("#multiple-downloads").download(
+      using(PROXY).withTimeout(4000).withFilter(withName("empty.html"))
+    );
+
+    assertEquals("empty.html", text.getName());
+    assertEquals(224, text.length());
   }
 }
