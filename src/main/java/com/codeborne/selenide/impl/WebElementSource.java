@@ -68,9 +68,11 @@ public abstract class WebElementSource {
 
     Throwable lastError = null;
     WebElement element = null;
+    Object actualValue = null;
     try {
       element = getWebElement();
-      if (check.apply(driver(), element)) {
+      actualValue = check.getActualValue(driver(), element);
+      if (check.apply(driver(), element, actualValue)) {
         return element;
       }
     }
@@ -88,10 +90,10 @@ public abstract class WebElementSource {
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, condition, element, actualValue, lastError);
     }
     else {
-      throw new ElementShould(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShould(driver(), getSearchCriteria(), prefix, condition, element, actualValue, lastError);
     }
     return null;
   }

@@ -569,8 +569,25 @@ public abstract class Condition {
    *
    * @param element given WebElement
    * @return true if element matches condition
+   *
+   * @deprecated Implement {@link #apply(Driver, WebElement, Object)} instead.
    */
-  public abstract boolean apply(Driver driver, WebElement element);
+  @Deprecated
+  public boolean apply(Driver driver, WebElement element) {
+    throw new UnsupportedOperationException("Condition.apply is not implemented");
+  }
+
+  /**
+   * Check if given element matches this condition.
+   *
+   * @param driver Selenide Driver
+   * @param element given WebElement
+   * @param actualValue the actual value of this element (that this condition is supposed to check)
+   * @return true if element matches condition
+   */
+  public boolean apply(Driver driver, WebElement element, @Nullable Object actualValue) {
+    return apply(driver, element);
+  }
 
   public boolean applyNull() {
     return absentElementMatchesCondition;
@@ -584,9 +601,26 @@ public abstract class Condition {
    * @param driver given driver
    * @param element given WebElement
    * @return any string that needs to be appended to error message.
+   *
+   * @deprecated Implement method {@link #formatActualValue(Object)} instead.
    */
   @Nullable
+  @Deprecated
   public String actualValue(Driver driver, WebElement element) {
+    return null;
+  }
+
+  /**
+   * Print out the actual value
+   * @param actualValue the actual value previously received using method {@link #getActualValue(Driver, WebElement)}
+   * @return String representation for error message
+   */
+  public String formatActualValue(@Nullable Object actualValue) {
+    return String.valueOf(actualValue);
+  }
+
+  @Nullable
+  public Object getActualValue(Driver driver, WebElement element) {
     return null;
   }
 

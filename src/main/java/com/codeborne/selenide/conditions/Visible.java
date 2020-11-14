@@ -6,7 +6,10 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static java.lang.Boolean.TRUE;
 
 @ParametersAreNonnullByDefault
 public class Visible extends Condition {
@@ -15,16 +18,21 @@ public class Visible extends Condition {
   }
 
   @Override
-  @CheckReturnValue
-  public boolean apply(Driver driver, WebElement element) {
+  public Boolean getActualValue(Driver driver, WebElement element) {
     return element.isDisplayed();
   }
 
   @Override
   @CheckReturnValue
+  public boolean apply(Driver driver, WebElement element, @Nullable Object actualVisibility) {
+    return actualVisibility == TRUE;
+  }
+
+  @Override
+  @CheckReturnValue
   @Nonnull
-  public String actualValue(Driver driver, WebElement element) {
-    return String.format("visible:%s", element.isDisplayed());
+  public String formatActualValue(@Nullable Object actualVisibility) {
+    return String.format("visible:%s", actualVisibility);
   }
 
   @Override

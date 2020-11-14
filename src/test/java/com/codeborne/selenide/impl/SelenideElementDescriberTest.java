@@ -44,7 +44,7 @@ final class SelenideElementDescriberTest implements WithAssertions {
 
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(driver, null, null, visible, webElement, null)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(driver, null, null, visible, webElement, null, null)).when(selenideElement).getTagName();
 
     assertThat(describe.briefly(driver, selenideElement))
       .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: disappeared]");

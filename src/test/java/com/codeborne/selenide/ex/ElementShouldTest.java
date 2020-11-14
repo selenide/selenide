@@ -1,12 +1,12 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Condition.appear;
 import static java.lang.System.lineSeparator;
 import static org.mockito.Mockito.mock;
 
@@ -18,7 +18,8 @@ final class ElementShouldTest implements WithAssertions {
     Driver driver = new DriverStub();
     WebElement webElementMock = mock(WebElement.class);
     Exception exception = new Exception("Error message");
-    ElementShould elementShould = new ElementShould(driver, searchCriteria, prefix, Condition.appear, webElementMock, exception);
+    ElementShould elementShould = new ElementShould(driver, searchCriteria, prefix, appear,
+      webElementMock, "visible:false", exception);
 
     assertThat(elementShould)
       .hasMessage("Element should be visible {by.name: selenide}" + lineSeparator() +

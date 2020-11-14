@@ -44,6 +44,16 @@ public class ErrorMessages {
   }
 
   @CheckReturnValue
+  static String actualValue(Condition condition, Driver driver, @Nullable WebElement element, @Nullable Object actualValue) {
+    if (actualValue != null) {
+      String formatted = condition.formatActualValue(actualValue);
+      return String.format("%nActual value: %s", formatted);
+    }
+    // For old Conditions that don't implement `getActualValue()` yet
+    return actualValue(condition, driver, element);
+  }
+
+  @CheckReturnValue
   static String causedBy(@Nullable Throwable cause) {
     if (cause == null) {
       return "";
