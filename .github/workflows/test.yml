@@ -25,6 +25,14 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-mozilla-daily/ppa
           sudo apt-get update
           sudo apt-get install firefox-trunk
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: ./gradlew ${{ matrix.gradle-task }} --no-daemon --console=plain -i
       - uses: actions/upload-artifact@v2
