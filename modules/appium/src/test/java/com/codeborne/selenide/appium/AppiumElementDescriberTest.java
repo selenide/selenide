@@ -2,7 +2,7 @@ package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.StaticDriver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
