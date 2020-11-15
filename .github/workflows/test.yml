@@ -9,6 +9,7 @@ jobs:
   run-tests-job:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         gradle-task: [ 'check', 'grid', 'firefox_headless', 'chrome_headless' ]
     steps:
