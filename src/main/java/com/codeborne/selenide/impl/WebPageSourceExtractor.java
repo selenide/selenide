@@ -22,7 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @ParametersAreNonnullByDefault
 public class WebPageSourceExtractor implements PageSourceExtractor {
   private static final Logger log = LoggerFactory.getLogger(WebPageSourceExtractor.class);
-  protected Set<String> printedErrors = new ConcurrentSkipListSet<>();
+  private final Set<String> printedErrors = new ConcurrentSkipListSet<>();
 
   @Nonnull
   @CheckReturnValue
@@ -32,30 +32,40 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
   }
 
   private File extract(Config config, WebDriver driver, String fileName, boolean retryIfAlert) {
-    File pageSource = new File(config.reportsFolder(), fileName + ".html");
+    File pageSource = createFile(config, fileName);
     try {
       writeToFile(driver.getPageSource(), pageSource);
-    } catch (UnhandledAlertException e) {
+    }
+    catch (UnhandledAlertException e) {
       if (retryIfAlert) {
         retryingExtractionOnAlert(config, driver, fileName, e);
-      } else {
+      }
+      else {
         printOnce("savePageSourceToFile", e);
       }
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       log.warn("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
       return pageSource;
-    } catch (RuntimeException e) {
+    }
+    catch (RuntimeException e) {
       log.error("Failed to save page source to {}", fileName, e);
       writeToFile(e.toString(), pageSource);
     }
     return pageSource;
   }
 
+  @Nonnull
+  protected File createFile(Config config, String fileName) {
+    return new File(config.reportsFolder(), fileName + ".html");
+  }
+
   protected void writeToFile(String content, File targetFile) {
     try (ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(UTF_8))) {
       FileHelper.copyFile(in, targetFile);
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       log.error("Failed to write file {}", targetFile.getAbsolutePath(), e);
     }
   }
@@ -64,7 +74,8 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
     if (!printedErrors.contains(action)) {
       log.error(error.getMessage(), error);
       printedErrors.add(action);
-    } else {
+    }
+    else {
       log.error("Failed to {}: {}", action, error);
     }
   }
@@ -75,7 +86,8 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
       log.error("{}: {}", e, alert.getText());
       alert.accept();
       extract(config, driver, fileName, false);
-    } catch (Exception unableToCloseAlert) {
+    }
+    catch (Exception unableToCloseAlert) {
       log.error("Failed to close alert", unableToCloseAlert);
     }
   }
