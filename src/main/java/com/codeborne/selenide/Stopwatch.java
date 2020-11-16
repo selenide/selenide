@@ -20,6 +20,8 @@ public class Stopwatch {
   }
 
   public void sleep(long milliseconds) {
+    if (isTimeoutReached()) return;
+
     try {
       Thread.sleep(milliseconds);
     } catch (InterruptedException e) {
