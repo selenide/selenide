@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
+import static java.nio.file.Files.createTempDirectory;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -120,7 +121,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
     closeWebDriver();
 
     try {
-      String downloadsFolder = "build/custom-folder";
+      String downloadsFolder = createTempDirectory("selenide-tests-custom-folder-proxy").toString();
       Configuration.downloadsFolder = downloadsFolder;
       openFile("page_with_uploads.html");
 

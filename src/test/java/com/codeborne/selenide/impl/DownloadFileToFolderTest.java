@@ -13,9 +13,9 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import static com.codeborne.selenide.impl.DownloadFileToFolder.isFileModifiedLaterThan;
+import static java.io.File.createTempFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
@@ -73,7 +73,7 @@ final class DownloadFileToFolderTest {
   }
 
   private File file(long modifiedAt) throws IOException {
-    File file = new File("build", UUID.randomUUID().toString());
+    File file = createTempFile("selenide-tests", "new-file");
     FileUtils.touch(file);
     file.setLastModified(modifiedAt);
     return file;

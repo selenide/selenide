@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
+import static java.nio.file.Files.createTempDirectory;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -121,7 +122,7 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
 
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
-    String downloadsFolder = "build/custom-folder";
+    String downloadsFolder = createTempDirectory("selenide-tests-custom-folder-get").toString();
     Configuration.downloadsFolder = downloadsFolder;
 
     File downloadedFile = $(byText("Download me")).download();
