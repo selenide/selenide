@@ -1,11 +1,12 @@
 # Changelog
 
-## 5.16.0 (planned to 2x.10.2020)
+## 5.16.0 (planned to 2x.11.2020)
 * Improve NOT condition description
 * Improve AND condition description
-* #1051 Selenide plugins system
 * #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)
 * #1307 Allow Chrome to download multiple files in one request (set as default setting)
+* #1051 Selenide plugins system
+* #1051 add extension point for downloading files from remote browsers
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests

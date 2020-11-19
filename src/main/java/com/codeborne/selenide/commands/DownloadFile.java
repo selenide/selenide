@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.codeborne.selenide.DownloadOptions.using;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class DownloadFile implements Command<File> {
@@ -32,7 +33,7 @@ public class DownloadFile implements Command<File> {
   private final DownloadFileToFolder downloadFileToFolder;
 
   public DownloadFile() {
-    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), new DownloadFileToFolder());
+    this(new DownloadFileWithHttpRequest(), new DownloadFileWithProxyServer(), inject(DownloadFileToFolder.class));
   }
 
   DownloadFile(DownloadFileWithHttpRequest httpget, DownloadFileWithProxyServer proxy, DownloadFileToFolder folder) {
