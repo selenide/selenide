@@ -1,0 +1,30 @@
+buildscript {
+  ext.versions = [
+      selenide: '5.16.0-SNAPSHOT',
+      browserupproxy: '2.1.1',
+      netty: '4.1.54.Final',
+      junit: '5.7.0',
+      assertj: '3.18.1',
+      slf4j: '1.7.30'
+  ]
+}
+
+dependencies {
+  implementation("com.codeborne:selenide:${versions.selenide}")
+  testRuntimeOnly("com.browserup:browserup-proxy-core:${versions.browserupproxy}")
+  testRuntimeOnly("io.netty:netty-all:${versions.netty}")
+  testRuntimeOnly("io.netty:netty-codec:${versions.netty}")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:${versions.junit}")
+  testImplementation("org.assertj:assertj-core:${versions.assertj}")
+  testRuntimeOnly("org.slf4j:slf4j-simple:${versions.slf4j}")
+}
+
+repositories {
+  jcenter()
+  maven {
+    url uri('https://oss.sonatype.org/content/repositories/snapshots/')
+    mavenContent {
+      snapshotsOnly()
+    }
+  }
+}

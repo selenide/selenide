@@ -1,0 +1,16 @@
+plugins {
+  id 'java-library'
+  id 'idea'
+  id 'maven'
+}
+
+group = 'org.selenide'
+archivesBaseName = 'selenide-selenoid'
+version = '1.0.0-SNAPSHOT'
+
+apply from: rootProject.file('gradle/compilation.gradle')
+apply from: rootProject.file('gradle/dependencies.gradle')
+apply from: rootProject.file('gradle/tests.gradle')
+apply from: rootProject.file('gradle/deploy.gradle')
+
+defaultTasks 'check'

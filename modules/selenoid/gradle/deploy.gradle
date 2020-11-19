@@ -1,0 +1,97 @@
+jar {
+  manifest {
+    attributes(
+      "Automatic-Module-Name": project.group + '.' + project.name,
+      "Implementation-Title": project.group + '.' + project.name,
+      "Implementation-Version": version,
+      "Implementation-Vendor": "selenide.org")
+  }
+  from sourceSets.main.output
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+javadoc {
+  failOnError = false
+  source = sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives jar
+  archives sourcesJar
+  archives javadocJar
+}
+
+
+if (project.hasProperty("signing.keyId")) {
+  apply plugin: 'signing'
+
+  signing {
+    sign configurations.archives
+  }
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: project.version.endsWith("-SNAPSHOT") ?
+          'https://oss.sonatype.org/content/repositories/snapshots/' :
+          'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+          authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
+        }
+
+        pom.project {
+          name archivesBaseName
+          packaging 'jar'
+          description 'Selenoid plugin for Selenide'
+          url 'https://github.com/selenide/selenide-selenoid'
+
+          scm {
+            url 'scm:git@github.com:selenide/selenide-selenoid.git'
+            connection 'scm:git@github.com:selenide/selenide-selenoid.git'
+            developerConnection 'scm:git@github.com:selenide/selenide-selenoid.git'
+          }
+
+          licenses {
+            license {
+              name 'MIT'
+              url 'https://opensource.org/licenses/MIT'
+              distribution 'repo'
+            }
+          }
+
+          developers {
+            developer {
+              id 'asolntsev'
+              name 'Andrei Solntsev'
+            }
+          }
+        }
+
+        //mess with the generated pom to set the 'packaging' tag
+        pom.withXml { XmlProvider xmlProvider ->
+          def xml = xmlProvider.asString()
+          def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
+
+          pomXml.version[0] + { packaging('jar') }
+
+          def newXml = new StringWriter()
+          def printer = new XmlNodePrinter(new PrintWriter(newXml))
+          printer.preserveWhitespace = true
+          printer.print(pomXml)
+          xml.setLength(0)
+          xml.append(newXml.toString())
+        }
+      }
+    }
+  }
+}

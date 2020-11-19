@@ -1,0 +1,13 @@
+test {
+  include 'org/selenide/selenoid/**/*'
+}
+
+tasks.withType(Test) {
+  useJUnitPlatform()
+  systemProperty('file.encoding', encoding)
+  systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
+  systemProperties += System.properties
+  outputs.upToDateWhen {
+    false
+  }
+}
