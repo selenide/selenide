@@ -4,6 +4,7 @@ import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +30,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
-@ExtendWith({ScreenShooterExtension.class, VideoExtension.class})
+@ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeAll
   static void resetSettingsBeforeClass() {
