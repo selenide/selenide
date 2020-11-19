@@ -6,7 +6,7 @@ ext {
   testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
-  jettyVersion = '9.4.33.v20201020'
+  jettyVersion = '9.4.34.v20201102'
 }
 
 dependencies {
@@ -25,10 +25,12 @@ dependencies {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
+  implementation('com.google.guava:guava:30.0-jre')
+
   compileOnly('com.browserup:browserup-proxy-core:2.1.1')
   testCompile('com.browserup:browserup-proxy-core:2.1.1')
-  compileOnly('io.netty:netty-all:4.1.53.Final')
-  testCompile('io.netty:netty-all:4.1.53.Final')
+  compileOnly('io.netty:netty-all:4.1.54.Final')
+  testCompile('io.netty:netty-all:4.1.54.Final')
   compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
