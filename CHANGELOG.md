@@ -1,12 +1,29 @@
 # Changelog
 
-## 5.16.0 (planned to 2x.11.2020)
-* Improve NOT condition description
-* Improve AND condition description
-* #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)
-* #1307 Allow Chrome to download multiple files in one request (set as default setting)
-* #1051 Selenide plugins system
+## 5.16.0 (released 20.11.2020)
+
+#### Selenide plugins:
+* #1051 implement Selenide plugins system  --  see PR #1264
+* #1051 add extension point for describing WebElement/AppiumElement
+* #1051 add extension point for customizing taking screenshots  --  see PR #1317
+* #1051 add extension point for customizing saving page source  --  see PR #1321
 * #1051 add extension point for downloading files from remote browsers
+
+#### Error messages:
+* Improve NOT condition description  --  thanks to Pavel Fokin for PR #1306
+* Improve AND condition description  --  thanks to Pavel Fokin for PR #1300
+* Add parent element to ElementFinder.getSearchCriteria  --  thanks to Petro Ovcharenko for PR #1312
+* #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)  --  see PR #1294
+* #987 Avoid throwing "Element not found" when actually a file is not found  --  see PR #1301
+* #1302 show ClickOptions details in report  --  see PR #1303
+
+#### Other:
+* Add collection condition $$.shouldHave(exactTextsCaseSensitiveInAnyOrder(...))  --  thanks to Vitali Plagov for PR #1286
+* #1298 fix href condition for encoded values  --  thanks to @rerednaw for PR #1299
+* #1307 Allow Chrome to download multiple files in one request (set as default setting)  --  thanks to Alexei Vinogradov for PR #1308
+* #1322 allow downloading a file with slash in name  --  see PR #1323
+* fix version of Guava 30.0-jre (to avoid all those endless problems when Maven or Gradle transitively resolves too old Guava version)
+* Build Selenide with github actions (instead of Travis CI)  --  thanks to Boris Osipov for PR #1319
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests

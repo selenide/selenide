@@ -1,5 +1,3 @@
-import java.nio.charset.StandardCharsets
-
 plugins {
   id 'java-library'
   id 'idea'
@@ -12,25 +10,14 @@ plugins {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.16.0-SNAPSHOT'
+version = '5.16.0'
 
-ext {
-  encoding = StandardCharsets.UTF_8.name()
-}
-
-tasks.withType(JavaCompile) {
-  options.encoding = encoding
-  options.debug = true
-}
-compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-
-defaultTasks 'check', 'test', 'install'
-
+apply from: rootProject.file('gradle/compilation.gradle')
 apply from: rootProject.file('gradle/source-sets.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
 apply from: rootProject.file('gradle/code-analysis.gradle')
 apply from: rootProject.file('gradle/coverage.gradle')
 apply from: rootProject.file('gradle/tests.gradle')
 apply from: rootProject.file('gradle/deploy.gradle')
+
+defaultTasks 'check', 'test', 'install'

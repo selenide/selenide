@@ -1,0 +1,11 @@
+ext {
+  encoding = 'UTF-8'
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = encoding
+  options.debug = true
+}
+compileJava.options.debugOptions.debugLevel = "source,lines,vars"
+
+sourceCompatibility = '1.8'
