@@ -1,6 +1,6 @@
 buildscript {
   ext.versions = [
-      selenide: '5.16.0-SNAPSHOT',
+      selenide: '5.16.0',
       browserupproxy: '2.1.1',
       netty: '4.1.54.Final',
       junit: '5.7.0',
@@ -27,4 +27,8 @@ repositories {
       snapshotsOnly()
     }
   }
+}
+
+configurations.all {
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }

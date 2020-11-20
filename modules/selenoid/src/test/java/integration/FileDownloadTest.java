@@ -4,10 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileDownloadTest {
   @BeforeEach
   void setUp() {
-    Configuration.proxyHost = new NetworkUtils().getNonLoopbackAddressOfThisMachine();
     Configuration.remote = "http://localhost:4444/wd/hub";
 
     DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -33,9 +29,7 @@ public class FileDownloadTest {
     capabilities.setCapability("enableVideo", true);
     capabilities.setCapability("enableLog", true);
     Configuration.browserCapabilities = capabilities;
-//    Configuration.fileDownload = FileDownloadMode.FOLDER;
-    Configuration.fileDownload = FileDownloadMode.PROXY;
-    Configuration.proxyEnabled = true;
+    Configuration.fileDownload = FileDownloadMode.FOLDER;
   }
 
   @Test
