@@ -1,12 +1,5 @@
 package com.codeborne.selenide.webdriver;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
@@ -17,6 +10,13 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
 import static org.mockito.Mockito.mock;
@@ -154,7 +154,7 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
     config.headless(true);
     config.remote("https://some.remote.blah:1234/wd");
 
-    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    FirefoxOptions options = driverFactory.createCapabilities(config, browser, proxy, null);
 
     Map<String, Object> prefs = prefs(options);
     assertThat(prefs.get("browser.download.dir")).isNull();

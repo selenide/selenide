@@ -65,7 +65,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public MutableCapabilities createCapabilities(Config config, Browser browser,
+                                                @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -74,8 +75,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     }
     options.addArguments(createChromeArguments(config, browser));
     options.setExperimentalOption("excludeSwitches", excludeSwitches());
-    options.setExperimentalOption("prefs", prefs(config, browserDownloadsFolder));
-    setMobileEmulation(config, options);
+    options.setExperimentalOption("prefs", prefs(browserDownloadsFolder));
+    setMobileEmulation(options);
 
     return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
   }
@@ -97,8 +98,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     return new String[]{"enable-automation", "load-extension"};
   }
 
-  private void setMobileEmulation(Config config, ChromeOptions chromeOptions) {
-    Map<String, Object> mobileEmulation = mobileEmulation(config);
+  private void setMobileEmulation(ChromeOptions chromeOptions) {
+    Map<String, Object> mobileEmulation = mobileEmulation();
     if (!mobileEmulation.isEmpty()) {
       chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
     }
@@ -106,20 +107,20 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected Map<String, Object> mobileEmulation(Config config) {
+  protected Map<String, Object> mobileEmulation() {
     String mobileEmulation = System.getProperty("chromeoptions.mobileEmulation", "");
     return parsePreferencesFromString(mobileEmulation);
   }
 
   @CheckReturnValue
   @Nonnull
-  protected Map<String, Object> prefs(Config config, File browserDownloadsFolder) {
+  protected Map<String, Object> prefs(@Nullable File browserDownloadsFolder) {
     Map<String, Object> chromePreferences = new HashMap<>();
     chromePreferences.put("credentials_enable_service", false);
     chromePreferences.put("plugins.always_open_pdf_externally", true);
     chromePreferences.put("profile.default_content_setting_values.automatic_downloads", 1);
 
-    if (config.remote() == null) {
+    if (browserDownloadsFolder != null) {
       chromePreferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
     }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));

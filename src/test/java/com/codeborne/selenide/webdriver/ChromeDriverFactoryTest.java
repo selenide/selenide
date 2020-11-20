@@ -56,7 +56,7 @@ final class ChromeDriverFactoryTest implements WithAssertions {
   void shouldNotSetupDownloadFolder_forRemoteWebdriver() {
     config.remote("https://some.remote:1234/wd");
 
-    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, null);
 
     Map<String, Object> prefsMap = getBrowserLaunchPrefs(ChromeOptions.CAPABILITY, chromeOptions);
     assertThat(prefsMap).containsEntry("credentials_enable_service", false);

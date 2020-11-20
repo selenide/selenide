@@ -21,7 +21,8 @@ public class LegacyFirefoxDriverFactory extends FirefoxDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public FirefoxOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public FirefoxOptions createCapabilities(Config config, Browser browser,
+                                           @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     FirefoxOptions firefoxOptions = super.createCapabilities(config, browser, proxy, browserDownloadsFolder);
     firefoxOptions.setLegacy(true);
     return firefoxOptions;

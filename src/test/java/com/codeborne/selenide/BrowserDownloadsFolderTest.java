@@ -15,7 +15,7 @@ final class BrowserDownloadsFolderTest {
     touch(new File(folder, "file1"));
     touch(new File(folder, "file2"));
 
-    new BrowserDownloadsFolder(folder).cleanupBeforeDownload();
+    BrowserDownloadsFolder.from(folder).cleanupBeforeDownload();
 
     assertThat(folder).exists();
     assertThat(new File(folder, "file1")).doesNotExist();
