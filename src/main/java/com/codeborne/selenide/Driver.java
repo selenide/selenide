@@ -5,14 +5,25 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
+
 public interface Driver {
   Config config();
   Browser browser();
   boolean hasWebDriverStarted();
   WebDriver getWebDriver();
+
+  @CheckReturnValue
+  @Nullable
   SelenideProxyServer getProxy();
+
   WebDriver getAndCheckWebDriver();
+
+  @CheckReturnValue
+  @Nullable
   DownloadsFolder browserDownloadsFolder();
+
   void close();
 
   default boolean supportsJavascript() {

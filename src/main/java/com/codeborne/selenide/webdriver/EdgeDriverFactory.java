@@ -39,11 +39,11 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     EdgeOptions options = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     EdgeDriverService driverService = createDriverService(config);
     EdgeDriver driver = new EdgeDriver(driverService, options);
-    if (isChromiumBased()) {
+    if (isChromiumBased() && browserDownloadsFolder != null) {
       cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
     }
     return driver;
@@ -58,7 +58,8 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public EdgeOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public EdgeOptions createCapabilities(Config config, Browser browser,
+                                        @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     MutableCapabilities capabilities = createCommonCapabilities(config, browser, proxy);
     if (isChromiumBased()) {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);

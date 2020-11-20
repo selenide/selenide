@@ -40,7 +40,7 @@ public class InternetExplorerDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   public InternetExplorerOptions createCapabilities(Config config, Browser browser,
-                                                    @Nullable Proxy proxy, File browserDownloadsFolder) {
+                                                    @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     Capabilities capabilities = createCommonCapabilities(config, browser, proxy);
     InternetExplorerOptions options = new InternetExplorerOptions(capabilities);
     if (!config.browserBinary().isEmpty()) {

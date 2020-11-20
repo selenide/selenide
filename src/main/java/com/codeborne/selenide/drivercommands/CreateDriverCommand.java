@@ -62,7 +62,8 @@ public class CreateDriverCommand {
       }
     }
 
-    File browserDownloadsFolder = ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()));
+    @Nullable File browserDownloadsFolder = config.remote() != null ? null :
+      ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()));
 
     WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 
@@ -73,10 +74,12 @@ public class CreateDriverCommand {
     Runtime.getRuntime().addShutdownHook(
       new Thread(new SelenideDriverFinalCleanupThread(config, webDriver, selenideProxyServer))
     );
-    Runtime.getRuntime().addShutdownHook(
-      new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
-    );
-    return new Result(webDriver, selenideProxyServer, new BrowserDownloadsFolder(browserDownloadsFolder));
+    if (browserDownloadsFolder != null) {
+      Runtime.getRuntime().addShutdownHook(
+        new Thread(() -> deleteFolderIfEmpty(browserDownloadsFolder))
+      );
+    }
+    return new Result(webDriver, selenideProxyServer, BrowserDownloadsFolder.from(browserDownloadsFolder));
   }
 
   @Nonnull
@@ -93,12 +96,15 @@ public class CreateDriverCommand {
     return wrapper;
   }
 
+  @ParametersAreNonnullByDefault
   public static class Result {
     public final WebDriver webDriver;
-    public final SelenideProxyServer selenideProxyServer;
-    public final DownloadsFolder browserDownloadsFolder;
+    @Nullable public final SelenideProxyServer selenideProxyServer;
+    @Nullable public final DownloadsFolder browserDownloadsFolder;
 
-    public Result(WebDriver webDriver, @Nullable SelenideProxyServer selenideProxyServer, DownloadsFolder browserDownloadsFolder) {
+    public Result(WebDriver webDriver,
+                  @Nullable SelenideProxyServer selenideProxyServer,
+                  @Nullable DownloadsFolder browserDownloadsFolder) {
       this.webDriver = webDriver;
       this.selenideProxyServer = selenideProxyServer;
       this.browserDownloadsFolder = browserDownloadsFolder;

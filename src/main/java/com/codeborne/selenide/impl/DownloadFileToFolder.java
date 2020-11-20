@@ -61,6 +61,10 @@ public class DownloadFileToFolder {
     Config config = driver.config();
     DownloadsFolder folder = driver.browserDownloadsFolder();
 
+    if (folder == null) {
+      throw new IllegalStateException("Downloads folder is not configured");
+    }
+
     folder.cleanupBeforeDownload();
     long downloadStartedAt = System.currentTimeMillis();
 

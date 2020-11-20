@@ -40,7 +40,8 @@ public class SafariDriverFactory extends AbstractDriverFactory {
   @Nonnull
   @CheckReturnValue
   @Override
-  public SafariOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public SafariOptions createCapabilities(Config config, Browser browser,
+                                          @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     SafariOptions options = new SafariOptions();
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Safari. Set headless property to false.");

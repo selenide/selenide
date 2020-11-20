@@ -90,7 +90,8 @@ final class CommonCapabilitiesTest implements WithAssertions {
     @Override
     @CheckReturnValue
     @Nonnull
-    public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+    public MutableCapabilities createCapabilities(Config config, Browser browser,
+                                                  @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
       return new DesiredCapabilities();
     }
 

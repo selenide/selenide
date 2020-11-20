@@ -12,6 +12,7 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,8 +40,8 @@ public class LazyDriver implements Driver {
 
   private boolean closed;
   private WebDriver webDriver;
-  private SelenideProxyServer selenideProxyServer;
-  private DownloadsFolder browserDownloadsFolder;
+  @Nullable private SelenideProxyServer selenideProxyServer;
+  @Nullable private DownloadsFolder browserDownloadsFolder;
 
   public LazyDriver(Config config, @Nullable Proxy userProvidedProxy, List<WebDriverEventListener> listeners) {
     this(config, userProvidedProxy, listeners, new WebDriverFactory(), new BrowserHealthChecker(),
@@ -111,6 +112,8 @@ public class LazyDriver implements Driver {
     return getWebDriver();
   }
 
+  @CheckReturnValue
+  @Nullable
   @Override
   public DownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
