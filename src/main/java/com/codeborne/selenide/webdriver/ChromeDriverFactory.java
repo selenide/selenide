@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -67,6 +68,8 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @Nonnull
   public MutableCapabilities createCapabilities(Config config, Browser browser,
                                                 @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+    Capabilities commonCapabilities = createCommonCapabilities(config, browser, proxy);
+
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -74,11 +77,11 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
       options.setBinary(config.browserBinary());
     }
     options.addArguments(createChromeArguments(config, browser));
-    options.setExperimentalOption("excludeSwitches", excludeSwitches());
+    options.setExperimentalOption("excludeSwitches", excludeSwitches(commonCapabilities));
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder));
     setMobileEmulation(options);
 
-    return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
+    return new MergeableCapabilities(options, commonCapabilities);
   }
 
   @CheckReturnValue
@@ -94,8 +97,18 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected String[] excludeSwitches() {
-    return new String[]{"enable-automation", "load-extension"};
+  protected String[] excludeSwitches(Capabilities capabilities) {
+    return hasExtensions(capabilities) ?
+      new String[]{"enable-automation"} :
+      new String[]{"enable-automation", "load-extension"};
+  }
+
+  private boolean hasExtensions(Capabilities capabilities) {
+    Map<?, ?> chromeOptions = (Map<?, ?>) capabilities.getCapability("goog:chromeOptions");
+    if (chromeOptions == null) return false;
+
+    List<?> extensions = (List<?>) chromeOptions.get("extensions");
+    return extensions != null && !extensions.isEmpty();
   }
 
   private void setMobileEmulation(ChromeOptions chromeOptions) {
