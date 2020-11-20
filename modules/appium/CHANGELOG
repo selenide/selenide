@@ -3,6 +3,7 @@
 === 1.5.0
 * upgrade to selenide:5.16.0
 * introduce Selenide plugins for better Appium support
+* upgrade to io.appium:java-client:7.4.0
 
 === 1.4.6
 * upgrade to selenide:5.14.2
