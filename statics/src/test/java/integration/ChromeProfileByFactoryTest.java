@@ -7,6 +7,7 @@ import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +83,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    protected String[] excludeSwitches() {
+    protected String[] excludeSwitches(Capabilities commonCapabilities) {
       return new String[]{"enable-automation"};
     }
 

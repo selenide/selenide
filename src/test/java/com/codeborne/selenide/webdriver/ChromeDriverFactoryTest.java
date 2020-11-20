@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
+import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchExcludeSwitches;
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchPrefs;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -50,6 +52,26 @@ final class ChromeDriverFactoryTest implements WithAssertions {
     assertThat(prefsMap).containsEntry("profile.default_content_setting_values.automatic_downloads", 1);
     assertThat(prefsMap).containsEntry("download.default_directory",
       new File(DOWNLOADS_FOLDER).getAbsolutePath());
+  }
+
+  @Test
+  void disablesAnnoyingPopupAboutExtensions() {
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(ChromeOptions.CAPABILITY, chromeOptions);
+    assertThat(excludeSwitches).isEqualTo(asList("enable-automation", "load-extension"));
+  }
+
+  @Test
+  void shouldNotExcludeExtensionsSwitch_ifChromeIsOpenedWithExtensions() {
+    ChromeOptions options = new ChromeOptions();
+    options.addExtensions(new File("build.gradle"), new File("settings.gradle"));
+    config.browserCapabilities(new DesiredCapabilities(options));
+
+    Capabilities chromeOptions = factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+
+    List<String> excludeSwitches = getBrowserLaunchExcludeSwitches(ChromeOptions.CAPABILITY, chromeOptions);
+    assertThat(excludeSwitches).isEqualTo(singletonList("enable-automation"));
   }
 
   @Test
