@@ -1,7 +1,19 @@
 Selenide Selenoid plugin
 ================================
 
-A Selenide extension for working with Selenoid
+A [Selenide](https://selenide.org) extension for working with Selenoid
+
+## Why it's needed?
+
+Most of Selenide features work with Selenoid out of the box.  
+There are only a few things that might not work: proxy and downloading files. 
+1. Selenide proxy generally works with Selenoid, except one case: when tests and Selenoid are run on different machines, 
+and "test machine" is not accessible from "selenoid machine". 
+2. Downloading files: Selenide has 3 methods for downloading files: `HTTPGET`, `PROXY` and `FOLDER`.   
+   * `HTTPGET` and `PROXY` work in Selenoid as usually
+   * `FOLDER` doesn't work in Selenoid because the downloads folder is inside the container.   
+
+This problem is addressed by `selenide-selenoid` plugin: _it can get files from Selenoid container_. 
 
 ## Features
 Currently the plugin supports only one feature:
