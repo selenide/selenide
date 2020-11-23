@@ -31,7 +31,7 @@ dependencies {
   testCompile('com.browserup:browserup-proxy-core:2.1.1')
   compileOnly('io.netty:netty-all:4.1.54.Final')
   testCompile('io.netty:netty-all:4.1.54.Final')
-  compileOnly('xyz.rogfam:littleproxy:2.0.0-beta-5')
+  compileOnly('xyz.rogfam:littleproxy:2.0.1')
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   compileOnly("junit:junit:4.13.1")
