@@ -3,10 +3,10 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.ex.ElementIsNotClickableException;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.ex.UIAssertionError;
-import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -28,10 +28,7 @@ class ExceptionWrapper {
     else if (isElementNotClickableException(lastError)) {
       return new ElementIsNotClickableException(webElementSource.driver(), lastError);
     }
-    else if (lastError instanceof InvalidArgumentException || lastError instanceof MoveTargetOutOfBoundsException) {
-      return lastError;
-    }
-    else if (lastError instanceof WebDriverException) {
+    else if (lastError instanceof StaleElementReferenceException || lastError instanceof NotFoundException) {
       return webElementSource.createElementNotFoundError(exist, lastError);
     }
     return lastError;
