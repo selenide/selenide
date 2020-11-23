@@ -65,7 +65,9 @@ class SelenideElementProxy implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
-    validateAssertionMode(config());
+    if (isMethodForSoftAssertion(method)) {
+      validateAssertionMode(config());
+    }
 
     long timeoutMs = getTimeoutMs(method, arguments);
     long pollingIntervalMs = getPollingIntervalMs(method, arguments);
@@ -93,10 +95,14 @@ class SelenideElementProxy implements InvocationHandler {
 
   @Nonnull
   private Object continueOrBreak(Object proxy, Method method, Throwable wrappedError) throws Throwable {
-    if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
+    if (config().assertionMode() == SOFT && isMethodForSoftAssertion(method))
       return proxy;
     else
       throw wrappedError;
+  }
+
+  private boolean isMethodForSoftAssertion(Method method) {
+    return methodsForSoftAssertion.contains(method.getName());
   }
 
   private Driver driver() {

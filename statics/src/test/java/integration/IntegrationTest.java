@@ -14,11 +14,12 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
-import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
+import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -67,6 +68,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     fastSetValue = false;
     versatileSetValue = false;
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
+    Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     useProxy(false);
