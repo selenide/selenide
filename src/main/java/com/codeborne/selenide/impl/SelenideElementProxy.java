@@ -32,7 +32,13 @@ class SelenideElementProxy implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
       "toWebElement",
       "toString",
-      "getSearchCriteria"
+      "getSearchCriteria",
+      "$",
+      "$x",
+      "find",
+      "$$",
+      "$$x",
+      "findAll"
   ));
 
   private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
