@@ -12,7 +12,7 @@ import static com.codeborne.selenide.AssertionMode.SOFT;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith({SoftAssertsExtension.class})
-public class SoftAssertInParametrizedTest extends IntegrationTest{
+public class SoftAssertInParametrizedTest extends IntegrationTest {
   private final TestPage page = new TestPage();
 
   @BeforeEach
