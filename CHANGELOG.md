@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.16.1 (released 23.11.2020)
+* #1314 do not exclude "load-extension" switch if Chrome is opened with extensions  --  see PR #1324
+* #1315 support custom DriverFactory for running remote browsers  --  see PR #1324
+
 ## 5.16.0 (released 20.11.2020)
 
 #### Selenide plugins:
