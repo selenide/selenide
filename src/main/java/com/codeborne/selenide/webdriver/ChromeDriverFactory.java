@@ -92,6 +92,14 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(System.getProperty("chromeoptions.args")));
+    arguments.addAll(createHeadlessArguments(config));
+    return arguments;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected List<String> createHeadlessArguments(Config config) {
+    List<String> arguments = new ArrayList<>();
     if (config.headless()) {
       arguments.add("--disable-background-networking");
       arguments.add("--enable-features=NetworkService,NetworkServiceInProcess");
