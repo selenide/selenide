@@ -76,10 +76,10 @@ public class Click implements Command<Void> {
   }
 
   private void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-      driver.actions()
-        .moveToElement(element, offsetX, offsetY)
-        .click()
-        .perform();
+    driver.actions()
+      .moveToElement(element, offsetX, offsetY)
+      .click()
+      .perform();
   }
 
   private void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
