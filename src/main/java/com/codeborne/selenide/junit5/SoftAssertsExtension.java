@@ -11,6 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
 import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 
 /**
  * By using this extension selenide will collect all failed asserts
@@ -31,25 +32,19 @@ import static com.codeborne.selenide.logevents.SelenideLogger.removeListener;
  */
 @ParametersAreNonnullByDefault
 public class SoftAssertsExtension implements BeforeEachCallback, AfterEachCallback {
-  private final ErrorsCollector errorsCollector;
-
-  public SoftAssertsExtension() {
-    errorsCollector = new ErrorsCollector();
-  }
-
-  public ErrorsCollector getErrorsCollector() {
-    return errorsCollector;
-  }
+  public static final ExtensionContext.Namespace namespace = create(SoftAssertsExtension.class);
 
   @Override
   public void beforeEach(final ExtensionContext context) {
-    errorsCollector.clear();
+    ErrorsCollector errorsCollector = new ErrorsCollector();
     addListener(LISTENER_SOFT_ASSERT, errorsCollector);
+    context.getStore(namespace).put(LISTENER_SOFT_ASSERT, errorsCollector);
   }
 
   @Override
   public void afterEach(final ExtensionContext context) {
     removeListener(LISTENER_SOFT_ASSERT);
+    ErrorsCollector errorsCollector = (ErrorsCollector) context.getStore(namespace).get(LISTENER_SOFT_ASSERT);
     errorsCollector.failIfErrors(context.getDisplayName());
   }
 }
