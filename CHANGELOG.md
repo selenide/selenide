@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.16.2 (released 25.11.2020)
+* #1332 return old click(int, int) command logic  --  thanks to Petro Ovcharenko for PR #1333
+* make SoftAssertsExtension thread-safe  --  thanks to @dtuchs for PR #1334
+* #1258 fix soft asserts with ParameterizedTest in jUnit5  --  see PR #1328
+* #1293 don't report "Element not found" in case of other errors  --  see PR #1326
+* #1290 don't show unused page object fields in report  --  see PR #1327
+* upgrade to littleproxy:2.0.1  --  see PR #1325
+
 ## 5.16.1 (released 23.11.2020)
 * #1314 do not exclude "load-extension" switch if Chrome is opened with extensions  --  see PR #1324
 * #1315 support custom DriverFactory for running remote browsers  --  see PR #1324

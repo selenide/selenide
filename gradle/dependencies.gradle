@@ -42,12 +42,12 @@ dependencies {
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.6.0')
+  testImplementation('org.mockito:mockito-core:3.6.28')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'
   }
-  testImplementation("org.assertj:assertj-core:3.17.1")
+  testImplementation("org.assertj:assertj-core:3.18.1")
 
   implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
