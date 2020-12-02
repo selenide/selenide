@@ -19,7 +19,9 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
@@ -163,7 +165,11 @@ class SelenideElementProxy implements InvocationHandler {
 
   @CheckReturnValue
   private long getTimeoutMs(Method method, Arguments arguments) {
-    return isWaitCommand(method) ? arguments.nth(1) : config().timeout();
+    Optional<Duration> duration = arguments.ofType(Duration.class);
+
+    return duration.map(Duration::toMillis).orElseGet(() ->
+      isWaitCommand(method) ? arguments.nth(1) : config().timeout()
+    );
   }
 
   @CheckReturnValue

@@ -17,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.Duration;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -360,6 +361,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldHave(Condition... condition);
 
   /**
+   * Wait until given element meets given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement shouldHave(Condition condition, Duration timeout);
+
+  /**
    * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    * $("#errorMessage").shouldBe(visible, enabled);
@@ -371,6 +379,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldBe(Condition... condition);
+
+  /**
+   * Wait until given element meets given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement shouldBe(Condition condition, Duration timeout);
 
   /**
    * <p>Checks that given element does not meet given conditions.</p>
@@ -394,6 +409,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNot(Condition... condition);
 
   /**
+   * Wait until given element meets given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement shouldNot(Condition condition, Duration timeout);
+
+  /**
    * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    * $("#errorMessage").shouldNotHave(text("Exception"), text("Error"));
@@ -405,6 +427,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement shouldNotHave(Condition... condition);
+
+  /**
+   * Wait until given element does NOT meet given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement shouldNotHave(Condition condition, Duration timeout);
 
   /**
    * <p>Synonym for {@link #shouldNot(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
@@ -420,6 +449,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotBe(Condition... condition);
 
   /**
+   * Wait until given element does NOT meet given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement shouldNotBe(Condition condition, Duration timeout);
+
+  /**
    * <p>Wait until given element meets given conditions.</p>
    *
    * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
@@ -427,10 +463,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.ShouldBe
+   * @see com.codeborne.selenide.commands.WaitUntil
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
 
   /**
@@ -442,10 +480,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition                   e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.ShouldBe
+   * @see com.codeborne.selenide.commands.WaitUntil
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement waitUntil(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
 
   /**
@@ -456,10 +496,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.ShouldNotBe
+   * @see com.codeborne.selenide.commands.WaitWhile
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
 
   /**
@@ -471,10 +513,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition                   e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.ShouldNotBe
+   * @see com.codeborne.selenide.commands.WaitWhile
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
+  @Deprecated
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
 
   /**
