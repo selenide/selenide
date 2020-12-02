@@ -132,14 +132,14 @@ public class Commands {
     add("shouldNot", new ShouldNot());
     add("shouldNotHave", new ShouldNotHave());
     add("shouldNotBe", new ShouldNotBe());
-    add("waitWhile", new ShouldNotBe());
+    add("waitWhile", new WaitWhile());
   }
 
   private void addShouldCommands() {
     add("should", new Should());
     add("shouldHave", new ShouldHave());
     add("shouldBe", new ShouldBe());
-    add("waitUntil", new ShouldBe());
+    add("waitUntil", new WaitUntil());
   }
 
   public void add(String method, Command<?> command) {
