@@ -5,7 +5,7 @@ repositories {
 ext {
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
-  jettyVersion = '9.4.34.v20201102'
+  jettyVersion = '9.4.35.v20201120'
 }
 
 dependencies {
@@ -44,8 +44,7 @@ dependencies {
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
     exclude group: 'org.awaitility'
   }
-  // don't update. see https://github.com/assertj/assertj-core/issues/1985#issuecomment-696340308
-  testImplementation("org.assertj:assertj-core:3.17.1")
+  testImplementation("org.assertj:assertj-core:3.18.1")
 
   implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
