@@ -71,14 +71,6 @@ task grid(type: Test) {
   exclude 'com/codeborne/selenide/**/*'
 }
 
-task testng(type: Test) {
-  useTestNG()
-  include '**/testng/**/*'
-  systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.headless'] = 'true'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/testng'
-}
-
 tasks.withType(Test) {
   useJUnitPlatform()
   systemProperty('file.encoding', encoding)

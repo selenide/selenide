@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.17.0 (planned to xx.12.2020)
+* Move TestNG support from core Selenide code to a separate plugin  --  see https://github.com/selenide/selenide-testng
+
 ## 5.16.2 (released 25.11.2020)
 * #1332 return old click(int, int) command logic  --  thanks to Petro Ovcharenko for PR #1333
 * make SoftAssertsExtension thread-safe  --  thanks to @dtuchs for PR #1334

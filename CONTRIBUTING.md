@@ -69,7 +69,6 @@ Selenide project has two types of tests: unit tests and UI tests.
   - `./gradlew grid`
   - `./gradlew ie`
   - `./gradlew edge`
-  - `./gradlew testng`  
   Note that you typically don't need to run them locally because our Continuous Integration server will run them anyway when you send a pull request. 
 
 #### Run test locally inside docker containers

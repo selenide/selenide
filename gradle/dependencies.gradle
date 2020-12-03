@@ -3,7 +3,6 @@ repositories {
 }
 
 ext {
-  testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
   jettyVersion = '9.4.34.v20201102'
@@ -35,13 +34,11 @@ dependencies {
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   compileOnly("junit:junit:4.13.1")
-  compileOnly("org.testng:testng:$testngVersion") { transitive = false }
 
   testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
   testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
-  testImplementation("org.testng:testng:$testngVersion") { transitive = false }
   testImplementation('org.mockito:mockito-core:3.6.28')
   testImplementation('commons-fileupload:commons-fileupload:1.4')
   testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
