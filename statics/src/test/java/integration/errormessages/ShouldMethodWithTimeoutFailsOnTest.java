@@ -50,13 +50,13 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
     SelenideElement element = $$("ul .nonexistent").get(1);
 
     try {
-      element.shouldBe(visible, Duration.ofMillis(44));
+      element.shouldBe(visible, Duration.ofSeconds(0, 1_000_000));
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
       assertThat(expected).hasMessageStartingWith("Element not found {ul .nonexistent[1]}");
       assertThat(expected).hasMessageContaining("Expected: visible");
-      assertThat(expected).hasMessageContaining("Timeout: 44 ms.");
+      assertThat(expected).hasMessageContaining("Timeout: 1 ms.");
     }
   }
 
@@ -80,12 +80,12 @@ final class ShouldMethodWithTimeoutFailsOnTest extends IntegrationTest {
     SelenideElement element = $(".detective").shouldBe(visible);
 
     try {
-      element.shouldNotHave(text("Miller"), Duration.ofMillis(45));
+      element.shouldNotHave(text("Miller"), Duration.ofNanos(20001000));
       fail("Expected ElementNotFound");
     }
     catch (ElementShouldNot expected) {
       assertThat(expected).hasMessageStartingWith("Element should not have text 'Miller' {.detective}");
-      assertThat(expected).hasMessageContaining("Timeout: 45 ms.");
+      assertThat(expected).hasMessageContaining("Timeout: 20 ms.");
     }
   }
 }
