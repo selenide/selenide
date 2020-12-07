@@ -80,15 +80,19 @@ public abstract class Condition {
   /**
    * Synonym for {@link #visible} - may be used for better readability
    * <p><code>$("#logoutLink").waitUntil(appears, 10000);</code></p>
-   * <p>
+   * @deprecated use {@link #visible} or {@link #appear}
    */
+  @Deprecated
   public static final Condition appears = visible;
 
   /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
    * <p>Sample: <code>$("#loginLink").waitUntil(disappears, 9000);</code></p>
+   *
+   * @deprecated use {@link #disappear} or {@link #hidden}
    */
+  @Deprecated
   public static final Condition disappears = hidden;
 
   /**
@@ -261,7 +265,9 @@ public abstract class Condition {
    * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>
    *
    * @see #matchText(String)
+   * @deprecated use {@link #matchText(String)}
    */
+  @Deprecated
   @CheckReturnValue
   @Nonnull
   public static Condition matchesText(String text) {
