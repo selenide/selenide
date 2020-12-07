@@ -25,7 +25,7 @@ public class Plugins {
 
   @SuppressWarnings("unchecked")
   public static <T> T inject(Class<T> klass) {
-    return (T) cache.computeIfAbsent(klass, c -> loadPlugin(klass));
+    return (T) cache.computeIfAbsent(klass, Plugins::loadPlugin);
   }
 
   private static <T> T loadPlugin(Class<T> klass) {
@@ -42,7 +42,7 @@ public class Plugins {
 
   private static <T> T getDefaultPlugin(Class<T> klass) {
     String resource = "/META-INF/defaultservices/" + klass.getName();
-    URL file = Plugins.class.getResource("/META-INF/defaultservices/" + klass.getName());
+    URL file = Plugins.class.getResource(resource);
     if (file == null) {
       throw new IllegalStateException("Resource not found in classpath: " + resource);
     }
