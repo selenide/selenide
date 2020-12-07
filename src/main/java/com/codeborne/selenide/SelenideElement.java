@@ -348,6 +348,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement should(Condition... condition);
 
   /**
+   * Wait until given element meets given condition (with given timeout)
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement should(Condition condition, Duration timeout);
+
+  /**
    * <p>Synonym for {@link #should(com.codeborne.selenide.Condition...)}. Useful for better readability.</p>
    * <p>For example: {@code
    * $("#errorMessage").shouldHave(text("Hello"), text("World"));

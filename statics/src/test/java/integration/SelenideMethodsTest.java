@@ -20,6 +20,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
@@ -107,11 +109,20 @@ final class SelenideMethodsTest extends IntegrationTest {
 
     $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
+    $("#theHiddenElement").should(disappear, Duration.ofSeconds(2));
     $("#theHiddenElement").waitUntil(disappears, 1000);
     $("#theHiddenElement").should(exist);
 
     $(".non-existing-element").should(Condition.not(exist));
     $(".non-existing-element").shouldNot(exist);
+  }
+
+  @Test
+  void shouldMethodCanUseCustomTimeout() {
+    $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
+    $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
+    $("#theHiddenElement").shouldHave(exactText(""), Duration.ofSeconds(3));
+    $("#theHiddenElement").shouldNotHave(text("no"), Duration.ofHours(3));
   }
 
   @Test
