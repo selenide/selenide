@@ -92,6 +92,38 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(System.getProperty("chromeoptions.args")));
+    arguments.addAll(createHeadlessArguments(config));
+    return arguments;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected List<String> createHeadlessArguments(Config config) {
+    List<String> arguments = new ArrayList<>();
+    if (config.headless()) {
+      arguments.add("--disable-background-networking");
+      arguments.add("--enable-features=NetworkService,NetworkServiceInProcess");
+      arguments.add("--disable-background-timer-throttling");
+      arguments.add("--disable-backgrounding-occluded-windows");
+      arguments.add("--disable-breakpad");
+      arguments.add("--disable-client-side-phishing-detection");
+      arguments.add("--disable-component-extensions-with-background-pages");
+      arguments.add("--disable-default-apps");
+      arguments.add("--disable-features=TranslateUI");
+      arguments.add("--disable-hang-monitor");
+      arguments.add("--disable-ipc-flooding-protection");
+      arguments.add("--disable-popup-blocking");
+      arguments.add("--disable-prompt-on-repost");
+      arguments.add("--disable-renderer-backgrounding");
+      arguments.add("--disable-sync");
+      arguments.add("--force-color-profile=srgb");
+      arguments.add("--metrics-recording-only");
+      arguments.add("--no-first-run");
+      arguments.add("--password-store=basic");
+      arguments.add("--use-mock-keychain");
+      arguments.add("--hide-scrollbars");
+      arguments.add("--mute-audio");
+    }
     return arguments;
   }
 
