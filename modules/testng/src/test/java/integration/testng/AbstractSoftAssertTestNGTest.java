@@ -14,7 +14,7 @@ import static com.codeborne.selenide.AssertionMode.SOFT;
 @Listeners(SoftAsserts.class)
 public abstract class AbstractSoftAssertTestNGTest implements WithAssertions {
 
-  protected SelenideDriver driver = new SelenideDriver(
+  protected final SelenideDriver driver = new SelenideDriver(
     new SelenideConfig()
       .browser("chrome")
       .assertionMode(SOFT)
@@ -22,7 +22,7 @@ public abstract class AbstractSoftAssertTestNGTest implements WithAssertions {
   );
 
   @BeforeMethod
-  public void openBrowser() {
+  final void openBrowser() {
     driver.open("http://google.com/ncr");
   }
 
@@ -30,7 +30,7 @@ public abstract class AbstractSoftAssertTestNGTest implements WithAssertions {
     return driver.$(cssSelector);
   }
 
-  public ElementsCollection $$(String cssSelector) {
+  protected ElementsCollection $$(String cssSelector) {
     return driver.$$(cssSelector);
   }
 }

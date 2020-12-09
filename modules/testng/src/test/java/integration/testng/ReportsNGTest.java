@@ -2,6 +2,7 @@ package integration.testng;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.testng.TextReport;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -10,6 +11,11 @@ import static com.codeborne.selenide.Condition.visible;
 
 @Listeners(TextReport.class)
 public class ReportsNGTest extends BaseTestNGTest {
+  @BeforeMethod
+  final void setUp() {
+    driver.open("/");
+  }
+
   @Test(expectedExceptions = ElementNotFound.class)
   public void failingMethod() {
     $("h22").shouldBe(visible).shouldHave(text("Selenide"));

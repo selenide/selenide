@@ -3,22 +3,20 @@ jar {
     attributes(
       "Automatic-Module-Name": project.group + '.' + project.name,
       "Implementation-Title": project.group + '.' + project.name,
-      "Implementation-Version": version,
+      "Implementation-Version": archiveVersion,
       "Implementation-Vendor": "Codeborne")
   }
-  from sourceSets.main.output
-  from sourceSets.staticFacade.output
+  from allprojects.sourceSets.main.output
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
-  from sourceSets.main.allSource
-  from sourceSets.staticFacade.allSource
+  from allprojects.sourceSets.main.allSource
 }
 
 javadoc {
   failOnError = false
-  source = sourceSets.main.allJava + sourceSets.staticFacade.allJava
+  source = allprojects.sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

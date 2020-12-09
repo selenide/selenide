@@ -18,7 +18,7 @@ import static java.lang.Boolean.parseBoolean;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
 @ExtendWith({LogTestNameExtension.class})
-abstract class BaseIntegrationTest {
+public abstract class BaseIntegrationTest {
   protected static LocalHttpServer server;
   private static String protocol;
   private static int port;

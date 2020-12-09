@@ -1,12 +1,21 @@
-repositories {
-  jcenter()
+allprojects {
+  repositories {
+    jcenter()
+  }
 }
 
 ext {
-  testngVersion = '7.3.0'
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.0'
   jettyVersion = '9.4.34.v20201102'
+  nettyVersion = '4.1.54.Final'
+  guavaVersion = '30.0-jre'
+  assertjVersion = '3.18.1'
+  mockitoVersion = '3.6.28'
+  browserupProxyVersion = '2.1.1'
+  littleProxyVersion = '2.0.1'
+  videoRecorderVersion = '2.0'
+  commonsFileuploadVersion = '1.4'
 }
 
 dependencies {
@@ -25,45 +34,36 @@ dependencies {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
   }
 
-  implementation('com.google.guava:guava:30.0-jre')
-
-  compileOnly('com.browserup:browserup-proxy-core:2.1.1')
-  testCompile('com.browserup:browserup-proxy-core:2.1.1')
-  compileOnly('io.netty:netty-all:4.1.54.Final')
-  testCompile('io.netty:netty-all:4.1.54.Final')
-  compileOnly('xyz.rogfam:littleproxy:2.0.1')
+  compileOnly("com.browserup:browserup-proxy-core:$browserupProxyVersion")
+  compileOnly("xyz.rogfam:littleproxy:$littleProxyVersion")
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-  compileOnly("junit:junit:4.13.1")
-  compileOnly("org.testng:testng:$testngVersion") { transitive = false }
-
-  testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
-    exclude group: 'net.bytebuddy', module: 'byte-buddy'
-  }
-  testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
-  testImplementation("org.testng:testng:$testngVersion") { transitive = false }
-  testImplementation('org.mockito:mockito-core:3.6.28')
-  testImplementation('commons-fileupload:commons-fileupload:1.4')
-  testImplementation('com.automation-remarks:video-recorder-junit5:2.0') {
-    exclude group: 'org.awaitility'
-  }
-  // don't update. see https://github.com/assertj/assertj-core/issues/1985#issuecomment-696340308
-  testImplementation("org.assertj:assertj-core:3.17.1")
-
-  implementation('org.slf4j:slf4j-api:1.7.30')
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-  testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
 }
 
-task libsProd(type: Sync) {
-  from configurations.compileClasspath
-  into "$buildDir/lib-prod"
+allprojects {
+  dependencies {
+    implementation("com.google.guava:guava:${guavaVersion}")
+    testImplementation("com.browserup:browserup-proxy-core:$browserupProxyVersion")
+    testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion")
+    testImplementation("io.netty:netty-all:$nettyVersion")
+    testImplementation("io.netty:netty-codec:$nettyVersion")
+    testImplementation("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
+    testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation("org.assertj:assertj-core:$assertjVersion")
+    testImplementation("com.automation-remarks:video-recorder-junit5:$videoRecorderVersion") {
+      exclude group: 'org.awaitility'
+    }
+    implementation('org.slf4j:slf4j-api:1.7.30')
+    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
+  }
 }
 
-task libsTest(type: Sync) {
-  from configurations.testRuntimeClasspath - configurations.compileClasspath
-  into "$buildDir/lib-test"
+subprojects {
+  dependencies {
+    implementation project(':')
+    testImplementation project(':')
+    testImplementation project(':').sourceSets.test.output
+  }
 }
-
-compileJava.dependsOn libsProd, libsTest

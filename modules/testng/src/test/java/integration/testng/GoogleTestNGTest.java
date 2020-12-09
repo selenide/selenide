@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Condition.visible;
 @Listeners(TextReport.class)
 public class GoogleTestNGTest extends BaseTestNGTest {
   @BeforeMethod
-  public void setUp() {
+  public final void setUp() {
     TextReport.onSucceededTest = false;
     TextReport.onFailedTest = true;
     driver.open("http://google.com/ncr");
@@ -34,6 +34,6 @@ public class GoogleTestNGTest extends BaseTestNGTest {
   @Test
   public void successfulMethod() {
     $(By.name("q")).setValue("selenide").pressEnter();
-    $$("#ires .g").shouldHave(size(10));
+    $$("#res .g").shouldHave(size(10));
   }
 }
