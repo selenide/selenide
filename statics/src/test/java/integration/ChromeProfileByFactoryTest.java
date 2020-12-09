@@ -57,7 +57,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     assertThat(log).contains("\"excludeSwitches\": [ \"enable-automation\" ]");
     assertThat(log).contains("\"extensions\": [  ]");
     assertThat(log).contains("\"credentials_enable_service\": false");
-    assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath());
+    assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 
     String arguments = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
     if (Configuration.headless) {
