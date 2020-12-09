@@ -42,12 +42,16 @@ class FileDownloadHandler extends BaseHandler {
       }
     }
 
-    if ("файл-с-запрещёнными-символами.txt".equals(fileName)) fileName = "имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
-      "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
-      ":colon,@at,+plus,`backtick,|pipe,=equal.txt";
+    String contentType = getContentType(fileName);
+    if ("файл-с-запрещёнными-символами.txt".equals(fileName)) {
+      fileName = "имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
+        "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
+        ":colon,@at,+plus,`backtick,|pipe,=equal.txt";
+      contentType = CONTENT_TYPE_HTML_TEXT;
+    }
     Map<String, String> map = new HashMap<>();
     map.put("content-disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-    return new Result(SC_OK, getContentType(fileName), fileContent, map);
+    return new Result(SC_OK, contentType, fileContent, map);
   }
 
   private String getSessionId(HttpServletRequest request) {
