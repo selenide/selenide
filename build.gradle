@@ -8,12 +8,15 @@ plugins {
   id 'org.sonarqube' version '3.0'
 }
 
+allprojects {
+  apply plugin: 'java'
+}
+
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.16.2'
+version = '5.17.0-SNAPSHOT'
 
 apply from: rootProject.file('gradle/compilation.gradle')
-apply from: rootProject.file('gradle/source-sets.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
 apply from: rootProject.file('gradle/code-analysis.gradle')
 apply from: rootProject.file('gradle/coverage.gradle')

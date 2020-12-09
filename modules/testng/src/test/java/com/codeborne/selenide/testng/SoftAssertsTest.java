@@ -7,11 +7,11 @@ import integration.testng.ReportsNGTest;
 import integration.testng.SoftAssertTestNGTest1;
 import integration.testng.SoftAssertTestNGTest2;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import org.testng.IClass;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
@@ -29,7 +29,7 @@ import static org.testng.ITestResult.FAILURE;
 final class SoftAssertsTest implements WithAssertions {
   private final SoftAsserts listener = new SoftAsserts();
 
-  @AfterEach
+  @AfterMethod
   void tearDown() {
     SelenideLogger.removeAllListeners();
   }

@@ -1,0 +1,11 @@
+dependencies {
+  testImplementation project(':statics')
+  testImplementation project(':statics').sourceSets.test.output
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.seleniumhq.selenium:selenium-server:$seleniumVersion") {
+    exclude group: 'net.bytebuddy', module: 'byte-buddy'
+  }
+}

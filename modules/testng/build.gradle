@@ -1,0 +1,19 @@
+ext {
+  testngVersion = '7.3.0'
+}
+
+dependencies {
+  implementation project(':statics')
+  testImplementation project(':statics')
+  testImplementation project(':statics').sourceSets.test.output
+
+  compileOnly("org.testng:testng:$testngVersion") { transitive = false }
+  testImplementation("org.testng:testng:$testngVersion") { transitive = false }
+  testRuntimeOnly("org.testng:testng:$testngVersion") {
+    exclude(group: 'junit')
+  }
+}
+
+tasks.withType(Test) {
+  useTestNG()
+}

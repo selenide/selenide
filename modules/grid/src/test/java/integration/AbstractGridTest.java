@@ -1,6 +1,6 @@
-package grid;
+package integration;
 
-import integration.IntegrationTest;
+import com.codeborne.selenide.WebDriverRunner;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +18,12 @@ abstract class AbstractGridTest extends IntegrationTest {
 
   @BeforeEach
   final void setUpGrid() {
+    if (WebDriverRunner.isChrome()) {
+      WebDriverManager.chromedriver().setup();
+    }
+    if (WebDriverRunner.isFirefox()) {
+      WebDriverManager.firefoxdriver().setup();
+    }
     closeWebDriver();
 
     hubPort = findFreePort();
@@ -28,7 +34,6 @@ abstract class AbstractGridTest extends IntegrationTest {
       "-hub", "http://localhost:" + hubPort + "/grid/register"
     });
 
-    WebDriverManager.chromedriver().setup();
     timeout = 4000;
   }
 

@@ -1,107 +1,83 @@
-test {
-  include 'com/codeborne/selenide/**/*'
-}
-
-task ie(type: Test) {
-  systemProperties['selenide.browser'] = 'ie'
-  systemProperties['selenide.timeout'] = '8000'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/ie'
-  include 'integration/**/*'
-  exclude '**/AlertText.*'
-  exclude '**/ConfirmTest.*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task edge(type: Test) {
-  systemProperties['selenide.browser'] = 'edge'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task chrome(type: Test) {
-  systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task chrome_headless(type: Test) {
-  systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.headless'] = 'true'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_headless'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task chrome_remote(type: Test) {
-  systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
-  systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_remote'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task firefox(type: Test) {
-  systemProperties['selenide.browser'] = 'firefox'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task firefox_headless(type: Test) {
-  systemProperties['selenide.browser'] = 'firefox'
-  systemProperties['selenide.headless'] = 'true'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_headless'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task firefox_remote(type: Test) {
-  systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
-  systemProperties['selenide.browser'] = 'firefox'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_remote'
-  include 'integration/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task grid(type: Test) {
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/grid'
-  include 'grid/**/*'
-  exclude 'com/codeborne/selenide/**/*'
-}
-
-task testng(type: Test) {
-  useTestNG()
-  include '**/testng/**/*'
-  systemProperties['selenide.browser'] = 'chrome'
-  systemProperties['selenide.headless'] = 'true'
-  systemProperties['selenide.reportsFolder'] = 'build/reports/tests/testng'
-}
-
-tasks.withType(Test) {
-  useJUnitPlatform()
-  systemProperty('file.encoding', encoding)
-  systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
-  if (System.getenv('CI')) {
-    maxParallelForks = 1
-  } else {
-    maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+allprojects {
+  test {
+    include 'com/codeborne/selenide/**/*'
   }
-  jvmArgs = ['-ea', '-Xmx512m']
-  systemProperties += System.properties
 
-  classpath += project.sourceSets.staticFacade.output.classesDirs
-  classpath += project.sourceSets.staticFacadeTest.output.classesDirs
-  testClassesDirs += project.sourceSets.staticFacadeTest.output.classesDirs
-
-  jacoco {
-    enabled = true
-    includes = ['com/codeborne/selenide/**/*']
+  task ie(type: Test) {
+    systemProperties['selenide.browser'] = 'ie'
+    systemProperties['selenide.timeout'] = '8000'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/ie'
+    include 'integration/**/*'
+    exclude '**/AlertText.*'
+    exclude '**/ConfirmTest.*'
+    exclude 'com/codeborne/selenide/**/*'
   }
-  outputs.upToDateWhen {
-    false
+
+  task edge(type: Test) {
+    systemProperties['selenide.browser'] = 'edge'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task chrome(type: Test) {
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task chrome_headless(type: Test) {
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.headless'] = 'true'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_headless'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task chrome_remote(type: Test) {
+    systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome_remote'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task firefox(type: Test) {
+    systemProperties['selenide.browser'] = 'firefox'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task firefox_headless(type: Test) {
+    systemProperties['selenide.browser'] = 'firefox'
+    systemProperties['selenide.headless'] = 'true'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_headless'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  task firefox_remote(type: Test) {
+    systemProperties['selenide.remote'] = 'http://localhost:4444/wd/hub'
+    systemProperties['selenide.browser'] = 'firefox'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_remote'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
+  tasks.withType(Test) {
+    useJUnitPlatform()
+    systemProperty('file.encoding', encoding)
+    systemProperty('BUILD_URL', System.getenv()['BUILD_URL'])
+    if (System.getenv('CI')) {
+      maxParallelForks = 1
+    } else {
+      maxParallelForks = (int) Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    }
+    jvmArgs = ['-ea', '-Xmx512m']
+    systemProperties += System.properties
   }
 }
 
-task allTests(dependsOn: ['clean', 'check', 'test', 'grid', 'firefox_headless', 'chrome_headless']) {}
+task allTests(dependsOn: ['clean', 'check', 'firefox_headless', 'chrome_headless']) {}

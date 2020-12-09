@@ -8,7 +8,7 @@ import integration.server.LocalHttpServer;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
@@ -17,19 +17,17 @@ abstract class BaseTestNGTest {
   private static LocalHttpServer server;
 
   protected static final String browser = System.getProperty("selenide.browser", "chrome");
-  protected static String baseUrl;
 
-  protected SelenideDriver driver = new SelenideDriver(
-    new SelenideConfig().browser(browser).baseUrl(baseUrl)
-  );
+  private static final SelenideConfig config = new SelenideConfig().browser(browser);
+  protected final SelenideDriver driver = new SelenideDriver(config);
 
-  @BeforeClass
-  private void startServer() throws Exception {
+  @BeforeSuite
+  void startServer() throws Exception {
     if (server == null) {
       int port = findFreePort();
       log.info("START {} Test NG tests", browser);
       server = new LocalHttpServer(port, true).start();
-      baseUrl = "https://127.0.0.1:" + port;
+      config.baseUrl("https://127.0.0.1:" + port);
     }
   }
 

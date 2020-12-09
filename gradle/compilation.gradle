@@ -1,11 +1,13 @@
-ext {
-  encoding = 'UTF-8'
-}
+allprojects {
+  ext {
+    encoding = 'UTF-8'
+  }
 
-tasks.withType(JavaCompile) {
-  options.encoding = encoding
-  options.debug = true
-}
-compileJava.options.debugOptions.debugLevel = "source,lines,vars"
+  tasks.withType(JavaCompile) {
+    options.encoding = encoding
+    options.debug = true
+  }
+  compileJava.options.debugOptions.debugLevel = "source,lines,vars"
 
-sourceCompatibility = '1.8'
+  sourceCompatibility = '1.8'
+}

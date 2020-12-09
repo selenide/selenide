@@ -1,4 +1,4 @@
-package grid;
+package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.AfterEach;
@@ -16,9 +16,6 @@ final class SeleniumGridTest extends AbstractGridTest {
   @BeforeEach
   void setUp() {
     Configuration.remote = "http://localhost:" + hubPort + "/wd/hub";
-    Configuration.browser = "chrome";
-    Configuration.headless = true;
-    Configuration.proxyEnabled = true;
     System.setProperty("chromeoptions.mobileEmulation", "deviceName=Nexus 5");
   }
 
