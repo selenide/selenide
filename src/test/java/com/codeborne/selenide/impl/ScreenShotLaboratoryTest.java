@@ -29,7 +29,8 @@ import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
 final class ScreenShotLaboratoryTest implements WithAssertions {
-  private final String workingDirectory = new File(System.getProperty("user.dir")).toURI().toString().replaceAll("/$", "");
+  private final String dir = System.getProperty("user.dir");
+  private final String workingDirectory = new File(dir).toURI().toString().replaceAll("/$", "");
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
   private final SelenideConfig config = new SelenideConfig().savePageSource(false).reportsFolder("build/reports/tests");
   private final Driver driver = new DriverStub(config, new Browser("chrome", false), webDriver, null);
@@ -79,14 +80,13 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
       .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
 
     List<File> contextScreenshots = screenshots.finishContext();
-    assertThat(contextScreenshots)
-      .hasSize(3);
+    assertThat(contextScreenshots).hasSize(3);
     assertThat(contextScreenshots.get(0))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
     assertThat(contextScreenshots.get(1))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
     assertThat(contextScreenshots.get(2))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
   }
 
   @Test
@@ -102,18 +102,17 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.takeScreenShot(driver);
 
     List<File> allScreenshots = screenshots.getScreenshots();
-    assertThat(allScreenshots)
-      .hasSize(5);
+    assertThat(allScreenshots).hasSize(5);
     assertThat(allScreenshots.get(0))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
     assertThat(allScreenshots.get(1))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
     assertThat(allScreenshots.get(2))
-      .isEqualTo(new File("build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
     assertThat(allScreenshots.get(3))
-      .isEqualTo(new File("build/reports/tests/12356789.3.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.3.png"));
     assertThat(allScreenshots.get(4))
-      .isEqualTo(new File("build/reports/tests/12356789.4.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.4.png"));
   }
 
   @Test
@@ -129,18 +128,17 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.takeScreenShot(driver);
 
     List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
-    assertThat(allThreadScreenshots)
-      .hasSize(5);
+    assertThat(allThreadScreenshots).hasSize(5);
     assertThat(allThreadScreenshots.get(0))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
     assertThat(allThreadScreenshots.get(1))
-      .isEqualTo(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
     assertThat(allThreadScreenshots.get(2))
-      .isEqualTo(new File("build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
+      .hasToString(dir + normalize("/build/reports/tests/ui/YourTest/test_another_method/12356789.2.png"));
     assertThat(allThreadScreenshots.get(3))
-      .isEqualTo(new File("build/reports/tests/12356789.3.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.3.png"));
     assertThat(allThreadScreenshots.get(4))
-      .isEqualTo(new File("build/reports/tests/12356789.4.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.4.png"));
   }
 
   @Test
@@ -155,28 +153,25 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
       .hasSize(3);
 
     screenshots.finishContext();
-    assertThat(contextScreenshots)
-      .hasSize(3);
-    assertThat(screenshots.getContextScreenshots())
-      .isEmpty();
+    assertThat(contextScreenshots).hasSize(3);
+    assertThat(screenshots.getContextScreenshots()).isEmpty();
   }
 
   @Test
   void canGetLastScreenshot() {
-    assertThat(screenshots.getLastScreenshot())
-      .isNull();
+    assertThat(screenshots.getLastScreenshot()).isNull();
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .isEqualTo(new File("build/reports/tests/12356789.0.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.0.png"));
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .isEqualTo(new File("build/reports/tests/12356789.1.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.1.png"));
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastScreenshot())
-      .isEqualTo(new File("build/reports/tests/12356789.2.png"));
+      .hasToString(dir + normalize("/build/reports/tests/12356789.2.png"));
   }
 
   @Test
@@ -186,15 +181,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.0.png"));
+      .hasValue(new File("build/reports/tests/12356789.0.png").getAbsoluteFile());
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.1.png"));
+      .hasValue(new File("build/reports/tests/12356789.1.png").getAbsoluteFile());
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastThreadScreenshot())
-      .hasValue(new File("build/reports/tests/12356789.2.png"));
+      .hasValue(new File("build/reports/tests/12356789.2.png").getAbsoluteFile());
   }
 
   @Test
@@ -207,15 +202,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
       .isEmpty();
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png").getAbsoluteFile());
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png").getAbsoluteFile());
 
     screenshots.takeScreenShot(driver);
     assertThat(screenshots.getLastContextScreenshot())
-      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png"));
+      .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png").getAbsoluteFile());
   }
 
   @Test
@@ -265,12 +260,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   void convertsReportUrlForOutsideSavedScreenshot() throws IOException {
     String reportsUrl = "http://ci.mycompany.com/job/666/artifact/";
     config.reportsUrl(reportsUrl);
-    config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath()); //directory, that not in 'user.dir'
+
+    // directory, that not in 'user.dir'
+    config.reportsFolder(Files.createTempDirectory("artifacts-storage").toFile().getAbsolutePath());
+
     doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
     String screenshot = screenshots.takeScreenshot(driver).summary();
     assertThat(screenshot)
-      .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home directories")
+      .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home dir")
       .startsWith(String.format("%nScreenshot: %s", reportsUrl + new File(screenshot).getName()));
   }
 
@@ -312,5 +310,9 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     assertThat(screenshot.summary()).isEqualTo(
       lineSeparator() + "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/12356789.0.png" +
         lineSeparator() + "Page source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html");
+  }
+
+  private String normalize(String path) {
+    return separatorChar == '\\' ? path.replace('/', separatorChar) : path;
   }
 }
