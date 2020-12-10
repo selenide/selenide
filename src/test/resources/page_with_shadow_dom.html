@@ -7,19 +7,21 @@
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
-    function appendChildItem(shadowContainer, text) {
+    function appendChildItem(shadowContainer, clazz, text) {
       var shadowContainerChildHost = document.createElement("div");
-      shadowContainerChildHost.setAttribute('class', 'shadow-container-child');
+      shadowContainerChildHost.setAttribute('class', clazz);
       var shadowContainerChild = shadowContainerChildHost.attachShadow( { mode: "open" } );
 
       var shadowContainerChildItem = document.createElement("div");
-      shadowContainerChildItem.setAttribute('class', 'shadow-container-child-item');
+      shadowContainerChildItem.setAttribute('class', clazz + '-item');
       let p = document.createElement("p");
       p.appendChild(document.createTextNode(text));
       shadowContainerChildItem.appendChild(p);
       shadowContainerChild.appendChild(shadowContainerChildItem);
 
       shadowContainer.appendChild(shadowContainerChildHost);
+
+      return shadowContainerChild;
     }
 
     $(function () {
@@ -55,9 +57,13 @@
       shadow2.appendChild(p2);
 
       var shadowContainer = document.getElementById('shadow-container').attachShadow( { mode: "open" } )
-      appendChildItem(shadowContainer, "shadowContainerChildHost1");
-      appendChildItem(shadowContainer, "shadowContainerChildHost2");
-      appendChildItem(shadowContainer, "shadowContainerChildHost3");
+      shadowContainerChild1 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost1');
+      shadowContainerChild2 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost2');
+      shadowContainerChild3 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost3');
+
+      appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild1Host1')
+      appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild2Host1')
+      appendChildItem(shadowContainerChild3, 'shadow-container-child-child', 'shadowContainerChildChild1Host3')
     });
 
   </script>

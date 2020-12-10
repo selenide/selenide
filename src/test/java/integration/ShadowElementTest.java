@@ -86,8 +86,10 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getAllElementsInAllNestedShadowHosts() {
-    final ElementsCollection elements = $$(shadowCss(".shadow-container-child-item", "#shadow-container", ".shadow-container-child"));
+    final ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
+      "#shadow-container", ".shadow-container-child", ".shadow-container-child-child"));
     elements.shouldHaveSize(3);
-    assertThat(elements.get(0).getText()).isEqualTo("shadowContainerChildHost1").as("Mismatch in name of first child container");
+    assertThat(elements.get(0).getText()).isEqualTo("shadowContainerChildChild1Host1").as("Mismatch in name of first child container");
+    assertThat(elements.get(2).getText()).isEqualTo("shadowContainerChildChild1Host3").as("Mismatch in name of last child container");
   }
 }

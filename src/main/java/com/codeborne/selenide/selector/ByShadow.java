@@ -84,12 +84,12 @@ public class ByShadow {
       List<String> hostSelectors = innerHostSelectors;
       while (!hostSelectors.isEmpty()) {
         final List<WebElement> innerHosts = new ArrayList<>();
-        final String innerHostSelector = innerHostSelectors.get(0);
+        final String hostSelector = hostSelectors.get(0);
         for (final WebElement host : hosts) {
-          innerHosts.addAll(getElementsInsideShadowTree(host, innerHostSelector));
+          innerHosts.addAll(getElementsInsideShadowTree(host, hostSelector));
         }
         hosts = innerHosts;
-        hostSelectors = innerHostSelectors.subList(1, innerHostSelectors.size());
+        hostSelectors = hostSelectors.subList(1, hostSelectors.size());
       }
 
       return hosts;
