@@ -1,33 +1,40 @@
-jar {
-  manifest {
-    attributes(
-      "Automatic-Module-Name": project.group + '.' + project.name,
-      "Implementation-Title": project.group + '.' + project.name,
-      "Implementation-Version": archiveVersion,
-      "Implementation-Vendor": "Codeborne")
+allprojects {
+  tasks.withType(Jar) {
+    manifest {
+      attributes(
+        "Automatic-Module-Name": project.group + '.' + project.name,
+        "Implementation-Title": project.group + '.' + project.name,
+        "Implementation-Version": archiveVersion,
+        "Implementation-Vendor": "selenide.org")
+    }
   }
+  tasks.withType(Javadoc) {
+    failOnError = false
+  }
+}
+
+task allprojectsJar(type: Jar, dependsOn: classes) {
   from allprojects.sourceSets.main.output
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task allprojectsSourcesJar(type: Jar) {
   classifier = 'sources'
   from allprojects.sourceSets.main.allSource
 }
 
-javadoc {
-  failOnError = false
+task allprojectsJavadoc(type: Javadoc) {
   source = allprojects.sourceSets.main.allJava
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task allprojectsJavadocJar(type: Jar) {
   classifier = 'javadoc'
-  from javadoc.destinationDir
+  from allprojectsJavadoc.destinationDir
 }
 
 artifacts {
-  archives jar
-  archives sourcesJar
-  archives javadocJar
+  archives allprojectsJar
+  archives allprojectsSourcesJar
+  archives allprojectsJavadocJar
 }
 
 
