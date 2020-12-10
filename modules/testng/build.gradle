@@ -11,6 +11,9 @@ dependencies {
   testImplementation("org.testng:testng:$testngVersion") { transitive = false }
   testRuntimeOnly("org.testng:testng:$testngVersion") {
     exclude(group: 'junit')
+    exclude(group: 'testng')
+    exclude(group: 'org.apache.ant')
+    exclude(group: 'com.google.inject')
   }
 }
 

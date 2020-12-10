@@ -2,15 +2,13 @@ package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import integration.AttributeTest;
-import integration.testng.ReportsNGTest;
-import integration.testng.SoftAssertTestNGTest1;
-import integration.testng.SoftAssertTestNGTest2;
 import org.assertj.core.api.WithAssertions;
 import org.testng.IClass;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
@@ -36,45 +34,34 @@ final class SoftAssertsTest implements WithAssertions {
 
   @Test
   void findsListenersAnnotationFromParentClass() {
-    assertThat(listener.getListenersAnnotation(SoftAssertTestNGTest1.class))
-      .isNotNull();
-    assertThat(listener.getListenersAnnotation(SoftAssertTestNGTest2.class))
-      .isNotNull();
-    assertThat(listener.getListenersAnnotation(ReportsNGTest.class))
-      .isNotNull();
-    assertThat(listener.getListenersAnnotation(AttributeTest.class))
-      .isNull();
+    assertThat(listener.getListenersAnnotation(BaseSoftTest.class)).isNotNull();
+    assertThat(listener.getListenersAnnotation(SoftTest.class)).isNotNull();
+    assertThat(listener.getListenersAnnotation(BaseHardTest.class)).isNotNull();
+    assertThat(listener.getListenersAnnotation(HardTest.class)).isNotNull();
+    assertThat(listener.getListenersAnnotation(AnotherTest.class)).isNull();
   }
 
   @Test
   void interceptsTestMethod_ifTestClassHasDeclaredSoftAssertListener() {
-    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class))
-      .isTrue();
-    assertThat(listener.shouldIntercept(SoftAssertTestNGTest2.class))
-      .isTrue();
-
-    assertThat(listener.shouldIntercept(ReportsNGTest.class))
-      .isFalse();
-    assertThat(listener.shouldIntercept(AttributeTest.class))
-      .isFalse();
+    assertThat(listener.shouldIntercept(SoftTest.class)).isTrue();
+    assertThat(listener.shouldIntercept(HardTest.class)).isFalse();
   }
 
   @Test
-  void shouldNotInterceptTestMethod_withDeclaredExceptedExceptions() throws NoSuchMethodException {
-    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("successfulTest1")))
+  void shouldNotInterceptTestMethod_withDeclaredExpectedExceptions() throws NoSuchMethodException {
+    assertThat(listener.shouldIntercept(SoftTest.class.getMethod("someTestMethod")))
       .isTrue();
-    assertThat(listener.shouldIntercept(SoftAssertTestNGTest1.class.getMethod("testWithExpectedExceptions")))
+    assertThat(listener.shouldIntercept(SoftTest.class.getMethod("testWithExpectedException")))
       .isFalse();
   }
 
   @Test
   void addsSelenideErrorListener_forMethodsThatNeedSoftAsserts() throws Exception {
-    ITestResult result = mockTestResult(SoftAssertTestNGTest1.class, "successfulTest1");
+    ITestResult result = mockTestResult(SoftTest.class, "someTestMethod");
 
     listener.addSelenideErrorListener(result);
 
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
-      .isTrue();
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isTrue();
   }
 
   private ITestResult mockTestResult(Class<?> testClass, String methodName) throws Exception {
@@ -94,31 +81,28 @@ final class SoftAssertsTest implements WithAssertions {
 
   @Test
   void shouldNotAddSelenideErrorListener_forMethodsThatDoNotNeedSoftAsserts() throws Exception {
-    ITestResult result = mockTestResult(ReportsNGTest.class, "successfulMethod");
+    ITestResult result = mockTestResult(HardTest.class, "yetAnotherTestMethod");
 
     listener.addSelenideErrorListener(result);
 
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
-      .isFalse();
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isFalse();
   }
 
   @Test
   void marksTestAsFailed_withAssertionError_containingAllErrors() throws Exception {
-    ITestResult result = mockTestResult(SoftAssertTestNGTest2.class, "userCanUseSoftAssertWithTestNG2");
+    ITestResult result = mockTestResult(SoftTest.class, "someTestMethod");
 
     ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     AssertionError softAssertionError = new AssertionError("fail1, fail2, fail3");
-    doThrow(softAssertionError)
-      .when(errorsCollector).failIfErrors("integration.testng.SoftAssertTestNGTest2.userCanUseSoftAssertWithTestNG2");
+    doThrow(softAssertionError).when(errorsCollector).failIfErrors(any());
 
     listener.onTestFailure(result);
 
     verify(result).setStatus(FAILURE);
     verify(result).setThrowable(softAssertionError);
-
-    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT))
-      .isFalse();
+    verify(errorsCollector).failIfErrors("com.codeborne.selenide.testng.SoftAssertsTest$SoftTest.someTestMethod");
+    assertThat(SelenideLogger.hasListener(LISTENER_SOFT_ASSERT)).isFalse();
   }
 
   @Test
@@ -132,16 +116,42 @@ final class SoftAssertsTest implements WithAssertions {
 
   @Test
   void shouldNotMarkTestAsFailed_ifThereWereNoErrorsDuringMethodExecution() throws Exception {
-    ITestResult result = mockTestResult(SoftAssertTestNGTest2.class, "userCanUseSoftAssertWithTestNG2");
+    ITestResult result = mockTestResult(SoftTest.class, "someTestMethod");
 
     ErrorsCollector errorsCollector = mock(ErrorsCollector.class);
     SelenideLogger.addListener(LISTENER_SOFT_ASSERT, errorsCollector);
     doNothing().when(errorsCollector)
-      .failIfErrors("integration.testng.SoftAssertTestNGTest2.userCanUseSoftAssertWithTestNG2");
+      .failIfErrors("com.codeborne.selenide.testng.SoftAssertsTest.SoftTest.someTestMethod");
 
     listener.onTestFailure(result);
 
     verify(result, never()).setStatus(FAILURE);
     verify(result, never()).setThrowable(any(Throwable.class));
+  }
+
+  @Listeners(SoftAsserts.class)
+  private static abstract class BaseSoftTest {
+  }
+
+  private static abstract class SoftTest extends BaseSoftTest {
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public abstract void testWithExpectedException();
+
+    @Test
+    public abstract void someTestMethod();
+  }
+
+  @Listeners(TextReport.class)
+  private static abstract class BaseHardTest {
+  }
+
+  private static abstract class HardTest extends BaseHardTest {
+    @Test
+    public abstract void yetAnotherTestMethod();
+  }
+
+  private static abstract class AnotherTest {
+    @Test
+    public abstract void yetAnotherTestMethod();
   }
 }
