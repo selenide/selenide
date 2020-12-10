@@ -49,7 +49,7 @@ final class LazyDriverTest implements WithAssertions {
 
     driver.createDriver();
 
-    verify(factory).createWebDriver(config, null, new File("build/down/123_456_78"));
+    verify(factory).createWebDriver(config, null, new File("build/down/123_456_78").getAbsoluteFile());
   }
 
   @Test
@@ -59,7 +59,8 @@ final class LazyDriverTest implements WithAssertions {
     driver.createDriver();
 
     assertThat(driver.getProxy()).isNotNull();
-    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(), new File("build/down/123_456_78"));
+    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(),
+      new File("build/down/123_456_78").getAbsoluteFile());
   }
 
   @Test

@@ -234,7 +234,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   private File writeToFile(Driver driver, BufferedImage destination) throws IOException {
-    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
+    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png").getAbsoluteFile();
     ensureParentFolderExists(screenshotOfElement);
     ImageIO.write(destination, "png", screenshotOfElement);
     return screenshotOfElement;
@@ -346,7 +346,7 @@ public class ScreenShotLaboratory {
         log.info("Webdriver doesn't support screenshots");
         return null;
       }
-      File imageFile = new File(config.reportsFolder(), fileName + ".png");
+      File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       try {
         FileHelper.writeToFile(scrFile.get(), imageFile);
       } catch (IOException e) {

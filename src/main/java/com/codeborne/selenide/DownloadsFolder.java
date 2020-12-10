@@ -29,7 +29,7 @@ public abstract class DownloadsFolder {
   public abstract void cleanupBeforeDownload();
 
   public File file(String fileName) {
-    return new File(folder, fileName);
+    return new File(folder, fileName).getAbsoluteFile();
   }
 
   @Override

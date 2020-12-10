@@ -58,7 +58,7 @@ public class WebPageSourceExtractor implements PageSourceExtractor {
 
   @Nonnull
   protected File createFile(Config config, String fileName) {
-    return new File(config.reportsFolder(), fileName + ".html");
+    return new File(config.reportsFolder(), fileName + ".html").getAbsoluteFile();
   }
 
   protected void writeToFile(String content, File targetFile) {

@@ -37,10 +37,10 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   @CheckReturnValue
   @Nonnull
   protected File webdriverLog(Config config) {
-    File logFolder = ensureFolderExists(new File(config.reportsFolder()));
+    File logFolder = ensureFolderExists(new File(config.reportsFolder()).getAbsoluteFile());
     String logFileName = String.format("webdriver.%s.log", fileNamer.generateFileName());
-    File logFile = new File(logFolder, logFileName);
-    log.info("Write webdriver logs to: {}", logFile.getAbsolutePath());
+    File logFile = new File(logFolder, logFileName).getAbsoluteFile();
+    log.info("Write webdriver logs to: {}", logFile);
     return logFile;
   }
 

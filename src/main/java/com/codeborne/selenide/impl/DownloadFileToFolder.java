@@ -93,7 +93,7 @@ public class DownloadFileToFolder {
   @Nonnull
   private File archiveFile(Config config, File downloadedFile) {
     File uniqueFolder = downloader.prepareTargetFolder(config);
-    File archivedFile = new File(uniqueFolder, downloadedFile.getName());
+    File archivedFile = new File(uniqueFolder, downloadedFile.getName()).getAbsoluteFile();
     moveFile(downloadedFile, archivedFile);
     return archivedFile;
   }

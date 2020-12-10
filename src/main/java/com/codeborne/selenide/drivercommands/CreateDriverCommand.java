@@ -63,7 +63,7 @@ public class CreateDriverCommand {
     }
 
     @Nullable File browserDownloadsFolder = config.remote() != null ? null :
-      ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()));
+      ensureFolderExists(new File(config.downloadsFolder(), fileNamer.generateFileName()).getAbsoluteFile());
 
     WebDriver webdriver = factory.createWebDriver(config, browserProxy, browserDownloadsFolder);
 

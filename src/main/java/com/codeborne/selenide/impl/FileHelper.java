@@ -52,7 +52,7 @@ public final class FileHelper {
 
   @Nonnull
   public static File ensureFolderExists(File folder) {
-    if (!folder.exists()) {
+    if (!folder.exists() || !folder.getAbsoluteFile().exists()) {
       log.info("Creating folder: {}", folder.getAbsolutePath());
       try {
         createDirectories(folder.toPath());
