@@ -11,8 +11,10 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 public class ByShadow {
@@ -66,13 +68,31 @@ public class ByShadow {
     @Override
     @CheckReturnValue
     @Nonnull
-    public List<WebElement> findElements(SearchContext context) {
-      WebElement host = context.findElement(By.cssSelector(shadowHost));
-      for (String innerHost : innerShadowHosts) {
-        host = getElementInsideShadowTree(host, innerHost);
+    public List<WebElement> findElements(final SearchContext context) {
+      final List<WebElement> hosts = context.findElements(By.cssSelector(shadowHost));
+
+      final List<WebElement> innerHosts = findInnerShadowHosts(hosts, Arrays.asList(this.innerShadowHosts));
+
+      return innerHosts.stream()
+        .flatMap(host -> getElementsInsideShadowTree(host, this.target).stream())
+        .collect(Collectors.toList());
+    }
+
+    private List<WebElement> findInnerShadowHosts(final List<WebElement> shadowHosts,
+                                                  final List<String> innerHostSelectors) {
+      List<WebElement> hosts = shadowHosts;
+      List<String> hostSelectors = innerHostSelectors;
+      while (!hostSelectors.isEmpty()) {
+        final List<WebElement> innerHosts = new ArrayList<>();
+        final String hostSelector = hostSelectors.get(0);
+        for (final WebElement host : hosts) {
+          innerHosts.addAll(getElementsInsideShadowTree(host, hostSelector));
+        }
+        hosts = innerHosts;
+        hostSelectors = hostSelectors.subList(1, hostSelectors.size());
       }
 
-      return getElementsInsideShadowTree(host, target);
+      return hosts;
     }
 
     private WebElement getElementInsideShadowTree(WebElement host, String target) {

@@ -7,6 +7,23 @@
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
+    function appendChildItem(shadowContainer, clazz, text) {
+      var shadowContainerChildHost = document.createElement("div");
+      shadowContainerChildHost.setAttribute('class', clazz);
+      var shadowContainerChild = shadowContainerChildHost.attachShadow( { mode: "open" } );
+
+      var shadowContainerChildItem = document.createElement("div");
+      shadowContainerChildItem.setAttribute('class', clazz + '-item');
+      let p = document.createElement("p");
+      p.appendChild(document.createTextNode(text));
+      shadowContainerChildItem.appendChild(p);
+      shadowContainerChild.appendChild(shadowContainerChildItem);
+
+      shadowContainer.appendChild(shadowContainerChildHost);
+
+      return shadowContainerChild;
+    }
+
     $(function () {
       var shadow = document.getElementById('shadow-host').attachShadow( { mode: "open" } )
 
@@ -38,17 +55,27 @@
       var text2 = document.createTextNode("The Shadow-DOM inside another shadow tree");
       p2.appendChild(text2);
       shadow2.appendChild(p2);
+
+      var shadowContainer = document.getElementById('shadow-container').attachShadow( { mode: "open" } )
+      shadowContainerChild1 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost1');
+      shadowContainerChild2 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost2');
+      shadowContainerChild3 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost3');
+
+      appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild1Host1')
+      appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild2Host1')
+      appendChildItem(shadowContainerChild3, 'shadow-container-child-child', 'shadowContainerChildChild1Host3')
     });
-
-
 
   </script>
 </head>
 <body>
 <h1>Page with Shadow DOM</h1>
 
-<div id="shadow-host">
-</div>
+<h2>Nested Shadow DOM</h2>
+<div id="shadow-host"></div>
+
+<h2>Multiple nested Shadow hosts</h2>
+<div id="shadow-container"></div>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.shadowCss;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ShadowElementTest extends ITest {
@@ -80,5 +82,14 @@ final class ShadowElementTest extends ITest {
   void getNonExistingTargetElementsInsideShadowHost() {
     $$(shadowCss("#nonexistent", "#shadow-host"))
       .shouldHaveSize(0);
+  }
+
+  @Test
+  void getAllElementsInAllNestedShadowHosts() {
+    final ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
+      "#shadow-container", ".shadow-container-child", ".shadow-container-child-child"));
+    elements.shouldHaveSize(3);
+    assertThat(elements.get(0).getText()).isEqualTo("shadowContainerChildChild1Host1").as("Mismatch in name of first child container");
+    assertThat(elements.get(2).getText()).isEqualTo("shadowContainerChildChild1Host3").as("Mismatch in name of last child container");
   }
 }
