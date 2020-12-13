@@ -18,6 +18,8 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -115,24 +117,24 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   @Test
   void decoratesElementsContainerWithItsSubElements() throws NoSuchFieldException {
     StatusBlock status = (StatusBlock) fieldDecorator.decorate(getClass().getClassLoader(), getField("status"));
-    WebElement statusElement = mock(WebElement.class);
+    WebElement statusElement = mockWebElement("div", "the status");
+    WebElement lastLogin = mockWebElement("div", "03.03.2003");
+    WebElement name = mockWebElement("div", "lena");
     when(webDriver.findElement(By.id("status"))).thenReturn(statusElement);
-    when(statusElement.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
-    when(statusElement.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
+    when(statusElement.findElement(By.className("last-login"))).thenReturn(lastLogin);
+    when(statusElement.findElement(By.className("name"))).thenReturn(name);
 
-    assertThat(status)
-      .isNotNull();
-    assertThat(status.getSelf())
-      .isNotNull();
-    status.getSelf().getText();
+    assertThat(status).isNotNull();
+    assertThat(status.getSelf()).isNotNull();
+    status.getSelf().shouldHave(text("the status"));
     verify(webDriver).findElement(By.id("status"));
-    assertThat(status.lastLogin)
-      .isNotNull();
-    status.lastLogin.getText();
+
+    assertThat(status.lastLogin).isNotNull();
+    status.lastLogin.shouldHave(text("03.03.2003"));
     verify(statusElement).findElement(By.className("last-login"));
-    assertThat(status.name)
-      .isNotNull();
-    status.name.getText();
+
+    assertThat(status.name).isNotNull();
+    status.name.shouldHave(text("lena"));
     verify(statusElement).findElement(By.className("name"));
   }
 
@@ -143,30 +145,28 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
     WebElement statusElement2 = mock(WebElement.class);
     when(webDriver.findElements(any(By.class))).thenReturn(asList(statusElement1, statusElement2));
     when(statusElement1.getText()).thenReturn("status element1 text");
-    when(statusElement1.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
-    when(statusElement1.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
-    when(statusElement2.findElement(By.className("last-login"))).thenReturn(mock(WebElement.class));
-    when(statusElement2.findElement(By.className("name"))).thenReturn(mock(WebElement.class));
+    WebElement lastLogin1 = mockWebElement("div", "01.01.2001");
+    when(statusElement1.findElement(By.className("last-login"))).thenReturn(lastLogin1);
+    WebElement name1 = mockWebElement("div", "john");
+    when(statusElement1.findElement(By.className("name"))).thenReturn(name1);
+    WebElement lastLogin2 = mockWebElement("div", "02.02.2002");
+    when(statusElement2.findElement(By.className("last-login"))).thenReturn(lastLogin2);
+    WebElement name2 = mockWebElement("div", "katie");
+    when(statusElement2.findElement(By.className("name"))).thenReturn(name2);
 
     Object decoratedField = fieldDecorator.decorate(getClass().getClassLoader(), getField("statusHistory"));
 
-    assertThat(decoratedField)
-      .isInstanceOf(List.class);
+    assertThat(decoratedField).isInstanceOf(List.class);
     List<StatusBlock> statusHistory = (List<StatusBlock>) decoratedField;
-    assertThat(statusHistory)
-      .isNotNull();
+    assertThat(statusHistory).isNotNull();
     verify(webDriver).findElements(By.cssSelector("table.history tr.status"));
-    assertThat(statusHistory)
-      .hasSize(2);
-    assertThat(statusHistory.get(0).getSelf().getText())
-      .isEqualTo("status element1 text");
-    assertThat(statusHistory.get(0).lastLogin)
-      .isNotNull();
-    statusHistory.get(0).lastLogin.getText();
+    assertThat(statusHistory).hasSize(2);
+    assertThat(statusHistory.get(0).getSelf().getText()).isEqualTo("status element1 text");
+    assertThat(statusHistory.get(0).lastLogin).isNotNull();
+    statusHistory.get(0).lastLogin.shouldHave(text("01.01.2001"));
     verify(statusElement1).findElement(By.className("last-login"));
-    assertThat(statusHistory.get(0).name)
-      .isNotNull();
-    statusHistory.get(0).name.getText();
+    assertThat(statusHistory.get(0).name).isNotNull();
+    statusHistory.get(0).name.shouldHave(text("john"));
     verify(statusElement1).findElement(By.className("name"));
   }
 
