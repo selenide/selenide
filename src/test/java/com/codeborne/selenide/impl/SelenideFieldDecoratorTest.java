@@ -3,7 +3,9 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideElement;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -20,11 +22,12 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class SelenideFieldDecoratorTest implements WithAssertions {
   private final TestPage page = new TestPage();
-  private final Config config = mock(Config.class);
+  private final Config config = new SelenideConfig();
   private final WebDriver webDriver = mock(WebDriver.class);
   private final Driver driver = new DriverStub(config, null, webDriver, null);
   private final SelenidePageFactory pageFactory = new SelenidePageFactory();
@@ -45,26 +48,39 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   }
 
   private Field getField(String fieldName) throws NoSuchFieldException {
+    return getField(page, fieldName);
+  }
+
+  private <T> Field getField(T page, String fieldName) throws NoSuchFieldException {
     return page.getClass().getDeclaredField(fieldName);
   }
 
   @Test
-  @SuppressWarnings("unchecked")
+  void decoratesElementsCollection() throws NoSuchFieldException {
+    TestPageWithElementsCollection page = new TestPageWithElementsCollection();
+
+    Object decoratedField = fieldDecorator.decorate(getClass().getClassLoader(), getField(page, "rows"));
+
+    assertThat(decoratedField).isInstanceOf(ElementsCollection.class);
+    verifyNoMoreInteractions(webDriver);
+  }
+
+  @Test
   void decoratesListOfSelenideElements() throws NoSuchFieldException {
-    when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
+    WebElement element1 = mock(WebElement.class);
+    WebElement element2 = mock(WebElement.class);
+    when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
 
     Object decoratedField = fieldDecorator.decorate(getClass().getClassLoader(), getField("rows"));
+    assertThat(decoratedField).isInstanceOf(ElementsCollection.class);
+    verifyNoMoreInteractions(webDriver);
 
-    assertThat(decoratedField)
-      .isInstanceOf(List.class);
-    List<SelenideElement> elements = (List<SelenideElement>) decoratedField;
-    assertThat(elements)
-      .hasSize(2);
-    verify(webDriver).findElements(any(By.class));
-    assertThat(elements.get(0))
-      .isInstanceOf(SelenideElement.class);
-    assertThat(elements.get(1))
-      .isInstanceOf(SelenideElement.class);
+    ElementsCollection elementsCollection = (ElementsCollection) decoratedField;
+    Object[] elements = elementsCollection.toArray();
+    assertThat(elements).hasSize(2);
+    verify(webDriver).findElements(By.cssSelector("table tbody tr"));
+    assertThat(elements[0]).isInstanceOf(SelenideElement.class);
+    assertThat(elements[0]).isInstanceOf(SelenideElement.class);
   }
 
   @Test
@@ -78,15 +94,16 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   @Test
   @SuppressWarnings("unchecked")
   void decoratesListOfVanillaWebElements() throws NoSuchFieldException {
-    when(webDriver.findElements(any(By.class))).thenReturn(asList(mock(WebElement.class), mock(WebElement.class)));
+    WebElement element1 = mock(WebElement.class);
+    WebElement element2 = mock(WebElement.class);
+    when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
+
     List<WebElement> elements = (List<WebElement>) fieldDecorator.decorate(getClass().getClassLoader(), getField("data"));
-    assertThat(elements)
-      .hasSize(2);
-    verify(webDriver).findElements(any(By.class));
-    assertThat(elements.get(0))
-      .isInstanceOf(WebElement.class);
-    assertThat(elements.get(1))
-      .isNotInstanceOf(SelenideElement.class);
+
+    assertThat(elements).hasSize(2);
+    verify(webDriver).findElements(By.cssSelector("table tbody tr"));
+    assertThat(elements.get(0)).isInstanceOf(SelenideElement.class);
+    assertThat(elements.get(1)).isInstanceOf(SelenideElement.class);
   }
 
   @Test
@@ -177,5 +194,10 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
 
     @FindBy(className = "name")
     SelenideElement name;
+  }
+
+  static class TestPageWithElementsCollection {
+    @FindBy(css = "table tbody tr")
+    ElementsCollection rows;
   }
 }
