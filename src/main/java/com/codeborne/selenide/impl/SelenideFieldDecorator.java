@@ -46,7 +46,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(driver, searchContext, selector, 0);
     }
-    if (ElementsCollection.class.isAssignableFrom(field.getType()) || isDecoratableList(field, SelenideElement.class)) {
+    if (ElementsCollection.class.isAssignableFrom(field.getType()) || isDecoratableList(field, WebElement.class)) {
       return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
