@@ -46,7 +46,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(driver, searchContext, selector, 0);
     }
-    if (ElementsCollection.class.isAssignableFrom(field.getType())) {
+    if (ElementsCollection.class.isAssignableFrom(field.getType()) || isDecoratableList(field, SelenideElement.class)) {
       return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
@@ -54,9 +54,6 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
     else if (isDecoratableList(field, ElementsContainer.class)) {
       return createElementsContainerList(field);
-    }
-    else if (isDecoratableList(field, SelenideElement.class)) {
-      return SelenideElementListProxy.wrap(driver, factory.createLocator(field));
     }
 
     return super.decorate(loader, field);
