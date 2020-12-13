@@ -42,6 +42,9 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   @CheckReturnValue
   @Nullable
   public Object decorate(ClassLoader loader, Field field) {
+    if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
+      return searchContext;
+    }
     By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(driver, searchContext, selector, 0);
@@ -98,7 +101,6 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
     pageFactory.initElements(new SelenideFieldDecorator(pageFactory, driver, self), result);
-    result.setSelf(self);
     return result;
   }
 
