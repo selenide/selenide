@@ -88,8 +88,9 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   @Test
   void decoratesVanillaWebElements() throws NoSuchFieldException {
     final Object someDiv = fieldDecorator.decorate(getClass().getClassLoader(), getField("someDiv"));
+    assertThat(someDiv).isNotNull();
     assertThat(someDiv)
-      .withFailMessage("someDiv should not be instance of SelenideElement. Actual class: " + someDiv.getClass())
+      .withFailMessage("someDiv should be instance of SelenideElement. Actual class: " + someDiv.getClass())
       .isInstanceOf(SelenideElement.class);
   }
 

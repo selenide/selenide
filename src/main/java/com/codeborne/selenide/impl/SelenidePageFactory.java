@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 /**
  * Factory class to make using Page Objects simpler and easier.
@@ -32,7 +33,8 @@ public class SelenidePageFactory {
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
-    initElements(new SelenideFieldDecorator(this, driver, driver.getWebDriver()), pageObject);
+    Type[] types = pageObject.getClass().getGenericInterfaces();
+    initElements(new SelenideFieldDecorator(this, driver, driver.getWebDriver()), pageObject, types);
     return pageObject;
   }
 
@@ -43,21 +45,21 @@ public class SelenidePageFactory {
    * @param decorator the decorator to use
    * @param page      The object to decorate the fields of
    */
-  public void initElements(FieldDecorator decorator, Object page) {
+  public void initElements(SelenideFieldDecorator decorator, Object page, Type[] genericTypes) {
     Class<?> proxyIn = page.getClass();
     while (proxyIn != Object.class) {
-      proxyFields(decorator, page, proxyIn);
+      proxyFields(decorator, page, proxyIn, genericTypes);
       proxyIn = proxyIn.getSuperclass();
     }
   }
 
-  private void proxyFields(FieldDecorator decorator, Object page, Class<?> proxyIn) {
+  private void proxyFields(SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
       if (isInitialized(page, field)) {
         continue;
       }
-      Object value = decorator.decorate(page.getClass().getClassLoader(), field);
+      Object value = decorator.decorate(page.getClass().getClassLoader(), field, genericTypes);
       if (value != null) {
         try {
           field.setAccessible(true);
