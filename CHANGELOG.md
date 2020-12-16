@@ -2,6 +2,7 @@
 
 ## 5.17.0 (planned to xx.12.2020)
 * Upgraded to browserup-proxy:2.1.2 and guava:30.1-jre
+* Support for chrome 88, edge 89, opera 73
 
 ## 5.16.2 (released 25.11.2020)
 * #1332 return old click(int, int) command logic  --  thanks to Petro Ovcharenko for PR #1333
