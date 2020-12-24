@@ -58,15 +58,8 @@ public class LastCollectionElement extends WebElementSource {
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.driver(), getSearchCriteria(), visible, lastError);
+      return new ElementNotFound(collection.driver(), description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  public String toString() {
-    return getSearchCriteria();
   }
 }

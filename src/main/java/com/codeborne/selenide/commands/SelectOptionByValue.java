@@ -39,7 +39,7 @@ public class SelectOptionByValue implements Command<Void> {
       select.selectByValue(value);
     }
     catch (NoSuchElementException e) {
-      throw new ElementNotFound(selectField.driver(), selectField.getSearchCriteria() + "/option[value:" + value + ']', exist, e);
+      throw new ElementNotFound(selectField.driver(), selectField.description() + "/option[value:" + value + ']', exist, e);
     }
   }
 }

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.17.0 (planned to xx.12.2020)
+* #1200 Add method $.as("name") to give elements human-readable names
 * Upgraded to browserup-proxy:2.1.2 and guava:30.1-jre
 * Support for chrome 88, edge 89, opera 73
 

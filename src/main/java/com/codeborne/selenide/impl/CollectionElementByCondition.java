@@ -50,7 +50,7 @@ public class CollectionElementByCondition extends WebElementSource {
       }
     }
 
-    throw new ElementNotFound(driver(), getSearchCriteria(), condition);
+    throw new ElementNotFound(driver(), description(), condition);
   }
 
   @Override
@@ -58,12 +58,5 @@ public class CollectionElementByCondition extends WebElementSource {
   @Nonnull
   public String getSearchCriteria() {
     return collection.description() + ".findBy(" + condition + ")";
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  public String toString() {
-    return getSearchCriteria();
   }
 }

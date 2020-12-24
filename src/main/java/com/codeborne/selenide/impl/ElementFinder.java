@@ -158,6 +158,6 @@ public class ElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return "{" + getSearchCriteria() + '}';
+    return "{" + description() + '}';
   }
 }

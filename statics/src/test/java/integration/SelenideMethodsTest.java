@@ -118,6 +118,11 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  void canGiveElementsHumanReadableNames() {
+    $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").shouldNot(exist);
+  }
+
+  @Test
   void shouldMethodCanUseCustomTimeout() {
     $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
     $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
