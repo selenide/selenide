@@ -55,7 +55,7 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @CheckReturnValue
     @Nonnull
     public String description() {
-      return selectElement.getSearchCriteria() + " selected options";
+      return selectElement.description() + " selected options";
     }
 
     @Override

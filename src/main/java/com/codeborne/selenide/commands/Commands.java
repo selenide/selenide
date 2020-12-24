@@ -42,6 +42,7 @@ public class Commands {
   }
 
   private void addTechnicalCommands() {
+    add("as", new As());
     add("toString", new ToString());
     add("toWebElement", new ToWebElement());
     add("getWrappedElement", new GetWrappedElement());

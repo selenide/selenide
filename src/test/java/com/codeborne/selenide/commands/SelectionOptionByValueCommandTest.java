@@ -27,7 +27,7 @@ final class SelectionOptionByValueCommandTest implements WithAssertions {
   void setup() {
     when(selectField.driver()).thenReturn(new DriverStub());
     when(selectField.getWebElement()).thenReturn(element);
-    when(selectField.getSearchCriteria()).thenReturn("By.tagName{select}");
+    when(selectField.description()).thenReturn("By.tagName{select}");
     when(element.getText()).thenReturn("walue");
     when(element.getTagName()).thenReturn("select");
     when(foundElement.isSelected()).thenReturn(true);

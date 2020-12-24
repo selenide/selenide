@@ -41,6 +41,6 @@ public class SelectRadio implements Command<SelenideElement> {
         return wrap(locator.driver(), radio);
       }
     }
-    throw new ElementNotFound(locator.driver(), locator.getSearchCriteria(), value(value));
+    throw new ElementNotFound(locator.driver(), locator.description(), value(value));
   }
 }

@@ -26,6 +26,9 @@ import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public abstract class WebElementSource {
+  @Nullable
+  protected String alias;
+
   @CheckReturnValue
   @Nonnull
   public abstract Driver driver();
@@ -37,6 +40,24 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public abstract String getSearchCriteria();
+
+  public void setAlias(String alias) {
+    if (alias.isEmpty()) throw new IllegalArgumentException("Empty alias not allowed");
+    this.alias = alias;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public String description() {
+    return alias != null ? alias : getSearchCriteria();
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String toString() {
+    return description();
+  }
 
   @CheckReturnValue
   @Nonnull
@@ -53,7 +74,7 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    return new ElementNotFound(driver(), getSearchCriteria(), condition, lastError);
+    return new ElementNotFound(driver(), description(), condition, lastError);
   }
 
   @CheckReturnValue
@@ -88,10 +109,10 @@ public abstract class WebElementSource {
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShouldNot(driver(), description(), prefix, condition, element, lastError);
     }
     else {
-      throw new ElementShould(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShould(driver(), description(), prefix, condition, element, lastError);
     }
     return null;
   }

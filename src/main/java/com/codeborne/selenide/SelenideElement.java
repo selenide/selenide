@@ -542,6 +542,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String toString();
 
   /**
+   * Give this element a human-readable name
+   *
+   * Caution: you probably don't need this method.
+   * It's always a good idea to have the actual selector instead of "nice" description (which might be misleading or even lying).
+   *
+   * @param alias a human-readable name of this element (null or empty string not allowed)
+   * @return this element
+   * @since 5.17.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement as(String alias);
+
+  /**
    * Get parent element of this element
    * ATTENTION! This method doesn't start any search yet!
    * For example, $("td").parent() could give some "tr".
