@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +28,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-class SelenideFieldDecorator extends DefaultFieldDecorator {
+class SelenideFieldDecorator {
   private static final Logger logger = LoggerFactory.getLogger(SelenideFieldDecorator.class);
+  private final FieldDecorator defaultFieldDecorator;
   private final SelenidePageFactory pageFactory;
   private final Driver driver;
   private final SearchContext searchContext;
 
   SelenideFieldDecorator(SelenidePageFactory pageFactory, Driver driver, SearchContext searchContext) {
-    super(new DefaultElementLocatorFactory(searchContext));
+    defaultFieldDecorator = new DefaultFieldDecorator(new DefaultElementLocatorFactory(searchContext));
     this.pageFactory = pageFactory;
     this.driver = driver;
     this.searchContext = searchContext;
@@ -42,7 +44,6 @@ class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   @CheckReturnValue
   @Nullable
-  @Override
   public final Object decorate(ClassLoader loader, Field field) {
     Type[] classGenericTypes = field.getDeclaringClass().getGenericInterfaces();
     return decorate(loader, field, classGenericTypes);
@@ -75,7 +76,7 @@ class SelenideFieldDecorator extends DefaultFieldDecorator {
       return createElementsContainerList(field, genericTypes, selector);
     }
 
-    return super.decorate(loader, field);
+    return defaultFieldDecorator.decorate(loader, field);
   }
 
   @CheckReturnValue

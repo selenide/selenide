@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -37,9 +38,12 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   private final SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, driver, webDriver);
 
   @Test
-  void usesDefaultElementLocatorFactory() throws NoSuchFieldException {
+  void usesDefaultElementLocatorFactory() throws NoSuchFieldException, IllegalAccessException {
     SelenideFieldDecorator fieldDecorator = new SelenideFieldDecorator(pageFactory, driver, webDriver);
-    Field factoryField = fieldDecorator.getClass().getSuperclass().getDeclaredField("factory");
+    Field fieldDecoratorField = fieldDecorator.getClass().getDeclaredField("defaultFieldDecorator");
+    fieldDecoratorField.setAccessible(true);
+    FieldDecorator defaultFieldDecorator = (FieldDecorator) fieldDecoratorField.get(fieldDecorator);
+    Field factoryField = defaultFieldDecorator.getClass().getDeclaredField("factory");
     assertThat(factoryField.getType())
       .isAssignableFrom(DefaultElementLocatorFactory.class);
   }
