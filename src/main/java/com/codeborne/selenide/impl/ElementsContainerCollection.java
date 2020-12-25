@@ -4,6 +4,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -47,7 +48,7 @@ class ElementsContainerCollection extends AbstractList<ElementsContainer> {
       return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
     }
     catch (ReflectiveOperationException e) {
-      throw new RuntimeException("Failed to initialize field " + field, e);
+      throw new PageObjectException("Failed to initialize field " + field, e);
     }
   }
 

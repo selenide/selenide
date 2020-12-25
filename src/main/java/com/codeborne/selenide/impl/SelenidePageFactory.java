@@ -3,6 +3,7 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
@@ -32,7 +33,7 @@ public class SelenidePageFactory {
       return page(driver, constructor.newInstance());
     }
     catch (ReflectiveOperationException e) {
-      throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
+      throw new PageObjectException("Failed to create new instance of " + pageObjectClass, e);
     }
   }
 
@@ -62,29 +63,33 @@ public class SelenidePageFactory {
   private void proxyFields(SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
-      if (isInitialized(page, field)) {
-        continue;
-      }
-      Object value = decorator.decorate(page.getClass().getClassLoader(), field, genericTypes);
-      if (value != null) {
-        try {
-          field.setAccessible(true);
-          field.set(page, value);
-        }
-        catch (IllegalAccessException e) {
-          throw new RuntimeException(e);
+      if (!isInitialized(page, field)) {
+        Object value = decorator.decorate(page.getClass().getClassLoader(), field, genericTypes);
+        if (value != null) {
+          setFieldValue(page, field, value);
         }
       }
     }
   }
 
+  private void setFieldValue(Object page, Field field, Object value) {
+    try {
+      field.setAccessible(true);
+      field.set(page, value);
+    }
+    catch (IllegalAccessException e) {
+      throw new PageObjectException("Failed to assign field " + field + " to value " + value, e);
+    }
+  }
+
+  @CheckReturnValue
   private boolean isInitialized(Object page, Field field) {
     try {
       field.setAccessible(true);
       return field.get(page) != null;
     }
     catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
+      throw new PageObjectException("Failed to access field " + field + " in " + page, e);
     }
   }
 
@@ -96,7 +101,7 @@ public class SelenidePageFactory {
       return initElementsContainer(driver, field, self);
     }
     catch (ReflectiveOperationException e) {
-      throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
+      throw new PageObjectException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
