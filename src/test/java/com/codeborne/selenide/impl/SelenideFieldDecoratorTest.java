@@ -23,6 +23,7 @@ import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -142,10 +143,11 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
   @SuppressWarnings("unchecked")
   @Test
   void decoratesElementsContainerListWithItsSubElements() throws NoSuchFieldException {
-    WebElement statusElement1 = mock(WebElement.class);
-    WebElement statusElement2 = mock(WebElement.class);
-    when(webDriver.findElements(any(By.class))).thenReturn(asList(statusElement1, statusElement2));
-    when(statusElement1.getText()).thenReturn("status element1 text");
+    WebElement statusElement1 = mockWebElement("div", "status element1 text");
+    WebElement statusElement2 = mockWebElement("div", "status element2 text");
+    when(webDriver.findElement(any())).thenReturn(statusElement1);
+    when(webDriver.findElements(any())).thenReturn(asList(statusElement1, statusElement2));
+
     WebElement lastLogin1 = mockWebElement("div", "01.01.2001");
     when(statusElement1.findElement(By.className("last-login"))).thenReturn(lastLogin1);
     WebElement name1 = mockWebElement("div", "john");
@@ -160,17 +162,25 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
     assertThat(decoratedField).isInstanceOf(List.class);
     List<StatusBlock> statusHistory = (List<StatusBlock>) decoratedField;
     assertThat(statusHistory).isNotNull();
-    verify(webDriver).findElements(By.cssSelector("table.history tr.status"));
+    verify(webDriver, never()).findElements(By.cssSelector("table.history tr.status"));
     assertThat(statusHistory).hasSize(2);
-    assertThat(statusHistory.get(0).getSelf().getText()).isEqualTo("status element1 text");
-    assertThat(statusHistory.get(0).lastLogin).isNotNull();
-    statusHistory.get(0).lastLogin.shouldHave(text("01.01.2001"));
-    verify(statusElement1).findElement(By.className("last-login"));
-    assertThat(statusHistory.get(0).name).isNotNull();
-    statusHistory.get(0).name.shouldHave(text("john"));
-    verify(statusElement1).findElement(By.className("name"));
+    verify(webDriver).findElements(By.cssSelector("table.history tr.status"));
+
+    checkItemInStatusHistory(statusElement1, statusHistory.get(0), "status element1 text", "01.01.2001", "john");
+    checkItemInStatusHistory(statusElement2, statusHistory.get(1), "status element2 text", "02.02.2002", "katie");
   }
 
+  private void checkItemInStatusHistory(WebElement statusElement, StatusBlock status, String text, String lastLogin, String name) {
+    assertThat(status.getSelf().getText()).isEqualTo(text);
+
+    status.lastLogin.shouldHave(text(lastLogin));
+    verify(statusElement).findElement(By.className("last-login"));
+
+    status.name.shouldHave(text(name));
+    verify(statusElement).findElement(By.className("name"));
+  }
+
+  @SuppressWarnings("unused")
   static class TestPage {
     SelenideElement username;
     @FindBy(css = "table tbody tr")
@@ -197,6 +207,7 @@ final class SelenideFieldDecoratorTest implements WithAssertions {
     SelenideElement name;
   }
 
+  @SuppressWarnings("unused")
   static class TestPageWithElementsCollection {
     @FindBy(css = "table tbody tr")
     ElementsCollection rows;

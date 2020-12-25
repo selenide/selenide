@@ -48,11 +48,12 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
 
   @Test
   void injectsFoundSelenideElementAsSelf3() {
-    assertThatThrownBy(() -> page(YetAnotherPage.class))
+    YetAnotherPage page = page(YetAnotherPage.class);
+    assertThat(page.body).isNotNull();
+    assertThat(page.body.selects).hasSize(3);
+
+    assertThatThrownBy(() -> page.body.selects.get(0))
       .isInstanceOf(RuntimeException.class)
-      .hasMessageMatching("Failed to create new instance of class .*\\.FieldOfGenericTypeTest.YetAnotherPage.*")
-      .getCause()
-      .isInstanceOf(IllegalArgumentException.class)
       .hasMessageMatching("Cannot initialize field .*List .*DummyTypedElement.selects: .*ElementsContainer is abstract");
   }
 
@@ -75,6 +76,6 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
 
   static class YetAnotherPage {
     @FindBy(tagName = "body")
-    private DummyTypedElement<Boolean, ElementsContainer> body;
+    DummyTypedElement<Boolean, ElementsContainer> body;
   }
 }

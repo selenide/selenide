@@ -31,7 +31,7 @@ public class SelenidePageFactory {
       constructor.setAccessible(true);
       return page(driver, constructor.newInstance());
     }
-    catch (Exception e) {
+    catch (ReflectiveOperationException e) {
       throw new RuntimeException("Failed to create new instance of " + pageObjectClass, e);
     }
   }
@@ -95,17 +95,14 @@ public class SelenidePageFactory {
       SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
       return initElementsContainer(driver, field, self);
     }
-    catch (RuntimeException e) {
-      throw e;
-    }
-    catch (Exception e) {
+    catch (ReflectiveOperationException e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
   @CheckReturnValue
   @Nonnull
-  ElementsContainer initElementsContainer(Driver driver, Field field, SelenideElement self) throws Exception {
+  ElementsContainer initElementsContainer(Driver driver, Field field, SelenideElement self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType ?
       ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
@@ -117,7 +114,7 @@ public class SelenidePageFactory {
                                           Field field,
                                           SelenideElement self,
                                           Class<?> type,
-                                          Type[] genericTypes) throws Exception {
+                                          Type[] genericTypes) throws ReflectiveOperationException {
     if (Modifier.isInterface(type.getModifiers())) {
       throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
     }

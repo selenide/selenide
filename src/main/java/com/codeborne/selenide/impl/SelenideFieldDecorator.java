@@ -23,18 +23,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class SelenideFieldDecorator extends DefaultFieldDecorator {
+class SelenideFieldDecorator extends DefaultFieldDecorator {
   private static final Logger logger = LoggerFactory.getLogger(SelenideFieldDecorator.class);
   private final SelenidePageFactory pageFactory;
   private final Driver driver;
   private final SearchContext searchContext;
 
-  public SelenideFieldDecorator(SelenidePageFactory pageFactory, Driver driver, SearchContext searchContext) {
+  SelenideFieldDecorator(SelenidePageFactory pageFactory, Driver driver, SearchContext searchContext) {
     super(new DefaultElementLocatorFactory(searchContext));
     this.pageFactory = pageFactory;
     this.driver = driver;
@@ -65,14 +64,15 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(driver, searchContext, selector, 0);
     }
-    if (ElementsCollection.class.isAssignableFrom(field.getType()) || isDecoratableList(field, genericTypes, WebElement.class)) {
+    if (ElementsCollection.class.isAssignableFrom(field.getType()) ||
+      isDecoratableList(field, genericTypes, WebElement.class)) {
       return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return pageFactory.createElementsContainer(driver, searchContext, field, selector);
     }
     else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
-      return createElementsContainerList(field, genericTypes);
+      return createElementsContainerList(field, genericTypes, selector);
     }
 
     return super.decorate(loader, field);
@@ -80,27 +80,13 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
 
   @CheckReturnValue
   @Nonnull
-  private List<ElementsContainer> createElementsContainerList(Field field, Type[] genericTypes) {
-    List<ElementsContainer> result = new ArrayList<>();
+  private List<ElementsContainer> createElementsContainerList(Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
     }
 
-    try {
-      List<SelenideElement> selfList = SelenideElementListProxy.wrap(driver, factory.createLocator(field));
-      for (SelenideElement element : selfList) {
-        Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-        result.add(pageFactory.initElementsContainer(driver, field, element, listType, types));
-      }
-      return result;
-    }
-    catch (RuntimeException e) {
-      throw e;
-    }
-    catch (Exception e) {
-      throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
-    }
+    return new ElementsContainerCollection(pageFactory, driver, searchContext, field, listType, genericTypes, selector);
   }
 
   @CheckReturnValue
