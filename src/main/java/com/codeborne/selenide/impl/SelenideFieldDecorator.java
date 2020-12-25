@@ -19,9 +19,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -93,7 +91,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
       List<SelenideElement> selfList = SelenideElementListProxy.wrap(driver, factory.createLocator(field));
       for (SelenideElement element : selfList) {
         Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-        result.add(initElementsContainer(field, element, listType, types));
+        result.add(pageFactory.initElementsContainer(driver, field, element, listType, types));
       }
       return result;
     }
@@ -110,7 +108,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
   private ElementsContainer createElementsContainer(By selector, Field field) {
     try {
       SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
-      return initElementsContainer(field, self);
+      return pageFactory.initElementsContainer(driver, field, self);
     }
     catch (RuntimeException e) {
       throw e;
@@ -118,31 +116,6 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     catch (Exception e) {
       throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
-  }
-
-  private ElementsContainer initElementsContainer(Field field, SelenideElement self) throws Exception {
-    Type[] genericTypes = field.getGenericType() instanceof ParameterizedType ?
-      ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
-    return initElementsContainer(field, self, field.getType(), genericTypes);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private ElementsContainer initElementsContainer(Field field,
-                                                  SelenideElement self,
-                                                  Class<?> type,
-                                                  Type[] genericTypes) throws Exception {
-    if (Modifier.isInterface(type.getModifiers())) {
-      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
-    }
-    if (Modifier.isAbstract(type.getModifiers())) {
-      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is abstract");
-    }
-    Constructor<?> constructor = type.getDeclaredConstructor();
-    constructor.setAccessible(true);
-    ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    pageFactory.initElements(new SelenideFieldDecorator(pageFactory, driver, self), result, genericTypes);
-    return result;
   }
 
   @CheckReturnValue

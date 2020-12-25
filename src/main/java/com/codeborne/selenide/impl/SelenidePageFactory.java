@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.ElementsContainer;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import javax.annotation.CheckReturnValue;
@@ -8,6 +10,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
@@ -80,5 +84,33 @@ public class SelenidePageFactory {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  ElementsContainer initElementsContainer(Driver driver, Field field, SelenideElement self) throws Exception {
+    Type[] genericTypes = field.getGenericType() instanceof ParameterizedType ?
+      ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
+    return initElementsContainer(driver, field, self, field.getType(), genericTypes);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  ElementsContainer initElementsContainer(Driver driver,
+                                          Field field,
+                                          SelenideElement self,
+                                          Class<?> type,
+                                          Type[] genericTypes) throws Exception {
+    if (Modifier.isInterface(type.getModifiers())) {
+      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
+    }
+    if (Modifier.isAbstract(type.getModifiers())) {
+      throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is abstract");
+    }
+    Constructor<?> constructor = type.getDeclaredConstructor();
+    constructor.setAccessible(true);
+    ElementsContainer result = (ElementsContainer) constructor.newInstance();
+    initElements(new SelenideFieldDecorator(this, driver, self), result, genericTypes);
+    return result;
   }
 }
