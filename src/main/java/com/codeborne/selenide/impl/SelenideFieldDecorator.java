@@ -69,7 +69,7 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
       return new ElementsCollection(new BySelectorCollection(driver, searchContext, selector));
     }
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
-      return createElementsContainer(selector, field);
+      return pageFactory.createElementsContainer(driver, searchContext, field, selector);
     }
     else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
       return createElementsContainerList(field, genericTypes);
@@ -100,21 +100,6 @@ public class SelenideFieldDecorator extends DefaultFieldDecorator {
     }
     catch (Exception e) {
       throw new RuntimeException("Failed to create elements container list for field " + field.getName(), e);
-    }
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private ElementsContainer createElementsContainer(By selector, Field field) {
-    try {
-      SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
-      return pageFactory.initElementsContainer(driver, field, self);
-    }
-    catch (RuntimeException e) {
-      throw e;
-    }
-    catch (Exception e) {
-      throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
