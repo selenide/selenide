@@ -3,6 +3,8 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import javax.annotation.CheckReturnValue;
@@ -83,6 +85,21 @@ public class SelenidePageFactory {
     }
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  ElementsContainer createElementsContainer(Driver driver, SearchContext searchContext, Field field, By selector) {
+    try {
+      SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
+      return initElementsContainer(driver, field, self);
+    }
+    catch (RuntimeException e) {
+      throw e;
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Failed to create elements container for field " + field.getName(), e);
     }
   }
 
