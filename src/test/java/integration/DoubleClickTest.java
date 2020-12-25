@@ -12,15 +12,17 @@ final class DoubleClickTest extends ITest {
   void userCanDoubleClickOnElement() {
     openFile("page_with_double_clickable_button.html");
 
-    $("#double-clickable-button")
-      .shouldHave(value("double click me"))
-      .shouldBe(enabled);
+    withLongTimeout(() -> {
+      $("#double-clickable-button")
+        .shouldHave(value("double click me"))
+        .shouldBe(enabled);
 
-    $("#double-clickable-button")
-      .doubleClick()
-      .shouldHave(value("do not click me anymore"))
-      .shouldBe(disabled);
+      $("#double-clickable-button")
+        .doubleClick()
+        .shouldHave(value("do not click me anymore"))
+        .shouldBe(disabled);
 
-    $("h2").shouldHave(text("Double click worked"));
+      $("h2").shouldHave(text("Double click worked"));
+    });
   }
 }
