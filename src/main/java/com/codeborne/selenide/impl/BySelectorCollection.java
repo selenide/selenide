@@ -15,7 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
-public class BySelectorCollection implements WebElementsCollection {
+public class BySelectorCollection implements CollectionSource {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
   private final Driver driver;

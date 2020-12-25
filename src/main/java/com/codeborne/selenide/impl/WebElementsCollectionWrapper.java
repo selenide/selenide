@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class WebElementsCollectionWrapper implements WebElementsCollection {
+public class WebElementsCollectionWrapper implements CollectionSource {
   private final List<WebElement> elements;
   private final Driver driver;
 

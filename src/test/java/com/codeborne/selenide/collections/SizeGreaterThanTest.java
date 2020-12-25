@@ -2,7 +2,7 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.Mocks;
 import com.codeborne.selenide.ex.ListSizeMismatch;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -33,7 +33,7 @@ final class SizeGreaterThanTest implements WithAssertions {
 
   @Test
   void failMethod() {
-    WebElementsCollection collection = Mocks.mockCollection("Collection description");
+    CollectionSource collection = Mocks.mockCollection("Collection description");
 
     assertThatThrownBy(() ->
       new SizeGreaterThan(10).fail(collection,

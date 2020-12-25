@@ -9,7 +9,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public interface WebElementsCollection {
+public interface CollectionSource {
   /**
    * get elements of this collection (probably cached).
    */

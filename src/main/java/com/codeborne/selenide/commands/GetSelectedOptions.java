@@ -5,7 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -22,7 +22,7 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     return new ElementsCollection(new SelectedOptionsCollection(selectElement));
   }
 
-  private static class SelectedOptionsCollection implements WebElementsCollection {
+  private static class SelectedOptionsCollection implements CollectionSource {
     private final WebElementSource selectElement;
 
     private SelectedOptionsCollection(WebElementSource selectElement) {

@@ -36,7 +36,7 @@ final class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void getWebElement() {
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     WebElement mockedWebElement1 = mock(WebElement.class);
     WebElement mockedWebElement2 = mock(WebElement.class);
 
@@ -51,7 +51,7 @@ final class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void getSearchCriteria() {
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
     assertThat(collectionElement)
@@ -60,7 +60,7 @@ final class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void testToString() {
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
     assertThat(collectionElement)
@@ -69,7 +69,7 @@ final class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void createElementNotFoundErrorWithEmptyCollection() {
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn("ul#employees li.employee");
     CollectionElementByCondition collectionElement = new CollectionElementByCondition(collection, visible);
@@ -86,7 +86,7 @@ final class CollectionElementByConditionTest implements WithAssertions {
 
   @Test
   void createElementNotFoundErrorWithNonEmptyCollection() {
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn("ul#employees li.employee");
     when(collection.getElements()).thenReturn(singletonList(mock(WebElement.class)));

@@ -17,16 +17,16 @@ public class CollectionElementByCondition extends WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public static SelenideElement wrap(WebElementsCollection collection, Condition condition) {
+  public static SelenideElement wrap(CollectionSource collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
         collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
         new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
   }
 
-  private final WebElementsCollection collection;
+  private final CollectionSource collection;
   private final Condition condition;
 
-  CollectionElementByCondition(WebElementsCollection collection, Condition condition) {
+  CollectionElementByCondition(CollectionSource collection, Condition condition) {
     this.collection = collection;
     this.condition = condition;
   }

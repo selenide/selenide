@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 final class SelenideElementListIteratorTest implements WithAssertions {
   private final WebElement webElement = mockWebElement("a", "click me if you can");
-  private final WebElementsCollection collection = mockCollection("Collection description", webElement);
+  private final CollectionSource collection = mockCollection("Collection description", webElement);
 
   @Test
   void hasPrevious() {

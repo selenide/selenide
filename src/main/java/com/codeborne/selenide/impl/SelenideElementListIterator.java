@@ -9,7 +9,7 @@ import java.util.ListIterator;
 
 @ParametersAreNonnullByDefault
 public class SelenideElementListIterator extends SelenideElementIterator implements ListIterator<SelenideElement> {
-  public SelenideElementListIterator(WebElementsCollection collection, int index) {
+  public SelenideElementListIterator(CollectionSource collection, int index) {
     super(collection);
     this.index = index;
   }

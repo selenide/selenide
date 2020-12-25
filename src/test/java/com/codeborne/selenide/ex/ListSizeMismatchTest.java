@@ -2,7 +2,7 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 final class ListSizeMismatchTest implements WithAssertions {
   private final int expectedSize = 10;
   private final Driver driver = new DriverStub();
-  private final WebElementsCollection collection = mockCollection("Collection description");
+  private final CollectionSource collection = mockCollection("Collection description");
   private final List<WebElement> actualElementsList = asList(mockElement("Niff"), mockElement("Naff"), mockElement("Nuff"));
   private final Exception exception = new Exception("Something happened");
   private final long timeoutMs = 1000L;
