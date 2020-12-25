@@ -3,7 +3,7 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ final class AnyMatchTest implements WithAssertions {
 
   @Test
   void applyWithMatchingPredicate() {
-    WebElementsCollection collection = mockCollection("Collection description", element1, element2);
+    CollectionSource collection = mockCollection("Collection description", element1, element2);
 
     assertThat(new AnyMatch("Predicate description", it -> it.getText().equals("World"))
       .test(collection.getElements()))
@@ -41,7 +41,7 @@ final class AnyMatchTest implements WithAssertions {
 
   @Test
   void failOnMatcherError() {
-    WebElementsCollection collection = mockCollection("Collection description");
+    CollectionSource collection = mockCollection("Collection description");
 
     assertThatThrownBy(() ->
       new AnyMatch("Predicate description", it -> it.getText().equals("World"))

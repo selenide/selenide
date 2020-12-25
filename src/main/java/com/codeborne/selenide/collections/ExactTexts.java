@@ -6,7 +6,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
 import com.codeborne.selenide.impl.Html;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -50,7 +50,7 @@ public class ExactTexts extends CollectionCondition {
   }
 
   @Override
-  public void fail(WebElementsCollection collection,
+  public void fail(CollectionSource collection,
                    @Nullable List<WebElement> elements,
                    @Nullable Exception lastError,
                    long timeoutMs) {

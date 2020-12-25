@@ -13,7 +13,7 @@ import com.codeborne.selenide.impl.LastCollectionElement;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
 import com.codeborne.selenide.impl.TailOfCollection;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -44,9 +44,9 @@ import static java.util.stream.Collectors.toList;
 @ParametersAreNonnullByDefault
 public class ElementsCollection extends AbstractList<SelenideElement> {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
-  private final WebElementsCollection collection;
+  private final CollectionSource collection;
 
-  public ElementsCollection(WebElementsCollection collection) {
+  public ElementsCollection(CollectionSource collection) {
     this.collection = collection;
   }
 

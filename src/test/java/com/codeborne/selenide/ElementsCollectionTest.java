@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 final class ElementsCollectionTest implements WithAssertions {
   private final DriverStub driver = new DriverStub();
-  private final WebElementsCollection source = mock(WebElementsCollection.class);
+  private final CollectionSource source = mock(CollectionSource.class);
   private final WebElement element1 = element("h1");
   private final WebElement element2 = element("h2");
   private final WebElement element3 = element("h3");
@@ -221,7 +221,7 @@ final class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
-    WebElementsCollection source = mock(WebElementsCollection.class);
+    CollectionSource source = mock(CollectionSource.class);
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
@@ -232,7 +232,7 @@ final class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
-    WebElementsCollection source = mock(WebElementsCollection.class);
+    CollectionSource source = mock(CollectionSource.class);
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));

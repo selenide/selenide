@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.DriverStub;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 
 final class TextMismatchTest implements WithAssertions {
-  private final WebElementsCollection collection = mockCollection("Collection description");
+  private final CollectionSource collection = mockCollection("Collection description");
   private final List<String> actualTexts = asList("One", "Two", "Three");
   private final List<String> expectedTexts = asList("Four", "Five", "Six");
   private final long timeoutMs = 1000L;

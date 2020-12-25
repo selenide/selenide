@@ -10,10 +10,10 @@ import java.util.NoSuchElementException;
 
 @ParametersAreNonnullByDefault
 public class SelenideElementIterator implements Iterator<SelenideElement> {
-  protected final WebElementsCollection collection;
+  protected final CollectionSource collection;
   protected int index;
 
-  public SelenideElementIterator(WebElementsCollection collection) {
+  public SelenideElementIterator(CollectionSource collection) {
     this.collection = collection;
   }
 

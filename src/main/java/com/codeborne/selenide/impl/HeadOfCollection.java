@@ -9,11 +9,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class HeadOfCollection implements WebElementsCollection {
-  private final WebElementsCollection originalCollection;
+public class HeadOfCollection implements CollectionSource {
+  private final CollectionSource originalCollection;
   private final int size;
 
-  public HeadOfCollection(WebElementsCollection originalCollection, int size) {
+  public HeadOfCollection(CollectionSource originalCollection, int size) {
     this.originalCollection = originalCollection;
     this.size = size;
   }

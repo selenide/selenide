@@ -14,7 +14,7 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 
 import org.openqa.selenium.WebElement;
 
@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
   protected String explanation;
 
-  public abstract void fail(WebElementsCollection collection,
+  public abstract void fail(CollectionSource collection,
                             @Nullable List<WebElement> elements,
                             @Nullable Exception lastError,
                             long timeoutMs);
@@ -216,7 +216,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public void fail(WebElementsCollection collection,
+    public void fail(CollectionSource collection,
                      @Nullable List<WebElement> elements,
                      @Nullable Exception lastError,
                      long timeoutMs) {

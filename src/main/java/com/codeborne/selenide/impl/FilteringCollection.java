@@ -12,11 +12,11 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
-public class FilteringCollection implements WebElementsCollection {
-  private final WebElementsCollection originalCollection;
+public class FilteringCollection implements CollectionSource {
+  private final CollectionSource originalCollection;
   private final Condition filter;
 
-  public FilteringCollection(WebElementsCollection originalCollection, Condition filter) {
+  public FilteringCollection(CollectionSource originalCollection, Condition filter) {
     this.originalCollection = originalCollection;
     this.filter = filter;
   }

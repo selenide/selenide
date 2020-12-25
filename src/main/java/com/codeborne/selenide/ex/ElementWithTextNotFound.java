@@ -1,6 +1,6 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -11,7 +11,7 @@ import static java.lang.System.lineSeparator;
 @ParametersAreNonnullByDefault
 public class ElementWithTextNotFound extends UIAssertionError {
 
-  public ElementWithTextNotFound(WebElementsCollection collection, List<String> actualTexts,
+  public ElementWithTextNotFound(CollectionSource collection, List<String> actualTexts,
                                  List<String> expectedTexts, @Nullable String explanation,
                                  long timeoutMs, @Nullable Throwable lastError) {
     super(collection.driver(),

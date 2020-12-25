@@ -1,7 +1,7 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nullable;
@@ -15,7 +15,7 @@ import static java.lang.System.lineSeparator;
 public class ListSizeMismatch extends UIAssertionError {
   public ListSizeMismatch(Driver driver, String operator, int expectedSize,
                           @Nullable String explanation,
-                          WebElementsCollection collection,
+                          CollectionSource collection,
                           @Nullable List<WebElement> actualElements,
                           @Nullable Exception lastError,
                           long timeoutMs) {
