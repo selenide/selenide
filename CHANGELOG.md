@@ -1,7 +1,20 @@
 # Changelog
 
-## 5.17.0 (planned to xx.12.2020)
-* #1200 Add method $.as("name") to give elements human-readable names
+## 5.17.0 (planned to 26.12.2020)
+* #1200 Add method $.as("name") to give elements human-readable names  --  see PR #1353
+* #1329 Apply chrome headless arguments from puppeteer config  --  thanks to Aliaksandr Rasolka
+* #1346 Return all shadow dom elements  --  thanks to Daniel H. Peger for PR #1347
+
+* #1136 add method $.shouldBe(condition, timeout) as a replacement for $.waitUntil(condition, timeout)  --  see PR #1340
+* #1136 deprecate Conditions that were created for using with $.waitUntil/$.waitWhile methods  --  see PR #1340
+* #1338 improve message of waitUntil/waitWhile methods  --  see PR #1340
+
+* #694 support page object fields of generic types  --  see PR #1351
+* #282, #482 enable lazy loading for Page Object fields of type List<ElementsContainer>  --  see PR #1354
+
+* #1348 split the single gradle project to subprojects
+* #1344 Fixed OS dependencies in Selenide tests  --  thanks to Daniel H. Peger for PR #1345
+* #1343 Simple code cleanup  --  thanks to Yuri Orlov
 * Upgraded to browserup-proxy:2.1.2 and guava:30.1-jre
 * Support for chrome 88, edge 89, opera 73
 
