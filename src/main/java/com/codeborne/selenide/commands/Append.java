@@ -12,10 +12,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
-public class Append implements Command<WebElement> {
+public class Append implements Command<SelenideElement> {
   @Override
   @Nonnull
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     WebElement input = locator.getWebElement();
     input.sendKeys((String) firstOf(args));
     return proxy;

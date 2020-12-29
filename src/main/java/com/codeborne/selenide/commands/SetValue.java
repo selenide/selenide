@@ -15,7 +15,7 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 import static com.codeborne.selenide.impl.Events.events;
 
 @ParametersAreNonnullByDefault
-public class SetValue implements Command<WebElement> {
+public class SetValue implements Command<SelenideElement> {
   private final SelectOptionByValue selectOptionByValue;
   private final SelectRadio selectRadio;
 
@@ -31,7 +31,7 @@ public class SetValue implements Command<WebElement> {
 
   @Override
   @Nonnull
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     String text = firstOf(args);
     WebElement element = locator.findAndAssertElementIsInteractable();
 
