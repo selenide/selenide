@@ -1,6 +1,10 @@
 # Changelog
 
-## 5.17.0 (planned to 26.12.2020)
+## 5.17.1 (released 31.12.2020)
+* #1355 make Commands return SelenideElement instead of WebElement
+* #1070 #981 enable using soft asserts in @BeforeAll and @AfterAll methods (in JUnit 5)
+
+## 5.17.0 (released 26.12.2020)
 * #1200 Add method $.as("name") to give elements human-readable names  --  see PR #1353
 * #1329 Apply chrome headless arguments from puppeteer config  --  thanks to Aliaksandr Rasolka
 * #1346 Return all shadow dom elements  --  thanks to Daniel H. Peger for PR #1347
