@@ -34,7 +34,7 @@ public class Arguments {
     if (args == null) return Optional.empty();
 
     for (Object arg : args) {
-      if (klass.isAssignableFrom(arg.getClass()))
+      if (arg != null && klass.isAssignableFrom(arg.getClass()))
         //noinspection unchecked
         return Optional.of((T) arg);
     }
