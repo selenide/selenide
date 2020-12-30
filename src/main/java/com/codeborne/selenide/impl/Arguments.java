@@ -32,10 +32,10 @@ public class Arguments {
   @CheckReturnValue
   @Nonnull
   public <T> Optional<T> ofType(@Nonnull Class<T> klass) {
-    if (args == null || Arrays.stream(args).allMatch(Objects::isNull)) return Optional.empty();
+    if (args == null) return Optional.empty();
 
     for (Object arg : args) {
-      if (klass.isAssignableFrom(arg.getClass()))
+      if (arg != null && klass.isAssignableFrom(arg.getClass()))
         //noinspection unchecked
         return Optional.of((T) arg);
     }
