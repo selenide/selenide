@@ -4,7 +4,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Arguments {
