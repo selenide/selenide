@@ -1,8 +1,9 @@
 # Changelog
 
-## 5.17.1 (released 31.12.2020)
-* #1355 make Commands return SelenideElement instead of WebElement
-* #1070 #981 enable using soft asserts in @BeforeAll and @AfterAll methods (in JUnit 5)
+## 5.17.1 (released 30.12.2020)
+* #1355 make Commands return SelenideElement instead of WebElement  --  thanks to Boris Osipov
+* #1356 fix method $.setValue(null)  --  thanks to Dmitriy Zemlyanitsyn for PR #1357
+* #1070 #981 enable using soft asserts in @BeforeAll and @AfterAll methods (in JUnit 5)  --  see PR #1359
 
 ## 5.17.0 (released 26.12.2020)
 * #1200 Add method $.as("name") to give elements human-readable names  --  see PR #1353
