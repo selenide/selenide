@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import javax.annotation.CheckReturnValue;
@@ -23,7 +24,8 @@ import java.lang.reflect.Type;
  * @see <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects">Page Objects Wiki</a>
  */
 @ParametersAreNonnullByDefault
-public class SelenidePageFactory {
+public class SelenidePageFactory implements PageObjectFactory {
+  @Override
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass> PageObjectClass page(Driver driver, Class<PageObjectClass> pageObjectClass) {
@@ -37,6 +39,7 @@ public class SelenidePageFactory {
     }
   }
 
+  @Override
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
@@ -55,21 +58,27 @@ public class SelenidePageFactory {
   public void initElements(SelenideFieldDecorator decorator, Object page, Type[] genericTypes) {
     Class<?> proxyIn = page.getClass();
     while (proxyIn != Object.class) {
-      proxyFields(decorator, page, proxyIn, genericTypes);
+      initFields(decorator, page, proxyIn, genericTypes);
       proxyIn = proxyIn.getSuperclass();
     }
   }
 
-  private void proxyFields(SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
+  private void initFields(SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
       if (!isInitialized(page, field)) {
-        Object value = decorator.decorate(page.getClass().getClassLoader(), field, genericTypes);
+        By selector = findSelector(field);
+        Object value = decorator.decorate(page.getClass().getClassLoader(), field, selector, genericTypes);
         if (value != null) {
           setFieldValue(page, field, value);
         }
       }
     }
+  }
+
+  @Nonnull
+  protected By findSelector(Field field) {
+    return new Annotations(field).buildBy();
   }
 
   private void setFieldValue(Object page, Field field, Object value) {
@@ -93,9 +102,10 @@ public class SelenidePageFactory {
     }
   }
 
+  @Override
   @CheckReturnValue
   @Nonnull
-  ElementsContainer createElementsContainer(Driver driver, SearchContext searchContext, Field field, By selector) {
+  public ElementsContainer createElementsContainer(Driver driver, SearchContext searchContext, Field field, By selector) {
     try {
       SelenideElement self = ElementFinder.wrap(driver, searchContext, selector, 0);
       return initElementsContainer(driver, field, self);
@@ -113,13 +123,14 @@ public class SelenidePageFactory {
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
   }
 
+  @Override
   @CheckReturnValue
   @Nonnull
-  ElementsContainer initElementsContainer(Driver driver,
-                                          Field field,
-                                          SelenideElement self,
-                                          Class<?> type,
-                                          Type[] genericTypes) throws ReflectiveOperationException {
+  public ElementsContainer initElementsContainer(Driver driver,
+                                                 Field field,
+                                                 SelenideElement self,
+                                                 Class<?> type,
+                                                 Type[] genericTypes) throws ReflectiveOperationException {
     if (Modifier.isInterface(type.getModifiers())) {
       throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
     }

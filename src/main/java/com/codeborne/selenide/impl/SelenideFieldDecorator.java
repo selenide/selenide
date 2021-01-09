@@ -9,7 +9,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
-import org.openqa.selenium.support.pagefactory.Annotations;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
@@ -31,11 +30,11 @@ import java.util.List;
 class SelenideFieldDecorator {
   private static final Logger logger = LoggerFactory.getLogger(SelenideFieldDecorator.class);
   private final FieldDecorator defaultFieldDecorator;
-  private final SelenidePageFactory pageFactory;
+  private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final SearchContext searchContext;
 
-  SelenideFieldDecorator(SelenidePageFactory pageFactory, Driver driver, SearchContext searchContext) {
+  SelenideFieldDecorator(PageObjectFactory pageFactory, Driver driver, SearchContext searchContext) {
     defaultFieldDecorator = new DefaultFieldDecorator(new DefaultElementLocatorFactory(searchContext));
     this.pageFactory = pageFactory;
     this.driver = driver;
@@ -44,14 +43,14 @@ class SelenideFieldDecorator {
 
   @CheckReturnValue
   @Nullable
-  public final Object decorate(ClassLoader loader, Field field) {
+  public final Object decorate(ClassLoader loader, Field field, By selector) {
     Type[] classGenericTypes = field.getDeclaringClass().getGenericInterfaces();
-    return decorate(loader, field, classGenericTypes);
+    return decorate(loader, field, selector, classGenericTypes);
   }
 
   @CheckReturnValue
   @Nullable
-  public final Object decorate(ClassLoader loader, Field field, Type[] genericTypes) {
+  public final Object decorate(ClassLoader loader, Field field, By selector, Type[] genericTypes) {
     if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
       if (searchContext instanceof SelenideElement) {
         return searchContext;
@@ -61,7 +60,6 @@ class SelenideFieldDecorator {
         return null;
       }
     }
-    By selector = new Annotations(field).buildBy();
     if (WebElement.class.isAssignableFrom(field.getType())) {
       return ElementFinder.wrap(driver, searchContext, selector, 0);
     }

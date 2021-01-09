@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.17.3 (released 11.01.2021)
+* #1361 Fix int method arguments displaying in selenide report(log)  --  thanks to Pavel Fokin @fokinp
+* #1360 extract interface PageObjectFactory from SelenidePageFactory
+* #1360 move usages of o.o.s.s.pagefactory.Annotations to SelenidePageFactory.findSelector()  -  make it customizable
+
 ## 5.17.2 (released 30.12.2020)
 * #1355 make Commands return SelenideElement instead of WebElement  --  thanks to Boris Osipov
 * #1356 fix method $.setValue(null)  --  thanks to Dmitriy Zemlyanitsyn for PR #1357
