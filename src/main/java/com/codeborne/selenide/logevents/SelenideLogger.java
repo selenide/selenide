@@ -54,14 +54,30 @@ public class SelenideLogger {
   @CheckReturnValue
   @Nonnull
   static String readableArguments(@Nullable Object... args) {
-    return args == null ? "" :
-        (args[0] instanceof Object[]) ? arrayToString((Object[]) args[0]) :
-            arrayToString(args);
+    if (args == null) {
+      return "";
+    }
+
+    if (args[0] instanceof Object[]) {
+      return arrayToString((Object[]) args[0]);
+    }
+
+    if (args[0] instanceof int[]) {
+      return arrayToString((int[]) args[0]);
+    }
+
+    return arrayToString(args);
   }
 
   @CheckReturnValue
   @Nonnull
   private static String arrayToString(Object[] args) {
+    return args.length == 1 ? String.valueOf(args[0]) : Arrays.toString(args);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private static String arrayToString(int[] args) {
     return args.length == 1 ? String.valueOf(args[0]) : Arrays.toString(args);
   }
 
