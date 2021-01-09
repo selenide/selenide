@@ -26,6 +26,7 @@ public class FieldOfGenericTypeTest extends IntegrationTest {
     DummyPage page = page(DummyPage.class);
     assertThat(page).isInstanceOf(DummyPage.class);
     assertThat(page.body).isInstanceOf(DummyTypedElement.class);
+    assertThat(page.body.names).isNull();
     assertThat(page.body.selects).isInstanceOf(List.class);
     assertThat(page.body.selects).hasSize(3);
     assertThat(page.body.getSelf()).isEqualTo($("body"));

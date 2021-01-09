@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Condition.exist;
 
 @ParametersAreNonnullByDefault
 class ElementsContainerCollection extends AbstractList<ElementsContainer> {
-  private final SelenidePageFactory pageFactory;
+  private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final SearchContext parent;
   private final Field field;
@@ -28,7 +28,7 @@ class ElementsContainerCollection extends AbstractList<ElementsContainer> {
   private final Type[] genericTypes;
   private final By selector;
 
-  ElementsContainerCollection(SelenidePageFactory pageFactory, Driver driver, SearchContext parent,
+  ElementsContainerCollection(PageObjectFactory pageFactory, Driver driver, SearchContext parent,
                               Field field, Class<?> listType, Type[] genericTypes, By selector) {
     this.pageFactory = pageFactory;
     this.driver = driver;
