@@ -56,6 +56,10 @@ final class SelenideLoggerTest implements WithAssertions {
       .isEqualTo("null");
     assertThat(SelenideLogger.readableArguments((Object[]) new String[]{null, "a", null}))
       .isEqualTo("[null, a, null]");
+    assertThat(SelenideLogger.readableArguments((Object) new int[]{1}))
+      .isEqualTo("1");
+    assertThat(SelenideLogger.readableArguments((Object) new int[]{1, 2}))
+      .isEqualTo("[1, 2]");
   }
 
   @Test
