@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -90,7 +91,7 @@ class SelenideElementProxy implements InvocationHandler {
       SelenideLogger.commitStep(log, wrappedError);
       return continueOrBreak(proxy, method, wrappedError);
     }
-    catch (RuntimeException error) {
+    catch (RuntimeException | IOException error) {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
