@@ -31,6 +31,8 @@ task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
   from allprojectsJavadoc.destinationDir
 }
 
+uploadArchives.dependsOn(allprojectsJar, allprojectsSourcesJar, allprojectsJavadoc)
+
 artifacts {
   archives allprojectsJar
   archives allprojectsSourcesJar
@@ -92,6 +94,10 @@ if (project.hasProperty("signing.keyId")) {
             developer {
               id 'vinogradoff'
               name 'Alexei Vinogradov'
+            }
+            developer {
+              id 'dstekanov'
+              name 'Dmytro Stekanov'
             }
           }
         }
