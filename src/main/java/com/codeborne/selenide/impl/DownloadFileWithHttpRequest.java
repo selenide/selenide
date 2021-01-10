@@ -101,7 +101,7 @@ public class DownloadFileWithHttpRequest {
     saveContentToFile(response, downloadedFile);
 
     if (!fileFilter.match(new DownloadedFile(downloadedFile, emptyMap()))) {
-      throw new FileNotFoundException(String.format("Failed to download file from %s in %d ms.%s %n; actually downloaded: %s",
+      throw new FileNotFoundException(String.format("Failed to download file from %s in %d ms. %s;%n actually downloaded: %s",
         relativeOrAbsoluteUrl, timeout, fileFilter.description(), downloadedFile.getAbsolutePath())
       );
     }
