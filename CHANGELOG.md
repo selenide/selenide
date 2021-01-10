@@ -3,6 +3,7 @@
 ## 5.17.3 (released 10.01.2021)
 * #1361 Fix int method arguments displaying in selenide report(log)  --  thanks to Pavel Fokin @fokinp
 * #1363 Add human-readable description of FileFilter arguments in selenide report  --  thanks to Pavel Fokin @fokinp
+* #1364 Fix download log event missing in case of FileNotFoundException  --  thanks to Pavel Fokin @fokinp
 * #1360 extract interface PageObjectFactory from SelenidePageFactory
 * #1360 move usages of o.o.s.s.pagefactory.Annotations to SelenidePageFactory.findSelector()  -  make it customizable
 

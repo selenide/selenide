@@ -15,11 +15,13 @@ allprojects {
 
 task allprojectsJar(type: Jar, dependsOn: classes) {
   from allprojects.sourceSets.main.output
+  destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
 task allprojectsSourcesJar(type: Jar) {
-  classifier = 'sources'
+  archiveClassifier = 'sources'
   from allprojects.sourceSets.main.allSource
+  destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
 task allprojectsJavadoc(type: Javadoc) {
@@ -27,8 +29,9 @@ task allprojectsJavadoc(type: Javadoc) {
 }
 
 task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
-  classifier = 'javadoc'
+  archiveClassifier = 'javadoc'
   from allprojectsJavadoc.destinationDir
+  destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
 uploadArchives.dependsOn(allprojectsJar, allprojectsSourcesJar, allprojectsJavadoc)
