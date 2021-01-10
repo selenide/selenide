@@ -8,6 +8,7 @@ import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class ExtensionFilterTest {
+  private static final String FILTER_DESCRIPTION = "with extension \"pdf\"";
   private final FileFilter filter = new ExtensionFilter("pdf");
 
   @Test
@@ -24,7 +25,12 @@ final class ExtensionFilterTest {
 
   @Test
   void description() {
-    assertThat(filter.description()).isEqualTo(" with extension \"pdf\"");
+    assertThat(filter.description()).isEqualTo(FILTER_DESCRIPTION);
+  }
+
+  @Test
+  void hasToString() {
+    assertThat(filter).hasToString(FILTER_DESCRIPTION);
   }
 
   @Test

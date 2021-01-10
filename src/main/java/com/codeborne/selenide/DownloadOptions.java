@@ -44,11 +44,11 @@ public class DownloadOptions {
   @Override
   public String toString() {
     if (hasSpecifiedTimed() && !filter.isEmpty())
-      return String.format("method: %s, timeout: %s ms, filter:%s", method, timeout, filter.description());
+      return String.format("method: %s, timeout: %s ms, filter: %s", method, timeout, filter.description());
     else if (hasSpecifiedTimed())
       return String.format("method: %s, timeout: %s ms", method, timeout);
     else if (!filter.isEmpty())
-      return String.format("method: %s, filter:%s", method, filter.description());
+      return String.format("method: %s, filter: %s", method, filter.description());
     else
       return String.format("method: %s", method);
   }

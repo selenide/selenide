@@ -14,6 +14,10 @@ class ExtensionFilter implements FileFilter {
   }
 
   @Override public String description() {
-    return " with extension \"" + extension + "\"";
+    return "with extension \"" + extension + "\"";
+  }
+
+  @Override public String toString() {
+    return description();
   }
 }

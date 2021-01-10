@@ -12,6 +12,10 @@ class FilenameFilter implements FileFilter {
   }
 
   @Override public String description() {
-    return " with file name \"" + fileName + "\"";
+    return "with file name \"" + fileName + "\"";
+  }
+
+  @Override public String toString() {
+    return description();
   }
 }
