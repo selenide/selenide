@@ -47,7 +47,9 @@ if (project.hasProperty("signing.keyId")) {
   apply plugin: 'signing'
 
   signing {
-    sign configurations.archives
+    sign allprojectsJar
+    sign allprojectsSourcesJar
+    sign allprojectsJavadocJar
   }
 
   uploadArchives {
