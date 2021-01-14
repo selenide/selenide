@@ -27,14 +27,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-class SelenideFieldDecorator {
+public class SelenideFieldDecorator {
   private static final Logger logger = LoggerFactory.getLogger(SelenideFieldDecorator.class);
   private final FieldDecorator defaultFieldDecorator;
   private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final SearchContext searchContext;
 
-  SelenideFieldDecorator(PageObjectFactory pageFactory, Driver driver, SearchContext searchContext) {
+  protected SelenideFieldDecorator(PageObjectFactory pageFactory, Driver driver, SearchContext searchContext) {
     defaultFieldDecorator = new DefaultFieldDecorator(new DefaultElementLocatorFactory(searchContext));
     this.pageFactory = pageFactory;
     this.driver = driver;
@@ -50,7 +50,7 @@ class SelenideFieldDecorator {
 
   @CheckReturnValue
   @Nullable
-  public final Object decorate(ClassLoader loader, Field field, By selector, Type[] genericTypes) {
+  public Object decorate(ClassLoader loader, Field field, By selector, Type[] genericTypes) {
     if (ElementsContainer.class.equals(field.getDeclaringClass()) && "self".equals(field.getName())) {
       if (searchContext instanceof SelenideElement) {
         return searchContext;
@@ -79,7 +79,7 @@ class SelenideFieldDecorator {
 
   @CheckReturnValue
   @Nonnull
-  private List<ElementsContainer> createElementsContainerList(Field field, Type[] genericTypes, By selector) {
+  protected List<ElementsContainer> createElementsContainerList(Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
@@ -89,7 +89,7 @@ class SelenideFieldDecorator {
   }
 
   @CheckReturnValue
-  private boolean isDecoratableList(Field field, Type[] genericTypes, Class<?> type) {
+  protected boolean isDecoratableList(Field field, Type[] genericTypes, Class<?> type) {
     if (!List.class.isAssignableFrom(field.getType())) {
       return false;
     }
@@ -102,7 +102,7 @@ class SelenideFieldDecorator {
 
   @CheckReturnValue
   @Nullable
-  private Class<?> getListGenericType(Field field, Type[] genericTypes) {
+  protected Class<?> getListGenericType(Field field, Type[] genericTypes) {
     Type fieldType = field.getGenericType();
     if (!(fieldType instanceof ParameterizedType)) return null;
 
@@ -118,7 +118,7 @@ class SelenideFieldDecorator {
     throw new IllegalArgumentException("Cannot detect list type of " + field);
   }
 
-  private int indexOf(Class<?> klass, Type firstArgument) {
+  protected int indexOf(Class<?> klass, Type firstArgument) {
     Object[] objects = Arrays.stream(klass.getTypeParameters()).toArray();
     for (int i = 0; i < objects.length; i++) {
       if (objects[i].equals(firstArgument)) return i;

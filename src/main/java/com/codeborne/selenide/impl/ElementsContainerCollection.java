@@ -19,7 +19,7 @@ import java.util.AbstractList;
 import static com.codeborne.selenide.Condition.exist;
 
 @ParametersAreNonnullByDefault
-class ElementsContainerCollection extends AbstractList<ElementsContainer> {
+public class ElementsContainerCollection extends AbstractList<ElementsContainer> {
   private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final SearchContext parent;
@@ -28,8 +28,8 @@ class ElementsContainerCollection extends AbstractList<ElementsContainer> {
   private final Type[] genericTypes;
   private final By selector;
 
-  ElementsContainerCollection(PageObjectFactory pageFactory, Driver driver, SearchContext parent,
-                              Field field, Class<?> listType, Type[] genericTypes, By selector) {
+  public ElementsContainerCollection(PageObjectFactory pageFactory, Driver driver, SearchContext parent,
+                                     Field field, Class<?> listType, Type[] genericTypes, By selector) {
     this.pageFactory = pageFactory;
     this.driver = driver;
     this.parent = parent;
