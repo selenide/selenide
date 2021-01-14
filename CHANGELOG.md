@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.17.4 (released 14.01.2021)
+* #1360 make SelenidePageFactory even more customizable 
+
 ## 5.17.3 (released 10.01.2021)
 * #1361 Fix int method arguments displaying in selenide report(log)  --  thanks to Pavel Fokin @fokinp
 * #1363 Add human-readable description of FileFilter arguments in selenide report  --  thanks to Pavel Fokin @fokinp

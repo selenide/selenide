@@ -44,8 +44,14 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(Driver driver, T pageObject) {
     Type[] types = pageObject.getClass().getGenericInterfaces();
-    initElements(new SelenideFieldDecorator(this, driver, driver.getWebDriver()), pageObject, types);
+    initElements(driver, decorator(driver, driver.getWebDriver()), pageObject, types);
     return pageObject;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected SelenideFieldDecorator decorator(Driver driver, SearchContext searchContext) {
+    return new SelenideFieldDecorator(this, driver, searchContext);
   }
 
   /**
@@ -55,19 +61,19 @@ public class SelenidePageFactory implements PageObjectFactory {
    * @param decorator the decorator to use
    * @param page      The object to decorate the fields of
    */
-  public void initElements(SelenideFieldDecorator decorator, Object page, Type[] genericTypes) {
+  public void initElements(Driver driver, SelenideFieldDecorator decorator, Object page, Type[] genericTypes) {
     Class<?> proxyIn = page.getClass();
     while (proxyIn != Object.class) {
-      initFields(decorator, page, proxyIn, genericTypes);
+      initFields(driver, decorator, page, proxyIn, genericTypes);
       proxyIn = proxyIn.getSuperclass();
     }
   }
 
-  private void initFields(SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
+  protected void initFields(Driver driver, SelenideFieldDecorator decorator, Object page, Class<?> proxyIn, Type[] genericTypes) {
     Field[] fields = proxyIn.getDeclaredFields();
     for (Field field : fields) {
       if (!isInitialized(page, field)) {
-        By selector = findSelector(field);
+        By selector = findSelector(driver, field);
         Object value = decorator.decorate(page.getClass().getClassLoader(), field, selector, genericTypes);
         if (value != null) {
           setFieldValue(page, field, value);
@@ -77,11 +83,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @Nonnull
-  protected By findSelector(Field field) {
+  protected By findSelector(Driver driver, Field field) {
     return new Annotations(field).buildBy();
   }
 
-  private void setFieldValue(Object page, Field field, Object value) {
+  protected void setFieldValue(Object page, Field field, Object value) {
     try {
       field.setAccessible(true);
       field.set(page, value);
@@ -92,7 +98,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   }
 
   @CheckReturnValue
-  private boolean isInitialized(Object page, Field field) {
+  protected boolean isInitialized(Object page, Field field) {
     try {
       field.setAccessible(true);
       return field.get(page) != null;
@@ -140,7 +146,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
     ElementsContainer result = (ElementsContainer) constructor.newInstance();
-    initElements(new SelenideFieldDecorator(this, driver, self), result, genericTypes);
+    initElements(driver, decorator(driver, self), result, genericTypes);
     return result;
   }
 }
