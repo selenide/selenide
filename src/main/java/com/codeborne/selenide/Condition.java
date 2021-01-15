@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
-import static java.util.Arrays.asList;
+import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
@@ -504,28 +504,34 @@ public abstract class Condition {
 
   /**
    * Check if element matches ALL given conditions.
+   * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
    *
    * @param name       Name of this condition, like "empty" (meaning e.g. empty text AND empty value).
-   * @param conditions Conditions to match.
+   * @param condition1 first condition to match
+   * @param condition2 second condition to match
+   * @param conditions Other conditions to match
    * @return logical AND for given conditions.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition and(String name, Condition... conditions) {
-    return new And(name, asList(conditions));
+  public static Condition and(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return new And(name, merge(condition1, condition2, conditions));
   }
 
   /**
    * Check if element matches ANY of given conditions.
+   * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
    *
    * @param name       Name of this condition, like "error" (meaning e.g. "error" OR "failed").
-   * @param conditions Conditions to match.
+   * @param condition1 first condition to match
+   * @param condition2 second condition to match
+   * @param conditions Other conditions to match
    * @return logical OR for given conditions.
    */
   @CheckReturnValue
   @Nonnull
-  public static Condition or(String name, Condition... conditions) {
-    return new Or(name, asList(conditions));
+  public static Condition or(String name, Condition condition1, Condition condition2, Condition... conditions) {
+    return new Or(name, merge(condition1, condition2, conditions));
   }
 
   /**
