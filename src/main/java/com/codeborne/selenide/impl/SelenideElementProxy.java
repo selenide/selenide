@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Stopwatch;
 import com.codeborne.selenide.commands.Commands;
+import com.codeborne.selenide.ex.FailFastException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -161,6 +162,7 @@ class SelenideElementProxy implements InvocationHandler {
     if (e instanceof IllegalArgumentException) return false;
     if (e instanceof ReflectiveOperationException) return false;
     if (e instanceof JavascriptException) return false;
+    if (e instanceof FailFastException) return false;
 
     return e instanceof Exception || e instanceof AssertionError;
   }

@@ -2,10 +2,13 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.FailFastCondition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
+import com.codeborne.selenide.ex.FailFastException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -29,6 +32,9 @@ public abstract class WebElementSource {
   @Nullable
   protected String alias;
 
+  @Nullable
+  protected FailFastCondition failFastCondition;
+
   @CheckReturnValue
   @Nonnull
   public abstract Driver driver();
@@ -40,6 +46,10 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public abstract String getSearchCriteria();
+
+  public void setFailFast(FailFastCondition failFastCondition) {
+    this.failFastCondition = failFastCondition;
+  }
 
   public void setAlias(String alias) {
     if (alias.isEmpty()) throw new IllegalArgumentException("Empty alias not allowed");
@@ -89,6 +99,9 @@ public abstract class WebElementSource {
 
     Throwable lastError = null;
     WebElement element = null;
+    if(failFastCondition != null && failFastCondition.getAsBoolean()){
+      throw new FailFastException(driver(), failFastCondition);
+    }
     try {
       element = getWebElement();
       if (check.apply(driver(), element)) {
@@ -102,7 +115,6 @@ public abstract class WebElementSource {
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
       throw Cleanup.of.wrap(lastError);
     }
-
     if (element == null) {
       if (!check.applyNull()) {
         throw createElementNotFoundError(check, lastError);

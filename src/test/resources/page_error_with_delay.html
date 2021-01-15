@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>start page</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script src="jquery.min.js"></script>
+  <script>
+    function appendError() {
+      setTimeout(function() {
+        $('body').append("<div id='error'>Something went wrong!</div>");
+      }, 1000);
+    }
+  </script>
+</head>
+<body onpageshow="appendError()">
+<!--<h2>Start page</h2>-->
+</body>
+</html>

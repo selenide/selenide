@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.commands.FailFast;
 import com.codeborne.selenide.files.FileFilter;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.openqa.selenium.By;
@@ -511,6 +512,35 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CanIgnoreReturnValue
   @Deprecated
   SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
+
+  /**
+   * <p>Set fail fast condition<p/>
+   *
+   * <p>Helps in situations when you want to
+   *  perform additional checks while waiting for an element to appear or disappear. For example
+   *  you can check if there are any alerts or error messages displayed and fail fast after submitting a form
+   *  instead of waiting for some element to appear. The condition is re-evaluated for the duration of should wait,
+   *  unless triggered, which means that it may add additional network delay, especially if we are talking
+   *  about RemoteWebdriver.
+   *  <p/>
+   *
+   *  <p>Example usage:
+   *
+   *  $("#submit-button").click()
+   *  $("#success").failIf(new FailFastCondition(() -> $("#error").exists(), "error text detected!"))
+   *       .shouldBe(visible, Duration.ofSeconds(15));
+   *
+   *   In the example above the error may happen after a couple of seconds and if we didn't intercept it
+   *   we would have wasted 15 seconds while waiting for a success message.
+   *
+   *  <p/>
+   *
+   * @param condition FailFastCondition(BooleanSupplier condition, String description)
+   * @see com.codeborne.selenide.commands.FailFast
+   * */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement failIf(FailFastCondition condition);
 
   /**
    * <p>Wait until given element does not meet given conditions.</p>

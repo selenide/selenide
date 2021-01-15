@@ -50,6 +50,7 @@ public class Commands {
     add("screenshotAsImage", new TakeScreenshotAsImage());
     add("getSearchCriteria", new GetSearchCriteria());
     add("execute", new Execute<>());
+    add("failIf", new FailFast());
   }
 
   private void addActionsCommands() {

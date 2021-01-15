@@ -6,10 +6,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.SharedDownloadsFolder;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
+import com.codeborne.selenide.ex.FailFastException;
 import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
+
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +27,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -273,6 +276,12 @@ final class SelenideElementProxyTest implements WithAssertions {
   void shouldRetry_onAnyOtherException() {
     assertThat(shouldRetryAfterError(new Exception("bla")))
       .isTrue();
+  }
+
+  @Test
+  void shouldNotRetry_onFailFastException() {
+    FailFastException failFastException = mock(FailFastException.class);
+    assertThat(shouldRetryAfterError(failFastException)).isFalse();
   }
 
   @Test
