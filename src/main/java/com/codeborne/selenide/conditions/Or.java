@@ -4,9 +4,11 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.conditions.ConditionHelpers.negateMissingElementTolerance;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
@@ -17,6 +19,12 @@ public class Or extends Condition {
   public Or(String name, List<Condition> conditions) {
     super(name);
     this.conditions = conditions;
+  }
+
+  @Nonnull
+  @Override
+  public Condition negate() {
+    return new Not(this, negateMissingElementTolerance(conditions));
   }
 
   @Override
