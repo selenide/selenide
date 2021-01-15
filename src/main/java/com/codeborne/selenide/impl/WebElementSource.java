@@ -99,7 +99,7 @@ public abstract class WebElementSource {
 
     Throwable lastError = null;
     WebElement element = null;
-    if(failFastCondition != null && failFastCondition.getAsBoolean()){
+    if (failFastCondition != null && failFastCondition.getAsBoolean()) {
       throw new FailFastException(driver(), failFastCondition);
     }
     try {
