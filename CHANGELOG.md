@@ -2,6 +2,7 @@
 
 ## 5.18.0 (planned to 2x.01.2021)
 * #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`
+* upgraded to WebDriverManager 4.3.1  --  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.17.4 (released 14.01.2021)
 * #1360 make SelenidePageFactory even more customizable 
@@ -202,13 +203,13 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 * #814 #880 fix Screenshots  --  thanks to Petro Ovcharenko for PR #1052
 * #1049 use env variable BUILD_URL (no need to add BUILD_URL to system properties anymore)  --  thanks to GongYi for PR #1049 
 * #1049 fix path to screenshots in Jenkins for multi-module maven projects  --  thanks to GongYi for PR #1049 
-* upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
+* upgrade to WebDriverManager 3.8.1,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.1 (released 14.01.2020)
 * #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR https://github.com/selenide/selenide/pull/1031
 * fix #1034 Selenide cannot download file if response doesn't contain "Content-Disposition" header,  see PR https://github.com/selenide/selenide/pull/1035
 * fix method WebDriverRunner.using(): don't close the webdriver itself,  see https://github.com/selenide/selenide/commit/4d1b19972d
-* upgrade to WebDriverManager 3.8.0,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.0...master
+* upgrade to WebDriverManager 3.8.0,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.0 (released 26.12.2019)
 * #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
@@ -362,7 +363,7 @@ Technical changes (probably should not affect end users):
 * #273 Method `switchTo().alert()` now throws `NoAlertPresentException` instead of `TimeoutException`  -- thanks to @tsukakei for PR #774
 * #709 Fixed a misleading error message $.selectOptionByValue() reports  -- thanks to Keita Tsukamoto for PR #780
 * #734 Fixed incorrect filename of downloaded file  -- thanks to @rosolko for PR 768
-* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/changelog)
+* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 * #775 Upgrade to htmlunit 2.32.1
 * #778 Fixed Selenide tests for FireFox
 
