@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.18.0 (planned to 2x.01.2021)
+* #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`
+
 ## 5.17.4 (released 14.01.2021)
 * #1360 make SelenidePageFactory even more customizable 
 
