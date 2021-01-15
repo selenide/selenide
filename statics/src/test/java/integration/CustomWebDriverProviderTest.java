@@ -14,8 +14,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -52,6 +55,9 @@ final class CustomWebDriverProviderTest extends IntegrationTest {
     public WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities) {
       ChromeOptions options = new ChromeOptions();
       if (browser().isHeadless()) options.setHeadless(true);
+      if (isBlank(System.getProperty("webdriver.chrome.driver", ""))) {
+        WebDriverManager.chromedriver().setup();
+      }
       return new CustomChromeDriver(options);
     }
   }
