@@ -157,33 +157,24 @@ final class SelectorsTest implements WithAssertions {
 
   @Test
   void byClassName() {
-    String className = "selenide";
-    By classNameSelector = Selectors.byClassName(className);
-    assertThat(classNameSelector)
-      .isInstanceOf(By.ByClassName.class);
-    assertThat(classNameSelector)
-      .hasToString("By.className: " + className);
+    By classNameSelector = Selectors.byClassName("btn-active");
+    assertThat(classNameSelector).isInstanceOf(By.ByClassName.class);
+    assertThat(classNameSelector).hasToString("By.className: btn-active");
   }
 
   @Test
   void byShadowCss() {
-    String target = "#target";
-    String shadow = "#shadow";
-    String innerShadow = "#inner-shadow";
-    By cssSelector = Selectors.shadowCss(target, shadow, innerShadow);
+    By cssSelector = Selectors.shadowCss("#target", "#shadow", "#inner-shadow");
     assertThat(cssSelector)
       .isInstanceOf(ByShadow.ByShadowCss.class);
     assertThat(cssSelector)
-      .hasToString("By.cssSelector: " + shadow + " [" + innerShadow + "] " + target);
+      .hasToString("By.cssSelector: #shadow -> #inner-shadow -> #target");
   }
 
   @Test
   void byTagName() {
-    String tagName = "selenide";
-    By tagNameSelector = Selectors.byTagName(tagName);
-    assertThat(tagNameSelector)
-      .isInstanceOf(By.ByTagName.class);
-    assertThat(tagNameSelector)
-      .hasToString("By.tagName: " + tagName);
+    By tagNameSelector = Selectors.byTagName("div");
+    assertThat(tagNameSelector).isInstanceOf(By.ByTagName.class);
+    assertThat(tagNameSelector).hasToString("By.tagName: div");
   }
 }

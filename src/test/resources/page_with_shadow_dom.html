@@ -7,59 +7,68 @@
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
-    function appendChildItem(shadowContainer, clazz, text) {
-      var shadowContainerChildHost = document.createElement("div");
-      shadowContainerChildHost.setAttribute('class', clazz);
-      var shadowContainerChild = shadowContainerChildHost.attachShadow( { mode: "open" } );
+/*
+    function findInShadows(root, shadowRoots, leaf) {
+      if (shadowRoots.length === 0) {
+        return Array.from(root.querySelectorAll(leaf));
+      }
 
-      var shadowContainerChildItem = document.createElement("div");
-      shadowContainerChildItem.setAttribute('class', clazz + '-item');
-      let p = document.createElement("p");
-      p.appendChild(document.createTextNode(text));
-      shadowContainerChildItem.appendChild(p);
+      const nextSelector = shadowRoots[0];
+      const otherSelectors = shadowRoots.slice(1);
+
+      return Array.from(root.querySelectorAll(nextSelector)).map(function(childShadowRoot) {
+        return findInShadows(childShadowRoot.shadowRoot, otherSelectors, leaf);
+      }).flat();
+    }
+*/
+
+    function newElement(tag, attributes, text) {
+      const element = document.createElement(tag);
+      Object.keys(attributes).forEach(function (attributeName) {
+        element.setAttribute(attributeName, attributes[attributeName]);
+      });
+      if (text) {
+        element.appendChild(document.createTextNode(text));
+      }
+      return element;
+    }
+
+    function appendChildItem(shadowContainer, clazz, text) {
+      const shadowContainerChildHost = newElement('div', {'class': clazz});
+      const shadowContainerChild = shadowContainerChildHost.attachShadow({mode: "open"});
+
+      const shadowContainerChildItem = newElement('div', {'class': clazz + '-item'});
+      shadowContainerChildItem.appendChild(newElement('p', {}, text));
       shadowContainerChild.appendChild(shadowContainerChildItem);
 
       shadowContainer.appendChild(shadowContainerChildHost);
-
       return shadowContainerChild;
     }
 
     $(function () {
-      var shadow = document.getElementById('shadow-host').attachShadow( { mode: "open" } )
+      const shadow = document.getElementById('shadow-host').attachShadow({mode: "open"});
 
-      var p = document.createElement("p");
-      var div = document.createElement("div");
-      var div2 = document.createElement("div");
-      var div3 = document.createElement("div");
       var input = document.createElement("input");
       var button = document.createElement("button");
       button.setAttribute("id", "anyButton");
       button.textContent = `Button`;
       button.onclick = function() {this.textContent = "Changed text";};
       input.setAttribute("type", "text");
-      div.setAttribute('id', 'inner-shadow-host');
-      div2.setAttribute('class', 'test-class');
-      div3.setAttribute('class', 'test-class');
-      var text = document.createTextNode("Inside Shadow-DOM");
-      p.appendChild(text);
-      shadow.appendChild(p);
-      shadow.appendChild(div);
-      shadow.appendChild(div2);
-      shadow.appendChild(div3);
+
+      shadow.appendChild(newElement('p', {}, 'Inside Shadow-DOM'));
+      shadow.appendChild(newElement('div', {'id': 'inner-shadow-host'}));
+      shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-1'));
+      shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-2'));
       shadow.appendChild(input);
       shadow.appendChild(button);
 
       var shadow2 = shadow.getElementById("inner-shadow-host").attachShadow( { mode: "open" } )
+      shadow2.appendChild(newElement('p', {}, 'The Shadow-DOM inside another shadow tree'));
 
-      var p2 = document.createElement("p");
-      var text2 = document.createTextNode("The Shadow-DOM inside another shadow tree");
-      p2.appendChild(text2);
-      shadow2.appendChild(p2);
-
-      var shadowContainer = document.getElementById('shadow-container').attachShadow( { mode: "open" } )
-      shadowContainerChild1 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost1');
-      shadowContainerChild2 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost2');
-      shadowContainerChild3 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost3');
+      const shadowContainer = document.getElementById('shadow-container').attachShadow({mode: "open"});
+      const shadowContainerChild1 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost1');
+      const shadowContainerChild2 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost2');
+      const shadowContainerChild3 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost3');
 
       appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild1Host1')
       appendChildItem(shadowContainerChild1, 'shadow-container-child-child', 'shadowContainerChildChild2Host1')
