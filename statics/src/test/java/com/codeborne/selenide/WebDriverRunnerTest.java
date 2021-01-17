@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verify;
 final class WebDriverRunnerTest implements WithAssertions {
   private static WebDriver driver;
 
-  private URL url = currentThread().getContextClassLoader().getResource("start_page.html");
+  private final URL url = currentThread().getContextClassLoader().getResource("start_page.html");
 
   @BeforeEach
   void resetWebDriverContainer() {
