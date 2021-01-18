@@ -1,6 +1,6 @@
 package integration;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
 
 final class DoubleClickTest extends ITest {
-  @Test
+  @RepeatedTest(100)
   void userCanDoubleClickOnElement() {
     openFile("page_with_double_clickable_button.html");
 

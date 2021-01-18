@@ -1,10 +1,12 @@
 package integration;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.junit5.TextReportExtension;
 import integration.server.LocalHttpServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.net.NetworkUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -17,7 +19,7 @@ import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Boolean.parseBoolean;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
-@ExtendWith({LogTestNameExtension.class})
+@ExtendWith({LogTestNameExtension.class, TextReportExtension.class})
 public abstract class BaseIntegrationTest {
   protected static LocalHttpServer server;
   private static String protocol;
