@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.FileNamer;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,13 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     File logFile = new File(logFolder, logFileName).getAbsoluteFile();
     log.info("Write webdriver logs to: {}", logFile);
     return logFile;
+  }
+
+  protected <DS extends DriverService, B extends DriverService.Builder<DS, ?>> DS withLog(Config config, B dsBuilder) {
+    if (config.webdriverLogsEnabled()) {
+      dsBuilder.withLogFile(webdriverLog(config));
+    }
+    return dsBuilder.build();
   }
 
   @CheckReturnValue
