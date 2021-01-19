@@ -1,5 +1,6 @@
 package integration.proxy;
 
+import com.codeborne.selenide.impl.FileContent;
 import integration.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,6 @@ public class MultipleDownloadsTest extends IntegrationTest {
     );
 
     assertEquals("empty.html", text.getName());
-    assertEquals(224, text.length());
+    assertEquals(new FileContent("empty.html").content().length(), text.length());
   }
 }
