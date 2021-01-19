@@ -44,9 +44,7 @@ public class OperaDriverFactory extends AbstractDriverFactory {
   }
 
   private OperaDriverService createDriverService(Config config) {
-    return new OperaDriverService.Builder()
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new OperaDriverService.Builder());
   }
 
   @Override

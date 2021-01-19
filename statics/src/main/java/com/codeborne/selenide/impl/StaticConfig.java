@@ -152,6 +152,11 @@ public class StaticConfig implements Config {
   }
 
   @Override
+  public boolean webdriverLogsEnabled() {
+    return Configuration.webdriverLogsEnabled;
+  }
+
+  @Override
   public String browserBinary() {
     return Configuration.browserBinary;
   }

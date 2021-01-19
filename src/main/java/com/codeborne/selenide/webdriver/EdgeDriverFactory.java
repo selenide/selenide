@@ -50,9 +50,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
   }
 
   private EdgeDriverService createDriverService(Config config) {
-    return new EdgeDriverService.Builder()
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new EdgeDriverService.Builder());
   }
 
   @Override

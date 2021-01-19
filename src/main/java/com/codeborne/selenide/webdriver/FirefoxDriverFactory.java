@@ -48,10 +48,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   protected GeckoDriverService createDriverService(Config config) {
-    File logFile = webdriverLog(config);
-    return new GeckoDriverService.Builder()
-      .withLogFile(logFile)
-      .build();
+    return withLog(config, new GeckoDriverService.Builder());
   }
 
   @Override

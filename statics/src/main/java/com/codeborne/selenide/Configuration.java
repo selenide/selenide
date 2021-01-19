@@ -327,6 +327,22 @@ public class Configuration {
   public static boolean driverManagerEnabled = defaults.driverManagerEnabled();
 
   /**
+   * <p>
+   *  Whether webdriver logs should be enabled.
+   * </p>
+   *
+   * <p>
+   *   These logs may be useful for debugging some webdriver issues.
+   *   But in most cases they are not needed (and can take quite a lot of disk space),
+   *   that's why don't enable them by default.
+   * </p>
+   *
+   * Default: false
+   * @since 5.18.0
+   */
+  public static boolean webdriverLogsEnabled = defaults.webdriverLogsEnabled();
+
+  /**
    * Enables the ability to run the browser in headless mode.
    * Works only for Chrome(59+) and Firefox(56+).
    * Can be configured either programmatically or by system property "-Dselenide.headless=true"
