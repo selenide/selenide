@@ -6,32 +6,29 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.opentest4j.TestAbortedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static integration.BaseIntegrationTest.browser;
+import static org.slf4j.LoggerFactory.getLogger;
 
 final class LogTestNameExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback, AfterEachCallback {
-  private static final Logger log = LoggerFactory.getLogger(LogTestNameExtension.class);
-
   @Override
   public void beforeAll(ExtensionContext context) {
-    log.info("Starting {} @ {}", context.getDisplayName(), browser);
+    getLogger(context.getDisplayName()).info("Starting tests @ {}", browser);
   }
 
   @Override
   public void afterAll(ExtensionContext context) {
-    log.info("Finished {} @ {} - {}", context.getDisplayName(), browser, verdict(context));
+    getLogger(context.getDisplayName()).info("Finished tests @ {} - {}", browser, verdict(context));
   }
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    log.info("  starting {} ...", context.getDisplayName());
+    getLogger(context.getRequiredTestClass().getName()).info("starting {} ...", context.getDisplayName());
   }
 
   @Override
   public void afterEach(ExtensionContext context) {
-    log.info("  finished {} - {}", context.getDisplayName(), verdict(context));
+    getLogger(context.getRequiredTestClass().getName()).info("finished {} - {}", context.getDisplayName(), verdict(context));
   }
 
   private String verdict(ExtensionContext context) {
