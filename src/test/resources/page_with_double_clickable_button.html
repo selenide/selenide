@@ -4,29 +4,29 @@
   <title>Test::double-clickable-button</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <script type="text/javascript" src="jquery.min.js"></script>
-  <script type="text/javascript">
-    $(function() {
-      $('#double-clickable-button').on('dblclick', function (e) {
-        $('h2').text('Double click worked');
-        $(this).val("do not click me anymore");
-        $(this).attr('disabled', true);
-        e.stopImmediatePropagation();
-      }).removeAttr('disabled');
-    });
-
-  </script>
 </head>
 <body>
-<h1>Page with double-clickable button</h1>
+  <h1>Page with double-clickable button</h1>
 
-<br/>
-<h2></h2>
-<div style="width: 400px">
-  <form>
-    <input type="button" id="double-clickable-button" value="double click me" disabled>
-  </form>
-</div>
+  <br/>
+  <div style="width: 400px">
+    <form>
+      <input type="button" id="double-clickable-button" value="double click me" disabled>
+    </form>
+  </div>
+  <h2>not clicked yet</h2>
 
+  <script>
+    function onDbClickButton(event) {
+      var e = event || window.event;
+      document.querySelector('h2').innerText = 'Double click worked';
+      e.target.value = 'do not click me anymore';
+      e.target.disabled = true;
+      e.stopImmediatePropagation();
+    }
+
+    document.querySelector('#double-clickable-button').addEventListener('dblclick', onDbClickButton);
+    document.querySelector('#double-clickable-button').disabled = false;
+  </script>
 </body>
 </html>

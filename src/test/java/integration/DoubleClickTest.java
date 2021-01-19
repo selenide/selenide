@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.value;
 
 final class DoubleClickTest extends ITest {
   @BeforeEach
-  final void hackForFlakyTestInChrome() throws InterruptedException {
+  void hackForFlakyTestInChrome() throws InterruptedException {
     if (driver().browser().isChrome()) {
       Thread.sleep(500);
     }
