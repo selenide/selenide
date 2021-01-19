@@ -9,7 +9,10 @@ import static com.codeborne.selenide.Condition.value;
 
 final class DoubleClickTest extends ITest {
   @RepeatedTest(100)
-  void userCanDoubleClickOnElement() {
+  void userCanDoubleClickOnElement() throws InterruptedException {
+    if (driver().browser().isChrome()) {
+      Thread.sleep(500);
+    }
     openFile("page_with_double_clickable_button.html");
 
     withLongTimeout(() -> {
