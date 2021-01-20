@@ -1,58 +1,11 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.Selectors.ByText;
-import com.codeborne.selenide.Selectors.WithText;
 import com.codeborne.selenide.selector.ByShadow;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 final class SelectorsTest implements WithAssertions {
-  @Test
-  void withTextUsesXPath() {
-    By selector = Selectors.withText("john");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(selector)
-      .hasToString("with text: john");
-    assertThat(((WithText) selector).getXPath())
-      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), \"john\")]/parent::*");
-  }
-
-  @Test
-  void withTextEscapesQuotes() {
-    By selector = Selectors.withText("Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .hasToString("with text: Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((WithText) selector).getXPath())
-      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), " +
-        "concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*");
-  }
-
-  @Test
-  void byTextUsesXPath() {
-    By selector = Selectors.byText("john");
-    assertThat(selector)
-      .hasToString("by text: john");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((ByText) selector).getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')) = \"john\"]/parent::*");
-  }
-
-  @Test
-  void byTextEscapesQuotes() {
-    By selector = Selectors.byText("Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .hasToString("by text: Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((ByText) selector).getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r ', '    ')) = " +
-        "concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*");
-  }
 
   @Test
   void byAttributeUsesXPath() {
