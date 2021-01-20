@@ -96,6 +96,7 @@ final class CollectionWaitTest extends IntegrationTest {
   @Test
   void customTimeoutForCollections() {
     Configuration.timeout = 1;
+    $$("#collection li").first(2).shouldHave(texts("Element #0", "Element #1"), 5000);
     $$("#collection li").last(2).shouldHave(texts("Element #18", "Element #19"), Duration.ofSeconds(5));
   }
 
