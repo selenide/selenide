@@ -472,7 +472,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
    * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -489,7 +489,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
    * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -505,7 +505,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
    * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -522,7 +522,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
    * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
