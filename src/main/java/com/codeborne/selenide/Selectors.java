@@ -3,7 +3,9 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByShadow;
 import com.codeborne.selenide.selector.ByText;
+import com.codeborne.selenide.selector.ByTextCaseInsensitive;
 import com.codeborne.selenide.selector.WithText;
+import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
 
 import javax.annotation.CheckReturnValue;
@@ -27,11 +29,18 @@ public class Selectors {
     return new WithText(elementText);
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public static By withTextCaseInsensitive(String elementText) {
+    return new WithTextCaseInsensitive(elementText);
+  }
+
   /**
    * Find element that has given text (the whole text, not a substring).
    * <p>
    * This method ignores difference between space, \n, \r, \t and &nbsp;
    * This method ignores multiple spaces.
+   * This method is case-sensitive.
    *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
@@ -40,6 +49,15 @@ public class Selectors {
   @Nonnull
   public static By byText(String elementText) {
     return new ByText(elementText);
+  }
+
+  /**
+   * Same as {@link #byText(String)}, but case-insensitive.
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By byTextCaseInsensitive(String elementText) {
+    return new ByTextCaseInsensitive(elementText);
   }
 
   /**
