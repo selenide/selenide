@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -7,11 +8,15 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byTextCaseInsensitive;
 import static com.codeborne.selenide.Selectors.withText;
+import static com.codeborne.selenide.Selectors.withTextCaseInsensitive;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ByTextTest extends ITest {
   @BeforeEach
@@ -37,8 +42,8 @@ final class ByTextTest extends ITest {
     $("#hello-world").shouldHave(text("Hello world"));
     $(byText("Hello world")).shouldHave(attribute("id", "hello-world"));
     $(withText("Hello world")).shouldHave(text("Hello world"));
-    $(withText("Hello ")).shouldHave(text("Hello world"));
-    $(withText(" world")).shouldHave(text("Hello world"));
+    $(".level2").$(withText("Hello ")).shouldHave(text("Hello world"));
+    $(".level2").$(withText(" world")).shouldHave(text("Hello world"));
   }
 
   @Test
@@ -77,5 +82,36 @@ final class ByTextTest extends ITest {
     $(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
     $("#hero").find(byText("Arnold \"Schwarzenegger\"")).shouldBe(visible);
     $("#apostrophes-and-quotes").find(By.linkText("Options with 'apostrophes' and \"quotes\"")).click();
+  }
+
+  @Test
+  void canFindByText_caseInsensitive() {
+    $(byTextCaseInsensitive("PAGE with selects")).shouldHave(text("Page with selects"));
+    $(byTextCaseInsensitive("PAGE with SELECTS")).shouldHave(text("Page with selects"));
+
+    assertThatThrownBy(() -> $(byTextCaseInsensitive("PAGE with SELECT")).should(exist))
+      .isInstanceOf(ElementNotFound.class);
+  }
+
+  @Test
+  void canFindByText_inParent_caseInsensitive() {
+    $(".level1").$(byTextCaseInsensitive("Hi WORLD")).shouldHave(text("Hi world"));
+    $(".level2").$(byTextCaseInsensitive("Hello WORLD")).shouldHave(text("Hello world"), cssClass("hello2"));
+    $(".level3").$(byTextCaseInsensitive("HELLO world")).shouldHave(text("Hello world"), cssClass("hello3"));
+  }
+
+  @Test
+  void canFindWithText_caseInsensitive() {
+    $(withTextCaseInsensitive("Hello WORLD")).shouldHave(text("Hello world"));
+    $(withTextCaseInsensitive("heLLO ")).shouldHave(text("Hello world"));
+    $(withTextCaseInsensitive("O wORld")).shouldHave(text("Hello world"));
+    $(withTextCaseInsensitive("PAGE with SELECT")).should(exist);
+  }
+
+  @Test
+  void canFindWithText_inParent_caseInsensitive() {
+    $(".level1").$(withTextCaseInsensitive("i WOR")).shouldHave(text("Hi world"));
+    $(".level2").$(withTextCaseInsensitive("llo WORLD")).shouldHave(text("Hello world"), cssClass("hello2"));
+    $(".level3").$(withTextCaseInsensitive("ELLO worl")).shouldHave(text("Hello world"), cssClass("hello3"));
   }
 }
