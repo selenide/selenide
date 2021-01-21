@@ -1,10 +1,13 @@
 == Changelog
 
-=== 1.6.0
+=== 1.6.1 (released 21.01.2021)
+* #50 change scope of selenide and appium dependencies from "implementation" to "api"
+
+=== 1.6.0 (released 14.01.2021)
 * upgrade to selenide:5.17.4
 * upgrade to io.appium:java-client:7.4.1
 
-=== 1.5.0
+=== 1.5.0 (released 20.11.2020)
 * upgrade to selenide:5.16.0
 * introduce Selenide plugins for better Appium support
 * upgrade to io.appium:java-client:7.4.0

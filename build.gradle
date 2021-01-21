@@ -1,11 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven'
 
 defaultTasks 'check', 'test', 'install'
 
 group = 'com.codeborne'
 description = 'Selenide adaptor for Appium framework'
-version = '1.6.0'
+version = '1.6.1'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -32,6 +32,7 @@ javadoc {
 repositories {
   jcenter()
   mavenCentral()
+  mavenLocal()
   maven {
     url "https://oss.sonatype.org/content/repositories/snapshots"
     mavenContent {
@@ -40,13 +41,18 @@ repositories {
   }
 }
 
+configurations.all {
+  // Check for updates every build
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
-  implementation('com.codeborne:selenide:5.17.4')
+  api('com.codeborne:selenide:5.17.4')
   implementation('net.bytebuddy:byte-buddy:1.10.19')
-  implementation('io.appium:java-client:7.4.1')
+  api('io.appium:java-client:7.4.1')
   testImplementation('org.junit.jupiter:junit-jupiter:5.7.0')
   testImplementation("org.assertj:assertj-core:3.18.1")
-  testImplementation('org.mockito:mockito-core:3.7.0')
+  testImplementation('org.mockito:mockito-core:3.7.7')
   testRuntimeOnly('org.slf4j:slf4j-simple:1.7.30')
 }
 
