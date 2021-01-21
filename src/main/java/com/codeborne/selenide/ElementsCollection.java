@@ -26,6 +26,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.Duration;
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -83,12 +84,21 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @Nonnull
   public ElementsCollection shouldBe(CollectionCondition... conditions) {
-    return should("be", driver().config().timeout(), conditions);
+    return should("be", Duration.ofMillis(driver().config().timeout()), conditions);
   }
 
   @Nonnull
+  public ElementsCollection shouldBe(CollectionCondition condition, Duration timeout) {
+    return should("be", timeout, toArray(condition));
+  }
+
+  /**
+   * @deprecated use {@link #shouldBe(CollectionCondition, Duration)}
+   */
+  @Nonnull
+  @Deprecated
   public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
-    return should("be", timeoutMs, toArray(condition));
+    return should("be", Duration.ofMillis(timeoutMs), toArray(condition));
   }
 
   /**
@@ -98,36 +108,48 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    */
   @Nonnull
   public ElementsCollection shouldHave(CollectionCondition... conditions) {
-    return should("have", driver().config().timeout(), conditions);
+    return should("have", Duration.ofMillis(driver().config().timeout()), conditions);
+  }
+
+  /**
+   * Check if a collection matches given condition within given period
+   *
+   * @param timeout maximum waiting time
+   */
+  @Nonnull
+  public ElementsCollection shouldHave(CollectionCondition condition, Duration timeout) {
+    return should("have", timeout, toArray(condition));
   }
 
   /**
    * Check if a collection matches given condition within given period
    *
    * @param timeoutMs maximum waiting time in milliseconds
+   * @deprecated use {@link #shouldHave(CollectionCondition, Duration)}
    */
   @Nonnull
+  @Deprecated
   public ElementsCollection shouldHave(CollectionCondition condition, long timeoutMs) {
-    return should("have", timeoutMs, toArray(condition));
+    return should("have", Duration.ofMillis(timeoutMs), toArray(condition));
   }
 
   private CollectionCondition[] toArray(CollectionCondition condition) {
     return new CollectionCondition[]{condition};
   }
 
-  protected ElementsCollection should(String prefix, long timeoutMs, CollectionCondition... conditions) {
+  protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
     validateAssertionMode(driver().config());
 
     SelenideLog log = SelenideLogger.beginStep(collection.description(), "should " + prefix, (Object[]) conditions);
     try {
       for (CollectionCondition condition : conditions) {
-        waitUntil(condition, timeoutMs);
+        waitUntil(condition, timeout);
       }
       SelenideLogger.commitStep(log, PASS);
       return this;
     }
     catch (Error error) {
-      Error wrappedError = UIAssertionError.wrap(driver(), error, timeoutMs);
+      Error wrappedError = UIAssertionError.wrap(driver(), error, timeout.toMillis());
       SelenideLogger.commitStep(log, wrappedError);
       switch (driver().config().assertionMode()) {
         case SOFT:
@@ -142,10 +164,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
-  protected void waitUntil(CollectionCondition condition, long timeoutMs) {
+  protected void waitUntil(CollectionCondition condition, Duration timeout) {
     Throwable lastError = null;
     List<WebElement> actualElements = null;
-    Stopwatch stopwatch = new Stopwatch(timeoutMs);
+    Stopwatch stopwatch = new Stopwatch(timeout.toMillis());
     do {
       try {
         actualElements = collection.getElements();
@@ -176,7 +198,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       throw (UIAssertionError) lastError;
     }
     else {
-      condition.fail(collection, actualElements, (Exception) lastError, timeoutMs);
+      condition.fail(collection, actualElements, (Exception) lastError, timeout.toMillis());
     }
   }
 

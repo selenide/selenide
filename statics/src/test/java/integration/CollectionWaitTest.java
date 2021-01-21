@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.TextsSizeMismatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -95,14 +96,15 @@ final class CollectionWaitTest extends IntegrationTest {
   @Test
   void customTimeoutForCollections() {
     Configuration.timeout = 1;
-    $$("#collection li").last(2).shouldHave(texts("Element #18", "Element #19"), 5000);
+    $$("#collection li").first(2).shouldHave(texts("Element #0", "Element #1"), 5000);
+    $$("#collection li").last(2).shouldHave(texts("Element #18", "Element #19"), Duration.ofSeconds(5));
   }
 
   @Test
   void waitsForCustomTimeoutForCollections() {
     Configuration.timeout = 1;
     assertThatThrownBy(() ->
-      $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), 2000)
+      $$("#collection li").last(2).shouldHave(texts("Element #88888", "Element #99999"), Duration.ofMillis(2000))
     )
       .isInstanceOf(TextsMismatch.class)
       .hasMessageContaining("Actual: [Element #18, Element #19]")
