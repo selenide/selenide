@@ -1,7 +1,14 @@
 # Changelog
 
-## 5.18.0 (planned to 2x.01.2021)
-* #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`
+## 5.18.0 (released 23.01.2021)
+* #1365 disable webdriver logs by default  --  see PR #1379
+  (they still can be enabled by Configuration.webdriverLogsEnabled = true)
+* #1377 Replace long timeout with Duration for ElementsCollection  -- thanks to Ostap Oleksyn for PR #1377!
+* #1373 speed up `$(shadowCss())`  --  also thanks to @sakamoto66 for issue #1246 and PR #1233!
+* #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`  --  see PR #1370
+* #1369 don't allow `and` and `or` with only one condition  --  see PR #1370
+* #1366 detect mismatching "browserName" capability  --  see PR #1374
+* #1376 display duration argument in report as "1s" or "300 ms"  --  see PR #1378
 * upgraded to WebDriverManager 4.3.1  --  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.17.4 (released 14.01.2021)
