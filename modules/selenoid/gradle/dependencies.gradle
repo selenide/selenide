@@ -10,7 +10,7 @@ buildscript {
 }
 
 dependencies {
-  implementation("com.codeborne:selenide:${versions.selenide}")
+  api("com.codeborne:selenide:${versions.selenide}")
   testRuntimeOnly("com.browserup:browserup-proxy-core:${versions.browserupproxy}")
   testRuntimeOnly("io.netty:netty-all:${versions.netty}")
   testRuntimeOnly("io.netty:netty-codec:${versions.netty}")
