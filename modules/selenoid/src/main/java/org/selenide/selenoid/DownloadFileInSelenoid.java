@@ -46,8 +46,13 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
                        FileFilter fileFilter) throws FileNotFoundException {
 
     Driver driver = anyClickableElement.driver();
-    RemoteWebDriver webDriver = (RemoteWebDriver) driver.getWebDriver();
     Config config = driver.config();
+    if (config.remote() == null) {
+      log.debug("Working in local browser. Switching to a default FOLDER implementation.");
+      return super.download(anyClickableElement, clickable, timeout, fileFilter);
+    }
+
+    RemoteWebDriver webDriver = (RemoteWebDriver) driver.getWebDriver();
     SelenoidClient selenoidClient = new SelenoidClient(config.remote(), webDriver.getSessionId().toString());
 
     selenoidClient.deleteDownloadedFiles();
