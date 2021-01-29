@@ -12,7 +12,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Integer.parseInt;
@@ -62,8 +64,12 @@ public class SelenideProxyServer {
     proxy.setTrustAllServers(true);
     if (outsideProxy != null) {
       proxy.setChainedProxy(getProxyAddress(outsideProxy));
+      String noProxy = outsideProxy.getNoProxy();
+      if (noProxy != null) {
+        List<String> noProxyHosts = Arrays.asList(noProxy.split(","));
+        proxy.setChainedProxyNonProxyHosts(noProxyHosts);
+      }
     }
-
     addRequestFilter("authentication", new AuthenticationFilter());
     addRequestFilter("requestSizeWatchdog", new RequestSizeWatchdog());
     addResponseFilter("responseSizeWatchdog", new ResponseSizeWatchdog());
