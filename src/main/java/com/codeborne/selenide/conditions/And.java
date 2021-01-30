@@ -53,10 +53,6 @@ public class And extends Condition {
   @CheckReturnValue
   @Override
   public String toString() {
-    return lastFailedCondition == null ? getDefaultDescription() : lastFailedCondition.toString();
-  }
-
-  private String getDefaultDescription() {
     String conditionsToString = conditions.stream().map(Condition::toString).collect(joining(" and "));
     return String.format("%s: %s", getName(), conditionsToString);
   }

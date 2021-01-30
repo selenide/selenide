@@ -370,7 +370,7 @@ final class ConditionTest {
     Condition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
     assertThat(condition.apply(driver, element)).isFalse();
-    assertThat(condition).hasToString("be selected");
+    assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
   }
 
   @Test
