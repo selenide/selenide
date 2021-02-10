@@ -988,4 +988,9 @@ public class Selenide {
   public static LocalStorage localStorage() {
     return getSelenideDriver().getLocalStorage();
   }
+
+  @Nonnull
+  public static SessionStorage sessionStorage(){
+    return getSelenideDriver().getSessionStorage();
+  }
 }
