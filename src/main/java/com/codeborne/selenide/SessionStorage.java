@@ -1,11 +1,10 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+
 import static java.lang.Integer.parseInt;
 import static java.util.Optional.ofNullable;
-
-/**
- * Created by dbudim on 10.02.2021
- */
 
 public class SessionStorage {
 
@@ -15,6 +14,8 @@ public class SessionStorage {
     this.driver = driver;
   }
 
+  @Nonnull
+  @CheckReturnValue
   public boolean containsItem(String key) {
     return ofNullable(getItem(key)).isPresent();
   }
@@ -35,10 +36,12 @@ public class SessionStorage {
     driver.executeJavaScript("sessionStorage.clear()");
   }
 
+  @CheckReturnValue
   public int size() {
     return parseInt(driver.executeJavaScript("return sessionStorage.length").toString());
   }
 
+  @CheckReturnValue
   public boolean isEmpty() {
     return size() == 0;
   }
