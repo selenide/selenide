@@ -988,4 +988,16 @@ public class Selenide {
   public static LocalStorage localStorage() {
     return getSelenideDriver().getLocalStorage();
   }
+
+  /**
+   * Access browser's session storage.
+   * Allows setting, getting, removing items as well as getting the size, check for contains item and clear the storage.
+   *
+   * @return sessionStorage
+   */
+
+  @Nonnull
+  public static SessionStorage sessionStorage(){
+    return getSelenideDriver().getSessionStorage();
+  }
 }

@@ -430,6 +430,12 @@ public class SelenideDriver {
     return new LocalStorage(driver());
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public SessionStorage getSessionStorage() {
+    return new SessionStorage(driver());
+  }
+
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
 
