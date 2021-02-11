@@ -8,10 +8,6 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.sessionStorage;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Created by dbudim on 10.02.2021
- */
-
 public class SessionStorageTest extends IntegrationTest {
 
   @BeforeEach
