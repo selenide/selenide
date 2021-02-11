@@ -778,6 +778,7 @@ public class Selenide {
    * @return SelenideTargetLocator
    */
   @Nonnull
+  @CheckReturnValue
   public static SelenideTargetLocator switchTo() {
     return getSelenideDriver().driver().switchTo();
   }
@@ -856,6 +857,8 @@ public class Selenide {
   /**
    * Same as com.codeborne.selenide.Selenide#getWebDriverLogs(java.lang.String, java.util.logging.Level)
    */
+  @CheckReturnValue
+  @Nonnull
   public static List<String> getWebDriverLogs(String logType) {
     return getSelenideDriver().getWebDriverLogs().logs(logType);
   }
@@ -889,6 +892,8 @@ public class Selenide {
    * @see LogType
    * @see Level
    */
+  @Nonnull
+  @CheckReturnValue
   public static List<String> getWebDriverLogs(String logType, Level logLevel) {
     return getSelenideDriver().getWebDriverLogs().logs(logType, logLevel);
   }
@@ -917,6 +922,7 @@ public class Selenide {
    * @return browser user agent
    */
   @Nonnull
+  @CheckReturnValue
   public static String getUserAgent() {
     return getSelenideDriver().driver().getUserAgent();
   }
@@ -926,6 +932,7 @@ public class Selenide {
    *
    * Useful if you need to scroll down by x pixels unknown number of times.
    */
+  @CheckReturnValue
   public static boolean atBottom() {
     return getSelenideDriver().atBottom();
   }
@@ -938,6 +945,7 @@ public class Selenide {
    * Download fails if default timeout (Configuration.timeout) is exceeded
    */
   @Nonnull
+  @CheckReturnValue
   public static File download(String url) throws IOException, URISyntaxException {
     return getSelenideDriver().download(url);
   }
@@ -946,6 +954,7 @@ public class Selenide {
    * @see #download(String)
    */
   @Nonnull
+  @CheckReturnValue
   public static File download(URI url) throws IOException {
     return getSelenideDriver().download(url);
   }
@@ -954,6 +963,7 @@ public class Selenide {
    * @see #download(String, long)
    */
   @Nonnull
+  @CheckReturnValue
   public static File download(URI url, long timeoutMs) throws IOException {
     return getSelenideDriver().download(url, timeoutMs);
   }
@@ -974,6 +984,7 @@ public class Selenide {
    * @throws URISyntaxException if given url has invalid syntax
    */
   @Nonnull
+  @CheckReturnValue
   public static File download(String url, long timeoutMs) throws IOException, URISyntaxException {
     return getSelenideDriver().download(new URI(url), timeoutMs);
   }
@@ -983,8 +994,10 @@ public class Selenide {
    * Allows setting, getting, removing items as well as getting the size and clear the storage.
    *
    * @return LocalStorage
+   * @since 5.15.0
    */
   @Nonnull
+  @CheckReturnValue
   public static LocalStorage localStorage() {
     return getSelenideDriver().getLocalStorage();
   }
@@ -994,9 +1007,10 @@ public class Selenide {
    * Allows setting, getting, removing items as well as getting the size, check for contains item and clear the storage.
    *
    * @return sessionStorage
+   * @since 5.18.1
    */
-
   @Nonnull
+  @CheckReturnValue
   public static SessionStorage sessionStorage(){
     return getSelenideDriver().getSessionStorage();
   }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.18.1 (released 11.02.2021)
+* #1400 add method Selenide.getSessionStorage()  --  thanks to Dmitriy Budim @dbudim
+* #1392 remove "dynamic" nature of toString for And condition  --  thanks to Pavel Fokin @fokinp for PR #1393
+* #1390 Pass noproxy options to outside proxy  --  thanks to Boris Osipov @BorisOsipov
+* upgrade to netty:4.1.59.Final and littleProxyVersion:2.0.2 
+
 ## 5.18.0 (released 23.01.2021)
 * #1365 disable webdriver logs by default  --  see PR #1379
   (they still can be enabled by Configuration.webdriverLogsEnabled = true)
