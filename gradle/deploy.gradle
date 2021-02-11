@@ -24,8 +24,14 @@ task allprojectsSourcesJar(type: Jar) {
   destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
-task allprojectsJavadoc(type: Javadoc) {
+task allprojectsJavadoc(type: Javadoc, dependsOn: classes) {
   source = allprojects.sourceSets.main.allJava
+  destinationDir = file("${project.docsDir}/javadoc-to-upload")
+  classpath = project.sourceSets.main.compileClasspath
+  classpath += project(":statics").sourceSets.main.compileClasspath
+  classpath += project(":modules:grid").sourceSets.main.compileClasspath
+  classpath += project(":modules:junit4").sourceSets.main.compileClasspath
+  classpath += project(":modules:testng").sourceSets.main.compileClasspath
 }
 
 task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
@@ -34,7 +40,7 @@ task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
   destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
-uploadArchives.dependsOn(allprojectsJar, allprojectsSourcesJar, allprojectsJavadoc)
+uploadArchives.dependsOn(allprojectsJar, allprojectsSourcesJar, allprojectsJavadocJar)
 
 artifacts {
   archives allprojectsJar
