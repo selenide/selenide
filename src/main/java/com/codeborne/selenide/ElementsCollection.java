@@ -12,6 +12,7 @@ import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
+import com.codeborne.selenide.impl.SnapshotCollection;
 import com.codeborne.selenide.impl.TailOfCollection;
 import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
@@ -465,7 +466,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @CheckReturnValue
   @Nonnull
   public ElementsCollection snapshot() {
-    return new ElementsCollection(fetch());
+    return new ElementsCollection(new SnapshotCollection(collection));
   }
 
   @Override
