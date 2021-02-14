@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.18.2 (planned to 14.02.2021)
+* #1402 improve collection description for $$.snapshot()
+
 ## 5.18.1 (released 11.02.2021)
 * #1400 add method Selenide.getSessionStorage()  --  thanks to Dmitriy Budim @dbudim
 * #1392 remove "dynamic" nature of toString for And condition  --  thanks to Pavel Fokin @fokinp for PR #1393

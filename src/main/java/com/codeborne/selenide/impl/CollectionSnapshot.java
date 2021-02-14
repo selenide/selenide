@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class SnapshotCollection implements CollectionSource {
+public class CollectionSnapshot implements CollectionSource {
 
   private final CollectionSource originalCollection;
   private final List<WebElement> elementsSnapshot;
 
-  public SnapshotCollection(CollectionSource collection) {
+  public CollectionSnapshot(CollectionSource collection) {
     this.originalCollection = collection;
     this.elementsSnapshot = new ArrayList<>(collection.getElements());
   }
