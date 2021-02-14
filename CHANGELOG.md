@@ -3,6 +3,7 @@
 ## 5.18.2 (planned to 14.02.2021)
 * #1402 improve collection description for $$.snapshot()
 * #1395 add @Nullable annotations to WebDriverRunner
+* #1383 add events "refresh", "back", "forward", "updateHash", "confirm", "dismiss", "prompt", "clearCookies" to Selenide log 
 
 ## 5.18.1 (released 11.02.2021)
 * #1400 add method Selenide.getSessionStorage()  --  thanks to Dmitriy Budim @dbudim
