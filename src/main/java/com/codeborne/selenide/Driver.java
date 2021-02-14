@@ -6,18 +6,31 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface Driver {
+  @CheckReturnValue
+  @Nonnull
   Config config();
+
+  @CheckReturnValue
+  @Nonnull
   Browser browser();
+
+  @CheckReturnValue
   boolean hasWebDriverStarted();
+
+  @CheckReturnValue
+  @Nonnull
   WebDriver getWebDriver();
 
   @CheckReturnValue
   @Nullable
   SelenideProxyServer getProxy();
 
+  @CheckReturnValue
+  @Nonnull
   WebDriver getAndCheckWebDriver();
 
   @CheckReturnValue
@@ -26,6 +39,7 @@ public interface Driver {
 
   void close();
 
+  @CheckReturnValue
   default boolean supportsJavascript() {
     return hasWebDriverStarted() && getWebDriver() instanceof JavascriptExecutor;
   }
@@ -46,26 +60,38 @@ public interface Driver {
     }
   }
 
+  @CheckReturnValue
+  @Nonnull
   default String getUserAgent() {
     return executeJavaScript("return navigator.userAgent;");
   }
 
+  @CheckReturnValue
+  @Nonnull
   default String source() {
     return getWebDriver().getPageSource();
   }
 
+  @CheckReturnValue
+  @Nonnull
   default String url() {
     return getWebDriver().getCurrentUrl();
   }
 
+  @CheckReturnValue
+  @Nonnull
   default String getCurrentFrameUrl() {
     return executeJavaScript("return window.location.href").toString();
   }
 
+  @CheckReturnValue
+  @Nonnull
   default SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(this);
   }
 
+  @CheckReturnValue
+  @Nonnull
   default Actions actions() {
     return new Actions(getWebDriver());
   }

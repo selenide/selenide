@@ -98,6 +98,7 @@ public class LazyDriver implements Driver {
   }
 
   @Override
+  @CheckReturnValue
   @Nonnull
   public synchronized WebDriver getAndCheckWebDriver() {
     if (webDriver != null && config.reopenBrowserOnFail() && !browserHealthChecker.isBrowserStillOpen(webDriver)) {

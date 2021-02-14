@@ -5,9 +5,17 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static org.mockito.Mockito.mock;
+
 /**
  * A dummy `Driver` implementation used in tests.
  */
+@ParametersAreNonnullByDefault
 public class DriverStub implements Driver {
   private final Config config;
   private final Browser browser;
@@ -20,10 +28,12 @@ public class DriverStub implements Driver {
   }
 
   public DriverStub(String browser) {
-    this(new SelenideConfig(), new Browser(browser, false), null, null);
+    this(new SelenideConfig(), new Browser(browser, false), mock(WebDriver.class), null);
   }
 
-  public DriverStub(Config config, Browser browser, WebDriver webDriver, SelenideProxyServer proxy) {
+  public DriverStub(Config config, Browser browser,
+                    WebDriver webDriver,
+                    @Nullable SelenideProxyServer proxy) {
     this.config = config;
     this.browser = browser;
     this.webDriver = webDriver;
@@ -31,21 +41,28 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
+  @CheckReturnValue
   public boolean hasWebDriverStarted() {
     return webDriver != null;
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public Browser browser() {
     return browser;
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getWebDriver() {
     return webDriver;
   }
@@ -56,11 +73,15 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     return webDriver;
   }
 
   @Override
+  @CheckReturnValue
+  @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
   }
@@ -71,6 +92,7 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @CheckReturnValue
   public boolean supportsJavascript() {
     return hasWebDriverStarted() && webDriver instanceof JavascriptExecutor;
   }
@@ -88,17 +110,21 @@ public class DriverStub implements Driver {
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public String getUserAgent() {
     return "zhopera";
   }
 
   @Override
-  public SelenideTargetLocator switchTo() {
+  @CheckReturnValue
+  @Nonnull  public SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(this);
   }
 
   @Override
-  public Actions actions() {
+  @CheckReturnValue
+  @Nonnull  public Actions actions() {
     return new Actions(getWebDriver());
   }
 }
