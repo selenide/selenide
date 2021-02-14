@@ -7,6 +7,7 @@ import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
 import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -157,8 +158,10 @@ public class SelenideDriver {
   }
 
   public void updateHash(String hash) {
-    String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
-    executeJavaScript("window.location.hash='" + localHash + "'");
+    SelenideLogger.run("updateHash", hash, () -> {
+      String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
+      executeJavaScript("window.location.hash='" + localHash + "'");
+    });
   }
 
   @CheckReturnValue
@@ -183,14 +186,15 @@ public class SelenideDriver {
     return driver.getWebDriver();
   }
 
-  @CheckReturnValue
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
     return driver.getAndCheckWebDriver();
   }
 
   public void clearCookies() {
-    driver().clearCookies();
+    SelenideLogger.run("clearCookies", "", () -> {
+      driver().clearCookies();
+    });
   }
 
   public void close() {

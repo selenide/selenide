@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -129,6 +130,31 @@ public class SelenideLogger {
       catch (RuntimeException e) {
         LOG.error("Failed to call listener {}", listener, e);
       }
+    }
+  }
+
+  public static void run(String source, String subject, Runnable runnable) {
+    SelenideLog log = SelenideLogger.beginStep(source, subject);
+    try {
+      runnable.run();
+      SelenideLogger.commitStep(log, PASS);
+    }
+    catch (RuntimeException | Error e) {
+      SelenideLogger.commitStep(log, e);
+      throw e;
+    }
+  }
+
+  public static <T> T get(String source, @Nullable String subject, java.util.function.Supplier<T> supplier) {
+    SelenideLog log = SelenideLogger.beginStep(source, subject);
+    try {
+      T result = supplier.get();
+      SelenideLogger.commitStep(log, PASS);
+      return result;
+    }
+    catch (RuntimeException | Error e) {
+      SelenideLogger.commitStep(log, e);
+      throw e;
     }
   }
 

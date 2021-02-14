@@ -2,10 +2,13 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.Alert;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @ParametersAreNonnullByDefault
 public class Modal {
@@ -20,11 +23,13 @@ public class Modal {
   }
 
   public String confirm(@Nullable String expectedDialogText) {
-    Alert alert = driver.switchTo().alert();
-    String actualDialogText = alert.getText();
-    alert.accept();
-    checkDialogText(driver, expectedDialogText, actualDialogText);
-    return actualDialogText;
+    return SelenideLogger.get("confirm", defaultString(expectedDialogText), () -> {
+      Alert alert = driver.switchTo().alert();
+      String actualDialogText = alert.getText();
+      alert.accept();
+      checkDialogText(driver, expectedDialogText, actualDialogText);
+      return actualDialogText;
+    });
   }
 
   public String prompt() {
@@ -36,13 +41,17 @@ public class Modal {
   }
 
   public String prompt(@Nullable String expectedDialogText, @Nullable String inputText) {
-    Alert alert = driver.switchTo().alert();
-    String actualDialogText = alert.getText();
-    if (inputText != null)
-      alert.sendKeys(inputText);
-    alert.accept();
-    checkDialogText(driver, expectedDialogText, actualDialogText);
-    return actualDialogText;
+    String description = defaultString(inputText) + " -> " + defaultString(expectedDialogText);
+    return SelenideLogger.get("prompt", description, () -> {
+      Alert alert = driver.switchTo().alert();
+      String actualDialogText = alert.getText();
+      if (inputText != null) {
+        alert.sendKeys(inputText);
+      }
+      alert.accept();
+      checkDialogText(driver, expectedDialogText, actualDialogText);
+      return actualDialogText;
+    });
   }
 
   public String dismiss() {
@@ -50,11 +59,13 @@ public class Modal {
   }
 
   public String dismiss(@Nullable String expectedDialogText) {
-    Alert alert = driver.switchTo().alert();
-    String actualDialogText = alert.getText();
-    alert.dismiss();
-    checkDialogText(driver, expectedDialogText, actualDialogText);
-    return actualDialogText;
+    return SelenideLogger.get("dismiss", defaultString(expectedDialogText), () -> {
+      Alert alert = driver.switchTo().alert();
+      String actualDialogText = alert.getText();
+      alert.dismiss();
+      checkDialogText(driver, expectedDialogText, actualDialogText);
+      return actualDialogText;
+    });
   }
 
   private static void checkDialogText(Driver driver, @Nullable String expectedDialogText, String actualDialogText) {
