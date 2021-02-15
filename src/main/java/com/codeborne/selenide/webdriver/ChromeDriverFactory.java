@@ -79,7 +79,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     options.setExperimentalOption("prefs", prefs(browserDownloadsFolder));
     setMobileEmulation(options);
 
-    return new MergeableCapabilities(options, commonCapabilities);
+    return options.merge(commonCapabilities);
   }
 
   @CheckReturnValue

@@ -21,7 +21,7 @@ final class MergeableCapabilitiesTest {
     extra.addArguments("--c", "--d");
     extra.setBinary("/usr/local/chrome.exe");
 
-    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+    ChromeOptions result = base.merge(extra);
 
     assertThat(result.asMap()).containsEntry("goog:chromeOptions", ImmutableMap.of(
       "args", asList("--a", "--b", "--c", "--d"),
@@ -38,7 +38,7 @@ final class MergeableCapabilitiesTest {
     ChromeOptions extra = new ChromeOptions();
     extra.setExperimentalOption("excludeSwitches", new String[]{"bar", "zzz"});
 
-    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+    ChromeOptions result = base.merge(extra);
 
     assertThat(result.asMap()).containsKeys("goog:chromeOptions");
     Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
@@ -53,7 +53,7 @@ final class MergeableCapabilitiesTest {
     ChromeOptions extra = new ChromeOptions();
     extra.setExperimentalOption("excludeSwitches", asList("blah", "bluh"));
 
-    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+    ChromeOptions result = base.merge(extra);
 
     assertThat(result.asMap()).containsKeys("goog:chromeOptions");
     Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
@@ -68,7 +68,7 @@ final class MergeableCapabilitiesTest {
     ChromeOptions extra = new ChromeOptions();
     extra.setExperimentalOption("excludeSwitches", new String[]{"blah", "bluh"});
 
-    MergeableCapabilities result = new MergeableCapabilities(base, extra);
+    ChromeOptions result = base.merge(extra);
 
     assertThat(result.asMap()).containsKeys("goog:chromeOptions");
     Object excludeSwitches = ((Map<String, Object>) result.asMap().get("goog:chromeOptions")).get("excludeSwitches");
@@ -80,7 +80,7 @@ final class MergeableCapabilitiesTest {
     ChromeOptions base = new ChromeOptions();
     FirefoxOptions extra = new FirefoxOptions();
 
-    assertThatThrownBy(() -> new MergeableCapabilities(base, extra))
+    assertThatThrownBy(() -> base.merge(extra))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Conflicting browser name: 'chrome' vs. 'firefox'");
   }
