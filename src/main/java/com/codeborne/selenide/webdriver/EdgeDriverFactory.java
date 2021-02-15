@@ -18,9 +18,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
@@ -67,17 +65,14 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
 
-    EdgeOptions options = new EdgeOptions();
-    options.merge(capabilities);
+    EdgeOptions options = new EdgeOptions().merge(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
 
     if (isChromiumBased()) {
-      Map<String, Object> edgeOptions = new HashMap<>();
-      edgeOptions.put("args", createEdgeArguments(config));
-      options.setCapability("ms:edgeOptions", edgeOptions);
+      options.addArguments(createEdgeArguments(config));
     }
     return options;
   }

@@ -66,8 +66,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest
       ChromeOptions options = new ChromeOptions();
       if (isHeadless()) options.setHeadless(true);
       options.addArguments("--proxy-bypass-list=<-loopback>");
-      options.merge(desiredCapabilities);
-      return new ChromeDriver(options);
+      return new ChromeDriver(options.merge(desiredCapabilities));
     }
 
     private FirefoxDriver firefox(DesiredCapabilities desiredCapabilities) {
@@ -77,8 +76,7 @@ final class CustomWebdriverProviderWithSelenideProxyTest extends IntegrationTest
       if (isHeadless()) options.setHeadless(true);
       options.addPreference("network.proxy.no_proxies_on", "");
       options.addPreference("network.proxy.allow_hijacking_localhost", true);
-      options.merge(desiredCapabilities);
-      return new FirefoxDriver(options);
+      return new FirefoxDriver(options.merge(desiredCapabilities));
     }
   }
 }

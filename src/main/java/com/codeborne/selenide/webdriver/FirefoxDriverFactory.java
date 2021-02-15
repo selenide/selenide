@@ -60,7 +60,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     firefoxOptions.setHeadless(config.headless());
     setupBrowserBinary(config, firefoxOptions);
     setupPreferences(firefoxOptions);
-    firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
+    firefoxOptions = firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
 
     setupDownloadsFolder(firefoxOptions, browserDownloadsFolder);
 
