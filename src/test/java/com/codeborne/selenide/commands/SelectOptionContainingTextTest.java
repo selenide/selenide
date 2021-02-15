@@ -34,27 +34,28 @@ final class SelectOptionContainingTextTest {
 
   @Test
   void selectsFirstMatchingOptionForSingleSelect() {
-    when(element.getAttribute(any())).thenReturn("false");
+    when(element.getDomAttribute(any())).thenReturn("false");
     when(element.findElements(any())).thenReturn(asList(option1, option2));
 
     command.execute(proxy, select, new Object[]{"option-subtext"});
 
     verify(option1).click();
     verify(option2, never()).click();
-    verify(element).getAttribute("multiple");
+    verify(element).getDomAttribute("multiple");
     verify(element).findElements(By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
   }
 
   @Test
   void selectsAllMatchingOptionsForMultipleSelect() {
-    when(element.getAttribute(any())).thenReturn("true");
+    when(element.getDomAttribute(any())).thenReturn("true");
     when(element.findElements(any())).thenReturn(asList(option1, option2));
 
     command.execute(proxy, select, new Object[]{"option-subtext"});
 
     verify(option1).click();
     verify(option2).click();
-    verify(element).getAttribute("multiple");
+    verify(element).getTagName();
+    verify(element).getDomAttribute("multiple");
     verify(element).findElements(By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
   }
 

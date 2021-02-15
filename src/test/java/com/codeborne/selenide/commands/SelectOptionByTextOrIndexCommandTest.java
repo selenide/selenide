@@ -30,6 +30,7 @@ final class SelectOptionByTextOrIndexCommandTest {
   void setup() {
     when(selectField.driver()).thenReturn(new DriverStub());
     when(selectField.getWebElement()).thenReturn(select);
+    when(selectField.description()).thenReturn("select#main");
     when(option.isSelected()).thenReturn(false);
   }
 
@@ -44,7 +45,7 @@ final class SelectOptionByTextOrIndexCommandTest {
   void selectOptionByTextWhenElementIsNotFound() {
     assertThatThrownBy(() -> command.execute(proxy, selectField, new Object[]{new String[]{"This is element text"}}))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {null/option[text:This is element text]}")
+      .hasMessageStartingWith("Element not found {select#main/option[text:This is element text]}")
       .hasMessageContaining("Expected: exist");
   }
 
@@ -53,7 +54,7 @@ final class SelectOptionByTextOrIndexCommandTest {
     doThrow(new NoSuchElementException("no element found")).when(select).findElements(any());
     assertThatThrownBy(() -> command.execute(proxy, selectField, new Object[]{new String[]{"Mega text"}}))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {null/option[text:Mega text]}")
+      .hasMessageStartingWith("Element not found {select#main/option[text:Mega text]}")
       .hasMessageContaining("Expected: exist")
       .hasMessageContaining("Caused by: NoSuchElementException: no element found");
     verify(select).findElements(By.xpath(".//option[normalize-space(.) = \"Mega text\"]"));
@@ -75,7 +76,7 @@ final class SelectOptionByTextOrIndexCommandTest {
   void selectOptionByIndexWhenNoElementFound() {
     assertThatThrownBy(() -> command.execute(proxy, selectField, new Object[]{new int[]{42}}))
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageStartingWith("Element not found {null/option[index:42]}")
+      .hasMessageStartingWith("Element not found {select#main/option[index:42]}")
       .hasMessageContaining("Expected: exist");
   }
 
