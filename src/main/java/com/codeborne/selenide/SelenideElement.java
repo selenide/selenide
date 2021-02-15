@@ -7,9 +7,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.internal.HasIdentity;
-import org.openqa.selenium.internal.WrapsElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -25,7 +24,7 @@ import java.time.Duration;
  * {@link #shouldBe(Condition...)} and {@link #shouldHave(Condition...)}
  */
 @ParametersAreNonnullByDefault
-public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot, HasIdentity {
+public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
   /**
    * <b>Implementation details:</b>
    *
