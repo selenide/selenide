@@ -146,7 +146,6 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
     assertThat((String) prefs.get("browser.helperApps.neverAsk.saveToDisk")).contains("application/pdf");
     assertThat(prefs.get("pdfjs.disabled")).isEqualTo(true);
     assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
-    assertThat(options.getProfile()).isNull();
   }
 
   @Test
