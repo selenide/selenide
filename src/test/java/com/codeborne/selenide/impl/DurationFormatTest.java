@@ -1,6 +1,9 @@
 package com.codeborne.selenide.impl;
 
+import integration.UseLocale;
+import integration.UseLocaleExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
@@ -26,6 +29,8 @@ final class DurationFormatTest {
     assertThat(df.format(2000)).isEqualTo("2 s.");
   }
 
+  @ExtendWith(UseLocaleExtension.class)
+  @UseLocale(language = "en")
   @Test
   void greaterThanSecond() {
     assertThat(df.format(1500)).isEqualTo("1.500 s.");
@@ -33,6 +38,8 @@ final class DurationFormatTest {
     assertThat(df.format(2001)).isEqualTo("2.001 s.");
   }
 
+  @ExtendWith(UseLocaleExtension.class)
+  @UseLocale(language = "en")
   @Test
   void greaterThanMinute() {
     assertThat(df.format(Duration.ofMinutes(1))).isEqualTo("60 s.");

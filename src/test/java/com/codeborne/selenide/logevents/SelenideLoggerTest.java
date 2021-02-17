@@ -1,9 +1,12 @@
 package com.codeborne.selenide.logevents;
 
+import integration.UseLocale;
+import integration.UseLocaleExtension;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -57,6 +60,8 @@ final class SelenideLoggerTest implements WithAssertions {
     assertThat(readableArguments((Object) new int[]{1, 2})).isEqualTo("[1, 2]");
   }
 
+  @ExtendWith(UseLocaleExtension.class)
+  @UseLocale(language = "en")
   @Test
   void printsDurationAmongArguments() {
     assertThat(readableArguments(Duration.ofMillis(900))).isEqualTo("900 ms.");
