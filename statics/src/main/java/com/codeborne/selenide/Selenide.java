@@ -1014,4 +1014,16 @@ public class Selenide {
   public static SessionStorage sessionStorage(){
     return getSelenideDriver().getSessionStorage();
   }
+
+  /**
+   * Provide access to system clipboard via {@link java.awt.Toolkit}
+   * Current version not support selenoid, will be implemented in future version
+   *
+   * @return String clipboard data
+   */
+  @Nonnull
+  @CheckReturnValue
+  public static Clipboard clipboard(){
+    return getSelenideDriver().getClipboard();
+  }
 }

@@ -440,6 +440,12 @@ public class SelenideDriver {
     return new SessionStorage(driver());
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public Clipboard getClipboard() {
+    return new Clipboard();
+  }
+
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
   private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
 
