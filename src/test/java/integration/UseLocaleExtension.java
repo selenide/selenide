@@ -20,7 +20,10 @@ public class UseLocaleExtension implements InvocationInterceptor {
       throw new IllegalStateException("UseLocaleExtension must be used with @UseLocale");
     }
     Locale.setDefault(new Locale(useLocale.language()));
-    invocation.proceed();
-    Locale.setDefault(previous);
+    try {
+      invocation.proceed();
+    } finally {
+      Locale.setDefault(previous);
+    }
   }
 }
