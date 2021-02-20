@@ -1129,6 +1129,21 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CanIgnoreReturnValue
   SelenideElement dragAndDropTo(WebElement target);
 
+
+  /**
+   * Drag and drop this element to the target via JS script
+   * see resources/drag_and_drop_script
+   * <p>
+   * Before dropping, waits until target element gets visible.
+   *
+   * @param targetCssSelector target cssSelector
+   * @return this element
+   * @see com.codeborne.selenide.commands.DragAndDropToByJs
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement dragAndDropToByJs(String targetCssSelector);
+
   /**
    * Execute custom implemented command
    *

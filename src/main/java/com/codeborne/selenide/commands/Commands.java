@@ -54,6 +54,7 @@ public class Commands {
 
   private void addActionsCommands() {
     add("dragAndDropTo", new DragAndDropTo());
+    add("dragAndDropToByJs", new DragAndDropToByJs());
     add("hover", new Hover());
     add("scrollTo", new ScrollTo());
     add("scrollIntoView", new ScrollIntoView());
