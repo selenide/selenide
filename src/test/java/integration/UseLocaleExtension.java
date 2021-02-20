@@ -21,7 +21,10 @@ public class UseLocaleExtension implements InvocationInterceptor {
                                   ExtensionContext extensionContext) throws Throwable {
     Locale previous = Locale.getDefault();
     Locale.setDefault(new Locale(language));
-    invocation.proceed();
-    Locale.setDefault(previous);
+    try {
+      invocation.proceed();
+    } finally {
+      Locale.setDefault(previous);
+    }
   }
 }
