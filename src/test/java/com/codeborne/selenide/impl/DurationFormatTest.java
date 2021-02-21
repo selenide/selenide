@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
+import integration.UseLocaleExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.time.Duration;
 
@@ -8,6 +10,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 final class DurationFormatTest {
   private final DurationFormat df = new DurationFormat();
+
+  @RegisterExtension
+  static UseLocaleExtension useLocale = new UseLocaleExtension("en");
 
   @Test
   void zero() {

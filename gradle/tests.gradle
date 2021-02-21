@@ -1,6 +1,7 @@
 allprojects {
   test {
     include 'com/codeborne/selenide/**/*'
+    systemProperties = ['user.language': 'FR']
   }
 
   task ie(type: Test) {

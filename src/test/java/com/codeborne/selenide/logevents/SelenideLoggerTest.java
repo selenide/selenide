@@ -1,9 +1,11 @@
 package com.codeborne.selenide.logevents;
 
+import integration.UseLocaleExtension;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -25,6 +27,9 @@ import static org.mockito.Mockito.when;
 
 final class SelenideLoggerTest implements WithAssertions {
   private final WebDriver webdriver = mock(WebDriver.class);
+
+  @RegisterExtension
+  static UseLocaleExtension useLocale = new UseLocaleExtension("en");
 
   @BeforeEach
   @AfterEach
