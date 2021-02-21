@@ -1,8 +1,10 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.FileContent;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.impl.WebElementWrapper;
 import org.openqa.selenium.By;
@@ -35,7 +37,18 @@ public class DragAndDropTo implements Command<SelenideElement> {
         " (only String or WebElement are supported)");
     }
     target.shouldBe(visible);
+    if (args.length == 2 && (boolean) args[1]) {
+      executeDragAndDropJs(locator.driver(), locator.getWebElement(), target);
+      return proxy;
+    }
     new Actions(locator.driver().getWebDriver()).dragAndDrop(locator.getWebElement(), target).perform();
     return proxy;
   }
+
+  private void executeDragAndDropJs(Driver driver, WebElement from, WebElement to) {
+    StringBuilder js = new StringBuilder(new FileContent("drag_and_drop_script.js").content());
+    js.append("dragAndDrop(arguments[0], arguments[1])");
+    driver.executeJavaScript(js.toString(), from, to);
+  }
+
 }

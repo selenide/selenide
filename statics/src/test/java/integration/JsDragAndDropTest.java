@@ -17,7 +17,7 @@ public class JsDragAndDropTest extends IntegrationTest {
 
   @Test
   public void checkDragAndDropByJS() {
-    $("#drag1").dragAndDropToByJs("#div2");
+    $("#drag1").dragAndDropTo("#div2", true);
     $("#div2").$("#drag1").shouldBe(Condition.appear);
   }
 
@@ -25,5 +25,4 @@ public class JsDragAndDropTest extends IntegrationTest {
   public static void tearDown() {
     closeWebDriver();
   }
-
 }
