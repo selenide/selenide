@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.18.2 (planned to 14.02.2021)
+* #1110 Implement drag and drop method with JavaScript (works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
 * #1402 improve collection description for $$.snapshot()
 * #1395 add @Nullable annotations to WebDriverRunner
 * #1383 add events "refresh", "back", "forward", "updateHash", "confirm", "dismiss", "prompt", "clearCookies" to Selenide log 

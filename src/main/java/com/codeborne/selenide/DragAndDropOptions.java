@@ -1,11 +1,14 @@
 package com.codeborne.selenide;
 
-import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.DEFAULT;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.JS;
 
+@ParametersAreNonnullByDefault
 public class DragAndDropOptions {
 
-  private DragAndDropMethod method;
+  private final DragAndDropMethod method;
 
   public DragAndDropOptions(DragAndDropMethod method) {
     this.method = method;
@@ -15,8 +18,8 @@ public class DragAndDropOptions {
     return new DragAndDropOptions(JS);
   }
 
-  public static DragAndDropOptions defaultStrategy() {
-    return new DragAndDropOptions(DEFAULT);
+  public static DragAndDropOptions usingActions() {
+    return new DragAndDropOptions(ACTIONS);
   }
 
   public DragAndDropMethod getMethod() {
@@ -28,7 +31,7 @@ public class DragAndDropOptions {
     /**
      * Executing drag and drop via Selenium Actions
      */
-    DEFAULT,
+    ACTIONS,
 
     /**
      * Executing drag and drop via JS script
@@ -38,7 +41,7 @@ public class DragAndDropOptions {
 
   @Override
   public String toString() {
-    return String.format("Drag and Drop method: %s", method);
+    return String.format("method: %s", method);
   }
 }
 
