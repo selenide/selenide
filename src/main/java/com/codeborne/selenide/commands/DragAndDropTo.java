@@ -1,6 +1,7 @@
 package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.ElementFinder;
@@ -11,6 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -37,15 +39,34 @@ public class DragAndDropTo implements Command<SelenideElement> {
         " (only String or WebElement are supported)");
     }
     target.shouldBe(visible);
-    if (args.length == 2 && (boolean) args[1]) {
-      executeDragAndDropJs(locator.driver(), locator.getWebElement(), target);
-      return proxy;
+    if (args.length == 2 && args[1] instanceof DragAndDropOptions) {
+      dragAndDrop(locator, target, (DragAndDropOptions) args[1]);
+    } else {
+      dragAndDropViaActions(locator, target);
     }
-    new Actions(locator.driver().getWebDriver()).dragAndDrop(locator.getWebElement(), target).perform();
     return proxy;
   }
 
-  private void executeDragAndDropJs(Driver driver, WebElement from, WebElement to) {
+  @Nonnull
+  @CheckReturnValue
+  private void dragAndDrop(WebElementSource locator, SelenideElement target, DragAndDropOptions options) {
+    switch (options.getMethod()) {
+      case JS:
+        dragAndDropViaJs(locator.driver(), locator.getWebElement(), target);
+        break;
+      case DEFAULT:
+        dragAndDropViaActions(locator, target);
+        break;
+      default:
+        throw new IllegalArgumentException("Drag and Drop method not defined!");
+    }
+  }
+
+  private void dragAndDropViaActions(WebElementSource locator, SelenideElement target) {
+    new Actions(locator.driver().getWebDriver()).dragAndDrop(locator.getWebElement(), target).perform();
+  }
+
+  private void dragAndDropViaJs(Driver driver, WebElement from, WebElement to) {
     StringBuilder js = new StringBuilder(new FileContent("drag_and_drop_script.js").content());
     js.append("dragAndDrop(arguments[0], arguments[1])");
     driver.executeJavaScript(js.toString(), from, to);

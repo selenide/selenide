@@ -1137,13 +1137,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Before dropping, waits until target element gets visible.
    *
    * @param targetCssSelector target css selector
-   * @param useJavaScript boolean flag to use JS
+   * @param options drag and drop options to define which way it will be executed
+   *
    * @return this element
    * @see com.codeborne.selenide.commands.DragAndDropTo
    */
   @Nonnull
   @CanIgnoreReturnValue
-  SelenideElement dragAndDropTo(String targetCssSelector, boolean useJavaScript);
+  SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
 
   /**
    * Execute custom implemented command
