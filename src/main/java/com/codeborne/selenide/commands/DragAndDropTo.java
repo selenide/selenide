@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.DragAndDropOptions.usingActions;
+import static com.codeborne.selenide.DragAndDropOptions.usingJavaScript;
 
 @ParametersAreNonnullByDefault
 public class DragAndDropTo implements Command<SelenideElement> {
@@ -32,7 +32,7 @@ public class DragAndDropTo implements Command<SelenideElement> {
 
     DragAndDropOptions options = new Arguments(args)
       .ofType(DragAndDropOptions.class)
-      .orElse(usingActions());
+      .orElse(usingJavaScript());
 
     dragAndDrop(locator, target, options);
     return proxy;
