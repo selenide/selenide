@@ -130,6 +130,16 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   String getText();
 
   /**
+   * Element alias, which can be set with {@link #as(String text)}
+   *
+   * @return Alias of this element or empty string, if element alias is not set
+   * @see com.codeborne.selenide.commands.GetAlias
+   */
+  @CheckReturnValue
+  @Nonnull
+  String getAlias();
+
+  /**
    * Short form of {@link #getText()}
    *
    * @see WebElement#getText()
