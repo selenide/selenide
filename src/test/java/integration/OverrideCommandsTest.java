@@ -23,7 +23,7 @@ final class OverrideCommandsTest extends ITest {
 
   @AfterEach
   void tearDown() {
-    Commands.getInstance().resetDefaults();
+    Commands.getInstance().add("click", new Click());
   }
 
   @Test
