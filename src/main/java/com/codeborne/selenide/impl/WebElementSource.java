@@ -53,7 +53,7 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return alias != null ? alias : getSearchCriteria();
+    return getAlias() != null ? getAlias() : getSearchCriteria();
   }
 
   @Override

@@ -48,7 +48,7 @@ public class WebElementWrapper extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String toString() {
-    return alias != null ? alias : describe.fully(driver(), delegate);
+    return getAlias() != null ? getAlias() : describe.fully(driver(), delegate);
   }
 
   @Override
