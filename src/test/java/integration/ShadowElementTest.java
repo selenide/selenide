@@ -26,6 +26,13 @@ final class ShadowElementTest extends ITest {
   }
 
   @Test
+  void clickInsideShadowHostInsideOfElement() {
+    $("#shadow-host")
+      .find(shadowCss("p", "#inner-shadow-host"))
+      .shouldHave(text("The Shadow-DOM inside another shadow tree"));
+  }
+
+  @Test
   void getTargetElementViaShadowHost() {
     $(shadowCss("p", "#shadow-host"))
       .shouldHave(text("Inside Shadow-DOM"));
@@ -61,9 +68,9 @@ final class ShadowElementTest extends ITest {
   void throwErrorWhenInnerShadowHostAbsent() {
     assertThatThrownBy(() -> $(shadowCss("p", "#shadow-host", "#nonexistent")).text())
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {#shadow-host [#nonexistent] p}")
+      .hasMessageContaining("Element not found {#shadow-host -> #nonexistent -> p}")
       .hasCauseInstanceOf(NoSuchElementException.class)
-      .hasMessageContaining("The element was not found: #nonexistent");
+      .hasMessageContaining("Cannot locate an element p in shadow roots #shadow-host -> #nonexistent");
   }
 
   @Test
@@ -86,7 +93,7 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getAllElementsInAllNestedShadowHosts() {
-    final ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
+    ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
       "#shadow-container", ".shadow-container-child", ".shadow-container-child-child"));
     elements.shouldHaveSize(3);
     assertThat(elements.get(0).getText()).isEqualTo("shadowContainerChildChild1Host1").as("Mismatch in name of first child container");

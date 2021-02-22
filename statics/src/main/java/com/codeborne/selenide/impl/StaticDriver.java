@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -52,17 +53,21 @@ public class StaticDriver implements Driver {
 
   @Override
   @CheckReturnValue
-  @Nonnull
+  @Nullable
   public SelenideProxyServer getProxy() {
     return WebDriverRunner.getSelenideProxy();
   }
 
   @Override
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getAndCheckWebDriver() {
     return WebDriverRunner.getAndCheckWebDriver();
   }
 
   @Override
+  @CheckReturnValue
+  @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return WebDriverRunner.getBrowserDownloadsFolder();
   }

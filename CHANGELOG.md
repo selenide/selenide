@@ -1,5 +1,29 @@
 # Changelog
 
+## 5.18.2 (planned to 14.02.2021)
+* #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
+* #1402 improve collection description for $$.snapshot()
+* #1395 add @Nullable annotations to WebDriverRunner
+* #1383 add events "refresh", "back", "forward", "updateHash", "confirm", "dismiss", "prompt", "clearCookies" to Selenide log 
+* #1408 fix Selenide own tests when running on machine with user language other than EN  --  thanks to Vicente Rossello Jaume
+
+## 5.18.1 (released 11.02.2021)
+* #1400 add method Selenide.getSessionStorage()  --  thanks to Dmitriy Budim @dbudim
+* #1392 remove "dynamic" nature of toString for And condition  --  thanks to Pavel Fokin @fokinp for PR #1393
+* #1390 Pass noproxy options from outside proxy to selenide proxy  --  thanks to Boris Osipov @BorisOsipov
+* upgrade to Netty 4.1.59.Final and LittleProxy 2.0.2 
+
+## 5.18.0 (released 23.01.2021)
+* #1365 disable webdriver logs by default  --  see PR #1379
+  (they still can be enabled by Configuration.webdriverLogsEnabled = true)
+* #1377 Replace long timeout with Duration for ElementsCollection  -- thanks to Ostap Oleksyn for PR #1377!
+* #1373 speed up `$(shadowCss())`  --  also thanks to @sakamoto66 for issue #1246 and PR #1233!
+* #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`  --  see PR #1370
+* #1369 don't allow `and` and `or` with only one condition  --  see PR #1370
+* #1366 detect mismatching "browserName" capability  --  see PR #1374
+* #1376 display duration argument in report as "1s" or "300 ms"  --  see PR #1378
+* upgraded to WebDriverManager 4.3.1  --  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
+
 ## 5.17.4 (released 14.01.2021)
 * #1360 make SelenidePageFactory even more customizable 
 
@@ -199,13 +223,13 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 * #814 #880 fix Screenshots  --  thanks to Petro Ovcharenko for PR #1052
 * #1049 use env variable BUILD_URL (no need to add BUILD_URL to system properties anymore)  --  thanks to GongYi for PR #1049 
 * #1049 fix path to screenshots in Jenkins for multi-module maven projects  --  thanks to GongYi for PR #1049 
-* upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
+* upgrade to WebDriverManager 3.8.1,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.1 (released 14.01.2020)
 * #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR https://github.com/selenide/selenide/pull/1031
 * fix #1034 Selenide cannot download file if response doesn't contain "Content-Disposition" header,  see PR https://github.com/selenide/selenide/pull/1035
 * fix method WebDriverRunner.using(): don't close the webdriver itself,  see https://github.com/selenide/selenide/commit/4d1b19972d
-* upgrade to WebDriverManager 3.8.0,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.0...master
+* upgrade to WebDriverManager 3.8.0,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.0 (released 26.12.2019)
 * #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
@@ -359,7 +383,7 @@ Technical changes (probably should not affect end users):
 * #273 Method `switchTo().alert()` now throws `NoAlertPresentException` instead of `TimeoutException`  -- thanks to @tsukakei for PR #774
 * #709 Fixed a misleading error message $.selectOptionByValue() reports  -- thanks to Keita Tsukamoto for PR #780
 * #734 Fixed incorrect filename of downloaded file  -- thanks to @rosolko for PR 768
-* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/changelog)
+* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 * #775 Upgrade to htmlunit 2.32.1
 * #778 Fixed Selenide tests for FireFox
 

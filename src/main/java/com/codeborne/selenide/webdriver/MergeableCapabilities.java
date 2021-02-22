@@ -16,8 +16,16 @@ import static java.util.Arrays.asList;
  */
 public class MergeableCapabilities extends MutableCapabilities {
   public MergeableCapabilities(Capabilities base, Capabilities extraCapabilities) {
+    if (areDifferent(base.getBrowserName(), extraCapabilities.getBrowserName())) {
+      throw new IllegalArgumentException(String.format("Conflicting browser name: '%s' vs. '%s'",
+        base.getBrowserName(), extraCapabilities.getBrowserName()));
+    }
     merge(base);
     merge(extraCapabilities);
+  }
+
+  private boolean areDifferent(String text1, String text2) {
+    return !text1.isEmpty() && !text2.isEmpty() && !text1.equals(text2);
   }
 
   @SuppressWarnings("unchecked")

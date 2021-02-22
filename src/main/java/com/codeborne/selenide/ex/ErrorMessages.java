@@ -3,6 +3,7 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.DurationFormat;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -14,16 +15,11 @@ import static org.apache.commons.lang3.StringUtils.substring;
 
 @ParametersAreNonnullByDefault
 public class ErrorMessages {
+  private static final DurationFormat df = new DurationFormat();
+
   @CheckReturnValue
   protected static String timeout(long timeoutMs) {
-    if (timeoutMs < 1000) {
-      return String.format("%nTimeout: %d ms.", timeoutMs);
-    }
-    if (timeoutMs % 1000 == 0) {
-      return String.format("%nTimeout: %d s.", timeoutMs / 1000);
-    }
-
-    return String.format("%nTimeout: %.3f s.", timeoutMs / 1000.0);
+    return String.format("%nTimeout: %s", df.format(timeoutMs));
   }
 
   @CheckReturnValue

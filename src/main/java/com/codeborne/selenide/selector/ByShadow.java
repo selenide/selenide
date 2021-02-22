@@ -1,6 +1,9 @@
 package com.codeborne.selenide.selector;
 
+import com.codeborne.selenide.impl.Cleanup;
+import com.codeborne.selenide.impl.FileContent;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -12,17 +15,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class ByShadow {
+  private static final FileContent jsSource = new FileContent("find-in-shadow-roots.js");
 
   /**
    * Find target elements inside shadow-root that attached to shadow-host.
    * <br/> Supports inner shadow-hosts.
-   *
+   * <p>
    * <br/> For example: shadow-host &gt; inner-shadow-host &gt; target-element
    * (each shadow-host must be specified explicitly).
    *
@@ -39,8 +44,7 @@ public class ByShadow {
 
   @ParametersAreNonnullByDefault
   public static class ByShadowCss extends By implements Serializable {
-    private final String shadowHost;
-    private final String[] innerShadowHosts;
+    private final List<String> shadowHostsChain;
     private final String target;
 
     ByShadowCss(String target, String shadowHost, String... innerShadowHosts) {
@@ -48,8 +52,9 @@ public class ByShadow {
       if (shadowHost == null || target == null) {
         throw new IllegalArgumentException("Cannot find elements when the selector is null");
       }
-      this.shadowHost = shadowHost;
-      this.innerShadowHosts = innerShadowHosts;
+      shadowHostsChain = new ArrayList<>(1 + innerShadowHosts.length);
+      shadowHostsChain.add(shadowHost);
+      shadowHostsChain.addAll(asList(innerShadowHosts));
       this.target = target;
     }
 
@@ -57,88 +62,56 @@ public class ByShadow {
     @CheckReturnValue
     @Nonnull
     public WebElement findElement(SearchContext context) {
-      WebElement host = context.findElement(By.cssSelector(shadowHost));
-      for (String innerHost : innerShadowHosts) {
-        host = getElementInsideShadowTree(host, innerHost);
+      List<WebElement> found = findElements(context);
+      if (found.isEmpty()) {
+        throw new NoSuchElementException("Cannot locate an element " + target + " in shadow roots " + describeShadowRoots());
       }
-
-      return getElementInsideShadowTree(host, target);
+      return found.get(0);
     }
 
     @Override
     @CheckReturnValue
     @Nonnull
-    public List<WebElement> findElements(final SearchContext context) {
-      final List<WebElement> hosts = context.findElements(By.cssSelector(shadowHost));
-
-      final List<WebElement> innerHosts = findInnerShadowHosts(hosts, Arrays.asList(this.innerShadowHosts));
-
-      return innerHosts.stream()
-        .flatMap(host -> getElementsInsideShadowTree(host, this.target).stream())
-        .collect(Collectors.toList());
-    }
-
-    private List<WebElement> findInnerShadowHosts(final List<WebElement> shadowHosts,
-                                                  final List<String> innerHostSelectors) {
-      List<WebElement> hosts = shadowHosts;
-      List<String> hostSelectors = innerHostSelectors;
-      while (!hostSelectors.isEmpty()) {
-        final List<WebElement> innerHosts = new ArrayList<>();
-        final String hostSelector = hostSelectors.get(0);
-        for (final WebElement host : hosts) {
-          innerHosts.addAll(getElementsInsideShadowTree(host, hostSelector));
+    public List<WebElement> findElements(SearchContext context) {
+      try {
+        if (context instanceof JavascriptExecutor) {
+          return findElementsInDocument((JavascriptExecutor) context);
         }
-        hosts = innerHosts;
-        hostSelectors = hostSelectors.subList(1, hostSelectors.size());
-      }
-
-      return hosts;
-    }
-
-    private WebElement getElementInsideShadowTree(WebElement host, String target) {
-      if (isShadowRootAttached(host)) {
-        WebElement targetWebElement = (WebElement) getJavascriptExecutor(host)
-          .executeScript("return arguments[0].shadowRoot.querySelector(arguments[1])", host, target);
-        if (targetWebElement == null) {
-          throw new NoSuchElementException("The element was not found: " + target);
+        else {
+          return findElementsInElement(context);
         }
-        return targetWebElement;
-      } else {
-        throw new NoSuchElementException("The element is not a shadow host or has 'closed' shadow-dom mode: " + host);
       }
-    }
-
-    private boolean isShadowRootAttached(WebElement host) {
-      return getJavascriptExecutor(host).executeScript("return arguments[0].shadowRoot", host) != null;
+      catch (JavascriptException e) {
+        throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
+      }
     }
 
     @SuppressWarnings("unchecked")
-    private List<WebElement> getElementsInsideShadowTree(WebElement host, String sh) {
-      return (List<WebElement>) getJavascriptExecutor(host)
-        .executeScript("return arguments[0].shadowRoot.querySelectorAll(arguments[1])", host, sh);
+    private List<WebElement> findElementsInDocument(JavascriptExecutor context) {
+      return (List<WebElement>) context.executeScript(
+        "return " + jsSource.content() + "(arguments[0], arguments[1])", target, shadowHostsChain
+      );
     }
 
-    private JavascriptExecutor getJavascriptExecutor(SearchContext context) {
-      JavascriptExecutor jsExecutor;
-      if (context instanceof JavascriptExecutor) {
-        jsExecutor = (JavascriptExecutor) context;
-      } else {
-        jsExecutor = (JavascriptExecutor) ((WrapsDriver) context).getWrappedDriver();
-      }
-      return jsExecutor;
+    @SuppressWarnings("unchecked")
+    private List<WebElement> findElementsInElement(SearchContext context) {
+      JavascriptExecutor js = (JavascriptExecutor) ((WrapsDriver) context).getWrappedDriver();
+      return (List<WebElement>) js.executeScript(
+        "return " + jsSource.content() + "(arguments[0], arguments[1], arguments[2])", target, shadowHostsChain, context
+      );
     }
 
     @Override
     @CheckReturnValue
     @Nonnull
     public String toString() {
-      StringBuilder sb = new StringBuilder("By.cssSelector: ");
-      sb.append(shadowHost).append(" ");
-      if (innerShadowHosts.length > 0) {
-        sb.append(Arrays.toString(innerShadowHosts)).append(" ");
-      }
-      sb.append(target);
-      return sb.toString();
+      return "By.cssSelector: " + describeShadowRoots() + " -> " + target;
+    }
+
+    @CheckReturnValue
+    @Nonnull
+    private String describeShadowRoots() {
+      return shadowHostsChain.stream().collect(joining(" -> "));
     }
   }
 }

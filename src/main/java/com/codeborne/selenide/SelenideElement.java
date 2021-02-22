@@ -473,7 +473,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
    * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -490,7 +490,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
    * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -506,7 +506,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param condition           e.g. enabled, visible, text() and so on
    * @param timeoutMilliseconds timeout in milliseconds.
    * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -552,7 +552,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param timeoutMilliseconds         timeout in milliseconds.
    * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
    * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or @deprecated use {@link #shouldHave(Condition, Duration)}
+   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
    */
   @Nonnull
   @CanIgnoreReturnValue
@@ -1158,6 +1158,23 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @Nonnull
   @CanIgnoreReturnValue
   SelenideElement dragAndDropTo(WebElement target);
+
+  /**
+   Drag and drop this element to the target via JS script
+   * see resources/drag_and_drop_script
+   *
+   * <p>
+   * Before dropping, waits until target element gets visible.
+   *
+   * @param targetCssSelector target css selector
+   * @param options drag and drop options to define which way it will be executed
+   *
+   * @return this element
+   * @see com.codeborne.selenide.commands.DragAndDropTo
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
 
   /**
    * Execute custom implemented command

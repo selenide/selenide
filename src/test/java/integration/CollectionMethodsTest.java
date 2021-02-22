@@ -33,6 +33,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
@@ -201,6 +202,15 @@ final class CollectionMethodsTest extends ITest {
     $$("#multirowTable tr").shouldHaveSize(2);
     $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);
     $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHaveSize(2);
+  }
+
+  @Test
+  void errorMessageShouldShowFullAndConditionDescription() {
+    ElementsCollection filteredRows = $$("#multirowTable tr")
+      .filterBy(and("condition name", text("Chack"), text("Baskerville")));
+
+    assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
+      .hasMessageContaining("collection: #multirowTable tr.filter(condition name: text 'Chack' and text 'Baskerville'");
   }
 
   @Test

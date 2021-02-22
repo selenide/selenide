@@ -58,9 +58,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   protected ChromeDriverService buildService(Config config) {
-    return new ChromeDriverService.Builder()
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new ChromeDriverService.Builder());
   }
 
   @Override

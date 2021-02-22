@@ -10,6 +10,7 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -70,7 +71,7 @@ final class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(emptyList());
 
-    assertThatThrownBy(() -> collection.should("Size", 1, CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Size", Duration.ofMillis(1), CollectionCondition.size(1)))
       .isInstanceOf(Error.class);
   }
 
@@ -79,7 +80,7 @@ final class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     doThrow(RuntimeException.class).when(source).getElements();
 
-    assertThatThrownBy(() -> collection.should("Be size 1", 1, CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Be size 1", Duration.ofMillis(1), CollectionCondition.size(1)))
       .isInstanceOf(RuntimeException.class);
   }
 

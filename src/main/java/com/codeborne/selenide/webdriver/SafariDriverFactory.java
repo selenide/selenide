@@ -31,10 +31,7 @@ public class SafariDriverFactory extends AbstractDriverFactory {
   }
 
   private SafariDriverService createDriverService(Config config) {
-    return new SafariDriverService.Builder()
-      .usingTechnologyPreview(false)
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new SafariDriverService.Builder().usingTechnologyPreview(false));
   }
 
   @Nonnull
