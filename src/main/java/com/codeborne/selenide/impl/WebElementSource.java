@@ -46,10 +46,14 @@ public abstract class WebElementSource {
     this.alias = alias;
   }
 
+  public String getAlias() {
+    return alias;
+  }
+
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return alias != null ? alias : getSearchCriteria();
+    return getAlias() != null ? getAlias() : getSearchCriteria();
   }
 
   @Override
