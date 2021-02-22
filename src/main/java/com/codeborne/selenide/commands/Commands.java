@@ -144,7 +144,7 @@ public class Commands {
     add("waitUntil", new WaitUntil());
   }
 
-  public void add(String method, Command<?> command) {
+  public final void add(String method, Command<?> command) {
     commands.put(method, command);
   }
 
