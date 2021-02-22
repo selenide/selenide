@@ -25,10 +25,10 @@ public class GetAliasCommandTest implements WithAssertions {
   }
 
   @Test
-  void testReturnEmptyWhenAliasNotSet() {
+  void testReturnNullWhenAliasNotSet() {
     assertThat(getAlias.execute(proxy, locator, new Object[]{}))
-      .as("should return empty string when alias is not set")
-      .isEmpty();
+      .as("should return null when alias is not set")
+      .isNull();
   }
 
 }

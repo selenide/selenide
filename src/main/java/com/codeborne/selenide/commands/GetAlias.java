@@ -15,6 +15,6 @@ public class GetAlias implements Command<String> {
   @CheckReturnValue
   @Nullable
   public String execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    return locator.getAlias() == null ? "" : locator.getAlias();
+    return locator.getAlias();
   }
 }
