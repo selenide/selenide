@@ -39,7 +39,7 @@ public class DragAndDropTo implements Command<SelenideElement> {
   }
 
   @Nonnull
-  private SelenideElement findTarget(Driver driver, @Nullable Object[] args) {
+  protected SelenideElement findTarget(Driver driver, @Nullable Object[] args) {
     if (args == null || args.length == 0) {
       throw new IllegalArgumentException("Missing target argument");
     }
