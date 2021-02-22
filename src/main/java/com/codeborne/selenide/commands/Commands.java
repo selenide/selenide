@@ -27,7 +27,7 @@ public class Commands {
 
   private final Map<String, Command<?>> commands = new ConcurrentHashMap<>(128);
 
-  private Commands() {
+  protected Commands() {
     addFindCommands();
     addClickCommands();
     addModifyCommands();
