@@ -46,6 +46,8 @@ public abstract class WebElementSource {
     this.alias = alias;
   }
 
+  @CheckReturnValue
+  @Nullable
   public String getAlias() {
     return alias;
   }

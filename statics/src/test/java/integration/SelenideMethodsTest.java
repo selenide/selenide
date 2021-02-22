@@ -123,6 +123,15 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  void canGetElementAlias() {
+    SelenideElement anonymousElement = $(By.xpath("/dev[1]/span[2]"));
+    SelenideElement namedElement = $(By.xpath("/dev[1]/span[2]")).as("Login button");
+
+    assertThat(anonymousElement.getAlias()).isNull();
+    assertThat(namedElement.getAlias()).isEqualTo("Login button");
+  }
+
+  @Test
   void shouldMethodCanUseCustomTimeout() {
     $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
     $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
