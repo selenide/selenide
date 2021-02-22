@@ -77,7 +77,7 @@ allprojects {
     }
     jvmArgs = ['-ea', '-Xmx512m']
     systemProperties += System.properties
-    systemProperties = ['user.language': 'FR']
+    systemProperties['user.language'] = 'FR'
   }
 }
 
