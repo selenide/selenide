@@ -4,7 +4,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,12 +51,19 @@ public class Plugins {
 
     String className = readFile(file).trim();
     try {
-      //noinspection unchecked
-      return (T) Class.forName(className).getConstructor().newInstance();
+      return instantiate(className);
     }
     catch (Exception e) {
       throw new IllegalStateException("Failed to initialize default plugin " + className + " from " + file, e);
     }
+  }
+
+  @Nonnull
+  private static <T> T instantiate(String className) throws Exception {
+    @SuppressWarnings("unchecked")
+    Constructor<T> constructor = (Constructor<T>) Class.forName(className).getDeclaredConstructor();
+    constructor.setAccessible(true);
+    return constructor.newInstance();
   }
 
   private static String readFile(URL file) {

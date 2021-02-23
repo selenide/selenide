@@ -12,22 +12,22 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.codeborne.selenide.impl.Plugins.inject;
+
 @ParametersAreNonnullByDefault
 public class Commands {
-  private static Commands collection;
+  private static Commands instance;
+
+  public static synchronized Commands getInstance() {
+    if (instance == null) {
+      instance = inject(Commands.class);
+    }
+    return instance;
+  }
 
   private final Map<String, Command<?>> commands = new ConcurrentHashMap<>(128);
 
-  public static synchronized Commands getInstance() {
-    if (collection == null) {
-      collection = new Commands();
-      collection.resetDefaults();
-    }
-    return collection;
-  }
-
-  public final synchronized void resetDefaults() {
-    commands.clear();
+  protected Commands() {
     addFindCommands();
     addClickCommands();
     addModifyCommands();
@@ -144,7 +144,7 @@ public class Commands {
     add("waitUntil", new WaitUntil());
   }
 
-  public void add(String method, Command<?> command) {
+  public final void add(String method, Command<?> command) {
     commands.put(method, command);
   }
 

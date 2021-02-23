@@ -1,8 +1,6 @@
 package integration.customcommands;
 
-import com.codeborne.selenide.commands.Commands;
 import integration.IntegrationTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,10 +35,5 @@ final class CustomCommandsTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
     openFile("page_with_images.html");
-  }
-
-  @AfterEach
-  void resetSelenideDefaultCommands() {
-    Commands.getInstance().resetDefaults();
   }
 }
