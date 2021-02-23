@@ -26,8 +26,13 @@ public class Plugins {
   private static final Map<Class<?>, Object> cache = new ConcurrentHashMap<>();
 
   @SuppressWarnings("unchecked")
-  public static <T> T inject(Class<T> klass) {
-    return (T) cache.computeIfAbsent(klass, Plugins::loadPlugin);
+  public static synchronized <T> T inject(Class<T> klass) {
+    T plugin = (T) cache.get(klass);
+    if (plugin == null) {
+      plugin = loadPlugin(klass);
+      cache.put(klass, plugin);
+    }
+    return plugin;
   }
 
   private static <T> T loadPlugin(Class<T> klass) {
