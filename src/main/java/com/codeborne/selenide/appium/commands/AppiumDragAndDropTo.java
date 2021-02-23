@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.DragAndDropTo;
 import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.PerformsTouchActions;
-import io.appium.java_client.android.AndroidTouchAction;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
 
@@ -24,7 +24,9 @@ public class AppiumDragAndDropTo extends DragAndDropTo {
     SelenideElement target = findTarget(locator.driver(), args);
     target.shouldBe(visible);
 
-    new AndroidTouchAction((PerformsTouchActions) locator.driver().getWebDriver())
+    PerformsTouchActions driver = (PerformsTouchActions) locator.driver().getWebDriver();
+
+    new TouchAction<>(driver)
       .longPress(ElementOption.element(locator.getWebElement()))
       .waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000)))
       .moveTo(ElementOption.element(target.getWrappedElement()))
