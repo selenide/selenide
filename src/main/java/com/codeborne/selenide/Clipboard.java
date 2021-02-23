@@ -1,25 +1,25 @@
 package com.codeborne.selenide;
 
+public interface Clipboard {
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
+  /**
+   * Get text from clipboard
+   * @return
+   */
+  String getText();
 
-public class Clipboard {
+  /**
+   * Set value to clipboard
+   * @param text value to be set to clipboard
+   */
 
-  @Nonnull
-  @CheckReturnValue
-  public String getString() {
-    String content = null;
-    try {
-      content = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
-    } catch (UnsupportedFlavorException | IOException e) {
-      throw new IllegalStateException("Can't get clipboard data! " + e);
-    }
-    return content;
-  }
+  void setValue(String text);
+
+
+  /**
+   * Check that value in clipboard equals to expected
+   * @param text expected value for compare
+   */
+  void shouldBeText(String text);
 
 }

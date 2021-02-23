@@ -443,7 +443,7 @@ public class SelenideDriver {
   @CheckReturnValue
   @Nonnull
   public Clipboard getClipboard() {
-    return new Clipboard();
+    return new ClipboardService(driver()).load();
   }
 
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);

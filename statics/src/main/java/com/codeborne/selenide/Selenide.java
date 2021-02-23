@@ -1016,8 +1016,11 @@ public class Selenide {
   }
 
   /**
-   * Provide access to system clipboard via {@link java.awt.Toolkit}
-   * Current version not support selenoid, will be implemented in future version
+   * Provide access to system clipboard
+   * Default implementation acts via {@link java.awt.Toolkit} and supports only local runs
+   *
+   * Remote runs can be implemented via plugins
+   * Plugin for Selenoid will be released soon
    *
    * @return String clipboard data
    */

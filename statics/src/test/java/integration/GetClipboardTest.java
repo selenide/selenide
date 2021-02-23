@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class GetClipboardTest extends IntegrationTest {
@@ -24,8 +23,14 @@ public class GetClipboardTest extends IntegrationTest {
   public void getClipboard() {
     $("#myInput").should(Condition.attribute("value", "Hello World"));
     $("#my-button").should(Condition.visible).click();
-    String clipboardString = Selenide.clipboard().getString();
-    assertEquals("Hello World", clipboardString, "clipboard content doesn't match");
+    Selenide.clipboard().shouldBeText("Hello World");
+  }
+
+  @Disabled("Need configure X11 for github actions, not sure that it needs")
+  @Test
+  public void checkSetValue() {
+    Selenide.clipboard().setValue("111");
+    Selenide.clipboard().shouldBeText("111");
   }
 
   @AfterAll
