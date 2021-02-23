@@ -23,8 +23,7 @@ public class Clipboard {
 
   /**
    * Get text from clipboard
-   *
-   * @return
+   * @return string content of clipboard
    */
   @Nonnull
   @CheckReturnValue
@@ -33,14 +32,13 @@ public class Clipboard {
     try {
       content = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
     } catch (UnsupportedFlavorException | IOException e) {
-      throw new IllegalStateException("Can't get clipboard data! " + e);
+      throw new IllegalStateException("Can't get clipboard data! " + e.getMessage(), e);
     }
     return content;
   }
 
   /**
    * Set value to clipboard
-   *
    * @param text value to be set to clipboard
    */
   public void setValue(String text) {
@@ -49,7 +47,6 @@ public class Clipboard {
 
   /**
    * Check that value in clipboard equals to expected
-   *
    * @param text expected value for compare
    */
   public void shouldBeText(String text) {
