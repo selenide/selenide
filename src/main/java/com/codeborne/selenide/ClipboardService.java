@@ -1,11 +1,12 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.Plugins;
-import com.google.common.base.Strings;
-
+import java.lang.reflect.InvocationTargetException;
 import java.util.ServiceLoader;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.codeborne.selenide.impl.Plugins.getDefaultPlugin;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Arrays.stream;
 
 
 public class ClipboardService {
@@ -17,9 +18,26 @@ public class ClipboardService {
   }
 
   public Clipboard load() {
-    Stream<Clipboard> implementations = StreamSupport.stream(ServiceLoader.load(Clipboard.class).spliterator(), false);
-    return Strings.isNullOrEmpty(driver.config().remote())
-      ? Plugins.getDefaultPlugin(Clipboard.class)
-      : implementations.findFirst().orElseThrow(() -> new IllegalStateException("Remote Clipboard plugin not defined!"));
+    if (isNullOrEmpty(driver.config().remote())) {
+      return initClipboardWithDriver(getDefaultPlugin(Clipboard.class).getClass());
+    } else {
+      Clipboard implementation = StreamSupport.stream(ServiceLoader.load(Clipboard.class).spliterator(), false)
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Remote clipboard plugin not defined!"));
+      return initClipboardWithDriver(implementation.getClass());
+    }
+  }
+
+
+  private Clipboard initClipboardWithDriver(Class<? extends Clipboard> clazz) {
+    try {
+      return (Clipboard) stream(clazz.getConstructors())
+        .filter(constructor -> stream(constructor.getParameterTypes()).allMatch(t -> t.getSimpleName().equals("Driver")))
+        .findFirst()
+        .get()
+        .newInstance(driver);
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      throw new IllegalStateException(e);
+    }
   }
 }
