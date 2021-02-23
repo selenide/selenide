@@ -6,7 +6,6 @@ import java.util.stream.StreamSupport;
 
 import static com.codeborne.selenide.impl.Plugins.getDefaultPlugin;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Arrays.stream;
 
 
 public class ClipboardService {
@@ -31,12 +30,8 @@ public class ClipboardService {
 
   private Clipboard initClipboardWithDriver(Class<? extends Clipboard> clazz) {
     try {
-      return (Clipboard) stream(clazz.getConstructors())
-        .filter(constructor -> stream(constructor.getParameterTypes()).allMatch(t -> t.getSimpleName().equals("Driver")))
-        .findFirst()
-        .get()
-        .newInstance(driver);
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      return clazz.getConstructor(Driver.class).newInstance(driver);
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new IllegalStateException(e);
     }
   }
