@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.2 (planned to 2x.02.2021)
+* #52 override Selenide standard method `$.dragAndDropTo()`
+
 === 1.6.1 (released 21.01.2021)
 * #50 change scope of selenide and appium dependencies from "implementation" to "api"
 
