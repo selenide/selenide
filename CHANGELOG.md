@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.18.2 (planned to 14.02.2021)
+## 5.19.0 (released 24.02.2021)
 * #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
 * #1402 improve collection description for $$.snapshot()
 * #1415 add method $.getAlias()  --  thanks to @pavelpp
