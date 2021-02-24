@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.2 (in progress)
+* upgrade to Selenide 5.19.0
+
 ## 1.0.1 (released 29.01.2021)
 * #4 Support local browsers too
 * upgrade to Selenide 5.18.0
