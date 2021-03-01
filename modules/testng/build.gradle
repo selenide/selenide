@@ -1,5 +1,5 @@
 ext {
-  testngVersion = '7.3.0'
+  testngVersion = '7.4.0'
 }
 
 dependencies {
