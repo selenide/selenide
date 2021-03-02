@@ -47,7 +47,7 @@ public class Plugins {
     return implementation;
   }
 
-  public static <T> T getDefaultPlugin(Class<T> klass) {
+  private static <T> T getDefaultPlugin(Class<T> klass) {
     String resource = "/META-INF/defaultservices/" + klass.getName();
     URL file = Plugins.class.getResource(resource);
     if (file == null) {

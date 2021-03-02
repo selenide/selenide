@@ -1,38 +1,59 @@
 package com.codeborne.selenide;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ServiceLoader;
-import java.util.stream.StreamSupport;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
-import static com.codeborne.selenide.impl.Plugins.getDefaultPlugin;
-import static com.google.common.base.Strings.isNullOrEmpty;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClipboardService {
 
   private Driver driver;
 
-  public ClipboardService(Driver driver) {
+  @Nonnull
+  @CheckReturnValue
+  public ClipboardService getClipboard(Driver driver) {
     this.driver = driver;
+    return this;
   }
 
-  public Clipboard load() {
-    if (isNullOrEmpty(driver.config().remote())) {
-      return initClipboardWithDriver(getDefaultPlugin(Clipboard.class).getClass());
-    } else {
-      Clipboard implementation = StreamSupport.stream(ServiceLoader.load(Clipboard.class).spliterator(), false)
-        .findFirst()
-        .orElseThrow(() -> new IllegalStateException("Remote clipboard plugin not defined!"));
-      return initClipboardWithDriver(implementation.getClass());
-    }
-  }
-
-
-  private Clipboard initClipboardWithDriver(Class<? extends Clipboard> clazz) {
+  /**
+   * Get text from clipboard
+   *
+   * @return string content of clipboard
+   */
+  @Nonnull
+  @CheckReturnValue
+  public String getText() {
+    String content = null;
     try {
-      return clazz.getConstructor(Driver.class).newInstance(driver);
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      throw new IllegalStateException(e);
+      content = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
+    } catch (UnsupportedFlavorException | IOException e) {
+      throw new IllegalStateException("Can't get clipboard data! " + e.getMessage(), e);
     }
+    return content;
   }
+
+  /**
+   * Set value to clipboard
+   *
+   * @param text value to be set to clipboard
+   */
+  public void setValue(String text) {
+    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), new StringSelection(text));
+  }
+
+  /**
+   * Check that value in clipboard equals to expected
+   *
+   * @param text expected value for compare
+   */
+  public void shouldBeText(String text) {
+    assertEquals(text, getText(), "Clipboard data doesn't match with expected!");
+  }
+
 }

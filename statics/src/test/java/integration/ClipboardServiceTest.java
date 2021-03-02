@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 
-public class GetClipboardTest extends IntegrationTest {
+public class ClipboardServiceTest extends IntegrationTest {
 
   @BeforeEach
   public void openTestPage() {
@@ -24,6 +24,7 @@ public class GetClipboardTest extends IntegrationTest {
     $("#myInput").should(Condition.attribute("value", "Hello World"));
     $("#my-button").should(Condition.visible).click();
     Selenide.clipboard().shouldBeText("Hello World");
+    Selenide.switchTo().alert().accept();
   }
 
   @Disabled("Need configure X11 for github actions, not sure that it needs")

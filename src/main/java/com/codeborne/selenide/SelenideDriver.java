@@ -442,8 +442,8 @@ public class SelenideDriver {
 
   @CheckReturnValue
   @Nonnull
-  public Clipboard getClipboard() {
-    return new ClipboardService(driver()).load();
+  public ClipboardService getClipboard() {
+    return inject(ClipboardService.class).getClipboard(driver());
   }
 
   private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
