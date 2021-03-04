@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.20.0 (planned to xx.03.2021)
+* #1422 add headless mode to Microsoft Edge browser (chromium-based)
+
 ## 5.19.0 (released 24.02.2021)
 * #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
 * #1406 fix method `$.click(usingJavascript())` in Internet Explorer  --  see PR #1419

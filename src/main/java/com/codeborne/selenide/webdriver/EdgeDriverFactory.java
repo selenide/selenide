@@ -17,7 +17,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 
 @ParametersAreNonnullByDefault
@@ -70,6 +73,11 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
     }
 
+    if (isChromiumBased() && config.headless()) {
+      Map<String, Object> edgeOptions = new HashMap<>();
+      edgeOptions.put("args", asList("--headless", "--disable-gpu"));
+      options.setCapability("ms:edgeOptions", edgeOptions);
+    }
     return options;
   }
 
