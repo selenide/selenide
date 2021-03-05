@@ -442,7 +442,7 @@ public class SelenideDriver {
 
   @CheckReturnValue
   @Nonnull
-  public ClipboardService getClipboard() {
+  public Clipboard getClipboard() {
     return inject(ClipboardService.class).getClipboard(driver());
   }
 

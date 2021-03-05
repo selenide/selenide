@@ -1025,11 +1025,11 @@ public class Selenide {
    * Pay attention that Clipboard is shared resource for instance where tests runs
    * and keep in mind while developing test suite with multiple tests for clipboard.
    *
-   * @return ClipboardService
+   * @return Clipboard
    */
   @Nonnull
   @CheckReturnValue
-  public static ClipboardService clipboard(){
+  public static Clipboard clipboard(){
     return getSelenideDriver().getClipboard();
   }
 }

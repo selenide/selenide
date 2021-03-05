@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 
-public class ClipboardServiceTest extends IntegrationTest {
+public class ClipboardDefaultTest extends IntegrationTest {
 
   @BeforeEach
   public void openTestPage() {
