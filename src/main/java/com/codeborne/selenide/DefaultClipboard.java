@@ -8,11 +8,11 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClipboardDefault implements Clipboard {
+public class DefaultClipboard implements Clipboard {
 
   private Driver driver;
 
-  public ClipboardDefault(Driver driver) {
+  public DefaultClipboard(Driver driver) {
     this.driver = driver;
   }
 
