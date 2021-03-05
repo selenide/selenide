@@ -1,7 +1,5 @@
 package com.codeborne.selenide;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -18,8 +16,6 @@ public class ClipboardDefault implements Clipboard {
     this.driver = driver;
   }
 
-  @Nonnull
-  @CheckReturnValue
   public String getText() {
     assertRemoteState();
     String content = null;

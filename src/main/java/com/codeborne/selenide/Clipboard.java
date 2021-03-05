@@ -1,5 +1,8 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+
 public interface Clipboard {
 
   /**
@@ -7,6 +10,8 @@ public interface Clipboard {
    *
    * @return string content of clipboard
    */
+  @CheckReturnValue
+  @Nonnull
   String getText();
 
   /**
