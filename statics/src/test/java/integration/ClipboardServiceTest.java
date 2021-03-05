@@ -30,7 +30,7 @@ public class ClipboardServiceTest extends IntegrationTest {
   @Disabled("Need configure X11 for github actions, not sure that it needs")
   @Test
   public void checkSetValue() {
-    Selenide.clipboard().setValue("111");
+    Selenide.clipboard().setText("111");
     Selenide.clipboard().shouldBeText("111");
   }
 

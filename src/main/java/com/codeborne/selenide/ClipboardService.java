@@ -39,11 +39,11 @@ public class ClipboardService {
   }
 
   /**
-   * Set value to clipboard
+   * Set text to clipboard
    *
    * @param text value to be set to clipboard
    */
-  public void setValue(String text) {
+  public void setText(String text) {
     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), new StringSelection(text));
   }
 
