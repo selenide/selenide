@@ -18,7 +18,7 @@ public class DefaultClipboardTest extends IntegrationTest {
     openFile("clipboard.html");
   }
 
-  @Disabled("Need configure X11 for github actions, not sure that it needs")
+  @Disabled("Need configure X11 for github actions, not sure that it needs ")
   @Test
   public void getClipboard() {
     $("#myInput").should(Condition.attribute("value", "Hello World"));
