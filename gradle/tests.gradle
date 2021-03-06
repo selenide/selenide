@@ -20,6 +20,14 @@ allprojects {
     exclude 'com/codeborne/selenide/**/*'
   }
 
+  task edge_headless(type: Test) {
+    systemProperties['selenide.browser'] = 'edge'
+    systemProperties['selenide.headless'] = 'true'
+    systemProperties['selenide.reportsFolder'] = 'build/reports/tests/edge_headless'
+    include 'integration/**/*'
+    exclude 'com/codeborne/selenide/**/*'
+  }
+
   task chrome(type: Test) {
     systemProperties['selenide.browser'] = 'chrome'
     systemProperties['selenide.reportsFolder'] = 'build/reports/tests/chrome'
