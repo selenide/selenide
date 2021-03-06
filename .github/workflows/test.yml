@@ -28,7 +28,7 @@ jobs:
         if: failure()
         with:
           name: test-report-win
-          path: build/reports/
+          path: ./**/build/reports
   run-tests-on-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -62,4 +62,4 @@ jobs:
         if: failure()
         with:
           name: test-report
-          path: build/reports/
+          path: ./**/build/reports/
