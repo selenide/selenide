@@ -13,6 +13,6 @@ final class UserAgentTest extends ITest {
     assertThat(userAgent).isNotBlank();
     assertThat(userAgent)
       .withFailMessage(String.format("Current user agent [%s] should belong to '%s' browser", userAgent, browser))
-      .containsIgnoringCase(browser);
+      .containsIgnoringCase(browser.substring(0, browser.length() - 1));
   }
 }
