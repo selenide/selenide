@@ -6,8 +6,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class DefaultClipboard implements Clipboard {
 
   private Driver driver;
@@ -30,11 +28,6 @@ public class DefaultClipboard implements Clipboard {
   public void setText(String text) {
     assertRemoteState();
     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), new StringSelection(text));
-  }
-
-  public void shouldBeText(String text) {
-    assertRemoteState();
-    assertEquals(text, getText(), "Clipboard data doesn't match with expected!");
   }
 
   private void assertRemoteState() {

@@ -21,11 +21,4 @@ public interface Clipboard {
    */
   void setText(String text);
 
-  /**
-   * Check that value in clipboard equals to expected
-   *
-   * @param text expected value for compare
-   */
-  void shouldBeText(String text);
-
 }
