@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.20.0 (planned to xx.03.2021)
+* #1409 Added method for getting clipboard content  --  thanks to Dmitriy Budim @dbudim
 * #1422 add headless mode to Microsoft Edge browser (chromium-based)
 
 ## 5.19.0 (released 24.02.2021)
