@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
+
 @ParametersAreNonnullByDefault
 public class WebElementsCollectionWrapper implements CollectionSource {
   private final List<WebElement> elements;
   private final Driver driver;
+  private Alias alias = NONE;
 
   public WebElementsCollectionWrapper(Driver driver, Collection<? extends WebElement> elements) {
     this.driver = driver;
@@ -38,7 +41,7 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return "$$(" + elements.size() + " elements)";
+    return alias.getOrElse(() -> "$$(" + elements.size() + " elements)");
   }
 
   @Override
@@ -46,5 +49,10 @@ public class WebElementsCollectionWrapper implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return driver;
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

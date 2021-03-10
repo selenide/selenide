@@ -9,12 +9,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.stream.Collectors.toList;
 
 @ParametersAreNonnullByDefault
 public class FilteringCollection implements CollectionSource {
   private final CollectionSource originalCollection;
   private final Condition filter;
+  private Alias alias = NONE;
 
   public FilteringCollection(CollectionSource originalCollection, Condition filter) {
     this.originalCollection = originalCollection;
@@ -45,7 +47,7 @@ public class FilteringCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return originalCollection.description() + ".filter(" + filter + ')';
+    return alias.getOrElse(() -> originalCollection.description() + ".filter(" + filter + ')');
   }
 
   @Override
@@ -53,5 +55,10 @@ public class FilteringCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

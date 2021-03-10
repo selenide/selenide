@@ -6,15 +6,15 @@ import com.codeborne.selenide.impl.BySelectorCollection;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.CollectionElement;
 import com.codeborne.selenide.impl.CollectionElementByCondition;
+import com.codeborne.selenide.impl.CollectionSnapshot;
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.ElementDescriber;
 import com.codeborne.selenide.impl.FilteringCollection;
 import com.codeborne.selenide.impl.HeadOfCollection;
 import com.codeborne.selenide.impl.LastCollectionElement;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
-import com.codeborne.selenide.impl.CollectionSnapshot;
 import com.codeborne.selenide.impl.TailOfCollection;
-import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementsCollectionWrapper;
 import com.codeborne.selenide.logevents.SelenideLog;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -469,13 +469,30 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new ElementsCollection(new CollectionSnapshot(collection));
   }
 
+  /**
+   * Give this collection a human-readable name
+   *
+   * Caution: you probably don't need this method.
+   * It's always a good idea to have the actual selector instead of "nice" description (which might be misleading or even lying).
+   *
+   * @param alias a human-readable name of this collection (null or empty string not allowed)
+   * @return this collection
+   * @since 5.20.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public ElementsCollection as(String alias) {
+    this.collection.setAlias(alias);
+    return this;
+  }
+
   @Override
   @CheckReturnValue
   public String toString() {
     try {
-      return elementsToString(driver(), getElements());
+      return String.format("%s %s", collection.description(), elementsToString(driver(), getElements()));
     } catch (RuntimeException e) {
-      return String.format("[%s]", Cleanup.of.webdriverExceptionMessage(e));
+      return String.format("%s [%s]", collection.description(), Cleanup.of.webdriverExceptionMessage(e));
     }
   }
 
