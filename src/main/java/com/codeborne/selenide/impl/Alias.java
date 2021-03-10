@@ -33,7 +33,7 @@ public class Alias {
   public static final Alias NONE = new NoneAlias();
 
   private static final class NoneAlias extends Alias {
-    public NoneAlias() {
+    NoneAlias() {
       super("-");
     }
 
