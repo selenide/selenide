@@ -588,15 +588,15 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void collectionToString() {
     assertThat($$("not-existing-locator"))
-      .hasToString("$$(not-existing-locator)");
+      .hasToString("not-existing-locator []");
 
     assertThat($$("input[type=checkbox].red").as("red checkboxes"))
-      .hasToString("$$(red checkboxes)");
+      .hasToString("red checkboxes []");
 
     assertThat($$(".active").first(42))
-      .hasToString("$$(.active:first(42))");
+      .hasToString(".active:first(42) []");
 
     assertThat($$(".parent").first(2).filterBy(cssClass("child")))
-      .hasToString("$$(.parent:first(2).filter(css class 'child'))");
+      .hasToString(".parent:first(2).filter(css class 'child') []");
   }
 }
