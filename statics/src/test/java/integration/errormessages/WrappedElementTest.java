@@ -62,7 +62,7 @@ final class WrappedElementTest extends IntegrationTest {
     private WebElement categoryDropdown;
 
     /**
-     * Classical Selenium-style page object :(
+     * Classic Selenium-style page object :(
      */
     PageObject(WebDriver webDriver) {
       PageFactory.initElements(webDriver, this);

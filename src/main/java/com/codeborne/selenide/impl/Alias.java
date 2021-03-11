@@ -22,8 +22,8 @@ public class Alias {
   /**
    * As a rule, you don't need to use this method directly.
    * @return text value of this alias (or empty text if alias is not defined)
+   * @since 5.20.0
    */
-
   @Nullable
   @CheckReturnValue
   public String getText() {
