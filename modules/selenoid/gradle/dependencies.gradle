@@ -1,6 +1,6 @@
 buildscript {
   ext.versions = [
-      selenide: '5.19.0',
+      selenide: '5.20.0-SNAPSHOT',
       browserupproxy: '2.1.2',
       netty: '4.1.59.Final',
       junit: '5.7.1',
