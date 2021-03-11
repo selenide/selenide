@@ -8,10 +8,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
+
 @ParametersAreNonnullByDefault
 public class TailOfCollection implements CollectionSource {
   private final CollectionSource originalCollection;
   private final int size;
+  private Alias alias = NONE;
 
   public TailOfCollection(CollectionSource originalCollection, int size) {
     this.originalCollection = originalCollection;
@@ -45,7 +48,7 @@ public class TailOfCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return originalCollection.description() + ":last(" + size + ')';
+    return alias.getOrElse(() -> originalCollection.description() + ":last(" + size + ')');
   }
 
   @Override
@@ -53,5 +56,10 @@ public class TailOfCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

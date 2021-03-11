@@ -21,13 +21,14 @@ import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public abstract class WebElementSource {
-  @Nullable
-  protected String alias;
+  @Nonnull
+  private Alias alias = NONE;
 
   @CheckReturnValue
   @Nonnull
@@ -42,20 +43,19 @@ public abstract class WebElementSource {
   public abstract String getSearchCriteria();
 
   public void setAlias(String alias) {
-    if (alias.isEmpty()) throw new IllegalArgumentException("Empty alias not allowed");
-    this.alias = alias;
+    this.alias = new Alias(alias);
   }
 
   @CheckReturnValue
-  @Nullable
-  public String getAlias() {
+  @Nonnull
+  public Alias getAlias() {
     return alias;
   }
 
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return getAlias() != null ? getAlias() : getSearchCriteria();
+    return alias.getOrElse(this::getSearchCriteria);
   }
 
   @Override

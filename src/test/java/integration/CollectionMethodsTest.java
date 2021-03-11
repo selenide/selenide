@@ -164,7 +164,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void exactTextsCheckThrowsElementNotFound() {
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2")))
-      .isInstanceOf(ElementNotFound.class);
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {.non-existing-elements}");
   }
 
   @Test
@@ -582,5 +583,20 @@ final class CollectionMethodsTest extends ITest {
       .hasMessageContaining(String.format("Element with text not found" +
         "%nActual: %s" +
         "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
+  }
+
+  @Test
+  void collectionToString() {
+    assertThat($$("not-existing-locator"))
+      .hasToString("not-existing-locator []");
+
+    assertThat($$("input[type=checkbox].red").as("red checkboxes"))
+      .hasToString("red checkboxes []");
+
+    assertThat($$(".active").first(42))
+      .hasToString(".active:first(42) []");
+
+    assertThat($$(".parent").first(2).filterBy(cssClass("child")))
+      .hasToString(".parent:first(2).filter(css class 'child') []");
   }
 }

@@ -119,7 +119,11 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canGiveElementsHumanReadableNames() {
-    $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").shouldNot(exist);
+    assertThatThrownBy(() -> {
+      $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").should(exist);
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {Login button}");
   }
 
   @Test

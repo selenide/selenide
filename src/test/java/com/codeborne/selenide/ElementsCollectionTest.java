@@ -257,18 +257,20 @@ final class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void toStringFetchedCollectionFromWebdriverIfNotFetchedYet() {
+  void toStringFetchesCollectionFromWebdriverIfNotFetchedYet() {
+    when(source.description()).thenReturn("li.odd");
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     assertThat(collection)
-      .hasToString(String.format("[%n\t<h1></h1>,%n\t<h2></h2>%n]"));
+      .hasToString(String.format("li.odd [%n\t<h1></h1>,%n\t<h2></h2>%n]"));
   }
 
   @Test
   void toStringPrintsErrorIfFailedToFetchElements() {
+    when(source.description()).thenReturn("li.odd");
     when(source.getElements()).thenThrow(new WebDriverException("Failed to fetch elements"));
     assertThat(new ElementsCollection(source))
-      .hasToString("[WebDriverException: Failed to fetch elements]");
+      .hasToString("li.odd [WebDriverException: Failed to fetch elements]");
   }
 
   @Test

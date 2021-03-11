@@ -8,10 +8,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
+
 @ParametersAreNonnullByDefault
 public class HeadOfCollection implements CollectionSource {
   private final CollectionSource originalCollection;
   private final int size;
+  private Alias alias = NONE;
 
   public HeadOfCollection(CollectionSource originalCollection, int size) {
     this.originalCollection = originalCollection;
@@ -47,6 +50,11 @@ public class HeadOfCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return originalCollection.description() + ".first(" + size + ')';
+    return alias.getOrElse(() -> originalCollection.description() + ":first(" + size + ')');
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }
