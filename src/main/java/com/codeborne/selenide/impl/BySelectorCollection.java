@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
@@ -21,6 +22,7 @@ public class BySelectorCollection implements CollectionSource {
   private final Driver driver;
   private final SearchContext parent;
   private final By selector;
+  private Alias alias = NONE;
 
   public BySelectorCollection(Driver driver, By selector) {
     this(driver, null, selector);
@@ -55,10 +57,15 @@ public class BySelectorCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public String description() {
+    return alias.getOrElse(this::composeDescription);
+  }
+
+  @Nonnull
+  private String composeDescription() {
     return parent == null ? describe.selector(selector) :
-        (parent instanceof SelenideElement) ?
-            ((SelenideElement) parent).getSearchCriteria() + "/" + describe.selector(selector) :
-          describe.selector(selector);
+      (parent instanceof SelenideElement) ?
+        ((SelenideElement) parent).getSearchCriteria() + "/" + describe.selector(selector) :
+        describe.selector(selector);
   }
 
   @Override
@@ -66,5 +73,10 @@ public class BySelectorCollection implements CollectionSource {
   @Nonnull
   public Driver driver() {
     return driver;
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

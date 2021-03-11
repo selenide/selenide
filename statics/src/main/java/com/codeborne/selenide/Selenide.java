@@ -1014,4 +1014,22 @@ public class Selenide {
   public static SessionStorage sessionStorage(){
     return getSelenideDriver().getSessionStorage();
   }
+
+  /**
+   * Provide access to system clipboard, allows get and set String content.
+   * Default implementation acts via {@link java.awt.Toolkit} and supports only local runs.
+   *
+   * Remote runs support can be implemented via plugins.
+   * Plugin for Selenoid will be released soon.
+   *
+   * Pay attention that Clipboard is shared resource for instance where tests runs
+   * and keep in mind while developing test suite with multiple tests for clipboard.
+   *
+   * @return Clipboard
+   */
+  @Nonnull
+  @CheckReturnValue
+  public static Clipboard clipboard(){
+    return getSelenideDriver().getClipboard();
+  }
 }

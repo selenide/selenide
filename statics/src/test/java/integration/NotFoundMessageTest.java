@@ -70,6 +70,6 @@ final class NotFoundMessageTest extends IntegrationTest {
     assertThatThrownBy(
       () -> $$("#task-list>li").first(11).shouldHave(size(11)))
       .isInstanceOf(ListSizeMismatch.class)
-      .hasMessageStartingWith("List size mismatch: expected: = 11, actual: 0, collection: #task-list>li.first(11)");
+      .hasMessageStartingWith("List size mismatch: expected: = 11, actual: 0, collection: #task-list>li:first(11)");
   }
 }

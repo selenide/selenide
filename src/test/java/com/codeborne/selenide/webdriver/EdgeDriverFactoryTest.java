@@ -20,7 +20,18 @@ class EdgeDriverFactoryTest {
     EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
 
     assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(ImmutableMap.of(
-      "args", asList("--headless", "--disable-gpu")
+      "args", asList("--headless", "--disable-gpu", "--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox")
+    ));
+  }
+
+  @Test
+  void non_headless() {
+    SelenideConfig config = new SelenideConfig().headless(false);
+
+    EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
+
+    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(ImmutableMap.of(
+      "args", asList("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox")
     ));
   }
 }

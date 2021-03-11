@@ -24,6 +24,9 @@ abstract class AbstractGridTest extends IntegrationTest {
     if (WebDriverRunner.isFirefox()) {
       WebDriverManager.firefoxdriver().setup();
     }
+    if (WebDriverRunner.isEdge()) {
+      WebDriverManager.edgedriver().setup();
+    }
     closeWebDriver();
 
     hubPort = findFreePort();

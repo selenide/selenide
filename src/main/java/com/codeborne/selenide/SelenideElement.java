@@ -133,6 +133,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return Alias of this element or null, if element alias is not set
    * @see com.codeborne.selenide.commands.GetAlias
+   * @since 5.20.0
    */
   @CheckReturnValue
   @Nullable

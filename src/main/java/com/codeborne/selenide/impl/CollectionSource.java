@@ -31,4 +31,6 @@ public interface CollectionSource {
   @CheckReturnValue
   @Nonnull
   Driver driver();
+
+  void setAlias(String alias);
 }
