@@ -38,6 +38,16 @@ public abstract class ITest extends BaseIntegrationTest {
     }
   }
 
+  protected final void withFastSetValue(Runnable test) {
+    config.get().fastSetValue(true);
+    try {
+      test.run();
+    }
+    finally {
+      config.get().fastSetValue(false);
+    }
+  }
+
   protected SelenideDriver driver() {
     return driver.get();
   }
