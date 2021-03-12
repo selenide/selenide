@@ -7,10 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.shadowCss;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 final class ShadowElementTest extends ITest {
   @BeforeEach
@@ -19,10 +22,58 @@ final class ShadowElementTest extends ITest {
   }
 
   @Test
+  void sendKeysInsideShadowHost() {
+    assumeThat(driver().browser().isFirefox())
+      .as("Firefox doesn't support sendKeys() inside shadow dom, see https://bugzilla.mozilla.org/show_bug.cgi?id=1503860")
+      .isFalse();
+    SelenideElement input = $(shadowCss("#inputInShadow", "#shadow-host"));
+    input.sendKeys("I can type text inside of shadow dom");
+    input.shouldHave(exactValue("I can type text inside of shadow dom"));
+  }
+
+  @Test
+  void setValueInsideShadowHost() {
+    SelenideElement input = $(shadowCss("#inputInShadow", "#shadow-host"));
+    withFastSetValue(() -> {
+      input.setValue("I can type text inside of shadow dom");
+      input.shouldHave(exactValue("I can type text inside of shadow dom"));
+    });
+  }
+
+  @Test
+  void sendKeysInsideInnerShadowHost() {
+    assumeThat(driver().browser().isFirefox())
+      .as("Firefox doesn't support sendKeys() inside shadow dom, see https://bugzilla.mozilla.org/show_bug.cgi?id=1503860")
+      .isFalse();
+
+    SelenideElement input = $(shadowCss("#inputInInnerShadow", "#shadow-host", "#inner-shadow-host"));
+    input.sendKeys("I can type text inside of shadow dom");
+    input.shouldHave(exactValue("I can type text inside of shadow dom"));
+  }
+
+  @Test
+  void setValueInsideInnerShadowHost() {
+    SelenideElement input = $(shadowCss("#inputInInnerShadow", "#shadow-host", "#inner-shadow-host"));
+    withFastSetValue(() -> {
+      input.setValue("I can type text inside of shadow dom");
+      input.shouldHave(exactValue("I can type text inside of shadow dom"));
+    });
+  }
+
+  @Test
   void clickInsideShadowHost() {
-    SelenideElement button = $(shadowCss("#anyButton", "#shadow-host"));
+    SelenideElement button = $(shadowCss("#buttonInShadow", "#shadow-host"));
+    button.shouldHave(exactText("Button 1"));
     button.click();
-    button.shouldHave(text("Changed text"));
+    button.shouldHave(exactText("Changed Button 1"));
+  }
+
+  @Test
+  void clickInsideInnerShadowHost() {
+    SelenideElement button = $(shadowCss("#buttonInInnerShadow", "#shadow-host", "#inner-shadow-host"));
+    button.shouldHave(exactText("Button 2"));
+    button.click();
+    button.shouldHave(exactText("Changed Button 2"));
   }
 
   @Test

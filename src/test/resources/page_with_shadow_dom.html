@@ -45,25 +45,35 @@
       return shadowContainerChild;
     }
 
+    function createInput(id) {
+      const input = document.createElement("input");
+      input.setAttribute("id", id);
+      input.setAttribute("type", "text");
+      return input;
+    }
+
+    function createButton(id, text) {
+      const button = document.createElement("button");
+      button.setAttribute("id", id);
+      button.textContent = text;
+      button.onclick = function() {this.textContent = "Changed " + text;};
+      return button;
+    }
+
     $(function () {
       const shadow = document.getElementById('shadow-host').attachShadow({mode: "open"});
-
-      var input = document.createElement("input");
-      var button = document.createElement("button");
-      button.setAttribute("id", "anyButton");
-      button.textContent = `Button`;
-      button.onclick = function() {this.textContent = "Changed text";};
-      input.setAttribute("type", "text");
 
       shadow.appendChild(newElement('p', {}, 'Inside Shadow-DOM'));
       shadow.appendChild(newElement('div', {'id': 'inner-shadow-host'}));
       shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-1'));
       shadow.appendChild(newElement('div', {class: 'test-class'}, 'text-test-class-2'));
-      shadow.appendChild(input);
-      shadow.appendChild(button);
+      shadow.appendChild(createInput("inputInShadow"));
+      shadow.appendChild(createButton('buttonInShadow', 'Button 1'));
 
-      var shadow2 = shadow.getElementById("inner-shadow-host").attachShadow( { mode: "open" } )
+      const shadow2 = shadow.getElementById("inner-shadow-host").attachShadow( { mode: "open" } )
       shadow2.appendChild(newElement('p', {}, 'The Shadow-DOM inside another shadow tree'));
+      shadow2.appendChild(createInput("inputInInnerShadow"));
+      shadow2.appendChild(createButton('buttonInInnerShadow', 'Button 2'));
 
       const shadowContainer = document.getElementById('shadow-container').attachShadow({mode: "open"});
       const shadowContainerChild1 = appendChildItem(shadowContainer, 'shadow-container-child', 'shadowContainerChildHost1');
