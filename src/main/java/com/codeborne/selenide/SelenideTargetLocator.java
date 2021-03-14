@@ -151,13 +151,9 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(int index) {
-    try {
-      return Wait().until(new WindowByIndex(index));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with index: " + index, e);
-    }
+    return window(Wait(), index);
   }
+
 
   /**
    * Switch to window/tab by index with a configurable timeout
@@ -168,12 +164,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(int index, Duration duration) {
-    try {
-      return Wait(duration).until(new WindowByIndex(index));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with index: " + index, e);
-    }
+    return window(Wait(duration), index);
   }
 
   /**
@@ -184,12 +175,7 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle) {
-    try {
-      return Wait().until(new WindowByNameOrHandle(nameOrHandleOrTitle));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
-    }
+    return window(Wait(), nameOrHandleOrTitle);
   }
 
   /**
@@ -200,10 +186,21 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
+    return window(Wait(duration), nameOrHandleOrTitle);
+  }
+
+  private WebDriver window(SelenideWait wait, int index) {
     try {
-      return Wait(duration).until(new WindowByNameOrHandle(nameOrHandleOrTitle));
+      return wait.until(new WindowByIndex(index));
+    } catch (TimeoutException e) {
+      throw windowNotFoundError("No window found with index: " + index, e);
     }
-    catch (TimeoutException e) {
+  }
+
+  private WebDriver window(SelenideWait wait, String nameOrHandleOrTitle) {
+    try {
+      return wait.until(new WindowByNameOrHandle(nameOrHandleOrTitle));
+    } catch (TimeoutException e) {
       throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
     }
   }
