@@ -49,7 +49,13 @@ public class SelenideLogger {
   @CheckReturnValue
   @Nonnull
   public static SelenideLog beginStep(String source, String methodName, @Nullable Object... args) {
-    return beginStep(source, readableMethodName(methodName) + "(" + readableArguments(args) + ")");
+    return beginStep(source, getReadableSubject(methodName, args));
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static String getReadableSubject(String methodName, @Nullable Object... args) {
+    return readableMethodName(methodName) + "(" + readableArguments(args) + ")";
   }
 
   @CheckReturnValue
