@@ -4,6 +4,7 @@
 * #1409 Added method for getting clipboard content  --  thanks to Dmitriy Budim @dbudim
 * #1422 add headless mode to Microsoft Edge browser (chromium-based)
 * #1389 add method $$.as()
+* Added CollectionCondition.containTexts method
 
 ## 5.19.0 (released 24.02.2021)
 * #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412

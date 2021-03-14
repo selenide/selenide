@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
+import com.codeborne.selenide.collections.ContainTexts;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ItemWithText;
@@ -171,6 +172,45 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition itemWithText(String expectedText) {
     return new ItemWithText(expectedText);
+  }
+
+  /**
+   * Check that the given collection contains elements with given texts.
+   * <p></p>
+   * Examples:
+   * <pre code='java'>
+   * // collection 1: [Tom, Dick, Harry]
+   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * // collection 2: [Tom, John, Dick, Harry]
+   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * // collection 3: [John, Harry, Tom]
+   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry"); // fail
+   * </pre>
+   *
+   * @param expectedTexts the expected texts that the collection should contain
+   */
+  @CheckReturnValue
+  public static CollectionCondition containTexts(String... expectedTexts) {
+    return new ContainTexts(expectedTexts);
+  }
+
+  /**
+   * Check that the given collection contains elements with given texts.
+   * <p></p>
+   * Examples:
+   * <pre code='java'>
+   * // collection 1: [Tom, Dick, Harry]
+   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * // collection 2: [Tom, John, Dick, Harry]
+   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * // collection 3: [John, Harry, Tom]
+   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry"); // fail
+   * </pre>
+   * @param expectedTexts the expected texts that the collection should contain
+   */
+  @CheckReturnValue
+  public static CollectionCondition containTexts(List<String> expectedTexts) {
+    return new ContainTexts(expectedTexts);
   }
 
   /**
