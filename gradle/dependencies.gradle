@@ -5,7 +5,7 @@ allprojects {
 }
 
 ext {
-  seleniumVersion = '4.0.0-beta-1'
+  seleniumVersion = '4.0.0-beta-2'
   junitVersion = '5.7.1'
   jettyVersion = '9.4.36.v20210114'
   nettyVersion = '4.1.59.Final'
