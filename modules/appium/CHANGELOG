@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.3 (planned to xx.04.2021)
+* upgrade to Selenide 5.20.0
+
 === 1.6.2 (released 24.02.2021)
 * #52 override Selenide standard method `$.dragAndDropTo()`
 * upgrade to Selenide 5.19.0
