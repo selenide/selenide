@@ -1,7 +1,8 @@
 # Changelog
 
-## 1.0.2 (in progress)
-* upgrade to Selenide 5.19.0
+## 1.1.0 (released 20.03.2021)
+* #6 Added get & set clipboard methods  --  thanks to Dmitriy Budim
+* upgrade to Selenide 5.20.0
 
 ## 1.0.1 (released 29.01.2021)
 * #4 Support local browsers too
