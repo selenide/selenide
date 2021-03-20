@@ -1,10 +1,13 @@
 # Changelog
 
-## 5.20.0 (planned to xx.03.2021)
+## 5.20.0 (released 20.03.2021)
 * #1409 Added method for getting clipboard content  --  thanks to Dmitriy Budim @dbudim
-* #1422 add headless mode to Microsoft Edge browser (chromium-based)
-* #1389 add method $$.as()
-* Added CollectionCondition.containTexts method
+* #1422 add headless mode to Microsoft Edge browser (chromium-based)  --  see PR #1424
+* #1423 Microsoft Edge User Agent Test Failed  --  see PR #1425
+* #1389 add method $$.as()  --  see PR #1431
+* #1426 Added CollectionCondition.containTexts method  --  thanks to Oleg Berezhnoy @bereg2k
+* #1436 Fix ignored prefs in FirefoxOptions  -- thanks to for Dmitriy Budim PR #1437
+* #1428 Do not log extended "find" methods (e.g. parent, sibling and so)  --  thanks to Pavel Fokin @fokinp
 
 ## 5.19.0 (released 24.02.2021)
 * #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
