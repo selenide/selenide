@@ -68,6 +68,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     if (!ffProfile.isEmpty()) {
       transferFirefoxProfileFromSystemProperties(firefoxOptions, ffProfile);
     }
+    injectFirefoxPrefs(firefoxOptions);
     return firefoxOptions;
   }
 
@@ -149,6 +150,24 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
     }
     else {
       profile.setPreference(capability, value);
+    }
+  }
+
+  private void injectFirefoxPrefs(FirefoxOptions options) {
+    if (Optional.ofNullable(options.getCapability("moz:firefoxOptions")).isPresent()) {
+      Map<String, Map<String, Object>> mozOptions = (Map<String, Map<String, Object>>) options.getCapability("moz:firefoxOptions");
+
+      if (mozOptions.containsKey("prefs")) {
+        for (Map.Entry<String, Object> pref : mozOptions.get("prefs").entrySet()) {
+          if (pref.getValue() instanceof String) {
+            options.addPreference(pref.getKey(), (String) pref.getValue());
+          } else if (pref.getValue() instanceof Integer) {
+            options.addPreference(pref.getKey(), (Integer) pref.getValue());
+          } else if (pref.getValue() instanceof Boolean) {
+            options.addPreference(pref.getKey(), (Boolean) pref.getValue());
+          }
+        }
+      }
     }
   }
 }
