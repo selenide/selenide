@@ -604,11 +604,10 @@ final class CollectionMethodsTest extends ITest {
     assertThatThrownBy(() -> $$("[name='domain'] > option").should(containTexts(expectedTexts)))
       .isInstanceOf(ContainTextsError.class)
       .hasMessageContaining(
-      String.format("The collection with text elements: %s%n" +
-          "should contain all of the following text elements: %s%n" +
-          "but could not find these elements: %s%n",
-        actualTexts, expectedTexts, difference)
-    );
+        String.format("The collection with text elements: %s%n" +
+            "should contain all of the following text elements: %s%n" +
+            "but could not find these elements: %s%n",
+          actualTexts, expectedTexts, difference));
   }
 
   @Test
