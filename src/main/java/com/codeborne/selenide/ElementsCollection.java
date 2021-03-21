@@ -85,7 +85,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * <p> For example: </p>
    * {@code $$(".text_list").should(containTexts("text1", "text2"));}
    * {@code $$(".cat_list").should(allMatch("value==cat",
-   * el -> el.getAttribute("value").equals("cat"))));}
+   * el -> el.getAttribute("value").equals("cat")));}
    */
   @Nonnull
   public ElementsCollection should(CollectionCondition... conditions) {
