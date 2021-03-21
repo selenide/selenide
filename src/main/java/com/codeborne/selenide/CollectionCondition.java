@@ -180,11 +180,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * Examples:
    * <pre code='java'>
    * // collection 1: [Tom, Dick, Harry]
-   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry")); // success
    * // collection 2: [Tom, John, Dick, Harry]
-   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry")); // success
    * // collection 3: [John, Harry, Tom]
-   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry"); // fail
+   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry")); // fail
    * </pre>
    *
    * @param expectedTexts the expected texts that the collection should contain
@@ -200,11 +200,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * Examples:
    * <pre code='java'>
    * // collection 1: [Tom, Dick, Harry]
-   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry")); // success
    * // collection 2: [Tom, John, Dick, Harry]
-   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry"); // success
+   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry")); // success
    * // collection 3: [John, Harry, Tom]
-   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry"); // fail
+   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry")); // fail
    * </pre>
    * @param expectedTexts the expected texts that the collection should contain
    */
