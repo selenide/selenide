@@ -81,6 +81,28 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
+   * Check if a collection matches given condition(s).
+   * <p> For example: </p>
+   * {@code $$(".text_list").should(containTexts("text1", "text2"));}
+   * {@code $$(".cat_list").should(allMatch("value==cat",
+   * el -> el.getAttribute("value").equals("cat")));}
+   */
+  @Nonnull
+  public ElementsCollection should(CollectionCondition... conditions) {
+    return should("", Duration.ofMillis(driver().config().timeout()), conditions);
+  }
+
+  /**
+   * Check if a collection matches a given condition within the given time period.
+   *
+   * @param timeout maximum waiting time
+   */
+  @Nonnull
+  public ElementsCollection should(CollectionCondition condition, Duration timeout) {
+    return should("", timeout, toArray(condition));
+  }
+
+  /**
    * For example: {@code $$(".error").shouldBe(empty)}
    */
   @Nonnull

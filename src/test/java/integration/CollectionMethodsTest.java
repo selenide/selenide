@@ -23,6 +23,7 @@ import java.util.ListIterator;
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
 import static com.codeborne.selenide.CollectionCondition.empty;
+import static com.codeborne.selenide.CollectionCondition.containTexts;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
 import static com.codeborne.selenide.CollectionCondition.noneMatch;
@@ -576,9 +577,17 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void shouldContainTexts() {
+    $$("#hero option")
+      .should(containTexts("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
+    $$("#user-table th")
+      .should(containTexts("First name", "Last name"));
+  }
+
+  @Test
   void errorWhenItemWithTextNotMatchedButShouldBe() {
     String expectedText = "Luis";
-    assertThatThrownBy(()  -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
+    assertThatThrownBy(() -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
       .isInstanceOf(ElementWithTextNotFound.class)
       .hasMessageContaining(String.format("Element with text not found" +
         "%nActual: %s" +
