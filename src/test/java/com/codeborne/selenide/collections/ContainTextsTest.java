@@ -2,13 +2,13 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
-
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
@@ -37,9 +37,9 @@ public class ContainTextsTest implements WithAssertions {
     "Collection without one of the expected texts",
     element1, element2, element4
   );
-  private final CollectionSource collectionMoreElementsWithoutElement = mockCollection(
-    "Collection with more elements than expected and without one of the expected texts",
-    element1, element2, element4, element5
+  private final CollectionSource collectionMoreElementsWithoutTwoElements = mockCollection(
+    "Collection with more elements than expected and without two of the expected texts",
+    element1, element4, element5, element1, element4
   );
   private final CollectionSource collectionLessElementsWithoutElement = mockCollection(
     "Collection with less elements than expected and without one of the expected texts",
@@ -90,34 +90,36 @@ public class ContainTextsTest implements WithAssertions {
       .fail(collectionWithoutElement,
         collectionWithoutElement.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(TextsMismatch.class)
+      .isInstanceOf(ContainTextsError.class)
       .hasMessageContaining(
-        String.format("Texts mismatch" +
-            "%nActual: %s" +
-            "%nExpected: %s",
+        String.format("The collection with text elements: %s%n" +
+            "should contain all of the following text elements: %s%n" +
+            "but could not find these elements: %s",
           ElementsCollection.texts(collectionWithoutElement.getElements()),
-          asList("Test-One", "Test-Two", "Test-Three"))
+          asList("Test-One", "Test-Two", "Test-Three"),
+          Collections.singletonList("Test-Three"))
       );
   }
 
   @Test
-  void testCollectionMoreElementsWithoutElement() {
+  void testCollectionMoreElementsWithoutSomeElements() {
     ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
 
-    assertThat(expectedTexts.test(collectionMoreElementsWithoutElement.getElements()))
+    assertThat(expectedTexts.test(collectionMoreElementsWithoutTwoElements.getElements()))
       .isFalse();
 
     assertThatThrownBy(() -> new ContainTexts("Test-One", "Test-Two", "Test-Three")
-      .fail(collectionMoreElementsWithoutElement,
-        collectionMoreElementsWithoutElement.getElements(),
+      .fail(collectionMoreElementsWithoutTwoElements,
+        collectionMoreElementsWithoutTwoElements.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(TextsMismatch.class)
+      .isInstanceOf(ContainTextsError.class)
       .hasMessageContaining(
-        String.format("Texts mismatch" +
-            "%nActual: %s" +
-            "%nExpected: %s",
-          ElementsCollection.texts(collectionMoreElementsWithoutElement.getElements()),
-          asList("Test-One", "Test-Two", "Test-Three"))
+        String.format("The collection with text elements: %s%n" +
+            "should contain all of the following text elements: %s%n" +
+            "but could not find these elements: %s",
+          ElementsCollection.texts(collectionMoreElementsWithoutTwoElements.getElements()),
+          asList("Test-One", "Test-Two", "Test-Three"),
+          asList("Test-Two", "Test-Three"))
       );
   }
 
@@ -132,13 +134,14 @@ public class ContainTextsTest implements WithAssertions {
       .fail(collectionLessElementsWithoutElement,
         collectionLessElementsWithoutElement.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(TextsSizeMismatch.class)
+      .isInstanceOf(ContainTextsError.class)
       .hasMessageContaining(
-        String.format("Texts size mismatch" +
-            "%nActual: %s, List size: %s" +
-            "%nExpected: %s, List size: %s",
-          ElementsCollection.texts(collectionLessElementsWithoutElement.getElements()), "2",
-          asList("Test-One", "Test-Two", "Test-Three"), "3")
+        String.format("The collection with text elements: %s%n" +
+            "should contain all of the following text elements: %s%n" +
+            "but could not find these elements: %s",
+          ElementsCollection.texts(collectionLessElementsWithoutElement.getElements()),
+          asList("Test-One", "Test-Two", "Test-Three"),
+          Collections.singletonList("Test-Three"))
       );
   }
 

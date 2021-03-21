@@ -2,14 +2,14 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.ex.ContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.TextsMismatch;
-import com.codeborne.selenide.ex.TextsSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
 
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -45,14 +45,16 @@ public class ContainTexts extends CollectionCondition {
                    @Nullable List<WebElement> elements,
                    @Nullable Exception lastError,
                    long timeoutMs) {
+    List<String> actualTexts = ElementsCollection.texts(elements);
+
     if (elements == null || elements.isEmpty()) {
       ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
-    } else if (elements.size() < expectedTexts.size()) {
-      throw new TextsSizeMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
     } else {
-      throw new TextsMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
+      List<String> difference = new ArrayList<>(expectedTexts);
+      difference.removeAll(actualTexts);
+      throw new ContainTextsError(collection, actualTexts, expectedTexts, difference, explanation, timeoutMs, lastError);
     }
   }
 

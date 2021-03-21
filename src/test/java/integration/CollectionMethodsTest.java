@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
@@ -22,8 +23,8 @@ import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
-import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.containTexts;
+import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
 import static com.codeborne.selenide.CollectionCondition.noneMatch;
@@ -577,6 +578,16 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
+  void errorWhenItemWithTextNotMatchedButShouldBe() {
+    String expectedText = "Luis";
+    assertThatThrownBy(() -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
+      .isInstanceOf(ElementWithTextNotFound.class)
+      .hasMessageContaining(String.format("Element with text not found" +
+        "%nActual: %s" +
+        "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
+  }
+
+  @Test
   void shouldContainTexts() {
     $$("#hero option")
       .should(containTexts("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
@@ -585,13 +596,19 @@ final class CollectionMethodsTest extends ITest {
   }
 
   @Test
-  void errorWhenItemWithTextNotMatchedButShouldBe() {
-    String expectedText = "Luis";
-    assertThatThrownBy(() -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
-      .isInstanceOf(ElementWithTextNotFound.class)
-      .hasMessageContaining(String.format("Element with text not found" +
-        "%nActual: %s" +
-        "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
+  void errorWhenCollectionDoesNotContainTextsButShould() {
+    List<String> expectedTexts = Arrays.asList("@livemail.ru", "@yandex.ru", "@list.ru");
+    List<String> actualTexts = Arrays.asList("@livemail.ru", "@myrambler.ru", "@rusmail.ru", "@мыло.ру");
+    List<String> difference = Arrays.asList("@yandex.ru", "@list.ru");
+
+    assertThatThrownBy(() -> $$("[name='domain'] > option").should(containTexts(expectedTexts)))
+      .isInstanceOf(ContainTextsError.class)
+      .hasMessageContaining(
+      String.format("The collection with text elements: %s%n" +
+          "should contain all of the following text elements: %s%n" +
+          "but could not find these elements: %s%n",
+        actualTexts, expectedTexts, difference)
+    );
   }
 
   @Test
