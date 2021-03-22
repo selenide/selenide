@@ -2,7 +2,7 @@ package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ContainTextsError;
+import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
 
-public class ContainTextsTest implements WithAssertions {
+public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");
@@ -49,7 +49,8 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testExactCollection() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts.test(collection.getElements()))
       .isTrue();
@@ -57,7 +58,8 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionUnordered() {
-    ContainTexts expectedTexts = new ContainTexts("Test-Three", "Test-One", "Test-Two");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
     assertThat(expectedTexts.test(collection.getElements()))
       .isTrue();
@@ -65,7 +67,8 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionUnorderedMoreElements() {
-    ContainTexts expectedTexts = new ContainTexts("Test-Three", "Test-One", "Test-Two");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
     assertThat(expectedTexts.test(collectionMoreElements.getElements()))
       .isTrue();
@@ -73,7 +76,8 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionUnorderedMoreElementsWithDuplicates() {
-    ContainTexts expectedTexts = new ContainTexts("Test-Three", "Test-One", "Test-Two");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
     assertThat(expectedTexts.test(collectionMoreElementsAndDuplicates.getElements()))
       .isTrue();
@@ -81,16 +85,17 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionWithoutElement() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts.test(collectionWithoutElement.getElements()))
       .isFalse();
 
-    assertThatThrownBy(() -> new ContainTexts("Test-One", "Test-Two", "Test-Three")
+    assertThatThrownBy(() -> new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three")
       .fail(collectionWithoutElement,
         collectionWithoutElement.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(ContainTextsError.class)
+      .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageContaining(
         String.format("The collection with text elements: %s%n" +
             "should contain all of the following text elements: %s%n" +
@@ -103,16 +108,17 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionMoreElementsWithoutSomeElements() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts.test(collectionMoreElementsWithoutTwoElements.getElements()))
       .isFalse();
 
-    assertThatThrownBy(() -> new ContainTexts("Test-One", "Test-Two", "Test-Three")
+    assertThatThrownBy(() -> new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three")
       .fail(collectionMoreElementsWithoutTwoElements,
         collectionMoreElementsWithoutTwoElements.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(ContainTextsError.class)
+      .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageContaining(
         String.format("The collection with text elements: %s%n" +
             "should contain all of the following text elements: %s%n" +
@@ -125,16 +131,17 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionLessElementsWithoutElement() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts.test(collectionLessElementsWithoutElement.getElements()))
       .isFalse();
 
-    assertThatThrownBy(() -> new ContainTexts("Test-One", "Test-Two", "Test-Three")
+    assertThatThrownBy(() -> new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three")
       .fail(collectionLessElementsWithoutElement,
         collectionLessElementsWithoutElement.getElements(),
         new Exception("Exception message"), 10_000))
-      .isInstanceOf(ContainTextsError.class)
+      .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageContaining(
         String.format("The collection with text elements: %s%n" +
             "should contain all of the following text elements: %s%n" +
@@ -147,7 +154,8 @@ public class ContainTextsTest implements WithAssertions {
 
   @Test
   void testCollectionNullElements() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThatThrownBy(() -> expectedTexts
       .fail(emptyCollection,
@@ -156,13 +164,14 @@ public class ContainTextsTest implements WithAssertions {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining(
         String.format("Element not found {Empty collection}" +
-          "%nExpected: Contains texts [Test-One, Test-Two, Test-Three]")
+          "%nExpected: Contains exact texts case-sensitive [Test-One, Test-Two, Test-Three]")
       );
   }
 
   @Test
   void testCollectionEmpty() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThatThrownBy(() -> expectedTexts
       .fail(emptyCollection,
@@ -171,21 +180,23 @@ public class ContainTextsTest implements WithAssertions {
       .isInstanceOf(ElementNotFound.class)
       .hasMessageContaining(
         String.format("Element not found {Empty collection}" +
-          "%nExpected: Contains texts [Test-One, Test-Two, Test-Three]")
+          "%nExpected: Contains exact texts case-sensitive [Test-One, Test-Two, Test-Three]")
       );
   }
 
   @Test
   void testToString() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts)
-      .hasToString("Contains texts [Test-One, Test-Two, Test-Three]");
+      .hasToString("Contains exact texts case-sensitive [Test-One, Test-Two, Test-Three]");
   }
 
   @Test
   void testApplyNull() {
-    ContainTexts expectedTexts = new ContainTexts("Test-One", "Test-Two", "Test-Three");
+    ContainExactTextsCaseSensitive expectedTexts =
+      new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
     assertThat(expectedTexts.applyNull())
       .isFalse();

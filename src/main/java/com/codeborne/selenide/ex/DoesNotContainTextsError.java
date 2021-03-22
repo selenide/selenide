@@ -9,11 +9,11 @@ import java.util.List;
 import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
-public class ContainTextsError extends UIAssertionError {
+public class DoesNotContainTextsError extends UIAssertionError {
 
-  public ContainTextsError(CollectionSource collection,
-                           List<String> actualTexts, List<String> expectedTexts, List<String> difference,
-                           @Nullable String explanation, long timeoutMs, @Nullable Throwable lastError) {
+  public DoesNotContainTextsError(CollectionSource collection,
+                                  List<String> actualTexts, List<String> expectedTexts, List<String> difference,
+                                  @Nullable String explanation, long timeoutMs, @Nullable Throwable lastError) {
     super(collection.driver(),
       "The collection with text elements: " + actualTexts +
         lineSeparator() + "should contain all of the following text elements: " + expectedTexts +

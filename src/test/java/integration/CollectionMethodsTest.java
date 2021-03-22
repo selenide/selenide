@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ContainTextsError;
+import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
@@ -23,7 +23,7 @@ import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
-import static com.codeborne.selenide.CollectionCondition.containTexts;
+import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
@@ -66,7 +66,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void invalidSelector() {
-    assertThatThrownBy(() -> $$(By.xpath("//xxx[@'")).shouldHave(size(0)))
+    assertThatThrownBy(() -> $$(By.xpath("//xxx[@s='s']")).shouldHave(size(0)))
       .isInstanceOf(InvalidSelectorException.class);
   }
 
@@ -590,9 +590,9 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void shouldContainTexts() {
     $$("#hero option")
-      .should(containTexts("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
+      .should(containExactTextsCaseSensitive("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
     $$("#user-table th")
-      .should(containTexts("First name", "Last name"));
+      .should(containExactTextsCaseSensitive("First name", "Last name"));
   }
 
   @Test
@@ -601,8 +601,8 @@ final class CollectionMethodsTest extends ITest {
     List<String> actualTexts = Arrays.asList("@livemail.ru", "@myrambler.ru", "@rusmail.ru", "@мыло.ру");
     List<String> difference = Arrays.asList("@yandex.ru", "@list.ru");
 
-    assertThatThrownBy(() -> $$("[name='domain'] > option").should(containTexts(expectedTexts)))
-      .isInstanceOf(ContainTextsError.class)
+    assertThatThrownBy(() -> $$("[name='domain'] > option").should(containExactTextsCaseSensitive(expectedTexts)))
+      .isInstanceOf(DoesNotContainTextsError.class)
       .hasMessageContaining(
         String.format("The collection with text elements: %s%n" +
             "should contain all of the following text elements: %s%n" +
