@@ -66,7 +66,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void invalidSelector() {
-    assertThatThrownBy(() -> $$(By.xpath("//xxx[@s='s']")).shouldHave(size(0)))
+    assertThatThrownBy(() -> $$(By.xpath("//xxx[@'")).shouldHave(size(0)))
       .isInstanceOf(InvalidSelectorException.class);
   }
 
