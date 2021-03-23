@@ -1011,7 +1011,7 @@ public class Selenide {
    */
   @Nonnull
   @CheckReturnValue
-  public static SessionStorage sessionStorage(){
+  public static SessionStorage sessionStorage() {
     return getSelenideDriver().getSessionStorage();
   }
 
@@ -1029,7 +1029,7 @@ public class Selenide {
    */
   @Nonnull
   @CheckReturnValue
-  public static Clipboard clipboard(){
+  public static Clipboard clipboard() {
     return getSelenideDriver().getClipboard();
   }
 }

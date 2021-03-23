@@ -128,4 +128,9 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     Matcher matcher = REGEX_VERSION.matcher(browserVersion);
     return matcher.matches() ? parseInt(matcher.replaceFirst("$1")) : 0;
   }
+
+  @SuppressWarnings("unchecked")
+  protected <T> T cast(Object value) {
+    return (T) value;
+  }
 }
