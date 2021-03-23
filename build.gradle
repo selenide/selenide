@@ -14,7 +14,7 @@ allprojects {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.20.0'
+version = '5.20.1'
 
 apply from: rootProject.file('gradle/compilation.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
