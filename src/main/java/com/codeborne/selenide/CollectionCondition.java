@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
-import com.codeborne.selenide.collections.ContainTexts;
+import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ItemWithText;
@@ -175,42 +175,47 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   }
 
   /**
-   * Check that the given collection contains elements with given texts.
-   * <p></p>
+   * Check that the given collection contains all elements with given texts.
+   * <p> NB! This condition is case-sensitive and checks for exact matches! </p>
    * Examples:
    * <pre code='java'>
    * // collection 1: [Tom, Dick, Harry]
-   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry")); // success
+   * $$("li.odd").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
    * // collection 2: [Tom, John, Dick, Harry]
-   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry")); // success
-   * // collection 3: [John, Harry, Tom]
-   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry")); // fail
+   * $$("li.even").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   * // collection 3: [John, Dick, Tom, Paul]
+   * $$("li.first").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   * // collection 4: [Tom, Dick, hArRy]
+   * $$("li.last").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
    * </pre>
    *
    * @param expectedTexts the expected texts that the collection should contain
    */
   @CheckReturnValue
-  public static CollectionCondition containTexts(String... expectedTexts) {
-    return new ContainTexts(expectedTexts);
+  public static CollectionCondition containExactTextsCaseSensitive(String... expectedTexts) {
+    return new ContainExactTextsCaseSensitive(expectedTexts);
   }
 
   /**
-   * Check that the given collection contains elements with given texts.
-   * <p></p>
+   * Check that the given collection contains all elements with given texts.
+   * <p> NB! This condition is case-sensitive and checks for exact matches! </p>
    * Examples:
    * <pre code='java'>
    * // collection 1: [Tom, Dick, Harry]
-   * $$("collection 1 locator").should(containTexts("Tom", "Dick", "Harry")); // success
+   * $$("li.odd").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
    * // collection 2: [Tom, John, Dick, Harry]
-   * $$("collection 2 locator").should(containTexts("Tom", "Dick", "Harry")); // success
-   * // collection 3: [John, Harry, Tom]
-   * $$("collection 3 locator").should(containTexts("Tom", "Dick", "Harry")); // fail
+   * $$("li.even").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // success
+   * // collection 3: [John, Dick, Tom, Paul]
+   * $$("li.first").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
+   * // collection 4: [Tom, Dick, hArRy]
+   * $$("li.last").should(containExactTextsCaseSensitive("Tom", "Dick", "Harry")); // fail ("Harry" is missing)
    * </pre>
+   *
    * @param expectedTexts the expected texts that the collection should contain
    */
   @CheckReturnValue
-  public static CollectionCondition containTexts(List<String> expectedTexts) {
-    return new ContainTexts(expectedTexts);
+  public static CollectionCondition containExactTextsCaseSensitive(List<String> expectedTexts) {
+    return new ContainExactTextsCaseSensitive(expectedTexts);
   }
 
   /**
