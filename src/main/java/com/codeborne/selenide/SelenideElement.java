@@ -593,6 +593,49 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement sibling(int index);
 
   /**
+   * Get the following sibling element by tag of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").sibling("div") will give the first following "div" sibling element of "td"
+   *
+   * @param tag the tag of sibling element
+   * @return Sibling element by tag name
+   * @see com.codeborne.selenide.commands.GetSibling
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement sibling(String tag);
+
+  /**
+   * Get the following sibling element by tag of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").sibling("div", 1) will give the second following "div" sibling element of "td"
+   *
+   * @param tag the tag of sibling element
+   * @param index the index of sibling element
+   * @return Sibling element by tag name
+   * @see com.codeborne.selenide.commands.GetSibling
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement sibling(String tag, int index);
+
+  /**
+   * Get the following sibling element by tag of this element
+   * ATTENTION! This method doesn't start any search yet!
+   * For example, $("td").sibling("div", "name", "selenide") will give the first following "div" sibling element of "td"
+   * with attribute name "name" and attribute value "selenide"
+   *
+   * @param tag the tag of sibling element
+   * @param attributeName the attribute name of sibling element
+   * @param attributeValue the attribute value of sibling element
+   * @return Sibling element by tag name, attribute name and attribute value
+   * @see com.codeborne.selenide.commands.GetSibling
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement sibling(String tag, String attributeName, String attributeValue);
+
+  /**
    * Get the preceding sibling element of this element
    * ATTENTION! This method doesn't start any search yet!
    * For example, $("td").preceding(0) will give the first preceding sibling element of "td"

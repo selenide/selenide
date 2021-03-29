@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.20.2 (released 29.03.2021)
+* #1429 add overload methods to sibling() (by tag name, by tag and index, by tag attribute name and attribute value) 
+
 ## 5.20.1 (released 23.03.2021)
 * #1438 Added $$.should() method + JavaDoc fixes  --  thanks to Oleg Berezhnoy @bereg2k
 * #1439 rename containTexts() to containExactTextsCaseSensitive()  --  thanks to Oleg Berezhnoy @bereg2k and Pavel Fokin @fokinp

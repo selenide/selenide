@@ -2,6 +2,11 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.commands.sibling.Sibling;
+import com.codeborne.selenide.commands.sibling.GetSiblingByTab;
+import com.codeborne.selenide.commands.sibling.GetSiblingByTagAndAttribute;
+import com.codeborne.selenide.commands.sibling.GetSiblingByIndex;
+import com.codeborne.selenide.commands.sibling.GetSiblingByTagAndIndex;
 import com.codeborne.selenide.impl.WebElementSource;
 
 import javax.annotation.CheckReturnValue;
@@ -9,10 +14,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
+import static java.util.Arrays.asList;
 
 @ParametersAreNonnullByDefault
 public class Commands {
@@ -103,9 +110,14 @@ public class Commands {
     add("$$x", new FindAllByXpath());
     add("closest", new GetClosest());
     add("parent", new GetParent());
-    add("sibling", new GetSibling());
+    add("sibling", new GetSibling(getSiblingOverloads()));
     add("preceding", new GetPreceding());
     add("lastChild", new GetLastChild());
+  }
+
+  private List<Sibling> getSiblingOverloads() {
+    return asList(new GetSiblingByIndex(), new GetSiblingByTab(), new GetSiblingByTagAndAttribute(),
+      new GetSiblingByTagAndIndex());
   }
 
   private void addKeyboardCommands() {
