@@ -1,8 +1,7 @@
 package integration;
 
-import com.automation.remarks.video.annotations.Video;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
@@ -15,22 +14,19 @@ final class FrameWaitTest extends ITest {
     setTimeout(2000);
   }
 
-  @Test
-  @Video
+  @RepeatedTest(20)
   void waitsUntilFrameAppears_inner() {
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
   }
 
-  @Test
-  @Video
+  @RepeatedTest(20)
   void waitsUntilFrameAppears_byTitle() {
     switchTo().frame("leftFrame");
     $("h1").shouldHave(text("Page with dynamic select"));
   }
 
-  @Test
-  @Video
+  @RepeatedTest(20)
   void waitsUntilFrameAppears_byIndex() {
     switchTo().frame(2);
 

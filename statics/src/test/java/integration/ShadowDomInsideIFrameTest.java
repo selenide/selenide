@@ -2,7 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.value;
@@ -18,14 +18,14 @@ final class ShadowDomInsideIFrameTest extends IntegrationTest {
     openFile("page_with_shadow_dom_inside_iframe.html");
   }
 
-  @Test
+  @RepeatedTest(10)
   void getTargetElementViaShadowHostInsideIFrame() {
     switchTo().frame("iframe_page");
     $(shadowCss("p", "#shadow-host"))
       .shouldHave(text("Inside Shadow-DOM"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void setValueViaShadowDomInsideIFrame() {
     // Firefox says that the input is "not reachable by keyboard" (inside shadow-dom)
     assumeFalse(isFirefox());
@@ -34,7 +34,7 @@ final class ShadowDomInsideIFrameTest extends IntegrationTest {
     $(shadowCss("input", "#shadow-host")).setValue("test").shouldHave(value("test"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void setFastValueViaShadowDomInsideIFrame() {
     switchTo().frame("iframe_page");
     Configuration.fastSetValue = true;

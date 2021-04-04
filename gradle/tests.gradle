@@ -62,7 +62,7 @@ allprojects {
     systemProperties['selenide.browser'] = 'firefox'
     systemProperties['selenide.headless'] = 'true'
     systemProperties['selenide.reportsFolder'] = 'build/reports/tests/firefox_headless'
-    include 'integration/**/*'
+    include 'integration/**/*Frame*'
     exclude 'com/codeborne/selenide/**/*'
   }
 
