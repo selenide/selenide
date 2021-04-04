@@ -14,19 +14,19 @@ final class FrameWaitTest extends ITest {
     setTimeout(2000);
   }
 
-  @RepeatedTest(20)
+  @RepeatedTest(100)
   void waitsUntilFrameAppears_inner() {
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
   }
 
-  @RepeatedTest(20)
+  @RepeatedTest(100)
   void waitsUntilFrameAppears_byTitle() {
     switchTo().frame("leftFrame");
     $("h1").shouldHave(text("Page with dynamic select"));
   }
 
-  @RepeatedTest(20)
+  @RepeatedTest(100)
   void waitsUntilFrameAppears_byIndex() {
     switchTo().frame(2);
 
