@@ -16,7 +16,7 @@ final class FramesTest extends ITest {
     openFile("page_with_frames.html");
   }
 
-  @RepeatedTest(10)
+  // @RepeatedTest(10)
   void canSwitchIntoInnerFrame() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
