@@ -50,7 +50,7 @@ final class FramesTest extends ITest {
     $("frame").shouldHave(name("topFrame"));
   }
 
-  @RepeatedTest(10)
+  //@RepeatedTest(10)
   void canSwitchBetweenFramesByTitle() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
@@ -66,7 +66,7 @@ final class FramesTest extends ITest {
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @RepeatedTest(10)
+  // @RepeatedTest(10)
   void canSwitchBetweenFramesByIndex() {
     assumeFalse(browser().isChrome());
     assertThat(driver().title()).isEqualTo("Test::frames");
