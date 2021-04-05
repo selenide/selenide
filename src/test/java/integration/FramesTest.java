@@ -83,7 +83,7 @@ final class FramesTest extends ITest {
     $("h1").shouldHave(text("Page with JQuery"));
   }
 
-  @RepeatedTest(10)
+  //@RepeatedTest(10)
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByElement() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
@@ -96,7 +96,7 @@ final class FramesTest extends ITest {
       .hasMessageStartingWith("No frame found with element: <div id=\"log\" displayed:false></div>");
   }
 
-  @RepeatedTest(10)
+  //@RepeatedTest(10)
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByTitle() {
     assertThat(driver().title()).isEqualTo("Test::frames");
     assertThatThrownBy(() -> {
@@ -106,7 +106,7 @@ final class FramesTest extends ITest {
       .hasMessageStartingWith("No frame found with id/name: absentFrame");
   }
 
-  @RepeatedTest(10)
+  //@RepeatedTest(10)
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByIndex() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
@@ -117,7 +117,7 @@ final class FramesTest extends ITest {
       .hasMessageStartingWith("No frame found with index: " + Integer.MAX_VALUE);
   }
 
-  @RepeatedTest(10)
+  //@RepeatedTest(10)
   void attachesScreenshotWhenCannotFrameNotFound() {
     assertThatThrownBy(() -> switchTo().frame(33))
       .isInstanceOf(FrameNotFoundException.class)
