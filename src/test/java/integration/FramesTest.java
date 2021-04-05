@@ -41,7 +41,7 @@ final class FramesTest extends ITest {
     assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/page_with_parent_frame.html");
   }
 
-  @RepeatedTest(10)
+  // @RepeatedTest(10)
   void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
