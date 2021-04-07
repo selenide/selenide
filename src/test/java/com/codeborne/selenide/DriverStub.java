@@ -10,8 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static org.mockito.Mockito.mock;
-
 /**
  * A dummy `Driver` implementation used in tests.
  */
@@ -28,7 +26,7 @@ public class DriverStub implements Driver {
   }
 
   public DriverStub(String browser) {
-    this(new SelenideConfig(), new Browser(browser, false), mock(WebDriver.class), null);
+    this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null);
   }
 
   public DriverStub(Config config, Browser browser,

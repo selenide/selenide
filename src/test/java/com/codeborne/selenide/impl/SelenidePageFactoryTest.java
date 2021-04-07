@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
@@ -32,7 +33,7 @@ final class SelenidePageFactoryTest {
   private final TestPage page = new TestPage();
   private final Config config = new SelenideConfig();
   private final WebDriver webDriver = mock(WebDriver.class);
-  private final Driver driver = new DriverStub(config, null, webDriver, null);
+  private final Driver driver = new DriverStub(config, new Browser("zopera", false), webDriver, null);
   private final SelenidePageFactory pageFactory = new SelenidePageFactory();
   private final ClassLoader cl = getClass().getClassLoader();
 
