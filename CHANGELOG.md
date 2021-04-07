@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.20.2 
+* upgrade to WebDriverManager 4.4.0
+
 ## 5.20.1 (released 23.03.2021)
 * #1438 Added $$.should() method + JavaDoc fixes  --  thanks to Oleg Berezhnoy @bereg2k
 * #1439 rename containTexts() to containExactTextsCaseSensitive()  --  thanks to Oleg Berezhnoy @bereg2k and Pavel Fokin @fokinp
