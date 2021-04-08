@@ -1,6 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.impl.DummyFileNamer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 final class LazyDriverTest implements WithAssertions {
   private final Config config = mock(Config.class);
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = new DummyWebDriver();
   private final WebDriverFactory factory = mock(WebDriverFactory.class);
   private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));

@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
@@ -34,7 +35,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
   private final DownloadFileWithProxyServer command = new DownloadFileWithProxyServer(waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = new DummyWebDriver();
   private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
@@ -94,7 +95,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
   @Test
   void proxyServerShouldBeStarted() {
     SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
-    when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(Browser.class), mock(WebDriver.class), null));
+    when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(Browser.class), new DummyWebDriver(), null));
 
     assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none()))
       .isInstanceOf(IllegalStateException.class)

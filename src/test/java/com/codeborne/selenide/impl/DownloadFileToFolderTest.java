@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.FileFilters;
 import org.apache.commons.io.FileUtils;
@@ -31,7 +32,7 @@ final class DownloadFileToFolderTest {
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
   private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = new DummyWebDriver();
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
   private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null);
