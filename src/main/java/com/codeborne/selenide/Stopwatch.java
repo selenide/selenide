@@ -8,17 +8,17 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @ParametersAreNonnullByDefault
 public class Stopwatch {
-  public final long startTimeNano;
-  public final long timeoutNano;
+  private final long endTimeNano;
 
   public Stopwatch(long timeoutMs) {
-    startTimeNano = nanoTime();
-    timeoutNano = MILLISECONDS.toNanos(timeoutMs);
+    this.endTimeNano = nanoTime() + MILLISECONDS.toNanos(timeoutMs);
   }
 
   @CheckReturnValue
   public boolean isTimeoutReached() {
-    return nanoTime() - startTimeNano > timeoutNano;
+    long current = nanoTime();
+    System.out.println("Current: " + current + ", end: " + endTimeNano + ", reached: " + (current > endTimeNano));
+    return current > endTimeNano;
   }
 
   public void sleep(long milliseconds) {
