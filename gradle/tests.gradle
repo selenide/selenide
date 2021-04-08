@@ -1,6 +1,6 @@
 allprojects {
   test {
-    include 'com/codeborne/selenide/**/*'
+    include 'com/codeborne/selenide/**/*StopwatchTest*'
   }
 
   task ie(type: Test) {

@@ -16,7 +16,9 @@ public class Stopwatch {
 
   @CheckReturnValue
   public boolean isTimeoutReached() {
-    return nanoTime() > endTimeNano;
+    long current = nanoTime();
+    System.out.println("Current: " + current + ", end: " + endTimeNano + ", reached: " + (current > endTimeNano));
+    return current > endTimeNano;
   }
 
   public void sleep(long milliseconds) {
