@@ -3,8 +3,6 @@ package com.codeborne.selenide;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import java.util.concurrent.TimeUnit;
-
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -33,4 +31,22 @@ public class Stopwatch {
       throw new RuntimeException(e);
     }
   }
+
+/*
+  public static void main(String[] args) {
+    System.out.println("ok");
+    System.out.println(397227793300L - 397226462400L);
+    System.out.println(TimeUnit.NANOSECONDS.toMillis(397227793300L - 397226462400L));
+
+    System.out.println("nok");
+    System.out.println(397431381100L < 397431481500L);
+    System.out.println(397431381100L - 397431481500L < 0L);
+    System.out.println(397431481500L < 397431381100L);
+    System.out.println(397431481500L - 397431381100L < 0L);
+    System.out.println(TimeUnit.NANOSECONDS.toMillis(397431381100L - 397431481500L));
+
+//    System.out.println(Long.MAX_VALUE);
+//    System.out.println(Long.MAX_VALUE - 397431381100L);
+  }
+*/
 }
