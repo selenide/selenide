@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static java.lang.System.nanoTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class StopwatchTest {
@@ -32,7 +33,11 @@ final class StopwatchTest {
   @Nonnull
   @CheckReturnValue
   private String description(Date start, Date end) {
+    long current = nanoTime();
     return "*************** Started at: " + df.format(start) + ", ended at: " + df.format(end) +
-      ", duration: " + (end.getTime() - start.getTime()) + " ms.";
+      ", duration: " + (end.getTime() - start.getTime()) + " ms." +
+      ", current: " + current + ", start: " + stopwatch.startTimeNano
+      + ", timeoutNano: " + stopwatch.timeoutNano
+      + ", reached: " + (current - stopwatch.startTimeNano < stopwatch.timeoutNano);
   }
 }
