@@ -1,7 +1,6 @@
 plugins {
   id 'java-library'
   id 'idea'
-  id 'maven'
   id 'jacoco'
   id 'checkstyle'
   id 'com.github.spotbugs' version '4.7.0'
