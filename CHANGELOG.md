@@ -1,7 +1,8 @@
 # Changelog
 
-## 5.20.2 
+## 5.20.2 (released 13.04.2021)
 * upgrade to WebDriverManager 4.4.0
+* #1451 migrate 'maven' plugin to 'maven-publish'
 
 ## 5.20.1 (released 23.03.2021)
 * #1438 Added $$.should() method + JavaDoc fixes  --  thanks to Oleg Berezhnoy @bereg2k
