@@ -1,7 +1,6 @@
 plugins {
   id 'java-library'
   id 'idea'
-  id 'maven'
   id 'jacoco'
   id 'checkstyle'
   id 'com.github.spotbugs' version '4.7.0'
@@ -14,7 +13,7 @@ allprojects {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.20.2-SNAPSHOT'
+version = '5.20.2'
 
 apply from: rootProject.file('gradle/compilation.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
