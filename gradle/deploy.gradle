@@ -45,9 +45,9 @@ if (project.hasProperty("signing.keyId")) {
   apply plugin: 'maven-publish'
 
   signing {
-    sign allprojectsJar
-    sign allprojectsSourcesJar
-    sign allprojectsJavadocJar
+    afterEvaluate {
+      sign publishing.publications.mavenJava
+    }
   }
 
   artifacts {
