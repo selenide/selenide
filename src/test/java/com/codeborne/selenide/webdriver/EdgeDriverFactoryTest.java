@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.edge.EdgeOptions;
 
@@ -19,8 +20,10 @@ class EdgeDriverFactoryTest {
 
     EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
 
-    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(ImmutableMap.of(
-      "args", asList("--headless", "--disable-gpu", "--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox")
+    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(
+      ImmutableMap.of(
+      "args", asList("--headless", "--disable-gpu", "--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox"),
+      "extensions", Collections.emptyList()
     ));
   }
 
@@ -30,8 +33,10 @@ class EdgeDriverFactoryTest {
 
     EdgeOptions edgeOptions = factory.createCapabilities(config, browser, null, null);
 
-    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(ImmutableMap.of(
-      "args", asList("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox")
+    assertThat(edgeOptions.asMap().get("ms:edgeOptions")).isEqualTo(
+      ImmutableMap.of(
+      "args", asList("--proxy-bypass-list=<-loopback>", "--disable-dev-shm-usage", "--no-sandbox"),
+      "extensions", Collections.emptyList()
     ));
   }
 }
