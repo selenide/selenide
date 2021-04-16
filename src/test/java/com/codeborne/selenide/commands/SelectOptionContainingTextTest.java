@@ -32,7 +32,7 @@ final class SelectOptionContainingTextTest implements WithAssertions {
 
   @Test
   void selectsFirstMatchingOptionForSingleSelect() {
-    doReturn("false").when(element).getAttribute("multiple");
+    doReturn("false").when(element).getDomAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
       .findElements(
         By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
@@ -45,7 +45,7 @@ final class SelectOptionContainingTextTest implements WithAssertions {
 
   @Test
   void selectsAllMatchingOptionsForMultipleSelect() {
-    doReturn("true").when(element).getAttribute("multiple");
+    doReturn("true").when(element).getDomAttribute("multiple");
     doReturn(asList(option1, option2)).when(element)
       .findElements(
         By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
