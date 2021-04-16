@@ -74,9 +74,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
     }
 
     if (isChromiumBased()) {
-      Map<String, Object> edgeOptions = new HashMap<>();
-      edgeOptions.put("args", createEdgeArguments(config));
-      options.setCapability("ms:edgeOptions", edgeOptions);
+      options.addArguments(createEdgeArguments(config));
     }
     return options;
   }
