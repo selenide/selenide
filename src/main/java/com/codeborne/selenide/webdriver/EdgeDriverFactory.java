@@ -67,8 +67,7 @@ public class EdgeDriverFactory extends AbstractDriverFactory {
       capabilities.setCapability(ACCEPT_INSECURE_CERTS, true);
     }
 
-    EdgeOptions options = new EdgeOptions();
-    options.merge(capabilities);
+    EdgeOptions options = new EdgeOptions().merge(capabilities);
     if (!config.browserBinary().isEmpty()) {
       log.info("Using browser binary: {}", config.browserBinary());
       log.warn("Changing browser binary not supported in Edge, setting will be ignored.");
