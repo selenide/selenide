@@ -81,7 +81,7 @@ final class NavigatorTest implements WithAssertions {
     assertThat(navigator.isAbsoluteUrl("/tmp/memory.dump?url=http://selenide.org"))
       .as("relative url")
       .isFalse();
-    assertThat(navigator.isAbsoluteUrl("/foo-bar/baz"))
+    assertThat(navigator.isAbsoluteUrl("foo-bar/baz"))
       .as("relative url")
       .isFalse();
   }
