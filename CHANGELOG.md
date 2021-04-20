@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.20.3 (released 20.04.2021)
+* #1454 Add ability to navigate to absolute browser internal urls  --  thanks to Aliaksandr Rasolka
+
 ## 5.20.2 (released 13.04.2021)
 * upgrade to WebDriverManager 4.4.0
 * #1451 migrate 'maven' plugin to 'maven-publish'
