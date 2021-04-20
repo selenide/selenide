@@ -4,6 +4,7 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Proxy;
@@ -62,7 +63,7 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
     assertThat(driverFactory.createCommonCapabilities(config, browser, proxy).getCapability("some.cap")).isEqualTo(25);
   }
 
-  @Test
+  @Test @Disabled
   void keepConfigurationFirefoxProfileWhenTransferPreferencesFromSystemPropsToDriver() {
     FirefoxProfile configurationProfile = new FirefoxProfile();
     configurationProfile.setPreference("some.conf.cap", 42);
