@@ -56,20 +56,21 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
   @Nonnull
   public FirefoxOptions createCapabilities(Config config, Browser browser,
                                            @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
-    FirefoxOptions firefoxOptions = new FirefoxOptions();
-    firefoxOptions.setHeadless(config.headless());
-    setupBrowserBinary(config, firefoxOptions);
-    setupPreferences(firefoxOptions);
-    firefoxOptions = firefoxOptions.merge(createCommonCapabilities(config, browser, proxy));
+    final FirefoxOptions initialOptions = new FirefoxOptions();
+    initialOptions.setHeadless(config.headless());
+    setupBrowserBinary(config, initialOptions);
+    setupPreferences(initialOptions);
 
-    setupDownloadsFolder(firefoxOptions, browserDownloadsFolder);
+    final FirefoxOptions options = initialOptions.merge(createCommonCapabilities(config, browser, proxy));
+
+    setupDownloadsFolder(options, browserDownloadsFolder);
 
     Map<String, String> ffProfile = collectFirefoxProfileFromSystemProperties();
     if (!ffProfile.isEmpty()) {
-      transferFirefoxProfileFromSystemProperties(firefoxOptions, ffProfile);
+      transferFirefoxProfileFromSystemProperties(options, ffProfile);
     }
-    injectFirefoxPrefs(firefoxOptions);
-    return firefoxOptions;
+    injectFirefoxPrefs(options);
+    return options;
   }
 
   protected void setupBrowserBinary(Config config, FirefoxOptions firefoxOptions) {
@@ -159,13 +160,7 @@ public class FirefoxDriverFactory extends AbstractDriverFactory {
 
       if (mozOptions.containsKey("prefs")) {
         for (Map.Entry<String, Object> pref : mozOptions.get("prefs").entrySet()) {
-          if (pref.getValue() instanceof String) {
-            options.addPreference(pref.getKey(), (String) pref.getValue());
-          } else if (pref.getValue() instanceof Integer) {
-            options.addPreference(pref.getKey(), (Integer) pref.getValue());
-          } else if (pref.getValue() instanceof Boolean) {
-            options.addPreference(pref.getKey(), (Boolean) pref.getValue());
-          }
+          options.addPreference(pref.getKey(), pref.getValue());
         }
       }
     }
