@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.20.4 (released 22.04.2021)
+* #1456 upgrade to WebDriverManager 4.4.1  --  thanks to Anil Kumar Reddy Gaddam
+
 ## 5.20.3 (released 20.04.2021)
 * #1454 Add ability to navigate to absolute browser internal urls  --  thanks to Aliaksandr Rasolka
 
