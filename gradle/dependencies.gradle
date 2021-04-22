@@ -22,7 +22,7 @@ dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
-  api('io.github.bonigarcia:webdrivermanager:4.4.0') {
+  api('io.github.bonigarcia:webdrivermanager:4.4.1') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
     exclude group: 'org.rauschig', module: 'jarchivelib'
   }
