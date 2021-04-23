@@ -1,63 +1,94 @@
-if (project.hasProperty("signing.keyId")) {
+jar {
+  manifest {
+    attributes(
+      "Implementation-Title": project.group + '.' + project.name,
+      "Implementation-Version": version,
+      "Implementation-Vendor": "Codeborne")
+  }
+}
 
+task sourcesJar(type: Jar) {
+  classifier = 'sources'
+  from sourceSets.main.allJava
+}
+
+javadoc {
+  options.encoding = 'UTF-8'
+  failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+if (project.hasProperty("signing.keyId")) {
   apply plugin: 'signing'
+  apply plugin: 'maven-publish'
 
   signing {
-    sign configurations.archives
+    afterEvaluate {
+      sign publishing.publications.mavenJava
+    }
   }
 
-  uploadArchives {
+  artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+  }
+
+  publishing {
     repositories {
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-        repository(url: project.version.endsWith("-SNAPSHOT") ?
+      maven {
+        name 'Maven'
+        url project.version.endsWith("-SNAPSHOT") ?
           'https://oss.sonatype.org/content/repositories/snapshots/' :
-          'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-          authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
+          'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+        credentials {
+          username "$sonatypeUsername"
+          password "$sonatypePassword"
         }
+      }
+    }
+    publications {
+      mavenJava(MavenPublication) {
+        groupId "${project.group}"
+        artifactId "${project.name}"
 
-        pom.project {
-          name archivesBaseName
-          packaging 'jar'
-          description 'Selenide adaptor for Appium framework'
-          url 'https://github.com/codeborne/selenide-appium'
+        artifact(jar)
+        artifact(sourcesJar)
+        artifact(javadocJar)
 
-          scm {
-            url 'scm:git@github.com:codeborne/selenide-appium.git'
-            connection 'scm:git@github.com:codeborne/selenide-appium.git'
-            developerConnection 'scm:git@github.com:codeborne/selenide-appium.git'
-          }
-
+        pom {
+          name = archivesBaseName
+          description = 'Selenide adaptor for Appium framework'
+          url = 'https://github.com/selenide/selenide-appium'
           licenses {
             license {
-              name 'MIT'
-              url 'https://opensource.org/licenses/MIT'
-              distribution 'repo'
+              name = 'MIT'
+              url = 'https://opensource.org/licenses/MIT'
             }
           }
-
           developers {
             developer {
-              id 'asolntsev'
-              name 'Andrei Solntsev'
+              id = 'asolntsev'
+              name = 'Andrei Solntsev'
+            }
+            developer {
+              id = 'rosolko'
+              name = 'Aliaksandr Rasolka'
+            }
+            developer {
+              id = 'BorisOsipov'
+              name = 'Boris Osipov'
             }
           }
-        }
-
-        //mess with the generated pom to set the 'packaging' tag
-        pom.withXml { XmlProvider xmlProvider ->
-          def xml = xmlProvider.asString()
-          def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
-
-          pomXml.version[0] + { packaging('jar') }
-
-          def newXml = new StringWriter()
-          def printer = new XmlNodePrinter(new PrintWriter(newXml))
-          printer.preserveWhitespace = true
-          printer.print(pomXml)
-          xml.setLength(0)
-          xml.append(newXml.toString())
+          scm {
+            connection = 'scm:git@github.com:selenide/selenide-appium.git'
+            developerConnection = 'scm:git@github.com:selenide/selenide-appium.git'
+            url = 'https://github.com/selenide/selenide-appium'
+          }
         }
       }
     }

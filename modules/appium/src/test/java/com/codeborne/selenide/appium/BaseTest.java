@@ -10,7 +10,6 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 public class BaseTest {
   @BeforeEach
   public void setUp() {
-    Configuration.startMaximized = false;
     Configuration.browserSize = null;
     Configuration.browser = AndroidDriverProvider.class.getName();
     open();

@@ -1,7 +1,9 @@
 == Changelog
 
-=== 1.6.3 (planned to xx.04.2021)
-* upgrade to Selenide 5.20.0
+=== 1.6.3 (released 22.04.2021)
+* upgrade to Selenide 5.20.4
+* upgrade to Appium 7.5.1
+* upgrade to Gradle 7.0
 
 === 1.6.2 (released 24.02.2021)
 * #52 override Selenide standard method `$.dragAndDropTo()`
