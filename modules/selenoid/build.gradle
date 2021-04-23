@@ -1,12 +1,11 @@
 plugins {
   id 'java-library'
   id 'idea'
-  id 'maven'
 }
 
 group = 'org.selenide'
 archivesBaseName = 'selenide-selenoid'
-version = '1.1.0'
+version = '1.1.1'
 
 apply from: rootProject.file('gradle/compilation.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')

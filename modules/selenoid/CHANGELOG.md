@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 (released 23.04.2021)
+* upgrade to Selenide 5.20.4
+* upgrade to Gradle 7.0
+
 ## 1.1.0 (released 20.03.2021)
 * #6 Added get & set clipboard methods  --  thanks to Dmitriy Budim
 * upgrade to Selenide 5.20.0
