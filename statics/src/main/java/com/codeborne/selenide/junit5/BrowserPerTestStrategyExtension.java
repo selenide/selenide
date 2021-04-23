@@ -20,7 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
  * <br>
  *
  * @author simple-elf
- * @since 5.20.2
+ * @since 5.21.0
  */
 @ParametersAreNonnullByDefault
 public class BrowserPerTestStrategyExtension implements AfterEachCallback {
