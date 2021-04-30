@@ -4,7 +4,7 @@ plugins {
   id 'jacoco'
   id 'checkstyle'
   id 'com.github.spotbugs' version '4.7.1'
-  id 'org.sonarqube' version '3.1.1'
+  id 'org.sonarqube' version '3.2.0'
 }
 
 allprojects {
