@@ -6,27 +6,23 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script src="jquery.min.js"></script>
   <script>
-      function onUsernameChanged(input) {
-        var val = $('#username').val();
-        $('#log').append('onUsernameChanged(' + val + ')<br/>');
-        $("h2").text(val);
-      }
-      function onPasswordChanged() {
-        var val = $('#password').val();
-        $('#log').append('onPasswordChanged(' + val + ')<br/>');
-        $("h2").text(val);
-      }
-      function onRememberMeChanged() {
-        var val = $('#rememberMe').val();
-        $('#log').append('onRememberMeChanged(' + val + ')<br/>');
-        $("h2").text(val);
-      }
-      function onHover(element) {
-        $(element).text("It's hover!");
-      }
-      function offHover(element) {
-        $(element).text("It's not hover.");
-      }
+    function onUsernameChanged(input) {
+      var val = $('#username').val();
+      $('#log').append('onUsernameChanged(' + val + ')<br/>');
+      $("h2").text(val);
+    }
+
+    function onPasswordChanged() {
+      var val = $('#password').val();
+      $('#log').append('onPasswordChanged(' + val + ')<br/>');
+      $("h2").text(val);
+    }
+
+    function onRememberMeChanged() {
+      var val = $('#rememberMe').val();
+      $('#log').append('onRememberMeChanged(' + val + ')<br/>');
+      $("h2").text(val);
+    }
   </script>
 </head>
 <body>
@@ -50,7 +46,5 @@
     <input type="button" id="some-button" value="click me">
   </form>
 </div>
-
-<div id="hoverable" onmouseover="onHover(this);" onmouseout="offHover(this);">It's not hover</div>
 </body>
 </html>
