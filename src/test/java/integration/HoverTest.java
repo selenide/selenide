@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.text;
 final class HoverTest extends ITest {
   @BeforeEach
   void openTestPageWithJQuery() {
-    openFile("page_with_jquery.html");
+    openFile("hover.html");
   }
 
   @Test

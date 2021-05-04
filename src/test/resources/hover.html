@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::hover</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script>
+    function onHover(event) {
+      event.target.innerText = "It's hover!";
+    }
+    function offHover(event) {
+      event.target.innerText = "It's not hover.";
+    }
+  </script>
+</head>
+<body>
+<h1>Page with Hover</h1>
+
+<div id="hoverable" style="border: 1px solid; width: 600px; height: 100px;">It's not hover</div>
+<br/>
+<h4>Mouse coordinates:</h4>
+<div id="coords">(0, 0)</div>
+
+<script type="text/javascript">
+  document.getElementById('hoverable').addEventListener('mouseover', onHover);
+  document.getElementById('hoverable').addEventListener('mouseout', offHover);
+</script>
+
+</body>
+</html>
