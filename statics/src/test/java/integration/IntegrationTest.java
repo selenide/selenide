@@ -31,7 +31,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
-@ExtendWith({ScreenShooterExtension.class, TextReportExtension.class, VideoExtension.class})
+@ExtendWith({ScreenShooterExtension.class, VideoExtension.class})
 public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeAll
   static void resetSettingsBeforeClass() {
