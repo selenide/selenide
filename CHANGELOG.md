@@ -2,6 +2,7 @@
 
 ## 5.21.0 (planned to 0x.05.2021)
 * #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450
+* #1447 Add hover with offset  --  see PR #1461
 
 ## 5.20.4 (released 22.04.2021)
 * #1456 upgrade to WebDriverManager 4.4.1  --  thanks to Anil Kumar Reddy Gaddam

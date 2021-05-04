@@ -1115,6 +1115,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement hover();
 
   /**
+   * Emulate "mouseOver" event. In other words, move mouse cursor over this element (without clicking it).
+   *
+   * @param options optional hover parameters (offset etc)
+   * @return this element
+   * @see com.codeborne.selenide.commands.Hover
+   */
+  @Nonnull
+  @CanIgnoreReturnValue
+  SelenideElement hover(HoverOptions options);
+
+  /**
    * Drag and drop this element to the target
    * <p>
    * Before dropping, waits until target element gets visible.
