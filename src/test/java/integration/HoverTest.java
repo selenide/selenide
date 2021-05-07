@@ -37,7 +37,6 @@ final class HoverTest extends ITest {
   @Test
   void hoverWithOffset() {
     $("#hoverable").hover(withOffset(123, 122)).shouldHave(text("It's hover"));
-    $("#coords").shouldHave(text("(523, 322)"));
     verifyCoordinates(523, 322);
   }
 
@@ -47,7 +46,7 @@ final class HoverTest extends ITest {
     String coordinatesAsText = $("#coords").text();
     int x = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$1"));
     int y = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$2"));
-    assertThat(x).isBetween(expectedX-50, expectedX+50);
-    assertThat(y).isBetween(expectedY-50, expectedY+50);
+    assertThat(x).isBetween(expectedX - 50, expectedX + 50);
+    assertThat(y).isBetween(expectedY - 50, expectedY + 50);
   }
 }
