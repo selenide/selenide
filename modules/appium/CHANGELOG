@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.5 (released 07.05.2021)
+* restore transitive dependencies (selenide:5.20.4 and appium:7.5.1)
+
 === 1.6.4 (released 07.05.2021)
 * #54 improve $.toString() in iOS
 

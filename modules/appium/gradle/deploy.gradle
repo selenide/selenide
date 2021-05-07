@@ -56,7 +56,7 @@ if (project.hasProperty("signing.keyId")) {
         groupId "${project.group}"
         artifactId "${project.name}"
 
-        artifact(jar)
+        from components.java
         artifact(sourcesJar)
         artifact(javadocJar)
 
