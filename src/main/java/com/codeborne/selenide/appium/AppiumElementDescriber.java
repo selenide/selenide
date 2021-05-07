@@ -4,6 +4,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Appium-specific element describer.
@@ -79,6 +81,7 @@ public class AppiumElementDescriber implements ElementDescriber {
     private final WebElement element;
     private String className = "?";
     private String tagName = "?";
+    private String text = "?";
     private final StringBuilder sb = new StringBuilder();
     private StaleElementReferenceException staleElementException;
 
@@ -87,10 +90,15 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private Builder appendTagName() {
-      getAttribute("class", (value) -> {
-        className = element.getAttribute("class");
+      getAttribute("class", (className) -> {
+        this.className = className;
         tagName = className.replaceFirst(".+\\.(.+)", "$1");
       });
+      if ("?".equals(tagName)) {
+        safeCall(element::getTagName, () -> "Failed to get tag name", (tagName) -> {
+          this.tagName = tagName;
+        });
+      }
       sb.append("<").append(tagName).append(" class=\"").append(className).append("\"");
       return this;
     }
@@ -103,23 +111,32 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void getAttribute(String name, Consumer<String> attributeHandler) {
+      safeCall(() -> element.getAttribute(name),
+        () -> "Failed to get attribute " + name,
+        attributeHandler);
+    }
+
+    private void safeCall(Supplier<String> method, Supplier<String> errorMessage, Consumer<String> resultHandler) {
       if (staleElementException != null) return;
 
       try {
-        String value = element.getAttribute(name);
+        String value = method.get();
         if (value != null) {
-          attributeHandler.accept(value);
+          resultHandler.accept(value);
         }
       }
       catch (StaleElementReferenceException e) {
         staleElementException = e;
-        logger.debug("Failed to get attribute {}: {}", name, e.toString());
+        logger.debug("{}: {}", errorMessage.get(), e.toString());
+      }
+      catch (UnsupportedCommandException e) {
+        logger.debug("{}: {}", errorMessage.get(), e.toString());
       }
       catch (WebDriverException e) {
-        logger.info("Failed to get attribute {}: {}", name, e.toString());
+        logger.info("{}: {}", errorMessage.get(), e.toString());
       }
       catch (RuntimeException e) {
-        logger.warn("Failed to get attribute {}", name, e);
+        logger.warn("{}", errorMessage.get(), e);
       }
     }
 
@@ -138,13 +155,11 @@ public class AppiumElementDescriber implements ElementDescriber {
     }
 
     private void appendText() {
-      try {
-        String text = element.getAttribute("text");
-        sb.append(text);
+      safeCall(element::getText, () -> "Failed to get text", (text) -> this.text = text);
+      if ("?".equals(text)) {
+        getAttribute("text", (text) -> this.text = text);
       }
-      catch (WebDriverException e) {
-        sb.append(e.toString());
-      }
+      sb.append(text);
     }
 
     private String build() {

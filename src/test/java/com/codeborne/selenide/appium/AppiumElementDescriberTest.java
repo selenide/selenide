@@ -3,6 +3,7 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.StaticDriver;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
@@ -18,7 +19,36 @@ public class AppiumElementDescriberTest {
   private final WebElement element = mock(WebElement.class);
 
   @Test
-  public void extractsTagNameFromClassName() {
+  public void printsTagName_ifPresent() {
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getAttribute("class")).thenThrow(new UnsupportedCommandException());
+
+    assertThat(describer.briefly(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\">?</XCUIElementTypeImage>");
+  }
+
+  @Test
+  public void printsText_ifPresent() {
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getText()).thenReturn("element text");
+
+    assertThat(describer.briefly(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\">element text</XCUIElementTypeImage>");
+  }
+
+  @Test
+  public void canExtractTextFromAttribute() {
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getText()).thenReturn(null);
+    when(element.getAttribute("text")).thenReturn("element text");
+
+    assertThat(describer.briefly(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\">element text</XCUIElementTypeImage>");
+  }
+
+  @Test
+  public void extractsTagNameFromClassName_inAndroid() {
+    when(element.getTagName()).thenReturn(null);
     when(element.getAttribute("class")).thenReturn("android.widget.TextView");
     when(element.getAttribute("text")).thenReturn("Hello, world");
 
