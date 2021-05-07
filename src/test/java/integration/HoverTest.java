@@ -27,24 +27,27 @@ final class HoverTest extends ITest {
   @Test
   void canEmulateHover() {
     $("#hoverable").hover().shouldHave(text("It's hover"));
-    $("#coords").should(matchText("\\(\\d{3}, \\d{3}\\)"));
-    verifyCoordinates($("#coords").text());
+    verifyCoordinates(400, 200);
 
     $("h1").hover();
     $("#hoverable").shouldHave(text("It's not hover"));
     $("#coords").shouldHave(exactText(""));
   }
 
-  private void verifyCoordinates(String coordinatesAsText) {
-    int x = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$1"));
-    int y = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$2"));
-    assertThat(x).isBetween(300, 500);
-    assertThat(y).isBetween(150, 250);
-  }
-
   @Test
   void hoverWithOffset() {
     $("#hoverable").hover(withOffset(123, 122)).shouldHave(text("It's hover"));
     $("#coords").shouldHave(text("(523, 322)"));
+    verifyCoordinates(523, 322);
+  }
+
+  private void verifyCoordinates(int expectedX, int expectedY) {
+    $("#coords").should(matchText("\\(\\d{3}, \\d{3}\\)"));
+
+    String coordinatesAsText = $("#coords").text();
+    int x = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$1"));
+    int y = parseInt(coordinatesAsText.replaceFirst(REGEX_COORDINATES, "$2"));
+    assertThat(x).isBetween(expectedX-50, expectedX+50);
+    assertThat(y).isBetween(expectedY-50, expectedY+50);
   }
 }
