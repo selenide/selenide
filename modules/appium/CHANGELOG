@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.4 (released 07.05.2021)
+* #54 improve $.toString() in iOS
+
 === 1.6.3 (released 22.04.2021)
 * upgrade to Selenide 5.20.4
 * upgrade to Appium 7.5.1

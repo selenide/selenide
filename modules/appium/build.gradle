@@ -4,7 +4,7 @@ defaultTasks 'check', 'test', 'install'
 
 group = 'com.codeborne'
 description = 'Selenide adaptor for Appium framework'
-version = '1.6.3'
+version = '1.6.4'
 
 tasks.withType(Test) {
   useJUnitPlatform()
