@@ -159,6 +159,12 @@ public class AppiumElementDescriber implements ElementDescriber {
       if ("?".equals(text)) {
         getAttribute("text", (text) -> this.text = text);
       }
+      if ("?".equals(text)) {
+        getAttribute("label", (text) -> this.text = text);
+      }
+      if ("?".equals(text)) {
+        getAttribute("value", (text) -> this.text = text);
+      }
       sb.append(text);
     }
 

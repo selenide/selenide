@@ -37,10 +37,28 @@ public class AppiumElementDescriberTest {
   }
 
   @Test
-  public void canExtractTextFromAttribute() {
+  public void canExtractTextFromAttributeText() {
     when(element.getTagName()).thenReturn("XCUIElementTypeImage");
     when(element.getText()).thenReturn(null);
     when(element.getAttribute("text")).thenReturn("element text");
+
+    assertThat(describer.briefly(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\">element text</XCUIElementTypeImage>");
+  }
+
+  @Test
+  public void canExtractTextFromAttributeLabel() {
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getAttribute("label")).thenReturn("element text");
+
+    assertThat(describer.briefly(driver, element))
+      .isEqualTo("<XCUIElementTypeImage class=\"?\">element text</XCUIElementTypeImage>");
+  }
+
+  @Test
+  public void canExtractTextFromAttributeValue() {
+    when(element.getTagName()).thenReturn("XCUIElementTypeImage");
+    when(element.getAttribute("value")).thenReturn("element text");
 
     assertThat(describer.briefly(driver, element))
       .isEqualTo("<XCUIElementTypeImage class=\"?\">element text</XCUIElementTypeImage>");
