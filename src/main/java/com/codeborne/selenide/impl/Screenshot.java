@@ -31,6 +31,10 @@ public class Screenshot {
     return new Screenshot((String) null, null);
   }
 
+  public boolean isPresent() {
+    return image != null || source != null;
+  }
+
   public String summary() {
     if (image != null && source != null) {
       return String.format("%nScreenshot: %s%nPage source: %s", image, source);
