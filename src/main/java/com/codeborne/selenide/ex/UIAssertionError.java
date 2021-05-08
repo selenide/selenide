@@ -5,6 +5,8 @@ import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
@@ -16,6 +18,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 @ParametersAreNonnullByDefault
 public class UIAssertionError extends AssertionError {
+  private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
   private final Driver driver;
 
   private Screenshot screenshot = Screenshot.none();
@@ -73,7 +76,13 @@ public class UIAssertionError extends AssertionError {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
-    uiError.screenshot = ScreenShotLaboratory.getInstance().takeScreenshot(driver);
+    if (uiError.screenshot.isPresent()) {
+      log.warn("UIAssertionError already has screenshot: {} {} -> {}",
+        uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
+    }
+    else {
+      uiError.screenshot = ScreenShotLaboratory.getInstance().takeScreenshot(driver);
+    }
     return uiError;
   }
 
