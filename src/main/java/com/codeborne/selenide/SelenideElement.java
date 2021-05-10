@@ -1024,6 +1024,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Return criteria by which this element is located
    *
    * @return e.g. "#multirowTable.findBy(text 'INVALID-TEXT')/valid-selector"
+   * @see com.codeborne.selenide.commands.GetSearchCriteria
    */
   @CheckReturnValue
   @Nonnull

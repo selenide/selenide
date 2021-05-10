@@ -64,14 +64,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this(new BySelectorCollection(driver, seleniumSelector));
   }
 
-  public ElementsCollection(Driver driver, WebElement parent, String cssSelector) {
-    this(driver, parent, By.cssSelector(cssSelector));
-  }
-
-  public ElementsCollection(Driver driver, WebElement parent, By seleniumSelector) {
-    this(new BySelectorCollection(driver, parent, seleniumSelector));
-  }
-
   /**
    * Deprecated. Use {@code $$.shouldHave(size(expectedSize))} instead.
    */

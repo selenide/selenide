@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -20,7 +19,7 @@ public class BySelectorCollection implements CollectionSource {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
   private final Driver driver;
-  private final SearchContext parent;
+  private final WebElementSource parent;
   private final By selector;
   private Alias alias = NONE;
 
@@ -28,7 +27,7 @@ public class BySelectorCollection implements CollectionSource {
     this(driver, null, selector);
   }
 
-  public BySelectorCollection(Driver driver, @Nullable SearchContext parent, By selector) {
+  public BySelectorCollection(Driver driver, @Nullable WebElementSource parent, By selector) {
     this.driver = driver;
     this.parent = parent;
     this.selector = selector;
@@ -38,7 +37,7 @@ public class BySelectorCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public List<WebElement> getElements() {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
+    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent.getWebElement();
     return WebElementSelector.instance.findElements(driver, searchContext, selector);
   }
 
@@ -46,7 +45,7 @@ public class BySelectorCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public WebElement getElement(int index) {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
+    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent.getWebElement();
     if (index == 0) {
       return WebElementSelector.instance.findElement(driver, searchContext, selector);
     }
@@ -63,9 +62,7 @@ public class BySelectorCollection implements CollectionSource {
   @Nonnull
   private String composeDescription() {
     return parent == null ? describe.selector(selector) :
-      (parent instanceof SelenideElement) ?
-        ((SelenideElement) parent).getSearchCriteria() + "/" + describe.selector(selector) :
-        describe.selector(selector);
+      parent.getSearchCriteria() + "/" + describe.selector(selector);
   }
 
   @Override

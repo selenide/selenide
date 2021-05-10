@@ -68,7 +68,7 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
-    return ElementFinder.wrap(driver(), proxy, getSelector(arg), index);
+    return ElementFinder.wrap(driver(), this, getSelector(arg), index);
   }
 
   @CheckReturnValue

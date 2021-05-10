@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsContainer;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
@@ -11,6 +10,7 @@ import org.openqa.selenium.SearchContext;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -22,13 +22,13 @@ import static com.codeborne.selenide.Condition.exist;
 public class ElementsContainerCollection extends AbstractList<ElementsContainer> {
   private final PageObjectFactory pageFactory;
   private final Driver driver;
-  private final SearchContext parent;
+  private final WebElementSource parent;
   private final Field field;
   private final Class<?> listType;
   private final Type[] genericTypes;
   private final By selector;
 
-  public ElementsContainerCollection(PageObjectFactory pageFactory, Driver driver, SearchContext parent,
+  public ElementsContainerCollection(PageObjectFactory pageFactory, Driver driver, @Nullable WebElementSource parent,
                                      Field field, Class<?> listType, Type[] genericTypes, By selector) {
     this.pageFactory = pageFactory;
     this.driver = driver;
@@ -43,7 +43,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @Nonnull
   @Override
   public ElementsContainer get(int index) {
-    SelenideElement self = ElementFinder.wrap(driver, parent, selector, index);
+    WebElementSource self = new ElementFinder(driver, parent, selector, index);
     try {
       return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);
     }
@@ -56,7 +56,8 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @Override
   public int size() {
     try {
-      return WebElementSelector.instance.findElements(driver, parent, selector).size();
+      SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
+      return WebElementSelector.instance.findElements(driver, context, selector).size();
     }
     catch (NoSuchElementException e) {
       throw new ElementNotFound(driver, selector.toString(), exist, e);

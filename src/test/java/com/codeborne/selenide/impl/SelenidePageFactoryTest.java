@@ -39,7 +39,7 @@ final class SelenidePageFactoryTest {
 
   @Test
   void decoratesSelenideElement() throws NoSuchFieldException {
-    assertThat(pageFactory.decorate(cl, driver, webDriver, getField("username"), new ByIdOrName("username")))
+    assertThat(pageFactory.decorate(cl, driver, null, getField("username"), new ByIdOrName("username")))
       .isInstanceOf(SelenideElement.class);
   }
 
@@ -47,7 +47,7 @@ final class SelenidePageFactoryTest {
   void decoratesElementsCollection() throws NoSuchFieldException {
     TestPageWithElementsCollection page = new TestPageWithElementsCollection();
 
-    Object decoratedField = pageFactory.decorate(cl, driver, webDriver,
+    Object decoratedField = pageFactory.decorate(cl, driver, null,
       getField(page, "rows"), By.cssSelector("table tbody tr"));
 
     assertThat(decoratedField).isInstanceOf(ElementsCollection.class);
@@ -60,7 +60,7 @@ final class SelenidePageFactoryTest {
     WebElement element2 = mock(WebElement.class);
     when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
 
-    Object decoratedField = pageFactory.decorate(cl, driver, webDriver, getField("rows"), By.cssSelector("table tbody tr"));
+    Object decoratedField = pageFactory.decorate(cl, driver, null, getField("rows"), By.cssSelector("table tbody tr"));
     assertThat(decoratedField).isInstanceOf(ElementsCollection.class);
     verifyNoMoreInteractions(webDriver);
 
@@ -74,7 +74,7 @@ final class SelenidePageFactoryTest {
 
   @Test
   void decoratesVanillaWebElements() throws NoSuchFieldException {
-    final Object someDiv = pageFactory.decorate(cl, driver, webDriver, getField("someDiv"), new ByIdOrName("someDiv"));
+    final Object someDiv = pageFactory.decorate(cl, driver, null, getField("someDiv"), new ByIdOrName("someDiv"));
     assertThat(someDiv).isNotNull();
     assertThat(someDiv)
       .withFailMessage("someDiv should be instance of SelenideElement. Actual class: " + someDiv.getClass())
@@ -88,7 +88,7 @@ final class SelenidePageFactoryTest {
     WebElement element2 = mock(WebElement.class);
     when(webDriver.findElements(any(By.class))).thenReturn(asList(element1, element2));
 
-    List<WebElement> elements = (List<WebElement>) pageFactory.decorate(cl, driver, webDriver,
+    List<WebElement> elements = (List<WebElement>) pageFactory.decorate(cl, driver, null,
       getField("data"), By.cssSelector("table tbody tr"));
 
     assertThat(elements).hasSize(2);
@@ -99,13 +99,13 @@ final class SelenidePageFactoryTest {
 
   @Test
   void ignoresUnknownTypes() throws NoSuchFieldException {
-    assertThat(pageFactory.decorate(cl, driver, webDriver, getField("unsupportedField"), new ByIdOrName("unsupportedField")))
+    assertThat(pageFactory.decorate(cl, driver, null, getField("unsupportedField"), new ByIdOrName("unsupportedField")))
       .isNull();
   }
 
   @Test
   void decoratesElementsContainerWithItsSubElements() throws NoSuchFieldException {
-    StatusBlock status = (StatusBlock) pageFactory.decorate(cl, driver, webDriver, getField("status"), By.id("status"));
+    StatusBlock status = (StatusBlock) pageFactory.decorate(cl, driver, null, getField("status"), By.id("status"));
     WebElement statusElement = mockWebElement("div", "the status");
     WebElement lastLogin = mockWebElement("div", "03.03.2003");
     WebElement name = mockWebElement("div", "lena");
@@ -144,7 +144,7 @@ final class SelenidePageFactoryTest {
     WebElement name2 = mockWebElement("div", "katie");
     when(statusElement2.findElement(By.className("name"))).thenReturn(name2);
 
-    Object decoratedField = pageFactory.decorate(cl, driver, webDriver,
+    Object decoratedField = pageFactory.decorate(cl, driver, null,
       getField("statusHistory"), By.cssSelector("table.history tr.status"));
 
     assertThat(decoratedField).isInstanceOf(List.class);
