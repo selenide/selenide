@@ -18,10 +18,10 @@ public class FindAll implements Command<ElementsCollection> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection execute(SelenideElement parent, WebElementSource locator, @Nullable Object[] args) {
+  public ElementsCollection execute(SelenideElement parentElement, WebElementSource parentLocator, @Nullable Object[] args) {
     Object selector = firstOf(args);
     return new ElementsCollection(
-      new BySelectorCollection(locator.driver(), parent, WebElementSource.getSelector(selector))
+      new BySelectorCollection(parentLocator.driver(), parentLocator, WebElementSource.getSelector(selector))
     );
   }
 }
