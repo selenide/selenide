@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +62,7 @@ public class SelenoidClient {
   @Nonnull
   public File download(String fileName) {
     URL url = urlOfDownloadedFile(fileName);
-    try (InputStream in = url.openStream()) {
+    try (InputStream in = connectionFromUrl(url).getInputStream()) {
       Path uniqueDir = Files.createTempDirectory("selenoid-download");
       File file = new File(uniqueDir.toFile(), fileName);
       try (OutputStream out = new FileOutputStream(file)) {
@@ -86,7 +87,7 @@ public class SelenoidClient {
     URL url = urlOfDownloadedFile(fileName);
 
     try {
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      HttpURLConnection connection = connectionFromUrl(url);
       connection.setRequestMethod("DELETE");
       int responseCode = connection.getResponseCode();
       if (responseCode != 200) {
@@ -104,7 +105,7 @@ public class SelenoidClient {
     @Nonnull
     public String getClipboardText() {
         try {
-            HttpURLConnection connection = (HttpURLConnection) url(baseUrl, "clipboard", sessionId).openConnection();
+            HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
             int code = connection.getResponseCode();
             if (code != 200)
                 throw new RuntimeException("Something went wrong while getting clipboard! Response code: " + code);
@@ -119,7 +120,7 @@ public class SelenoidClient {
 
     public void setClipboardText(String text) {
         try {
-            HttpURLConnection connection = (HttpURLConnection) url(baseUrl, "clipboard", sessionId).openConnection();
+            HttpURLConnection connection = connectionFromUrl(url(baseUrl, "clipboard", sessionId));
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             connection.setConnectTimeout(10000);
@@ -169,11 +170,22 @@ public class SelenoidClient {
   @CheckReturnValue
   @Nonnull
   private String readToString(URL url) {
-    try {
-      return IOUtils.toString(url, UTF_8);
+    try (InputStream in = connectionFromUrl(url).getInputStream()) {
+      return IOUtils.toString(in, UTF_8);
     }
     catch (IOException e) {
       throw new RuntimeException("Failed to fetch data from " + url, e);
     }
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  private HttpURLConnection connectionFromUrl(URL url) throws IOException {
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    if (url.getUserInfo() != null) {
+      String basicAuth = "Basic " + new String(Base64.getEncoder().encode(url.getUserInfo().getBytes()));
+      connection.setRequestProperty("Authorization", basicAuth);
+    }
+    return connection;
   }
 }
