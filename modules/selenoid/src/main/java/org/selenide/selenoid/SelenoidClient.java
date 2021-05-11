@@ -149,7 +149,7 @@ public class SelenoidClient {
       return new URL(url);
     }
     catch (MalformedURLException e) {
-      throw new RuntimeException("Failed to build valid URL from " + url);
+      throw new RuntimeException("Failed to build valid URL from " + url, e);
     }
   }
 
@@ -162,7 +162,7 @@ public class SelenoidClient {
           .build().toURL();
     }
     catch (URISyntaxException | MalformedURLException e) {
-      throw new RuntimeException("Failed to build valid URL from " + base + '+' + Arrays.toString(pathSegments));
+      throw new RuntimeException("Failed to build valid URL from " + base + '+' + Arrays.toString(pathSegments), e);
     }
   }
 
@@ -173,7 +173,7 @@ public class SelenoidClient {
       return IOUtils.toString(url, UTF_8);
     }
     catch (IOException e) {
-      throw new RuntimeException("Failed to fetch data from " + url);
+      throw new RuntimeException("Failed to fetch data from " + url, e);
     }
   }
 }
