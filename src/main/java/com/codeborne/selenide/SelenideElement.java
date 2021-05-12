@@ -568,12 +568,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement as(String alias);
 
   /**
-   * Get parent element of this element
-   * ATTENTION! This method doesn't start any search yet!
+   * Get parent element of this element (lazy evaluation)
+   *
    * For example, $("td").parent() could give some "tr".
    *
    * @return Parent element
    * @see com.codeborne.selenide.commands.GetParent
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -581,12 +582,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get the following sibling element of this element
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * For example, $("td").sibling(0) will give the first following sibling element of "td"
    *
    * @param index the index of sibling element
    * @return Sibling element by index
    * @see com.codeborne.selenide.commands.GetSibling
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -594,12 +596,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get the preceding sibling element of this element
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * For example, $("td").preceding(0) will give the first preceding sibling element of "td"
    *
    * @param index the index of sibling element
    * @return Sibling element by index
    * @see com.codeborne.selenide.commands.GetPreceding
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -607,8 +610,10 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Get last child element of this element
-   * ATTENTION! this method doesn't start any search yet!
+   *
    * For example, $("tr").lastChild(); could give the last "td".
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -616,12 +621,13 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * Locates closes ancestor element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * For example, $("td").closest("table") could give some "table".
    *
    * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
    * @return Matching ancestor element
    * @see com.codeborne.selenide.commands.GetClosest
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -629,10 +635,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * <p>Locates the first matching element inside given element</p>
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * <p>Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}</p>
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -640,68 +647,68 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * <p>Locates the Nth matching element inside given element</p>
-   * ATTENTION! This method doesn't start any search yet!
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   SelenideElement find(String cssSelector, int index);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   SelenideElement find(By selector);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   SelenideElement find(By selector, int index);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   SelenideElement $(String cssSelector);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   SelenideElement $(String cssSelector, int index);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   SelenideElement $(By selector);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #find(String, int)}
    *
    * @see com.codeborne.selenide.commands.Find
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -709,10 +716,11 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * <p>Locates the first matching element inside given element using xpath locator</p>
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * <p>Short form of {@code webElement.findElement(By.xpath(xpathLocator))}</p>
    *
    * @see com.codeborne.selenide.commands.FindByXpath
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -720,9 +728,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * <p>Locates the Nth matching element inside given element using xpath locator</p>
-   * ATTENTION! This method doesn't start any search yet!
    *
    * @see com.codeborne.selenide.commands.FindByXpath
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -732,13 +740,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
    * </p>
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * <p>
    * For example, {@code $("#multirowTable").findAll("tr.active").shouldHave(size(2));}
    * </p>
    *
    * @return list of elements inside given element matching given CSS selector
    * @see com.codeborne.selenide.commands.FindAll
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -748,21 +757,22 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, selector)}
    * </p>
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * <p>
    * For example, {@code $("#multirowTable").findAll(By.className("active")).shouldHave(size(2));}
    * </p>
    *
    * @return list of elements inside given element matching given criteria
    * @see com.codeborne.selenide.commands.FindAll
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
   ElementsCollection findAll(By selector);
 
   /**
-   * ATTENTION! This method doesn't start any search yet!
    * Same as {@link #findAll(String)}
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -779,13 +789,14 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.xpath(xpath))}
    * </p>
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * <p>
    * For example, {@code $("#multirowTable").$$x("./input").shouldHave(size(2));}
    * </p>
    *
    * @return list of elements inside given element matching given xpath locator
    * @see com.codeborne.selenide.commands.FindAllByXpath
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull

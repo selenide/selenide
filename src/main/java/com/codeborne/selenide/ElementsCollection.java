@@ -65,9 +65,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * Deprecated. Use {@code $$.shouldHave(size(expectedSize))} instead.
+   * @deprecated Use {@code $$.shouldHave(size(expectedSize))} instead.
    */
   @Nonnull
+  @Deprecated
   public ElementsCollection shouldHaveSize(int expectedSize) {
     return shouldHave(CollectionCondition.size(expectedSize));
   }
@@ -229,9 +230,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -241,10 +243,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #filter(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -254,9 +257,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -266,10 +270,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #exclude(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -279,9 +284,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Find the first element which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -291,10 +297,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Find the first element which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #find(Condition)
    * @param condition condition
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -367,10 +374,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Gets the n-th element of collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
    *
    * @param index 0..N
    * @return the n-th element of collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -380,10 +387,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * returns the first element of the collection
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
-   * NOTICE: $(css) is faster and returns the same result as $$(css).first()
+   * <p>
+   * returns the first element of the collection (lazy evaluation)
+   * </p>
+   *
+   * <p>
+   * NOTICE: Instead of {@code $$(css).first()}, prefer {@code $(css)} as it's faster and returns the same result
+   * </p>
+   *
    * @return the first element of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -393,8 +406,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the last element of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @return the last element of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -404,8 +418,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the first n elements of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @param elements number of elements 1..N
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -415,8 +430,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the last n elements of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @param elements number of elements 1..N
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
