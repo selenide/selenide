@@ -290,10 +290,11 @@ public class Selenide {
   }
 
   /**
-   * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates the first element matching given CSS selector (lazy evaluation)
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -302,10 +303,11 @@ public class Selenide {
   }
 
   /**
-   * Locates the first element matching given XPATH expression
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates the first element matching given XPATH expression (lazy evaluation)
+   *
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return SelenideElement which locates elements via XPath
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -314,10 +316,11 @@ public class Selenide {
   }
 
   /**
-   * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates the first element matching given CSS selector (lazy evaluation)
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -340,10 +343,11 @@ public class Selenide {
    * @see  #$(String)
    *
    * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @Nonnull
@@ -352,11 +356,12 @@ public class Selenide {
   }
 
   /**
-   * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates the Nth element matching given criteria (lazy evaluation)
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -370,11 +375,12 @@ public class Selenide {
    * @see  #$(String, int)
    *
    * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -389,10 +395,11 @@ public class Selenide {
    * @see  #$(By)
    *
    * Locates the first element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -407,11 +414,12 @@ public class Selenide {
    * @see  #$(By, int)
    *
    * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param parent the WebElement to search elements in
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -430,14 +438,15 @@ public class Selenide {
   }
 
   /**
-   * Locates all elements matching given CSS selector.
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates all elements matching given CSS selector (lazy evaluation).
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -446,13 +455,15 @@ public class Selenide {
   }
 
   /**
-   * Locates all elements matching given XPATH expression.
-   * ATTENTION! This method doesn't start any search yet!
+   * Locates all elements matching given XPATH expression (lazy evaluation)
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
+   *
    * @param xpathExpression any XPATH expression //*[@id='value'] //E[contains(@A, 'value')]
    * @return ElementsCollection which locates elements via XPath
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -462,13 +473,14 @@ public class Selenide {
 
   /**
    * Locates all elements matching given CSS selector.
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -482,7 +494,7 @@ public class Selenide {
    * @see  #$$(String)
    *
    * Locates all elements matching given CSS selector inside given parent element
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
@@ -490,6 +502,7 @@ public class Selenide {
    * @param parent the WebElement to search elements in
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -499,13 +512,14 @@ public class Selenide {
   }
 
   /**
+   * Locates all elements matching given criteria inside given parent element
+   *
    * @deprecated please use $(parent).$$(By) which is the same
    * (method will not be removed until 4.x or later)
-   * @see  #$$(By)
    *
-   * Locates all elements matching given criteria inside given parent element
-   * ATTENTION! This method doesn't start any search yet!
+   * @see #$$(By)
    * @see Selenide#$$(WebElement, String)
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -529,9 +543,10 @@ public class Selenide {
 
   /**
    * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -541,9 +556,10 @@ public class Selenide {
 
   /**
    * Locates the first element matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -553,10 +569,11 @@ public class Selenide {
 
   /**
    * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -566,10 +583,11 @@ public class Selenide {
 
   /**
    * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -592,13 +610,14 @@ public class Selenide {
 
   /**
    * Locates all elements matching given CSS selector.
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -608,13 +627,14 @@ public class Selenide {
 
   /**
    * Locates all elements matching given CSS selector.
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
    * and at the same time is implementation of WebElement interface,
    * meaning that you can call methods .sendKeys(), click() etc. on it.
    *
    * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -626,9 +646,10 @@ public class Selenide {
    * @deprecated please use element(criteria) which is the same
    * (method will not be removed until 4.x or later)
    * Locates the first element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -641,10 +662,11 @@ public class Selenide {
    * @deprecated please use element(criteria, index) which is the same
    * (method will not be removed until 4.x or later)
    * Locates the Nth element matching given criteria
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
    * @param index 0..N
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
@@ -657,9 +679,10 @@ public class Selenide {
    * @deprecated please use elements(criteria) which is the same
    * (method will not be removed until 4.x or later)
    * Locates all elements matching given CSS selector
-   * ATTENTION! This method doesn't start any search yet!
+   *
    * @param criteria instance of By: By.id(), By.className() etc.
    * @return empty list if element was no found
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @Deprecated
   @CheckReturnValue
