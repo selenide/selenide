@@ -122,6 +122,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return The innerText of this element
    * @see com.codeborne.selenide.commands.GetText
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -144,6 +145,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see WebElement#getText()
    * @see com.codeborne.selenide.commands.GetText
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -153,6 +155,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Get the text of the element WITHOUT children.
    *
    * @see com.codeborne.selenide.commands.GetOwnText
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -166,6 +169,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Short form of getAttribute("textContent") or getAttribute("innerText") depending on browser.
    * <p>
    * @see com.codeborne.selenide.commands.GetInnerText
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -179,6 +183,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Short form of getAttribute("innerHTML")
    * <p>
    * @see com.codeborne.selenide.commands.GetInnerHtml
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -189,6 +194,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return null if attribute is missing
    * @see com.codeborne.selenide.commands.GetAttribute
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -199,6 +205,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return attribute "name" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.GetName
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -210,6 +217,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return attribute "value" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.Val
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -221,6 +229,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return attribute "value" value or null if attribute is missing
    * @see com.codeborne.selenide.commands.GetValue
    * @since 3.1
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -234,6 +243,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param propertyName      property name of the pseudo-element
    * @return the property value or "" if the property is missing
    * @see com.codeborne.selenide.commands.GetPseudoValue
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -245,6 +255,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
    * @return the content value or "none" if the content is missing
    * @see com.codeborne.selenide.commands.GetPseudoValue
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -265,6 +276,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Get value of attribute "data-<i>dataAttributeName</i>"
    *
    * @see com.codeborne.selenide.commands.GetDataAttribute
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -272,6 +284,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * {@inheritDoc}
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
   @Nullable
@@ -280,6 +293,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
 
   /**
    * {@inheritDoc}
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
   @Nonnull
@@ -291,6 +305,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return false if element is not found, browser is closed or any WebDriver exception happened
    * @see com.codeborne.selenide.commands.Exists
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   boolean exists();
@@ -299,6 +314,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Check if this element exists and visible.
    *
    * @return false if element does not exists, is invisible, browser is closed or any WebDriver exception happened.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
   @CheckReturnValue
@@ -307,10 +323,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   /**
    * immediately returns true if element matches given condition
    * Method doesn't wait!
+   *
    * WARNING: This method can help implementing crooks, but it is not needed for typical ui tests.
    *
    * @see #has
    * @see com.codeborne.selenide.commands.Matches
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   boolean is(Condition condition);
@@ -322,6 +340,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see #is
    * @see com.codeborne.selenide.commands.Matches
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   boolean has(Condition condition);
@@ -868,6 +887,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return WebElement for selected &lt;option&gt; element
    * @throws NoSuchElementException if no options are selected
    * @see com.codeborne.selenide.commands.GetSelectedOption
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -878,6 +898,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @return ElementsCollection for selected &lt;option&gt; elements (empty list if no options are selected)
    * @see com.codeborne.selenide.commands.GetSelectedOptions
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -888,6 +909,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    *
    * @see com.codeborne.selenide.commands.GetSelectedValue
    * @return null if the selected option doesn't have "value" attribute
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nullable
@@ -897,6 +919,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * Get text of selected option in select field
    *
    * @see com.codeborne.selenide.commands.GetSelectedText
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -1196,6 +1219,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @throws IllegalArgumentException if argument is not an "img" element
    * @see com.codeborne.selenide.commands.IsImage
    * @since 2.13
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   boolean isImage();
 
