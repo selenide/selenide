@@ -318,6 +318,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the texts in elements collection
    * @return array of texts
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -347,7 +348,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Outputs string presentation of the element's collection
    * @param elements elements of string
-   * @return String
+   * @return e.g. "[<h1>foo</h1>, <h2>bar</h2>]"
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -441,8 +443,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
+   * <p>
    * return actual size of the collection, doesn't wait on collection to be loaded.
-   * ATTENTION not recommended for use in tests. Use collection.shouldHave(size(n)); for assertions instead.
+   * </p>
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @return actual size of the collection
    */
   @CheckReturnValue
@@ -455,6 +460,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
+  /**
+   * Does not reload collection elements while iterating it.
+   * Not recommended to use.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull
@@ -462,6 +472,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new SelenideElementIterator(fetch());
   }
 
+  /**
+   * Does not reload collection elements while iterating it.
+   * Not recommended to use.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull
@@ -474,6 +489,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new WebElementsCollectionWrapper(driver(), fetchedElements);
   }
 
+  /**
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull
