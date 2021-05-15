@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.21.0 (planned to 0x.05.2021)
+## 5.21.0 (released 15.05.2021)
+* #1055 Avoid multiple screenshots for chained locators  --  see PR #1465
 * #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450
 * #1447 Add hover with offset  --  see PR #1461
+* #1464 upgrade to WebDriverManager 4.4.3  --  thanks to Anil Kumar Reddy Gaddam
+* #1469 upgrade to httpclient to 5.1  --  thanks to Anil Kumar Reddy Gaddam
+* #1430 javadoc: improve description of lazy loading in many Selenide methods
 
 ## 5.20.4 (released 22.04.2021)
 * #1456 upgrade to WebDriverManager 4.4.1  --  thanks to Anil Kumar Reddy Gaddam
