@@ -28,6 +28,14 @@ public class WebElementSelector {
 
   @CheckReturnValue
   @Nonnull
+  public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector, int index) {
+    return index == 0 ?
+      findElement(driver, parent, selector) :
+      findElements(driver, parent, selector).get(index);
+  }
+
+  @CheckReturnValue
+  @Nonnull
   public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
     SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);

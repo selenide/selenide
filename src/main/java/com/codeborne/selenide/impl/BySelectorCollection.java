@@ -15,7 +15,8 @@ import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class BySelectorCollection implements CollectionSource {
-  private static final ElementDescriber describe = inject(ElementDescriber.class);
+  private final WebElementSelector elementSelector = inject(WebElementSelector.class);
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   private final Driver driver;
   private final WebElementSource parent;
@@ -36,17 +37,14 @@ public class BySelectorCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public List<WebElement> getElements() {
-    return WebElementSelector.instance.findElements(driver, parent, selector);
+    return elementSelector.findElements(driver, parent, selector);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebElement getElement(int index) {
-    if (index == 0) {
-      return WebElementSelector.instance.findElement(driver, parent, selector);
-    }
-    return WebElementSelector.instance.findElements(driver, parent, selector).get(index);
+    return elementSelector.findElement(driver, parent, selector, index);
   }
 
   @Override
