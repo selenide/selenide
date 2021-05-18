@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class WebElementSelector {
 
   @CheckReturnValue
   @Nonnull
-  public WebElement findElement(Driver driver, SearchContext context, By selector) {
+  public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
+    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -43,7 +45,8 @@ public class WebElementSelector {
 
   @CheckReturnValue
   @Nonnull
-  public List<WebElement> findElements(Driver driver, SearchContext context, By selector) {
+  public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
+    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {

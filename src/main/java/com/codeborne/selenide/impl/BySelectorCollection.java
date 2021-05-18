@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -37,19 +36,17 @@ public class BySelectorCollection implements CollectionSource {
   @CheckReturnValue
   @Nonnull
   public List<WebElement> getElements() {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent.getWebElement();
-    return WebElementSelector.instance.findElements(driver, searchContext, selector);
+    return WebElementSelector.instance.findElements(driver, parent, selector);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebElement getElement(int index) {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent.getWebElement();
     if (index == 0) {
-      return WebElementSelector.instance.findElement(driver, searchContext, selector);
+      return WebElementSelector.instance.findElement(driver, parent, selector);
     }
-    return WebElementSelector.instance.findElements(driver, searchContext, selector).get(index);
+    return WebElementSelector.instance.findElements(driver, parent, selector).get(index);
   }
 
   @Override

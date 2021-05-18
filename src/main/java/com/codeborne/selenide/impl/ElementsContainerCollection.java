@@ -6,7 +6,6 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -56,8 +55,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @Override
   public int size() {
     try {
-      SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
-      return WebElementSelector.instance.findElements(driver, context, selector).size();
+      return WebElementSelector.instance.findElements(driver, parent, selector).size();
     }
     catch (NoSuchElementException e) {
       throw new ElementNotFound(driver, selector.toString(), exist, e);
