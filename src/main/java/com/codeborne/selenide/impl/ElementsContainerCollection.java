@@ -16,9 +16,11 @@ import java.lang.reflect.Type;
 import java.util.AbstractList;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
 public class ElementsContainerCollection extends AbstractList<ElementsContainer> {
+  private final WebElementSelector elementSelector = inject(WebElementSelector.class);
   private final PageObjectFactory pageFactory;
   private final Driver driver;
   private final WebElementSource parent;
@@ -55,7 +57,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @Override
   public int size() {
     try {
-      return WebElementSelector.instance.findElements(driver, parent, selector).size();
+      return elementSelector.findElements(driver, parent, selector).size();
     }
     catch (NoSuchElementException e) {
       throw new ElementNotFound(driver, selector.toString(), exist, e);

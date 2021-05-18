@@ -21,6 +21,7 @@ import static java.lang.Thread.currentThread;
 
 @ParametersAreNonnullByDefault
 public class ElementFinder extends WebElementSource {
+  private final WebElementSelector elementSelector = inject(WebElementSelector.class);
   private final ElementDescriber describe = inject(ElementDescriber.class);
 
   @CheckReturnValue
@@ -83,8 +84,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return arg instanceof By ?
-        wrap(driver, this, (By) arg, index) :
-        wrap(driver, this, By.cssSelector((String) arg), index);
+      wrap(driver, this, (By) arg, index) :
+      wrap(driver, this, By.cssSelector((String) arg), index);
   }
 
   @Override
@@ -98,9 +99,7 @@ public class ElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public WebElement getWebElement() throws NoSuchElementException, IndexOutOfBoundsException {
-    return index == 0 ?
-        WebElementSelector.instance.findElement(driver, parent, criteria) :
-        WebElementSelector.instance.findElements(driver, parent, criteria).get(index);
+    return elementSelector.findElement(driver, parent, criteria, index);
   }
 
   @Override
@@ -108,8 +107,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public List<WebElement> findAll() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
-        WebElementSelector.instance.findElements(driver(), parent, criteria) :
-        super.findAll();
+      elementSelector.findElements(driver(), parent, criteria) :
+      super.findAll();
   }
 
   @Override
