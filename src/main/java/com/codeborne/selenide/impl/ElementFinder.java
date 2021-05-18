@@ -6,7 +6,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -100,8 +99,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public WebElement getWebElement() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
-        WebElementSelector.instance.findElement(driver, getSearchContext(), criteria) :
-        WebElementSelector.instance.findElements(driver, getSearchContext(), criteria).get(index);
+        WebElementSelector.instance.findElement(driver, parent, criteria) :
+        WebElementSelector.instance.findElements(driver, parent, criteria).get(index);
   }
 
   @Override
@@ -109,14 +108,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public List<WebElement> findAll() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
-        WebElementSelector.instance.findElements(driver(), getSearchContext(), criteria) :
+        WebElementSelector.instance.findElements(driver(), parent, criteria) :
         super.findAll();
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private SearchContext getSearchContext() {
-    return parent == null ? driver().getWebDriver() : parent.getWebElement();
   }
 
   @Override
