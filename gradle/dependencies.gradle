@@ -39,6 +39,7 @@ dependencies {
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  implementation(group: 'org.awaitility', name: 'awaitility', version: '4.1.0')
 }
 
 allprojects {
