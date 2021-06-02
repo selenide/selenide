@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -39,18 +39,18 @@ public class DownloadFileWithProxyServer {
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
-                       Consumer<Driver> afterClick) throws FileNotFoundException {
+                       BiConsumer<Driver, WebElement> action) throws FileNotFoundException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, afterClick)
+      clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action)
     );
   }
 
   @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   long timeout, FileFilter fileFilter,
-                                                  Consumer<Driver> afterClick) throws FileNotFoundException {
+                                                  BiConsumer<Driver, WebElement> action) throws FileNotFoundException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     if (!config.proxyEnabled()) {
@@ -72,8 +72,7 @@ public class DownloadFileWithProxyServer {
       waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
 
       filter.reset();
-      clickable.click();
-      afterClick.accept(driver);
+      action.accept(driver, clickable);
 
       waiter.wait(filter, new HasDownloads(fileFilter), timeout, config.pollingInterval());
 

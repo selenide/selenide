@@ -1,8 +1,9 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
+import org.openqa.selenium.WebElement;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static com.codeborne.selenide.files.FileFilters.none;
 
@@ -12,13 +13,13 @@ public class DownloadOptions {
   private final FileDownloadMode method;
   private final long timeout;
   private final FileFilter filter;
-  private final Consumer<Driver> actionAfterClick;
+  private final BiConsumer<Driver, WebElement> action;
 
-  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, Consumer<Driver> actionAfterClick) {
+  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, BiConsumer<Driver, WebElement> action) {
     this.method = method;
     this.timeout = timeout;
     this.filter = filter;
-    this.actionAfterClick = actionAfterClick;
+    this.action = action;
   }
 
   public FileDownloadMode getMethod() {
@@ -37,20 +38,29 @@ public class DownloadOptions {
     return filter;
   }
 
-  public Consumer<Driver> getActionAfterClick() {
-    return actionAfterClick;
+  public BiConsumer<Driver, WebElement> getAction() {
+    return action;
   }
 
   public DownloadOptions withTimeout(long timeout) {
-    return new DownloadOptions(method, timeout, filter, actionAfterClick);
+    return new DownloadOptions(method, timeout, filter, action);
   }
 
   public DownloadOptions withFilter(FileFilter filter) {
-    return new DownloadOptions(method, timeout, filter, actionAfterClick);
+    return new DownloadOptions(method, timeout, filter, action);
   }
 
-  public DownloadOptions afterClick(Consumer<Driver> actionAfterClick) {
-    return new DownloadOptions(method, timeout, filter, actionAfterClick);
+  /**
+   * An user action to start the downloading process.
+   * By default it's a click.
+   *
+   * Use this method if you need to close some alert before downloading file etc.
+   *
+   * @param action any lambda accepting a Driver and WebElement (the element being clicked).
+   * @return DownloadOptions
+   */
+  public DownloadOptions withAction(BiConsumer<Driver, WebElement> action) {
+    return new DownloadOptions(method, timeout, filter, action);
   }
 
   @Override
@@ -66,11 +76,12 @@ public class DownloadOptions {
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), noAction());
+    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), performClick());
   }
 
-  public static Consumer<Driver> noAction() {
-    return driver -> {
+  public static BiConsumer<Driver, WebElement> performClick() {
+    return (driver, link) -> {
+      link.click();
     };
   }
 }

@@ -51,7 +51,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithAlert() throws IOException {
-    File downloadedFile = $(byText("Download me with alert")).download(using(FOLDER).afterClick(driver -> {
+    File downloadedFile = $(byText("Download me with alert")).download(using(FOLDER).withAction((driver, link) -> {
+      link.click();
       Alert alert = driver.switchTo().alert();
       assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
       alert.dismiss();
@@ -79,7 +80,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
+    open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
 
     assertThat(video.getName()).isEqualTo("some-file.txt");
@@ -125,7 +126,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
     String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
-    ;
     downloadsFolder = customDownloadsFolder;
 
     try {

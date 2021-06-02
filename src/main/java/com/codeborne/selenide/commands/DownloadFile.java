@@ -58,10 +58,10 @@ public class DownloadFile implements Command<File> {
         return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
       }
       case PROXY: {
-        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getActionAfterClick());
+        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
       }
       case FOLDER: {
-        return downloadFileToFolder.download(linkWithHref, link, timeout, options.getFilter(), options.getActionAfterClick());
+        return downloadFileToFolder.download(linkWithHref, link, timeout, options.getFilter(), options.getAction());
       }
       default: {
         throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());

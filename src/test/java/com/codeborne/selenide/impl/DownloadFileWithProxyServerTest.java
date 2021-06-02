@@ -18,7 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.DownloadOptions.noAction;
+import static com.codeborne.selenide.DownloadOptions.performClick;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static java.util.Collections.emptyMap;
@@ -56,7 +56,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
   void canInterceptFileViaProxyServer() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, 3000, none(), noAction());
+    File file = command.download(linkWithHref, link, 3000, none(), performClick());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
     verify(filter).activate();
@@ -68,7 +68,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
   void closesNewWindowIfFileWasOpenedInSeparateWindow() throws IOException {
     emulateServerResponseWithFiles(new File("report.pdf"));
 
-    File file = command.download(linkWithHref, link, 3000, none(), noAction());
+    File file = command.download(linkWithHref, link, 3000, none(), performClick());
 
     assertThat(file.getName()).isEqualTo("report.pdf");
     verify(windowsCloser).runAndCloseArisedWindows(same(webdriver), any());
@@ -78,7 +78,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
   void throwsFileNotFoundExceptionIfNoFilesHaveBeenDownloadedAfterClick() {
     emulateServerResponseWithFiles();
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), noAction()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), performClick()))
       .isInstanceOf(FileNotFoundException.class)
       .hasMessageStartingWith("Failed to download file <a href='report.pdf'>report</a>");
   }
@@ -88,7 +88,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
     config.proxyEnabled(false);
     config.fileDownload(PROXY);
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), noAction()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), performClick()))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("Cannot download file: proxy server is not enabled");
   }
@@ -98,7 +98,7 @@ final class DownloadFileWithProxyServerTest implements WithAssertions {
     SelenideConfig config = new SelenideConfig().proxyEnabled(true).fileDownload(PROXY);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, mock(Browser.class), new DummyWebDriver(), null));
 
-    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), noAction()))
+    assertThatThrownBy(() -> command.download(linkWithHref, link, 3000, none(), performClick()))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("Cannot download file: proxy server is not started");
   }
