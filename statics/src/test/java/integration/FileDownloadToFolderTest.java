@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import java.io.File;
@@ -39,6 +40,22 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFiles() throws IOException {
     File downloadedFile = $(byText("Download me")).download();
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download(using(FOLDER).afterClick(driver -> {
+      Alert alert = driver.switchTo().alert();
+      assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
+      alert.dismiss();
+    }));
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.txt");
@@ -107,7 +124,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
-    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();;
+    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
+    ;
     downloadsFolder = customDownloadsFolder;
 
     try {

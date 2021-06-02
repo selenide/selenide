@@ -2,6 +2,8 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
 
+import java.util.function.Consumer;
+
 import static com.codeborne.selenide.files.FileFilters.none;
 
 public class DownloadOptions {
@@ -10,11 +12,13 @@ public class DownloadOptions {
   private final FileDownloadMode method;
   private final long timeout;
   private final FileFilter filter;
+  private final Consumer<Driver> actionAfterClick;
 
-  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter) {
+  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, Consumer<Driver> actionAfterClick) {
     this.method = method;
     this.timeout = timeout;
     this.filter = filter;
+    this.actionAfterClick = actionAfterClick;
   }
 
   public FileDownloadMode getMethod() {
@@ -33,12 +37,20 @@ public class DownloadOptions {
     return filter;
   }
 
+  public Consumer<Driver> getActionAfterClick() {
+    return actionAfterClick;
+  }
+
   public DownloadOptions withTimeout(long timeout) {
-    return new DownloadOptions(method, timeout, filter);
+    return new DownloadOptions(method, timeout, filter, actionAfterClick);
   }
 
   public DownloadOptions withFilter(FileFilter filter) {
-    return new DownloadOptions(method, timeout, filter);
+    return new DownloadOptions(method, timeout, filter, actionAfterClick);
+  }
+
+  public DownloadOptions afterClick(Consumer<Driver> actionAfterClick) {
+    return new DownloadOptions(method, timeout, filter, actionAfterClick);
   }
 
   @Override
@@ -54,6 +66,11 @@ public class DownloadOptions {
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none());
+    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), noAction());
+  }
+
+  public static Consumer<Driver> noAction() {
+    return driver -> {
+    };
   }
 }

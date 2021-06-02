@@ -1,6 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
+import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
@@ -52,7 +53,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none());
+    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none(), DownloadOptions.noAction());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());

@@ -19,6 +19,7 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 
+import static com.codeborne.selenide.DownloadOptions.noAction;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.FileFilters.none;
@@ -66,12 +67,12 @@ final class DownloadFileTest implements WithAssertions {
     config.proxyEnabled(true).fileDownload(PROXY);
     SelenideProxyServer selenideProxy = mock(SelenideProxyServer.class);
     when(linkWithHref.driver()).thenReturn(new DriverStub(config, null, null, selenideProxy));
-    when(proxy.download(any(), any(), anyLong(), any())).thenReturn(file);
+    when(proxy.download(any(), any(), anyLong(), any(), any())).thenReturn(file);
 
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});
 
     assertThat(f).isSameAs(file);
-    verify(proxy).download(linkWithHref, link, 9000L, none());
+    verify(proxy).download(linkWithHref, link, 9000L, none(), noAction());
     verifyNoMoreInteractions(httpget);
   }
 

@@ -66,6 +66,13 @@ final class FileDownloadViaHttpGetTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download();
+
+    assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");
+  }
+
+  @Test
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
