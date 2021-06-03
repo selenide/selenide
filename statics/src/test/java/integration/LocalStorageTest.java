@@ -25,7 +25,6 @@ final class LocalStorageTest extends IntegrationTest {
   void setAndGetItem() {
     Selenide.localStorage().setItem("cat", "Tom");
     Selenide.localStorage().setItem("mouse", "Jerry");
-
     Selenide.localStorage().should(itemHasValue("cat","Tom"),"Item 'cat' value doesn't match", ofMillis(10000));
     Selenide.localStorage().should(itemHasValue("mouse","Jerry"),"Item 'mouse' value doesn't match");
   }
