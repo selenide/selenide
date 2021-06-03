@@ -3,7 +3,6 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import java.io.File;
@@ -19,6 +18,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
@@ -51,12 +51,11 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithAlert() throws IOException {
-    File downloadedFile = $(byText("Download me with alert")).download(using(FOLDER).withAction((driver, link) -> {
-      link.click();
-      Alert alert = driver.switchTo().alert();
-      assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
-      alert.dismiss();
-    }));
+    File downloadedFile = $(byText("Download me with alert")).download(
+      using(FOLDER).withAction(
+        clickAndConfirm("Are you sure to download it?")
+      )
+    );
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.txt");

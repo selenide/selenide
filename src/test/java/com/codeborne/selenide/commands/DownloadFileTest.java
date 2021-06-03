@@ -19,9 +19,9 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 
-import static com.codeborne.selenide.DownloadOptions.performClick;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
+import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -72,7 +72,7 @@ final class DownloadFileTest implements WithAssertions {
     File f = command.execute(seLink, linkWithHref, new Object[]{9000L});
 
     assertThat(f).isSameAs(file);
-    verify(proxy).download(linkWithHref, link, 9000L, none(), performClick());
+    verify(proxy).download(linkWithHref, link, 9000L, none(), click());
     verifyNoMoreInteractions(httpget);
   }
 

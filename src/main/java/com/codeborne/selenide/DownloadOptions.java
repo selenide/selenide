@@ -1,10 +1,9 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
-import org.openqa.selenium.WebElement;
 
-import java.util.function.BiConsumer;
-
+import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 
 public class DownloadOptions {
@@ -13,9 +12,9 @@ public class DownloadOptions {
   private final FileDownloadMode method;
   private final long timeout;
   private final FileFilter filter;
-  private final BiConsumer<Driver, WebElement> action;
+  private final DownloadAction action;
 
-  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, BiConsumer<Driver, WebElement> action) {
+  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, DownloadAction action) {
     this.method = method;
     this.timeout = timeout;
     this.filter = filter;
@@ -38,7 +37,7 @@ public class DownloadOptions {
     return filter;
   }
 
-  public BiConsumer<Driver, WebElement> getAction() {
+  public DownloadAction getAction() {
     return action;
   }
 
@@ -59,7 +58,7 @@ public class DownloadOptions {
    * @param action any lambda accepting a Driver and WebElement (the element being clicked).
    * @return DownloadOptions
    */
-  public DownloadOptions withAction(BiConsumer<Driver, WebElement> action) {
+  public DownloadOptions withAction(DownloadAction action) {
     return new DownloadOptions(method, timeout, filter, action);
   }
 
@@ -76,12 +75,6 @@ public class DownloadOptions {
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), performClick());
-  }
-
-  public static BiConsumer<Driver, WebElement> performClick() {
-    return (driver, link) -> {
-      link.click();
-    };
+    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), click());
   }
 }

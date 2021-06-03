@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
-import com.codeborne.selenide.DownloadOptions;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
@@ -16,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 
+import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.impl.DownloadFileToFolder.isFileModifiedLaterThan;
 import static java.io.File.createTempFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -53,7 +53,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none(), DownloadOptions.performClick());
+    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none(), click());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());

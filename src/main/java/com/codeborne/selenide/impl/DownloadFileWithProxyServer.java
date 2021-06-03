@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -15,7 +16,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -39,7 +39,7 @@ public class DownloadFileWithProxyServer {
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
                        FileFilter fileFilter,
-                       BiConsumer<Driver, WebElement> action) throws FileNotFoundException {
+                       DownloadAction action) throws FileNotFoundException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
@@ -50,7 +50,7 @@ public class DownloadFileWithProxyServer {
   @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
                                                   long timeout, FileFilter fileFilter,
-                                                  BiConsumer<Driver, WebElement> action) throws FileNotFoundException {
+                                                  DownloadAction action) throws FileNotFoundException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     if (!config.proxyEnabled()) {
@@ -72,7 +72,7 @@ public class DownloadFileWithProxyServer {
       waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
 
       filter.reset();
-      action.accept(driver, clickable);
+      action.perform(driver, clickable);
 
       waiter.wait(filter, new HasDownloads(fileFilter), timeout, config.pollingInterval());
 
