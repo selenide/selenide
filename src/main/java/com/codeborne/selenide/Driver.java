@@ -4,6 +4,9 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -94,5 +97,18 @@ public interface Driver {
   @Nonnull
   default Actions actions() {
     return new Actions(getWebDriver());
+  }
+
+  @CheckReturnValue
+  @Nullable
+  default SessionId getSessionId() {
+    WebDriver driver = getWebDriver();
+    if (getWebDriver() instanceof EventFiringWebDriver) {
+      driver = ((EventFiringWebDriver) getWebDriver()).getWrappedDriver();
+    }
+    if (driver instanceof RemoteWebDriver) {
+      return ((RemoteWebDriver) driver).getSessionId();
+    }
+    return null;
   }
 }
