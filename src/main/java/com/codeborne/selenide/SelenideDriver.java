@@ -386,7 +386,7 @@ public class SelenideDriver {
   }
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   public SessionId getSessionId() {
     return driver().getSessionId();
   }

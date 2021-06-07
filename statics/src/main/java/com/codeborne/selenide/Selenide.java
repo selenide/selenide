@@ -1062,7 +1062,7 @@ public class Selenide {
    *
    * @return SessionId
    */
-  @Nullable
+  @Nonnull
   @CheckReturnValue
   public static SessionId sessionId(){
     return getSelenideDriver().getSessionId();

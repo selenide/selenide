@@ -100,15 +100,12 @@ public interface Driver {
   }
 
   @CheckReturnValue
-  @Nullable
+  @Nonnull
   default SessionId getSessionId() {
     WebDriver driver = getWebDriver();
-    if (getWebDriver() instanceof EventFiringWebDriver) {
-      driver = ((EventFiringWebDriver) getWebDriver()).getWrappedDriver();
+    if (driver instanceof EventFiringWebDriver) {
+      driver = ((EventFiringWebDriver) driver).getWrappedDriver();
     }
-    if (driver instanceof RemoteWebDriver) {
-      return ((RemoteWebDriver) driver).getSessionId();
-    }
-    return null;
+    return ((RemoteWebDriver) driver).getSessionId();
   }
 }
