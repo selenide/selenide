@@ -20,7 +20,7 @@ public class JavaScript {
   @Nonnull
   @SuppressWarnings("unchecked")
   public <T> T execute(SearchContext context, Object... arguments) {
-    String js = "return " + jsSource.content() + "(arguments[0], arguments[1])";
+    String js = "return " + jsSource.content();
     return (T) jsExecutor(context).executeScript(js, arguments);
   }
 
