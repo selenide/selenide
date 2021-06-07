@@ -1,7 +1,6 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,18 +16,10 @@ import static org.mockito.Mockito.when;
 final class TextCaseSensitiveTest {
 
   private final Driver driver = mock(Driver.class);
-  private WebElement elementShort;
-  private WebElement elementLong;
-  private WebElement singleSelectElement;
-  private WebElement multiSelectElement;
-
-  @BeforeEach
-  void setUp() {
-    elementShort = elementWithText("One");
-    elementLong = elementWithText("ZeroOneTwo");
-    singleSelectElement = selectSingle("One", "Two", "Three"); // only the first element is selected
-    multiSelectElement = selectMulti("One", "Two", "Three");  //  all elements are selected
-  }
+  private final WebElement elementShort = elementWithText("One");
+  private final WebElement elementLong = elementWithText("ZeroOneTwo");
+  private final WebElement singleSelectElement = selectSingle("One", "Two", "Three"); // only the first element is selected
+  private final WebElement multiSelectElement = selectMulti("One", "Two", "Three");  //  all elements are selected
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {

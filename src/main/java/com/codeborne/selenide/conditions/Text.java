@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @ParametersAreNonnullByDefault
@@ -34,11 +35,7 @@ public class Text extends Condition {
 
   private String getSelectedOptionsTexts(WebElement element) {
     List<WebElement> selectedOptions = new Select(element).getAllSelectedOptions();
-    StringBuilder sb = new StringBuilder();
-    for (WebElement selectedOption : selectedOptions) {
-      sb.append(selectedOption.getText());
-    }
-    return sb.toString();
+    return selectedOptions.stream().map(WebElement::getText).collect(joining());
   }
 
   @Override

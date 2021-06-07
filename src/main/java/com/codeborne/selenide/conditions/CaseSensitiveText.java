@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.Select;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static java.util.stream.Collectors.joining;
+
 @ParametersAreNonnullByDefault
 public class CaseSensitiveText extends Condition {
   private final String expectedText;
@@ -28,11 +30,7 @@ public class CaseSensitiveText extends Condition {
 
   private String getSelectedOptionsTexts(WebElement element) {
     List<WebElement> selectedOptions = new Select(element).getAllSelectedOptions();
-    StringBuilder sb = new StringBuilder();
-    for (WebElement selectedOption : selectedOptions) {
-      sb.append(selectedOption.getText());
-    }
-    return sb.toString();
+    return selectedOptions.stream().map(WebElement::getText).collect(joining());
   }
 
   @Override
