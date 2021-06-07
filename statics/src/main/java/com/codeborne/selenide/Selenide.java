@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.remote.SessionId;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1054,5 +1055,16 @@ public class Selenide {
   @CheckReturnValue
   public static Clipboard clipboard() {
     return getSelenideDriver().getClipboard();
+  }
+
+  /**
+   * Get current browser session Id
+   *
+   * @return SessionId
+   */
+  @Nonnull
+  @CheckReturnValue
+  public static SessionId sessionId(){
+    return getSelenideDriver().getSessionId();
   }
 }

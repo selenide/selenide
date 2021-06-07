@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import javax.annotation.CheckReturnValue;
@@ -382,6 +383,12 @@ public class SelenideDriver {
   @Nonnull
   public String getUserAgent() {
     return driver().getUserAgent();
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public SessionId getSessionId() {
+    return driver().getSessionId();
   }
 
   /**

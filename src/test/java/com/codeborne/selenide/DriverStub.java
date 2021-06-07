@@ -4,6 +4,7 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.SessionId;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -112,6 +113,13 @@ public class DriverStub implements Driver {
   @Nonnull
   public String getUserAgent() {
     return "zhopera";
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public SessionId getSessionId() {
+    return new SessionId("testSession");
   }
 
   @Override
