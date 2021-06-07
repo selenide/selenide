@@ -14,4 +14,4 @@
   }
 
   return nodeList;
-})
+})(...arguments)
