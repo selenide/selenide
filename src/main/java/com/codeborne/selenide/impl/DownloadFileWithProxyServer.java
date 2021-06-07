@@ -1,6 +1,8 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.proxy.FileDownloadFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
@@ -36,23 +38,26 @@ public class DownloadFileWithProxyServer {
   @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
-                       FileFilter fileFilter) throws FileNotFoundException {
+                       FileFilter fileFilter,
+                       DownloadAction action) throws FileNotFoundException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter)
+      clickAndInterceptFileByProxyServer(anyClickableElement, clickable, timeout, fileFilter, action)
     );
   }
 
   @Nonnull
   private File clickAndInterceptFileByProxyServer(WebElementSource anyClickableElement, WebElement clickable,
-                                                  long timeout, FileFilter fileFilter) throws FileNotFoundException {
-    Config config = anyClickableElement.driver().config();
+                                                  long timeout, FileFilter fileFilter,
+                                                  DownloadAction action) throws FileNotFoundException {
+    Driver driver = anyClickableElement.driver();
+    Config config = driver.config();
     if (!config.proxyEnabled()) {
       throw new IllegalStateException("Cannot download file: proxy server is not enabled. Setup proxyEnabled");
     }
 
-    SelenideProxyServer proxyServer = anyClickableElement.driver().getProxy();
+    SelenideProxyServer proxyServer = driver.getProxy();
     if (proxyServer == null) {
       throw new IllegalStateException("Cannot download file: proxy server is not started");
     }
@@ -67,7 +72,7 @@ public class DownloadFileWithProxyServer {
       waiter.wait(filter, new PreviousDownloadsCompleted(), timeout, config.pollingInterval());
 
       filter.reset();
-      clickable.click();
+      action.perform(driver, clickable);
 
       waiter.wait(filter, new HasDownloads(fileFilter), timeout, config.pollingInterval());
 

@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import java.io.File;
@@ -48,6 +49,23 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download(using(PROXY).withAction((driver, link) -> {
+      link.click();
+      Alert alert = driver.switchTo().alert();
+      assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
+      alert.dismiss();
+    }));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
@@ -74,7 +92,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
+    open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
     assertThat(video.getName())
       .isEqualTo("some-file.txt");

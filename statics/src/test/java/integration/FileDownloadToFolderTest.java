@@ -18,6 +18,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
@@ -49,6 +50,22 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download(
+      using(FOLDER).withAction(
+        clickAndConfirm("Are you sure to download it?")
+      )
+    );
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadsFileWithCyrillicName() throws IOException {
     File downloadedFile = $(byText("Download file with cyrillic name")).download();
 
@@ -62,7 +79,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
+    open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
 
     assertThat(video.getName()).isEqualTo("some-file.txt");
@@ -107,7 +124,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
-    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();;
+    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
     downloadsFolder = customDownloadsFolder;
 
     try {

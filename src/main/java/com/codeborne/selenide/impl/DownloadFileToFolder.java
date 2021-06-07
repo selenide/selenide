@@ -3,8 +3,9 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
+import com.codeborne.selenide.files.FileFilter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -44,11 +45,12 @@ public class DownloadFileToFolder {
   @Nonnull
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
-                       FileFilter fileFilter) throws FileNotFoundException {
+                       FileFilter fileFilter,
+                       DownloadAction action) throws FileNotFoundException {
 
     WebDriver webDriver = anyClickableElement.driver().getWebDriver();
     return windowsCloser.runAndCloseArisedWindows(webDriver, () ->
-      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, fileFilter)
+      clickAndWaitForNewFilesInDownloadsFolder(anyClickableElement, clickable, timeout, fileFilter, action)
     );
   }
 
@@ -56,7 +58,8 @@ public class DownloadFileToFolder {
   @Nonnull
   private File clickAndWaitForNewFilesInDownloadsFolder(WebElementSource anyClickableElement, WebElement clickable,
                                                         long timeout,
-                                                        FileFilter fileFilter) throws FileNotFoundException {
+                                                        FileFilter fileFilter,
+                                                        DownloadAction action) throws FileNotFoundException {
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     DownloadsFolder folder = driver.browserDownloadsFolder();
@@ -68,7 +71,7 @@ public class DownloadFileToFolder {
     folder.cleanupBeforeDownload();
     long downloadStartedAt = System.currentTimeMillis();
 
-    clickable.click();
+    action.perform(driver, clickable);
 
     Downloads newDownloads = waitForNewFiles(timeout, fileFilter, config, folder, downloadStartedAt);
     File downloadedFile = newDownloads.firstDownloadedFile(anyClickableElement.toString(), timeout, fileFilter);

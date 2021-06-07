@@ -1,7 +1,9 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 
+import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 
 public class DownloadOptions {
@@ -10,11 +12,13 @@ public class DownloadOptions {
   private final FileDownloadMode method;
   private final long timeout;
   private final FileFilter filter;
+  private final DownloadAction action;
 
-  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter) {
+  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter, DownloadAction action) {
     this.method = method;
     this.timeout = timeout;
     this.filter = filter;
+    this.action = action;
   }
 
   public FileDownloadMode getMethod() {
@@ -33,12 +37,29 @@ public class DownloadOptions {
     return filter;
   }
 
+  public DownloadAction getAction() {
+    return action;
+  }
+
   public DownloadOptions withTimeout(long timeout) {
-    return new DownloadOptions(method, timeout, filter);
+    return new DownloadOptions(method, timeout, filter, action);
   }
 
   public DownloadOptions withFilter(FileFilter filter) {
-    return new DownloadOptions(method, timeout, filter);
+    return new DownloadOptions(method, timeout, filter, action);
+  }
+
+  /**
+   * An user action to start the downloading process.
+   * By default it's a click.
+   *
+   * Use this method if you need to close some alert before downloading file etc.
+   *
+   * @param action any lambda accepting a Driver and WebElement (the element being clicked).
+   * @return DownloadOptions
+   */
+  public DownloadOptions withAction(DownloadAction action) {
+    return new DownloadOptions(method, timeout, filter, action);
   }
 
   @Override
@@ -54,6 +75,6 @@ public class DownloadOptions {
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none());
+    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), click());
   }
 }
