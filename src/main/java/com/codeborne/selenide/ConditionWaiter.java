@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.SoftAssertionError;
+import com.codeborne.selenide.ex.ConditionNotMatchException;
 import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class ConditionWaiter {
         .pollInSameThread()
         .until(() -> checkUnThrowable(conditional, predicate));
     } catch (ConditionTimeoutException e) {
-      throw new SoftAssertionError(message);
+      throw new ConditionNotMatchException(message);
     }
   }
 
