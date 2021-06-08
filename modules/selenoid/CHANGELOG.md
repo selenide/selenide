@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3 (released 08.06.2021)
+* #10 fix ClassCastException when using EventFiringDriver
+* #10 upgrade to Selenide 5.22.0
+
 ## 1.1.2 (released 11.05.2021)
 * #9 add support for BasicAuth when downloading files from Selenoid
 
