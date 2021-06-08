@@ -3,13 +3,13 @@ package com.codeborne.selenide.appium;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.impl.SelenidePageFactory;
+import com.codeborne.selenide.impl.WebElementSource;
 import io.appium.java_client.HasSessionDetails;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.DefaultElementByBuilder;
 import io.appium.java_client.pagefactory.bys.builder.AppiumByBuilder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.ByIdOrName;
 
 import javax.annotation.CheckReturnValue;
@@ -44,7 +44,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @Nullable
   @Override
   public Object decorate(ClassLoader loader,
-                         Driver driver, SearchContext searchContext,
+                         Driver driver, WebElementSource searchContext,
                          Field field, By selector, Type[] genericTypes) {
     if (selector instanceof ByIdOrName) {
       return decorateWithAppium(loader, searchContext, field);
@@ -53,8 +53,8 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return super.decorate(loader, driver, searchContext, field, selector, genericTypes);
   }
 
-  private Object decorateWithAppium(ClassLoader loader, SearchContext searchContext, Field field) {
-    AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext);
+  private Object decorateWithAppium(ClassLoader loader, WebElementSource searchContext, Field field) {
+    AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement());
     Object appiumElement = defaultAppiumFieldDecorator.decorate(loader, field);
     if (appiumElement instanceof MobileElement) {
       // TODO Make appiumElement lazy-loaded

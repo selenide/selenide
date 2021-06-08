@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.6 (released 08.06.2021)
+* upgrade to Selenide 5.22.0
+
 === 1.6.5 (released 07.05.2021)
 * restore transitive dependencies (selenide:5.20.4 and appium:7.5.1)
 
