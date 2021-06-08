@@ -88,6 +88,7 @@ final class ByTextTest extends ITest {
   void canFindByText_caseInsensitive() {
     $(byTextCaseInsensitive("PAGE with selects")).shouldHave(text("Page with selects"));
     $(byTextCaseInsensitive("PAGE with SELECTS")).shouldHave(text("Page with selects"));
+    $$(byTextCaseInsensitive("PAGE with SELECTS")).shouldHave(size(1));
 
     assertThatThrownBy(() -> $(byTextCaseInsensitive("PAGE with SELECT")).should(exist))
       .isInstanceOf(ElementNotFound.class);
@@ -98,6 +99,7 @@ final class ByTextTest extends ITest {
     $(".level1").$(byTextCaseInsensitive("Hi WORLD")).shouldHave(text("Hi world"));
     $(".level2").$(byTextCaseInsensitive("Hello WORLD")).shouldHave(text("Hello world"), cssClass("hello2"));
     $(".level3").$(byTextCaseInsensitive("HELLO world")).shouldHave(text("Hello world"), cssClass("hello3"));
+    $("#greetings").$$(byTextCaseInsensitive("HELLO world")).shouldHave(size(2));
   }
 
   @Test
@@ -105,7 +107,9 @@ final class ByTextTest extends ITest {
     $(withTextCaseInsensitive("Hello WORLD")).shouldHave(text("Hello world"));
     $(withTextCaseInsensitive("heLLO ")).shouldHave(text("Hello world"));
     $(withTextCaseInsensitive("O wORld")).shouldHave(text("Hello world"));
+    $$(withTextCaseInsensitive("O wORld")).shouldHave(size(2));
     $(withTextCaseInsensitive("PAGE with SELECT")).should(exist);
+    $$(withTextCaseInsensitive("PAGE with SELECT")).shouldHave(size(1));
   }
 
   @Test
@@ -113,5 +117,6 @@ final class ByTextTest extends ITest {
     $(".level1").$(withTextCaseInsensitive("i WOR")).shouldHave(text("Hi world"));
     $(".level2").$(withTextCaseInsensitive("llo WORLD")).shouldHave(text("Hello world"), cssClass("hello2"));
     $(".level3").$(withTextCaseInsensitive("ELLO worl")).shouldHave(text("Hello world"), cssClass("hello3"));
+    $("#greetings").$$(withTextCaseInsensitive("ELLO worl")).shouldHave(size(2));
   }
 }
