@@ -11,6 +11,9 @@ buildscript {
 
 dependencies {
   api("com.codeborne:selenide:${versions.selenide}")
+  implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
+    exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
+  }
   testRuntimeOnly("com.browserup:browserup-proxy-core:${versions.browserupproxy}")
   testRuntimeOnly("io.netty:netty-all:${versions.netty}")
   testRuntimeOnly("io.netty:netty-codec:${versions.netty}")
