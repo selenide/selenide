@@ -2,6 +2,7 @@ package org.selenide.selenoid;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.DownloadedFile;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
@@ -19,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;
@@ -41,19 +43,20 @@ public class DownloadFileInSelenoid extends com.codeborne.selenide.impl.Download
 
   @CheckReturnValue
   @Nonnull
+  @Override
   public File download(WebElementSource anyClickableElement,
                        WebElement clickable, long timeout,
-                       FileFilter fileFilter) throws FileNotFoundException {
+                       FileFilter fileFilter,
+                       DownloadAction action) throws FileNotFoundException {
 
     Driver driver = anyClickableElement.driver();
     Config config = driver.config();
     if (config.remote() == null) {
       log.debug("Working in local browser. Switching to a default FOLDER implementation.");
-      return super.download(anyClickableElement, clickable, timeout, fileFilter);
+      return super.download(anyClickableElement, clickable, timeout, fileFilter, action);
     }
 
-    RemoteWebDriver webDriver = (RemoteWebDriver) driver.getWebDriver();
-    SelenoidClient selenoidClient = new SelenoidClient(config.remote(), webDriver.getSessionId().toString());
+    SelenoidClient selenoidClient = new SelenoidClient(config.remote(), driver.getSessionId().toString());
 
     selenoidClient.deleteDownloadedFiles();
     clickable.click();

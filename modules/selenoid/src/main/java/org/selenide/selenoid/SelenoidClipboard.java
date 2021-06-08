@@ -26,7 +26,7 @@ public class SelenoidClipboard implements Clipboard {
             log.debug("Working in local browser. Switching to a default Clipboard implementation.");
             return new DefaultClipboard(driver).getText();
         } else {
-            return new SelenoidClient(driver.config().remote(), ((RemoteWebDriver) driver.getWebDriver()).getSessionId().toString()).getClipboardText();
+            return new SelenoidClient(driver.config().remote(), driver.getSessionId().toString()).getClipboardText();
         }
     }
 
@@ -36,7 +36,7 @@ public class SelenoidClipboard implements Clipboard {
             log.debug("Working in local browser. Switching to a default Clipboard implementation.");
             new DefaultClipboard(driver).setText(text);
         } else {
-            new SelenoidClient(driver.config().remote(), ((RemoteWebDriver) driver.getWebDriver()).getSessionId().toString()).setClipboardText(text);
+            new SelenoidClient(driver.config().remote(), driver.getSessionId().toString()).setClipboardText(text);
         }
     }
 }

@@ -29,7 +29,7 @@ class SelenoidClientTest {
         new URL("http://localhost:4444/download/sid-01/some-file.txt")
     );
     assertThat(client.urlOfDownloadedFile("some file (2).txt")).isEqualTo(
-        new URL("http://localhost:4444/download/sid-01/some%20file%20(2).txt")
+        new URL("http://localhost:4444/download/sid-01/some%20file%20%282%29.txt")
     );
   }
 }
