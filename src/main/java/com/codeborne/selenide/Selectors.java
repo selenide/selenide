@@ -29,6 +29,10 @@ public class Selectors {
     return new WithText(elementText);
   }
 
+  /**
+   * Same as {@link #withText(String)}, but case-insensitive.
+   * @since 5.22.0
+   */
   @CheckReturnValue
   @Nonnull
   public static By withTextCaseInsensitive(String elementText) {
@@ -53,6 +57,7 @@ public class Selectors {
 
   /**
    * Same as {@link #byText(String)}, but case-insensitive.
+   * @since 5.22.0
    */
   @CheckReturnValue
   @Nonnull

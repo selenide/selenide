@@ -57,6 +57,7 @@ public class DownloadOptions {
    *
    * @param action any lambda accepting a Driver and WebElement (the element being clicked).
    * @return DownloadOptions
+   * @since 5.22.0
    */
   public DownloadOptions withAction(DownloadAction action) {
     return new DownloadOptions(method, timeout, filter, action);

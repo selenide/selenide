@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.22.0 (released 08.06.2021)
+* #1479 make it possible to check an alert before downloading a file  --  see PR #1481
+* #1482 Add support for `Condition.textCaseSensitive` for selected options in `select` element --  thanks to Oleg Berezhnoy
+* #1380 Add selectors `byTextCaseInsensitive` and `withTextCaseInsensitive` --  see PR #1381
+* #1483 add method `Driver.getSessionId()`  --  thanks to Petro Ovcharenko
+* override default Selenium http timeouts  --  see PR #1433
+* #1472 refactoring: pass WebElementSource instead of SearchContext
+
 ## 5.21.0 (released 15.05.2021)
 * #1055 Avoid multiple screenshots for chained locators  --  see PR #1465
 * #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450
