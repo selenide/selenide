@@ -45,7 +45,7 @@ public class ConditionWaiter {
     }
   }
 
-  private static boolean checkUnThrowable(Conditional conditional, Predicate<Conditional> predicate) {
+  private boolean checkUnThrowable(Conditional conditional, Predicate<Conditional> predicate) {
     try {
       return predicate.test(conditional);
     } catch (Exception e) {
