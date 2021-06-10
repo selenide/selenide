@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.ConditionNotMatchException;
+import com.codeborne.selenide.ex.UIAssertionError;
 import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +17,23 @@ import static org.awaitility.Awaitility.await;
 
 public class ConditionWaiter {
 
+  private Driver driver;
+
+  public ConditionWaiter(Driver driver) {
+    this.driver = driver;
+  }
+
   private static final Logger logger = LoggerFactory.getLogger(ConditionWaiter.class);
 
-  public static void waitFor(Conditional conditional, Predicate predicate, String message) {
+  public void waitFor(Conditional conditional, Predicate predicate, String message) {
     waitFor(conditional, predicate, message, Duration.ofMillis(10000));
   }
 
-  public static void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout) {
+  public void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout) {
     waitFor(conditional, predicate, message, timeout, Duration.ofMillis(500));
   }
 
-  public static void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout, Duration polling) {
+  public void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout, Duration polling) {
     try {
       await()
         .pollInterval(polling)
@@ -34,7 +41,7 @@ public class ConditionWaiter {
         .pollInSameThread()
         .until(() -> checkUnThrowable(conditional, predicate));
     } catch (ConditionTimeoutException e) {
-      throw new ConditionNotMatchException(message);
+      throw UIAssertionError.wrap(driver, new ConditionNotMatchException(message), timeout.toMillis());
     }
   }
 

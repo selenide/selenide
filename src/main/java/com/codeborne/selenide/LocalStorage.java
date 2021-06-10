@@ -14,16 +14,16 @@ public class LocalStorage extends JSStorage implements Conditional<LocalStorage>
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message) {
-    ConditionWaiter.waitFor(this, predicate, message);
+    new ConditionWaiter(driver).waitFor(this, predicate, message);
   }
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message, Duration timeout) {
-    ConditionWaiter.waitFor(this, predicate, message, timeout);
+    new ConditionWaiter(driver).waitFor(this, predicate, message, timeout);
   }
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message, Duration timeout, Duration polling) {
-    ConditionWaiter.waitFor(this, predicate, message, timeout, polling);
+    new ConditionWaiter(driver).waitFor(this, predicate, message, timeout, polling);
   }
 }

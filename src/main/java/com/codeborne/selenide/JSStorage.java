@@ -10,7 +10,7 @@ import static java.util.Optional.ofNullable;
 @ParametersAreNonnullByDefault
 abstract class JSStorage {
 
-  private final Driver driver;
+  protected final Driver driver;
   private final String storage;
 
   JSStorage(Driver driver, String storage) {
