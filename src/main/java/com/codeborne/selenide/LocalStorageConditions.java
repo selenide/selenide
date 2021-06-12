@@ -8,7 +8,7 @@ public class LocalStorageConditions {
     return localStorage -> localStorage.containsItem(item);
   }
 
-  public static Predicate<LocalStorage> itemHasValue(String item, String value) {
+  public static Predicate<LocalStorage> containsItemWithValue(String item, String value) {
     return localStorage -> localStorage.getItem(item).equals(value);
   }
 
