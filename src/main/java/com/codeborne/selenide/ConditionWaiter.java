@@ -14,7 +14,6 @@ import static org.awaitility.Awaitility.await;
 /**
  * Class provide conditional polling wait by predicate with ignore exceptions.
  */
-
 public class ConditionWaiter {
 
   private Driver driver;

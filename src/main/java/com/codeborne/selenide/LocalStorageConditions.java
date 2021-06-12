@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 public class LocalStorageConditions {
 
-  public static Predicate<LocalStorage> itemPresent(String item) {
+  public static Predicate<LocalStorage> containsItem(String item) {
     return localStorage -> localStorage.containsItem(item);
   }
 

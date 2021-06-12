@@ -13,7 +13,6 @@ import java.util.function.Predicate;
  * For implementing wait with polling use ConditionWaiter
  * @link com.codeborne.selenide.ConditionWaiter
  */
-
 public interface Conditional<T> {
 
   void should(Predicate<T> predicate, String message);
