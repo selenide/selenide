@@ -78,20 +78,6 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
-  void downloadsFileWithForbiddenCharactersInName() throws IOException {
-    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
-      .download(withExtension("txt"));
-    assertThat(downloadedFile.getName())
-      .isEqualTo("имя+с+#pound,%percent,&ampersand,{left,}right,_backslash,_left,_right," +
-        "_asterisk,_question,$dollar,!exclamation,'quote,_quotes,_colon,@at,+plus," +
-        "`backtick,_pipe,=equal.txt");
-    assertThat(readFileToString(downloadedFile, "UTF-8"))
-      .isEqualTo("Превед \"короед\"! Амперсанды &everywhere&&;$#`\n");
-    assertThat(downloadedFile.getAbsolutePath())
-      .startsWith(folder.getAbsolutePath());
-  }
-
-  @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
