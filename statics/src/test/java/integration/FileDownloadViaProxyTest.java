@@ -79,7 +79,8 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithForbiddenCharactersInName() throws IOException {
-    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name")).download();
+    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
+      .download(withExtension("txt"));
     assertThat(downloadedFile.getName())
       .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
         "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
