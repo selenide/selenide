@@ -75,6 +75,23 @@ final class WebDriverRunnerTest implements WithAssertions {
   }
 
   @Test
+  void allowsToSetActiveWebDriver() {
+    SelenideConfig browserConfig1 = new SelenideConfig()
+      .baseUrl("http://google.ru");
+    SelenideDriver selenideDriver1 = new SelenideDriver(browserConfig1);
+    WebDriverRunner.setActiveSelenideDriver(selenideDriver1);
+    Selenide.open("");
+    assertThat(selenideDriver1.url()).contains("google.ru");
+
+    SelenideConfig browserConfig2 = new SelenideConfig()
+      .baseUrl("http://ya.ru");
+    SelenideDriver selenideDriver2 = new SelenideDriver(browserConfig2);
+    WebDriverRunner.setActiveSelenideDriver(selenideDriver2);
+    Selenide.open("");
+    assertThat(selenideDriver2.url()).contains("ya.ru");
+  }
+
+  @Test
   void userCanAddWebDriverListeners() {
     WebDriverEventListener listener = mock(WebDriverEventListener.class);
     WebDriverRunner.addListener(listener);
