@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.22.1 (released 18.06.2021)
+* Add mime type "binary/octet-stream" to download binary files in FireFox
+
 ## 5.22.0 (released 08.06.2021)
 * #1479 make it possible to check an alert before downloading a file  --  see PR #1481
 * #1482 Add support for `Condition.textCaseSensitive` for selected options in `select` element --  thanks to Oleg Berezhnoy
