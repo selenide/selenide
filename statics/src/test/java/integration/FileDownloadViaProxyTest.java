@@ -109,7 +109,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   public void download_withCustomTimeout() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000, withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
