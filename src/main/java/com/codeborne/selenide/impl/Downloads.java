@@ -76,7 +76,7 @@ public class Downloads {
     }
 
     return firstMatchingFile(fileFilter)
-      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms.%s",
+      .orElseThrow(() -> new FileNotFoundException(String.format("Failed to download file %s in %d ms. %s".trim(),
         context, timeout, fileFilter.description())
         )
       ).getFile();

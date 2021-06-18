@@ -78,6 +78,20 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithForbiddenCharactersInName() throws IOException {
+    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
+      .download(withExtension("txt"));
+    assertThat(downloadedFile.getName())
+      .isEqualTo("имя+с+#pound,%percent,&ampersand,{left,}right,_backslash,_left,_right," +
+        "_asterisk,_question,$dollar,!exclamation,'quote,_quotes,_colon,@at,+plus," +
+        "`backtick,_pipe,=equal.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед \"короед\"! Амперсанды &everywhere&&;$#`\n");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("https://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
@@ -89,7 +103,16 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   void downloadMissingFile() {
     timeout = 100;
     assertThatThrownBy(() -> $(byText("Download missing file")).download())
-      .isInstanceOf(FileNotFoundException.class);
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessage("Failed to download file {by text: Download missing file} in 100 ms.");
+  }
+
+  @Test
+  void downloadMissingFileWithExtension() {
+    timeout = 80;
+    assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
   }
 
   @Test
