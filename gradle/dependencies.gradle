@@ -7,13 +7,13 @@ allprojects {
 ext {
   seleniumVersion = '3.141.59'
   junitVersion = '5.7.2'
-  jettyVersion = '9.4.41.v20210516'
+  jettyVersion = '9.4.42.v20210604'
   nettyVersion = '4.1.65.Final'
   guavaVersion = '30.1.1-jre'
-  assertjVersion = '3.20.0'
-  mockitoVersion = '3.11.0'
+  assertjVersion = '3.20.1'
+  mockitoVersion = '3.11.1'
   browserupProxyVersion = '2.1.2'
-  littleProxyVersion = '2.0.3'
+  littleProxyVersion = '2.0.4'
   videoRecorderVersion = '2.0'
   commonsFileuploadVersion = '1.4'
 }
