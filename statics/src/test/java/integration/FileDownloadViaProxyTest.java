@@ -108,14 +108,6 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
-  void downloadMissingFileWithExtension() {
-    timeout = 80;
-    assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
-      .isInstanceOf(FileNotFoundException.class)
-      .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
-  }
-
-  @Test
   public void download_withCustomTimeout() throws FileNotFoundException {
     File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
 
