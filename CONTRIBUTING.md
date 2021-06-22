@@ -54,7 +54,7 @@ Selenide has a very simple branching strategy
     cd selenide
     ./gradlew    (or `gradlew.bat` on Windows)
 
-After build you'll find Selenide's .jar file under `build/libs/` directory.
+After build you'll find Selenide's .jar file under `build/libs/` directory as well as in local maven repository at `~/.m2/repository/com/codeborne/selenide/<version>/selenide-<version>.jar`.
 
 
 ### How to run tests?
