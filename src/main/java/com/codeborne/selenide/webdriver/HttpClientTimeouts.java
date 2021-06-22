@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * A temporary workaround to override default timeouts of OkClient used in Selenium.
@@ -73,15 +76,27 @@ class HttpClientTimeouts {
   private void setupTimeouts(okhttp3.OkHttpClient okClient, Duration connectTimeout, Duration readTimeout) throws Exception {
     int previousConnectTimeout = okClient.connectTimeoutMillis();
     int previousReadTimeout = okClient.readTimeoutMillis();
-    setFieldValue(okClient, "connectTimeout", (int) connectTimeout.toMillis());
-    setFieldValue(okClient, "readTimeout", (int) readTimeout.toMillis());
+    setFieldValue(okClient, asList("connectTimeout", "connectTimeoutMillis"), (int) connectTimeout.toMillis());
+    setFieldValue(okClient, asList("readTimeout", "readTimeoutMillis"), (int) readTimeout.toMillis());
     logger.info("Changed connectTimeout from {} to {}", previousConnectTimeout, okClient.connectTimeoutMillis());
     logger.info("Changed readTimeout from {} to {}", previousReadTimeout, okClient.readTimeoutMillis());
   }
 
-  private <T> void setFieldValue(T object, String fieldName, Object fieldValue) throws Exception {
-    Field field = object.getClass().getDeclaredField(fieldName);
-    field.setAccessible(true);
-    field.set(object, fieldValue);
+  private <T> void setFieldValue(T object, List<String> fieldNames, Object fieldValue) throws Exception {
+    NoSuchFieldException fieldNotFound = null;
+    for (String fieldName : fieldNames) {
+      try {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(object, fieldValue);
+        return;
+      }
+      catch (NoSuchFieldException e) {
+        fieldNotFound = e;
+      }
+    }
+    if (fieldNotFound != null) {
+      throw fieldNotFound;
+    }
   }
 }
