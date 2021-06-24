@@ -8,6 +8,11 @@
       margin: 0;
     }
 
+    #debug {
+      position: absolute;
+      background-color: lightpink;
+    }
+
     #page {
       position: absolute;
       text-align: center;
@@ -35,15 +40,25 @@
   </style>
   <script type="text/javascript">
     function clickRel(event) {
+      var debug = document.getElementById("debug");
       var coords = document.getElementById("coords");
+      const newLeft = event.offsetX + 'px';
+      const newTop = event.offsetY + 'px';
+      debug.innerText += "\nevent.offsetX=" + event.offsetX;
+      debug.innerText += "\nevent.offsetY=" + event.offsetY;
+      debug.innerText += "\noldLeft=" + coords.style.left;
+      debug.innerText += "\noldTop=" + coords.style.top;
+      debug.innerText += "\nnewLeft=" + newLeft;
+      debug.innerText += "\nnewTop=" + newTop;
       coords.innerText = '(' + event.offsetX + ', ' + event.offsetY + ')';
-      coords.style.left = event.offsetX + 'px';
-      coords.style.top = event.offsetY + 'px';
+      coords.style.left = newLeft;
+      coords.style.top = newTop;
       return false;
     }
   </script>
 </head>
 <body>
+  <div id="debug">DEBUG</div>
   <div id="page">THIS IS A TEST</div>
   <span id="coords">(0, 0)</span>
   <script type="text/javascript">
