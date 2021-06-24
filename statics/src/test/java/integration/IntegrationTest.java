@@ -61,6 +61,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
 
   private static void resetSettings() {
     timeout = 1;
+    Configuration.webdriverLogsEnabled = true;
     Configuration.browser = System.getProperty("selenide.browser", CHROME);
     Configuration.baseUrl = getBaseUrl();
     Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));

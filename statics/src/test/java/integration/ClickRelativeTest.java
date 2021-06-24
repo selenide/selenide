@@ -3,7 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
@@ -23,7 +23,7 @@ final class ClickRelativeTest extends IntegrationTest {
     openFile("page_with_relative_click_position.html");
   }
 
-  @Test
+  @RepeatedTest(10)
   void userCanClickElementWithOffsetPosition_withActions() {
     Configuration.clickViaJs = false;
 
@@ -32,7 +32,7 @@ final class ClickRelativeTest extends IntegrationTest {
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void userCanClickElementWithOffsetPosition_withJavascript() {
     Configuration.clickViaJs = true;
 
@@ -41,7 +41,7 @@ final class ClickRelativeTest extends IntegrationTest {
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void userCanClickElementWithOffsetPositions_withClickOptionJS() {
     Configuration.clickViaJs = false;
 
@@ -50,7 +50,7 @@ final class ClickRelativeTest extends IntegrationTest {
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void userCanClickElementWithOffsetXPosition_withClickOptionJS() {
     Configuration.clickViaJs = false;
 
@@ -59,7 +59,7 @@ final class ClickRelativeTest extends IntegrationTest {
     $("#coords").shouldHave(exactText("(523, 300)"));
   }
 
-  @Test
+  @RepeatedTest(10)
   void screenshotIsTaken_ifClickWithOffset_getsOutsideOfElement() {
     Configuration.timeout = 123;
 
