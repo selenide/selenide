@@ -10,6 +10,7 @@ import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
@@ -20,10 +21,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 final class ClickRelativeTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
+    closeWebDriver();
     openFile("page_with_relative_click_position.html");
   }
 
-  @RepeatedTest(10)
+  @RepeatedTest(1000)
   void userCanClickElementWithOffsetPosition_withActions() {
     Configuration.clickViaJs = false;
 
