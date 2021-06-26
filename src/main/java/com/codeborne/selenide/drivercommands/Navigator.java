@@ -71,7 +71,12 @@ public class Navigator {
         WebDriver webDriver = driver.getAndCheckWebDriver();
         beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, domain, login, password);
         webDriver.navigate().to(url);
-        log.info("browser window size: {}", webDriver.manage().window().getSize());
+        try {
+          log.info("browser window size: {}", webDriver.manage().window().getSize());
+        }
+        catch (Exception e) {
+          log.info("browser window size: {}", "?");
+        }
       }
       catch (WebDriverException e) {
         e.addInfo("selenide.url", url);
