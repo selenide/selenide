@@ -39,6 +39,7 @@ dependencies {
 
   compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
   testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+  testImplementation("org.junit.platform:junit-platform-runner:1.7.2")
 }
 
 allprojects {

@@ -21,16 +21,28 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 final class ClickRelativeTest extends IntegrationTest {
   @BeforeEach
   void openTestPage() {
-    closeWebDriver();
+//    closeWebDriver();
+//    Configuration.browserSize = "1280x950";
+//    Configuration.browserPosition = "4x25";
     openFile("page_with_relative_click_position.html");
   }
 
-  @RepeatedTest(1000)
+  @RepeatedTest(100)
   void userCanClickElementWithOffsetPosition_withActions() {
     Configuration.clickViaJs = false;
 
     $("#page").click(123, 222);
 
+    // OK
+    // SelenideConfig{browser='chrome', headless=true, remote='null',
+    // browserSize='1200x960', browserVersion='null', browserPosition='null',
+    // startMaximized=false, driverManagerEnabled=true, webdriverLogsEnabled=true, browserBinary='',
+    // pageLoadStrategy='normal', pageLoadTimeout=30000, browserCapabilities=Capabilities {},
+    // baseUrl='https://127.0.0.1:47175', timeout=1, pollingInterval=200, holdBrowserOpen=false,
+    // reopenBrowserOnFail=true, clickViaJs=false, screenshots=true, savePageSource=true,
+    // reportsFolder='build/reports/tests', downloadsFolder='build/downloads', reportsUrl='null',
+    // fastSetValue=false, versatileSetValue=false, selectorMode=CSS, assertionMode=STRICT, fileDownload=HTTPGET,
+    // proxyEnabled=false, proxyHost='', proxyPort=0}
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
