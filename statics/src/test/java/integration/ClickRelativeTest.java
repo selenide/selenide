@@ -1,16 +1,18 @@
 package integration;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
@@ -19,30 +21,25 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Click to (400+123, 300+222) -> (523, 522)
  */
 final class ClickRelativeTest extends IntegrationTest {
+  private static final Logger log = LoggerFactory.getLogger(ClickRelativeTest.class);
+
   @BeforeEach
   void openTestPage() {
-//    closeWebDriver();
-//    Configuration.browserSize = "1280x950";
-//    Configuration.browserPosition = "4x25";
     openFile("page_with_relative_click_position.html");
   }
 
-  @RepeatedTest(100)
+  @RepeatedTest(10)
   void userCanClickElementWithOffsetPosition_withActions() {
     Configuration.clickViaJs = false;
 
+    log.info("{}", WebDriverRunner.driver().config());
+    log.info("position: {}", WebDriverRunner.getWebDriver().manage().window().getPosition());
+    log.info("size: {}", WebDriverRunner.getWebDriver().manage().window().getSize());
+    log.info("title: {}", WebDriverRunner.getWebDriver().getTitle());
+    log.info("url: {}", WebDriverRunner.getWebDriver().getCurrentUrl());
+
     $("#page").click(123, 222);
 
-    // OK
-    // SelenideConfig{browser='chrome', headless=true, remote='null',
-    // browserSize='1200x960', browserVersion='null', browserPosition='null',
-    // startMaximized=false, driverManagerEnabled=true, webdriverLogsEnabled=true, browserBinary='',
-    // pageLoadStrategy='normal', pageLoadTimeout=30000, browserCapabilities=Capabilities {},
-    // baseUrl='https://127.0.0.1:47175', timeout=1, pollingInterval=200, holdBrowserOpen=false,
-    // reopenBrowserOnFail=true, clickViaJs=false, screenshots=true, savePageSource=true,
-    // reportsFolder='build/reports/tests', downloadsFolder='build/downloads', reportsUrl='null',
-    // fastSetValue=false, versatileSetValue=false, selectorMode=CSS, assertionMode=STRICT, fileDownload=HTTPGET,
-    // proxyEnabled=false, proxyHost='', proxyPort=0}
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
 

@@ -10,6 +10,8 @@ import com.codeborne.selenide.proxy.AuthenticationFilter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,6 +24,7 @@ import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
 public class Navigator {
+  private static final Logger log = LoggerFactory.getLogger(Navigator.class);
   private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z-]+:.*", DOTALL);
 
   private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
@@ -68,6 +71,7 @@ public class Navigator {
         WebDriver webDriver = driver.getAndCheckWebDriver();
         beforeNavigateTo(driver.config(), driver.getProxy(), authenticationType, domain, login, password);
         webDriver.navigate().to(url);
+        log.info("browser window size: {}", webDriver.manage().window().getSize());
       }
       catch (WebDriverException e) {
         e.addInfo("selenide.url", url);

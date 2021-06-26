@@ -41,11 +41,19 @@
   <script type="text/javascript">
     function clickRel(event) {
       var debug = document.getElementById("debug");
+      var body = document.getElementById("body");
+      var page = document.getElementById("page");
+      var pagePL = window.getComputedStyle(page, null).getPropertyValue('padding-left')
+      var pagePT = window.getComputedStyle(page, null).getPropertyValue('padding-top')
       var coords = document.getElementById("coords");
       const newLeft = event.offsetX + 'px';
       const newTop = event.offsetY + 'px';
       debug.innerText += "\nevent.offsetX=" + event.offsetX;
       debug.innerText += "\nevent.offsetY=" + event.offsetY;
+      debug.innerText += "\nbody.left=" + body.style.left;
+      debug.innerText += "\nbody.top=" + body.style.top;
+      debug.innerText += "\npagePL=" + pagePL;
+      debug.innerText += "\npagePT=" + pagePT;
       debug.innerText += "\noldLeft=" + coords.style.left;
       debug.innerText += "\noldTop=" + coords.style.top;
       debug.innerText += "\nnewLeft=" + newLeft;
@@ -57,10 +65,10 @@
     }
   </script>
 </head>
-<body>
-  <div id="debug">DEBUG</div>
+<body id="body">
   <div id="page">THIS IS A TEST</div>
   <span id="coords">(0, 0)</span>
+  <div id="debug">DEBUG</div>
   <script type="text/javascript">
     document.getElementById('page').addEventListener('click', clickRel);
   </script>
