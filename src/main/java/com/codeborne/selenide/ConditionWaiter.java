@@ -25,7 +25,7 @@ public class ConditionWaiter {
   private static final Logger logger = LoggerFactory.getLogger(ConditionWaiter.class);
 
   public void waitFor(Conditional conditional, Predicate predicate, String message) {
-    waitFor(conditional, predicate, message, Duration.ofMillis(10000));
+    waitFor(conditional, predicate, message, Duration.ofMillis(driver.config().timeout()));
   }
 
   public void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout) {
