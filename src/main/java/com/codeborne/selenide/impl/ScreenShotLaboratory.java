@@ -104,6 +104,7 @@ public class ScreenShotLaboratory {
    * Takes screenshot of current browser window.
    * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
    *
+   *
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
    * @deprecated use {@link #takeScreenshot(Driver, String)} which returns {@link Screenshot} instead of String
