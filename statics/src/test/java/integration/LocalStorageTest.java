@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
+    Configuration.timeout = 4000;
     openFile("empty.html");
   }
 
