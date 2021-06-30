@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.22.2 (released 30.06.2021)
+#1493 support uploading files from inside of JAR files  --  see PR #1494
+
 ## 5.22.1 (released 18.06.2021)
 * Add mime type "binary/octet-stream" to download binary files in FireFox
 
