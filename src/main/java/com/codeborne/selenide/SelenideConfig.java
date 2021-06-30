@@ -1,8 +1,11 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CiReportUrl;
+import com.codeborne.selenide.impl.PropertiesUtils;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.util.Properties;
 
 import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
@@ -10,40 +13,50 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.SelectorMode.CSS;
 
 public class SelenideConfig implements Config {
-  private String browser = System.getProperty("selenide.browser", CHROME);
-  private boolean headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
-  private String remote = System.getProperty("selenide.remote");
-  private String browserSize = System.getProperty("selenide.browserSize", "1366x768");
-  private String browserVersion = System.getProperty("selenide.browserVersion");
-  private String browserPosition = System.getProperty("selenide.browserPosition");
-  private boolean startMaximized = Boolean.parseBoolean(System.getProperty("selenide.startMaximized", "false"));
-  private boolean driverManagerEnabled = Boolean.parseBoolean(System.getProperty("selenide.driverManagerEnabled", "true"));
-  private boolean webdriverLogsEnabled = Boolean.parseBoolean(System.getProperty("selenide.webdriverLogsEnabled", "false"));
-  private String browserBinary = System.getProperty("selenide.browserBinary", "");
-  private String pageLoadStrategy = System.getProperty("selenide.pageLoadStrategy", "normal");
-  private long pageLoadTimeout = Long.parseLong(System.getProperty("selenide.pageLoadTimeout", "30000"));
+  private String browser = getProperty("selenide.browser", CHROME);
+  private boolean headless = Boolean.parseBoolean(getProperty("selenide.headless", "false"));
+  private String remote = getProperty("selenide.remote");
+  private String browserSize = getProperty("selenide.browserSize", "1366x768");
+  private String browserVersion = getProperty("selenide.browserVersion");
+  private String browserPosition = getProperty("selenide.browserPosition");
+  private boolean startMaximized = Boolean.parseBoolean(getProperty("selenide.startMaximized", "false"));
+  private boolean driverManagerEnabled = Boolean.parseBoolean(getProperty("selenide.driverManagerEnabled", "true"));
+  private boolean webdriverLogsEnabled = Boolean.parseBoolean(getProperty("selenide.webdriverLogsEnabled", "false"));
+  private String browserBinary = getProperty("selenide.browserBinary", "");
+  private String pageLoadStrategy = getProperty("selenide.pageLoadStrategy", "normal");
+  private long pageLoadTimeout = Long.parseLong(getProperty("selenide.pageLoadTimeout", "30000"));
   private MutableCapabilities browserCapabilities = new DesiredCapabilities();
 
-  private String baseUrl = System.getProperty("selenide.baseUrl", "http://localhost:8080");
-  private long timeout = Long.parseLong(System.getProperty("selenide.timeout", "4000"));
-  private long pollingInterval = Long.parseLong(System.getProperty("selenide.pollingInterval", "200"));
+  private String baseUrl = getProperty("selenide.baseUrl", "http://localhost:8080");
+  private long timeout = Long.parseLong(getProperty("selenide.timeout", "4000"));
+  private long pollingInterval = Long.parseLong(getProperty("selenide.pollingInterval", "200"));
   private boolean holdBrowserOpen = Boolean.getBoolean("selenide.holdBrowserOpen");
-  private boolean reopenBrowserOnFail = Boolean.parseBoolean(System.getProperty("selenide.reopenBrowserOnFail", "true"));
-  private boolean clickViaJs = Boolean.parseBoolean(System.getProperty("selenide.clickViaJs", "false"));
-  private boolean screenshots = Boolean.parseBoolean(System.getProperty("selenide.screenshots", "true"));
+  private boolean reopenBrowserOnFail = Boolean.parseBoolean(getProperty("selenide.reopenBrowserOnFail", "true"));
+  private boolean clickViaJs = Boolean.parseBoolean(getProperty("selenide.clickViaJs", "false"));
+  private boolean screenshots = Boolean.parseBoolean(getProperty("selenide.screenshots", "true"));
 
-  private boolean savePageSource = Boolean.parseBoolean(System.getProperty("selenide.savePageSource", "true"));
-  private String reportsFolder = System.getProperty("selenide.reportsFolder", "build/reports/tests");
-  private String downloadsFolder = System.getProperty("selenide.downloadsFolder", "build/downloads");
-  private String reportsUrl = new CiReportUrl().getReportsUrl(System.getProperty("selenide.reportsUrl"));
-  private boolean fastSetValue = Boolean.parseBoolean(System.getProperty("selenide.fastSetValue", "false"));
-  private boolean versatileSetValue = Boolean.parseBoolean(System.getProperty("selenide.versatileSetValue", "false"));
-  private SelectorMode selectorMode = SelectorMode.valueOf(System.getProperty("selenide.selectorMode", CSS.name()));
-  private AssertionMode assertionMode = AssertionMode.valueOf(System.getProperty("selenide.assertionMode", STRICT.name()));
-  private FileDownloadMode fileDownload = FileDownloadMode.valueOf(System.getProperty("selenide.fileDownload", HTTPGET.name()));
-  private boolean proxyEnabled = Boolean.parseBoolean(System.getProperty("selenide.proxyEnabled", "false"));
-  private String proxyHost = System.getProperty("selenide.proxyHost", "");
-  private int proxyPort = Integer.parseInt(System.getProperty("selenide.proxyPort", "0"));
+  private boolean savePageSource = Boolean.parseBoolean(getProperty("selenide.savePageSource", "true"));
+  private String reportsFolder = getProperty("selenide.reportsFolder", "build/reports/tests");
+  private String downloadsFolder = getProperty("selenide.downloadsFolder", "build/downloads");
+  private String reportsUrl = new CiReportUrl().getReportsUrl(getProperty("selenide.reportsUrl"));
+  private boolean fastSetValue = Boolean.parseBoolean(getProperty("selenide.fastSetValue", "false"));
+  private boolean versatileSetValue = Boolean.parseBoolean(getProperty("selenide.versatileSetValue", "false"));
+  private SelectorMode selectorMode = SelectorMode.valueOf(getProperty("selenide.selectorMode", CSS.name()));
+  private AssertionMode assertionMode = AssertionMode.valueOf(getProperty("selenide.assertionMode", STRICT.name()));
+  private FileDownloadMode fileDownload = FileDownloadMode.valueOf(getProperty("selenide.fileDownload", HTTPGET.name()));
+  private boolean proxyEnabled = Boolean.parseBoolean(getProperty("selenide.proxyEnabled", "false"));
+  private String proxyHost = getProperty("selenide.proxyHost", "");
+  private int proxyPort = Integer.parseInt(getProperty("selenide.proxyPort", "0"));
+
+  private final Properties props;
+
+  public SelenideConfig() {
+    props = PropertiesUtils.getSelenideProperties();
+  }
+
+  public SelenideConfig(Properties props) {
+    this.props = props;
+  }
 
   @Override
   public String baseUrl() {
@@ -362,6 +375,14 @@ public class SelenideConfig implements Config {
   public SelenideConfig browserCapabilities(DesiredCapabilities browserCapabilities) {
     this.browserCapabilities = browserCapabilities;
     return this;
+  }
+
+  private String getProperty(String propKey, String defaultValue){
+    return props.getOrDefault(propKey, defaultValue).toString();
+  }
+
+  private String getProperty(String propKey){
+    return props.getProperty(propKey);
   }
 
 }

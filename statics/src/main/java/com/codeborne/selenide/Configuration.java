@@ -5,13 +5,14 @@ import org.openqa.selenium.MutableCapabilities;
 /**
  * Configuration settings for Selenide default browser
  * <br>
- * This class is designed so that every setting can be set either via system property or programmatically.
+ * This class is designed so that every setting can be set either via system property or programmatically or
+ * via resource properties file - selenide.properties.
  * <br>
  * Please note that all fields are static, meaning that
  * every change will immediately reflect in all threads (if you run tests in parallel).
  *
  * <p>
- *   These system properties can be additonally used having effect on every new created browser in test.
+ *   These system properties can be additionally used having effect on every new created browser in test.
  *   For example as -D&lt;property&gt;=&lt;value&gt; in command-line
  * </p>
  * <p>
