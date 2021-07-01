@@ -29,7 +29,7 @@ public class ConditionWaiter {
   }
 
   public void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout) {
-    waitFor(conditional, predicate, message, timeout, Duration.ofMillis(500));
+    waitFor(conditional, predicate, message, timeout, Duration.ofMillis(driver.config().pollingInterval()));
   }
 
   public void waitFor(Conditional conditional, Predicate predicate, String message, Duration timeout, Duration polling) {
