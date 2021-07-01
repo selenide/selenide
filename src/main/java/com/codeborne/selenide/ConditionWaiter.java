@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.ex.ConditionNotMatchException;
+import com.codeborne.selenide.ex.ConditionNotMetException;
 import com.codeborne.selenide.ex.UIAssertionError;
 import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class ConditionWaiter {
         .pollInSameThread()
         .until(() -> checkUnThrowable(conditional, predicate));
     } catch (ConditionTimeoutException e) {
-      throw UIAssertionError.wrap(driver, new ConditionNotMatchException(message), timeout.toMillis());
+      throw UIAssertionError.wrap(driver, new ConditionNotMetException(message), timeout.toMillis());
     }
   }
 
