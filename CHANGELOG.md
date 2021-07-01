@@ -1,7 +1,9 @@
 # Changelog
 
 ## 5.22.2 (released 30.06.2021)
-#1493 support uploading files from inside of JAR files  --  see PR #1494
+* #1493 support uploading files from inside of JAR files  --  see PR #1494
+* fix command `./gradlew` - now it installs jars to a local maven repo  --  see PR #1489 
+* add support for okhttp 4.9.1  --  see PR #1488
 
 ## 5.22.1 (released 18.06.2021)
 * Add mime type "binary/octet-stream" to download binary files in FireFox
