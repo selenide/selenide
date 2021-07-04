@@ -5,6 +5,7 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
@@ -52,16 +53,16 @@ public class SetValue implements Command<SelenideElement> {
 
   private void setValueForTextInput(Driver driver, WebElement element, String text) {
     if (text == null || text.isEmpty()) {
-      element.clear();
-    }
-    else if (driver.config().fastSetValue()) {
+      clearValueWithKeystrokes(element);
+    } else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
       if (error != null) throw new InvalidStateException(driver, error);
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
-    }
-    else {
+    } else {
+      // maybe too? would solve #960
+      // clearValueWithKeystrokes(element);
       element.clear();
       element.sendKeys(text);
     }
@@ -69,17 +70,21 @@ public class SetValue implements Command<SelenideElement> {
 
   private String setValueByJs(Driver driver, WebElement element, String text) {
     return driver.executeJavaScript(
-        "return (function(webelement, text) {" +
-            "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
-            "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +
-            "webelement.focus();" +
-            "var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));" +
-            "webelement.value = " +
-            "maxlength == -1 ? text " +
-            ": text.length <= maxlength ? text " +
-            ": text.substring(0, maxlength);" +
-            "return null;" +
-            "})(arguments[0], arguments[1]);",
-        element, text);
+      "return (function(webelement, text) {" +
+        "if (webelement.getAttribute('readonly') != undefined) return 'Cannot change value of readonly element';" +
+        "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +
+        "webelement.focus();" +
+        "var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));" +
+        "webelement.value = " +
+        "maxlength == -1 ? text " +
+        ": text.length <= maxlength ? text " +
+        ": text.substring(0, maxlength);" +
+        "return null;" +
+        "})(arguments[0], arguments[1]);",
+      element, text);
+  }
+
+  private void clearValueWithKeystrokes(WebElement element) {
+    element.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.chord(Keys.SHIFT, Keys.END), Keys.BACK_SPACE);
   }
 }

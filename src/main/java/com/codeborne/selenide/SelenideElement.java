@@ -32,16 +32,20 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <p>If Configuration.versatileSetValue is true, can work as 'selectOptionByValue', 'selectRadio'</p>
    *
    * <p>If Configuration.fastSetValue is true, sets value by javascript instead of using Selenium built-in "sendKey" function
-   * and trigger "focus", "keydown", "keypress", "input", "keyup", "change" events.
+   * and triggers "focus", "keydown", "keypress", "input", "keyup", "change" events.</p>
    *
    * <p>In other case behavior will be:
    * <pre>
    * 1. WebElement.clear()
    * 2. WebElement.sendKeys(text)
-   * 3. Trigger change event
    * </pre>
    *
-   * @param text Any text to enter into the text field or set by value for select/radio.
+   * </p>
+   *
+   * @since 5.23 setValue("") and setValue(null) are clearing the field with keystrokes, because it sends input (ond other) events.
+   * If you need (why would you?) the previous behaviour, you can use $().clear() command from Selenium.
+   *
+   * @param text Any text to enter into the text field or set by value for select/radio. "" or null - to clear the field.
    * @see com.codeborne.selenide.commands.SetValue
    */
   @Nonnull
@@ -58,13 +62,12 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement val(@Nullable String text);
 
   /**
-   * Append given text to the text field and trigger "change" event.
+   * Append given text to the text field
    * <p>
    * Implementation details:
    * This is the same as
    * <pre>
    *   1. WebElement.sendKeys(text)
-   *   2. Trigger change event
    * </pre>
    *
    * @param text Any text to append into the text field.

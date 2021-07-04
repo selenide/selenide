@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::inputs with hints</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript">
+
+        // hints appear when field is not empty
+        function displayUsernameHint(input, el) {
+          if (input.value ==""){
+            $(el).hide();
+          }else {
+            $(el).show();
+          }
+        }
+  </script>
+</head>
+<body>
+<h1>Page with JQuery</h1>
+
+<div style="width: 400px">
+  <form>
+    <fieldset title="Login form">
+      <label> Username (oninput):
+        <input id="username_input" value="" oninput="displayUsernameHint(this,'#usernameHint')"/>
+      </label>
+      <div id="usernameHint" style="display: none">Username is not empty</div>
+      <br/>
+    </fieldset>
+  </form>
+</div>
+</body>
+</html>
