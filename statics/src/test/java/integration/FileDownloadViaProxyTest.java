@@ -38,7 +38,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() throws IOException {
-    File downloadedFile = $(byText("Download me")).download();
+    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
@@ -67,7 +67,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCyrillicName() throws IOException {
-    File downloadedFile = $(byText("Download file with cyrillic name")).download();
+    File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("файл-с-русским-названием.txt");
@@ -94,7 +94,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("https://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download();
+    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
     assertThat(video.getName())
       .isEqualTo("some-file.txt");
   }
@@ -145,7 +145,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
       Configuration.downloadsFolder = downloadsFolder;
       openFile("page_with_uploads.html");
 
-      File downloadedFile = $(byText("Download me")).download();
+      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(downloadsFolder).getAbsolutePath());
