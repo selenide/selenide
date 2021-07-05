@@ -3,6 +3,9 @@
 ## 5.23.0 
 * #1497 fixes problems with setValue("") didn't trigger events -- see PR # 
 
+## 5.22.3 (released 05.07.2021)
+* #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498
+
 ## 5.22.2 (released 30.06.2021)
 * #1493 support uploading files from inside of JAR files  --  see PR #1494
 * fix command `./gradlew` - now it installs jars to a local maven repo  --  see PR #1489 

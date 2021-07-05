@@ -79,3 +79,5 @@ final class ReportForChainedElementsTest extends ITest {
     return new File(driver().config().reportsFolder());
   }
 }
+
+
