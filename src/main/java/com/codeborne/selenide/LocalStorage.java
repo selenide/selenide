@@ -1,6 +1,8 @@
 package com.codeborne.selenide;
 
 
+import com.codeborne.selenide.impl.Waiter;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.function.Predicate;
@@ -14,16 +16,16 @@ public class LocalStorage extends JSStorage implements Conditional<LocalStorage>
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message) {
-    new ConditionWaiter(driver).waitFor(this, predicate, message);
+    new Waiter().wait(this.driver, this, predicate, message);
   }
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message, Duration timeout) {
-    new ConditionWaiter(driver).waitFor(this, predicate, message, timeout);
+    new Waiter().wait(this.driver, this, predicate, timeout, message);
   }
 
   @Override
   public void should(Predicate<LocalStorage> predicate, String message, Duration timeout, Duration polling) {
-    new ConditionWaiter(driver).waitFor(this, predicate, message, timeout, polling);
+    new Waiter().wait(this.driver, this, predicate, timeout, polling, message);
   }
 }
