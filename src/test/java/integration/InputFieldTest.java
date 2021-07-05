@@ -4,6 +4,8 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.value;
 
@@ -32,6 +34,6 @@ final class InputFieldTest extends ITest {
 
     input.setValue("456");
     input.setValue(null);
-    input.shouldBe(empty);
+    input.shouldBe(empty, Duration.ofMillis(500));
   }
 }
