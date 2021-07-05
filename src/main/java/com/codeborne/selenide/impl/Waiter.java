@@ -15,8 +15,7 @@ import static java.lang.System.currentTimeMillis;
 import static java.time.Duration.ofMillis;
 
 @ParametersAreNonnullByDefault
-public
-class Waiter {
+public class Waiter {
 
   private static final Logger logger = LoggerFactory.getLogger(Waiter.class);
 
