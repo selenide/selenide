@@ -16,7 +16,6 @@ import static java.time.Duration.ofMillis;
 
 @ParametersAreNonnullByDefault
 public class Waiter {
-
   private static final Logger logger = LoggerFactory.getLogger(Waiter.class);
 
   @CheckReturnValue
@@ -39,7 +38,7 @@ public class Waiter {
   public <T> void wait(Driver driver, T subject, Predicate<T> condition, Duration timeout, Duration pollingInterval, String message) {
     wait(subject, condition, timeout.toMillis(), pollingInterval.toMillis());
     if (!checkUnThrowable(subject, condition))
-      throw UIAssertionError.wrap(driver, new ConditionNotMetException(message), driver.config().pollingInterval());
+      throw UIAssertionError.wrap(driver, new ConditionNotMetException(driver, message), timeout.toMillis());
   }
 
   private boolean isTimeoutExceeded(long timeout, long start) {
@@ -49,7 +48,8 @@ public class Waiter {
   private void sleep(long milliseconds) {
     try {
       Thread.sleep(milliseconds);
-    } catch (InterruptedException e) {
+    }
+    catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
@@ -58,11 +58,10 @@ public class Waiter {
   private <T> boolean checkUnThrowable(T subject, Predicate<T> predicate) {
     try {
       return predicate.test(subject);
-    } catch (Exception e) {
-      logger.info("Fail to check condition", e);
     }
-    return false;
+    catch (Exception e) {
+      logger.info("Fail to check condition", e);
+      return false;
+    }
   }
-
-
 }
