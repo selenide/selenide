@@ -21,6 +21,12 @@ public class CurrentFrameUrl implements ObjectCondition<WebDriver> {
     return "current frame should have url " + expectedUrl;
   }
 
+  @Nonnull
+  @Override
+  public String negativeDescription() {
+    return "current frame should not have url " + expectedUrl;
+  }
+
   @Override
   public boolean test(WebDriver webDriver) {
     return getCurrentFrameUrl(webDriver).equals(expectedUrl);

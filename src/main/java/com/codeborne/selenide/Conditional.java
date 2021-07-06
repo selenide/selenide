@@ -48,12 +48,12 @@ public interface Conditional<T> {
   }
 
   default Conditional<T> shouldNotHave(ObjectCondition<T> predicate) {
-    new Waiter().wait(driver(), object(), predicate.negate());
+    new Waiter().waitWhile(driver(), object(), predicate);
     return this;
   }
 
   default Conditional<T> shouldNotHave(ObjectCondition<T> predicate, Duration timeout) {
-    new Waiter().wait(driver(), object(), predicate.negate(), timeout);
+    new Waiter().waitWhile(driver(), object(), predicate, timeout);
     return this;
   }
 }

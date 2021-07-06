@@ -46,6 +46,25 @@ public class Waiter {
     throw UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition.description()), timeout);
   }
 
+  public <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition) {
+    waitWhile(driver, subject, condition, driver.config().timeout(), driver.config().pollingInterval());
+  }
+
+  public <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, Duration timeout) {
+    waitWhile(driver, subject, condition, timeout.toMillis(), driver.config().pollingInterval());
+  }
+
+  private <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
+    for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
+      if (!checkUnThrowable(subject, condition)) {
+        return;
+      }
+      sleep(pollingInterval);
+    }
+
+    throw UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition.negativeDescription()), timeout);
+  }
+
   private boolean isTimeoutExceeded(long timeout, long start) {
     return currentTimeMillis() - start > timeout;
   }

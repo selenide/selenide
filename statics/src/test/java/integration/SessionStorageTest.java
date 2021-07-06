@@ -116,7 +116,7 @@ final class SessionStorageTest extends IntegrationTest {
       sessionStorage().shouldNotHave(item("cat"))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("sessionStorage should not have item 'it'")
+      .hasMessageStartingWith("sessionStorage should not have item 'cat'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");
@@ -130,7 +130,7 @@ final class SessionStorageTest extends IntegrationTest {
       sessionStorage().shouldNotHave(itemWithValue("cat", "Tom"))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("sessionStorage should not have item 'it' with value 'wrong'")
+      .hasMessageStartingWith("sessionStorage should not have item 'cat' with value 'Tom'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");

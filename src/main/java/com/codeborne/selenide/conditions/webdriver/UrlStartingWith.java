@@ -16,7 +16,13 @@ public class UrlStartingWith implements ObjectCondition<WebDriver> {
   @Nonnull
   @Override
   public String description() {
-    return "driver should have url starting with " + expectedUrl;
+    return "webdriver should have url starting with " + expectedUrl;
+  }
+
+  @Nonnull
+  @Override
+  public String negativeDescription() {
+    return "webdriver should not have url starting with " + expectedUrl;
   }
 
   @Override
