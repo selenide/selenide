@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.sessionStorage;
 import static com.codeborne.selenide.SessionStorageConditions.containItem;
 import static com.codeborne.selenide.SessionStorageConditions.containItemWithValue;
@@ -16,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class SessionStorageTest extends IntegrationTest {
   @AfterAll
-  static void tearDown() {
-    closeWebDriver();
+  static void resetSessionStorage() {
+    sessionStorage().clear();
   }
 
   @BeforeEach
