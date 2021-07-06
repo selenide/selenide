@@ -123,6 +123,12 @@ public class Selenide {
     getSelenideDriver().open();
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public static Driver driver() {
+    return getSelenideDriver().driver();
+  }
+
   public static void using(WebDriver webDriver, Runnable lambda) {
     WebDriverRunner.using(webDriver, lambda);
   }
