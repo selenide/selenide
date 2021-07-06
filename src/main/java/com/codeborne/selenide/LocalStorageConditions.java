@@ -8,11 +8,11 @@ import java.util.function.Predicate;
  */
 public class LocalStorageConditions {
 
-  public static Predicate<LocalStorage> containItem(String item) {
+  public static Predicate<LocalStorage> item(String item) {
     return localStorage -> localStorage.containsItem(item);
   }
 
-  public static Predicate<LocalStorage> containItemWithValue(String item, String value) {
+  public static Predicate<LocalStorage> itemWithValue(String item, String value) {
     return localStorage -> Objects.equals(localStorage.getItem(item), value);
   }
 }

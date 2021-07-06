@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.Waiter;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,10 +11,8 @@ import org.openqa.selenium.remote.SessionId;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.time.Duration;
-import java.util.function.Predicate;
 
-public interface Driver {
+public interface Driver extends Conditional<WebDriver> {
   @CheckReturnValue
   @Nonnull
   Config config();
@@ -112,23 +109,15 @@ public interface Driver {
     return ((RemoteWebDriver) driver).getSessionId();
   }
 
-  default Driver shouldHave(Predicate<WebDriver> predicate, String message) {
-    new Waiter().wait(this, getWebDriver(), predicate, message);
+  @Nonnull
+  @Override
+  default Driver driver() {
     return this;
   }
 
-  default Driver shouldHave(Predicate<WebDriver> predicate, String message, Duration timeout) {
-    new Waiter().wait(this, getWebDriver(), predicate, timeout, message);
-    return this;
-  }
-
-  default Driver shouldNotHave(Predicate<WebDriver> predicate, String message) {
-    new Waiter().wait(this, getWebDriver(), predicate.negate(), message);
-    return this;
-  }
-
-  default Driver shouldNotHave(Predicate<WebDriver> predicate, String message, Duration timeout) {
-    new Waiter().wait(this, getWebDriver(), predicate.negate(), timeout, message);
-    return this;
+  @Nonnull
+  @Override
+  default WebDriver object() {
+    return getWebDriver();
   }
 }

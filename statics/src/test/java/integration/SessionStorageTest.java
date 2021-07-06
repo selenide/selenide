@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sessionStorage;
-import static com.codeborne.selenide.SessionStorageConditions.containItem;
-import static com.codeborne.selenide.SessionStorageConditions.containItemWithValue;
+import static com.codeborne.selenide.SessionStorageConditions.item;
+import static com.codeborne.selenide.SessionStorageConditions.itemWithValue;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,36 +28,36 @@ final class SessionStorageTest extends IntegrationTest {
   void setAndGetItem() {
     sessionStorage().setItem("cat", "Tom");
     sessionStorage().setItem("mouse", "Jerry");
-    sessionStorage().should(containItem("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
-    sessionStorage().should(containItemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
-    sessionStorage().should(containItemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+    sessionStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
+    sessionStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
+    sessionStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
   }
 
   @Test
   void assertPresenceOfItemInSessionStorage() {
     $("#button-put").click();
-    sessionStorage().should(containItem("it"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
-    sessionStorage().should(containItemWithValue("it", "works"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldHave(item("it"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldHave(itemWithValue("it", "works"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
   }
 
   @Test
   void assertAbsenceOfItemInSessionStorage() {
     sessionStorage().setItem("it", "is present");
     $("#button-remove").click();
-    sessionStorage().shouldNot(containItem("it"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
-    sessionStorage().shouldNot(containItemWithValue("it", "is present"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldNotHave(item("it"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldNotHave(itemWithValue("it", "is present"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
   }
 
   @Test
   void checkValueOfItem() {
     $("#button-put").click();
-    sessionStorage().shouldNot(containItemWithValue("it", "another"), "Item has different value", ofMillis(2000));
+    sessionStorage().shouldNotHave(itemWithValue("it", "another"), "Item has different value", ofMillis(2000));
   }
 
   @Test
   void errorMessageWhenItemIsMissing() {
     assertThatThrownBy(() ->
-      sessionStorage().should(containItem("foo"), "sessionStorage should contain item foo", ofMillis(10))
+      sessionStorage().shouldHave(item("foo"), "sessionStorage should contain item foo", ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("sessionStorage should contain item foo")
@@ -71,7 +71,7 @@ final class SessionStorageTest extends IntegrationTest {
     $("#button-put").click();
 
     assertThatThrownBy(() ->
-      sessionStorage().should(containItemWithValue("it", "wrong"), "sessionStorage should contain item 'it' with value 'wrong'")
+      sessionStorage().shouldHave(itemWithValue("it", "wrong"), "sessionStorage should contain item 'it' with value 'wrong'")
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("sessionStorage should contain item 'it' with value 'wrong'")

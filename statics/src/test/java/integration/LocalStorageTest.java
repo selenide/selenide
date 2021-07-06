@@ -5,8 +5,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.LocalStorageConditions.containItem;
-import static com.codeborne.selenide.LocalStorageConditions.containItemWithValue;
+import static com.codeborne.selenide.LocalStorageConditions.item;
+import static com.codeborne.selenide.LocalStorageConditions.itemWithValue;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.localStorage;
 import static java.time.Duration.ofMillis;
@@ -28,36 +28,49 @@ final class LocalStorageTest extends IntegrationTest {
   void setAndGetItem() {
     localStorage().setItem("cat", "Tom");
     localStorage().setItem("mouse", "Jerry");
-    localStorage().should(containItem("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
-    localStorage().should(containItemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
-    localStorage().should(containItemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+    localStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
+    localStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
+    localStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+  }
+
+  @Test
+  void canChainShouldMethods() {
+    localStorage().setItem("cat", "Tom");
+    localStorage().setItem("mouse", "Jerry");
+    localStorage()
+      .shouldHave(item("cat"), "Item 'cat' value doesn't match")
+      .shouldHave(item("mouse"), "Item 'mouse' value doesn't match")
+      .shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10))
+      .shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match", ofMillis(20))
+      .shouldNotHave(item("dog"), "no dogs")
+      .shouldNotHave(itemWithValue("dog", "barks"), "no barking dogs");
   }
 
   @Test
   void assertPresenceOfItemInLocalStorage() {
     $("#button-put").click();
-    localStorage().should(containItem("it"), "Button should put item to localStorage after 1 second", ofMillis(2000));
-    localStorage().should(containItemWithValue("it", "works"), "Button should put item to localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(item("it"), "Button should put item to localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(itemWithValue("it", "works"), "Button should put item to localStorage after 1 second", ofMillis(2000));
   }
 
   @Test
   void assertAbsenceOfItemInLocalStorage() {
     localStorage().setItem("it", "is present");
     $("#button-remove").click();
-    localStorage().shouldNot(containItem("it"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
-    localStorage().shouldNot(containItemWithValue("it", "is present"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(item("it"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(itemWithValue("it", "is present"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
   }
 
   @Test
   void checkValueOfItem() {
     $("#button-put").click();
-    localStorage().shouldNot(containItemWithValue("it", "another"), "Item has different value", ofMillis(2000));
+    localStorage().shouldNotHave(itemWithValue("it", "another"), "Item has different value", ofMillis(2000));
   }
 
   @Test
   void errorMessageWhenItemIsMissing() {
     assertThatThrownBy(() ->
-      localStorage().should(containItem("foo"), "localStorage should contain item foo", ofMillis(10))
+      localStorage().shouldHave(item("foo"), "localStorage should contain item foo", ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("localStorage should contain item foo")
@@ -71,7 +84,7 @@ final class LocalStorageTest extends IntegrationTest {
     $("#button-put").click();
 
     assertThatThrownBy(() ->
-      localStorage().should(containItemWithValue("it", "wrong"), "localStorage should contain item 'it' with value 'wrong'")
+      localStorage().shouldHave(itemWithValue("it", "wrong"), "localStorage should contain item 'it' with value 'wrong'")
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("localStorage should contain item 'it' with value 'wrong'")
