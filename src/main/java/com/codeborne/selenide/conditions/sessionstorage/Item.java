@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions.sessionstorage;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.SessionStorage;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -16,13 +17,13 @@ public class Item implements ObjectCondition<SessionStorage> {
   @Nonnull
   @Override
   public String description() {
-    return String.format("sessionStorage should have item '%s'", item);
+    return String.format("should have item '%s'", item);
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return String.format("sessionStorage should not have item '%s'", item);
+    return String.format("should not have item '%s'", item);
   }
 
   @Nullable
@@ -34,5 +35,12 @@ public class Item implements ObjectCondition<SessionStorage> {
   @Override
   public boolean test(SessionStorage sessionStorage) {
     return sessionStorage.containsItem(item);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String describe(SessionStorage sessionStorage) {
+    return "sessionStorage";
   }
 }

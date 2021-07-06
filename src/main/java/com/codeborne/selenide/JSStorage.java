@@ -1,11 +1,15 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.logevents.SelenideLog;
+import com.codeborne.selenide.logevents.SelenideLogger;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.Integer.parseInt;
 
 @ParametersAreNonnullByDefault
@@ -36,15 +40,21 @@ abstract class JSStorage {
   }
 
   public void setItem(String key, String value) {
+    SelenideLog log = SelenideLogger.beginStep(toString(), "setItem", key, value);
     driver.executeJavaScript(js("%s.setItem(arguments[0], arguments[1])"), key, value);
+    SelenideLogger.commitStep(log, PASS);
   }
 
   public void removeItem(String key) {
+    SelenideLog log = SelenideLogger.beginStep(toString(), "removeItem");
     driver.executeJavaScript(js("%s.removeItem(arguments[0])"), key);
+    SelenideLogger.commitStep(log, PASS);
   }
 
   public void clear() {
+    SelenideLog log = SelenideLogger.beginStep(toString(), "clear");
     driver.executeJavaScript(js("%s.clear()"));
+    SelenideLogger.commitStep(log, PASS);
   }
 
   @CheckReturnValue

@@ -19,4 +19,8 @@ public interface ObjectCondition<T> {
   @Nullable
   @CheckReturnValue
   Object actualValue(T object);
+
+  @Nonnull
+  @CheckReturnValue
+  String describe(T object);
 }

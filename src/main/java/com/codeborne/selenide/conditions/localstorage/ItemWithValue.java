@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions.localstorage;
 import com.codeborne.selenide.LocalStorage;
 import com.codeborne.selenide.ObjectCondition;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -19,13 +20,13 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
   @Nonnull
   @Override
   public String description() {
-    return String.format("localStorage should have item '%s' with value '%s'", item, value);
+    return String.format("should have item '%s' with value '%s'", item, value);
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return String.format("localStorage should not have item '%s' with value '%s'", item, value);
+    return String.format("should not have item '%s' with value '%s'", item, value);
   }
 
   @Nullable
@@ -37,5 +38,12 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
   @Override
   public boolean test(LocalStorage localStorage) {
     return Objects.equals(localStorage.getItem(item), value);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String describe(LocalStorage localStorage) {
+    return "localStorage";
   }
 }
