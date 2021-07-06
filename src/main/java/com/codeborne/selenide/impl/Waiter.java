@@ -4,6 +4,8 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import com.codeborne.selenide.ex.UIAssertionError;
+import com.codeborne.selenide.logevents.SelenideLog;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 import java.util.function.Predicate;
 
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static java.lang.System.currentTimeMillis;
 
 @ParametersAreNonnullByDefault
@@ -36,14 +39,19 @@ public class Waiter {
   }
 
   private <T> void wait(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
+    SelenideLog log = SelenideLogger.beginStep(condition.describe(subject), condition.description());
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
       if (checkUnThrowable(subject, condition)) {
+        SelenideLogger.commitStep(log, PASS);
         return;
       }
       sleep(pollingInterval);
     }
 
-    throw UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition.description()), timeout);
+    String message = condition.describe(subject) + " " + condition.description();
+    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetException(driver, message), timeout);
+    SelenideLogger.commitStep(log, failure);
+    throw failure;
   }
 
   public <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition) {
@@ -55,14 +63,19 @@ public class Waiter {
   }
 
   private <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
+    SelenideLog log = SelenideLogger.beginStep(subject.toString(), condition.description());
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
       if (!checkUnThrowable(subject, condition)) {
+        SelenideLogger.commitStep(log, PASS);
         return;
       }
       sleep(pollingInterval);
     }
 
-    throw UIAssertionError.wrap(driver, new ConditionNotMetException(driver, condition.negativeDescription()), timeout);
+    String message = condition.describe(subject) + " " + condition.negativeDescription();
+    Error failure = UIAssertionError.wrap(driver, new ConditionNotMetException(driver, message), timeout);
+    SelenideLogger.commitStep(log, failure);
+    throw failure;
   }
 
   private boolean isTimeoutExceeded(long timeout, long start) {

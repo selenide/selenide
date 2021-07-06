@@ -3,6 +3,7 @@ package com.codeborne.selenide.conditions.webdriver;
 import com.codeborne.selenide.ObjectCondition;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -16,13 +17,13 @@ public class UrlStartingWith implements ObjectCondition<WebDriver> {
   @Nonnull
   @Override
   public String description() {
-    return "webdriver should have url starting with " + expectedUrl;
+    return "should have url starting with " + expectedUrl;
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return "webdriver should not have url starting with " + expectedUrl;
+    return "should not have url starting with " + expectedUrl;
   }
 
   @Override
@@ -34,5 +35,12 @@ public class UrlStartingWith implements ObjectCondition<WebDriver> {
   @Override
   public Object actualValue(WebDriver webDriver) {
     return webDriver.getCurrentUrl();
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String describe(WebDriver webDriver) {
+    return "webdriver";
   }
 }

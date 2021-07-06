@@ -18,13 +18,13 @@ public class CurrentFrameUrlStartingWith implements ObjectCondition<WebDriver> {
   @Nonnull
   @Override
   public String description() {
-    return "current frame should have url starting with " + expectedUrl;
+    return "should have url starting with " + expectedUrl;
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return "current frame should not have url starting with " + expectedUrl;
+    return "should not have url starting with " + expectedUrl;
   }
 
   @Override
@@ -42,5 +42,12 @@ public class CurrentFrameUrlStartingWith implements ObjectCondition<WebDriver> {
   @Nonnull
   private static String getCurrentFrameUrl(WebDriver webDriver) {
     return ((JavascriptExecutor) webDriver).executeScript("return window.location.href").toString();
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public String describe(WebDriver webDriver) {
+    return "current frame";
   }
 }
