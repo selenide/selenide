@@ -1,11 +1,14 @@
 package integration;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.LocalStorageConditions.containItemWithValue;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class LocalStorageTest extends IntegrationTest {
@@ -16,6 +19,7 @@ final class LocalStorageTest extends IntegrationTest {
 
   @BeforeEach
   void openTestPage() {
+    Configuration.timeout = 4000;
     openFile("empty.html");
   }
 
@@ -23,12 +27,8 @@ final class LocalStorageTest extends IntegrationTest {
   void setAndGetItem() {
     Selenide.localStorage().setItem("cat", "Tom");
     Selenide.localStorage().setItem("mouse", "Jerry");
-
-    String cat = Selenide.localStorage().getItem("cat");
-    String mouse = Selenide.localStorage().getItem("mouse");
-
-    assertThat(cat).isEqualTo("Tom");
-    assertThat(mouse).isEqualTo("Jerry");
+    Selenide.localStorage().should(containItemWithValue("cat","Tom"),"Item 'cat' value doesn't match", ofMillis(10000));
+    Selenide.localStorage().should(containItemWithValue("mouse","Jerry"),"Item 'mouse' value doesn't match");
   }
 
   @Test
