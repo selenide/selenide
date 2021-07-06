@@ -7,27 +7,23 @@ import java.time.Duration;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
-public class LocalStorage extends JSStorage implements Conditional<LocalStorage> {
+public class LocalStorage extends JSStorage {
   LocalStorage(Driver driver) {
     super(driver, "localStorage");
   }
 
-  @Override
   public void should(Predicate<LocalStorage> predicate, String message) {
     new Waiter().wait(this.driver, this, predicate, message);
   }
 
-  @Override
   public void shouldNot(Predicate<LocalStorage> predicate, String message) {
     should(predicate.negate(), message);
   }
 
-  @Override
   public void should(Predicate<LocalStorage> predicate, String message, Duration timeout) {
     new Waiter().wait(this.driver, this, predicate, timeout, message);
   }
 
-  @Override
   public void shouldNot(Predicate<LocalStorage> predicate, String message, Duration timeout) {
     should(predicate.negate(), message, timeout);
   }
