@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.LocalStorageConditions.containItem;
 import static com.codeborne.selenide.LocalStorageConditions.containItemWithValue;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.localStorage;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class LocalStorageTest extends IntegrationTest {
   @AfterAll
-  static void tearDown() {
-    closeWebDriver();
+  static void resetSessionStorage() {
+    localStorage().clear();
   }
 
   @BeforeEach
