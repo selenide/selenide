@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.lang.Integer.parseInt;
-import static java.util.Optional.ofNullable;
 
 @ParametersAreNonnullByDefault
 abstract class JSStorage {
@@ -20,7 +19,7 @@ abstract class JSStorage {
 
   @CheckReturnValue
   public boolean containsItem(String key) {
-    return ofNullable(getItem(key)).isPresent();
+    return getItem(key) != null;
   }
 
   @CheckReturnValue
