@@ -6,7 +6,6 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
-import java.util.function.Predicate;
 
 /**
  * <p>
@@ -38,23 +37,23 @@ public interface Conditional<T> {
   @CheckReturnValue
   T object();
 
-  default Conditional<T> shouldHave(Predicate<T> predicate, String message) {
-    new Waiter().wait(driver(), object(), predicate, message);
+  default Conditional<T> shouldHave(ObjectCondition<T> predicate) {
+    new Waiter().wait(driver(), object(), predicate);
     return this;
   }
 
-  default Conditional<T> shouldHave(Predicate<T> predicate, String message, Duration timeout) {
-    new Waiter().wait(driver(), object(), predicate, timeout, message);
+  default Conditional<T> shouldHave(ObjectCondition<T> predicate, Duration timeout) {
+    new Waiter().wait(driver(), object(), predicate, timeout);
     return this;
   }
 
-  default Conditional<T> shouldNotHave(Predicate<T> predicate, String message) {
-    new Waiter().wait(driver(), object(), predicate.negate(), message);
+  default Conditional<T> shouldNotHave(ObjectCondition<T> predicate) {
+    new Waiter().wait(driver(), object(), predicate.negate());
     return this;
   }
 
-  default Conditional<T> shouldNotHave(Predicate<T> predicate, String message, Duration timeout) {
-    new Waiter().wait(driver(), object(), predicate.negate(), timeout, message);
+  default Conditional<T> shouldNotHave(ObjectCondition<T> predicate, Duration timeout) {
+    new Waiter().wait(driver(), object(), predicate.negate(), timeout);
     return this;
   }
 }

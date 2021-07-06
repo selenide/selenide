@@ -29,9 +29,9 @@ final class SessionStorageTest extends IntegrationTest {
   void setAndGetItem() {
     sessionStorage().setItem("cat", "Tom");
     sessionStorage().setItem("mouse", "Jerry");
-    sessionStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
-    sessionStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
-    sessionStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+    sessionStorage().shouldHave(item("cat"), ofMillis(10000));
+    sessionStorage().shouldHave(itemWithValue("cat", "Tom"), ofMillis(10000));
+    sessionStorage().shouldHave(itemWithValue("mouse", "Jerry"));
   }
 
   @Test
@@ -44,31 +44,31 @@ final class SessionStorageTest extends IntegrationTest {
   @Test
   void assertPresenceOfItemInSessionStorage() {
     $("#button-put").click();
-    sessionStorage().shouldHave(item("it"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
-    sessionStorage().shouldHave(itemWithValue("it", "works"), "Button should put item to sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldHave(item("it"), ofMillis(2000));
+    sessionStorage().shouldHave(itemWithValue("it", "works"), ofMillis(2000));
   }
 
   @Test
   void assertAbsenceOfItemInSessionStorage() {
     sessionStorage().setItem("it", "is present");
     $("#button-remove").click();
-    sessionStorage().shouldNotHave(item("it"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
-    sessionStorage().shouldNotHave(itemWithValue("it", "is present"), "Button should remove item from sessionStorage after 1 second", ofMillis(2000));
+    sessionStorage().shouldNotHave(item("it"), ofMillis(2000));
+    sessionStorage().shouldNotHave(itemWithValue("it", "is present"), ofMillis(2000));
   }
 
   @Test
   void checkValueOfItem() {
     $("#button-put").click();
-    sessionStorage().shouldNotHave(itemWithValue("it", "another"), "Item has different value", ofMillis(2000));
+    sessionStorage().shouldNotHave(itemWithValue("it", "another"), ofMillis(2000));
   }
 
   @Test
   void errorMessageWhenItemIsMissing() {
     assertThatThrownBy(() ->
-      sessionStorage().shouldHave(item("foo"), "sessionStorage should contain item foo", ofMillis(10))
+      sessionStorage().shouldHave(item("foo"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("sessionStorage should contain item foo")
+      .hasMessageStartingWith("sessionStorage should have item 'foo'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
@@ -79,10 +79,10 @@ final class SessionStorageTest extends IntegrationTest {
     $("#button-put").click();
 
     assertThatThrownBy(() ->
-      sessionStorage().shouldHave(itemWithValue("it", "wrong"), "sessionStorage should contain item 'it' with value 'wrong'")
+      sessionStorage().shouldHave(itemWithValue("it", "wrong"))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("sessionStorage should contain item 'it' with value 'wrong'")
+      .hasMessageStartingWith("sessionStorage should have item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");
@@ -105,5 +105,34 @@ final class SessionStorageTest extends IntegrationTest {
 
     sessionStorage().clear();
     assertThat(sessionStorage().size()).isEqualTo(0);
+  }
+
+
+  @Test
+  void errorMessageWhenItemShouldNotExist() {
+    sessionStorage().setItem("cat", "Tom");
+
+    assertThatThrownBy(() ->
+      sessionStorage().shouldNotHave(item("cat"))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("sessionStorage should not have item 'it'")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 1 ms.");
+  }
+
+  @Test
+  void errorMessageWhenItemShouldNotHaveGivenValue() {
+    sessionStorage().setItem("cat", "Tom");
+
+    assertThatThrownBy(() ->
+      sessionStorage().shouldNotHave(itemWithValue("cat", "Tom"))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("sessionStorage should not have item 'it' with value 'wrong'")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 1 ms.");
   }
 }
