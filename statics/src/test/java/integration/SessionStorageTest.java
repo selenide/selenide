@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,13 @@ final class SessionStorageTest extends IntegrationTest {
     sessionStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
     sessionStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
     sessionStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+  }
+
+  @Test
+  void getAllItems() {
+    sessionStorage().setItem("cat", "Tom");
+    sessionStorage().setItem("mouse", "Jerry");
+    assertThat(sessionStorage().getItems()).containsAllEntriesOf(ImmutableMap.of("cat", "Tom", "mouse", "Jerry"));
   }
 
   @Test

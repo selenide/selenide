@@ -4,12 +4,12 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
 @ParametersAreNonnullByDefault
 abstract class JSStorage {
-
   private final Driver driver;
   private final String storage;
 
@@ -55,6 +55,18 @@ abstract class JSStorage {
   @CheckReturnValue
   public boolean isEmpty() {
     return size() == 0;
+  }
+
+  /**
+   * @return all items in this storage
+   * @since 5.23.0
+   */
+  @CheckReturnValue
+  public Map<String, String> getItems() {
+    return driver.executeJavaScript(js("return Object.keys(%1$s).reduce((items, key) => {\n" +
+      "   items[key] = %1$s.getItem(key);\n" +
+      "   return items\n" +
+      "}, {});"));
   }
 
   private String js(String jsCodeTemplate) {

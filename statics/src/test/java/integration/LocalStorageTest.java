@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ConditionNotMetException;
+import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class LocalStorageTest extends IntegrationTest {
   @AfterAll
-  static void resetSessionStorage() {
+  static void resetLocalStorage() {
     localStorage().clear();
   }
 
@@ -31,6 +32,13 @@ final class LocalStorageTest extends IntegrationTest {
     localStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
     localStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
     localStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+  }
+
+  @Test
+  void getAllItems() {
+    localStorage().setItem("cat", "Tom");
+    localStorage().setItem("mouse", "Jerry");
+    assertThat(localStorage().getItems()).containsAllEntriesOf(ImmutableMap.of("cat", "Tom", "mouse", "Jerry"));
   }
 
   @Test
