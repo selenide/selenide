@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -9,12 +10,18 @@ import static java.lang.Integer.parseInt;
 @ParametersAreNonnullByDefault
 abstract class JSStorage {
 
-  protected final Driver driver;
+  private final Driver driver;
   private final String storage;
 
   JSStorage(Driver driver, String storage) {
     this.driver = driver;
     this.storage = storage;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public Driver driver() {
+    return driver;
   }
 
   @CheckReturnValue

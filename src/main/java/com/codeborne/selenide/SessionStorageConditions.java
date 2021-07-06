@@ -8,11 +8,11 @@ import java.util.function.Predicate;
  */
 public class SessionStorageConditions {
 
-  public static Predicate<SessionStorage> containItem(String item) {
+  public static Predicate<SessionStorage> item(String item) {
     return localStorage -> localStorage.containsItem(item);
   }
 
-  public static Predicate<SessionStorage> containItemWithValue(String item, String value) {
+  public static Predicate<SessionStorage> itemWithValue(String item, String value) {
     return localStorage -> Objects.equals(localStorage.getItem(item), value);
   }
 }
