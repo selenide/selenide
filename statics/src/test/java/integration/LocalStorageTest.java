@@ -29,9 +29,9 @@ final class LocalStorageTest extends IntegrationTest {
   void setAndGetItem() {
     localStorage().setItem("cat", "Tom");
     localStorage().setItem("mouse", "Jerry");
-    localStorage().shouldHave(item("cat"), "Item 'cat' value doesn't match", ofMillis(10000));
-    localStorage().shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10000));
-    localStorage().shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match");
+    localStorage().shouldHave(item("cat"), ofMillis(10000));
+    localStorage().shouldHave(itemWithValue("cat", "Tom"), ofMillis(10000));
+    localStorage().shouldHave(itemWithValue("mouse", "Jerry"));
   }
 
   @Test
@@ -46,42 +46,42 @@ final class LocalStorageTest extends IntegrationTest {
     localStorage().setItem("cat", "Tom");
     localStorage().setItem("mouse", "Jerry");
     localStorage()
-      .shouldHave(item("cat"), "Item 'cat' value doesn't match")
-      .shouldHave(item("mouse"), "Item 'mouse' value doesn't match")
-      .shouldHave(itemWithValue("cat", "Tom"), "Item 'cat' value doesn't match", ofMillis(10))
-      .shouldHave(itemWithValue("mouse", "Jerry"), "Item 'mouse' value doesn't match", ofMillis(20))
-      .shouldNotHave(item("dog"), "no dogs")
-      .shouldNotHave(itemWithValue("dog", "barks"), "no barking dogs");
+      .shouldHave(item("cat"))
+      .shouldHave(item("mouse"))
+      .shouldHave(itemWithValue("cat", "Tom"), ofMillis(10))
+      .shouldHave(itemWithValue("mouse", "Jerry"), ofMillis(20))
+      .shouldNotHave(item("dog"))
+      .shouldNotHave(itemWithValue("dog", "barks"));
   }
 
   @Test
   void assertPresenceOfItemInLocalStorage() {
     $("#button-put").click();
-    localStorage().shouldHave(item("it"), "Button should put item to localStorage after 1 second", ofMillis(2000));
-    localStorage().shouldHave(itemWithValue("it", "works"), "Button should put item to localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(item("it"), ofMillis(2000));
+    localStorage().shouldHave(itemWithValue("it", "works"), ofMillis(2000));
   }
 
   @Test
   void assertAbsenceOfItemInLocalStorage() {
     localStorage().setItem("it", "is present");
     $("#button-remove").click();
-    localStorage().shouldHave(item("it"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
-    localStorage().shouldHave(itemWithValue("it", "is present"), "Button should remove item from localStorage after 1 second", ofMillis(2000));
+    localStorage().shouldHave(item("it"), ofMillis(2000));
+    localStorage().shouldHave(itemWithValue("it", "is present"), ofMillis(2000));
   }
 
   @Test
   void checkValueOfItem() {
     $("#button-put").click();
-    localStorage().shouldNotHave(itemWithValue("it", "another"), "Item has different value", ofMillis(2000));
+    localStorage().shouldNotHave(itemWithValue("it", "another"), ofMillis(2000));
   }
 
   @Test
   void errorMessageWhenItemIsMissing() {
     assertThatThrownBy(() ->
-      localStorage().shouldHave(item("foo"), "localStorage should contain item foo", ofMillis(10))
+      localStorage().shouldHave(item("foo"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("localStorage should contain item foo")
+      .hasMessageStartingWith("localStorage should have item 'foo'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
@@ -92,10 +92,10 @@ final class LocalStorageTest extends IntegrationTest {
     $("#button-put").click();
 
     assertThatThrownBy(() ->
-      localStorage().shouldHave(itemWithValue("it", "wrong"), "localStorage should contain item 'it' with value 'wrong'")
+      localStorage().shouldHave(itemWithValue("it", "wrong"))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("localStorage should contain item 'it' with value 'wrong'")
+      .hasMessageStartingWith("localStorage should have item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");
@@ -118,5 +118,33 @@ final class LocalStorageTest extends IntegrationTest {
 
     localStorage().clear();
     assertThat(localStorage().size()).isEqualTo(0);
+  }
+
+  @Test
+  void errorMessageWhenItemShouldNotExist() {
+    localStorage().setItem("cat", "Tom");
+
+    assertThatThrownBy(() ->
+      localStorage().shouldNotHave(item("cat"))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("localStorage should not have item 'cat'")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 1 ms.");
+  }
+
+  @Test
+  void errorMessageWhenItemShouldNotHaveGivenValue() {
+    localStorage().setItem("cat", "Tom");
+
+    assertThatThrownBy(() ->
+      localStorage().shouldNotHave(itemWithValue("cat", "Tom"))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("localStorage should not have item 'it' with value 'wrong'")
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 1 ms.");
   }
 }

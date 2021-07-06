@@ -1,18 +1,18 @@
 package com.codeborne.selenide;
 
-import java.util.Objects;
-import java.util.function.Predicate;
+import com.codeborne.selenide.conditions.localstorage.Item;
+import com.codeborne.selenide.conditions.localstorage.ItemWithValue;
 
 /**
  * @since 5.23.0
  */
 public class LocalStorageConditions {
 
-  public static Predicate<LocalStorage> item(String item) {
-    return localStorage -> localStorage.containsItem(item);
+  public static ObjectCondition<LocalStorage> item(String item) {
+    return new Item(item);
   }
 
-  public static Predicate<LocalStorage> itemWithValue(String item, String value) {
-    return localStorage -> Objects.equals(localStorage.getItem(item), value);
+  public static ObjectCondition<LocalStorage> itemWithValue(String item, String value) {
+    return new ItemWithValue(item, value);
   }
 }
