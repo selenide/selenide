@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class LocalStorageConditions {
@@ -9,7 +10,6 @@ public class LocalStorageConditions {
   }
 
   public static Predicate<LocalStorage> containItemWithValue(String item, String value) {
-    return localStorage -> localStorage.getItem(item).equals(value);
+    return localStorage -> Objects.equals(localStorage.getItem(item), value);
   }
-
 }
