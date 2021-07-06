@@ -57,9 +57,9 @@ final class LocalStorageTest extends IntegrationTest {
 
   @Test
   void errorMessageWhenItemIsMissing() {
-    assertThatThrownBy(() -> {
-      localStorage().should(containItem("foo"), "localStorage should contain item foo", ofMillis(10));
-    })
+    assertThatThrownBy(() ->
+      localStorage().should(containItem("foo"), "localStorage should contain item foo", ofMillis(10))
+    )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("localStorage should contain item foo")
       .hasMessageContaining("Screenshot: ")
@@ -71,9 +71,9 @@ final class LocalStorageTest extends IntegrationTest {
   void errorMessageWhenItemHasWrongValue() {
     $("#button-put").click();
 
-    assertThatThrownBy(() -> {
-      localStorage().should(containItemWithValue("it", "wrong"), "localStorage should contain item 'it' with value 'wrong'");
-    })
+    assertThatThrownBy(() ->
+      localStorage().should(containItemWithValue("it", "wrong"), "localStorage should contain item 'it' with value 'wrong'")
+    )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("localStorage should contain item 'it' with value 'wrong'")
       .hasMessageContaining("Screenshot: ")
