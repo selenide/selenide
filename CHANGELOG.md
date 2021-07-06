@@ -2,6 +2,8 @@
 
 ## 5.23.0 (released 07.07.2021)
 * #1478 Conditional wait for non-WebElement entities
+* #1502 Add method sessionStorage.getItems()
+* #1502 Add method localStorage.getItems()
 
 ## 5.22.3 (released 05.07.2021)
 * #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498
