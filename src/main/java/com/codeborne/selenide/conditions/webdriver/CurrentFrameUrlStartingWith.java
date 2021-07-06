@@ -21,6 +21,12 @@ public class CurrentFrameUrlStartingWith implements ObjectCondition<WebDriver> {
     return "current frame should have url starting with " + expectedUrl;
   }
 
+  @Nonnull
+  @Override
+  public String negativeDescription() {
+    return "current frame should not have url starting with " + expectedUrl;
+  }
+
   @Override
   public boolean test(WebDriver webDriver) {
     return getCurrentFrameUrl(webDriver).startsWith(expectedUrl);

@@ -30,10 +30,25 @@ final class WebDriverConditionsTest extends IntegrationTest {
       driver().shouldHave(url("page_with_frames.html"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("driver should have url page_with_frames.html")
+      .hasMessageStartingWith("webdriver should have url page_with_frames.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
+  }
+
+  @Test
+  void errorMessageWhenWebdriverShouldNotHaveUrl() {
+    openFile("page_with_frames.html");
+    String url = baseUrl + "/page_with_frames.html";
+
+    assertThatThrownBy(() ->
+      driver().shouldNotHave(urlStartingWith(url), ofMillis(11))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageStartingWith("webdriver should not have url starting with " + url)
+      .hasMessageContaining("Screenshot: ")
+      .hasMessageContaining("Page source: ")
+      .hasMessageContaining("Timeout: 11 ms.");
   }
 
   @Test
@@ -47,7 +62,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       driver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("driver should have url starting with https://google.ee/")
+      .hasMessageStartingWith("webdriver should have url starting with https://google.ee/")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");

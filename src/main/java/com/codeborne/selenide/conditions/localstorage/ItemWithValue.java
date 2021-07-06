@@ -22,6 +22,12 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
     return String.format("localStorage should have item '%s' with value '%s'", item, value);
   }
 
+  @Nonnull
+  @Override
+  public String negativeDescription() {
+    return String.format("localStorage should not have item '%s' with value '%s'", item, value);
+  }
+
   @Nullable
   @Override
   public Object actualValue(LocalStorage localStorage) {

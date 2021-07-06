@@ -142,7 +142,7 @@ final class LocalStorageTest extends IntegrationTest {
       localStorage().shouldNotHave(itemWithValue("cat", "Tom"))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageStartingWith("localStorage should not have item 'it' with value 'wrong'")
+      .hasMessageStartingWith("localStorage should not have item 'cat' with value 'Tom'")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");
