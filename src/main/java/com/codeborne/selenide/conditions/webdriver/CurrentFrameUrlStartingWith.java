@@ -34,7 +34,7 @@ public class CurrentFrameUrlStartingWith implements ObjectCondition<WebDriver> {
 
   @Nullable
   @Override
-  public Object actualValue(WebDriver webDriver) {
+  public String actualValue(WebDriver webDriver) {
     return getCurrentFrameUrl(webDriver);
   }
 

@@ -72,6 +72,7 @@ abstract class JSStorage {
    * @since 5.23.0
    */
   @CheckReturnValue
+  @Nonnull
   public Map<String, String> getItems() {
     return driver.executeJavaScript(js("return Object.keys(%1$s).reduce((items, key) => {\n" +
       "   items[key] = %1$s.getItem(key);\n" +

@@ -31,8 +31,8 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
 
   @Nullable
   @Override
-  public Object actualValue(LocalStorage localStorage) {
-    return localStorage.getItems();
+  public String actualValue(LocalStorage localStorage) {
+    return localStorage.getItems().toString();
   }
 
   @Override
