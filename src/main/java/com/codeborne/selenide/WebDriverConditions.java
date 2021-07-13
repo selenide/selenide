@@ -1,8 +1,10 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrl;
+import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlContaining;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlStartingWith;
 import com.codeborne.selenide.conditions.webdriver.Url;
+import com.codeborne.selenide.conditions.webdriver.UrlContaining;
 import com.codeborne.selenide.conditions.webdriver.UrlStartingWith;
 import org.openqa.selenium.WebDriver;
 
@@ -18,11 +20,19 @@ public class WebDriverConditions {
     return new UrlStartingWith(expectedUrl);
   }
 
+  public static ObjectCondition<WebDriver> urlContaining(String expectedUrl) {
+    return new UrlContaining(expectedUrl);
+  }
+
   public static ObjectCondition<WebDriver> currentFrameUrl(String expectedUrl) {
     return new CurrentFrameUrl(expectedUrl);
   }
 
   public static ObjectCondition<WebDriver> currentFrameUrlStartingWith(String expectedUrl) {
     return new CurrentFrameUrlStartingWith(expectedUrl);
+  }
+
+  public static ObjectCondition<WebDriver> currentFrameUrlContaining(String expectedUrl) {
+    return new CurrentFrameUrlContaining(expectedUrl);
   }
 }
