@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.driver;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
 import static com.codeborne.selenide.WebDriverConditions.url;
+import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -57,6 +59,11 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
+  void waitForUrlContaining() {
+    driver().shouldHave(urlContaining("_with_"), ofMillis(2000));
+  }
+
+  @Test
   void errorMessageForWrongUrlStartingWith() {
     assertThatThrownBy(() ->
       driver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
@@ -88,6 +95,11 @@ final class WebDriverConditionsTest extends IntegrationTest {
   @Test
   void waitForUrlCurrentFrameStartingWith() {
     driver().shouldHave(currentFrameUrlStartingWith(baseUrl + "/page_with_"), ofMillis(2000));
+  }
+
+  @Test
+  void waitForUrlCurrentFrameContaining() {
+    driver().shouldHave(currentFrameUrlContaining("e_with_"), ofMillis(2000));
   }
 
   @Test
