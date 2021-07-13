@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,8 +47,9 @@ final class WebDriverConditionsTest extends IntegrationTest {
     assertThatThrownBy(() ->
       driver().shouldNotHave(urlStartingWith(url), ofMillis(11))
     )
-      .isInstanceOf(ConditionNotMetException.class)
+      .isInstanceOf(ConditionMetException.class)
       .hasMessageStartingWith("webdriver should not have url starting with " + url)
+      .hasMessageContaining("Actual value: " + url)
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 11 ms.");
@@ -70,6 +72,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("webdriver should have url starting with https://google.ee/")
+      .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 10 ms.");
@@ -87,6 +90,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("current frame should have url https://google.ee/")
+      .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 20 ms.");
@@ -109,6 +113,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("current frame should have url starting with https://google.ee/")
+      .hasMessageContaining("Actual value: " + baseUrl + "/page_with_frames_with_delays.html")
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 5 ms.");

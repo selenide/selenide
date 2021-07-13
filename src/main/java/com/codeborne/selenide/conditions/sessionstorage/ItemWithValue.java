@@ -31,8 +31,8 @@ public class ItemWithValue implements ObjectCondition<SessionStorage> {
 
   @Nullable
   @Override
-  public Object actualValue(SessionStorage sessionStorage) {
-    return sessionStorage.getItems();
+  public String actualValue(SessionStorage sessionStorage) {
+    return sessionStorage.getItems().toString();
   }
 
   @Override

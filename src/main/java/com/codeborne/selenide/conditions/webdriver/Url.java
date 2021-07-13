@@ -33,7 +33,7 @@ public class Url implements ObjectCondition<WebDriver> {
 
   @Nullable
   @Override
-  public Object actualValue(WebDriver webDriver) {
+  public String actualValue(WebDriver webDriver) {
     return webDriver.getCurrentUrl();
   }
 

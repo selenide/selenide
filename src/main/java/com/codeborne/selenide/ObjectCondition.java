@@ -18,7 +18,7 @@ public interface ObjectCondition<T> {
 
   @Nullable
   @CheckReturnValue
-  Object actualValue(T object);
+  String actualValue(T object);
 
   @Nonnull
   @CheckReturnValue
