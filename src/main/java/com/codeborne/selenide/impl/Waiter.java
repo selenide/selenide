@@ -63,7 +63,7 @@ public class Waiter {
   }
 
   private <T> void waitWhile(Driver driver, T subject, ObjectCondition<T> condition, long timeout, long pollingInterval) {
-    SelenideLog log = SelenideLogger.beginStep(subject.toString(), condition.description());
+    SelenideLog log = SelenideLogger.beginStep(subject.toString(), condition.negativeDescription());
     for (long start = currentTimeMillis(); !isTimeoutExceeded(timeout, start); ) {
       if (!checkUnThrowable(subject, condition)) {
         SelenideLogger.commitStep(log, PASS);
