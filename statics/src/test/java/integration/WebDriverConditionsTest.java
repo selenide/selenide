@@ -1,9 +1,13 @@
 package integration;
 
+import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+
+import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.webdriver;
@@ -117,5 +121,43 @@ final class WebDriverConditionsTest extends IntegrationTest {
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 5 ms.");
+  }
+
+  @Test
+  void userCanDefineCustomConditions() {
+    webdriver().shouldHave(tabs(1));
+  }
+
+  private ObjectCondition<WebDriver> tabs(int expectedTabsCount) {
+    return new ObjectCondition<WebDriver>() {
+      @Nonnull
+      @Override
+      public String description() {
+        return "should have " + expectedTabsCount + " tabs";
+      }
+
+      @Nonnull
+      @Override
+      public String negativeDescription() {
+        return "should not have " + expectedTabsCount + " tabs";
+      }
+
+      @Override
+      public boolean test(WebDriver webdriver) {
+        return webdriver.getWindowHandles().size() == expectedTabsCount;
+      }
+
+      @Nonnull
+      @Override
+      public String actualValue(WebDriver webdriver) {
+        return String.valueOf(webdriver.getWindowHandles().size());
+      }
+
+      @Nonnull
+      @Override
+      public String describe(WebDriver object) {
+        return "webdriver";
+      }
+    };
   }
 }
