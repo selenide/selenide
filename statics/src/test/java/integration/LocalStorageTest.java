@@ -1,11 +1,15 @@
 package integration;
 
+import com.codeborne.selenide.LocalStorage;
+import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.LocalStorageConditions.item;
 import static com.codeborne.selenide.LocalStorageConditions.itemWithValue;
@@ -147,5 +151,47 @@ final class LocalStorageTest extends IntegrationTest {
       .hasMessageContaining("Screenshot: ")
       .hasMessageContaining("Page source: ")
       .hasMessageContaining("Timeout: 1 ms.");
+  }
+
+  @Test
+  void userCanDefineCustomConditions() {
+    localStorage().setItem("item1", "foo bar");
+    localStorage().setItem("item2", "bar foo");
+    localStorage().setItem("item2", "bar foo zoo");
+    localStorage().shouldHave(allItemsContaining("foo"));
+  }
+
+  private ObjectCondition<LocalStorage> allItemsContaining(String expectedValue) {
+    return new ObjectCondition<LocalStorage>() {
+      @Nonnull
+      @Override
+      public String description() {
+        return String.format("should have all items containing '%s'", expectedValue);
+      }
+
+      @Nonnull
+      @Override
+      public String negativeDescription() {
+        return String.format("should not have all items containing '%s'", expectedValue);
+      }
+
+      @Override
+      public boolean test(LocalStorage localStorage) {
+        return localStorage.getItems().values().stream()
+          .allMatch(value -> value.contains(expectedValue));
+      }
+
+      @Nonnull
+      @Override
+      public String actualValue(LocalStorage localStorage) {
+        return localStorage.getItems().toString();
+      }
+
+      @Nonnull
+      @Override
+      public String describe(LocalStorage object) {
+        return "localStorage";
+      }
+    };
   }
 }
