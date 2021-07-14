@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @see StaticConfig
  */
 @ParametersAreNonnullByDefault
-public class StaticDriver implements Driver {
+class StaticDriver implements Driver {
   private final Config config = new StaticConfig();
 
   @Override
