@@ -123,10 +123,13 @@ public class Selenide {
     getSelenideDriver().open();
   }
 
+  /**
+   * @since 5.23.0
+   */
   @CheckReturnValue
   @Nonnull
-  public static Driver driver() {
-    return getSelenideDriver().driver();
+  public static Conditional<WebDriver> webdriver() {
+    return getSelenideDriver().webdriver();
   }
 
   public static void using(WebDriver webDriver, Runnable lambda) {

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Selenide.driver;
+import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
@@ -24,13 +24,13 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void waitForUrl() {
-    driver().shouldHave(url(baseUrl + "/page_with_frames.html"), ofMillis(2000));
+    webdriver().shouldHave(url(baseUrl + "/page_with_frames.html"), ofMillis(2000));
   }
 
   @Test
   void errorMessageForWrongUrl() {
     assertThatThrownBy(() ->
-      driver().shouldHave(url("page_with_frames.html"), ofMillis(10))
+      webdriver().shouldHave(url("page_with_frames.html"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("webdriver should have url page_with_frames.html")
@@ -45,7 +45,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     String url = baseUrl + "/page_with_frames.html";
 
     assertThatThrownBy(() ->
-      driver().shouldNotHave(urlStartingWith(url), ofMillis(11))
+      webdriver().shouldNotHave(urlStartingWith(url), ofMillis(11))
     )
       .isInstanceOf(ConditionMetException.class)
       .hasMessageStartingWith("webdriver should not have url starting with " + url)
@@ -57,18 +57,18 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void waitForUrlStartingWith() {
-    driver().shouldHave(urlStartingWith(baseUrl + "/page_with_"), ofMillis(2000));
+    webdriver().shouldHave(urlStartingWith(baseUrl + "/page_with_"), ofMillis(2000));
   }
 
   @Test
   void waitForUrlContaining() {
-    driver().shouldHave(urlContaining("_with_"), ofMillis(2000));
+    webdriver().shouldHave(urlContaining("_with_"), ofMillis(2000));
   }
 
   @Test
   void errorMessageForWrongUrlStartingWith() {
     assertThatThrownBy(() ->
-      driver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
+      webdriver().shouldHave(urlStartingWith("https://google.ee/"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("webdriver should have url starting with https://google.ee/")
@@ -80,13 +80,13 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void waitForCurrentFrameUrl() {
-    driver().shouldHave(currentFrameUrl(baseUrl + "/page_with_frames.html"), ofMillis(2000));
+    webdriver().shouldHave(currentFrameUrl(baseUrl + "/page_with_frames.html"), ofMillis(2000));
   }
 
   @Test
   void errorMessageForWrongCurrentFrameUrl() {
     assertThatThrownBy(() ->
-      driver().shouldHave(currentFrameUrl("https://google.ee/"), ofMillis(20))
+      webdriver().shouldHave(currentFrameUrl("https://google.ee/"), ofMillis(20))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("current frame should have url https://google.ee/")
@@ -98,18 +98,18 @@ final class WebDriverConditionsTest extends IntegrationTest {
 
   @Test
   void waitForUrlCurrentFrameStartingWith() {
-    driver().shouldHave(currentFrameUrlStartingWith(baseUrl + "/page_with_"), ofMillis(2000));
+    webdriver().shouldHave(currentFrameUrlStartingWith(baseUrl + "/page_with_"), ofMillis(2000));
   }
 
   @Test
   void waitForUrlCurrentFrameContaining() {
-    driver().shouldHave(currentFrameUrlContaining("e_with_"), ofMillis(2000));
+    webdriver().shouldHave(currentFrameUrlContaining("e_with_"), ofMillis(2000));
   }
 
   @Test
   void errorMessageForWrongCurrentFrameUrlStartingWith() {
     assertThatThrownBy(() ->
-      driver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
+      webdriver().shouldHave(currentFrameUrlStartingWith("https://google.ee/"), ofMillis(5))
     )
       .isInstanceOf(ConditionNotMetException.class)
       .hasMessageStartingWith("current frame should have url starting with https://google.ee/")
