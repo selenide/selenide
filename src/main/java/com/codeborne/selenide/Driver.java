@@ -12,7 +12,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface Driver extends Conditional<WebDriver> {
+public interface Driver {
   @CheckReturnValue
   @Nonnull
   Config config();
@@ -107,17 +107,5 @@ public interface Driver extends Conditional<WebDriver> {
       driver = ((WrapsDriver) driver).getWrappedDriver();
     }
     return ((RemoteWebDriver) driver).getSessionId();
-  }
-
-  @Nonnull
-  @Override
-  default Driver driver() {
-    return this;
-  }
-
-  @Nonnull
-  @Override
-  default WebDriver object() {
-    return getWebDriver();
   }
 }
