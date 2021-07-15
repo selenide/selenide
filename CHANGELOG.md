@@ -4,6 +4,7 @@
 * #1478 Conditional wait for non-WebElement entities
 * #1502 Add method sessionStorage.getItems()
 * #1502 Add method localStorage.getItems()
+* #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
 
 ## 5.22.3 (released 05.07.2021)
 * #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498

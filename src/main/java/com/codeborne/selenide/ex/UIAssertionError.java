@@ -1,5 +1,6 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
@@ -81,7 +82,9 @@ public class UIAssertionError extends AssertionError {
         uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
     }
     else {
-      uiError.screenshot = ScreenShotLaboratory.getInstance().takeScreenshot(driver);
+      Config config = driver.config();
+      uiError.screenshot = ScreenShotLaboratory.getInstance()
+        .takeScreenshot(driver, config.screenshots(), config.savePageSource());
     }
     return uiError;
   }
