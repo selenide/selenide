@@ -80,7 +80,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   public Screenshot takeScreenShot(Driver driver, String className, String methodName) {
-    return takeScreenshot(driver, getScreenshotFileName(className, methodName));
+    return takeScreenshot(driver, getScreenshotFileName(className, methodName), true, true);
   }
 
   @CheckReturnValue
@@ -91,7 +91,7 @@ public class ScreenShotLaboratory {
   }
 
   /**
-   * @deprecated use {@link #takeScreenshot(Driver)} which returns {@link Screenshot} instead of String
+   * @deprecated use {@link #takeScreenshot(Driver, boolean, boolean)} which returns {@link Screenshot} instead of String
    */
   @CheckReturnValue
   @Nullable
@@ -102,32 +102,40 @@ public class ScreenShotLaboratory {
 
   /**
    * Takes screenshot of current browser window.
-   * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
+   * Stores 2 files:
+   * 1. html of the page (if "savePageSource" parameter is true), and
+   * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
+   *
+   * Either file may be null if webdriver has failed to save it.
    *
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
-   * @deprecated use {@link #takeScreenshot(Driver, String)} which returns {@link Screenshot} instead of String
+   * @deprecated use {@link #takeScreenshot(Driver, String, boolean, boolean)} which returns {@link Screenshot} instead of String
    */
   @CheckReturnValue
   @Nullable
   @Deprecated
   public String takeScreenShot(Driver driver, String fileName) {
-    return takeScreenshot(driver, fileName).getImage();
+    return takeScreenshot(driver, fileName, true, true).getImage();
   }
 
   /**
    * Takes screenshot of current browser window.
-   * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
+   * Stores 2 files:
+   * 1. html of the page (if "savePageSource" parameter is true), and
+   * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
+   *
+   * Either file may be null if webdriver has failed to save it.
    *
    * @param fileName name of file (without extension) to store screenshot to.
    * @return instance of {@link Screenshot} containing both files
    */
   @CheckReturnValue
   @Nonnull
-  public Screenshot takeScreenshot(Driver driver, String fileName) {
+  public Screenshot takeScreenshot(Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
     Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
       ifReportsFolderNotNull(driver.config(), config ->
-        takeScreenShot(config, driver, fileName)));
+        takeScreenShot(config, driver, fileName, saveScreenshot, savePageSource)));
     return screenshot != null ? screenshot : Screenshot.none();
   }
 
@@ -149,9 +157,9 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nonnull
-  private Screenshot takeScreenShot(Config config, Driver driver, String fileName) {
-    File source = config.savePageSource() ? savePageSourceToFile(config, fileName, driver) : null;
-    File image = config.screenshots() ? savePageImageToFile(config, fileName, driver) : null;
+  private Screenshot takeScreenShot(Config config, Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
+    File source = savePageSource ? savePageSourceToFile(config, fileName, driver) : null;
+    File image = saveScreenshot ? savePageImageToFile(config, fileName, driver) : null;
     if (image != null) {
       addToHistory(image);
     }
@@ -312,7 +320,6 @@ public class ScreenShotLaboratory {
   @Nullable
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, webDriver -> {
-      //File pageSource = savePageSourceToFile(fileName, webDriver); - temporary not available
       try {
         return photographer.takeScreenshot(driver, FILE)
           .map(this::addToHistory)
@@ -436,21 +443,21 @@ public class ScreenShotLaboratory {
   }
 
   /**
-   * @deprecated Use method {@link #takeScreenshot(Driver)} which returns Screenshot instead of String
+   * @deprecated Use method {@link #takeScreenshot(Driver, boolean, boolean)} which returns Screenshot instead of String
    */
   @CheckReturnValue
   @Nonnull
   @Deprecated
   public String formatScreenShotPath(Driver driver) {
-    return defaultString(takeScreenshot(driver).getImage(), "");
+    return defaultString(takeScreenshot(driver, true, false).getImage(), "");
   }
 
   @CheckReturnValue
   @Nonnull
-  public Screenshot takeScreenshot(Driver driver) {
+  public Screenshot takeScreenshot(Driver driver, boolean saveScreenshot, boolean savePageSource) {
     Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
       ifReportsFolderNotNull(driver.config(), config ->
-        takeScreenShot(config, driver, generateScreenshotFileName())));
+        takeScreenShot(config, driver, generateScreenshotFileName(), saveScreenshot, savePageSource)));
     return screenshot != null ? screenshot : Screenshot.none();
   }
 
