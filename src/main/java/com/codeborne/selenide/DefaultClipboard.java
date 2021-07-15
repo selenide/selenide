@@ -17,6 +17,20 @@ public class DefaultClipboard implements Clipboard {
     this.driver = driver;
   }
 
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public Driver driver() {
+    return driver;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  @Override
+  public Clipboard object() {
+    return this;
+  }
+
   @CheckReturnValue
   @Nonnull
   @Override

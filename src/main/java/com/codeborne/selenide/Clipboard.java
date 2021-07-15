@@ -8,7 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @since 5.20.0
  */
 @ParametersAreNonnullByDefault
-public interface Clipboard {
+public interface Clipboard extends Conditional<Clipboard> {
 
   /**
    * Get text from clipboard
@@ -25,5 +25,4 @@ public interface Clipboard {
    * @param text value to be set to clipboard
    */
   void setText(String text);
-
 }
