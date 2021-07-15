@@ -1,7 +1,6 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
-import javax.annotation.CheckReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -11,6 +10,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.SessionId;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -1059,6 +1059,7 @@ public class Selenide {
    * and keep in mind while developing test suite with multiple tests for clipboard.
    *
    * @return Clipboard
+   * @since 5.20.0
    */
   @Nonnull
   @CheckReturnValue
