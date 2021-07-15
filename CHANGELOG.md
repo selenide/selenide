@@ -1,9 +1,10 @@
 # Changelog
 
 ## 5.23.0 (released 07.07.2021)
-* #1478 Conditional wait for non-WebElement entities
-* #1502 Add method sessionStorage.getItems()
-* #1502 Add method localStorage.getItems()
+* #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
+* #1442 Add method sessionStorage.getItems()  --  see PR #1502
+* #1442 Add method localStorage.getItems()  --  see PR #1502
+* #1442 add should-methods for clipboard  --  see PR #1507
 * #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
 
 ## 5.22.3 (released 05.07.2021)
