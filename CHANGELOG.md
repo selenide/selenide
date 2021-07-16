@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.23.0 (released 07.07.2021)
+## 5.23.0 (released 16.07.2021)
 * #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
 * #1442 Add method sessionStorage.getItems()  --  see PR #1502
 * #1442 Add method localStorage.getItems()  --  see PR #1502
