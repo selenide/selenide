@@ -1,7 +1,6 @@
 package com.codeborne.selenide.appium;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.impl.StaticDriver;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 public class AppiumElementDescriberTest {
   private final AppiumElementDescriber describer = new AppiumElementDescriber();
-  private final Driver driver = new StaticDriver();
+  private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
 
   @Test
