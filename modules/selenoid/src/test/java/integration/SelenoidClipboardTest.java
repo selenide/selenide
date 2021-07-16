@@ -1,14 +1,15 @@
 package integration;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.ClipboardConditions.content;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.clipboard;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static com.codeborne.selenide.Selenide.open;
@@ -26,15 +27,17 @@ public class SelenoidClipboardTest {
 
   @Test
   public void getClipboardContent() {
-    $("#myInput").should(Condition.attribute("value", "Hello World"));
-    $("[onclick='myFunction()']").should(Condition.visible).click();
-    assertEquals("Hello World", Selenide.clipboard().getText(), "clipboard content doesn't match");
+    $("#myInput").shouldHave(attribute("value", "Hello World"));
+    $("[onclick='myFunction()']").shouldBe(visible).click();
+    clipboard().shouldHave(content("Hello World"));
+    assertEquals("Hello World", clipboard().getText());
   }
 
   @Test
   public void setClipboardContent() {
-    Selenide.clipboard().setText("John Wick");
-    assertEquals("John Wick", Selenide.clipboard().getText(), "clipboard content doesn't match");
+    clipboard().setText("John Wick");
+    assertEquals("John Wick", clipboard().getText());
+    clipboard().shouldHave(content("John Wick"));
   }
 
   @AfterEach

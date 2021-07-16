@@ -8,7 +8,6 @@ import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.Downloader;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.impl.FileHelper.moveFile;
 import static java.lang.System.currentTimeMillis;

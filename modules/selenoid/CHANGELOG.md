@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.4 (released 17.07.2021)
+* upgrade to Selenide 5.23.0
+
 ## 1.1.3 (released 08.06.2021)
 * #10 fix ClassCastException when using EventFiringDriver
 * #10 upgrade to Selenide 5.22.0
