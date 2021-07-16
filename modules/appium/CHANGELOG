@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.6.7 (released 17.07.2021)
+* upgrade to Selenide 5.23.0
+
 === 1.6.6 (released 08.06.2021)
 * upgrade to Selenide 5.22.0
 
