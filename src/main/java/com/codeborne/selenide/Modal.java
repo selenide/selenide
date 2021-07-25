@@ -3,13 +3,13 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @ParametersAreNonnullByDefault
 public class Modal {
@@ -42,7 +42,7 @@ public class Modal {
   }
 
   public String prompt(@Nullable String expectedDialogText, @Nullable String inputText) {
-    String subject = getReadableSubject("prompt", StringUtils.defaultString(inputText));
+    String subject = getReadableSubject("prompt", defaultString(inputText));
     return SelenideLogger.get(getLogSubject(expectedDialogText), subject, () -> {
       Alert alert = driver.switchTo().alert();
       String actualDialogText = alert.getText();
@@ -70,7 +70,7 @@ public class Modal {
   }
 
   private String getLogSubject(@Nullable String expectedDialogText) {
-    return String.format("modal(%s)", StringUtils.defaultString(expectedDialogText));
+    return String.format("modal(%s)", defaultString(expectedDialogText));
   }
 
   private static void checkDialogText(Driver driver, @Nullable String expectedDialogText, String actualDialogText) {
