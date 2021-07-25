@@ -204,7 +204,8 @@ public class SelenideTargetLocator implements TargetLocator {
     return SelenideLogger.get(String.format("window(index: %s)", index), SWITCH_TO, () -> {
       try {
         return wait.until(new WindowByIndex(index));
-      } catch (TimeoutException e) {
+      }
+      catch (TimeoutException e) {
         throw windowNotFoundError("No window found with index: " + index, e);
       }
     });
@@ -214,7 +215,8 @@ public class SelenideTargetLocator implements TargetLocator {
     return SelenideLogger.get(String.format("window(%s)", nameOrHandleOrTitle), SWITCH_TO, () -> {
       try {
         return wait.until(new WindowByNameOrHandle(nameOrHandleOrTitle));
-      } catch (TimeoutException e) {
+      }
+      catch (TimeoutException e) {
         throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
       }
     });
