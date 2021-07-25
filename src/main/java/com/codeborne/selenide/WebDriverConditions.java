@@ -1,6 +1,12 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.conditions.webdriver.*;
+import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrl;
+import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlStartingWith;
+import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlContaining;
+import com.codeborne.selenide.conditions.webdriver.NumberOfTabs;
+import com.codeborne.selenide.conditions.webdriver.Url;
+import com.codeborne.selenide.conditions.webdriver.UrlContaining;
+import com.codeborne.selenide.conditions.webdriver.UrlStartingWith;
 import org.openqa.selenium.WebDriver;
 
 /**
