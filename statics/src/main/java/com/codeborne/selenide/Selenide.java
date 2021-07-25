@@ -1,6 +1,8 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.ex.DialogTextMismatch;
+import com.codeborne.selenide.logevents.SelenideLogger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static com.codeborne.selenide.WebDriverRunner.getSelenideDriver;
+import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 
 /**
  * The main starting point of Selenide.
@@ -197,7 +200,7 @@ public class Selenide {
    * @see WebDriver#close()
    */
   public static void closeWindow() {
-    WebDriverRunner.closeWindow();
+    SelenideLogger.run("current window", getReadableSubject("close"), WebDriverRunner::closeWindow);
   }
 
   /**
