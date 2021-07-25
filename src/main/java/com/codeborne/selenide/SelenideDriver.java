@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import javax.annotation.CheckReturnValue;
@@ -384,6 +385,12 @@ public class SelenideDriver {
     return driver().getUserAgent();
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public SessionId getSessionId() {
+    return driver().getSessionId();
+  }
+
   /**
    * Take a screenshot of the current page
    *
@@ -452,5 +459,21 @@ public class SelenideDriver {
   private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
     if (downloadFileWithHttpRequest == null) downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
     return downloadFileWithHttpRequest;
+  }
+
+  public Conditional<WebDriver> webdriver() {
+    return new Conditional<WebDriver>() {
+      @Nonnull
+      @Override
+      public Driver driver() {
+        return SelenideDriver.this.driver();
+      }
+
+      @Nonnull
+      @Override
+      public WebDriver object() {
+        return SelenideDriver.this.getWebDriver();
+      }
+    };
   }
 }

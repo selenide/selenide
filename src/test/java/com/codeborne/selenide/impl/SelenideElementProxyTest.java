@@ -64,6 +64,7 @@ final class SelenideElementProxyTest implements WithAssertions {
     when(webdriver
       .executeScript(anyString(), any(WebElement.class)))
       .thenReturn(map);
+    when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
 
     when(element.getTagName()).thenReturn("h1");
     when(element.getText()).thenReturn("Hello world");

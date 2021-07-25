@@ -1,14 +1,12 @@
 package com.codeborne.selenide.selector;
 
 import com.codeborne.selenide.impl.Cleanup;
-import com.codeborne.selenide.impl.FileContent;
+import com.codeborne.selenide.impl.JavaScript;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptException;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsDriver;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -22,7 +20,7 @@ import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class ByShadow {
-  private static final FileContent jsSource = new FileContent("find-in-shadow-roots.js");
+  private static final JavaScript jsSource = new JavaScript("find-in-shadow-roots.js");
 
   /**
    * Find target elements inside shadow-root that attached to shadow-host.
@@ -74,31 +72,16 @@ public class ByShadow {
     @Nonnull
     public List<WebElement> findElements(SearchContext context) {
       try {
-        if (context instanceof JavascriptExecutor) {
-          return findElementsInDocument((JavascriptExecutor) context);
+        if (context instanceof WebElement) {
+          return jsSource.execute(context, target, shadowHostsChain, context);
         }
         else {
-          return findElementsInElement(context);
+          return jsSource.execute(context, target, shadowHostsChain);
         }
       }
       catch (JavascriptException e) {
         throw new NoSuchElementException(Cleanup.of.webdriverExceptionMessage(e));
       }
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<WebElement> findElementsInDocument(JavascriptExecutor context) {
-      return (List<WebElement>) context.executeScript(
-        "return " + jsSource.content() + "(arguments[0], arguments[1])", target, shadowHostsChain
-      );
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<WebElement> findElementsInElement(SearchContext context) {
-      JavascriptExecutor js = (JavascriptExecutor) ((WrapsDriver) context).getWrappedDriver();
-      return (List<WebElement>) js.executeScript(
-        "return " + jsSource.content() + "(arguments[0], arguments[1], arguments[2])", target, shadowHostsChain, context
-      );
     }
 
     @Override

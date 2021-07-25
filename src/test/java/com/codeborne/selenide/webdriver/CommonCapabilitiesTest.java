@@ -2,6 +2,7 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
@@ -99,7 +100,7 @@ final class CommonCapabilitiesTest implements WithAssertions {
     @CheckReturnValue
     @Nonnull
     public WebDriver create(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
-      return mock(WebDriver.class);
+      return new DummyWebDriver();
     }
   }
 }

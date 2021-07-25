@@ -40,7 +40,9 @@ task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
   destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
-uploadArchives.dependsOn(allprojectsJar, allprojectsSourcesJar, allprojectsJavadocJar)
+task buildAll(dependsOn: ['allprojectsJar', 'allprojectsSourcesJar', 'allprojectsJavadocJar', 'publishToMavenLocal']) {}
+
+apply plugin: 'maven-publish'
 
 artifacts {
   archives allprojectsJar
@@ -48,86 +50,97 @@ artifacts {
   archives allprojectsJavadocJar
 }
 
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId "${project.group}"
+      artifactId "${project.name}"
 
-if (project.hasProperty("signing.keyId")) {
-  apply plugin: 'signing'
+      artifact(allprojectsJar)
+      artifact(allprojectsSourcesJar)
+      artifact(allprojectsJavadocJar)
 
-  signing {
-    sign allprojectsJar
-    sign allprojectsSourcesJar
-    sign allprojectsJavadocJar
-  }
-
-  uploadArchives {
-    repositories {
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-        repository(url: project.version.endsWith("-SNAPSHOT") ?
-          'https://oss.sonatype.org/content/repositories/snapshots/' :
-          'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-          authentication(userName: "$sonatypeUsername", password: "$sonatypePassword")
-        }
-
-        pom.project {
-          name archivesBaseName
-          packaging 'jar'
-          description 'Selenide = concise API for Selenium WebDriver'
-          url 'https://github.com/selenide/selenide'
-
-          scm {
-            url 'scm:git@github.com:selenide/selenide.git'
-            connection 'scm:git@github.com:selenide/selenide.git'
-            developerConnection 'scm:git@github.com:selenide/selenide.git'
-          }
-
-          licenses {
-            license {
-              name 'MIT'
-              url 'https://opensource.org/licenses/MIT'
-              distribution 'repo'
-            }
-          }
-
-          developers {
-            developer {
-              id 'asolntsev'
-              name 'Andrei Solntsev'
-            }
-            developer {
-              id 'BorisOsipov'
-              name 'Boris Osipov'
-            }
-            developer {
-              id 'rosolko'
-              name 'Aliaksandr Rasolka'
-            }
-            developer {
-              id 'vinogradoff'
-              name 'Alexei Vinogradov'
-            }
-            developer {
-              id 'dstekanov'
-              name 'Dmytro Stekanov'
-            }
+      pom {
+        name = archivesBaseName
+        description = 'Selenide = concise API for Selenium WebDriver'
+        url = 'https://github.com/selenide/selenide'
+        licenses {
+          license {
+            name = 'MIT'
+            url = 'https://opensource.org/licenses/MIT'
           }
         }
+        developers {
+          developer {
+            id = 'asolntsev'
+            name = 'Andrei Solntsev'
+          }
+          developer {
+            id = 'BorisOsipov'
+            name = 'Boris Osipov'
+          }
+          developer {
+            id = 'rosolko'
+            name = 'Aliaksandr Rasolka'
+          }
+          developer {
+            id = 'vinogradoff'
+            name = 'Alexei Vinogradov'
+          }
+          developer {
+            id = 'dstekanov'
+            name = 'Dmytro Stekanov'
+          }
+        }
+        scm {
+          connection = 'scm:git@github.com:selenide/selenide.git'
+          developerConnection = 'scm:git@github.com:selenide/selenide.git'
+          url = 'https://github.com/selenide/selenide'
+        }
+        withXml {
+          def dependenciesNode = asNode().appendNode('dependencies')
 
-        //mess with the generated pom to set the 'packaging' tag
-        pom.withXml { XmlProvider xmlProvider ->
-          def xml = xmlProvider.asString()
-          def pomXml = new XmlParser().parse(new ByteArrayInputStream(xml.toString().bytes))
-
-          pomXml.version[0] + { packaging('jar') }
-
-          def newXml = new StringWriter()
-          def printer = new XmlNodePrinter(new PrintWriter(newXml))
-          printer.preserveWhitespace = true
-          printer.print(pomXml)
-          xml.setLength(0)
-          xml.append(newXml.toString())
+          configurations.api.allDependencies.each {
+            def dependencyNode = dependenciesNode.appendNode('dependency')
+            dependencyNode.appendNode('groupId', it.group)
+            dependencyNode.appendNode('artifactId', it.name)
+            dependencyNode.appendNode('version', it.version)
+          }
+          (configurations.implementation.allDependencies-configurations.api.allDependencies).each {
+            def dependencyNode = dependenciesNode.appendNode('dependency')
+            dependencyNode.appendNode('groupId', it.group)
+            dependencyNode.appendNode('artifactId', it.name)
+            dependencyNode.appendNode('version', it.version)
+            dependencyNode.appendNode('scope', 'runtime')
+          }
         }
       }
     }
   }
 }
+
+if (project.hasProperty("signing.keyId")) {
+  apply plugin: 'signing'
+
+  signing {
+    afterEvaluate {
+      sign publishing.publications.mavenJava
+    }
+  }
+
+  publishing {
+    repositories {
+      maven {
+        name 'Maven'
+        url project.version.endsWith("-SNAPSHOT") ?
+          'https://oss.sonatype.org/content/repositories/snapshots/' :
+          'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+        credentials {
+          username "$sonatypeUsername"
+          password "$sonatypePassword"
+        }
+      }
+    }
+  }
+}
+

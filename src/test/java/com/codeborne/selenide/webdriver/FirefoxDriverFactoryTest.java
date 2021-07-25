@@ -129,6 +129,7 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
   void downloadsAllPopularContentTypesWithoutDialog() {
     assertThat(driverFactory.popularContentTypes()).contains(";application/pdf;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/octet-stream;");
+    assertThat(driverFactory.popularContentTypes()).contains(";binary/octet-stream;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/msword;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/vnd.ms-excel;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/zip;");
@@ -162,6 +163,23 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
     assertThat(prefs.get("pdfjs.disabled")).isEqualTo(true);
     assertThat(prefs.get("browser.download.folderList")).isEqualTo(2);
     assertThat(options.getProfile()).isNull();
+  }
+
+  @Test
+  public void injectPrefs() {
+    FirefoxOptions firefoxOptions = new FirefoxOptions();
+    firefoxOptions.addPreference("general.useragent.override", "my agent");
+    firefoxOptions.addPreference("boolean pref", true);
+    firefoxOptions.addPreference("int pref", 10);
+    config.browserCapabilities(new DesiredCapabilities(firefoxOptions));
+
+    Map<String, Object> options = driverFactory.createCapabilities(config, browser, proxy, null).asMap();
+    assertThat(options.get("moz:firefoxOptions") != null);
+
+    Map<String, Object> prefs = (Map<String, Object>) ((Map<String, Object>) options.get("moz:firefoxOptions")).get("prefs");
+    assertThat(prefs.get("general.useragent.override")).isEqualTo("my agent");
+    assertThat(prefs.get("boolean pref")).isEqualTo(true);
+    assertThat(prefs.get("int pref")).isEqualTo(10);
   }
 
   @SuppressWarnings("unchecked")

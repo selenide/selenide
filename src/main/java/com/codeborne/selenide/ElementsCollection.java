@@ -64,20 +64,36 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     this(new BySelectorCollection(driver, seleniumSelector));
   }
 
-  public ElementsCollection(Driver driver, WebElement parent, String cssSelector) {
-    this(driver, parent, By.cssSelector(cssSelector));
-  }
-
-  public ElementsCollection(Driver driver, WebElement parent, By seleniumSelector) {
-    this(new BySelectorCollection(driver, parent, seleniumSelector));
+  /**
+   * @deprecated Use {@code $$.shouldHave(size(expectedSize))} instead.
+   */
+  @Nonnull
+  @Deprecated
+  public ElementsCollection shouldHaveSize(int expectedSize) {
+    return shouldHave(CollectionCondition.size(expectedSize));
   }
 
   /**
-   * Deprecated. Use {@code $$.shouldHave(size(expectedSize))} instead.
+   * Check if a collection matches given condition(s).
+   * <p> For example: </p>
+   * <pre code='java'>
+   * $$(".text_list").should(containExactTextsCaseSensitive("text1", "text2"));
+   * $$(".cat_list").should(allMatch("value==cat", el -> el.getAttribute("value").equals("cat")));
+   * </pre>
    */
   @Nonnull
-  public ElementsCollection shouldHaveSize(int expectedSize) {
-    return shouldHave(CollectionCondition.size(expectedSize));
+  public ElementsCollection should(CollectionCondition... conditions) {
+    return should("", Duration.ofMillis(driver().config().timeout()), conditions);
+  }
+
+  /**
+   * Check if a collection matches a given condition within the given time period.
+   *
+   * @param timeout maximum waiting time
+   */
+  @Nonnull
+  public ElementsCollection should(CollectionCondition condition, Duration timeout) {
+    return should("", timeout, toArray(condition));
   }
 
   /**
@@ -214,9 +230,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -226,10 +243,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #filter(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -239,9 +257,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -251,10 +270,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #exclude(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -264,9 +284,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Find the first element which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @param condition condition
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -276,10 +297,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Find the first element which met the given condition (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied
+   *
    * @see #find(Condition)
    * @param condition condition
    * @return SelenideElement
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -296,6 +318,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Gets all the texts in elements collection
    * @return array of texts
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -325,7 +348,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Outputs string presentation of the element's collection
    * @param elements elements of string
-   * @return String
+   * @return e.g. "[<h1>foo</h1>, <h2>bar</h2>]"
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -352,10 +376,10 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Gets the n-th element of collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
    *
    * @param index 0..N
    * @return the n-th element of collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -365,10 +389,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * returns the first element of the collection
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
-   * NOTICE: $(css) is faster and returns the same result as $$(css).first()
+   * <p>
+   * returns the first element of the collection (lazy evaluation)
+   * </p>
+   *
+   * <p>
+   * NOTICE: Instead of {@code $$(css).first()}, prefer {@code $(css)} as it's faster and returns the same result
+   * </p>
+   *
    * @return the first element of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -378,8 +408,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the last element of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @return the last element of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -389,8 +420,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the first n elements of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @param elements number of elements 1..N
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -400,8 +432,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * returns the last n elements of the collection (lazy evaluation)
-   * ATTENTION! Doesn't start any search yet. Search will be started when action or assert is applied (.click(), should..() etc.)
+   *
    * @param elements number of elements 1..N
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
@@ -410,8 +443,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
+   * <p>
    * return actual size of the collection, doesn't wait on collection to be loaded.
-   * ATTENTION not recommended for use in tests. Use collection.shouldHave(size(n)); for assertions instead.
+   * </p>
+   *
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @return actual size of the collection
    */
   @CheckReturnValue
@@ -424,6 +460,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     }
   }
 
+  /**
+   * Does not reload collection elements while iterating it.
+   * Not recommended to use.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull
@@ -431,6 +472,11 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new SelenideElementIterator(fetch());
   }
 
+  /**
+   * Does not reload collection elements while iterating it.
+   * Not recommended to use.
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull
@@ -443,6 +489,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return new WebElementsCollectionWrapper(driver(), fetchedElements);
   }
 
+  /**
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
+   */
   @Override
   @CheckReturnValue
   @Nonnull

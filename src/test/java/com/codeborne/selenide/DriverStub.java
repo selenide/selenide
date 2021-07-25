@@ -4,13 +4,12 @@ import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.SessionId;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * A dummy `Driver` implementation used in tests.
@@ -28,7 +27,7 @@ public class DriverStub implements Driver {
   }
 
   public DriverStub(String browser) {
-    this(new SelenideConfig(), new Browser(browser, false), mock(WebDriver.class), null);
+    this(new SelenideConfig(), new Browser(browser, false), new DummyWebDriver(), null);
   }
 
   public DriverStub(Config config, Browser browser,
@@ -114,6 +113,13 @@ public class DriverStub implements Driver {
   @Nonnull
   public String getUserAgent() {
     return "zhopera";
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public SessionId getSessionId() {
+    return new SessionId("testSession");
   }
 
   @Override

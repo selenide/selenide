@@ -5,28 +5,33 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Mocks.mockElement;
 import static com.codeborne.selenide.SelectorMode.CSS;
 import static com.codeborne.selenide.SelectorMode.Sizzle;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 final class WebElementSelectorTest {
   private final WebElementSelector selector = new WebElementSelector();
   private final Browser browser = new Browser("zopera", false);
   private final JSWebDriver webDriver = mock(JSWebDriver.class);
-  private final SearchContext parent = mock(WebElement.class);
+  private final WebElementSource parent = mock(WebElementSource.class);
 
   @Test
   void findElement_byCss() {
@@ -35,7 +40,7 @@ final class WebElementSelectorTest {
     WebElement div = mock(WebElement.class);
     when(webDriver.findElement(By.cssSelector("a.active"))).thenReturn(div);
 
-    assertThat(selector.findElement(driver, webDriver, By.cssSelector("a.active"))).isSameAs(div);
+    assertThat(selector.findElement(driver, null, By.cssSelector("a.active"))).isSameAs(div);
   }
 
   @Test
@@ -45,7 +50,7 @@ final class WebElementSelectorTest {
     WebElement div = mock(WebElement.class);
     when(webDriver.findElement(By.xpath("/div/h1"))).thenReturn(div);
 
-    assertThat(selector.findElement(driver, webDriver, By.xpath("/div/h1"))).isSameAs(div);
+    assertThat(selector.findElement(driver, null, By.xpath("/div/h1"))).isSameAs(div);
   }
 
   @Test
@@ -57,7 +62,7 @@ final class WebElementSelectorTest {
     when(webDriver.executeScript("return typeof Sizzle != 'undefined'")).thenReturn(true);
     when(webDriver.executeScript("return Sizzle(arguments[0])", "a.active:last")).thenReturn(asList(div));
 
-    assertThat(selector.findElement(driver, driver.getWebDriver(), By.cssSelector("a.active:last"))).isSameAs(div);
+    assertThat(selector.findElement(driver, null, By.cssSelector("a.active:last"))).isSameAs(div);
   }
 
   @Test
@@ -65,13 +70,18 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
 
+    SelenideElement parentElement = mockElement("div", "the parent");
+    when(parent.getWebElement()).thenReturn(parentElement);
     WebElement div = mock(WebElement.class);
-    when(webDriver.executeScript("return typeof Sizzle != 'undefined'")).thenReturn(true);
-    when(webDriver.executeScript("return Sizzle(arguments[0], arguments[1])", "a.active:last", parent)).thenReturn(asList(div));
+    when(webDriver.executeScript(anyString())).thenReturn(true);
+    when(webDriver.executeScript(anyString(), any(), any())).thenReturn(asList(div));
 
     assertThat(selector.findElement(driver, parent, By.cssSelector("a.active:last"))).isSameAs(div);
-  }
 
+    verify(webDriver).executeScript("return typeof Sizzle != 'undefined'");
+    verify(webDriver).executeScript("return Sizzle(arguments[0], arguments[1])", "a.active:last", parentElement);
+    verifyNoMoreInteractions(webDriver);
+  }
 
   @Test
   void findElements_byCss() {
@@ -80,7 +90,7 @@ final class WebElementSelectorTest {
     List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
     when(webDriver.findElements(By.cssSelector("a.active"))).thenReturn(divs);
 
-    assertThat(selector.findElements(driver, webDriver, By.cssSelector("a.active"))).isSameAs(divs);
+    assertThat(selector.findElements(driver, null, By.cssSelector("a.active"))).isSameAs(divs);
   }
 
   @Test
@@ -90,12 +100,14 @@ final class WebElementSelectorTest {
     List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
     when(webDriver.findElements(By.xpath("/div/h1"))).thenReturn(divs);
 
-    assertThat(selector.findElements(driver, webDriver, By.xpath("/div/h1"))).isSameAs(divs);
+    assertThat(selector.findElements(driver, null, By.xpath("/div/h1"))).isSameAs(divs);
   }
 
   @Test
   void findElement_insideElement_cannotUseXpathStartingWithSlash() {
     Driver driver = new DriverStub("zopera");
+    SelenideElement parentElement = mockElement("div", "whatever");
+    when(parent.getWebElement()).thenReturn(parentElement);
 
     assertThatThrownBy(() -> selector.findElement(driver, parent, By.xpath("/div")))
       .isInstanceOf(IllegalArgumentException.class)
@@ -105,6 +117,8 @@ final class WebElementSelectorTest {
   @Test
   void findElements_insideElement_cannotUseXpathStartingWithSlash() {
     Driver driver = new DriverStub("zopera");
+    SelenideElement parentElement = mockElement("div", "whatever");
+    when(parent.getWebElement()).thenReturn(parentElement);
 
     assertThatThrownBy(() -> selector.findElements(driver, parent, By.xpath("/div")))
       .isInstanceOf(IllegalArgumentException.class)

@@ -18,6 +18,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.files.DownloadActions.clickAndConfirm;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
 import static com.codeborne.selenide.files.FileFilters.withName;
 import static com.codeborne.selenide.files.FileFilters.withNameMatching;
@@ -38,7 +39,23 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() throws IOException {
-    File downloadedFile = $(byText("Download me")).download();
+    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download(
+      using(FOLDER).withAction(
+        clickAndConfirm("Are you sure to download it?")
+      )
+    );
 
     assertThat(downloadedFile.getName())
       .matches("hello_world.*\\.txt");
@@ -50,7 +67,7 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithCyrillicName() throws IOException {
-    File downloadedFile = $(byText("Download file with cyrillic name")).download();
+    File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("файл-с-русским-названием.txt");
@@ -62,8 +79,8 @@ final class FileDownloadToFolderTest extends IntegrationTest {
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download();
+    open("https://the-internet.herokuapp.com/download");
+    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
 
     assertThat(video.getName()).isEqualTo("some-file.txt");
   }
@@ -71,8 +88,17 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadMissingFile() {
     timeout = 100;
-    assertThatThrownBy(() -> $(byText("Download missing file")).download())
-      .isInstanceOf(FileNotFoundException.class);
+    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("txt")))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessage("Failed to download file {by text: Download missing file} in 100 ms. with extension \"txt\"");
+  }
+
+  @Test
+  void downloadMissingFileWithExtension() {
+    timeout = 80;
+    assertThatThrownBy(() -> $(byText("Download me")).download(withExtension("pdf")))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessage("Failed to download file {by text: Download me} in 80 ms. with extension \"pdf\"");
   }
 
   @Test
@@ -107,12 +133,12 @@ final class FileDownloadToFolderTest extends IntegrationTest {
   @Test
   void downloadsFilesToCustomFolder() throws IOException {
     closeWebDriver();
-    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();;
+    String customDownloadsFolder = createTempDirectory("selenide-tests-to-custom-folder").toString();
     downloadsFolder = customDownloadsFolder;
 
     try {
       openFile("page_with_uploads.html");
-      File downloadedFile = $(byText("Download me")).download();
+      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(customDownloadsFolder).getAbsolutePath());

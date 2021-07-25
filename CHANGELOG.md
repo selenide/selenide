@@ -1,10 +1,61 @@
 # Changelog
 
-## 5.20.0 (planned to xx.03.2021)
+## 5.23.0 (released 16.07.2021)
+* #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
+* #1442 Add method sessionStorage.getItems()  --  see PR #1502
+* #1442 Add method localStorage.getItems()  --  see PR #1502
+* #1442 add should-methods for clipboard  --  see PR #1507
+* #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
+
+## 5.22.3 (released 05.07.2021)
+* #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498
+
+## 5.22.2 (released 30.06.2021)
+* #1493 support uploading files from inside of JAR files  --  see PR #1494
+* fix command `./gradlew` - now it installs jars to a local maven repo  --  see PR #1489 
+* add support for okhttp 4.9.1  --  see PR #1488
+
+## 5.22.1 (released 18.06.2021)
+* Add mime type "binary/octet-stream" to download binary files in FireFox
+
+## 5.22.0 (released 08.06.2021)
+* #1479 make it possible to check an alert before downloading a file  --  see PR #1481
+* #1482 Add support for `Condition.textCaseSensitive` for selected options in `select` element --  thanks to Oleg Berezhnoy
+* #1380 Add selectors `byTextCaseInsensitive` and `withTextCaseInsensitive` --  see PR #1381
+* #1483 add method `Driver.getSessionId()`  --  thanks to Petro Ovcharenko
+* override default Selenium http timeouts  --  see PR #1433
+* #1472 refactoring: pass WebElementSource instead of SearchContext
+
+## 5.21.0 (released 15.05.2021)
+* #1055 Avoid multiple screenshots for chained locators  --  see PR #1465
+* #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450
+* #1447 Add hover with offset  --  see PR #1461
+* #1464 upgrade to WebDriverManager 4.4.3  --  thanks to Anil Kumar Reddy Gaddam
+* #1469 upgrade to httpclient to 5.1  --  thanks to Anil Kumar Reddy Gaddam
+* #1430 javadoc: improve description of lazy loading in many Selenide methods
+
+## 5.20.4 (released 22.04.2021)
+* #1456 upgrade to WebDriverManager 4.4.1  --  thanks to Anil Kumar Reddy Gaddam
+
+## 5.20.3 (released 20.04.2021)
+* #1454 Add ability to navigate to absolute browser internal urls  --  thanks to Aliaksandr Rasolka
+
+## 5.20.2 (released 13.04.2021)
+* upgrade to WebDriverManager 4.4.0
+* #1451 migrate 'maven' plugin to 'maven-publish'
+
+## 5.20.1 (released 23.03.2021)
+* #1438 Added $$.should() method + JavaDoc fixes  --  thanks to Oleg Berezhnoy @bereg2k
+* #1439 rename containTexts() to containExactTextsCaseSensitive()  --  thanks to Oleg Berezhnoy @bereg2k and Pavel Fokin @fokinp
+
+## 5.20.0 (released 20.03.2021)
 * #1409 Added method for getting clipboard content  --  thanks to Dmitriy Budim @dbudim
-* #1422 add headless mode to Microsoft Edge browser (chromium-based)
-* #1389 add method $$.as()
-* Added CollectionCondition.containTexts method
+* #1422 add headless mode to Microsoft Edge browser (chromium-based)  --  see PR #1424
+* #1423 Microsoft Edge User Agent Test Failed  --  see PR #1425
+* #1389 add method $$.as()  --  see PR #1431
+* #1426 Added CollectionCondition.containTexts method  --  thanks to Oleg Berezhnoy @bereg2k
+* #1436 Fix ignored prefs in FirefoxOptions  -- thanks to for Dmitriy Budim PR #1437
+* #1428 Do not log extended "find" methods (e.g. parent, sibling and so)  --  thanks to Pavel Fokin @fokinp
 
 ## 5.19.0 (released 24.02.2021)
 * #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
@@ -132,7 +183,7 @@
 ## 5.14.0 (released 17.08.2020)
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
-* #1236 add support for Safari browser  --  see PR #1237
+* #1236 add support for Safari browser  --  see PR #1237 and https://github.com/selenide/selenide/wiki/Safari
 * #1166 added method `SelenideDriver.screenshot(fileName)`  --  see PR #1227
 * #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231
 * #1190 take screenshot if `switchTo(frame)` or `switchTo(window)` or `switchTo(alert)` failed  --  see PR #1240

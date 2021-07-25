@@ -3,7 +3,10 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -94,5 +97,15 @@ public interface Driver {
   @Nonnull
   default Actions actions() {
     return new Actions(getWebDriver());
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  default SessionId getSessionId() {
+    WebDriver driver = getWebDriver();
+    if (driver instanceof WrapsDriver) {
+      driver = ((WrapsDriver) driver).getWrappedDriver();
+    }
+    return ((RemoteWebDriver) driver).getSessionId();
   }
 }

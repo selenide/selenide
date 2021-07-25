@@ -29,4 +29,19 @@ class ScreenshotTest {
     assertThat(new Screenshot(null, "/home/user/shot.html").summary())
       .isEqualTo(lineSeparator() + "Page source: /home/user/shot.html");
   }
+
+  @Test
+  void isPresent_ifHasImage() {
+    assertThat(new Screenshot("/home/user/shot.png", null).isPresent()).isTrue();
+  }
+
+  @Test
+  void isPresent_ifHasSource() {
+    assertThat(new Screenshot(null, "/home/user/shot.html").isPresent()).isTrue();
+  }
+
+  @Test
+  void isNotPresent() {
+    assertThat(Screenshot.none().isPresent()).isFalse();
+  }
 }

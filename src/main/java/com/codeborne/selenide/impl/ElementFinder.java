@@ -6,7 +6,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -22,24 +21,13 @@ import static java.lang.Thread.currentThread;
 
 @ParametersAreNonnullByDefault
 public class ElementFinder extends WebElementSource {
+  private final WebElementSelector elementSelector = inject(WebElementSelector.class);
   private final ElementDescriber describe = inject(ElementDescriber.class);
-
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement wrap(Driver driver, WebElement parent, String cssSelector) {
-    return wrap(driver, parent, By.cssSelector(cssSelector), 0);
-  }
 
   @CheckReturnValue
   @Nonnull
   public static SelenideElement wrap(Driver driver, String cssSelector, int index) {
     return wrap(driver, null, By.cssSelector(cssSelector), index);
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement wrap(Driver driver, WebElement parent, String cssSelector, int index) {
-    return wrap(driver, WebElementWrapper.wrap(driver, parent), By.cssSelector(cssSelector), index);
   }
 
   @CheckReturnValue
@@ -50,7 +38,7 @@ public class ElementFinder extends WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public static SelenideElement wrap(Driver driver, @Nullable SearchContext parent, By criteria, int index) {
+  public static SelenideElement wrap(Driver driver, @Nullable WebElementSource parent, By criteria, int index) {
     return wrap(driver, SelenideElement.class, parent, criteria, index);
   }
 
@@ -59,7 +47,7 @@ public class ElementFinder extends WebElementSource {
   @SuppressWarnings("unchecked")
   public static <T extends SelenideElement> T wrap(Driver driver,
                                                    Class<T> clazz,
-                                                   @Nullable SearchContext parent,
+                                                   @Nullable WebElementSource parent,
                                                    By criteria,
                                                    int index) {
     return (T) Proxy.newProxyInstance(
@@ -68,12 +56,23 @@ public class ElementFinder extends WebElementSource {
       new SelenideElementProxy(new ElementFinder(driver, parent, criteria, index)));
   }
 
+  @CheckReturnValue
+  @Nonnull
+  @SuppressWarnings("unchecked")
+  public static <T extends SelenideElement> T wrap(Class<T> clazz,
+                                                   WebElementSource element) {
+    return (T) Proxy.newProxyInstance(
+      currentThread().getContextClassLoader(),
+      new Class<?>[]{clazz},
+      new SelenideElementProxy(element));
+  }
+
   private final Driver driver;
-  private final SearchContext parent;
+  private final WebElementSource parent;
   private final By criteria;
   private final int index;
 
-  ElementFinder(Driver driver, @Nullable SearchContext parent, By criteria, int index) {
+  ElementFinder(Driver driver, @Nullable WebElementSource parent, By criteria, int index) {
     this.driver = driver;
     this.parent = parent;
     this.criteria = criteria;
@@ -85,8 +84,8 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
     return arg instanceof By ?
-        wrap(driver, proxy, (By) arg, index) :
-        wrap(driver, proxy, By.cssSelector((String) arg), index);
+      wrap(driver, this, (By) arg, index) :
+      wrap(driver, this, By.cssSelector((String) arg), index);
   }
 
   @Override
@@ -100,9 +99,7 @@ public class ElementFinder extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public WebElement getWebElement() throws NoSuchElementException, IndexOutOfBoundsException {
-    return index == 0 ?
-        WebElementSelector.instance.findElement(driver, getSearchContext(), criteria) :
-        WebElementSelector.instance.findElements(driver, getSearchContext(), criteria).get(index);
+    return elementSelector.findElement(driver, parent, criteria, index);
   }
 
   @Override
@@ -110,27 +107,16 @@ public class ElementFinder extends WebElementSource {
   @Nonnull
   public List<WebElement> findAll() throws NoSuchElementException, IndexOutOfBoundsException {
     return index == 0 ?
-        WebElementSelector.instance.findElements(driver(), getSearchContext(), criteria) :
-        super.findAll();
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private SearchContext getSearchContext() {
-    return parent == null ? driver().getWebDriver() :
-        (parent instanceof SelenideElement) ? ((SelenideElement) parent).toWebElement() :
-        parent;
+      elementSelector.findElements(driver(), parent, criteria) :
+      super.findAll();
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    if (parent instanceof SelenideElement) {
-      ((SelenideElement) parent).should(exist);
-    }
-    else if (parent instanceof WebElement) {
-      WebElementWrapper.wrap(driver(), (WebElement) parent).should(exist);
+    if (parent != null) {
+      parent.checkCondition("", exist, false);
     }
 
     return super.createElementNotFoundError(condition, lastError);
@@ -142,9 +128,7 @@ public class ElementFinder extends WebElementSource {
   public String getSearchCriteria() {
     return parent == null ?
       elementCriteria() :
-      (parent instanceof SelenideElement) ?
-        ((SelenideElement) parent).getSearchCriteria() + "/" + elementCriteria() :
-        elementCriteria();
+      parent.getSearchCriteria() + "/" + elementCriteria();
   }
 
   @Nonnull

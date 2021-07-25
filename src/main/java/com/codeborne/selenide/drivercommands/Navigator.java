@@ -22,7 +22,7 @@ import static java.util.regex.Pattern.DOTALL;
 
 @ParametersAreNonnullByDefault
 public class Navigator {
-  private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z]+:.*", DOTALL);
+  private static final Pattern ABSOLUTE_URL_REGEX = Pattern.compile("^[a-zA-Z-]+:.*", DOTALL);
 
   private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 

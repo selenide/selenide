@@ -55,6 +55,9 @@ final class NavigatorTest implements WithAssertions {
     assertThat(navigator.isAbsoluteUrl("https://selenide.org\n"))
       .as("ignores newline")
       .isTrue();
+    assertThat(navigator.isAbsoluteUrl("browser-internal://foo-bar"))
+      .as("protocol browser internal")
+      .isTrue();
 
     assertThat(navigator.isAbsoluteUrl("HTTP://SELENIDE.ORG"))
       .as("case insensitive: HTTP")
@@ -76,6 +79,9 @@ final class NavigatorTest implements WithAssertions {
       .as("relative url")
       .isFalse();
     assertThat(navigator.isAbsoluteUrl("/tmp/memory.dump?url=http://selenide.org"))
+      .as("relative url")
+      .isFalse();
+    assertThat(navigator.isAbsoluteUrl("foo-bar/baz"))
       .as("relative url")
       .isFalse();
   }

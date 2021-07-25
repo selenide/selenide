@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 
 import java.io.File;
@@ -37,7 +38,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFiles() throws IOException {
-    File downloadedFile = $(byText("Download me")).download();
+    File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
@@ -48,8 +49,25 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithAlert() throws IOException {
+    File downloadedFile = $(byText("Download me with alert")).download(using(PROXY).withAction((driver, link) -> {
+      link.click();
+      Alert alert = driver.switchTo().alert();
+      assertThat(alert.getText()).isEqualTo("Are you sure to download it?");
+      alert.dismiss();
+    }));
+
+    assertThat(downloadedFile.getName())
+      .matches("hello_world.*\\.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, WinRar!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadsFileWithCyrillicName() throws IOException {
-    File downloadedFile = $(byText("Download file with cyrillic name")).download();
+    File downloadedFile = $(byText("Download file with cyrillic name")).download(withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("файл-с-русским-названием.txt");
@@ -61,7 +79,8 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadsFileWithForbiddenCharactersInName() throws IOException {
-    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name")).download();
+    File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
+      .download(withExtension("txt"));
     assertThat(downloadedFile.getName())
       .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
         "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
@@ -74,8 +93,8 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
 
   @Test
   void downloadExternalFile() throws FileNotFoundException {
-    open("http://the-internet.herokuapp.com/download");
-    File video = $(By.linkText("some-file.txt")).download();
+    open("https://the-internet.herokuapp.com/download");
+    File video = $(By.linkText("some-file.txt")).download(withExtension("txt"));
     assertThat(video.getName())
       .isEqualTo("some-file.txt");
   }
@@ -83,13 +102,14 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   @Test
   void downloadMissingFile() {
     timeout = 100;
-    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension(".pdf")))
-      .isInstanceOf(FileNotFoundException.class);
+    assertThatThrownBy(() -> $(byText("Download missing file")).download(withExtension("pdf")))
+      .isInstanceOf(FileNotFoundException.class)
+      .hasMessage("Failed to download file {by text: Download missing file} in 100 ms. with extension \"pdf\"");
   }
 
   @Test
   public void download_withCustomTimeout() throws FileNotFoundException {
-    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000);
+    File downloadedFile = $(byText("Download me slowly (2000 ms)")).download(3000, withExtension("txt"));
 
     assertThat(downloadedFile.getName())
       .isEqualTo("hello_world.txt");
@@ -125,7 +145,7 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
       Configuration.downloadsFolder = downloadsFolder;
       openFile("page_with_uploads.html");
 
-      File downloadedFile = $(byText("Download me")).download();
+      File downloadedFile = $(byText("Download me")).download(withExtension("txt"));
 
       assertThat(downloadedFile.getAbsolutePath())
         .startsWith(new File(downloadsFolder).getAbsolutePath());
