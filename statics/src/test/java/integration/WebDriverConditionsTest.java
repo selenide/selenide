@@ -10,13 +10,9 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Selenide.webdriver;
-import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
-import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
-import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
-import static com.codeborne.selenide.WebDriverConditions.url;
-import static com.codeborne.selenide.WebDriverConditions.urlContaining;
-import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverConditions.*;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -124,33 +120,65 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void userCanDefineCustomConditions() {
-    webdriver().shouldHave(tabs(1));
+  void checkNumberOfOpenTabs() {
+    openFile("page_with_tabs.html");
+
+    webdriver().shouldHave(numberOfTabs(1));
+    $(byText("Page4: same title")).click();
+    webdriver().shouldHave(numberOfTabs(2));
+    $(byText("Page5: same title")).click();
+    webdriver().shouldHave(numberOfTabs(3));
+
+    switchTo().window(2).close();
+    webdriver().shouldHave(numberOfTabs(2));
+    switchTo().window(1).close();
+    webdriver().shouldHave(numberOfTabs(1));
   }
 
-  private ObjectCondition<WebDriver> tabs(int expectedTabsCount) {
+  @Test
+  void errorMessageForNumberOfTabs() {
+    assertThatThrownBy(() ->
+      webdriver().shouldHave(numberOfTabs(2)))
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageContaining("webdriver should have 2 tab(s)")
+      .hasMessageContaining("Actual value: 1");
+
+    assertThatThrownBy(() ->
+      webdriver().shouldNotHave(numberOfTabs(1)))
+      .isInstanceOf(ConditionMetException.class)
+      .hasMessageContaining("webdriver should not have 1 tab(s)")
+      .hasMessageContaining("Actual value: 1");
+  }
+
+  @Test
+  void userCanDefineCustomConditions() {
+    webdriver().shouldHave(cookie("session_id"));
+    webdriver().shouldNotHave(cookie("nonexistent_cookie"));
+  }
+
+  private ObjectCondition<WebDriver> cookie(String expectedCookieName) {
     return new ObjectCondition<WebDriver>() {
       @Nonnull
       @Override
       public String description() {
-        return "should have " + expectedTabsCount + " tabs";
+        return "should have a cookie with name '" + expectedCookieName + "'";
       }
 
       @Nonnull
       @Override
       public String negativeDescription() {
-        return "should not have " + expectedTabsCount + " tabs";
+        return "should not have a cookie with name '" + expectedCookieName + "'";
       }
 
       @Override
       public boolean test(WebDriver webdriver) {
-        return webdriver.getWindowHandles().size() == expectedTabsCount;
+        return webdriver.manage().getCookieNamed(expectedCookieName) != null;
       }
 
       @Nonnull
       @Override
       public String actualValue(WebDriver webdriver) {
-        return String.valueOf(webdriver.getWindowHandles().size());
+        return "Available cookies: " + webdriver.manage().getCookies();
       }
 
       @Nonnull

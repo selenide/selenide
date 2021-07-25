@@ -6,28 +6,28 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class NumberOfWindows implements ObjectCondition<WebDriver> {
-  private final int expectedNumberOfWindows;
+public class NumberOfTabs implements ObjectCondition<WebDriver> {
+  private final int expectedNumberOfTabs;
 
-  public NumberOfWindows(int expectedNumberOfWindows) {
-    this.expectedNumberOfWindows = expectedNumberOfWindows;
+  public NumberOfTabs(int expectedNumberOfTabs) {
+    this.expectedNumberOfTabs = expectedNumberOfTabs;
   }
 
   @Nonnull
   @Override
   public String description() {
-    return "should have number of windows = " + expectedNumberOfWindows;
+    return "should have " + expectedNumberOfTabs + " tab(s)";
   }
 
   @Nonnull
   @Override
   public String negativeDescription() {
-    return "should not have number of windows = " + expectedNumberOfWindows;
+    return "should not have " + expectedNumberOfTabs + " tab(s)";
   }
 
   @Override
   public boolean test(WebDriver webDriver) {
-    return webDriver.getWindowHandles().size() == expectedNumberOfWindows;
+    return webDriver.getWindowHandles().size() == expectedNumberOfTabs;
   }
 
   @Nullable
@@ -42,4 +42,3 @@ public class NumberOfWindows implements ObjectCondition<WebDriver> {
     return "webdriver";
   }
 }
-
