@@ -48,15 +48,6 @@ final class FramesTest extends ITest {
   }
 
   @Test
-  void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
-    switchTo().innerFrame("parentFrame");
-    $("frame").shouldHave(name("childFrame_1"));
-
-    switchTo().innerFrame();
-    $("frame").shouldHave(name("topFrame"));
-  }
-
-  @Test
   void canSwitchBetweenFramesByTitle() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 

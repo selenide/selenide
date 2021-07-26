@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
+import static com.codeborne.selenide.impl.Lists.list;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
@@ -134,13 +135,19 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   /**
-   * Switch to the inner frame (last child frame in given sequence)
+   * Switch to the inner frame (last child frame in given sequence).
+   * <p>
+   * This method
+   * <ol>
+   *  <li> switches to the root frame (aka "default content"),</li>
+   *  <li> switches to "firstFrame",</li>
+   *  <li> switches to every of "otherFrames".</li>
+   * </ol>
    */
-  @Nonnull
-  public WebDriver innerFrame(String... frames) {
+  public void innerFrame(String firstFrame, String... otherFrames) {
     defaultContent();
 
-    for (String frame : frames) {
+    for (String frame : list(firstFrame, otherFrames)) {
       SelenideLogger.run(String.format("frame(%s)", frame), SWITCH_TO, () -> {
         try {
           Wait().until(new FrameByIdOrName(frame));
@@ -150,8 +157,6 @@ public class SelenideTargetLocator implements TargetLocator {
         }
       });
     }
-
-    return webDriver;
   }
 
   /**
