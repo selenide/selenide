@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.23.1 (released 30.07.2021)
+* #1500 forbid calling `switchTo().innerFrame()` without parameters  --  see PR #1509
+* #1435 add report when switching between frames  --  thanks to Pavel Fokin for the PR
+
 ## 5.23.0 (released 16.07.2021)
 * #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
 * #1442 Add method sessionStorage.getItems()  --  see PR #1502
