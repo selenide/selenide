@@ -11,8 +11,16 @@ import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverConditions.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
+import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
+import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
+import static com.codeborne.selenide.WebDriverConditions.url;
+import static com.codeborne.selenide.WebDriverConditions.urlContaining;
+import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -120,33 +128,33 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
-  void checkNumberOfOpenTabs() {
+  void checkNumberOfOpenWindows() {
     openFile("page_with_tabs.html");
 
-    webdriver().shouldHave(numberOfTabs(1));
+    webdriver().shouldHave(numberOfWindows(1));
     $(byText("Page4: same title")).click();
-    webdriver().shouldHave(numberOfTabs(2));
+    webdriver().shouldHave(numberOfWindows(2));
     $(byText("Page5: same title")).click();
-    webdriver().shouldHave(numberOfTabs(3));
+    webdriver().shouldHave(numberOfWindows(3));
 
     switchTo().window(2).close();
-    webdriver().shouldHave(numberOfTabs(2));
+    webdriver().shouldHave(numberOfWindows(2));
     switchTo().window(1).close();
-    webdriver().shouldHave(numberOfTabs(1));
+    webdriver().shouldHave(numberOfWindows(1));
   }
 
   @Test
-  void errorMessageForNumberOfTabs() {
+  void errorMessageForNumberOfWindows() {
     assertThatThrownBy(() ->
-      webdriver().shouldHave(numberOfTabs(2)))
+      webdriver().shouldHave(numberOfWindows(2)))
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageContaining("webdriver should have 2 tab(s)")
+      .hasMessageContaining("webdriver should have 2 window(s)")
       .hasMessageContaining("Actual value: 1");
 
     assertThatThrownBy(() ->
-      webdriver().shouldNotHave(numberOfTabs(1)))
+      webdriver().shouldNotHave(numberOfWindows(1)))
       .isInstanceOf(ConditionMetException.class)
-      .hasMessageContaining("webdriver should not have 1 tab(s)")
+      .hasMessageContaining("webdriver should not have 1 window(s)")
       .hasMessageContaining("Actual value: 1");
   }
 
