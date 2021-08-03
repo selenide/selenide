@@ -13,7 +13,7 @@ ext {
   assertjVersion = '3.20.2'
   mockitoVersion = '3.11.2'
   browserupProxyVersion = '2.1.2'
-  littleProxyVersion = '2.0.4'
+  littleProxyVersion = '2.0.5'
   videoRecorderVersion = '2.0'
   commonsFileuploadVersion = '1.4'
 }
@@ -57,8 +57,8 @@ allprojects {
       exclude group: 'org.junit.jupiter'
       exclude group: 'org.junit.platform'
     }
-    implementation('org.slf4j:slf4j-api:1.7.31')
-    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.31')
+    implementation('org.slf4j:slf4j-api:1.7.32')
+    testRuntimeOnly('org.slf4j:slf4j-simple:1.7.32')
   }
 }
 

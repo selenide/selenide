@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.23.2 (released 03.08.2021)
+* #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
+
 ## 5.23.1 (released 30.07.2021)
 * #1500 forbid calling `switchTo().innerFrame()` without parameters  --  see PR #1509
 * #1435 add report when switching between frames  --  thanks to Pavel Fokin for the PR
