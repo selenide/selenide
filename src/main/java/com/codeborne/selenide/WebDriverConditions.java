@@ -1,8 +1,9 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrl;
-import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlContaining;
 import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlStartingWith;
+import com.codeborne.selenide.conditions.webdriver.CurrentFrameUrlContaining;
+import com.codeborne.selenide.conditions.webdriver.NumberOfWindows;
 import com.codeborne.selenide.conditions.webdriver.Url;
 import com.codeborne.selenide.conditions.webdriver.UrlContaining;
 import com.codeborne.selenide.conditions.webdriver.UrlStartingWith;
@@ -34,5 +35,14 @@ public class WebDriverConditions {
 
   public static ObjectCondition<WebDriver> currentFrameUrlContaining(String expectedUrl) {
     return new CurrentFrameUrlContaining(expectedUrl);
+  }
+
+  /**
+   * Check that the number of windows/tabs in the browser is as expected.
+   * Example:
+   * {@code webdriver().shouldHave(numberOfWindows(2)) }
+   */
+  public static ObjectCondition<WebDriver> numberOfWindows(int numberOfWindows) {
+    return new NumberOfWindows(numberOfWindows);
   }
 }
