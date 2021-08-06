@@ -4,34 +4,30 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.remote.http.HttpClient;
-import org.openqa.selenium.remote.internal.OkHttpClient;
+import org.openqa.selenium.remote.http.netty.NettyClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.time.Duration;
-import java.util.List;
-
-import static java.util.Arrays.asList;
 
 /**
- * A temporary workaround to override default timeouts of OkClient used in Selenium.
+ * A temporary workaround to override default timeouts of NettyClient used in Selenium.
  *
- * Its default timeouts are incredibly long:
- * 1) connectTimeout = 120000 ms (2 minutes)
- * 2) readTimeout = 10800000 ms  (3 hours!)
- *
- * If it's fixed in Selenium 4, this workaround can be removed.
+ * Its default timeouts are too long:
+ * 1) connectTimeout = 10 seconds  (Selenide sets to 10 seconds)
+ * 2) readTimeout = 3 minutes      (Selenide sets to 90 seconds)
  *
  * @since 5.22.0
  */
 @ParametersAreNonnullByDefault
 class HttpClientTimeouts {
   private static final Logger logger = LoggerFactory.getLogger(HttpClientTimeouts.class);
-  public static Duration defaultConnectTimeout = Duration.ofMinutes(1);
-  public static Duration defaultReadTimeout = Duration.ofMinutes(2);
+  public static Duration defaultConnectTimeout = Duration.ofSeconds(10);
+  public static Duration defaultReadTimeout = Duration.ofSeconds(90);
 
   public void setup(WebDriver webDriver) {
     setup(webDriver, defaultConnectTimeout, defaultReadTimeout);
@@ -59,44 +55,25 @@ class HttpClientTimeouts {
     Field clientField = HttpCommandExecutor.class.getDeclaredField("client");
     clientField.setAccessible(true);
     HttpClient client = (HttpClient) clientField.get(executor);
-    if (client instanceof OkHttpClient) {
-      setupTimeouts((OkHttpClient) client, connectTimeout, readTimeout);
+    if (client instanceof NettyClient) {
+      setupTimeouts((NettyClient) client, connectTimeout, readTimeout);
     }
   }
 
-  private void setupTimeouts(OkHttpClient client, Duration connectTimeout, Duration readTimeout) throws Exception {
-    Field okClientField = OkHttpClient.class.getDeclaredField("client");
-    okClientField.setAccessible(true);
-    Object okClient = okClientField.get(client);
-    if (okClient instanceof okhttp3.OkHttpClient) {
-      setupTimeouts((okhttp3.OkHttpClient) okClient, connectTimeout, readTimeout);
+  private void setupTimeouts(NettyClient client, Duration connectTimeout, Duration readTimeout) throws Exception {
+    Field configField = NettyClient.class.getDeclaredField("config");
+    configField.setAccessible(true);
+    Object config = configField.get(client);
+    if (config instanceof ClientConfig) {
+      setupTimeouts((ClientConfig) config, connectTimeout, readTimeout);
     }
   }
-
-  private void setupTimeouts(okhttp3.OkHttpClient okClient, Duration connectTimeout, Duration readTimeout) throws Exception {
-    int previousConnectTimeout = okClient.connectTimeoutMillis();
-    int previousReadTimeout = okClient.readTimeoutMillis();
-    setFieldValue(okClient, asList("connectTimeout", "connectTimeoutMillis"), (int) connectTimeout.toMillis());
-    setFieldValue(okClient, asList("readTimeout", "readTimeoutMillis"), (int) readTimeout.toMillis());
-    logger.info("Changed connectTimeout from {} to {}", previousConnectTimeout, okClient.connectTimeoutMillis());
-    logger.info("Changed readTimeout from {} to {}", previousReadTimeout, okClient.readTimeoutMillis());
-  }
-
-  private <T> void setFieldValue(T object, List<String> fieldNames, Object fieldValue) throws Exception {
-    NoSuchFieldException fieldNotFound = null;
-    for (String fieldName : fieldNames) {
-      try {
-        Field field = object.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(object, fieldValue);
-        return;
-      }
-      catch (NoSuchFieldException e) {
-        fieldNotFound = e;
-      }
-    }
-    if (fieldNotFound != null) {
-      throw fieldNotFound;
-    }
+  private void setupTimeouts(ClientConfig config, Duration connectTimeout, Duration readTimeout) throws Exception {
+    Duration previousConnectTimeout = config.connectionTimeout();
+    Duration previousReadTimeout = config.readTimeout();
+    config.connectionTimeout(connectTimeout);
+    config.readTimeout(readTimeout);
+    logger.info("Changed connectTimeout from {} to {}", previousConnectTimeout, config.connectionTimeout());
+    logger.info("Changed readTimeout from {} to {}", previousReadTimeout, config.readTimeout());
   }
 }
