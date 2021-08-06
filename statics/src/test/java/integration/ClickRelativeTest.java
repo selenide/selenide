@@ -8,7 +8,7 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
-import static com.codeborne.selenide.Condition.matchText;
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,7 +29,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(123, 222);
 
-    $("#coords").should(matchText("(523, 522)"));
+    $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
   @Test
@@ -38,7 +38,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(123, 222);
 
-    $("#coords").should(matchText("(523, 522)"));
+    $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
   @Test
@@ -47,7 +47,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(usingJavaScript().offset(123, 222));
 
-    $("#coords").should(matchText("(523, 522)"));
+    $("#coords").shouldHave(exactText("(523, 522)"));
   }
 
   @Test
@@ -56,7 +56,7 @@ final class ClickRelativeTest extends IntegrationTest {
 
     $("#page").click(usingJavaScript().offsetX(123));
 
-    $("#coords").should(matchText("(523, 300)"));
+    $("#coords").shouldHave(exactText("(523, 300)"));
   }
 
   @Test

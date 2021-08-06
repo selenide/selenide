@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Test session storage</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h2>Test session storage</h2>
+
+<label for="debug">sessionStorage content:</label><textarea id="debug"></textarea>
+<button id="button-put">put</button>
+<button id="button-remove">remove</button>
+
+<script type="text/javascript">
+  (function () {
+    function putToSessionStorage() {
+      document.getElementById('debug').innerText = '...';
+      setTimeout(() => {
+        sessionStorage.setItem('it', 'works');
+        document.getElementById('debug').innerText = 'works';
+      }, 1000)
+    }
+
+    function removeFromSessionStorage() {
+      document.getElementById('debug').innerText = '...';
+      setTimeout(() => {
+        sessionStorage.removeItem('it');
+        document.getElementById('debug').innerText = '';
+      }, 1000)
+    }
+
+    document.getElementById('button-put').addEventListener('click', putToSessionStorage)
+    document.getElementById('button-remove').addEventListener('click', removeFromSessionStorage)
+    sessionStorage.clear()
+  })();
+</script>
+</body>
+</html>

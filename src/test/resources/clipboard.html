@@ -2,17 +2,29 @@
 <html>
 <body>
 
-<input type="text" value="Hello World" id="myInput">
-<button id="my-button" onclick="myFunction()">Copy text</button>
+<input type="text" value="Hello World" id="text-to-copy">
+<button id="button-copy-text">Copy text</button>
+<button id="button-copy-text-slowly">Copy text slowly</button>
+
+<div id="debug">Clipboard is empty...</div>
 
 <script>
-function myFunction() {
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999)
-  document.execCommand("copy");
-  alert("Copied the text: " + copyText.value);
-}
+  (function() {
+    function copyTextToClipboard() {
+      const copyText = document.getElementById("text-to-copy");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999)
+      document.execCommand("copy");
+      document.getElementById('debug').innerText += "Copied the text: " + copyText.value;
+    }
+
+    function copyTextSlowly() {
+      setTimeout(copyTextToClipboard, 1000);
+    }
+
+    document.getElementById('button-copy-text').addEventListener('click', copyTextToClipboard, false);
+    document.getElementById('button-copy-text-slowly').addEventListener('click', copyTextSlowly, false);
+  })();
 </script>
 
 </body>

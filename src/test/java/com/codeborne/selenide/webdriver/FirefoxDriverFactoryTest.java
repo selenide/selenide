@@ -130,6 +130,7 @@ final class FirefoxDriverFactoryTest implements WithAssertions {
   void downloadsAllPopularContentTypesWithoutDialog() {
     assertThat(driverFactory.popularContentTypes()).contains(";application/pdf;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/octet-stream;");
+    assertThat(driverFactory.popularContentTypes()).contains(";binary/octet-stream;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/msword;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/vnd.ms-excel;");
     assertThat(driverFactory.popularContentTypes()).contains(";application/zip;");

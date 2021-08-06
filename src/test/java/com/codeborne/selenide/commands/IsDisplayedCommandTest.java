@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -16,7 +18,7 @@ import static org.mockito.Mockito.when;
 final class IsDisplayedCommandTest implements WithAssertions {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
+  private final WebElement mockedElement = mock(WebElement.class);
   private final IsDisplayed isDisplayedCommand = new IsDisplayed();
 
   @BeforeEach
@@ -72,5 +74,18 @@ final class IsDisplayedCommandTest implements WithAssertions {
   void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
     assertThatThrownBy(() -> catchExecuteMethodWithException(new NotFoundException("invalid selector")))
       .isInstanceOf(InvalidSelectorException.class);
+  }
+
+  /**
+   * Workaround for https://github.com/SeleniumHQ/selenium/issues/9266
+   * Can be removed after upgrading to Selenium 4.
+   */
+  @Test
+  void ignoresNPE_from_isDisplayed() {
+    RemoteWebElement webElement = mock(RemoteWebElement.class);
+    when(webElement.isDisplayed()).thenThrow(new NullPointerException());
+    when(locator.getWebElement()).thenReturn(webElement);
+    Boolean isDisplayed = isDisplayedCommand.execute(proxy, locator, null);
+    assertThat(isDisplayed).isFalse();
   }
 }

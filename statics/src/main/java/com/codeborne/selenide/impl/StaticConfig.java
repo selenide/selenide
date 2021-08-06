@@ -15,7 +15,7 @@ import org.openqa.selenium.MutableCapabilities;
  *
  * This class should not be normally used in end user's code.
  */
-public class StaticConfig implements Config {
+class StaticConfig implements Config {
   @Override
   public String baseUrl() {
     return Configuration.baseUrl;

@@ -1,5 +1,38 @@
 # Changelog
 
+## 5.23.2 (released 03.08.2021)
+* #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
+
+## 5.23.1 (released 30.07.2021)
+* #1500 forbid calling `switchTo().innerFrame()` without parameters  --  see PR #1509
+* #1435 add report when switching between frames  --  thanks to Pavel Fokin for the PR
+
+## 5.23.0 (released 16.07.2021)
+* #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
+* #1442 Add method sessionStorage.getItems()  --  see PR #1502
+* #1442 Add method localStorage.getItems()  --  see PR #1502
+* #1442 add should-methods for clipboard  --  see PR #1507
+* #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
+
+## 5.22.3 (released 05.07.2021)
+* #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498
+
+## 5.22.2 (released 30.06.2021)
+* #1493 support uploading files from inside of JAR files  --  see PR #1494
+* fix command `./gradlew` - now it installs jars to a local maven repo  --  see PR #1489 
+* add support for okhttp 4.9.1  --  see PR #1488
+
+## 5.22.1 (released 18.06.2021)
+* Add mime type "binary/octet-stream" to download binary files in FireFox
+
+## 5.22.0 (released 08.06.2021)
+* #1479 make it possible to check an alert before downloading a file  --  see PR #1481
+* #1482 Add support for `Condition.textCaseSensitive` for selected options in `select` element --  thanks to Oleg Berezhnoy
+* #1380 Add selectors `byTextCaseInsensitive` and `withTextCaseInsensitive` --  see PR #1381
+* #1483 add method `Driver.getSessionId()`  --  thanks to Petro Ovcharenko
+* override default Selenium http timeouts  --  see PR #1433
+* #1472 refactoring: pass WebElementSource instead of SearchContext
+
 ## 5.21.0 (released 15.05.2021)
 * #1055 Avoid multiple screenshots for chained locators  --  see PR #1465
 * #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450

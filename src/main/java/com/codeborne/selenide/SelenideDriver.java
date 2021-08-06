@@ -460,4 +460,20 @@ public class SelenideDriver {
     if (downloadFileWithHttpRequest == null) downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
     return downloadFileWithHttpRequest;
   }
+
+  public Conditional<WebDriver> webdriver() {
+    return new Conditional<WebDriver>() {
+      @Nonnull
+      @Override
+      public Driver driver() {
+        return SelenideDriver.this.driver();
+      }
+
+      @Nonnull
+      @Override
+      public WebDriver object() {
+        return SelenideDriver.this.getWebDriver();
+      }
+    };
+  }
 }

@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.WindowNotFoundException;
 import com.codeborne.selenide.impl.windows.FrameByIdOrName;
 import com.codeborne.selenide.impl.windows.WindowByIndex;
 import com.codeborne.selenide.impl.windows.WindowByNameOrHandle;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,11 +21,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
+import static com.codeborne.selenide.impl.Lists.list;
 import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
 import static org.openqa.selenium.support.ui.ExpectedConditions.frameToBeAvailableAndSwitchToIt;
 
 @ParametersAreNonnullByDefault
 public class SelenideTargetLocator implements TargetLocator {
+  private static final String SWITCH_TO = SelenideLogger.getReadableSubject("switchTo");
+
   private final Driver driver;
   private final WebDriver webDriver;
   private final Config config;
@@ -40,52 +44,58 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   @Nonnull
   public WebDriver frame(int index) {
-    try {
-      return Wait().until(frameToBeAvailableAndSwitchToIt(index));
-    }
-    catch (NoSuchElementException | TimeoutException e) {
-      throw frameNotFoundError("No frame found with index: " + index, e);
-    }
-    catch (InvalidArgumentException e) {
-      if (isFirefox62Bug(e) || isChrome75Error(e)) {
+    return SelenideLogger.get(String.format("frame(index: %s)", index), SWITCH_TO, () -> {
+      try {
+        return Wait().until(frameToBeAvailableAndSwitchToIt(index));
+      }
+      catch (NoSuchElementException | TimeoutException e) {
         throw frameNotFoundError("No frame found with index: " + index, e);
       }
-      throw e;
-    }
+      catch (InvalidArgumentException e) {
+        if (isFirefox62Bug(e) || isChrome75Error(e)) {
+          throw frameNotFoundError("No frame found with index: " + index, e);
+        }
+        throw e;
+      }
+    });
   }
 
   @Override
   @Nonnull
   public WebDriver frame(String nameOrId) {
-    try {
-      return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
-    }
-    catch (NoSuchElementException | TimeoutException e) {
-      throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);
-    }
-    catch (InvalidArgumentException e) {
-      if (isFirefox62Bug(e)) {
+    return SelenideLogger.get("frame(" + nameOrId + ")", SWITCH_TO, () -> {
+      try {
+        return Wait().until(frameToBeAvailableAndSwitchToIt(nameOrId));
+      }
+      catch (NoSuchElementException | TimeoutException e) {
         throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);
       }
-      throw e;
-    }
+      catch (InvalidArgumentException e) {
+        if (isFirefox62Bug(e)) {
+          throw frameNotFoundError("No frame found with id/name: " + nameOrId, e);
+        }
+        throw e;
+      }
+    });
   }
 
   @Override
   @Nonnull
   public WebDriver frame(WebElement frameElement) {
-    try {
-      return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
-    }
-    catch (NoSuchElementException | TimeoutException e) {
-      throw frameNotFoundError("No frame found with element: " + frameElement, e);
-    }
-    catch (InvalidArgumentException e) {
-      if (isFirefox62Bug(e)) {
+    return SelenideLogger.get(String.format("frame(%s)", frameElement), SWITCH_TO, () -> {
+      try {
+        return Wait().until(frameToBeAvailableAndSwitchToIt(frameElement));
+      }
+      catch (NoSuchElementException | TimeoutException e) {
         throw frameNotFoundError("No frame found with element: " + frameElement, e);
       }
-      throw e;
-    }
+      catch (InvalidArgumentException e) {
+        if (isFirefox62Bug(e)) {
+          throw frameNotFoundError("No frame found with element: " + frameElement, e);
+        }
+        throw e;
+      }
+    });
   }
 
   private boolean isFirefox62Bug(InvalidArgumentException e) {
@@ -99,19 +109,19 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   @Nonnull
   public WebDriver parentFrame() {
-    return delegate.parentFrame();
+    return SelenideLogger.get("parent frame", SWITCH_TO, delegate::parentFrame);
   }
 
   @Override
   @Nonnull
   public WebDriver defaultContent() {
-    return delegate.defaultContent();
+    return SelenideLogger.get("default context", SWITCH_TO, delegate::defaultContent);
   }
 
   @Override
   @Nonnull
   public WebElement activeElement() {
-    return delegate.activeElement();
+    return SelenideLogger.get("active element", SWITCH_TO, delegate::activeElement);
   }
 
   @Override
@@ -126,22 +136,28 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   /**
-   * Switch to the inner frame (last child frame in given sequence)
+   * Switch to the inner frame (last child frame in given sequence).
+   * <p>
+   * This method
+   * <ol>
+   *  <li> switches to the root frame (aka "default content"),</li>
+   *  <li> switches to "firstFrame",</li>
+   *  <li> switches to every of "otherFrames".</li>
+   * </ol>
    */
-  @Nonnull
-  public WebDriver innerFrame(String... frames) {
-    delegate.defaultContent();
+  public void innerFrame(String firstFrame, String... otherFrames) {
+    defaultContent();
 
-    for (String frame : frames) {
-      try {
-        Wait().until(new FrameByIdOrName(frame));
-      }
-      catch (NoSuchElementException | TimeoutException e) {
-        throw frameNotFoundError("No frame found with id/name = " + frame, e);
-      }
+    for (String frame : list(firstFrame, otherFrames)) {
+      SelenideLogger.run(String.format("frame(%s)", frame), SWITCH_TO, () -> {
+        try {
+          Wait().until(new FrameByIdOrName(frame));
+        }
+        catch (NoSuchElementException | TimeoutException e) {
+          throw frameNotFoundError("No frame found with id/name = " + frame, e);
+        }
+      });
     }
-
-    return webDriver;
   }
 
   /**
@@ -152,13 +168,9 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(int index) {
-    try {
-      return Wait().until(new WindowByIndex(index));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with index: " + index, e);
-    }
+    return window(Wait(), index);
   }
+
 
   /**
    * Switch to window/tab by index with a configurable timeout
@@ -169,12 +181,7 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(int index, Duration duration) {
-    try {
-      return Wait(duration).until(new WindowByIndex(index));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with index: " + index, e);
-    }
+    return window(Wait(duration), index);
   }
 
   /**
@@ -185,12 +192,7 @@ public class SelenideTargetLocator implements TargetLocator {
   @Override
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle) {
-    try {
-      return Wait().until(new WindowByNameOrHandle(nameOrHandleOrTitle));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
-    }
+    return window(Wait(), nameOrHandleOrTitle);
   }
 
   /**
@@ -201,12 +203,29 @@ public class SelenideTargetLocator implements TargetLocator {
    */
   @Nonnull
   public WebDriver window(String nameOrHandleOrTitle, Duration duration) {
-    try {
-      return Wait(duration).until(new WindowByNameOrHandle(nameOrHandleOrTitle));
-    }
-    catch (TimeoutException e) {
-      throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
-    }
+    return window(Wait(duration), nameOrHandleOrTitle);
+  }
+
+  private WebDriver window(SelenideWait wait, int index) {
+    return SelenideLogger.get(String.format("window(index: %s)", index), SWITCH_TO, () -> {
+      try {
+        return wait.until(new WindowByIndex(index));
+      }
+      catch (TimeoutException e) {
+        throw windowNotFoundError("No window found with index: " + index, e);
+      }
+    });
+  }
+
+  private WebDriver window(SelenideWait wait, String nameOrHandleOrTitle) {
+    return SelenideLogger.get(String.format("window(%s)", nameOrHandleOrTitle), SWITCH_TO, () -> {
+      try {
+        return wait.until(new WindowByNameOrHandle(nameOrHandleOrTitle));
+      }
+      catch (TimeoutException e) {
+        throw windowNotFoundError("No window found with name or handle or title: " + nameOrHandleOrTitle, e);
+      }
+    });
   }
 
   @Override

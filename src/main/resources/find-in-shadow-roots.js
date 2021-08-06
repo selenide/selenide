@@ -22,4 +22,4 @@
   return arguments.length === 2 ?
     findInShadows(arguments[0], arguments[1], document) :
     findInShadows(arguments[0], arguments[1], getShadowRoot(arguments[2]));
-})
+})(...arguments)
