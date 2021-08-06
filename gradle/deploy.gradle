@@ -40,7 +40,7 @@ task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
   destinationDir file("${project.buildDir}/libs-to-upload")
 }
 
-task buildAll(dependsOn: ['allprojectsJar', 'allprojectsSourcesJar', 'allprojectsJavadocJar', 'publishToMavenLocal']) {}
+task install(dependsOn: ['allprojectsJar', 'allprojectsSourcesJar', 'allprojectsJavadocJar', 'publishToMavenLocal']) {}
 
 apply plugin: 'maven-publish'
 
