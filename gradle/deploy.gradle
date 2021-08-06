@@ -42,6 +42,8 @@ task allprojectsJavadocJar(type: Jar, dependsOn: allprojectsJavadoc) {
 
 task buildAll(dependsOn: ['allprojectsJar', 'allprojectsSourcesJar', 'allprojectsJavadocJar', 'publishToMavenLocal']) {}
 
+apply plugin: 'maven-publish'
+
 artifacts {
   archives allprojectsJar
   archives allprojectsSourcesJar
