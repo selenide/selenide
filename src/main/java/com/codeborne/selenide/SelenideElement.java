@@ -787,6 +787,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement $x(String xpath, int index);
 
   /**
+   * <p>Returns shadow root of this element</p>
+   *
+   * @see com.codeborne.selenide.commands.GetShadowRoot
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement shadowRoot();
+
+  /**
    * <p>
    * Short form of {@code webDriver.findElements(thisElement, By.cssSelector(cssSelector))}
    * </p>

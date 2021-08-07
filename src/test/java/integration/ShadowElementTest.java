@@ -7,8 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exactValue;
+import static com.codeborne.selenide.Condition.id;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.shadowCss;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -134,27 +137,35 @@ final class ShadowElementTest extends ITest {
   @Test
   void getTargetElementsViaShadowHost() {
     $$(shadowCss("div.test-class", "#shadow-host"))
-      .shouldHaveSize(2);
+      .shouldHave(size(2));
   }
 
   @Test
   void getElementsInsideInnerShadowHost() {
     $$(shadowCss("p", "#shadow-host", "#inner-shadow-host"))
-      .shouldHaveSize(1);
+      .shouldHave(size(1));
   }
 
   @Test
   void getNonExistingTargetElementsInsideShadowHost() {
     $$(shadowCss("#nonexistent", "#shadow-host"))
-      .shouldHaveSize(0);
+      .shouldHave(size(0));
   }
 
   @Test
   void getAllElementsInAllNestedShadowHosts() {
     ElementsCollection elements = $$(shadowCss(".shadow-container-child-child-item",
       "#shadow-container", ".shadow-container-child", ".shadow-container-child-child"));
-    elements.shouldHaveSize(3);
+    elements.shouldHave(size(3));
     assertThat(elements.get(0).getText()).isEqualTo("shadowContainerChildChild1Host1").as("Mismatch in name of first child container");
     assertThat(elements.get(2).getText()).isEqualTo("shadowContainerChildChild1Host3").as("Mismatch in name of last child container");
+  }
+
+  @Test
+  void getShadowRoot() {
+    $("#shadow-host").shadowRoot()
+      .find("#inner-shadow-host").shadowRoot()
+      .find("#inputInInnerShadow")
+      .shouldHave(id("inputInInnerShadow"), attribute("type", "text"));
   }
 }
