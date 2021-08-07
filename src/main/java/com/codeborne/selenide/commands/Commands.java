@@ -106,6 +106,7 @@ public class Commands {
     add("sibling", new GetSibling());
     add("preceding", new GetPreceding());
     add("lastChild", new GetLastChild());
+    add("shadowRoot", new GetShadowRoot());
   }
 
   private void addKeyboardCommands() {
