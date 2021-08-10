@@ -78,6 +78,16 @@ final class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithNorwayCharactersInName() throws IOException {
+    File downloadedFile = $(byText("Download file with \"ø\" in name")).download(withExtension("txt"));
+
+    assertThat(downloadedFile.getName())
+      .isEqualTo("ø-report.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Hello, Nørway!\n");
+  }
+
+  @Test
   void downloadsFileWithForbiddenCharactersInName() throws IOException {
     File downloadedFile = $(byText("Download file with \"forbidden\" characters in name"))
       .download(withExtension("txt"));
