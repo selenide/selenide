@@ -31,6 +31,7 @@ import com.codeborne.selenide.conditions.SelectedText;
 import com.codeborne.selenide.conditions.Text;
 import com.codeborne.selenide.conditions.Value;
 import com.codeborne.selenide.conditions.Visible;
+import com.codeborne.selenide.conditions.AttributeContainsText;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -147,6 +148,19 @@ public abstract class Condition {
   @Nonnull
   public static Condition attributeMatching(String attributeName, String attributeRegex) {
     return new MatchAttributeWithValue(attributeName, attributeRegex);
+  }
+
+  /**
+   * Asserts that the given attribute of an element contains text
+   *
+   * <p>Sample: <code>$("h1").should(attributeContainsVal("fieldId", "Hello Wor"))</code></p>
+   * @param attributeName name of attribute
+   * @param expectedAttributeValue text expected in the attribute
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static Condition attributeContainsText(String attributeName, String expectedAttributeValue) {
+    return new AttributeContainsText(attributeName, expectedAttributeValue);
   }
 
   /**

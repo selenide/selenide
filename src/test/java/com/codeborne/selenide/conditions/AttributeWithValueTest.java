@@ -28,6 +28,13 @@ final class AttributeWithValueTest {
   }
 
   @Test
+  void containsText() {
+    assertThat(new AttributeContainsText("data-id", "actual").apply(driver, element)).isTrue();
+    assertThat(new AttributeContainsText("data-id", "act").apply(driver, element)).isTrue();
+    assertThat(new AttributeContainsText("data-id", "exp").apply(driver, element)).isFalse();
+  }
+
+  @Test
   void actualValue() {
     assertThat(new AttributeWithValue("data-id", "expected").actualValue(driver, element)).isEqualTo("data-id=\"actual\"");
 

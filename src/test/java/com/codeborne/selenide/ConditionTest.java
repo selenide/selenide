@@ -30,6 +30,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.attributeContainsText;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
@@ -205,6 +206,14 @@ final class ConditionTest {
     assertThat(attributeMatching("name", "selenide.*").apply(driver, elementWithAttribute("name", "selenide is great"))).isTrue();
     assertThat(attributeMatching("name", "selenide.*").apply(driver, elementWithAttribute("id", "selenide"))).isFalse();
     assertThat(attributeMatching("name", "value.*").apply(driver, elementWithAttribute("name", "another value"))).isFalse();
+  }
+
+  @Test
+  void elementValueContainsText() {
+    assertThat(attributeContainsText("name", "sel").apply(driver, elementWithAttribute("name", "selenide"))).isTrue();
+    assertThat(attributeContainsText("name", "seleni").apply(driver, elementWithAttribute("name", "selenide is great"))).isTrue();
+    assertThat(attributeContainsText("name", "sel").apply(driver, elementWithAttribute("id", "selenide"))).isFalse();
+    assertThat(attributeContainsText("name", "sel").apply(driver, elementWithAttribute("id", "another value"))).isFalse();
   }
 
   @Test
