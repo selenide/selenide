@@ -85,6 +85,6 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private void clearValueWithKeystrokes(WebElement element) {
-    element.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.chord(Keys.SHIFT, Keys.END), Keys.BACK_SPACE);
+    element.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.HOME), Keys.chord(Keys.SHIFT, Keys.END), Keys.BACK_SPACE);
   }
 }
