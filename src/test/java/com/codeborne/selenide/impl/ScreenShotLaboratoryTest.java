@@ -61,22 +61,22 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
   @Test
   void composesScreenshotNameAsTimestampPlusCounter() {
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/12356789.0.png");
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/12356789.1.png");
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/12356789.2.png");
   }
 
   @Test
   void screenshotsCanByGroupedByTests() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.0.png");
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.1.png");
-    assertThat(screenshots.takeScreenshot(driver).getImage())
+    assertThat(screenshots.takeScreenshot(driver, true, false).getImage())
       .isEqualTo(workingDirectory + "/build/reports/tests/ui/MyTest/test_some_method/12356789.2.png");
 
     List<File> contextScreenshots = screenshots.finishContext();
@@ -250,7 +250,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
     doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
-    String screenshot = screenshots.takeScreenshot(driver).summary();
+    String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .startsWith(String.format("%nScreenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/"))
       .endsWith(".png");
@@ -266,7 +266,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
     doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
-    String screenshot = screenshots.takeScreenshot(driver).summary();
+    String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .as("Concatenate reportUrl with screenshot file name if it saved outside of build/project home dir")
       .startsWith(String.format("%nScreenshot: %s", reportsUrl + new File(screenshot).getName()));
@@ -284,7 +284,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
     doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
-    String screenshot = screenshots.takeScreenshot(driver).summary();
+    String screenshot = screenshots.takeScreenshot(driver, true, false).summary();
     assertThat(screenshot)
       .startsWith(String.format("%nScreenshot: file:%s/build/reports/tests/", currentDir))
       .endsWith(".png");
@@ -292,21 +292,21 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
   @Test
   void doesNotAddScreenshot_if_screenshotsAreDisabled() {
-    config.screenshots(false);
+    config.screenshots(true);
 
-    String screenshot = screenshots.takeScreenshot(driver).summary();
+    String screenshot = screenshots.takeScreenshot(driver, false, false).summary();
     assertThat(screenshot).isNullOrEmpty();
     verify(webDriver, never()).getScreenshotAs(any());
   }
 
   @Test
   void printHtmlPath_if_savePageSourceIsEnabled() throws IOException {
-    config.savePageSource(true);
+    config.savePageSource(false);
     config.reportsUrl("http://ci.mycompany.com/job/666/artifact/");
     doReturn(new File("build/reports/page123.html")).when(extractor).extract(eq(config), eq(webDriver), any());
     doReturn(resourceToByteArray("/screenshot.png")).when(webDriver).getScreenshotAs(BYTES);
 
-    Screenshot screenshot = screenshots.takeScreenshot(driver);
+    Screenshot screenshot = screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshot.summary()).isEqualTo(
       lineSeparator() + "Screenshot: http://ci.mycompany.com/job/666/artifact/build/reports/tests/12356789.0.png" +
         lineSeparator() + "Page source: http://ci.mycompany.com/job/666/artifact/build/reports/page123.html");

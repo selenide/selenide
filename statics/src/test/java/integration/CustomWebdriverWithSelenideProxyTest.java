@@ -2,8 +2,8 @@ package integration;
 
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Credentials;
+import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.impl.StaticConfig;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ final class CustomWebdriverWithSelenideProxyTest extends IntegrationTest {
   public void userCanUserCustomWebdriverWithSelenideProxy() {
     useProxy(true);
 
-    SelenideProxyServer proxy = new SelenideProxyServer(new StaticConfig(), null);
+    SelenideProxyServer proxy = new SelenideProxyServer(new SelenideConfig(), null);
     proxy.start();
     try {
       WebDriver webDriver = isChrome() ? chrome(proxy) : firefox(proxy);

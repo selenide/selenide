@@ -1,7 +1,20 @@
 # Changelog
 
-## 5.23.0 
-* #1497 fixes problems with setValue("") didn't trigger events -- see PR # 
+## 5.23.3 
+* #1497 fixes problems with setValue("") didn't trigger events -- see PR #1499 
+## 5.23.2 (released 03.08.2021)
+* #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
+
+## 5.23.1 (released 30.07.2021)
+* #1500 forbid calling `switchTo().innerFrame()` without parameters  --  see PR #1509
+* #1435 add report when switching between frames  --  thanks to Pavel Fokin for the PR
+
+## 5.23.0 (released 16.07.2021)
+* #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
+* #1442 Add method sessionStorage.getItems()  --  see PR #1502
+* #1442 Add method localStorage.getItems()  --  see PR #1502
+* #1442 add should-methods for clipboard  --  see PR #1507
+* #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
 
 ## 5.22.3 (released 05.07.2021)
 * #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498

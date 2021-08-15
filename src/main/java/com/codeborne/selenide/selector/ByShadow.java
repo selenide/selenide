@@ -12,10 +12,9 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
+import static com.codeborne.selenide.impl.Lists.list;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
@@ -50,9 +49,7 @@ public class ByShadow {
       if (shadowHost == null || target == null) {
         throw new IllegalArgumentException("Cannot find elements when the selector is null");
       }
-      shadowHostsChain = new ArrayList<>(1 + innerShadowHosts.length);
-      shadowHostsChain.add(shadowHost);
-      shadowHostsChain.addAll(asList(innerShadowHosts));
+      shadowHostsChain = list(shadowHost, innerShadowHosts);
       this.target = target;
     }
 

@@ -21,7 +21,9 @@ public class Screenshots {
 
   @CheckReturnValue
   public static String saveScreenshotAndPageSource() {
-    return screenshots.takeScreenshot(driver()).summary();
+    Driver driver = driver();
+    Config config = driver.config();
+    return screenshots.takeScreenshot(driver, config.screenshots(), config.savePageSource()).summary();
   }
 
   @CheckReturnValue
