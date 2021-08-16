@@ -85,6 +85,10 @@ public class SetValue implements Command<SelenideElement> {
   }
 
   private void clearValueWithKeystrokes(WebElement element) {
-    element.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.HOME), Keys.chord(Keys.SHIFT, Keys.END), Keys.BACK_SPACE);
+    // Yes it looks strange, but this is the shortest combination I found in August 2021
+    // that would work in Firefox, Chrome on Mac and on Linux smoothly.
+    element.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.HOME),
+      Keys.chord(Keys.SHIFT, Keys.END),
+      Keys.BACK_SPACE, Keys.BACK_SPACE);
   }
 }
