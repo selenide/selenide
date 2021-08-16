@@ -1,7 +1,9 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.files.FileFilter;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+
+import com.codeborne.selenide.files.FileFilter;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
@@ -11,14 +13,15 @@ import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.internal.HasIdentity;
 import org.openqa.selenium.internal.WrapsElement;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Duration;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -681,6 +684,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
+  @Nonnull
   SelenideElement find(By selector);
 
   /**
