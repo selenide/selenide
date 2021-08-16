@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
+import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -22,32 +24,27 @@ final class FramesTest extends ITest {
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
-    assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/page_with_parent_frame.html");
+    driver().webdriver().shouldHave(currentFrameUrl(getBaseUrl() + "/page_with_parent_frame.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_1");
     assertThat(driver().source()).contains("Hello, WinRar!");
-    assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/hello_world.txt");
+    driver().webdriver().shouldHave(currentFrameUrl(getBaseUrl() + "/hello_world.txt"));
+    driver().webdriver().shouldHave(urlContaining("/page_with_frames.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2");
     $("frame").shouldHave(name("childFrame_2_1"));
-    assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/page_with_child_frame.html");
+    driver().webdriver().shouldHave(currentFrameUrl(getBaseUrl() + "/page_with_child_frame.html"));
+    driver().webdriver().shouldHave(urlContaining("/page_with_frames.html"));
 
     switchTo().innerFrame("parentFrame", "childFrame_2", "childFrame_2_1");
     assertThat(driver().source()).contains("This is last frame!");
-    assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/child_frame.txt");
+    driver().webdriver().shouldHave(currentFrameUrl(getBaseUrl() + "/child_frame.txt"));
+    driver().webdriver().shouldHave(urlContaining("/page_with_frames.html"));
 
     switchTo().innerFrame("parentFrame");
     $("frame").shouldHave(name("childFrame_1"));
+    driver().webdriver().shouldHave(urlContaining("/page_with_frames.html"));
     assertThat(driver().getCurrentFrameUrl()).isEqualTo(getBaseUrl() + "/page_with_parent_frame.html");
-  }
-
-  @Test
-  void switchToInnerFrame_withoutParameters_switchesToDefaultContent() {
-    switchTo().innerFrame("parentFrame");
-    $("frame").shouldHave(name("childFrame_1"));
-
-    switchTo().innerFrame();
-    $("frame").shouldHave(name("topFrame"));
   }
 
   @Test
@@ -100,9 +97,7 @@ final class FramesTest extends ITest {
   @Test
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByTitle() {
     assertThat(driver().title()).isEqualTo("Test::frames");
-    assertThatThrownBy(() -> {
-      switchTo().frame("absentFrame");
-    })
+    assertThatThrownBy(() -> switchTo().frame("absentFrame"))
       .isInstanceOf(FrameNotFoundException.class)
       .hasMessageStartingWith("No frame found with id/name: absentFrame");
   }
@@ -111,9 +106,7 @@ final class FramesTest extends ITest {
   void throwsNoSuchFrameExceptionWhenSwitchingToAbsentFrameByIndex() {
     assertThat(driver().title()).isEqualTo("Test::frames");
 
-    assertThatThrownBy(() -> {
-      switchTo().frame(Integer.MAX_VALUE);
-    })
+    assertThatThrownBy(() -> switchTo().frame(Integer.MAX_VALUE))
       .isInstanceOf(FrameNotFoundException.class)
       .hasMessageStartingWith("No frame found with index: " + Integer.MAX_VALUE);
   }

@@ -8,6 +8,7 @@ import org.openqa.selenium.Alert;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.logevents.SelenideLogger.getReadableSubject;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @ParametersAreNonnullByDefault
@@ -23,7 +24,7 @@ public class Modal {
   }
 
   public String confirm(@Nullable String expectedDialogText) {
-    return SelenideLogger.get("confirm", defaultString(expectedDialogText), () -> {
+    return SelenideLogger.get(getLogSubject(expectedDialogText), getReadableSubject("confirm"), () -> {
       Alert alert = driver.switchTo().alert();
       String actualDialogText = alert.getText();
       alert.accept();
@@ -41,8 +42,8 @@ public class Modal {
   }
 
   public String prompt(@Nullable String expectedDialogText, @Nullable String inputText) {
-    String description = defaultString(inputText) + " -> " + defaultString(expectedDialogText);
-    return SelenideLogger.get("prompt", description, () -> {
+    String subject = getReadableSubject("prompt", defaultString(inputText));
+    return SelenideLogger.get(getLogSubject(expectedDialogText), subject, () -> {
       Alert alert = driver.switchTo().alert();
       String actualDialogText = alert.getText();
       if (inputText != null) {
@@ -59,13 +60,17 @@ public class Modal {
   }
 
   public String dismiss(@Nullable String expectedDialogText) {
-    return SelenideLogger.get("dismiss", defaultString(expectedDialogText), () -> {
+    return SelenideLogger.get(getLogSubject(expectedDialogText), getReadableSubject("dismiss"), () -> {
       Alert alert = driver.switchTo().alert();
       String actualDialogText = alert.getText();
       alert.dismiss();
       checkDialogText(driver, expectedDialogText, actualDialogText);
       return actualDialogText;
     });
+  }
+
+  private String getLogSubject(@Nullable String expectedDialogText) {
+    return String.format("modal(%s)", defaultString(expectedDialogText));
   }
 
   private static void checkDialogText(Driver driver, @Nullable String expectedDialogText, String actualDialogText) {
