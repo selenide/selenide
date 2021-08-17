@@ -55,7 +55,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
 
   private String verifySetValueThrowsException() {
     try {
-      $("username").val("another-username");
+      $(By.name("username")).val("another-username");
       fail("should throw InvalidStateException where setting value to readonly/disabled element");
       return null;
     } catch (InvalidStateException expected) {
@@ -78,8 +78,7 @@ final class ReadonlyElementsTest extends IntegrationTest {
       "You may only edit editable elements",
       "You may only interact with enabled elements",
       "Element is not currently interactable and may not be manipulated",
-      "Invalid element state: element not interactable",
-      "Invalid element state: invalid element state: Element is not currently interactable and may not be manipulated",
+      "Invalid element state",
       "Element is disabled");
 
     Configuration.fastSetValue = false;

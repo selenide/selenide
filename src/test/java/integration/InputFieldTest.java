@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.value;
 final class InputFieldTest extends ITest {
   @BeforeEach
   void setup() {
-    openFile("html5_input.html?" + System.currentTimeMillis());
+    openFile("html5_input.html");
   }
 
   @Test
