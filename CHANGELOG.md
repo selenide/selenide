@@ -1,7 +1,9 @@
 # Changelog
 
 ## 5.23.3 
-* #1497 fixes problems with setValue("") didn't trigger events -- see PR #1499 
+* #1497 fixes problems with setValue("") didn't trigger events -- see PR #1499
+* #960 fixes problems on some pages with setValue("xxx") (clear() didn't trigger events -- see PR #1499  
+
 ## 5.23.2 (released 03.08.2021)
 * #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
 

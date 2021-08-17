@@ -61,9 +61,7 @@ public class SetValue implements Command<SelenideElement> {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
     } else {
-      // maybe too? would solve #960
-      // clearValueWithKeystrokes(element);
-      element.clear();
+      clearValueWithKeystrokes(element);
       element.sendKeys(text);
     }
   }
