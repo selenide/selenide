@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.23.3 (released 19.08.2021)
+* #1528 fix "exe" or "dmg" file download in Chrome  -  see PR #1529
+
 ## 5.23.2 (released 03.08.2021)
 * #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
 

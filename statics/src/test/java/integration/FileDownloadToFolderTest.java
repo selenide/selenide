@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static com.codeborne.selenide.Configuration.downloadsFolder;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -153,6 +154,22 @@ final class FileDownloadToFolderTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(timeout, withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).matches("minimal.*.pdf");
+  }
+
+  @Test
+  void downloadsPotentiallyHarmfulWindowsFiles() throws IOException {
+    File downloadedFile = $(byText("Download EXE file")).download(withExtension("exe"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("tiny.exe");
+    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
+  }
+
+  @Test
+  void downloadsPotentiallyHarmfulMacFiles() throws IOException {
+    File downloadedFile = $(byText("Download DMG file")).download(withExtension("dmg"));
+
+    assertThat(downloadedFile.getName()).isEqualTo("tiny.dmg");
+    assertThat(Files.size(downloadedFile.toPath())).isEqualTo(43);
   }
 
   @Test
