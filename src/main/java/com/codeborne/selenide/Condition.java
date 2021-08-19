@@ -138,7 +138,7 @@ public abstract class Condition {
   /**
    * Assert that given element's attribute matches given regular expression
    *
-   * <p>Sample: <code>$("h1").should(attributeMatching("fileId", ".*12345.*"))</code></p>
+   * <p>Sample: <code>$("h1").shouldHave(attributeMatching("fileId", ".*12345.*"))</code></p>
    *
    * @param attributeName  name of attribute
    * @param attributeRegex regex to match attribute value
