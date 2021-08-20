@@ -624,6 +624,19 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
+  void canExecuteCustomCommandWithGivenTimeout() {
+    $("#username").setValue("value");
+    Replace replace = Replace.withValue("custom value");
+    Command<Void> doubleClick = new DoubleClick();
+    $("#username").scrollTo()
+      .execute(replace, Duration.ofSeconds(3))
+      .pressEnter()
+      .execute(doubleClick, Duration.ofSeconds(3));
+    String mirrorText = $("#username-mirror").text();
+    assertThat(mirrorText).startsWith("custom value");
+  }
+
+  @Test
   void canExecuteJavascript() {
     Long value = Selenide.executeJavaScript("return 10;");
     assertThat(value).isEqualTo(10);
