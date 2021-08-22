@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
@@ -8,17 +7,12 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.time.Duration;
 
@@ -614,29 +608,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  void canExecuteCustomCommand() {
-    $("#username").setValue("value");
-    Replace replace = Replace.withValue("custom value");
-    Command<Void> doubleClick = new DoubleClick();
-    $("#username").scrollTo().execute(replace).pressEnter().execute(doubleClick);
-    String mirrorText = $("#username-mirror").text();
-    assertThat(mirrorText).startsWith("custom value");
-  }
-
-  @Test
-  void canExecuteCustomCommandWithGivenTimeout() {
-    $("#username").setValue("value");
-    Replace replace = Replace.withValue("custom value");
-    Command<Void> doubleClick = new DoubleClick();
-    $("#username").scrollTo()
-      .execute(replace, Duration.ofSeconds(3))
-      .pressEnter()
-      .execute(doubleClick, Duration.ofSeconds(3));
-    String mirrorText = $("#username-mirror").text();
-    assertThat(mirrorText).startsWith("custom value");
-  }
-
-  @Test
   void canExecuteJavascript() {
     Long value = Selenide.executeJavaScript("return 10;");
     assertThat(value).isEqualTo(10);
@@ -648,37 +619,5 @@ final class SelenideMethodsTest extends IntegrationTest {
       "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
     );
     assertThat(value).isEqualTo(10);
-  }
-
-  @ParametersAreNonnullByDefault
-  static class DoubleClick implements Command<Void> {
-    @Override
-    @Nullable
-    public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-      locator.driver().actions().doubleClick(locator.findAndAssertElementIsInteractable()).perform();
-      return null;
-
-    }
-  }
-
-  @ParametersAreNonnullByDefault
-  static class Replace implements Command<SelenideElement> {
-    private final String replacement;
-
-    Replace(String replacement) {
-      this.replacement = replacement;
-    }
-
-    public static Replace withValue(String value) {
-      return new Replace(value);
-    }
-
-    @Override
-    @Nonnull
-    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-      proxy.clear();
-      proxy.sendKeys(replacement);
-      return proxy;
-    }
   }
 }
