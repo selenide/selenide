@@ -13,8 +13,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 final class ExecuteMethodTest extends ITest {
 
@@ -22,15 +24,13 @@ final class ExecuteMethodTest extends ITest {
   void userCanExecuteCustomCommand() {
     openFile("page_with_selects_without_jquery.html");
 
-    $("#username").setValue("value");
-    final Command<SelenideElement> replaceCommand = new CustomSetValueCommand("custom value");
-    final Command<Void> doubleClickCommand = new CustomDoubleClickCommand();
     $("#username").scrollTo()
-      .execute(replaceCommand)
+      .setValue("value")
+      .execute(new CustomSetValueCommand("custom value"))
       .pressEnter()
-      .execute(doubleClickCommand);
-    final String mirrorText = $("#username-mirror").text();
-    assertThat(mirrorText).startsWith("custom value");
+      .execute(new CustomDoubleClickCommand());
+    assertThat($("#username-mirror").text())
+      .startsWith("custom value");
   }
 
   @Test
@@ -48,16 +48,17 @@ final class ExecuteMethodTest extends ITest {
   @Test
   void executeMethodWithGivenTimeoutThrowsErrorAfterTimeout() {
     setTimeout(1);
-    openFile("long_ajax_request.html");
-    $("#loading").shouldNot(exist);
+    openFile("page_with_selects_without_jquery.html");
 
-    try {
-      $(byText("Loading..."))
-        .execute(new CustomShouldCommand(exist), Duration.ofSeconds(5));
-    } catch (final ElementNotFound expected) {
-      assertThat(expected).hasMessageStartingWith("Element not found");
-      assertThat(expected).hasMessageContaining("Timeout: 5 s.");
-    }
+    final Duration timeoutDuration = Duration.ofMillis(5000);
+    final Command<SelenideElement> customCommand = new CustomShouldCommand(exist);
+    final SelenideElement element = $(byName("non-existing-element"));
+    final long startMs = System.currentTimeMillis();
+    assertThatCode(() -> element.execute(customCommand, timeoutDuration))
+      .isInstanceOf(ElementNotFound.class);
+    final long timeoutMs = System.currentTimeMillis() - startMs;
+    assertThat(timeoutMs)
+      .isBetween(5000L, 5999L);
   }
 
   @ParametersAreNonnullByDefault
