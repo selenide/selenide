@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test::1000 inputs</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h1>Page with 100 inputs</h1>
+
+<div style="width: 800px">
+  <form id="form">
+
+  </form>
+</div>
+
+<script type="text/javascript">
+  (function() {
+    const form = document.getElementById('form');
+    for (let i = 0; i < 100; i++) {
+      form.innerHTML +=
+        '<input id="username_' + i + '" name="username" value="hello#' + i + '" style="width: 100%"/>'
+    }
+  })()
+</script>
+
+</body>
+</html>
