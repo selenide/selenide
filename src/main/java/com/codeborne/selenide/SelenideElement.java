@@ -1,9 +1,7 @@
 package com.codeborne.selenide;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
-
 import com.codeborne.selenide.files.FileFilter;
-
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
@@ -13,15 +11,14 @@ import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.internal.HasIdentity;
 import org.openqa.selenium.internal.WrapsElement;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.Duration;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.time.Duration;
 
 /**
  * Wrapper around {@link WebElement} with additional methods like
@@ -1225,6 +1222,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @return whatever the command returns (incl. null)
    * @see com.codeborne.selenide.commands.Execute
    * @see com.codeborne.selenide.Command
+   * @since 5.24.0
    */
   <ReturnType> ReturnType execute(Command<ReturnType> command, Duration timeout);
 
