@@ -1218,6 +1218,17 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   <ReturnType> ReturnType execute(Command<ReturnType> command);
 
   /**
+   * Execute custom implemented command with given timeout
+   *
+   * @param command custom command
+   * @param timeout given timeout
+   * @return whatever the command returns (incl. null)
+   * @see com.codeborne.selenide.commands.Execute
+   * @see com.codeborne.selenide.Command
+   */
+  <ReturnType> ReturnType execute(Command<ReturnType> command, Duration timeout);
+
+  /**
    * Check if image is properly loaded.
    *
    * @throws IllegalArgumentException if argument is not an "img" element
