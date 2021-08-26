@@ -124,13 +124,21 @@ public class DriverStub implements Driver {
 
   @Override
   @CheckReturnValue
-  @Nonnull  public SelenideTargetLocator switchTo() {
+  @Nonnull
+  public SelenideTargetLocator switchTo() {
     return new SelenideTargetLocator(this);
   }
 
   @Override
   @CheckReturnValue
-  @Nonnull  public Actions actions() {
+  @Nonnull
+  public Actions actions() {
     return new Actions(getWebDriver());
+  }
+
+  @Nonnull
+  @Override
+  public String url() {
+    return "https://test.selenide.org/page.html";
   }
 }

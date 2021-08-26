@@ -20,8 +20,15 @@ public class ErrorMessages {
   private static final DurationFormat df = new DurationFormat();
 
   @CheckReturnValue
+  @Nonnull
   protected static String timeout(long timeoutMs) {
     return String.format("%nTimeout: %s", df.format(timeoutMs));
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  protected static String pageUrl(@Nullable String pageUrl) {
+    return pageUrl == null ? "" : String.format("%nPage url: %s", pageUrl);
   }
 
   @CheckReturnValue

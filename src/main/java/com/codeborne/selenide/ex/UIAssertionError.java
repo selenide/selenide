@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
+import static com.codeborne.selenide.ex.ErrorMessages.pageUrl;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
@@ -24,6 +25,7 @@ public class UIAssertionError extends AssertionError {
 
   private Screenshot screenshot = Screenshot.none();
   public long timeoutMs;
+  public String pageUrl;
 
   protected UIAssertionError(Driver driver, String message) {
     super(message);
@@ -49,7 +51,7 @@ public class UIAssertionError extends AssertionError {
 
   @CheckReturnValue
   protected String uiDetails() {
-    return screenshot.summary() + timeout(timeoutMs) + causedBy(getCause());
+    return screenshot.summary() + pageUrl(pageUrl) + timeout(timeoutMs) + causedBy(getCause());
   }
 
   /**
@@ -77,6 +79,7 @@ public class UIAssertionError extends AssertionError {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
+    uiError.pageUrl = getPageUrl(driver);
     if (uiError.screenshot.isPresent()) {
       log.warn("UIAssertionError already has screenshot: {} {} -> {}",
         uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
@@ -87,6 +90,17 @@ public class UIAssertionError extends AssertionError {
         .takeScreenshot(driver, config.screenshots(), config.savePageSource());
     }
     return uiError;
+  }
+
+  @CheckReturnValue
+  @Nullable
+  private static String getPageUrl(Driver driver) {
+    try {
+      return driver.url();
+    }
+    catch (WebDriverException commandNotImplemented) {
+      return null;
+    }
   }
 
   @CheckReturnValue

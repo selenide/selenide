@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
@@ -66,6 +67,7 @@ final class MissingElementTest extends IntegrationTest {
           "Expected: text 'expected text'%n" +
           "Screenshot: " + path + png() + "%n" +
           "Page source: " + path + html() + "%n" +
+          "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
           "Timeout: 15 ms.%n" +
           "Caused by: NoSuchElementException:.*"));
       assertThat(expected.getScreenshot().getImage()).matches(path + pngOrHtml());
@@ -83,6 +85,7 @@ final class MissingElementTest extends IntegrationTest {
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -98,6 +101,7 @@ final class MissingElementTest extends IntegrationTest {
         "Actual value: name=\"\"%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -112,6 +116,7 @@ final class MissingElementTest extends IntegrationTest {
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -128,6 +133,7 @@ final class MissingElementTest extends IntegrationTest {
           "Actual value: visible:false, 1%n" +
           "Screenshot: " + path + png() + "%n" +
           "Page source: " + path + html() + "%n" +
+          "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
           "Timeout: 15 ms."));
   }
 
@@ -142,6 +148,7 @@ final class MissingElementTest extends IntegrationTest {
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -156,6 +163,7 @@ final class MissingElementTest extends IntegrationTest {
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -178,6 +186,7 @@ final class MissingElementTest extends IntegrationTest {
         "Expected: visible or transparent: visible or have css value opacity=0%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms.%n" +
         "Caused by: NoSuchElementException:.*"));
   }
@@ -193,6 +202,7 @@ final class MissingElementTest extends IntegrationTest {
         "Element: '<h2>Dropdown list</h2>'%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms."));
   }
 
@@ -207,6 +217,7 @@ final class MissingElementTest extends IntegrationTest {
         "Expected: not hidden%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
+        "Page url: " + baseUrl + "/page_with_selects_without_jquery\\.html\\?browser=" + Configuration.browser+ "&timeout=15%n" +
         "Timeout: 15 ms.%n" +
         "Caused by: NoSuchElementException:.*"));
   }

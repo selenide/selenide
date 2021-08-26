@@ -30,6 +30,7 @@ public class Mocks {
   public static CollectionSource mockCollection(String description, WebElement... elements) {
     Driver driver = mock(Driver.class);
     when(driver.config()).thenReturn(new SelenideConfig());
+    when(driver.url()).thenReturn("https://test.selenide.org/page.html");
 
     CollectionSource collection = mock(CollectionSource.class);
     when(collection.driver()).thenReturn(driver);
