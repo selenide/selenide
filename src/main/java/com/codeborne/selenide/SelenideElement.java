@@ -681,6 +681,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
+  @Nonnull
   SelenideElement find(By selector);
 
   /**
@@ -1212,6 +1213,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * @see com.codeborne.selenide.Command
    */
   <ReturnType> ReturnType execute(Command<ReturnType> command);
+
+  /**
+   * Execute custom implemented command with given timeout
+   *
+   * @param command custom command
+   * @param timeout given timeout
+   * @return whatever the command returns (incl. null)
+   * @see com.codeborne.selenide.commands.Execute
+   * @see com.codeborne.selenide.Command
+   * @since 5.24.0
+   */
+  <ReturnType> ReturnType execute(Command<ReturnType> command, Duration timeout);
 
   /**
    * Check if image is properly loaded.

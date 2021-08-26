@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.24.0
+* #1525 add method `$.execute(Command, Duration)` for running custom commands with a custom timeout  --  thanks to Evgenii Plugatar for PR #1531
+
+## 5.23.3 (released 19.08.2021)
+* #1528 fix "exe" or "dmg" file download in Chrome  -  see PR #1529
+
 ## 5.23.2 (released 03.08.2021)
 * #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
 
