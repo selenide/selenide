@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,16 @@ final class ExecuteMethodTest extends ITest {
       .hasMessageContaining("Timeout: 1.100 s.");
     long elapsedTimeMs = System.currentTimeMillis() - startMs;
     assertThat(elapsedTimeMs).isBetween(timeout, timeout * 2);
+  }
+
+  @Test
+  void canExecuteStandardCommand() {
+    $("#username").execute(new Click());
+  }
+
+  @Test
+  void canExecuteStandardCommand_withCustomTimeout() {
+    $("#username").execute(new Click(), Duration.ofSeconds(1));
   }
 
   @Test
