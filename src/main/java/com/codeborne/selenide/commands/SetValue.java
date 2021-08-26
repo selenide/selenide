@@ -74,10 +74,13 @@ public class SetValue implements Command<SelenideElement> {
             "if (webelement.getAttribute('disabled') != undefined) return 'Cannot change value of disabled element';" +
             "webelement.focus();" +
             "var maxlength = webelement.getAttribute('maxlength') == null ? -1 : parseInt(webelement.getAttribute('maxlength'));" +
-            "webelement.setAttribute('value', " +
-            "maxlength == -1 ? text " +
-            ": text.length <= maxlength ? text " +
-            ": text.substring(0, maxlength));" +
+            "var newValue = (maxlength == -1 || text.length <= maxlength) ? text : text.substring(0, maxlength);\n" +
+            "if (webelement.tagName === 'textarea') {\n" +
+            "  webelement.setAttribute('value', newValue);" +
+            "}\n" +
+            "else {\n" +
+            "  webelement.value = newValue;" +
+            "}\n" +
             "return null;" +
             "})(arguments[0], arguments[1]);",
         element, text);

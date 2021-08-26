@@ -221,7 +221,10 @@ final class SelenideMethodsTest extends IntegrationTest {
     Configuration.fastSetValue = false;
     $("#empty-text-area").val("text for textarea");
     $("#empty-text-area").shouldHave(value("text for textarea"));
+  }
 
+  @Test
+  void userCanSetValueToTextArea_fastSetValue() {
     Configuration.fastSetValue = true;
     $("#empty-text-area").val("another text");
     $("#empty-text-area").shouldHave(value("another text"));
