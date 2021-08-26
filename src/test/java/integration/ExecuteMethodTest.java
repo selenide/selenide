@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -53,6 +54,43 @@ final class ExecuteMethodTest extends ITest {
       .hasMessageContaining("Timeout: 1.100 s.");
     long elapsedTimeMs = System.currentTimeMillis() - startMs;
     assertThat(elapsedTimeMs).isBetween(timeout, timeout * 2);
+  }
+
+  @Test
+  void executeMethodDoesNotPassArgsToCustomCommand() {
+    AtomicReference<Object[]> passedArgsRef = new AtomicReference<>();
+    $("#username").execute(
+      new Command<Void>() {
+        @Override
+        @Nullable
+        public Void execute(@Nonnull SelenideElement proxy,
+                            @Nonnull WebElementSource locator,
+                            @Nullable Object[] args) {
+          passedArgsRef.set(args);
+          return null;
+        }
+      }
+    );
+    assertThat(passedArgsRef.get()).isEmpty();
+  }
+
+  @Test
+  void executeMethodWithGivenTimeoutDoesNotPassArgsToCustomCommand() {
+    AtomicReference<Object[]> passedArgsRef = new AtomicReference<>();
+    $("#username").execute(
+      new Command<Void>() {
+        @Override
+        @Nullable
+        public Void execute(@Nonnull SelenideElement proxy,
+                            @Nonnull WebElementSource locator,
+                            @Nullable Object[] args) {
+          passedArgsRef.set(args);
+          return null;
+        }
+      },
+      Duration.ofMillis(1)
+    );
+    assertThat(passedArgsRef.get()).isEmpty();
   }
 
   @ParametersAreNonnullByDefault

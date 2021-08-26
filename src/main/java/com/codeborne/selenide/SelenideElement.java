@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.files.FileFilter;
+import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -1205,7 +1206,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement dragAndDropTo(String targetCssSelector, DragAndDropOptions options);
 
   /**
-   * Execute custom implemented command
+   * Execute custom implemented command (this command will not receive
+   * any arguments through {@link Command#execute(SelenideElement, WebElementSource, Object[])}
+   * when executed).
    *
    * @param command custom command
    * @return whatever the command returns (incl. null)
@@ -1215,7 +1218,9 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   <ReturnType> ReturnType execute(Command<ReturnType> command);
 
   /**
-   * Execute custom implemented command with given timeout
+   * Execute custom implemented command with given timeout (this command will not receive
+   * any arguments through {@link Command#execute(SelenideElement, WebElementSource, Object[])}
+   * when executed).
    *
    * @param command custom command
    * @param timeout given timeout

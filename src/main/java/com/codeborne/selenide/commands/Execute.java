@@ -17,7 +17,7 @@ public class Execute<ReturnType> implements Command<ReturnType> {
   public ReturnType execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     Command<ReturnType> command = firstOf(args);
     try {
-      return command.execute(proxy, locator, args);
+      return command.execute(proxy, locator, NO_ARGS);
     } catch (IOException e) {
       throw new RuntimeException("Unable to execute custom command", e);
     }
