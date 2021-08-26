@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.switchTo;
 
 final class FastSetValueTest extends IntegrationTest {
@@ -57,5 +60,13 @@ final class FastSetValueTest extends IntegrationTest {
 
     $("#username").setValue("john in frame");
     $("h2").should(appear).shouldHave(text("john in frame"));
+  }
+
+  @Test
+  void fastSetValue_forMaterialDesign() {
+    Configuration.fastSetValue = true;
+    open("https://rusakovstas.github.io/material-autocomplete/");
+    $(byText("Вбейте что нибудь или скопируйте")).closest("div").$("input").setValue("123");
+    $(byText("Поймали логику!")).shouldBe(visible);
   }
 }
