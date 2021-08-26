@@ -19,7 +19,9 @@
     return element.shadowRoot;
   }
 
-  return arguments.length === 2 ?
-    findInShadows(arguments[0], arguments[1], document) :
-    findInShadows(arguments[0], arguments[1], getShadowRoot(arguments[2]));
+  function searchContext(element) {
+    return !element ? document : (element.shadowRoot || element);
+  }
+
+  return findInShadows(arguments[0], arguments[1], searchContext(arguments[2]));
 })(...arguments)
