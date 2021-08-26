@@ -77,9 +77,16 @@ final class ShadowElementTest extends ITest {
   }
 
   @Test
-  void clickInsideShadowHostInsideOfElement() {
+  void clickInsideShadowHostInsideOfOtherShadowHost() {
     $("#shadow-host")
       .find(shadowCss("p", "#inner-shadow-host"))
+      .shouldHave(text("The Shadow-DOM inside another shadow tree"));
+  }
+
+  @Test
+  void clickInsideShadowHostInsideOfElement() {
+    $("body")
+      .find(shadowCss("p", "#shadow-host", "#inner-shadow-host"))
       .shouldHave(text("The Shadow-DOM inside another shadow tree"));
   }
 

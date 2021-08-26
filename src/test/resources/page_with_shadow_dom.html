@@ -7,21 +7,6 @@
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
 
-/*
-    function findInShadows(root, shadowRoots, leaf) {
-      if (shadowRoots.length === 0) {
-        return Array.from(root.querySelectorAll(leaf));
-      }
-
-      const nextSelector = shadowRoots[0];
-      const otherSelectors = shadowRoots.slice(1);
-
-      return Array.from(root.querySelectorAll(nextSelector)).map(function(childShadowRoot) {
-        return findInShadows(childShadowRoot.shadowRoot, otherSelectors, leaf);
-      }).flat();
-    }
-*/
-
     function newElement(tag, attributes, text) {
       const element = document.createElement(tag);
       Object.keys(attributes).forEach(function (attributeName) {
