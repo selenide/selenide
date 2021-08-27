@@ -4,6 +4,7 @@
 * #1525 add method `$.execute(Command, Duration)` for running custom commands with a custom timeout  --  thanks to Evgenii Plugatar for PR #1531
 * #1532 fix searching shadow roots inside of a web element  --  see PR #1536
 * #1527 `$.execute(Command)` and `$.execute(Command, Duration)` methods no longer pass arguments to custom command  --  thanks to Evgenii Plugatar for PR #1535
+* #1467 Avoid spam in logs when webdriver is already closed  --  see PR #1540
 
 ## 5.23.3 (released 19.08.2021)
 * #1528 fix "exe" or "dmg" file download in Chrome  -  see PR #1529

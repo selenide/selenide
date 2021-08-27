@@ -2,7 +2,9 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.DownloadsFolder;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,7 @@ class UnusedWebdriversCleanupThread extends Thread {
       log.info("No webdriver found for thread: {} - nothing to close", thread.getId());
     }
     else {
-      driver.quit();
+      quitSafely(thread.getId(), driver);
     }
 
     SelenideProxyServer proxy = threadProxyServer.remove(thread.getId());
@@ -69,6 +71,23 @@ class UnusedWebdriversCleanupThread extends Thread {
     }
 
     threadDownloadsFolder.remove(thread.getId());
+  }
+
+  private void quitSafely(long threadId, WebDriver driver) {
+    try {
+      driver.quit();
+    }
+    catch (NoSuchSessionException e) {
+      log.debug("Webdriver for thread {} has been closed meanwhile", threadId, e);
+    }
+    catch (WebDriverException e) {
+      if ("The driver server has unexpectedly died!".equalsIgnoreCase(e.getMessage())) {
+        log.debug("Webdriver for thread {} has been closed meanwhile", threadId, e);
+      }
+      else {
+        log.error("Failed to close webdriver for thread {}", threadId, e);
+      }
+    }
   }
 }
 
