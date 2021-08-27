@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static com.codeborne.selenide.conditions.ConditionHelpers.negateMissingElementTolerance;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
@@ -17,14 +16,14 @@ public class Or extends Condition {
   private final List<Condition> conditions;
 
   public Or(String name, List<Condition> conditions) {
-    super(name);
+    super(name, conditions.stream().anyMatch(Condition::applyNull));
     this.conditions = conditions;
   }
 
   @Nonnull
   @Override
   public Condition negate() {
-    return new Not(this, negateMissingElementTolerance(conditions));
+    return new Not(this, conditions.stream().map(Condition::negate).anyMatch(Condition::applyNull));
   }
 
   @Override
