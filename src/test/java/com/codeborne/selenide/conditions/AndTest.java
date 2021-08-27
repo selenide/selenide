@@ -152,11 +152,11 @@ final class AndTest {
   private static class SimpleCondition extends Condition {
     private final boolean applyResult;
 
-    public SimpleCondition(boolean applyResult) {
+    SimpleCondition(boolean applyResult) {
       this(applyResult, false);
     }
 
-    public SimpleCondition(boolean applyResult, boolean applyNull) {
+    SimpleCondition(boolean applyResult, boolean applyNull) {
       super("", applyNull);
       this.applyResult = applyResult;
     }
