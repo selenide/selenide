@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class LogicalOperationsWithConditions extends ITest {
+final class LogicalOperationsWithConditions extends ITest {
   @BeforeEach
   void openPage() {
     openFile("elements_disappear_on_click.html");
@@ -54,10 +54,8 @@ public class LogicalOperationsWithConditions extends ITest {
   @Test
   void orRevertsMissingElementTolerance() {
     $(".lolkek").shouldNotBe(or("visible||exist", visible, exist));
-    assertThatThrownBy(() -> $(".lolkek").shouldNotBe(or("visible||text", visible, text("Lasnamäe"))))
-      .isInstanceOf(ElementNotFound.class);
-    assertThatThrownBy(() -> $(".lolkek").shouldNotBe(or("text||visible", text("Lasnamäe"), visible)))
-      .isInstanceOf(ElementNotFound.class);
+    $(".lolkek").shouldNotBe(or("visible||text", visible, text("Lasnamäe")));
+    $(".lolkek").shouldNotBe(or("text||visible", text("Lasnamäe"), visible));
   }
 
   @Test

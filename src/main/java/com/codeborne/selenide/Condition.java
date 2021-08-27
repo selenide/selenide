@@ -497,11 +497,6 @@ public abstract class Condition {
     return condition.negate();
   }
 
-  @Nonnull
-  public Condition negate() {
-    return new Not(this, absentElementMatchesCondition);
-  }
-
   /**
    * Check if element matches ALL given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
@@ -600,6 +595,11 @@ public abstract class Condition {
   @Nullable
   public String actualValue(Driver driver, WebElement element) {
     return null;
+  }
+
+  @Nonnull
+  public Condition negate() {
+    return new Not(this, absentElementMatchesCondition);
   }
 
   /**

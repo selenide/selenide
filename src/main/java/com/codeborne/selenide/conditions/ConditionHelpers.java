@@ -1,7 +1,5 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,14 +21,5 @@ public class ConditionHelpers {
     result.add(second);
     if (others.length > 0) result.addAll(asList(others));
     return unmodifiableList(result);
-  }
-
-  @CheckReturnValue
-  static boolean negateMissingElementTolerance(List<Condition> conditions) {
-    boolean result = true;
-    for (Condition condition : conditions) {
-      result &= condition.negate().applyNull();
-    }
-    return result;
   }
 }
