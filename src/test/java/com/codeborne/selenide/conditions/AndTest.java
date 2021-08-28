@@ -8,20 +8,39 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.Condition.attribute;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 
 final class AndTest {
 
   @Test
-  void verifyToString() {
-    Condition and = new And("checked", asList(
-      attribute("checked", "true"),
-      attribute("checked", "on")
-    ));
-    assertThat(and).hasToString("checked: attribute checked=\"true\" and attribute checked=\"on\"");
+  void ctorOfEmptyConditionsListThrowsException() {
+    assertThatCode(() -> {
+      new And("", emptyList());
+    }).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void ofSingleConditionToString() {
+    assertThat(
+      new And("CONDITION_NAME", singletonList(
+        new SimpleCondition(true)
+      ))
+    ).hasToString("CONDITION_NAME: SimpleCondition(true, false)");
+  }
+
+  @Test
+  void ofConditionsListToString() {
+    assertThat(
+      new And("CONDITION_NAME", asList(
+        new SimpleCondition(true),
+        new SimpleCondition(false)
+      ))
+    ).hasToString("CONDITION_NAME: SimpleCondition(true, false) and SimpleCondition(false, false)");
   }
 
   @Test
@@ -170,6 +189,11 @@ final class AndTest {
     @Override
     public Condition negate() {
       return new Not(this, !this.applyNull());
+    }
+
+    @Override
+    public String toString() {
+      return "SimpleCondition(" + this.applyResult + ", " + this.applyNull() + ")";
     }
   }
 }

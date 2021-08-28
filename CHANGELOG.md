@@ -5,6 +5,8 @@
 * #1532 fix searching shadow roots inside of a web element  --  see PR #1536
 * #1527 `$.execute(Command)` and `$.execute(Command, Duration)` methods no longer pass arguments to custom command  --  thanks to Evgenii Plugatar for PR #1535
 * #1467 Avoid spam in logs when webdriver is already closed  --  see PR #1540
+* #1534 `Or` and `And` conditions work correctly with non-existent element  --  thanks to Evgenii Plugatar for PR #1539
+* `Or` and `And` conditions support PECS principle in ctor, no longer allow empty list in ctor  --  thanks to Evgenii Plugatar for PR #1542
 
 ## 5.23.3 (released 19.08.2021)
 * #1528 fix "exe" or "dmg" file download in Chrome  -  see PR #1529

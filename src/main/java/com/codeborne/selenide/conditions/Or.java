@@ -13,11 +13,25 @@ import static java.util.stream.Collectors.joining;
 @ParametersAreNonnullByDefault
 public class Or extends Condition {
 
-  private final List<Condition> conditions;
+  private final List<? extends Condition> conditions;
 
-  public Or(String name, List<Condition> conditions) {
-    super(name, conditions.stream().anyMatch(Condition::applyNull));
+  /**
+   * Ctor.
+   *
+   * @param name       condition name
+   * @param conditions conditions list
+   * @throws IllegalArgumentException if {@code conditions} is empty
+   */
+  public Or(String name, List<? extends Condition> conditions) {
+    super(name, checkedConditionsListCtorArg(conditions).stream().anyMatch(Condition::applyNull));
     this.conditions = conditions;
+  }
+
+  private static List<? extends Condition> checkedConditionsListCtorArg(List<? extends Condition> conditions) {
+    if (conditions.isEmpty()) {
+      throw new IllegalArgumentException("conditions list is empty");
+    }
+    return conditions;
   }
 
   @Nonnull
@@ -43,7 +57,6 @@ public class Or extends Condition {
 
   @Override
   public String toString() {
-    String conditionsToString = conditions.stream().map(Condition::toString).collect(joining(" or "));
-    return String.format("%s: %s", getName(), conditionsToString);
+    return getName() + ": " + conditions.stream().map(Condition::toString).collect(joining(" or "));
   }
 }
