@@ -199,7 +199,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
           throw Cleanup.of.wrap(elementNotFound);
         }
-        if (condition.applyNull()) {
+        if (condition.missingElementSatisfiesCondition()) {
           return;
         }
         lastError = elementNotFound;

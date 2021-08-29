@@ -31,7 +31,7 @@ public class SizeLessThan extends CollectionCondition {
   }
 
   @Override
-  public boolean applyNull() {
+  public boolean missingElementSatisfiesCondition() {
     return apply(0);
   }
 
