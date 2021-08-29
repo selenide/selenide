@@ -110,7 +110,7 @@ public abstract class WebElementSource {
     }
 
     if (element == null) {
-      if (!check.applyNull()) {
+      if (!check.missingElementSatisfiesCondition()) {
         throw createElementNotFoundError(check, lastError);
       }
     }

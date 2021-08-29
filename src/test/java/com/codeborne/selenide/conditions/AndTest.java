@@ -106,24 +106,24 @@ final class AndTest {
   }
 
   @Test
-  void applyNullMethodReturnsTrueOnlyIfAllConditionsReturnTrue() {
+  void missingElementSatisfiesConditionMethodReturnsTrueOnlyIfAllConditionsReturnTrue() {
     assertThat(
       new And("", asList(
         new SimpleCondition(false, true),
         new SimpleCondition(false, true),
         new SimpleCondition(false, true)
-      )).applyNull()
+      )).missingElementSatisfiesCondition()
     ).isTrue();
   }
 
   @Test
-  void applyNullMethodReturnsFalseIfAtLeastOneOfConditionsReturnFalse() {
+  void missingElementSatisfiesConditionMethodReturnsFalseIfAtLeastOneOfConditionsReturnFalse() {
     assertThat(
       new And("", asList(
         new SimpleCondition(true, false),
         new SimpleCondition(true, true),
         new SimpleCondition(true, true)
-      )).applyNull()
+      )).missingElementSatisfiesCondition()
     ).isFalse();
 
     assertThat(
@@ -131,7 +131,7 @@ final class AndTest {
         new SimpleCondition(true, true),
         new SimpleCondition(true, true),
         new SimpleCondition(true, false)
-      )).applyNull()
+      )).missingElementSatisfiesCondition()
     ).isFalse();
 
     assertThat(
@@ -139,31 +139,31 @@ final class AndTest {
         new SimpleCondition(false, false),
         new SimpleCondition(false, false),
         new SimpleCondition(false, false)
-      )).applyNull()
+      )).missingElementSatisfiesCondition()
     ).isFalse();
   }
 
   @Test
-  void negativeConditionApplyNullMethodRecalculatedResultForNegativeInnerConditions() {
+  void negativeConditionMissingElementSatisfiesConditionMethodRecalculatedResultForNegativeInnerConditions() {
     assertThat(
       new And("", asList(
         new SimpleCondition(false, true),
         new SimpleCondition(false, true)
-      )).negate().applyNull()
+      )).negate().missingElementSatisfiesCondition()
     ).isFalse();
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false, false),
         new SimpleCondition(false, false)
-      )).negate().applyNull()
+      )).negate().missingElementSatisfiesCondition()
     ).isTrue();
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false, true),
         new SimpleCondition(false, false)
-      )).negate().applyNull()
+      )).negate().missingElementSatisfiesCondition()
     ).isFalse();
   }
 
@@ -175,8 +175,8 @@ final class AndTest {
       this(applyResult, false);
     }
 
-    SimpleCondition(boolean applyResult, boolean applyNull) {
-      super("", applyNull);
+    SimpleCondition(boolean applyResult, boolean missingElementSatisfiesConditionResult) {
+      super("", missingElementSatisfiesConditionResult);
       this.applyResult = applyResult;
     }
 
@@ -188,12 +188,12 @@ final class AndTest {
     @Nonnull
     @Override
     public Condition negate() {
-      return new Not(this, !this.applyNull());
+      return new Not(this, !this.missingElementSatisfiesCondition());
     }
 
     @Override
     public String toString() {
-      return "SimpleCondition(" + this.applyResult + ", " + this.applyNull() + ")";
+      return "SimpleCondition(" + this.applyResult + ", " + this.missingElementSatisfiesCondition() + ")";
     }
   }
 }

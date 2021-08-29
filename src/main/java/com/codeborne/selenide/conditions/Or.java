@@ -23,7 +23,7 @@ public class Or extends Condition {
    * @throws IllegalArgumentException if {@code conditions} is empty
    */
   public Or(String name, List<? extends Condition> conditions) {
-    super(name, checkedConditionsListCtorArg(conditions).stream().anyMatch(Condition::applyNull));
+    super(name, checkedConditionsListCtorArg(conditions).stream().anyMatch(Condition::missingElementSatisfiesCondition));
     this.conditions = conditions;
   }
 
@@ -37,7 +37,7 @@ public class Or extends Condition {
   @Nonnull
   @Override
   public Condition negate() {
-    return new Not(this, conditions.stream().map(Condition::negate).anyMatch(Condition::applyNull));
+    return new Not(this, conditions.stream().map(Condition::negate).anyMatch(Condition::missingElementSatisfiesCondition));
   }
 
   @Override

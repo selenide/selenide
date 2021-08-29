@@ -26,7 +26,7 @@ public class Matches implements Command<Boolean> {
       return condition.apply(locator.driver(), element);
     }
 
-    return condition.applyNull();
+    return condition.missingElementSatisfiesCondition();
   }
 
   @CheckReturnValue
