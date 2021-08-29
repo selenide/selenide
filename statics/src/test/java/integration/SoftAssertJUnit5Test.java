@@ -3,7 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.SoftAssertsExtension;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -16,8 +16,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 @ExtendWith({SoftAssertsExtension.class})
 public class SoftAssertJUnit5Test extends IntegrationTest {
-  @BeforeAll
-  static void setUp() {
+  @BeforeEach
+  void setUp() {
     Configuration.assertionMode = SOFT;
     open("https://duckduckgo.com/");
     $("#soft-assert-login").shouldNot(exist);
