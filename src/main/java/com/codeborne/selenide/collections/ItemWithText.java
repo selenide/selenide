@@ -41,7 +41,7 @@ public class ItemWithText extends CollectionCondition {
 
   @CheckReturnValue
   @Override
-  public boolean applyNull() {
+  public boolean missingElementSatisfiesCondition() {
     return false;
   }
 

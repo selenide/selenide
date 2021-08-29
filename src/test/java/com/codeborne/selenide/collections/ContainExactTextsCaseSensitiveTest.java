@@ -194,11 +194,11 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testApplyNull() {
+  void testMissingElementSatisfiesCondition() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
-    assertThat(expectedTexts.applyNull())
+    assertThat(expectedTexts.missingElementSatisfiesCondition())
       .isFalse();
   }
 }

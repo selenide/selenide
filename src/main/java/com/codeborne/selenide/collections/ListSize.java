@@ -34,7 +34,7 @@ public class ListSize extends CollectionCondition {
 
   @CheckReturnValue
   @Override
-  public boolean applyNull() {
+  public boolean missingElementSatisfiesCondition() {
     return apply(0);
   }
 

@@ -269,8 +269,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean applyNull() {
-      return delegate.applyNull();
+    public boolean missingElementSatisfiesCondition() {
+      return delegate.missingElementSatisfiesCondition();
     }
 
     @Override
@@ -287,5 +287,5 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new ExplainedCollectionCondition(this, explanation);
   }
 
-  public abstract boolean applyNull();
+  public abstract boolean missingElementSatisfiesCondition();
 }
