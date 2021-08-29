@@ -17,6 +17,8 @@ ext {
 }
 
 dependencies {
+  api('org.opentest4j:opentest4j:1.2.0')
+
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy'
   }
