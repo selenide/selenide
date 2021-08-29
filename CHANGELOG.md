@@ -1,6 +1,7 @@
 # Changelog
 
 ## 5.25.0
+* #969 Add support for OpenTest4j  --  see PR #1545 
 * #1515 add method $.shadowRoot()  --  see PR #1517
 * #1556 add method `SelenideElement.ancestor()`  --  thanks Oleg Berezhnoy for PR #1567
 * #1571 fix method `$.screenshot()` on Retina display  --  see PR #1576

@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
 @ParametersAreNonnullByDefault
-public class UIAssertionError extends AssertionError {
+public class UIAssertionError extends AssertionFailedError {
   private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
   private final Driver driver;
 
