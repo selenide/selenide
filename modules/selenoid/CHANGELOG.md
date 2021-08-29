@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.5 (released 29.08.2021)
+* upgrade to Selenide 5.24.0
+
 ## 1.1.4 (released 17.07.2021)
 * upgrade to Selenide 5.23.0
 

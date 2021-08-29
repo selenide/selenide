@@ -1,11 +1,11 @@
 buildscript {
   ext.versions = [
-      selenide: '5.23.0',
+      selenide: '5.24.0',
       browserupproxy: '2.1.2',
-      netty: '4.1.65.Final',
+      netty: '4.1.67.Final',
       junit: '5.7.2',
       assertj: '3.20.2',
-      slf4j: '1.7.31'
+      slf4j: '1.7.32'
   ]
 }
 
