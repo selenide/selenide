@@ -25,7 +25,7 @@ public class And extends Condition {
    * @throws IllegalArgumentException if {@code conditions} is empty
    */
   public And(String name, List<? extends Condition> conditions) {
-    super(name, checkedConditionsListCtorArg(conditions).stream().allMatch(Condition::applyNull));
+    super(name, checkedConditionsListCtorArg(conditions).stream().allMatch(Condition::missingElementSatisfiesCondition));
     this.conditions = conditions;
   }
 
@@ -39,7 +39,7 @@ public class And extends Condition {
   @Nonnull
   @Override
   public Condition negate() {
-    return new Not(this, conditions.stream().map(Condition::negate).allMatch(Condition::applyNull));
+    return new Not(this, conditions.stream().map(Condition::negate).allMatch(Condition::missingElementSatisfiesCondition));
   }
 
   @CheckReturnValue

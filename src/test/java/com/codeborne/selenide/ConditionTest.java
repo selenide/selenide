@@ -410,9 +410,9 @@ final class ConditionTest {
   }
 
   @Test
-  void conditionApplyNull() {
+  void conditionMissingElementSatisfiesCondition() {
     Condition condition = attribute("name");
-    assertThat(condition.applyNull()).isFalse();
+    assertThat(condition.missingElementSatisfiesCondition()).isFalse();
   }
 
   @Test
