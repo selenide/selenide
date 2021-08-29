@@ -11,7 +11,7 @@ ext {
   nettyVersion = '4.1.67.Final'
   guavaVersion = '30.1.1-jre'
   assertjVersion = '3.20.2'
-  mockitoVersion = '3.12.3'
+  mockitoVersion = '3.12.4'
   browserupProxyVersion = '2.1.2'
   littleProxyVersion = '2.0.5'
   videoRecorderVersion = '2.0'

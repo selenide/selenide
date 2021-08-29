@@ -7,13 +7,16 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
+@ParametersAreNonnullByDefault
 public class ContainExactTextsCaseSensitive extends CollectionCondition {
   private final List<String> expectedTexts;
 
@@ -28,6 +31,7 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
     this.expectedTexts = unmodifiableList(expectedTexts);
   }
 
+  @CheckReturnValue
   @Override
   public boolean test(List<WebElement> elements) {
     if (elements.size() < expectedTexts.size()) {
@@ -48,7 +52,8 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
       ElementNotFound elementNotFound = new ElementNotFound(collection, toString(), lastError);
       elementNotFound.timeoutMs = timeoutMs;
       throw elementNotFound;
-    } else {
+    }
+    else {
       List<String> actualTexts = ElementsCollection.texts(elements);
       List<String> difference = new ArrayList<>(expectedTexts);
       difference.removeAll(actualTexts);

@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.24.0
+## 5.24.0 (released 29.08.2021)
 * #1525 add method `$.execute(Command, Duration)` for running custom commands with a custom timeout  --  thanks to Evgenii Plugatar for PR #1531
 * #1532 fix searching shadow roots inside of a web element  --  see PR #1536
 * #1527 `$.execute(Command)` and `$.execute(Command, Duration)` methods no longer pass arguments to custom command  --  thanks to Evgenii Plugatar for PR #1535
