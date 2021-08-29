@@ -7,6 +7,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
@@ -18,6 +19,7 @@ final class ErrorsCollectorTest {
   private final LogEvent mockedPassedEvent = mock(LogEvent.class);
   private final LogEvent mockedFailedEvent = mock(LogEvent.class);
   private final String defaultErrorMessage = "Couldn't find an element";
+  private final StaleElementReferenceException defaultError = new StaleElementReferenceException(defaultErrorMessage);
   private final String defaultTestName = "ITestName";
 
   @BeforeEach
@@ -25,7 +27,7 @@ final class ErrorsCollectorTest {
     when(mockedInProgressEvent.getStatus()).thenReturn(LogEvent.EventStatus.IN_PROGRESS);
     when(mockedPassedEvent.getStatus()).thenReturn(LogEvent.EventStatus.PASS);
     when(mockedFailedEvent.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
-    when(mockedFailedEvent.getError()).thenReturn(new StaleElementReferenceException(defaultErrorMessage));
+    when(mockedFailedEvent.getError()).thenReturn(defaultError);
   }
 
   @Test
@@ -83,9 +85,9 @@ final class ErrorsCollectorTest {
   @Test
   void failIfErrorMethodWhenMoreThenOneError() {
     LogEvent mockedFailedEvent2 = mock(LogEvent.class);
-    String failedEvent2Message = "Second failure";
+    StaleElementReferenceException failedEvent2Error = new StaleElementReferenceException("Second failure");
     when(mockedFailedEvent2.getStatus()).thenReturn(LogEvent.EventStatus.FAIL);
-    when(mockedFailedEvent2.getError()).thenReturn(new StaleElementReferenceException(failedEvent2Message));
+    when(mockedFailedEvent2.getError()).thenReturn(failedEvent2Error);
 
     errorsCollector.afterEvent(mockedFailedEvent);
     errorsCollector.afterEvent(mockedFailedEvent2);
@@ -95,17 +97,9 @@ final class ErrorsCollectorTest {
     }
     catch (SoftAssertionError error) {
       assertThat(error)
-        .as("Error title")
-        .hasMessageContaining(String.format("Test %s failed.", defaultTestName));
-      assertThat(error)
-        .as("Record about number of failed checks")
-        .hasMessageContaining("2 checks failed");
-      assertThat(error)
-        .as("First event message")
-        .hasMessageContaining(String.format("FAIL #1: org.openqa.selenium.StaleElementReferenceException: %s", defaultErrorMessage));
-      assertThat(error)
-        .as("Second event message is missing")
-        .hasMessageContaining(String.format("FAIL #2: org.openqa.selenium.StaleElementReferenceException: %s", failedEvent2Message));
+        .hasMessageStartingWith("Test " + defaultTestName + " failed (2 failures)");
+      assertThat(error.getFailures())
+        .isEqualTo(asList(defaultError, failedEvent2Error));
     }
   }
 }
