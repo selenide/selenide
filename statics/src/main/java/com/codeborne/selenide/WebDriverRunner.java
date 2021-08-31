@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Configuration.headless;
  * A static facade for accessing WebDriver instance for current threads
  */
 @ParametersAreNonnullByDefault
-public class WebDriverRunner implements Browsers {
+public class WebDriverRunner {
   public static WebDriverContainer webdriverContainer = new WebDriverThreadLocalContainer();
   private static final SelenideDriver staticSelenideDriver = new ThreadLocalSelenideDriver();
 
