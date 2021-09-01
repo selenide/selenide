@@ -24,7 +24,7 @@ jobs:
       - name: Setup java
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 16
       # If this run was triggered by a pull request event, then checkout
       # the head of the pull request instead of the merge commit.
       - run: git checkout HEAD^2

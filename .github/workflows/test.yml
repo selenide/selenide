@@ -18,7 +18,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          java-version: '16'
       - name: Setup Edge
         if: ${{ matrix.gradle-task == 'edge_headless' }}
         uses: browser-actions/setup-edge@latest
@@ -41,7 +41,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          java-version: '16'
       - name: Setup Firefox
         if: ${{ matrix.gradle-task != 'check' }}
         run: |
