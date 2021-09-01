@@ -19,6 +19,7 @@ ext {
 }
 
 dependencies {
+  compileOnly 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.1'
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }

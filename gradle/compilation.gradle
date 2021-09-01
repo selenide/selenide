@@ -6,8 +6,15 @@ allprojects {
   tasks.withType(JavaCompile) {
     options.encoding = encoding
     options.debug = true
+    options.release = 8
   }
   compileJava.options.debugOptions.debugLevel = "source,lines,vars"
+  sourceCompatibility = '16' // for the IDE support
+  targetCompatibility = 8
 
-  sourceCompatibility = '1.8'
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(16)
+    }
+  }
 }

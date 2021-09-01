@@ -164,7 +164,7 @@ public class WebDriverRunner {
 
   public static void using(WebDriver driver, Runnable lambda) {
     if (hasWebDriverStarted()) {
-      WebDriver previous = getWebDriver();
+      var previous = getWebDriver();
       try {
         lambda.run();
       }
