@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.24.2 (released 02.09.2021)
+* #1551 Fix NoClassDefFoundException for StringUtils
+
 ## 5.24.1 (released 31.08.2021)
 * upgrade to WebDriverManager to 5.0.1  --  thanks to Anil Kumar Reddy Gaddam for PR #1547
 
