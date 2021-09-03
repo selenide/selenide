@@ -2,6 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.collections.AllMatch;
 import com.codeborne.selenide.collections.AnyMatch;
+import com.codeborne.selenide.collections.Attribute;
 import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
@@ -148,6 +149,11 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
   @CheckReturnValue
   public static CollectionCondition allMatch(String description, java.util.function.Predicate<WebElement> predicate) {
     return new AllMatch(description, predicate);
+  }
+
+  @CheckReturnValue
+  public static CollectionCondition allElementsWithAttribute(String attribute, String attributeValue) {
+    return new Attribute(attribute, attributeValue);
   }
 
   /**
