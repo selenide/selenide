@@ -342,15 +342,5 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> selectMultiple.selectOptionByValue("volvo", "audi", "saab"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Cannot select a disabled option: #cars/option[value:saab]");
-
-    assertThatThrownBy(() -> select.selectOptionByValue("somevalue"))
-      .isInstanceOf(ElementNotFound.class);
-    assertThatThrownBy(() -> select.selectOption(10))
-      .isInstanceOf(ElementNotFound.class);
-    assertThatThrownBy(() -> select.selectOption("TEXT"))
-      .isInstanceOf(ElementNotFound.class);
-    assertThatThrownBy(() -> select.selectOptionContainingText("TEXT"))
-      .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Cannot locate option containing text: TEXT");
   }
 }
