@@ -32,14 +32,18 @@ final class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
     when(selectField.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.getText()).thenReturn(defaultElementText);
     when(mockedElement.getTagName()).thenReturn("select");
+    when(mockedElement.isEnabled()).thenReturn(true);
 
     when(mockedFoundElement.isSelected()).thenReturn(true);
+    when(mockedFoundElement.isEnabled()).thenReturn(true);
   }
 
   @Test
   void testSelectOptionByText() {
     when(mockedElement.findElements(By.xpath(".//option[normalize-space(.) = " + Quotes.escape(defaultElementText) + "]")))
       .thenReturn(singletonList(mockedFoundElement));
+    when(mockedElement.findElement(By.xpath(".//option[normalize-space(.) = " + Quotes.escape(defaultElementText) + "]")))
+      .thenReturn(mockedFoundElement);
     selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new String[]{this.defaultElementText}});
   }
 
@@ -71,6 +75,7 @@ final class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
   @Test
   void selectOptionByIndex() {
     when(mockedElement.findElements(By.tagName("option"))).thenReturn(singletonList(mockedFoundElement));
+    when(mockedElement.findElement(By.xpath(".//option[" + (defaultIndex + 1) + "]"))).thenReturn(mockedFoundElement);
     when(mockedFoundElement.getAttribute("index")).thenReturn(String.valueOf(defaultIndex));
     selectOptionByTextOrIndexCommand.execute(proxy, selectField, new Object[]{new int[]{defaultIndex}});
   }

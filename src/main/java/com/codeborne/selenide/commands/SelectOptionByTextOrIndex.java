@@ -43,14 +43,14 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     Select select = new Select(selectWebElement);
     for (String text : texts) {
       try {
+        select.selectByVisibleText(text);
+
         WebElement option = selectWebElement.findElement(By.xpath(
           ".//option[normalize-space(.) = " + Quotes.escape(text) + "]"));
         if (!option.isEnabled()) {
           throw new InvalidStateException(selectField.driver(),
             "Cannot select a disabled option: " + selectField.description() + "/option[text:" + text + "]");
         }
-
-        select.selectByVisibleText(text);
       }
       catch (NoSuchElementException e) {
         throw new ElementNotFound(selectField.driver(),
@@ -64,14 +64,14 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     Select select = new Select(selectWebElement);
     for (int index : indexes) {
       try {
+        select.selectByIndex(index);
+
         WebElement option = selectWebElement.findElement(By.xpath(
           ".//option[" + (index + 1) + "]"));
         if (!option.isEnabled()) {
           throw new InvalidStateException(selectField.driver(),
             "Cannot select a disabled option: " + selectField.description() + "/option[index:" + index + "]");
         }
-
-        select.selectByIndex(index);
       }
       catch (NoSuchElementException e) {
         throw new ElementNotFound(selectField.driver(),

@@ -7,6 +7,7 @@ import com.codeborne.selenide.ex.InvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.empty;
@@ -341,5 +342,15 @@ final class SelectsTest extends IntegrationTest {
     assertThatThrownBy(() -> selectMultiple.selectOptionByValue("volvo", "audi", "saab"))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Cannot select a disabled option: #cars/option[value:saab]");
+
+    assertThatThrownBy(() -> select.selectOptionByValue("somevalue"))
+      .isInstanceOf(ElementNotFound.class);
+    assertThatThrownBy(() -> select.selectOption(10))
+      .isInstanceOf(ElementNotFound.class);
+    assertThatThrownBy(() -> select.selectOption("TEXT"))
+      .isInstanceOf(ElementNotFound.class);
+    assertThatThrownBy(() -> select.selectOptionContainingText("TEXT"))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageContaining("Cannot locate option containing text: TEXT");
   }
 }

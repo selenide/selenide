@@ -28,6 +28,9 @@ final class SelectOptionContainingTextTest implements WithAssertions {
   void setUp() {
     doReturn(element).when(select).getWebElement();
     doReturn("select").when(element).getTagName();
+    doReturn(true).when(element).isEnabled();
+    doReturn(true).when(option1).isEnabled();
+    doReturn(true).when(option2).isEnabled();
   }
 
   @Test

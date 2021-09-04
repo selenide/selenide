@@ -44,14 +44,14 @@ public class SelectOptionByValue implements Command<Void> {
   private void selectOptionByValue(WebElementSource selectField, String value) {
     Select select = new Select(selectField.getWebElement());
     try {
+      select.selectByValue(value);
+
       WebElement option = selectField.getWebElement().findElement(By.xpath(
         ".//option[@value = " + Quotes.escape(value) + "]"));
       if (!option.isEnabled()) {
         throw new InvalidStateException(selectField.driver(),
           "Cannot select a disabled option: " + selectField.description() + "/option[value:" + value + "]");
       }
-
-      select.selectByValue(value);
     }
     catch (NoSuchElementException e) {
       throw new ElementNotFound(selectField.driver(),

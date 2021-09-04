@@ -30,13 +30,17 @@ final class SelectionOptionByValueCommandTest implements WithAssertions {
     when(selectField.description()).thenReturn("By.tagName{select}");
     when(element.getText()).thenReturn("walue");
     when(element.getTagName()).thenReturn("select");
+    when(element.isEnabled()).thenReturn(true);
     when(foundElement.isSelected()).thenReturn(true);
+    when(foundElement.isEnabled()).thenReturn(true);
   }
 
   @Test
   void selectByValueWithStringFromArgs() {
     when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
       .thenReturn(Collections.singletonList(foundElement));
+    when(element.findElement(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(foundElement);
     selectOptionByValueCommand.execute(proxy, selectField, new Object[]{"walue"});
   }
 
@@ -44,6 +48,8 @@ final class SelectionOptionByValueCommandTest implements WithAssertions {
   void selectByValueWithStringArrayFromArgs() {
     when(element.findElements(By.xpath(".//option[@value = \"walue\"]")))
       .thenReturn(Collections.singletonList(foundElement));
+    when(element.findElement(By.xpath(".//option[@value = \"walue\"]")))
+      .thenReturn(foundElement);
     selectOptionByValueCommand.execute(proxy, selectField, new Object[]{new String[]{"walue"}});
   }
 
