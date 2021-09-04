@@ -3,18 +3,23 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.InvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byName;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -235,5 +240,106 @@ final class SelectsTest extends IntegrationTest {
 
     $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
     $("#selectedDomain").shouldHave(text("@myrambler.ru"));
+  }
+
+  @Test
+  void throwsExceptionWhenSelectingFromDisabledSelect() {
+    SelenideElement select = $("#hero");
+    executeJavaScript("arguments[0].setAttribute('disabled','')", select);
+    select.shouldBe(disabled);
+
+    assertThatThrownBy(() -> select.selectOption("Denzel Washington"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select anything in a disabled select element: {#hero}");
+    assertThatThrownBy(() -> select.selectOption(0))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select anything in a disabled select element: {#hero}");
+    assertThatThrownBy(() -> select.selectOptionContainingText("Arnold"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select anything in a disabled select element: {#hero}");
+    assertThatThrownBy(() -> select.selectOptionByValue("mickey rourke"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select anything in a disabled select element: {#hero}");
+  }
+
+  @Test
+  void throwsExceptionWhenSelectingDisabledOptionByText() {
+    //  single select
+    SelenideElement select = $("#hero");
+    SelenideElement disabledOptionOne = select.$("#denzel-washington");
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionOne);
+    disabledOptionOne.shouldBe(disabled);
+
+    assertThatThrownBy(() -> select.selectOption("Denzel Washington"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #hero/option[text:Denzel Washington]");
+
+    //  multiple select
+    SelenideElement selectMultiple = $("#cars");
+    SelenideElement disabledOptionTwo = selectMultiple.$(byText("Saab"));
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionTwo);
+    disabledOptionTwo.shouldBe(disabled);
+
+    assertThatThrownBy(() -> selectMultiple.selectOption("Volvo", "Audi", "Saab"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #cars/option[text:Saab]");
+  }
+
+  @Test
+  void throwsExceptionWhenSelectingDisabledOptionByIndex() {
+    //  single select
+    SelenideElement select = $("#hero");
+    SelenideElement disabledOptionOne = select.$x(".//option[2]");
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionOne);
+    disabledOptionOne.shouldBe(disabled);
+
+    assertThatThrownBy(() -> select.selectOption(1))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #hero/option[index:1]");
+
+    //  multiple select
+    SelenideElement selectMultiple = $("#cars");
+    SelenideElement disabledOptionTwo = selectMultiple.$x(".//option[2]");
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionTwo);
+    disabledOptionTwo.shouldBe(disabled);
+
+    assertThatThrownBy(() -> selectMultiple.selectOption(0, 1, 2))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #cars/option[index:1]");
+  }
+
+  @Test
+  void throwsExceptionWhenSelectingDisabledOptionContainingText() {
+    SelenideElement select = $("#hero");
+    SelenideElement disabledOption = select.$("#denzel-washington");
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOption);
+    disabledOption.shouldBe(disabled);
+
+    assertThatThrownBy(() -> select.selectOptionContainingText("Denzel"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option containing text: Denzel");
+  }
+
+  @Test
+  void throwsExceptionWhenSelectingDisabledOptionByValue() {
+    //  single select
+    SelenideElement select = $("#hero");
+    SelenideElement disabledOptionOne = select.$(byValue("mickey rourke"));
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionOne);
+    disabledOptionOne.shouldBe(disabled);
+
+    assertThatThrownBy(() -> select.selectOptionByValue("mickey rourke"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #hero/option[value:mickey rourke]");
+
+    //  multiple select
+    SelenideElement selectMultiple = $("#cars");
+    SelenideElement disabledOptionTwo = selectMultiple.$(byText("Saab"));
+    executeJavaScript("arguments[0].setAttribute('disabled','')", disabledOptionTwo);
+    disabledOptionTwo.shouldBe(disabled);
+
+    assertThatThrownBy(() -> selectMultiple.selectOptionByValue("volvo", "audi", "saab"))
+      .isInstanceOf(InvalidStateException.class)
+      .hasMessageContaining("Cannot select a disabled option: #cars/option[value:saab]");
   }
 }

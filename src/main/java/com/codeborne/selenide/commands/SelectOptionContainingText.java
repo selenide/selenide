@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -30,8 +31,17 @@ public class SelectOptionContainingText implements Command<Void> {
     if (options.isEmpty()) {
       throw new NoSuchElementException("Cannot locate option containing text: " + text);
     }
+    if (!element.isEnabled()) {
+      throw new InvalidStateException(selectField.driver(),
+        "Cannot select anything in a disabled select element: " + selectField);
+    }
 
     for (WebElement option : options) {
+      if (!option.isEnabled()) {
+        throw new InvalidStateException(selectField.driver(),
+          "Cannot select a disabled option containing text: " + text);
+      }
+
       setSelected(option);
       if (!select.isMultiple()) {
         break;
