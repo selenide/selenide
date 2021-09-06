@@ -16,15 +16,13 @@ import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
 import com.codeborne.selenide.impl.CollectionSource;
-
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
 public abstract class CollectionCondition implements Predicate<List<WebElement>> {
@@ -246,6 +244,7 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
    * Wraps CollectionCondition without any changes except toString() method
    * where explanation string (because) are being appended
    */
+  @ParametersAreNonnullByDefault
   private static class ExplainedCollectionCondition extends CollectionCondition {
     private final CollectionCondition delegate;
     private final String message;
@@ -269,8 +268,8 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     }
 
     @Override
-    public boolean applyNull() {
-      return delegate.applyNull();
+    public boolean missingElementSatisfiesCondition() {
+      return delegate.missingElementSatisfiesCondition();
     }
 
     @Override
@@ -287,5 +286,5 @@ public abstract class CollectionCondition implements Predicate<List<WebElement>>
     return new ExplainedCollectionCondition(this, explanation);
   }
 
-  public abstract boolean applyNull();
+  public abstract boolean missingElementSatisfiesCondition();
 }

@@ -38,7 +38,7 @@ public abstract class PredicateCollectionCondition extends CollectionCondition {
   }
 
   @Override
-  public boolean applyNull() {
+  public boolean missingElementSatisfiesCondition() {
     return false;
   }
 

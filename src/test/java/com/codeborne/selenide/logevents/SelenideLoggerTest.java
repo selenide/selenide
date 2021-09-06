@@ -30,6 +30,7 @@ final class SelenideLoggerTest implements WithAssertions {
 
   @RegisterExtension
   static UseLocaleExtension useLocale = new UseLocaleExtension("en");
+  private static final Object[] NO_ARGS = null;
 
   @BeforeEach
   @AfterEach
@@ -50,6 +51,7 @@ final class SelenideLoggerTest implements WithAssertions {
   }
 
   @Test
+  @SuppressWarnings("RedundantCast")
   void printsReadableArgumentsValues() {
     assertThat(readableArguments((Object[]) null)).isEqualTo("");
     assertThat(readableArguments(111)).isEqualTo("111");
@@ -85,7 +87,7 @@ final class SelenideLoggerTest implements WithAssertions {
     when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
 
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
 
     verifyEvent(listener1, "div", "click()", PASS);
     verifyEvent(listener2, "div", "click()", PASS);
@@ -97,7 +99,7 @@ final class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.removeListener("simpleReport");
     SelenideLogger.removeListener("softAsserts");
 
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
     verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);

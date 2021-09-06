@@ -138,7 +138,7 @@ public abstract class Condition {
   /**
    * Assert that given element's attribute matches given regular expression
    *
-   * <p>Sample: <code>$("h1").should(attributeMatching("fileId", ".*12345.*"))</code></p>
+   * <p>Sample: <code>$("h1").shouldHave(attributeMatching("fileId", ".*12345.*"))</code></p>
    *
    * @param attributeName  name of attribute
    * @param attributeRegex regex to match attribute value
@@ -497,11 +497,6 @@ public abstract class Condition {
     return condition.negate();
   }
 
-  @Nonnull
-  public Condition negate() {
-    return new Not(this, absentElementMatchesCondition);
-  }
-
   /**
    * Check if element matches ALL given conditions.
    * The method signature makes you to pass at least 2 conditions, otherwise it would be nonsense.
@@ -565,15 +560,15 @@ public abstract class Condition {
   }
 
   private final String name;
-  private final boolean absentElementMatchesCondition;
+  private final boolean missingElementSatisfiesCondition;
 
   public Condition(String name) {
     this(name, false);
   }
 
-  public Condition(String name, boolean absentElementMatchesCondition) {
+  public Condition(String name, boolean missingElementSatisfiesCondition) {
     this.name = name;
-    this.absentElementMatchesCondition = absentElementMatchesCondition;
+    this.missingElementSatisfiesCondition = missingElementSatisfiesCondition;
   }
 
   /**
@@ -583,10 +578,6 @@ public abstract class Condition {
    * @return true if element matches condition
    */
   public abstract boolean apply(Driver driver, WebElement element);
-
-  public boolean applyNull() {
-    return absentElementMatchesCondition;
-  }
 
   /**
    * If element didn't match the condition, returns the actual value of element.
@@ -600,6 +591,11 @@ public abstract class Condition {
   @Nullable
   public String actualValue(Driver driver, WebElement element) {
     return null;
+  }
+
+  @Nonnull
+  public Condition negate() {
+    return new Not(this, missingElementSatisfiesCondition);
   }
 
   /**
@@ -621,6 +617,6 @@ public abstract class Condition {
   }
 
   public boolean missingElementSatisfiesCondition() {
-    return absentElementMatchesCondition;
+    return missingElementSatisfiesCondition;
   }
 }

@@ -159,6 +159,7 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @Nonnull
   protected Map<String, Object> prefs(@Nullable File browserDownloadsFolder) {
     Map<String, Object> chromePreferences = new HashMap<>();
+    chromePreferences.put("safebrowsing.enabled", true);
     chromePreferences.put("credentials_enable_service", false);
     chromePreferences.put("plugins.always_open_pdf_externally", true);
     chromePreferences.put("profile.default_content_setting_values.automatic_downloads", 1);
