@@ -640,7 +640,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement lastChild();
 
   /**
-   * Locates closes ancestor element matching given criteria
+   * Locates the closest ancestor element matching given criteria
    *
    * For example, $("td").closest("table") could give some "table".
    *
@@ -652,6 +652,18 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nonnull
   SelenideElement closest(String tagOrClass);
+
+  /**
+   * Locates the closest ancestor element with matching attribute's name and value
+   * @param attributeName the attribute name of the ancestor element
+   * @param attributeValue the attribute value of the ancestor element
+   * @return Matching by attribute's name and value ancestor element
+   * @see com.codeborne.selenide.commands.GetClosestWithAttributeAndValue
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement closestWithAttribute(String attributeName, String attributeValue);
 
   /**
    * <p>Locates the first matching element inside given element</p>
