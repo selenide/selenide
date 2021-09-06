@@ -20,7 +20,7 @@ public class GetClosestWithAttributeAndValue implements Command<SelenideElement>
   public SelenideElement execute(@Nonnull SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     String attributeName = firstOf(args);
     String attributeValue = (String) args[1];
-    String xpath = format("ancestor::*[@%s='%s']", attributeName, attributeValue);
+    String xpath = format("ancestor::*[@%s='%s'][1]", attributeName, attributeValue);
     return locator.find(proxy, By.xpath(xpath), 0);
   }
 }

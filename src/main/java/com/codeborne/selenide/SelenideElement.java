@@ -663,7 +663,7 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @CheckReturnValue
   @Nonnull
-  SelenideElement closestWithAttribute(String attributeName, String attributeValue);
+  SelenideElement closestWithAttributeAndValue(String attributeName, String attributeValue);
 
   /**
    * <p>Locates the first matching element inside given element</p>

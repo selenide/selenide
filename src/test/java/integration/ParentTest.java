@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -48,5 +49,12 @@ final class ParentTest extends ITest {
       .isEqualTo($("#multirowTable"));
     assertThat($(".second_row").closest(".multirow_table"))
       .isEqualTo($("#multirowTable"));
+  }
+
+  @Test
+  void canFindClosestAncestorWithAttributeAndValue() {
+    SelenideElement expectedAncestor = $("#first-div")
+      .closestWithAttributeAndValue("test-attribute", "test-value");
+    assertThat(expectedAncestor).isEqualTo($("#ancestor"));
   }
 }
