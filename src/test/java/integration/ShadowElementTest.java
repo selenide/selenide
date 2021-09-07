@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exactText;
@@ -163,9 +165,27 @@ final class ShadowElementTest extends ITest {
 
   @Test
   void getShadowRoot() {
+    assumeThat(driver().browser().isFirefox())
+      .as("Firefox doesn't support .shadowRoot for RemoteWebElement - it throws 'TypeError: node.ownerDocument is null'")
+      .isFalse();
+
     $("#shadow-host").shadowRoot()
       .find("#inner-shadow-host").shadowRoot()
       .find("#inputInInnerShadow")
-      .shouldHave(id("inputInInnerShadow"), attribute("type", "text"));
+      .shouldHave(id("inputInInnerShadow"), Duration.ofSeconds(2))
+      .shouldHave(attribute("type", "text"));
+  }
+
+  @Test
+  void canFindShadowRootInsideGivenElement() {
+    assumeThat(driver().browser().isFirefox())
+      .as("Firefox doesn't support .shadowRoot for RemoteWebElement - it throws 'TypeError: node.ownerDocument is null'")
+      .isFalse();
+
+    SelenideElement input = $x("//*[@id='shadow-host']").shadowRoot().$("#inputInShadow");
+    withFastSetValue(() -> {
+      input.setValue("I can type text inside of shadow dom");
+      input.shouldHave(exactValue("I can type text inside of shadow dom"));
+    });
   }
 }
