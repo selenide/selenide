@@ -57,4 +57,10 @@ final class ParentTest extends ITest {
       .closestWithAttributeAndValue("test-attribute", "test-value");
     assertThat(expectedAncestor).isEqualTo($("#ancestor"));
   }
+
+  @Test
+  void canFindClosestAncestorWithAttribute() {
+    SelenideElement expectedAncestor = $("#first-div").closestWithAttribute("test-attribute");
+    assertThat(expectedAncestor).isEqualTo($("#ancestor"));
+  }
 }

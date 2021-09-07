@@ -9,22 +9,19 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GetClosestWithAttributeAndValueCommandTest implements WithAssertions {
-
+public class GetClosestWithAttributeCommandTest implements WithAssertions {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final GetClosestWithAttributeAndValue getClosestWithAttributeNameAndValueCommand =
-    new GetClosestWithAttributeAndValue();
+  private final GetClosestWithAttribute getClosestWithAttributeNameCommand = new GetClosestWithAttribute();
 
   @Test
-  void testExecuteMethodWithAttributeNameAndValue() {
+  void testExecuteMethodWithAttribute() {
     String attributeName = "test-argument";
-    String attributeValue = "test-value";
-    when(locator.find(proxy, By.xpath(String.format("ancestor::*[@%s='%s'][1]", attributeName, attributeValue)), 0))
+    when(locator.find(proxy, By.xpath(String.format("ancestor::*[@%s][1]", attributeName)), 0))
       .thenReturn(mockedElement);
-    assertThat(getClosestWithAttributeNameAndValueCommand
-      .execute(proxy, locator, new Object[]{attributeName, attributeValue, "something more"})
+    assertThat(getClosestWithAttributeNameCommand
+      .execute(proxy, locator, new Object[]{attributeName})
     ).isEqualTo(mockedElement);
   }
 }
