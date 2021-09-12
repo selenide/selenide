@@ -51,16 +51,4 @@ final class ParentTest extends ITest {
       .isEqualTo($("#multirowTable"));
   }
 
-  @Test
-  void canFindClosestAncestorWithAttributeAndValue() {
-    SelenideElement expectedAncestor = $("#first-div")
-      .closestWithAttributeAndValue("test-attribute", "test-value");
-    assertThat(expectedAncestor).isEqualTo($("#ancestor"));
-  }
-
-  @Test
-  void canFindClosestAncestorWithAttribute() {
-    SelenideElement expectedAncestor = $("#first-div").closestWithAttribute("test-attribute");
-    assertThat(expectedAncestor).isEqualTo($("#ancestor"));
-  }
 }

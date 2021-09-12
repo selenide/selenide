@@ -654,29 +654,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement closest(String tagOrClass);
 
   /**
-   * Locates the closest ancestor element with matching attribute's name and value
-   * @param attributeName the attribute name of the ancestor element
-   * @param attributeValue the attribute value of the ancestor element
-   * @return Matching by attribute's name and value ancestor element
-   * @see com.codeborne.selenide.commands.GetClosestWithAttributeAndValue
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   */
-  @CheckReturnValue
-  @Nonnull
-  SelenideElement closestWithAttributeAndValue(String attributeName, String attributeValue);
-
-  /**
-   * Locates the closest element with matching attribute
-   * @param attributeName the attribute name of the ancestor element
-   * @return Matching with attribute's name ancestor element
-   * @see com.codeborne.selenide.commands.GetClosestWithAttribute
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   */
-  @CheckReturnValue
-  @Nonnull
-  SelenideElement closestWithAttribute(String attributeName);
-
-  /**
    * <p>Locates the first matching element inside given element</p>
    *
    * <p>Short form of {@code webElement.findElement(By.cssSelector(cssSelector))}</p>
