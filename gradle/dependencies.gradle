@@ -19,15 +19,15 @@ ext {
 
 dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
-    exclude group: 'net.bytebuddy', module: 'byte-buddy'
+    exclude group: 'net.bytebuddy'
   }
-  api('io.github.bonigarcia:webdrivermanager:5.0.1') {
+  api('io.github.bonigarcia:webdrivermanager:5.0.2') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
-    exclude group: 'org.rauschig', module: 'jarchivelib'
+    exclude group: 'com.github.docker-java'
+    exclude group: 'org.rauschig'
   }
-  implementation('org.rauschig:jarchivelib:1.2.0') {
-    because 'used by webdrivermanager'
-  }
+  implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
+  implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
 
   implementation('org.apache.httpcomponents.client5:httpclient5:5.1') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
@@ -44,6 +44,7 @@ allprojects {
   dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("commons-io:commons-io:2.11.0")
     testImplementation("com.browserup:browserup-proxy-core:$browserupProxyVersion")
     testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion")
     testImplementation("io.netty:netty-all:$nettyVersion")

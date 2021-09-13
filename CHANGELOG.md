@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.24.3
+* upgrade to WebDriverManager to 5.0.21
+* exclude docker-java and few other dependencies
+
 ## 5.24.2 (released 02.09.2021)
 * #1551 Fix NoClassDefFoundException for StringUtils
 
