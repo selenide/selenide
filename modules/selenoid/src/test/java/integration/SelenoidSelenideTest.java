@@ -52,9 +52,9 @@ public class SelenoidSelenideTest {
   private void checkDownload() throws IOException {
     for (int i = 0; i < 8; i++){
       open("https://the-internet.herokuapp.com/download");
-      File file = $(byText("some-file.txt")).download();
-      assertThat(file).hasName("some-file.txt");
-      assertThat(readFileToString(file, UTF_8)).startsWith("{\\rtf");
+      File file = $(byText("a.txt")).download();
+      assertThat(file).hasName("a.txt");
+      assertThat(readFileToString(file, UTF_8)).isEqualTo("hello");
     }
   }
 }
