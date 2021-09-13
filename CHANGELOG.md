@@ -1,7 +1,7 @@
 # Changelog
 
-## 5.24.3
-* upgrade to WebDriverManager to 5.0.21
+## 5.24.3 (released 13.09.2021)
+* upgrade to WebDriverManager to 5.0.2
 * exclude docker-java and few other dependencies
 
 ## 5.24.2 (released 02.09.2021)
