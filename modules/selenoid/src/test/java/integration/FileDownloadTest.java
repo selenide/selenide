@@ -38,10 +38,10 @@ public class FileDownloadTest {
     Configuration.remote = "http://localhost:4444/wd/hub";
     open("https://the-internet.herokuapp.com/download");
 
-    File file = $(byText("a.txt")).download(withExtension("txt"));
+    File file = $(byText("some-file.txt")).download(withExtension("txt"));
 
-    assertThat(file.getName()).isEqualTo("a.txt");
-    assertThat(readFileToString(file, UTF_8)).startsWith("hello");
+    assertThat(file.getName()).isEqualTo("some-file.txt");
+    assertThat(readFileToString(file, UTF_8)).startsWith("{\\rtf1");
   }
 
   @Test
@@ -49,9 +49,9 @@ public class FileDownloadTest {
     Configuration.remote = null;
     open("https://the-internet.herokuapp.com/download");
 
-    File file = $(byText("a.txt")).download(withExtension("txt"));
+    File file = $(byText("some-file.txt")).download(withExtension("txt"));
 
-    assertThat(file.getName()).isEqualTo("a.txt");
-    assertThat(readFileToString(file, UTF_8)).isEqualTo("hello");
+    assertThat(file.getName()).isEqualTo("some-file.txt");
+    assertThat(readFileToString(file, UTF_8)).startsWith("{\\rtf1");
   }
 }
