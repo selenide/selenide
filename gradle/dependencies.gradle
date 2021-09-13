@@ -13,7 +13,6 @@ ext {
   mockitoVersion = '3.12.4'
   browserupProxyVersion = '2.1.2'
   littleProxyVersion = '2.0.5'
-  videoRecorderVersion = '2.0'
   commonsFileuploadVersion = '1.4'
 }
 
@@ -53,11 +52,6 @@ allprojects {
     testImplementation("commons-fileupload:commons-fileupload:${commonsFileuploadVersion}")
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    testImplementation("com.automation-remarks:video-recorder-junit5:$videoRecorderVersion") {
-      exclude group: 'org.awaitility'
-      exclude group: 'org.junit.jupiter'
-      exclude group: 'org.junit.platform'
-    }
     implementation('org.slf4j:slf4j-api:1.7.32')
     testRuntimeOnly('org.slf4j:slf4j-simple:1.7.32')
   }

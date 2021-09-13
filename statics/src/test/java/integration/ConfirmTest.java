@@ -1,6 +1,5 @@
 package integration;
 
-import com.automation.remarks.video.annotations.Video;
 import com.codeborne.selenide.ex.DialogTextMismatch;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +34,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void canSubmitConfirmDialogWithoutCheckingText() {
     $(byText("Confirm button")).click();
     confirm();
@@ -43,7 +41,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void canSubmitConfirmDialogAndCheckText() {
     $(byText("Confirm button")).click();
     confirm("Get out of this page, " + USER_NAME + '?');
@@ -51,7 +48,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void canCancelConfirmDialog() {
     $(byText("Confirm button")).click();
     dismiss("Get out of this page, " + USER_NAME + '?');
@@ -60,7 +56,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void selenideChecksDialogText() {
     $(byText("Confirm button")).click();
     assertThatThrownBy(() -> confirm("Get out of this page, Maria?"))
@@ -73,7 +68,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void confirmReturnsActualDialogText() {
     $(byText("Confirm button")).click();
     assertThat(confirm())
@@ -81,7 +75,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void dismissReturnsActualDialogText() {
     $(byText("Confirm button")).click();
     assertThat(dismiss())
@@ -89,7 +82,6 @@ final class ConfirmTest extends IntegrationTest {
   }
 
   @Test
-  @Video
   void waitsUntilConfirmDialogAppears() {
     timeout = 2000;
     $(byText("Slow confirm")).click();
