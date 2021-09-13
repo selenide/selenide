@@ -82,8 +82,41 @@ if (project.hasProperty("signing.keyId")) {
             developerConnection = 'scm:git@github.com:selenide/selenide-selenoid.git'
             url = 'https://github.com/selenide/selenide-selenoid'
           }
+          withXml {
+            def dependenciesNode = asNode().appendNode('dependencies')
+
+            configurations.api.allDependencies.each {
+              exportDependency(dependenciesNode, it, null)
+            }
+            (configurations.implementation.allDependencies-configurations.api.allDependencies).each {
+              exportDependency(dependenciesNode, it, 'runtime')
+            }
+          }
         }
       }
     }
+  }
+}
+
+private static def exportDependency(dependenciesNode, dependency, scope) {
+  def dependencyNode = dependenciesNode.appendNode('dependency')
+  dependencyNode.appendNode('groupId', dependency.group)
+  dependencyNode.appendNode('artifactId', dependency.name)
+  dependencyNode.appendNode('version', dependency.version)
+  if (scope) {
+    dependencyNode.appendNode('scope', scope)
+  }
+
+  if (dependency.getExcludeRules()) {
+    exclude(dependencyNode, dependency.getExcludeRules())
+  }
+}
+
+private static def exclude(dependencyNode, excludeRules) {
+  def exclusionsNode = dependencyNode.appendNode('exclusions')
+  excludeRules.each {
+    def exclusionNode = exclusionsNode.appendNode('exclusion')
+    exclusionNode.appendNode('groupId', it.group)
+    exclusionNode.appendNode('artifactId', it.module ?: '*')
   }
 }
