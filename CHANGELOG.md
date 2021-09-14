@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.24.4
+* upgrade okhttp 3.11.0 -> 3.12.13 
+
 ## 5.24.3 (released 13.09.2021)
 * upgrade to WebDriverManager to 5.0.2
 * exclude docker-java and few other dependencies
