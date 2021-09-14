@@ -101,21 +101,37 @@ publishing {
           def dependenciesNode = asNode().appendNode('dependencies')
 
           configurations.api.allDependencies.each {
-            def dependencyNode = dependenciesNode.appendNode('dependency')
-            dependencyNode.appendNode('groupId', it.group)
-            dependencyNode.appendNode('artifactId', it.name)
-            dependencyNode.appendNode('version', it.version)
+            exportDependency(dependenciesNode, it, null)
           }
           (configurations.implementation.allDependencies-configurations.api.allDependencies).each {
-            def dependencyNode = dependenciesNode.appendNode('dependency')
-            dependencyNode.appendNode('groupId', it.group)
-            dependencyNode.appendNode('artifactId', it.name)
-            dependencyNode.appendNode('version', it.version)
-            dependencyNode.appendNode('scope', 'runtime')
+            exportDependency(dependenciesNode, it, 'runtime')
           }
         }
       }
     }
+  }
+}
+
+private static def exportDependency(dependenciesNode, dependency, scope) {
+  def dependencyNode = dependenciesNode.appendNode('dependency')
+  dependencyNode.appendNode('groupId', dependency.group)
+  dependencyNode.appendNode('artifactId', dependency.name)
+  dependencyNode.appendNode('version', dependency.version)
+  if (scope) {
+    dependencyNode.appendNode('scope', scope)
+  }
+
+  if (dependency.getExcludeRules()) {
+    exclude(dependencyNode, dependency.getExcludeRules())
+  }
+}
+
+private static def exclude(dependencyNode, excludeRules) {
+  def exclusionsNode = dependencyNode.appendNode('exclusions')
+  excludeRules.each {
+    def exclusionNode = exclusionsNode.appendNode('exclusion')
+    exclusionNode.appendNode('groupId', it.group)
+    exclusionNode.appendNode('artifactId', it.module ?: '*')
   }
 }
 

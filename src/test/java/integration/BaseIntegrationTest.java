@@ -7,14 +7,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.File;
 import java.util.Locale;
 
-import static com.automation.remarks.video.enums.RecordingMode.ANNOTATED;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.SAFARI;
-import static com.codeborne.selenide.impl.FileHelper.ensureFolderExists;
 import static java.lang.Boolean.parseBoolean;
 import static org.openqa.selenium.net.PortProber.findFreePort;
 
@@ -31,7 +28,6 @@ public abstract class BaseIntegrationTest {
   static void setUpAll() throws Exception {
     Locale.setDefault(Locale.ENGLISH);
     runLocalHttpServer();
-    setUpVideoRecorder();
   }
 
   @BeforeEach
@@ -49,14 +45,6 @@ public abstract class BaseIntegrationTest {
         }
       }
     }
-  }
-
-  private static void setUpVideoRecorder() {
-    File videoFolder = new File(System.getProperty("selenide.reportsFolder", "build/reports/tests"));
-    ensureFolderExists(videoFolder);
-    System.setProperty("video.folder", videoFolder.getAbsolutePath());
-    System.setProperty("video.enabled", String.valueOf(!browser().isHeadless()));
-    System.setProperty("video.mode", String.valueOf(ANNOTATED));
   }
 
   protected static String getBaseUrl() {
