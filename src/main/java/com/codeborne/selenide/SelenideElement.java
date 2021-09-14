@@ -1,6 +1,5 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.commands.GetClosest;
 import com.codeborne.selenide.files.FileFilter;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -651,7 +650,8 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    * <br>
    * {@code $("td").closest("[data-testid]")} will find the closest ancestor with attribute {@code data-testid}
    * <br>
-   * {@code $("td").closest("[data-testid=test-value]")} will find the closest ancestor with attribute and attribute's value {@code data-testid=test-value}
+   * {@code $("td").closest("[data-testid=test-value]")} will find the closest ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
    *<br>
    * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
    *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
