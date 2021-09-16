@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
@@ -164,6 +166,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
     webdriver().shouldNotHave(cookie("nonexistent_cookie"));
   }
 
+  @ParametersAreNonnullByDefault
   private ObjectCondition<WebDriver> cookie(String expectedCookieName) {
     return new ObjectCondition<WebDriver>() {
       @Nonnull
@@ -178,6 +181,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
         return "should not have a cookie with name '" + expectedCookieName + "'";
       }
 
+      @CheckReturnValue
       @Override
       public boolean test(WebDriver webdriver) {
         return webdriver.manage().getCookieNamed(expectedCookieName) != null;

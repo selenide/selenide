@@ -1,5 +1,7 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.DragAndDropOptions.DragAndDropMethod.ACTIONS;
@@ -14,14 +16,20 @@ public class DragAndDropOptions {
     this.method = method;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static DragAndDropOptions usingJavaScript() {
     return new DragAndDropOptions(JS);
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static DragAndDropOptions usingActions() {
     return new DragAndDropOptions(ACTIONS);
   }
 
+  @CheckReturnValue
+  @Nonnull
   public DragAndDropMethod getMethod() {
     return method;
   }

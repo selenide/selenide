@@ -7,7 +7,9 @@ import org.openqa.selenium.WebDriver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver> {
   protected final String name;
   protected final String expectedUrl;
@@ -17,18 +19,21 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
     this.expectedUrl = expectedUrl;
   }
 
+  @CheckReturnValue
   @Nonnull
   @Override
   public String description() {
     return "should have url " + name + expectedUrl;
   }
 
+  @CheckReturnValue
   @Nonnull
   @Override
   public String negativeDescription() {
     return "should not have url " + name + expectedUrl;
   }
 
+  @CheckReturnValue
   @Nullable
   @Override
   public String actualValue(WebDriver webDriver) {
