@@ -6,13 +6,10 @@ import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
-import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
-import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +63,7 @@ public class SelenidePageFactory implements PageObjectFactory {
    * Similar to the other "initElements" methods, but takes an {@link FieldDecorator} which is used
    * for decorating each of the fields.
    *
-   * @param page      The object to decorate the fields of
+   * @param page The object to decorate the fields of
    */
   public void initElements(Driver driver, @Nullable WebElementSource searchContext, Object page, Type[] genericTypes) {
     Class<?> proxyIn = page.getClass();
@@ -119,7 +116,7 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsContainer createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
+  public Object createElementsContainer(Driver driver, @Nullable WebElementSource searchContext, Field field, By selector) {
     try {
       WebElementSource self = new ElementFinder(driver, searchContext, selector, 0);
       return initElementsContainer(driver, field, self);
@@ -131,7 +128,7 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @CheckReturnValue
   @Nonnull
-  ElementsContainer initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
+  Object initElementsContainer(Driver driver, Field field, WebElementSource self) throws ReflectiveOperationException {
     Type[] genericTypes = field.getGenericType() instanceof ParameterizedType ?
       ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
     return initElementsContainer(driver, field, self, field.getType(), genericTypes);
@@ -140,11 +137,11 @@ public class SelenidePageFactory implements PageObjectFactory {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsContainer initElementsContainer(Driver driver,
-                                                 Field field,
-                                                 WebElementSource self,
-                                                 Class<?> type,
-                                                 Type[] genericTypes) throws ReflectiveOperationException {
+  public Object initElementsContainer(Driver driver,
+                                      Field field,
+                                      WebElementSource self,
+                                      Class<?> type,
+                                      Type[] genericTypes) throws ReflectiveOperationException {
     if (Modifier.isInterface(type.getModifiers())) {
       throw new IllegalArgumentException("Cannot initialize field " + field + ": " + type + " is interface");
     }
@@ -153,7 +150,7 @@ public class SelenidePageFactory implements PageObjectFactory {
     }
     Constructor<?> constructor = type.getDeclaredConstructor();
     constructor.setAccessible(true);
-    ElementsContainer result = (ElementsContainer) constructor.newInstance();
+    Object result = constructor.newInstance();
     initElements(driver, self, result, genericTypes);
     return result;
   }
@@ -195,21 +192,13 @@ public class SelenidePageFactory implements PageObjectFactory {
     else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
-
-    return defaultFieldDecorator(driver, searchContext).decorate(loader, field);
+    return createElementsContainer(driver, searchContext, field, selector);
   }
 
   @CheckReturnValue
   @Nonnull
-  protected DefaultFieldDecorator defaultFieldDecorator(Driver driver, @Nullable WebElementSource searchContext) {
-    SearchContext context = searchContext == null ? driver.getWebDriver() : searchContext.getWebElement();
-    return new DefaultFieldDecorator(new DefaultElementLocatorFactory(context));
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  protected List<ElementsContainer> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
-                                                                Field field, Type[] genericTypes, By selector) {
+  protected List<Object> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
+                                                     Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
     if (listType == null) {
       throw new IllegalArgumentException("Cannot detect list type for " + field);

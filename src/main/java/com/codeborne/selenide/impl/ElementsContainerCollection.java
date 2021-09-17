@@ -1,7 +1,6 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.ElementsContainer;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.PageObjectException;
 import org.openqa.selenium.By;
@@ -19,7 +18,7 @@ import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
-public class ElementsContainerCollection extends AbstractList<ElementsContainer> {
+public class ElementsContainerCollection extends AbstractList<Object> {
   private final WebElementSelector elementSelector = inject(WebElementSelector.class);
   private final PageObjectFactory pageFactory;
   private final Driver driver;
@@ -43,7 +42,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
   @CheckReturnValue
   @Nonnull
   @Override
-  public ElementsContainer get(int index) {
+  public Object get(int index) {
     WebElementSource self = new ElementFinder(driver, parent, selector, index);
     try {
       return pageFactory.initElementsContainer(driver, field, self, listType, genericTypes);

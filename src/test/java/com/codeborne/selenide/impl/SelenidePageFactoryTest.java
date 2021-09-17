@@ -98,9 +98,9 @@ final class SelenidePageFactoryTest {
   }
 
   @Test
-  void ignoresUnknownTypes() throws NoSuchFieldException {
-    assertThat(pageFactory.decorate(cl, driver, null, getField("unsupportedField"), new ByIdOrName("unsupportedField")))
-      .isNull();
+  void createsEmptyInstanceForUnknownTypes() throws NoSuchFieldException {
+    Object field = pageFactory.decorate(cl, driver, null, getField("unsupportedField"), new ByIdOrName("unsupportedField"));
+    assertThat(field).isEqualTo("");
   }
 
   @Test
