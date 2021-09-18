@@ -1,6 +1,6 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
@@ -27,11 +27,11 @@ public class Mocks {
     return element;
   }
 
-  public static WebElementsCollection mockCollection(String description, WebElement... elements) {
+  public static CollectionSource mockCollection(String description, WebElement... elements) {
     Driver driver = mock(Driver.class);
     when(driver.config()).thenReturn(new SelenideConfig());
 
-    WebElementsCollection collection = mock(WebElementsCollection.class);
+    CollectionSource collection = mock(CollectionSource.class);
     when(collection.driver()).thenReturn(driver);
     when(collection.description()).thenReturn(description);
     when(collection.getElements()).thenReturn(asList(elements));

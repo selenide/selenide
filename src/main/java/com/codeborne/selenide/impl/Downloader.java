@@ -36,9 +36,9 @@ public class Downloader {
 
   @Nonnull
   public File prepareTargetFolder(Config config) {
-    File uniqueFolder = new File(config.downloadsFolder(), random.text());
+    File uniqueFolder = new File(config.downloadsFolder(), random.text()).getAbsoluteFile();
     if (uniqueFolder.exists()) {
-      throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder.getAbsolutePath());
+      throw new IllegalStateException("Unbelievable! Unique folder already exists: " + uniqueFolder);
     }
     ensureFolderExists(uniqueFolder);
     return uniqueFolder;

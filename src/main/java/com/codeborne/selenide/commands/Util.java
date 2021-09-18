@@ -6,6 +6,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ class Util {
         conditions.add((Condition) arg);
       else if (arg instanceof Condition[])
         conditions.addAll(asList((Condition[]) arg));
-      else if (!(arg instanceof String || arg instanceof Long))
+      else if (!(arg instanceof String || arg instanceof Long || arg instanceof Duration))
         throw new IllegalArgumentException("Unknown parameter: " + arg);
     }
     return conditions;

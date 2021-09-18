@@ -5,13 +5,15 @@ import com.codeborne.selenide.drivercommands.Navigator;
 import com.codeborne.selenide.drivercommands.WebDriverWrapper;
 import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.ElementFinder;
+import com.codeborne.selenide.impl.PageObjectFactory;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
-import com.codeborne.selenide.impl.SelenidePageFactory;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import javax.annotation.CheckReturnValue;
@@ -27,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.codeborne.selenide.files.FileFilters.none;
+import static com.codeborne.selenide.impl.Plugins.inject;
 import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 import static java.util.Collections.emptyList;
 
@@ -134,13 +137,13 @@ public class SelenideDriver {
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass> PageObjectClass page(Class<PageObjectClass> pageObjectClass) {
-    return pageFactory().page(driver(), pageObjectClass);
+    return pageFactory.page(driver(), pageObjectClass);
   }
 
   @CheckReturnValue
   @Nonnull
   public <PageObjectClass, T extends PageObjectClass> PageObjectClass page(T pageObject) {
-    return pageFactory().page(driver(), pageObject);
+    return pageFactory.page(driver(), pageObject);
   }
 
   public void refresh() {
@@ -156,8 +159,10 @@ public class SelenideDriver {
   }
 
   public void updateHash(String hash) {
-    String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
-    executeJavaScript("window.location.hash='" + localHash + "'");
+    SelenideLogger.run("updateHash", hash, () -> {
+      String localHash = (hash.charAt(0) == '#') ? hash.substring(1) : hash;
+      executeJavaScript("window.location.hash='" + localHash + "'");
+    });
   }
 
   @CheckReturnValue
@@ -182,14 +187,15 @@ public class SelenideDriver {
     return driver.getWebDriver();
   }
 
-  @CheckReturnValue
   @Nonnull
   public WebDriver getAndCheckWebDriver() {
     return driver.getAndCheckWebDriver();
   }
 
   public void clearCookies() {
-    driver().clearCookies();
+    SelenideLogger.run("clearCookies", "", () -> {
+      driver().clearCookies();
+    });
   }
 
   public void close() {
@@ -379,6 +385,12 @@ public class SelenideDriver {
     return driver().getUserAgent();
   }
 
+  @CheckReturnValue
+  @Nonnull
+  public SessionId getSessionId() {
+    return driver().getSessionId();
+  }
+
   /**
    * Take a screenshot of the current page
    *
@@ -429,16 +441,39 @@ public class SelenideDriver {
     return new LocalStorage(driver());
   }
 
-  private static SelenidePageFactory pageFactory;
-  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
-
-  private static synchronized SelenidePageFactory pageFactory() {
-    if (pageFactory == null) pageFactory = new SelenidePageFactory();
-    return pageFactory;
+  @CheckReturnValue
+  @Nonnull
+  public SessionStorage getSessionStorage() {
+    return new SessionStorage(driver());
   }
+
+  @CheckReturnValue
+  @Nonnull
+  public Clipboard getClipboard() {
+    return inject(ClipboardService.class).getClipboard(driver());
+  }
+
+  private static final PageObjectFactory pageFactory = inject(PageObjectFactory.class);
+  private static DownloadFileWithHttpRequest downloadFileWithHttpRequest;
 
   private static synchronized DownloadFileWithHttpRequest downloadFileWithHttpRequest() {
     if (downloadFileWithHttpRequest == null) downloadFileWithHttpRequest = new DownloadFileWithHttpRequest();
     return downloadFileWithHttpRequest;
+  }
+
+  public Conditional<WebDriver> webdriver() {
+    return new Conditional<WebDriver>() {
+      @Nonnull
+      @Override
+      public Driver driver() {
+        return SelenideDriver.this.driver();
+      }
+
+      @Nonnull
+      @Override
+      public WebDriver object() {
+        return SelenideDriver.this.getWebDriver();
+      }
+    };
   }
 }

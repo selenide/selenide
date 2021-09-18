@@ -76,6 +76,21 @@ final class FileUploadTest extends ITest {
   }
 
   @Test
+  void userCanUploadFilesFromClasspathInsideJar() {
+    $("#multi-file-upload-form .file").uploadFromClasspath(
+      "org/slf4j/Logger.class",
+      "org/slf4j/LoggerFactory.class"
+    );
+    $("#multi-file-upload-form .submit").click();
+
+    $("h3").shouldHave(text("Uploaded 2 files"));
+    assertThat(server.getUploadedFiles()).hasSize(2);
+
+    assertThat(server.getUploadedFiles().get(0).getName()).endsWith("Logger.class");
+    assertThat(server.getUploadedFiles().get(1).getName()).endsWith("LoggerFactory.class");
+  }
+
+  @Test
   void userCanUploadMultipleFiles() {
     File file = $("#multi-file-upload-form .file").uploadFile(
       new File("src/test/java/../resources/hello_world.txt"),

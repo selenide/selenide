@@ -63,7 +63,6 @@ final class SelectOptionByTextOrIndexCommandTest implements WithAssertions {
     } catch (ElementNotFound exception) {
       assertThat(exception)
         .hasMessage(String.format("Element not found {null/option[text:]}%nExpected: exist%n" +
-          "Screenshot: null%n" +
           "Timeout: 0 ms.%n" +
           "Caused by: NoSuchElementException: Cannot locate element with text:"));
     }

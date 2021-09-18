@@ -3,6 +3,7 @@ package integration;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,7 @@ final class CustomWebDriverProviderTest extends IntegrationTest {
     @CheckReturnValue
     @Nonnull
     public WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities) {
+      WebDriverManager.chromedriver().setup();
       ChromeOptions options = new ChromeOptions();
       if (browser().isHeadless()) options.setHeadless(true);
       return new CustomChromeDriver(options);

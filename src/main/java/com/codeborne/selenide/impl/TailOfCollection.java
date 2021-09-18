@@ -8,12 +8,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-public class TailOfCollection implements WebElementsCollection {
-  private final WebElementsCollection originalCollection;
-  private final int size;
+import static com.codeborne.selenide.impl.Alias.NONE;
 
-  public TailOfCollection(WebElementsCollection originalCollection, int size) {
+@ParametersAreNonnullByDefault
+public class TailOfCollection implements CollectionSource {
+  private final CollectionSource originalCollection;
+  private final int size;
+  private Alias alias = NONE;
+
+  public TailOfCollection(CollectionSource originalCollection, int size) {
     this.originalCollection = originalCollection;
     this.size = size;
   }
@@ -45,7 +48,7 @@ public class TailOfCollection implements WebElementsCollection {
   @CheckReturnValue
   @Nonnull
   public String description() {
-    return originalCollection.description() + ":last(" + size + ')';
+    return alias.getOrElse(() -> originalCollection.description() + ":last(" + size + ')');
   }
 
   @Override
@@ -53,5 +56,10 @@ public class TailOfCollection implements WebElementsCollection {
   @Nonnull
   public Driver driver() {
     return originalCollection.driver();
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

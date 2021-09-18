@@ -23,7 +23,6 @@ final class TextsSizeMismatchTest implements WithAssertions {
       "Actual: [Niff, Naff, Nuff%%], List size: 3%n" +
       "Expected: [Piff, Paff, Puff'\"bro], List size: 3%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s."));
   }
 
@@ -39,7 +38,6 @@ final class TextsSizeMismatchTest implements WithAssertions {
       "Expected: [Piff, Paff, Puff'\"bro], List size: 3%n" +
       "Because: we expect favorite characters%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s."));
   }
 }

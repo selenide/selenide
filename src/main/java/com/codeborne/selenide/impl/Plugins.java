@@ -4,7 +4,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,8 +26,13 @@ public class Plugins {
   private static final Map<Class<?>, Object> cache = new ConcurrentHashMap<>();
 
   @SuppressWarnings("unchecked")
-  public static <T> T inject(Class<T> klass) {
-    return (T) cache.computeIfAbsent(klass, c -> loadPlugin(klass));
+  public static synchronized <T> T inject(Class<T> klass) {
+    T plugin = (T) cache.get(klass);
+    if (plugin == null) {
+      plugin = loadPlugin(klass);
+      cache.put(klass, plugin);
+    }
+    return plugin;
   }
 
   private static <T> T loadPlugin(Class<T> klass) {
@@ -42,19 +49,26 @@ public class Plugins {
 
   private static <T> T getDefaultPlugin(Class<T> klass) {
     String resource = "/META-INF/defaultservices/" + klass.getName();
-    URL file = Plugins.class.getResource("/META-INF/defaultservices/" + klass.getName());
+    URL file = Plugins.class.getResource(resource);
     if (file == null) {
       throw new IllegalStateException("Resource not found in classpath: " + resource);
     }
 
     String className = readFile(file).trim();
     try {
-      //noinspection unchecked
-      return (T) Class.forName(className).getConstructor().newInstance();
+      return instantiate(className);
     }
     catch (Exception e) {
       throw new IllegalStateException("Failed to initialize default plugin " + className + " from " + file, e);
     }
+  }
+
+  @Nonnull
+  private static <T> T instantiate(String className) throws Exception {
+    @SuppressWarnings("unchecked")
+    Constructor<T> constructor = (Constructor<T>) Class.forName(className).getDeclaredConstructor();
+    constructor.setAccessible(true);
+    return constructor.newInstance();
   }
 
   private static String readFile(URL file) {

@@ -2,6 +2,7 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.files.FileFilters;
 import org.apache.commons.io.FileUtils;
@@ -13,9 +14,10 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
+import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.impl.DownloadFileToFolder.isFileModifiedLaterThan;
+import static java.io.File.createTempFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.commons.io.FileUtils.writeStringToFile;
@@ -31,7 +33,7 @@ final class DownloadFileToFolderTest {
   private final WindowsCloser windowsCloser = spy(new DummyWindowsCloser());
   private final DownloadFileToFolder command = new DownloadFileToFolder(downloader, waiter, windowsCloser);
   private final SelenideConfig config = new SelenideConfig();
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = new DummyWebDriver();
   private final WebElementSource linkWithHref = mock(WebElementSource.class);
   private final WebElement link = mock(WebElement.class);
   private final DriverStub driver = new DriverStub(config, new Browser("opera", false), webdriver, null);
@@ -51,7 +53,7 @@ final class DownloadFileToFolderTest {
       return null;
     }).when(link).click();
 
-    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none());
+    File downloadedFile = command.download(linkWithHref, link, 3000, FileFilters.none(), click());
 
     assertThat(downloadedFile.getName()).isEqualTo(newFileName);
     assertThat(downloadedFile.getParentFile()).isNotEqualTo(driver.browserDownloadsFolder().toFile());
@@ -73,7 +75,7 @@ final class DownloadFileToFolderTest {
   }
 
   private File file(long modifiedAt) throws IOException {
-    File file = new File("build", UUID.randomUUID().toString());
+    File file = createTempFile("selenide-tests", "new-file");
     FileUtils.touch(file);
     file.setLastModified(modifiedAt);
     return file;

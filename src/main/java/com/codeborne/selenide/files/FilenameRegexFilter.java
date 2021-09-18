@@ -14,6 +14,10 @@ class FilenameRegexFilter implements FileFilter {
   }
 
   @Override public String description() {
-    return " with file name matching \"" + fileNameRegex + "\"";
+    return "with file name matching \"" + fileNameRegex + "\"";
+  }
+
+  @Override public String toString() {
+    return description();
   }
 }

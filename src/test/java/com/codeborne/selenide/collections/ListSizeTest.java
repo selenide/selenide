@@ -1,7 +1,7 @@
 package com.codeborne.selenide.collections;
 
 import com.codeborne.selenide.ex.ListSizeMismatch;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -32,7 +32,7 @@ final class ListSizeTest implements WithAssertions {
 
   @Test
   void failMethod() {
-    WebElementsCollection collection = mockCollection("Collection description");
+    CollectionSource collection = mockCollection("Collection description");
 
     assertThatThrownBy(() ->
       new ListSize(10).fail(collection,

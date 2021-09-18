@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.FileNamer;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.service.DriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +38,18 @@ public abstract class AbstractDriverFactory implements DriverFactory {
   @CheckReturnValue
   @Nonnull
   protected File webdriverLog(Config config) {
-    File logFolder = ensureFolderExists(new File(config.reportsFolder()));
+    File logFolder = ensureFolderExists(new File(config.reportsFolder()).getAbsoluteFile());
     String logFileName = String.format("webdriver.%s.log", fileNamer.generateFileName());
-    File logFile = new File(logFolder, logFileName);
-    log.info("Write webdriver logs to: {}", logFile.getAbsolutePath());
+    File logFile = new File(logFolder, logFileName).getAbsoluteFile();
+    log.info("Write webdriver logs to: {}", logFile);
     return logFile;
+  }
+
+  protected <DS extends DriverService, B extends DriverService.Builder<DS, ?>> DS withLog(Config config, B dsBuilder) {
+    if (config.webdriverLogsEnabled()) {
+      dsBuilder.withLogFile(webdriverLog(config));
+    }
+    return dsBuilder.build();
   }
 
   @CheckReturnValue
@@ -119,5 +127,10 @@ public abstract class AbstractDriverFactory implements DriverFactory {
     if (isBlank(browserVersion)) return 0;
     Matcher matcher = REGEX_VERSION.matcher(browserVersion);
     return matcher.matches() ? parseInt(matcher.replaceFirst("$1")) : 0;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <T> T cast(Object value) {
+    return (T) value;
   }
 }

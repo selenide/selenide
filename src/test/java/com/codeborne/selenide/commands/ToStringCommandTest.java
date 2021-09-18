@@ -56,7 +56,6 @@ final class ToStringCommandTest implements WithAssertions {
     assertThat(elementString)
       .isEqualTo(String.format("Element not found {By.name: }%n" +
         "Expected: visible%n" +
-        "Screenshot: null%n" +
         "Timeout: 0 ms."));
   }
 

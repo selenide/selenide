@@ -1,17 +1,19 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.selector.ByAttribute;
 import com.codeborne.selenide.selector.ByShadow;
-import javax.annotation.CheckReturnValue;
+import com.codeborne.selenide.selector.ByText;
+import com.codeborne.selenide.selector.ByTextCaseInsensitive;
+import com.codeborne.selenide.selector.WithText;
+import com.codeborne.selenide.selector.WithTextCaseInsensitive;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Quotes;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class Selectors {
-  private static final String NORMALIZE_SPACE_XPATH = "normalize-space(translate(string(.), '\t\n\r\u00a0', '    '))";
-
   /**
    * Find element CONTAINING given text (as a substring).
    * <p>
@@ -28,10 +30,21 @@ public class Selectors {
   }
 
   /**
+   * Same as {@link #withText(String)}, but case-insensitive.
+   * @since 5.22.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By withTextCaseInsensitive(String elementText) {
+    return new WithTextCaseInsensitive(elementText);
+  }
+
+  /**
    * Find element that has given text (the whole text, not a substring).
    * <p>
    * This method ignores difference between space, \n, \r, \t and &nbsp;
    * This method ignores multiple spaces.
+   * This method is case-sensitive.
    *
    * @param elementText Text that searched element should have
    * @return standard selenium By criteria
@@ -40,6 +53,16 @@ public class Selectors {
   @Nonnull
   public static By byText(String elementText) {
     return new ByText(elementText);
+  }
+
+  /**
+   * Same as {@link #byText(String)}, but case-insensitive.
+   * @since 5.22.0
+   */
+  @CheckReturnValue
+  @Nonnull
+  public static By byTextCaseInsensitive(String elementText) {
+    return new ByTextCaseInsensitive(elementText);
   }
 
   /**
@@ -74,8 +97,7 @@ public class Selectors {
   @CheckReturnValue
   @Nonnull
   public static By byAttribute(String attributeName, String attributeValue) {
-    String escapedAttributeValue = attributeValue.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
-    return By.cssSelector(String.format("[%s=\"%s\"]", attributeName, escapedAttributeValue));
+    return new ByAttribute(attributeName, attributeValue);
   }
 
   /**
@@ -113,52 +135,6 @@ public class Selectors {
   @Nonnull
   public static By byValue(String value) {
     return byAttribute("value", value);
-  }
-
-  @ParametersAreNonnullByDefault
-  public static class ByText extends By.ByXPath {
-    protected final String elementText;
-
-    public ByText(String elementText) {
-      super(".//*/text()[" + NORMALIZE_SPACE_XPATH + " = " + Quotes.escape(elementText) + "]/parent::*");
-      this.elementText = elementText;
-    }
-
-    @Override
-    @CheckReturnValue
-    @Nonnull
-    public String toString() {
-      return "by text: " + elementText;
-    }
-
-    @CheckReturnValue
-    @Nonnull
-    String getXPath() {
-      return super.toString().replace("By.xpath: ", "");
-    }
-  }
-
-  @ParametersAreNonnullByDefault
-  public static class WithText extends By.ByXPath {
-    protected final String elementText;
-
-    public WithText(String elementText) {
-      super(".//*/text()[contains(" + NORMALIZE_SPACE_XPATH + ", " + Quotes.escape(elementText) + ")]/parent::*");
-      this.elementText = elementText;
-    }
-
-    @Override
-    @CheckReturnValue
-    @Nonnull
-    public String toString() {
-      return "with text: " + elementText;
-    }
-
-    @CheckReturnValue
-    @Nonnull
-    String getXPath() {
-      return super.toString().replace("By.xpath: ", "");
-    }
   }
 
   /**

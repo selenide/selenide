@@ -13,7 +13,7 @@ final class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void hasNext() {
-    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
+    CollectionSource collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
 
     assertThat(selenideElementIterator.hasNext()).isTrue();
@@ -21,7 +21,7 @@ final class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void doesNotHasNext() {
-    WebElementsCollection collection = mockCollection("empty collection");
+    CollectionSource collection = mockCollection("empty collection");
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
 
     assertThat(selenideElementIterator.hasNext()).isFalse();
@@ -29,7 +29,7 @@ final class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void next() {
-    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
+    CollectionSource collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
     SelenideElement nextElement = selenideElementIterator.next();
 
@@ -40,7 +40,7 @@ final class SelenideElementIteratorTest implements WithAssertions {
 
   @Test
   void remove() {
-    WebElementsCollection collection = mockCollection("collection with 1 element", webElement);
+    CollectionSource collection = mockCollection("collection with 1 element", webElement);
     SelenideElementIterator selenideElementIterator = new SelenideElementIterator(collection);
 
     assertThatThrownBy(selenideElementIterator::remove)

@@ -1,6 +1,7 @@
 package com.codeborne.selenide.drivercommands;
 
 import com.codeborne.selenide.Config;
+import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.impl.DummyFileNamer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
 import org.assertj.core.api.WithAssertions;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 final class LazyDriverTest implements WithAssertions {
   private final Config config = mock(Config.class);
-  private final WebDriver webdriver = mock(WebDriver.class);
+  private final WebDriver webdriver = new DummyWebDriver();
   private final WebDriverFactory factory = mock(WebDriverFactory.class);
   private final BrowserHealthChecker browserHealthChecker = mock(BrowserHealthChecker.class);
   private final CreateDriverCommand createDriverCommand = new CreateDriverCommand(new DummyFileNamer("123_456_78"));
@@ -49,7 +50,7 @@ final class LazyDriverTest implements WithAssertions {
 
     driver.createDriver();
 
-    verify(factory).createWebDriver(config, null, new File("build/down/123_456_78"));
+    verify(factory).createWebDriver(config, null, new File("build/down/123_456_78").getAbsoluteFile());
   }
 
   @Test
@@ -59,7 +60,8 @@ final class LazyDriverTest implements WithAssertions {
     driver.createDriver();
 
     assertThat(driver.getProxy()).isNotNull();
-    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(), new File("build/down/123_456_78"));
+    verify(factory).createWebDriver(config, driver.getProxy().createSeleniumProxy(),
+      new File("build/down/123_456_78").getAbsoluteFile());
   }
 
   @Test

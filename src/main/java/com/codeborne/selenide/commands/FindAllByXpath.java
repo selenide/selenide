@@ -20,8 +20,8 @@ public class FindAllByXpath implements Command<ElementsCollection> {
   @Override
   @CheckReturnValue
   @Nonnull
-  public ElementsCollection execute(SelenideElement parent, WebElementSource locator, @Nullable Object... args) {
+  public ElementsCollection execute(SelenideElement parentElement, WebElementSource parentLocator, @Nullable Object... args) {
     String xpath = firstOf(args);
-    return new ElementsCollection(new BySelectorCollection(locator.driver(), parent, By.xpath(xpath)));
+    return new ElementsCollection(new BySelectorCollection(parentLocator.driver(), parentLocator, By.xpath(xpath)));
   }
 }

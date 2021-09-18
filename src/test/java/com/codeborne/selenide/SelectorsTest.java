@@ -1,58 +1,11 @@
 package com.codeborne.selenide;
 
-import com.codeborne.selenide.Selectors.ByText;
-import com.codeborne.selenide.Selectors.WithText;
 import com.codeborne.selenide.selector.ByShadow;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 final class SelectorsTest implements WithAssertions {
-  @Test
-  void withTextUsesXPath() {
-    By selector = Selectors.withText("john");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(selector)
-      .hasToString("with text: john");
-    assertThat(((WithText) selector).getXPath())
-      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), \"john\")]/parent::*");
-  }
-
-  @Test
-  void withTextEscapesQuotes() {
-    By selector = Selectors.withText("Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .hasToString("with text: Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((WithText) selector).getXPath())
-      .isEqualTo(".//*/text()[contains(normalize-space(translate(string(.), '\t\n\r ', '    ')), " +
-        "concat(\"Ludvig'van\", '\"', \"Beethoven\"))]/parent::*");
-  }
-
-  @Test
-  void byTextUsesXPath() {
-    By selector = Selectors.byText("john");
-    assertThat(selector)
-      .hasToString("by text: john");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((ByText) selector).getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r\u00a0', '    ')) = \"john\"]/parent::*");
-  }
-
-  @Test
-  void byTextEscapesQuotes() {
-    By selector = Selectors.byText("Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .hasToString("by text: Ludvig'van\"Beethoven");
-    assertThat(selector)
-      .isInstanceOf(By.ByXPath.class);
-    assertThat(((ByText) selector).getXPath())
-      .isEqualTo(".//*/text()[normalize-space(translate(string(.), '\t\n\r ', '    ')) = " +
-        "concat(\"Ludvig'van\", '\"', \"Beethoven\")]/parent::*");
-  }
 
   @Test
   void byAttributeUsesXPath() {
@@ -157,33 +110,24 @@ final class SelectorsTest implements WithAssertions {
 
   @Test
   void byClassName() {
-    String className = "selenide";
-    By classNameSelector = Selectors.byClassName(className);
-    assertThat(classNameSelector)
-      .isInstanceOf(By.ByClassName.class);
-    assertThat(classNameSelector)
-      .hasToString("By.className: " + className);
+    By classNameSelector = Selectors.byClassName("btn-active");
+    assertThat(classNameSelector).isInstanceOf(By.ByClassName.class);
+    assertThat(classNameSelector).hasToString("By.className: btn-active");
   }
 
   @Test
   void byShadowCss() {
-    String target = "#target";
-    String shadow = "#shadow";
-    String innerShadow = "#inner-shadow";
-    By cssSelector = Selectors.shadowCss(target, shadow, innerShadow);
+    By cssSelector = Selectors.shadowCss("#target", "#shadow", "#inner-shadow");
     assertThat(cssSelector)
       .isInstanceOf(ByShadow.ByShadowCss.class);
     assertThat(cssSelector)
-      .hasToString("By.cssSelector: " + shadow + " [" + innerShadow + "] " + target);
+      .hasToString("By.cssSelector: #shadow -> #inner-shadow -> #target");
   }
 
   @Test
   void byTagName() {
-    String tagName = "selenide";
-    By tagNameSelector = Selectors.byTagName(tagName);
-    assertThat(tagNameSelector)
-      .isInstanceOf(By.ByTagName.class);
-    assertThat(tagNameSelector)
-      .hasToString("By.tagName: " + tagName);
+    By tagNameSelector = Selectors.byTagName("div");
+    assertThat(tagNameSelector).isInstanceOf(By.ByTagName.class);
+    assertThat(tagNameSelector).hasToString("By.tagName: div");
   }
 }

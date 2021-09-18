@@ -16,10 +16,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.codeborne.selenide.AssertionMode.SOFT;
@@ -30,9 +33,21 @@ import static java.util.Arrays.asList;
 @ParametersAreNonnullByDefault
 class SelenideElementProxy implements InvocationHandler {
   private static final Set<String> methodsToSkipLogging = new HashSet<>(asList(
+      "as",
       "toWebElement",
       "toString",
-      "getSearchCriteria"
+      "getSearchCriteria",
+      "$",
+      "$x",
+      "find",
+      "$$",
+      "$$x",
+      "findAll",
+      "parent",
+      "sibling",
+      "preceding",
+      "lastChild",
+      "closest"
   ));
 
   private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
@@ -59,11 +74,13 @@ class SelenideElementProxy implements InvocationHandler {
     if (methodsToSkipLogging.contains(method.getName()))
       return Commands.getInstance().execute(proxy, webElementSource, method.getName(), args);
 
-    validateAssertionMode(config());
+    if (isMethodForSoftAssertion(method)) {
+      validateAssertionMode(config());
+    }
 
     long timeoutMs = getTimeoutMs(method, arguments);
     long pollingIntervalMs = getPollingIntervalMs(method, arguments);
-    SelenideLog log = SelenideLogger.beginStep(webElementSource.getSearchCriteria(), method.getName(), args);
+    SelenideLog log = SelenideLogger.beginStep(webElementSource.description(), method.getName(), args);
     try {
       Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
@@ -79,7 +96,7 @@ class SelenideElementProxy implements InvocationHandler {
       SelenideLogger.commitStep(log, wrappedError);
       return continueOrBreak(proxy, method, wrappedError);
     }
-    catch (RuntimeException error) {
+    catch (RuntimeException | IOException error) {
       SelenideLogger.commitStep(log, error);
       throw error;
     }
@@ -87,10 +104,14 @@ class SelenideElementProxy implements InvocationHandler {
 
   @Nonnull
   private Object continueOrBreak(Object proxy, Method method, Throwable wrappedError) throws Throwable {
-    if (config().assertionMode() == SOFT && methodsForSoftAssertion.contains(method.getName()))
+    if (config().assertionMode() == SOFT && isMethodForSoftAssertion(method))
       return proxy;
     else
       throw wrappedError;
+  }
+
+  private boolean isMethodForSoftAssertion(Method method) {
+    return methodsForSoftAssertion.contains(method.getName());
   }
 
   private Driver driver() {
@@ -151,7 +172,11 @@ class SelenideElementProxy implements InvocationHandler {
 
   @CheckReturnValue
   private long getTimeoutMs(Method method, Arguments arguments) {
-    return isWaitCommand(method) ? arguments.nth(1) : config().timeout();
+    Optional<Duration> duration = arguments.ofType(Duration.class);
+
+    return duration.map(Duration::toMillis).orElseGet(() ->
+      isWaitCommand(method) ? arguments.nth(1) : config().timeout()
+    );
   }
 
   @CheckReturnValue

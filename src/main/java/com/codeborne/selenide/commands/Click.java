@@ -4,6 +4,7 @@ import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.FileContent;
 import com.codeborne.selenide.impl.WebElementSource;
 import org.openqa.selenium.WebElement;
 
@@ -14,6 +15,7 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
 public class Click implements Command<Void> {
+  private final FileContent jsSource = new FileContent("click.js");
 
   @Override
   @Nullable
@@ -76,29 +78,13 @@ public class Click implements Command<Void> {
   }
 
   private void defaultClick(Driver driver, WebElement element, int offsetX, int offsetY) {
-    if (offsetX == 0 && offsetY == 0) {
-      element.click();
-    } else {
-      driver.actions()
-        .moveToElement(element, offsetX, offsetY)
-        .click()
-        .build()
-        .perform();
-    }
+    driver.actions()
+      .moveToElement(element, offsetX, offsetY)
+      .click()
+      .perform();
   }
 
   private void clickViaJS(Driver driver, WebElement element, int offsetX, int offsetY) {
-    driver.executeJavaScript(
-      "var rect = arguments[0].getBoundingClientRect();" +
-        "arguments[0].dispatchEvent(new MouseEvent('click', {" +
-        " 'view': window," +
-        " 'bubbles': true," +
-        " 'cancelable': true," +
-        " 'clientX': rect.left + rect.width/2 + arguments[1]," +
-        " 'clientY': rect.top + rect.height/2 + arguments[2]" +
-        "}))",
-      element,
-      offsetX,
-      offsetY);
+    driver.executeJavaScript(jsSource.content(), element, offsetX, offsetY);
   }
 }

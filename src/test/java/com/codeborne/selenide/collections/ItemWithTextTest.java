@@ -3,7 +3,7 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ final class ItemWithTextTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");
-  private final WebElementsCollection collection = mockCollection("Collection description", element1, element2, element3);
+  private final CollectionSource collection = mockCollection("Collection description", element1, element2, element3);
 
   @Test
   void applyOnCorrectElementText() {
@@ -40,7 +40,7 @@ final class ItemWithTextTest implements WithAssertions {
 
   @Test
   void testApplyWithEmptyList() {
-    WebElementsCollection emptyCollection = mockCollection("empty collection");
+    CollectionSource emptyCollection = mockCollection("empty collection");
     assertThat(new ItemWithText("Test-X")
       .test(emptyCollection.getElements()))
       .isFalse();

@@ -30,7 +30,7 @@ public class ErrorsCollector implements LogEventListener {
     // ignore
   }
 
-  public void clear() {
+  void clear() {
     errors.clear();
   }
 
@@ -38,7 +38,16 @@ public class ErrorsCollector implements LogEventListener {
     return unmodifiableList(errors);
   }
 
+  /**
+   * 1. Clears all collected errors, and
+   * 2. throws SoftAssertionError if there were some errors
+   *
+   * @param testName any string, usually name of current test
+   */
   public void failIfErrors(String testName) {
+    List<Throwable> errors = new ArrayList<>(this.errors);
+    this.errors.clear();
+
     if (errors.size() == 1) {
       throw new SoftAssertionError(errors.get(0).toString());
     }

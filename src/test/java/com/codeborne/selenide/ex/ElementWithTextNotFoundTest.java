@@ -24,7 +24,6 @@ final class ElementWithTextNotFoundTest implements WithAssertions {
       "Actual: [Niff, Naff, Nuff]%n" +
       "Expected: [Piff, Paff, Puff]%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s.%n" +
       "Caused by: NoSuchElementException: ups"));
   }
@@ -41,7 +40,6 @@ final class ElementWithTextNotFoundTest implements WithAssertions {
       "Expected: [Piff, Paff, Puff]%n" +
       "Because: we expect favorite characters%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s.%n" +
       "Caused by: NoSuchElementException: ups"));
 

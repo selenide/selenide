@@ -18,13 +18,14 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.WebDriverRunner.isFirefox;
 import static integration.errormessages.Helper.assertScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
 final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
   @BeforeEach
   void openPage() {
     givenHtml(
-      "<ul>Hello to:",
+      "<ul id=\"root\">Hello to:",
       "<li class='the-expanse detective'>Miller</li>",
       "<li class='the-expanse missing'>Julie Mao</li>",
       "</ul>"
@@ -218,5 +219,12 @@ final class MethodCalledOnCollectionFailsOnTest extends IntegrationTest {
       assertScreenshot(expected);
       assertThat(expected.getCause()).isNull();
     }
+  }
+
+  @Test
+  void collectionSnapshot() {
+    assertThatThrownBy(() -> $$("#root li").snapshot().shouldHave(size(3)))
+      .isInstanceOf(ListSizeMismatch.class)
+      .hasMessageStartingWith("List size mismatch: expected: = 3, actual: 2, collection: #root li.snapshot(2 elements)");
   }
 }

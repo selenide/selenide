@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Test local storage</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h2>Test local storage</h2>
+
+<label for="debug">localStorage content:</label><textarea id="debug"></textarea>
+<button id="button-put">put</button>
+<button id="button-remove">remove</button>
+
+<script type="text/javascript">
+  (function () {
+    function putToLocalStorage() {
+      document.getElementById('debug').innerText = '...';
+      setTimeout(() => {
+        localStorage.setItem('it', 'works');
+        document.getElementById('debug').innerText = 'works';
+      }, 1000)
+    }
+
+    function removeFromLocalStorage() {
+      document.getElementById('debug').innerText = '...';
+      setTimeout(() => {
+        localStorage.removeItem('it');
+        document.getElementById('debug').innerText = '';
+      }, 1000)
+    }
+
+    document.getElementById('button-put').addEventListener('click', putToLocalStorage)
+    document.getElementById('button-remove').addEventListener('click', removeFromLocalStorage)
+    localStorage.clear()
+  })();
+</script>
+</body>
+</html>

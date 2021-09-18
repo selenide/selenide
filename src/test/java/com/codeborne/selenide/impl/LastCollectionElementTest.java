@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 final class LastCollectionElementTest implements WithAssertions {
   private final SelenideElement element1 = mockElement("Hello");
   private final SelenideElement element2 = mockElement("World");
-  private final WebElementsCollection collection = mockCollection("ul#employees li.employee", element1, element2);
+  private final CollectionSource collection = mockCollection("ul#employees li.employee", element1, element2);
   private final LastCollectionElement lastCollectionElement = new LastCollectionElement(collection);
 
   @Test

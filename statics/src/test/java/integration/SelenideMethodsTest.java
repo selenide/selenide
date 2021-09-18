@@ -1,6 +1,5 @@
 package integration;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
@@ -8,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
-import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -16,9 +14,7 @@ import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.attribute;
@@ -107,11 +103,38 @@ final class SelenideMethodsTest extends IntegrationTest {
 
     $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
+    $("#theHiddenElement").should(disappear, Duration.ofSeconds(2));
     $("#theHiddenElement").waitUntil(disappears, 1000);
     $("#theHiddenElement").should(exist);
 
     $(".non-existing-element").should(Condition.not(exist));
     $(".non-existing-element").shouldNot(exist);
+  }
+
+  @Test
+  void canGiveElementsHumanReadableNames() {
+    assertThatThrownBy(() -> {
+      $(By.xpath("/long/ugly/xpath[1][2][3]")).as("Login button").should(exist);
+    })
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {Login button}");
+  }
+
+  @Test
+  void canGetElementAlias() {
+    SelenideElement anonymousElement = $(By.xpath("/dev[1]/span[2]"));
+    SelenideElement namedElement = $(By.xpath("/dev[1]/span[2]")).as("Login button");
+
+    assertThat(anonymousElement.getAlias()).isNull();
+    assertThat(namedElement.getAlias()).isEqualTo("Login button");
+  }
+
+  @Test
+  void shouldMethodCanUseCustomTimeout() {
+    $("#theHiddenElement").should(exist, Duration.ofNanos(3_000_000_000L));
+    $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
+    $("#theHiddenElement").shouldHave(exactText(""), Duration.ofSeconds(3));
+    $("#theHiddenElement").shouldNotHave(text("no"), Duration.ofHours(3));
   }
 
   @Test
@@ -585,16 +608,6 @@ final class SelenideMethodsTest extends IntegrationTest {
   }
 
   @Test
-  void canExecuteCustomCommand() {
-    $("#username").setValue("value");
-    Replace replace = Replace.withValue("custom value");
-    Command<Void> doubleClick = new DoubleClick();
-    $("#username").scrollTo().execute(replace).pressEnter().execute(doubleClick);
-    String mirrorText = $("#username-mirror").text();
-    assertThat(mirrorText).startsWith("custom value");
-  }
-
-  @Test
   void canExecuteJavascript() {
     Long value = Selenide.executeJavaScript("return 10;");
     assertThat(value).isEqualTo(10);
@@ -606,37 +619,5 @@ final class SelenideMethodsTest extends IntegrationTest {
       "var callback = arguments[arguments.length - 1]; setTimeout(function() { callback(10); }, 50);"
     );
     assertThat(value).isEqualTo(10);
-  }
-
-  @ParametersAreNonnullByDefault
-  static class DoubleClick implements Command<Void> {
-    @Override
-    @Nullable
-    public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-      locator.driver().actions().doubleClick(locator.findAndAssertElementIsInteractable()).perform();
-      return null;
-
-    }
-  }
-
-  @ParametersAreNonnullByDefault
-  static class Replace implements Command<SelenideElement> {
-    private final String replacement;
-
-    Replace(String replacement) {
-      this.replacement = replacement;
-    }
-
-    public static Replace withValue(String value) {
-      return new Replace(value);
-    }
-
-    @Override
-    @Nonnull
-    public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-      proxy.clear();
-      proxy.sendKeys(replacement);
-      return proxy;
-    }
   }
 }

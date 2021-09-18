@@ -1,12 +1,15 @@
 package integration;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.text;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class MultipleSelectTest extends ITest {
   private final SelenideElement select = $("#character");
@@ -22,6 +25,22 @@ final class MultipleSelectTest extends ITest {
 
     select.getSelectedOptions().shouldHave(
       texts("Маргарита", "Theodor Woland"));
+  }
+
+  @Test
+  void reportsElementNotFound_ifThereIsNoSelectedOptions() {
+    assertThatThrownBy(() -> select.getSelectedOptions().shouldHave(texts("Кот", "Бегемот")))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {#character selected options}");
+  }
+
+  @Test
+  void canGiveHumanReadableNameToSelectedOptions() {
+    ElementsCollection namedCollection = select.getSelectedOptions().as("my animals");
+
+    assertThatThrownBy(() -> namedCollection.shouldHave(texts("Кот", "Бегемот")))
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {my animals}");
   }
 
   @Test

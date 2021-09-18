@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
-import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByCssSelector;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,15 +11,11 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.codeborne.selenide.SelectorMode.CSS;
-import static java.lang.Thread.currentThread;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Thanks to http://selenium.polteq.com/en/injecting-the-sizzle-css-selector-library/
@@ -29,11 +24,20 @@ import static java.util.Objects.requireNonNull;
 public class WebElementSelector {
   public static WebElementSelector instance = new WebElementSelector();
 
-  protected String sizzleSource;
+  protected final FileContent sizzleSource = new FileContent("sizzle.js");
 
   @CheckReturnValue
   @Nonnull
-  public WebElement findElement(Driver driver, SearchContext context, By selector) {
+  public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector, int index) {
+    return index == 0 ?
+      findElement(driver, parent, selector) :
+      findElements(driver, parent, selector).get(index);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public WebElement findElement(Driver driver, @Nullable WebElementSource parent, By selector) {
+    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -49,7 +53,8 @@ public class WebElementSelector {
 
   @CheckReturnValue
   @Nonnull
-  public List<WebElement> findElements(Driver driver, SearchContext context, By selector) {
+  public List<WebElement> findElements(Driver driver, @Nullable WebElementSource parent, By selector) {
+    SearchContext context = parent == null ? driver.getWebDriver() : parent.getWebElement();
     checkThatXPathNotStartingFromSlash(context, selector);
 
     if (driver.config().selectorMode() == CSS || !(selector instanceof ByCssSelector)) {
@@ -111,14 +116,6 @@ public class WebElementSelector {
   }
 
   protected synchronized void injectSizzle(Driver driver) {
-    if (sizzleSource == null) {
-      try {
-        URL sizzleJs = requireNonNull(currentThread().getContextClassLoader().getResource("sizzle.js"));
-        sizzleSource = IOUtils.toString(sizzleJs, StandardCharsets.UTF_8);
-      } catch (IOException e) {
-        throw new RuntimeException("Cannot load sizzle.js from classpath", e);
-      }
-    }
-    driver.executeJavaScript(sizzleSource);
+    driver.executeJavaScript(sizzleSource.content());
   }
 }

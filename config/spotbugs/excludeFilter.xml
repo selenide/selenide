@@ -7,5 +7,9 @@
     <Class name="~.*\.*Test"/>
     <Bug code="SS"/>
   </Match>
+  <Match>
+    <Class name="integration.SoftAssertInParametrizedTest$TestPage" />
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
+  </Match>
 </FindBugsFilter>
 

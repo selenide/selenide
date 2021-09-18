@@ -21,6 +21,8 @@ public class WebDriverLogs {
     this.driver = driver;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public List<String> logs(String logType) {
     return logs(logType, Level.ALL);
   }

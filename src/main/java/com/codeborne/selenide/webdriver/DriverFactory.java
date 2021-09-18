@@ -16,7 +16,8 @@ public interface DriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder);
+  MutableCapabilities createCapabilities(Config config, Browser browser,
+                                         @Nullable Proxy proxy, @Nullable File browserDownloadsFolder);
 
   @CheckReturnValue
   @Nonnull

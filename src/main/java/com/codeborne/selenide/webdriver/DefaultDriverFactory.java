@@ -34,43 +34,72 @@ public class DefaultDriverFactory extends AbstractDriverFactory {
   @Nonnull
   private WebDriver createInstanceOf(String className, Config config, Browser browser,
                                      @Nullable Proxy proxy, File browserDownloadsFolder) {
-    try {
-      Capabilities capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    Class<?> clazz = classOf(config.browser());
 
-      Class<?> clazz = Class.forName(className);
-      if (WebDriverProvider.class.isAssignableFrom(clazz)) {
-        return createInstanceOf(WebDriverProvider.class, clazz).createDriver(new DesiredCapabilities(capabilities));
+    if (WebDriverProvider.class.isAssignableFrom(clazz)) {
+      Capabilities capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
+      return createInstanceOf(WebDriverProvider.class, clazz).createDriver(new DesiredCapabilities(capabilities));
+    }
+    else if (DriverFactory.class.isAssignableFrom(clazz)) {
+      DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
+      if (config.driverManagerEnabled()) {
+        factory.setupWebdriverBinary();
       }
-      else if (DriverFactory.class.isAssignableFrom(clazz)) {
-        DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
-        if (config.driverManagerEnabled()) {
-          factory.setupWebdriverBinary();
-        }
-        return factory.create(config, browser, proxy, browserDownloadsFolder);
-      }
-      else {
-        Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
-        return (WebDriver) constructor.newInstance(capabilities);
-      }
-    } catch (InvocationTargetException e) {
-      throw runtime(e.getTargetException());
-    } catch (Exception invalidClassName) {
-      throw new IllegalArgumentException(invalidClassName);
+      return factory.create(config, browser, proxy, browserDownloadsFolder);
+    }
+    else {
+      Capabilities capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
+      return createWebDriver(className, capabilities);
     }
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public MutableCapabilities createCapabilities(Config config, Browser browser,
+                                                @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+    Class<?> clazz = classOf(config.browser());
+
+    if (DriverFactory.class.isAssignableFrom(clazz)) {
+      DriverFactory factory = createInstanceOf(DriverFactory.class, clazz);
+      return factory.createCapabilities(config, browser, proxy, browserDownloadsFolder);
+    }
+
     return createCommonCapabilities(config, browser, proxy);
   }
 
+  private Class<?> classOf(String className) {
+    try {
+      return Class.forName(className);
+    }
+    catch (ClassNotFoundException e) {
+      throw new IllegalArgumentException("Class not found: " + className, e);
+    }
+  }
+
+  private WebDriver createWebDriver(String className, Capabilities capabilities) {
+    try {
+      Constructor<?> constructor = Class.forName(className).getConstructor(Capabilities.class);
+      return (WebDriver) constructor.newInstance(capabilities);
+    }
+    catch (Exception e) {
+      throw new IllegalArgumentException("Failed to create WebDriver of type " + className, e);
+    }
+  }
+
   @SuppressWarnings({"unchecked", "unused"})
-  private <T> T createInstanceOf(Class<T> resultClass, Class<?> clazz) throws Exception {
-    Constructor<?> constructor = clazz.getDeclaredConstructor();
-    constructor.setAccessible(true);
-    return (T) constructor.newInstance();
+  private <T> T createInstanceOf(Class<T> resultClass, Class<?> clazz) {
+    try {
+      Constructor<?> constructor = clazz.getDeclaredConstructor();
+      constructor.setAccessible(true);
+      return (T) constructor.newInstance();
+    }
+    catch (InvocationTargetException e) {
+      throw runtime(e.getTargetException());
+    }
+    catch (Exception invalidClassName) {
+      throw new IllegalArgumentException(invalidClassName);
+    }
   }
 
   private RuntimeException runtime(Throwable exception) {

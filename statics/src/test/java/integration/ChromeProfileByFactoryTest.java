@@ -7,6 +7,7 @@ import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 final class ChromeProfileByFactoryTest extends IntegrationTest {
   private static final Logger logger = LoggerFactory.getLogger(ChromeProfileByFactoryTest.class);
   private static final File downloadsFolder = new File(Configuration.downloadsFolder);
-  private static final File chromedriverLog = new File(downloadsFolder, "chromedriver." + nanoTime());
+  private static final File chromedriverLog = new File(downloadsFolder, "chromedriver." + nanoTime()).getAbsoluteFile();
 
   @BeforeEach
   void setUp() throws IOException {
@@ -56,7 +57,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     assertThat(log).contains("\"excludeSwitches\": [ \"enable-automation\" ]");
     assertThat(log).contains("\"extensions\": [  ]");
     assertThat(log).contains("\"credentials_enable_service\": false");
-    assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath());
+    assertThat(log).contains("\"download.default_directory\": \"" + downloadsFolder.getAbsolutePath().replaceAll("\\\\", "\\\\\\\\"));
 
     String arguments = "\"--proxy-bypass-list=\\u003C-loopback>\", \"--no-sandbox\", \"--disable-3d-apis\"";
     if (Configuration.headless) {
@@ -82,7 +83,7 @@ final class ChromeProfileByFactoryTest extends IntegrationTest {
     @Override
     @CheckReturnValue
     @Nonnull
-    protected String[] excludeSwitches() {
+    protected String[] excludeSwitches(Capabilities commonCapabilities) {
       return new String[]{"enable-automation"};
     }
 

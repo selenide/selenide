@@ -23,7 +23,6 @@ final class TextsMismatchTest implements WithAssertions {
       "Actual: [Niff, Naff, Nuff]%n" +
       "Expected: [Piff, Paff, Puff]%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s."));
   }
 
@@ -39,7 +38,6 @@ final class TextsMismatchTest implements WithAssertions {
       "Expected: [Piff, Paff, Puff]%n" +
       "Because: we expect favorite characters%n" +
       "Collection: .characters%n" +
-      "Screenshot: null%n" +
       "Timeout: 9 s."));
   }
 }

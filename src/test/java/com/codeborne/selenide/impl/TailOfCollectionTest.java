@@ -13,7 +13,7 @@ final class TailOfCollectionTest implements WithAssertions {
   private final WebElement element1 = mock(WebElement.class);
   private final WebElement element2 = mock(WebElement.class);
   private final WebElement element3 = mock(WebElement.class);
-  private final WebElementsCollection originalCollection = mock(WebElementsCollection.class);
+  private final CollectionSource originalCollection = mock(CollectionSource.class);
 
   @BeforeEach
   void setUp() {

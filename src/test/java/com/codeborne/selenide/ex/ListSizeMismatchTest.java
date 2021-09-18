@@ -2,7 +2,7 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 final class ListSizeMismatchTest implements WithAssertions {
   private final int expectedSize = 10;
   private final Driver driver = new DriverStub();
-  private final WebElementsCollection collection = mockCollection("Collection description");
+  private final CollectionSource collection = mockCollection("Collection description");
   private final List<WebElement> actualElementsList = asList(mockElement("Niff"), mockElement("Naff"), mockElement("Nuff"));
   private final Exception exception = new Exception("Something happened");
   private final long timeoutMs = 1000L;
@@ -45,7 +45,6 @@ final class ListSizeMismatchTest implements WithAssertions {
         "\t<div displayed:false>Naff</div>,%n" +
         "\t<div displayed:false>Nuff</div>%n" +
         "]%n" +
-        "Screenshot: null%n" +
         "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }
@@ -68,7 +67,6 @@ final class ListSizeMismatchTest implements WithAssertions {
         "\t<div displayed:false>Naff</div>,%n" +
         "\t<div displayed:false>Nuff</div>%n" +
         "]%n" +
-        "Screenshot: null%n" +
         "Timeout: 1 s.%n" +
         "Caused by: java.lang.Exception: Something happened"));
   }

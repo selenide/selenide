@@ -8,6 +8,7 @@ import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class FilenameRegexFilterTest {
+  private static final String FILTER_DESCRIPTION = "with file name matching \"cv-\\d+.pdf\"";
   private final FileFilter filter = new FilenameRegexFilter("cv-\\d+.pdf");
 
   @Test
@@ -20,7 +21,12 @@ final class FilenameRegexFilterTest {
 
   @Test
   void description() {
-    assertThat(filter.description()).isEqualTo(" with file name matching \"cv-\\d+.pdf\"");
+    assertThat(filter.description()).isEqualTo(FILTER_DESCRIPTION);
+  }
+
+  @Test
+  void hasToString() {
+    assertThat(filter).hasToString(FILTER_DESCRIPTION);
   }
 
   @Test

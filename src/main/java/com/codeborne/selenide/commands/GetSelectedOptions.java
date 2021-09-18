@@ -4,8 +4,9 @@ import com.codeborne.selenide.Command;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.Alias;
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.WebElementSource;
-import com.codeborne.selenide.impl.WebElementsCollection;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -15,6 +16,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
+
 @ParametersAreNonnullByDefault
 public class GetSelectedOptions implements Command<ElementsCollection> {
   @Override
@@ -22,8 +25,9 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     return new ElementsCollection(new SelectedOptionsCollection(selectElement));
   }
 
-  private static class SelectedOptionsCollection implements WebElementsCollection {
+  private static class SelectedOptionsCollection implements CollectionSource {
     private final WebElementSource selectElement;
+    private Alias alias = NONE;
 
     private SelectedOptionsCollection(WebElementSource selectElement) {
       this.selectElement = selectElement;
@@ -55,7 +59,7 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @CheckReturnValue
     @Nonnull
     public String description() {
-      return selectElement.getSearchCriteria() + " selected options";
+      return alias.getOrElse(() -> selectElement.description() + " selected options");
     }
 
     @Override
@@ -63,6 +67,11 @@ public class GetSelectedOptions implements Command<ElementsCollection> {
     @Nonnull
     public Driver driver() {
       return selectElement.driver();
+    }
+
+    @Override
+    public void setAlias(String alias) {
+      this.alias = new Alias(alias);
     }
   }
 }

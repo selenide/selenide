@@ -20,7 +20,7 @@ final class FilteringCollectionTest implements WithAssertions {
     when(mockedWebElement1.isDisplayed()).thenReturn(false);
     when(mockedWebElement2.isDisplayed()).thenReturn(true);
 
-    WebElementsCollection mockedCollection = mock(WebElementsCollection.class);
+    CollectionSource mockedCollection = mock(CollectionSource.class);
     when(mockedCollection.getElements()).thenReturn(asList(mockedWebElement1, mockedWebElement2));
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);
 
@@ -33,7 +33,7 @@ final class FilteringCollectionTest implements WithAssertions {
 
   @Test
   void description() {
-    WebElementsCollection mockedCollection = mock(WebElementsCollection.class);
+    CollectionSource mockedCollection = mock(CollectionSource.class);
     when(mockedCollection.description()).thenReturn("Collection description");
     FilteringCollection filteringCollection = new FilteringCollection(mockedCollection, Condition.visible);
     assertThat(filteringCollection.description())

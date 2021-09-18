@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,46 +52,54 @@ public class WebDriverWrapper implements Driver {
   }
 
   @Override
+  @CheckReturnValue
   @Nonnull
   public Config config() {
     return config;
   }
 
   @Override
+  @CheckReturnValue
   @Nonnull
   public Browser browser() {
     return new Browser(config.browser(), config.headless());
   }
 
   @Override
+  @CheckReturnValue
   public boolean hasWebDriverStarted() {
     return webDriver != null;
   }
 
   @Override
+  @CheckReturnValue
   @Nonnull
   public WebDriver getWebDriver() {
     return webDriver;
   }
 
   @Override
+  @CheckReturnValue
   @Nullable
   public SelenideProxyServer getProxy() {
     return selenideProxy;
   }
 
   @Override
-  @Nullable
+  @CheckReturnValue
+  @Nonnull
   public WebDriver getAndCheckWebDriver() {
-    if (webDriver != null && !browserHealthChecker.isBrowserStillOpen(webDriver)) {
+    if (webDriver == null || !browserHealthChecker.isBrowserStillOpen(webDriver)) {
       log.info("Webdriver has been closed meanwhile");
       close();
-      return null;
+      throw new IllegalStateException("Webdriver has been closed meanwhile");
     }
     return webDriver;
   }
 
   @Override
+  @CheckReturnValue
+  @Nullable
   public DownloadsFolder browserDownloadsFolder() {
     return browserDownloadsFolder;
   }

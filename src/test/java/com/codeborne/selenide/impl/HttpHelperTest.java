@@ -120,18 +120,17 @@ final class HttpHelperTest implements WithAssertions {
 
   @Test
   void removesAllForbiddenCharactersFromFileName() {
-    assertThat(helper.normalize("имя с #pound,%percent,&ampersand,{left,}right,\\backslash," +
+    assertThat(helper.normalize("имя с #pound,%percent,&ampersand,{left,}right,/slash,\\backslash," +
       "<left,>right,*asterisk,?question,$dollar,!exclamation,'quote,\"quotes," +
       ":colon,@at,+plus,`backtick,|pipe,=equal.winrar"))
-      .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_backslash," +
+      .isEqualTo("имя+с+_pound,_percent,_ampersand,_left,_right,_slash,_backslash," +
         "_left,_right,_asterisk,_question,_dollar,_exclamation,_quote,_quotes," +
         "_colon,_at,_plus,_backtick,_pipe,_equal.winrar");
   }
 
   @Test
-  void slashIsNotAllowedInFileName() {
-    assertThatThrownBy(() -> helper.normalize("имя с /slash.winzip"))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("File name cannot contain slash: имя с /slash.winzip");
+  void slashIsAlsoReplacedByUnderscore() {
+    assertThat(helper.normalize("имя с /slash.winzip"))
+      .isEqualTo("имя+с+_slash.winzip");
   }
 }

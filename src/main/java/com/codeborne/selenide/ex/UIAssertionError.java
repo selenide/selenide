@@ -1,24 +1,28 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.ex.ErrorMessages.causedBy;
-import static com.codeborne.selenide.ex.ErrorMessages.screenshot;
 import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
 @ParametersAreNonnullByDefault
 public class UIAssertionError extends AssertionError {
+  private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
   private final Driver driver;
 
-  private String screenshot;
+  private Screenshot screenshot = Screenshot.none();
   public long timeoutMs;
 
   protected UIAssertionError(Driver driver, String message) {
@@ -45,7 +49,7 @@ public class UIAssertionError extends AssertionError {
 
   @CheckReturnValue
   protected String uiDetails() {
-    return screenshot(driver.config(), screenshot) + timeout(timeoutMs) + causedBy(getCause());
+    return screenshot.summary() + timeout(timeoutMs) + causedBy(getCause());
   }
 
   /**
@@ -54,7 +58,7 @@ public class UIAssertionError extends AssertionError {
    * @return empty string if screenshots are disabled
    */
   @CheckReturnValue
-  public String getScreenshot() {
+  public Screenshot getScreenshot() {
     return screenshot;
   }
 
@@ -73,7 +77,15 @@ public class UIAssertionError extends AssertionError {
     UIAssertionError uiError = error instanceof UIAssertionError ?
       (UIAssertionError) error : wrapToUIAssertionError(driver, error);
     uiError.timeoutMs = timeoutMs;
-    uiError.screenshot = ScreenShotLaboratory.getInstance().formatScreenShotPath(driver);
+    if (uiError.screenshot.isPresent()) {
+      log.warn("UIAssertionError already has screenshot: {} {} -> {}",
+        uiError.getClass().getName(), uiError.getMessage(), uiError.screenshot);
+    }
+    else {
+      Config config = driver.config();
+      uiError.screenshot = ScreenShotLaboratory.getInstance()
+        .takeScreenshot(driver, config.screenshots(), config.savePageSource());
+    }
     return uiError;
   }
 

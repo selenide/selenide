@@ -1,6 +1,7 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
+import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -19,8 +20,15 @@ public class Screenshots {
   public static ScreenShotLaboratory screenshots = ScreenShotLaboratory.getInstance();
 
   @CheckReturnValue
-  @Nullable
-  public static String takeScreenShot(String className, String methodName) {
+  public static String saveScreenshotAndPageSource() {
+    Driver driver = driver();
+    Config config = driver.config();
+    return screenshots.takeScreenshot(driver, config.screenshots(), config.savePageSource()).summary();
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public static Screenshot takeScreenShot(String className, String methodName) {
     return screenshots.takeScreenShot(driver(), className, methodName);
   }
 

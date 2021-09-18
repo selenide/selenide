@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -29,6 +31,34 @@ final class SelenideProxyServerTest implements WithAssertions {
 
     FileDownloadFilter filter = proxyServer.responseFilter("download");
     assertThat(filter.downloads().files()).hasSize(0);
+  }
+
+  @Test
+  void canChainProxyServersWithNoProxySettings() {
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("127.0.0.1:3128");
+    proxy.setNoProxy("localhost,https://example.com/");
+
+    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, new InetAddressResolverStub(), bmp);
+    proxyServer.start();
+
+    verify(bmp).setChainedProxy(any(InetSocketAddress.class));
+    verify(bmp).setChainedProxyNonProxyHosts(Arrays.asList("localhost", "https://example.com/"));
+    verify(bmp).start(0);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void canChainProxyServersWithEmptyNoProxySettings() {
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("127.0.0.1:3128");
+
+    SelenideProxyServer proxyServer = new SelenideProxyServer(config, proxy, new InetAddressResolverStub(), bmp);
+    proxyServer.start();
+
+    verify(bmp).setChainedProxy(any(InetSocketAddress.class));
+    verify(bmp, never()).setChainedProxyNonProxyHosts(any(List.class));
+    verify(bmp).start(0);
   }
 
   @Test

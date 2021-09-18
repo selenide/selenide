@@ -2,12 +2,14 @@ package com.codeborne.selenide;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
+@ParametersAreNonnullByDefault
 public abstract class DownloadsFolder {
   protected final File folder;
 
@@ -15,6 +17,8 @@ public abstract class DownloadsFolder {
     this.folder = folder;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public File toFile() {
     return folder;
   }
@@ -28,8 +32,10 @@ public abstract class DownloadsFolder {
 
   public abstract void cleanupBeforeDownload();
 
+  @CheckReturnValue
+  @Nonnull
   public File file(String fileName) {
-    return new File(folder, fileName);
+    return new File(folder, fileName).getAbsoluteFile();
   }
 
   @Override

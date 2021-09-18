@@ -21,11 +21,15 @@ import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 @ParametersAreNonnullByDefault
 public abstract class WebElementSource {
+  @Nonnull
+  private Alias alias = NONE;
+
   @CheckReturnValue
   @Nonnull
   public abstract Driver driver();
@@ -38,10 +42,33 @@ public abstract class WebElementSource {
   @Nonnull
   public abstract String getSearchCriteria();
 
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public Alias getAlias() {
+    return alias;
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  public String description() {
+    return alias.getOrElse(this::getSearchCriteria);
+  }
+
+  @Override
+  @CheckReturnValue
+  @Nonnull
+  public String toString() {
+    return description();
+  }
+
   @CheckReturnValue
   @Nonnull
   public SelenideElement find(SelenideElement proxy, Object arg, int index) {
-    return ElementFinder.wrap(driver(), proxy, getSelector(arg), index);
+    return ElementFinder.wrap(driver(), this, getSelector(arg), index);
   }
 
   @CheckReturnValue
@@ -53,7 +80,7 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    return new ElementNotFound(driver(), getSearchCriteria(), condition, lastError);
+    return new ElementNotFound(driver(), description(), condition, lastError);
   }
 
   @CheckReturnValue
@@ -83,15 +110,15 @@ public abstract class WebElementSource {
     }
 
     if (element == null) {
-      if (!check.applyNull()) {
+      if (!check.missingElementSatisfiesCondition()) {
         throw createElementNotFoundError(check, lastError);
       }
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShouldNot(driver(), description(), prefix, condition, element, lastError);
     }
     else {
-      throw new ElementShould(driver(), getSearchCriteria(), prefix, condition, element, lastError);
+      throw new ElementShould(driver(), description(), prefix, condition, element, lastError);
     }
     return null;
   }

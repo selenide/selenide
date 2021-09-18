@@ -43,7 +43,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -75,7 +75,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -107,7 +107,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -138,7 +138,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -169,7 +169,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -200,7 +200,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -231,7 +231,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -263,7 +263,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
       //todo - need to fix
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -294,7 +294,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
       //todo - need to fix
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -325,7 +325,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
       //todo - need to fix
       assertThat(expected)
         .hasMessageStartingWith("Element not found {##invalid-locator}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);
@@ -357,7 +357,7 @@ final class MethodCalledOnEntityWithInvalidLocatorFailsOnTest extends Integratio
 
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul}");
-      assertThat(expected.getScreenshot())
+      assertThat(expected.getScreenshot().getImage())
         .contains(Configuration.reportsFolder);
       assertThat(expected.getCause())
         .isInstanceOf(InvalidSelectorException.class);

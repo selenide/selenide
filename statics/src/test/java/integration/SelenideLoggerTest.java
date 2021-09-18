@@ -76,9 +76,8 @@ final class SelenideLoggerTest extends IntegrationTest {
   void findAllShouldHaveSize() {
     $("body").findAll("h1").shouldHave(sizeGreaterThan(0));
 
-    assertThat(collector.events()).hasSize(2);
-    assertThat(collector.events().get(0)).hasToString("$(\"body\") find all(h1)");
-    assertThat(collector.events().get(1)).hasToString("$(\"body/h1\") should have(size > 0)");
+    assertThat(collector.events()).hasSize(1);
+    assertThat(collector.events().get(0)).hasToString("$(\"body/h1\") should have(size > 0)");
   }
 
   @Test

@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
-public class SetSelected implements Command<WebElement> {
+public class SetSelected implements Command<SelenideElement> {
   private final Click click;
 
   public SetSelected() {
@@ -26,7 +26,7 @@ public class SetSelected implements Command<WebElement> {
 
   @Override
   @Nonnull
-  public WebElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
+  public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     boolean selected = firstOf(args);
     WebElement element = locator.getWebElement();
     if (!element.isDisplayed()) {

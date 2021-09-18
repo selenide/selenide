@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class ConditionTest {
-  private final WebDriver webDriver = mock(WebDriver.class);
+  private final WebDriver webDriver = new DummyWebDriver();
   private final SelenideProxyServer proxy = mock(SelenideProxyServer.class);
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = new DriverStub(config, new Browser("opera", false), webDriver, proxy);
@@ -278,7 +278,7 @@ final class ConditionTest {
     Condition condition = and("selected with text", be(selected), have(text("text")));
     assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
     assertThat(condition.apply(driver, element)).isFalse();
-    assertThat(condition).hasToString("be selected");
+    assertThat(condition).hasToString("selected with text: be selected and have text 'text'");
   }
 
   @Test
@@ -318,9 +318,9 @@ final class ConditionTest {
   }
 
   @Test
-  void conditionApplyNull() {
+  void conditionMissingElementSatisfiesCondition() {
     Condition condition = attribute("name");
-    assertThat(condition.applyNull()).isFalse();
+    assertThat(condition.missingElementSatisfiesCondition()).isFalse();
   }
 
   @Test

@@ -17,16 +17,16 @@ public class CollectionElementByCondition extends WebElementSource {
 
   @CheckReturnValue
   @Nonnull
-  public static SelenideElement wrap(WebElementsCollection collection, Condition condition) {
+  public static SelenideElement wrap(CollectionSource collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
         collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
         new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
   }
 
-  private final WebElementsCollection collection;
+  private final CollectionSource collection;
   private final Condition condition;
 
-  CollectionElementByCondition(WebElementsCollection collection, Condition condition) {
+  CollectionElementByCondition(CollectionSource collection, Condition condition) {
     this.collection = collection;
     this.condition = condition;
   }
@@ -50,7 +50,7 @@ public class CollectionElementByCondition extends WebElementSource {
       }
     }
 
-    throw new ElementNotFound(driver(), getSearchCriteria(), condition);
+    throw new ElementNotFound(driver(), description(), condition);
   }
 
   @Override
@@ -58,12 +58,5 @@ public class CollectionElementByCondition extends WebElementSource {
   @Nonnull
   public String getSearchCriteria() {
     return collection.description() + ".findBy(" + condition + ")";
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  public String toString() {
-    return getSearchCriteria();
   }
 }

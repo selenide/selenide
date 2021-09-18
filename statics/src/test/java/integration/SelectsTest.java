@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selenide.$;
@@ -166,7 +167,33 @@ final class SelectsTest extends IntegrationTest {
     $("#hero").shouldNotHave(text("John Mc'Lain").because("Option is not selected yet"));
 
     $("#hero").selectOptionByValue("john mc'lain");
-    $("#hero").shouldHave(text("John Mc'Lain").because("Option `john mc'lain` is selected"));
+    $("#hero").shouldHave(text("john mc'lain").because("Option with text `John Mc'Lain` is selected"));
+    $("#hero").shouldHave(textCaseSensitive("John Mc'Lain").because("Option with text `John Mc'Lain` is selected"));
+  }
+
+  @Test
+  void shouldHaveTextChecksSelectedOptions() {
+    $("#cars").selectOptionByValue("saab", "audi");
+
+    $("#cars").shouldHave(text("audi").because("Option with text `Audi` is selected"));
+    $("#cars").shouldHave(text("saab").because("Option with text `Saab` is selected"));
+    $("#cars").shouldHave(textCaseSensitive("Audi").because("Option with text `Audi` is selected"));
+    $("#cars").shouldHave(textCaseSensitive("Saab").because("Option with text `Saab` is selected"));
+  }
+
+  @Test()
+  void throwsAssertionErrorForSelectedElementsWithDifferentTextOrCase() {
+    $("#hero").selectOptionByValue("john mc'lain");
+    assertThatThrownBy(() -> $("#hero").shouldHave(text("Denzel Washington")))
+      .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(() -> $("#hero").shouldHave(textCaseSensitive("john mc'lain")))
+      .isInstanceOf(AssertionError.class);
+
+    $("#cars").selectOptionByValue("saab", "audi");
+    assertThatThrownBy(() -> $("#cars").shouldHave(text("volvo")))
+      .isInstanceOf(AssertionError.class);
+    assertThatThrownBy(() -> $("#cars").shouldHave(textCaseSensitive("audi")))
+      .isInstanceOf(AssertionError.class);
   }
 
   @Test

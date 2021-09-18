@@ -1,6 +1,6 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -10,7 +10,7 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class TextsSizeMismatch extends UIAssertionError {
-  public TextsSizeMismatch(WebElementsCollection collection, List<String> actualTexts,
+  public TextsSizeMismatch(CollectionSource collection, List<String> actualTexts,
                            List<String> expectedTexts, @Nullable String explanation, long timeoutMs) {
     super(collection.driver(),
       "Texts size mismatch" +

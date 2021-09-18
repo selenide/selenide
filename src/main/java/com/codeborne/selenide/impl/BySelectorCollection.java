@@ -1,9 +1,7 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -12,21 +10,24 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.impl.Alias.NONE;
 import static com.codeborne.selenide.impl.Plugins.inject;
 
 @ParametersAreNonnullByDefault
-public class BySelectorCollection implements WebElementsCollection {
-  private static final ElementDescriber describe = inject(ElementDescriber.class);
+public class BySelectorCollection implements CollectionSource {
+  private final WebElementSelector elementSelector = inject(WebElementSelector.class);
+  private final ElementDescriber describe = inject(ElementDescriber.class);
 
   private final Driver driver;
-  private final SearchContext parent;
+  private final WebElementSource parent;
   private final By selector;
+  private Alias alias = NONE;
 
   public BySelectorCollection(Driver driver, By selector) {
     this(driver, null, selector);
   }
 
-  public BySelectorCollection(Driver driver, @Nullable SearchContext parent, By selector) {
+  public BySelectorCollection(Driver driver, @Nullable WebElementSource parent, By selector) {
     this.driver = driver;
     this.parent = parent;
     this.selector = selector;
@@ -36,29 +37,27 @@ public class BySelectorCollection implements WebElementsCollection {
   @CheckReturnValue
   @Nonnull
   public List<WebElement> getElements() {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
-    return WebElementSelector.instance.findElements(driver, searchContext, selector);
+    return elementSelector.findElements(driver, parent, selector);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public WebElement getElement(int index) {
-    SearchContext searchContext = parent == null ? driver.getWebDriver() : parent;
-    if (index == 0) {
-      return WebElementSelector.instance.findElement(driver, searchContext, selector);
-    }
-    return WebElementSelector.instance.findElements(driver, searchContext, selector).get(index);
+    return elementSelector.findElement(driver, parent, selector, index);
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
   public String description() {
+    return alias.getOrElse(this::composeDescription);
+  }
+
+  @Nonnull
+  private String composeDescription() {
     return parent == null ? describe.selector(selector) :
-        (parent instanceof SelenideElement) ?
-            ((SelenideElement) parent).getSearchCriteria() + "/" + describe.selector(selector) :
-          describe.selector(selector);
+      parent.getSearchCriteria() + "/" + describe.selector(selector);
   }
 
   @Override
@@ -66,5 +65,10 @@ public class BySelectorCollection implements WebElementsCollection {
   @Nonnull
   public Driver driver() {
     return driver;
+  }
+
+  @Override
+  public void setAlias(String alias) {
+    this.alias = new Alias(alias);
   }
 }

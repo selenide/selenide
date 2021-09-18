@@ -1,6 +1,5 @@
 package integration;
 
-import com.automation.remarks.junit5.VideoExtension;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
@@ -13,11 +12,12 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import static com.codeborne.selenide.AssertionMode.STRICT;
 import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Configuration.browserSize;
 import static com.codeborne.selenide.Configuration.clickViaJs;
-import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.downloadsFolder;
+import static com.codeborne.selenide.Configuration.fastSetValue;
 import static com.codeborne.selenide.Configuration.timeout;
 import static com.codeborne.selenide.Configuration.versatileSetValue;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
@@ -29,7 +29,7 @@ import static com.codeborne.selenide.WebDriverRunner.isIE;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_INSECURE_CERTS;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
-@ExtendWith({ScreenShooterExtension.class, VideoExtension.class})
+@ExtendWith(ScreenShooterExtension.class)
 public abstract class IntegrationTest extends BaseIntegrationTest {
   @BeforeAll
   static void resetSettingsBeforeClass() {
@@ -66,6 +66,7 @@ public abstract class IntegrationTest extends BaseIntegrationTest {
     fastSetValue = false;
     versatileSetValue = false;
     browserSize = System.getProperty("selenide.browserSize", "1200x960");
+    Configuration.assertionMode = STRICT;
     Configuration.proxyPort = 0;
     Configuration.proxyHost = "";
     useProxy(false);

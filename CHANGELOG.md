@@ -1,10 +1,191 @@
 # Changelog
 
-## 5.16.0 (planned to 2x.10.2020)
-* Improve NOT condition description
-* Improve AND condition description
-* #1051 Selenide plugins system
-* #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)
+## 5.24.4
+* upgrade okhttp 3.11.0 -> 3.12.13 
+
+## 5.24.3 (released 13.09.2021)
+* upgrade to WebDriverManager to 5.0.2
+* exclude docker-java and few other dependencies
+
+## 5.24.2 (released 02.09.2021)
+* #1551 Fix NoClassDefFoundException for StringUtils
+
+## 5.24.1 (released 31.08.2021)
+* upgrade to WebDriverManager to 5.0.1  --  thanks to Anil Kumar Reddy Gaddam for PR #1547
+
+## 5.24.0 (released 29.08.2021)
+* #1525 add method `$.execute(Command, Duration)` for running custom commands with a custom timeout  --  thanks to Evgenii Plugatar for PR #1531
+* #1532 fix searching shadow roots inside of a web element  --  see PR #1536
+* #1527 `$.execute(Command)` and `$.execute(Command, Duration)` methods no longer pass arguments to custom command  --  thanks to Evgenii Plugatar for PR #1535
+* #1467 Avoid spam in logs when webdriver is already closed  --  see PR #1540
+* #1534 `Or` and `And` conditions work correctly with non-existent element  --  thanks to Evgenii Plugatar for PR #1539
+* `Or` and `And` conditions support PECS principle in ctor, no longer allow empty list in ctor  --  thanks to Evgenii Plugatar for PR #1542
+* #1541 removed deprecated `Condition` method `applyNull()` and renamed `CollectionCondition` `applyNull()` method  --  thanks to Evgenii Plugatar for PR #1544
+
+## 5.23.3 (released 19.08.2021)
+* #1528 fix "exe" or "dmg" file download in Chrome  -  see PR #1529
+
+## 5.23.2 (released 03.08.2021)
+* #1508 add check `webdriver().shouldHave(numberOfWindows(N))` --  thanks to Oleg Berezhnoy for PR #1511
+
+## 5.23.1 (released 30.07.2021)
+* #1500 forbid calling `switchTo().innerFrame()` without parameters  --  see PR #1509
+* #1435 add report when switching between frames  --  thanks to Pavel Fokin for the PR
+
+## 5.23.0 (released 16.07.2021)
+* #1442 Conditional wait for non-WebElement entities  --  thanks to Dmitriy Budim for PR #1478
+* #1442 Add method sessionStorage.getItems()  --  see PR #1502
+* #1442 Add method localStorage.getItems()  --  see PR #1502
+* #1442 add should-methods for clipboard  --  see PR #1507
+* #1477 Make `Selenide.screenshot()` take screenshots even if `Configuration.screenshots == false`. 
+
+## 5.22.3 (released 05.07.2021)
+* #1474 add workaround for NPE in RemoteWebElement.isDisplayed()  --  see PR #1498
+
+## 5.22.2 (released 30.06.2021)
+* #1493 support uploading files from inside of JAR files  --  see PR #1494
+* fix command `./gradlew` - now it installs jars to a local maven repo  --  see PR #1489 
+* add support for okhttp 4.9.1  --  see PR #1488
+
+## 5.22.1 (released 18.06.2021)
+* Add mime type "binary/octet-stream" to download binary files in FireFox
+
+## 5.22.0 (released 08.06.2021)
+* #1479 make it possible to check an alert before downloading a file  --  see PR #1481
+* #1482 Add support for `Condition.textCaseSensitive` for selected options in `select` element --  thanks to Oleg Berezhnoy
+* #1380 Add selectors `byTextCaseInsensitive` and `withTextCaseInsensitive` --  see PR #1381
+* #1483 add method `Driver.getSessionId()`  --  thanks to Petro Ovcharenko
+* override default Selenium http timeouts  --  see PR #1433
+* #1472 refactoring: pass WebElementSource instead of SearchContext
+
+## 5.21.0 (released 15.05.2021)
+* #1055 Avoid multiple screenshots for chained locators  --  see PR #1465
+* #1448: add BrowserPerTestStrategyExtension to close browser after each test  --  thanks to Aaftakhov for PR #1450
+* #1447 Add hover with offset  --  see PR #1461
+* #1464 upgrade to WebDriverManager 4.4.3  --  thanks to Anil Kumar Reddy Gaddam
+* #1469 upgrade to httpclient to 5.1  --  thanks to Anil Kumar Reddy Gaddam
+* #1430 javadoc: improve description of lazy loading in many Selenide methods
+
+## 5.20.4 (released 22.04.2021)
+* #1456 upgrade to WebDriverManager 4.4.1  --  thanks to Anil Kumar Reddy Gaddam
+
+## 5.20.3 (released 20.04.2021)
+* #1454 Add ability to navigate to absolute browser internal urls  --  thanks to Aliaksandr Rasolka
+
+## 5.20.2 (released 13.04.2021)
+* upgrade to WebDriverManager 4.4.0
+* #1451 migrate 'maven' plugin to 'maven-publish'
+
+## 5.20.1 (released 23.03.2021)
+* #1438 Added $$.should() method + JavaDoc fixes  --  thanks to Oleg Berezhnoy @bereg2k
+* #1439 rename containTexts() to containExactTextsCaseSensitive()  --  thanks to Oleg Berezhnoy @bereg2k and Pavel Fokin @fokinp
+
+## 5.20.0 (released 20.03.2021)
+* #1409 Added method for getting clipboard content  --  thanks to Dmitriy Budim @dbudim
+* #1422 add headless mode to Microsoft Edge browser (chromium-based)  --  see PR #1424
+* #1423 Microsoft Edge User Agent Test Failed  --  see PR #1425
+* #1389 add method $$.as()  --  see PR #1431
+* #1426 Added CollectionCondition.containTexts method  --  thanks to Oleg Berezhnoy @bereg2k
+* #1436 Fix ignored prefs in FirefoxOptions  -- thanks to for Dmitriy Budim PR #1437
+* #1428 Do not log extended "find" methods (e.g. parent, sibling and so)  --  thanks to Pavel Fokin @fokinp
+
+## 5.19.0 (released 24.02.2021)
+* #1110 Implement drag and drop method with JavaScript (used by default, works in all browsers)  --  thanks to Dmitriy Budim for PR #1412
+* #1406 fix method `$.click(usingJavascript())` in Internet Explorer  --  see PR #1419
+* #1402 improve collection description for $$.snapshot()
+* #1415 add method $.getAlias()  --  thanks to @pavelpp
+* #1395 add @Nullable annotations to WebDriverRunner
+* #1383 add events "refresh", "back", "forward", "updateHash", "confirm", "dismiss", "prompt", "clearCookies" to Selenide log 
+* #1408 fix Selenide own tests when running on machine with user language other than EN  --  thanks to Vicente Rossello Jaume
+
+## 5.18.1 (released 11.02.2021)
+* #1400 add method Selenide.getSessionStorage()  --  thanks to Dmitriy Budim @dbudim
+* #1392 remove "dynamic" nature of toString for And condition  --  thanks to Pavel Fokin @fokinp for PR #1393
+* #1390 Pass noproxy options from outside proxy to selenide proxy  --  thanks to Boris Osipov @BorisOsipov
+* upgrade to Netty 4.1.59.Final and LittleProxy 2.0.2 
+
+## 5.18.0 (released 23.01.2021)
+* #1365 disable webdriver logs by default  --  see PR #1379
+  (they still can be enabled by Configuration.webdriverLogsEnabled = true)
+* #1377 Replace long timeout with Duration for ElementsCollection  -- thanks to Ostap Oleksyn for PR #1377!
+* #1373 speed up `$(shadowCss())`  --  also thanks to @sakamoto66 for issue #1246 and PR #1233!
+* #1369 fix checks `$.shouldNot(and(...))` and `$.shouldNot(or(...))`  --  see PR #1370
+* #1369 don't allow `and` and `or` with only one condition  --  see PR #1370
+* #1366 detect mismatching "browserName" capability  --  see PR #1374
+* #1376 display duration argument in report as "1s" or "300 ms"  --  see PR #1378
+* upgraded to WebDriverManager 4.3.1  --  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
+
+## 5.17.4 (released 14.01.2021)
+* #1360 make SelenidePageFactory even more customizable 
+
+## 5.17.3 (released 10.01.2021)
+* #1361 Fix int method arguments displaying in selenide report(log)  --  thanks to Pavel Fokin @fokinp
+* #1363 Add human-readable description of FileFilter arguments in selenide report  --  thanks to Pavel Fokin @fokinp
+* #1364 Fix download log event missing in case of FileNotFoundException  --  thanks to Pavel Fokin @fokinp
+* #1360 extract interface PageObjectFactory from SelenidePageFactory
+* #1360 move usages of o.o.s.s.pagefactory.Annotations to SelenidePageFactory.findSelector()  -  make it customizable
+
+## 5.17.2 (released 30.12.2020)
+* #1355 make Commands return SelenideElement instead of WebElement  --  thanks to Boris Osipov
+* #1356 fix method $.setValue(null)  --  thanks to Dmitriy Zemlyanitsyn for PR #1357
+* #1070 #981 enable using soft asserts in @BeforeAll and @AfterAll methods (in JUnit 5)  --  see PR #1359
+
+## 5.17.1: broken, please ignore it.
+
+## 5.17.0 (released 26.12.2020)
+* #1200 Add method $.as("name") to give elements human-readable names  --  see PR #1353
+* #1329 Apply chrome headless arguments from puppeteer config  --  thanks to Aliaksandr Rasolka
+* #1346 Return all shadow dom elements  --  thanks to Daniel H. Peger for PR #1347
+
+* #1136 add method $.shouldBe(condition, timeout) as a replacement for $.waitUntil(condition, timeout)  --  see PR #1340
+* #1136 deprecate Conditions that were created for using with $.waitUntil/$.waitWhile methods  --  see PR #1340
+* #1338 improve message of waitUntil/waitWhile methods  --  see PR #1340
+
+* #694 support page object fields of generic types  --  see PR #1351
+* #282, #482 enable lazy loading for Page Object fields of type List<ElementsContainer>  --  see PR #1354
+
+* #1348 split the single gradle project to subprojects
+* #1344 Fixed OS dependencies in Selenide tests  --  thanks to Daniel H. Peger for PR #1345
+* #1343 Simple code cleanup  --  thanks to Yuri Orlov
+* Upgraded to browserup-proxy:2.1.2 and guava:30.1-jre
+* Support for chrome 88, edge 89, opera 73
+
+## 5.16.2 (released 25.11.2020)
+* #1332 return old click(int, int) command logic  --  thanks to Petro Ovcharenko for PR #1333
+* make SoftAssertsExtension thread-safe  --  thanks to @dtuchs for PR #1334
+* #1258 fix soft asserts with ParameterizedTest in jUnit5  --  see PR #1328
+* #1293 don't report "Element not found" in case of other errors  --  see PR #1326
+* #1290 don't show unused page object fields in report  --  see PR #1327
+* upgrade to littleproxy:2.0.1  --  see PR #1325
+
+## 5.16.1 (released 23.11.2020)
+* #1314 do not exclude "load-extension" switch if Chrome is opened with extensions  --  see PR #1324
+* #1315 support custom DriverFactory for running remote browsers  --  see PR #1324
+
+## 5.16.0 (released 20.11.2020)
+
+#### Selenide plugins:
+* #1051 implement Selenide plugins system  --  see PR #1264
+* #1051 add extension point for describing WebElement/AppiumElement
+* #1051 add extension point for customizing taking screenshots  --  see PR #1317
+* #1051 add extension point for customizing saving page source  --  see PR #1321
+* #1051 add extension point for downloading files from remote browsers
+
+#### Error messages:
+* Improve NOT condition description  --  thanks to Pavel Fokin for PR #1306
+* Improve AND condition description  --  thanks to Pavel Fokin for PR #1300
+* Add parent element to ElementFinder.getSearchCriteria  --  thanks to Petro Ovcharenko for PR #1312
+* #1261 Add actual own text to error message (when one of checks `ownText`, `exactOwnText` fails)  --  see PR #1294
+* #987 Avoid throwing "Element not found" when actually a file is not found  --  see PR #1301
+* #1302 show ClickOptions details in report  --  see PR #1303
+
+#### Other:
+* Add collection condition $$.shouldHave(exactTextsCaseSensitiveInAnyOrder(...))  --  thanks to Vitali Plagov for PR #1286
+* #1298 fix href condition for encoded values  --  thanks to @rerednaw for PR #1299
+* #1307 Allow Chrome to download multiple files in one request (set as default setting)  --  thanks to Alexei Vinogradov for PR #1308
+* #1322 allow downloading a file with slash in name  --  see PR #1323
+* fix version of Guava 30.0-jre (to avoid all those endless problems when Maven or Gradle transitively resolves too old Guava version)
+* Build Selenide with github actions (instead of Travis CI)  --  thanks to Boris Osipov for PR #1319
 
 ## 5.15.1 (released 03.10.2020)
 * Fix creating logs dir in parallel tests
@@ -34,7 +215,7 @@
 ## 5.14.0 (released 17.08.2020)
 * #1220 create a unique downloads folder for every browser instance  --  see PR #1221
 * #1194 added method `$$.shouldHave(itemWithText("any text"))`  --  thanks to Luis Serna for PR #1194
-* #1236 add support for Safari browser  --  see PR #1237
+* #1236 add support for Safari browser  --  see PR #1237 and https://github.com/selenide/selenide/wiki/Safari
 * #1166 added method `SelenideDriver.screenshot(fileName)`  --  see PR #1227
 * #1224 added method `SelenideDriver.screenshot(OutputType)`  --  see PR #1231
 * #1190 take screenshot if `switchTo(frame)` or `switchTo(window)` or `switchTo(alert)` failed  --  see PR #1240
@@ -133,13 +314,13 @@ See https://github.com/selenide/selenide/milestone/94?closed=1
 * #814 #880 fix Screenshots  --  thanks to Petro Ovcharenko for PR #1052
 * #1049 use env variable BUILD_URL (no need to add BUILD_URL to system properties anymore)  --  thanks to GongYi for PR #1049 
 * #1049 fix path to screenshots in Jenkins for multi-module maven projects  --  thanks to GongYi for PR #1049 
-* upgrade to WebDriverManager 3.8.1,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.1...master
+* upgrade to WebDriverManager 3.8.1,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.1 (released 14.01.2020)
 * #1030 Add method Selenide.executeAsyncScript()  --  thanks to Thierry Ygé @tyge68 for PR https://github.com/selenide/selenide/pull/1031
 * fix #1034 Selenide cannot download file if response doesn't contain "Content-Disposition" header,  see PR https://github.com/selenide/selenide/pull/1035
 * fix method WebDriverRunner.using(): don't close the webdriver itself,  see https://github.com/selenide/selenide/commit/4d1b19972d
-* upgrade to WebDriverManager 3.8.0,  see https://github.com/bonigarcia/webdrivermanager/compare/webdrivermanager-3.8.0...master
+* upgrade to WebDriverManager 3.8.0,  see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 
 ## 5.6.0 (released 26.12.2019)
 * #1019 Migrate from BrowserMob to BrowserUp proxy   --  thanks to Aliaksandr Rasolka for PR #1020
@@ -293,7 +474,7 @@ Technical changes (probably should not affect end users):
 * #273 Method `switchTo().alert()` now throws `NoAlertPresentException` instead of `TimeoutException`  -- thanks to @tsukakei for PR #774
 * #709 Fixed a misleading error message $.selectOptionByValue() reports  -- thanks to Keita Tsukamoto for PR #780
 * #734 Fixed incorrect filename of downloaded file  -- thanks to @rosolko for PR 768
-* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/changelog)
+* #783 Upgraded to webdrivermanager 2.2.5   -- see [changelog](https://github.com/bonigarcia/webdrivermanager/blob/master/CHANGELOG.md)
 * #775 Upgrade to htmlunit 2.32.1
 * #778 Fixed Selenide tests for FireFox
 

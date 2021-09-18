@@ -25,7 +25,7 @@ public class HttpHelper {
     Pattern.compile(".*filename\\*?=\"?((.+)'')?([^\";?]*)\"?(;charset=(.*))?.*", CASE_INSENSITIVE);
 
   private static final Pattern FILENAME_FORBIDDEN_CHARACTERS =
-    Pattern.compile("[#%&{}\\\\<>*?$!'\":@+`|=]");
+    Pattern.compile("[#%&{}/\\\\<>*?$!'\":@+`|=]");
 
   @CheckReturnValue
   @Nonnull
@@ -87,9 +87,6 @@ public class HttpHelper {
   @CheckReturnValue
   @Nonnull
   public String normalize(String fileName) {
-    if (fileName.contains("/")) {
-      throw new IllegalArgumentException("File name cannot contain slash: " + fileName);
-    }
     return FILENAME_FORBIDDEN_CHARACTERS.matcher(fileName).replaceAll("_").replace(' ', '+');
   }
 }

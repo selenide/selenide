@@ -2,6 +2,7 @@ package integration;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.ex.ListSizeMismatch;
@@ -22,6 +23,7 @@ import java.util.ListIterator;
 
 import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.anyMatch;
+import static com.codeborne.selenide.CollectionCondition.containExactTextsCaseSensitive;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.itemWithText;
@@ -33,6 +35,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
 import static com.codeborne.selenide.CollectionCondition.sizeLessThanOrEqual;
 import static com.codeborne.selenide.CollectionCondition.sizeNotEqual;
 import static com.codeborne.selenide.CollectionCondition.texts;
+import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
@@ -163,7 +166,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void exactTextsCheckThrowsElementNotFound() {
     assertThatThrownBy(() -> $$(".non-existing-elements").shouldHave(exactTexts("content1", "content2")))
-      .isInstanceOf(ElementNotFound.class);
+      .isInstanceOf(ElementNotFound.class)
+      .hasMessageStartingWith("Element not found {.non-existing-elements}");
   }
 
   @Test
@@ -201,6 +205,15 @@ final class CollectionMethodsTest extends ITest {
     $$("#multirowTable tr").shouldHaveSize(2);
     $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);
     $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHaveSize(2);
+  }
+
+  @Test
+  void errorMessageShouldShowFullAndConditionDescription() {
+    ElementsCollection filteredRows = $$("#multirowTable tr")
+      .filterBy(and("condition name", text("Chack"), text("Baskerville")));
+
+    assertThatThrownBy(() -> filteredRows.shouldHave(size(0)))
+      .hasMessageContaining("collection: #multirowTable tr.filter(condition name: text 'Chack' and text 'Baskerville'");
   }
 
   @Test
@@ -567,10 +580,48 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void errorWhenItemWithTextNotMatchedButShouldBe() {
     String expectedText = "Luis";
-    assertThatThrownBy(()  -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
+    assertThatThrownBy(() -> $$("#user-table tbody tr td.firstname").shouldHave(itemWithText(expectedText)))
       .isInstanceOf(ElementWithTextNotFound.class)
       .hasMessageContaining(String.format("Element with text not found" +
         "%nActual: %s" +
         "%nExpected: %s", Arrays.asList("Bob", "John"), Collections.singletonList(expectedText)));
+  }
+
+  @Test
+  void shouldContainTexts() {
+    $$("#hero option")
+      .should(containExactTextsCaseSensitive("Denzel Washington", "John Mc'Lain", "Arnold \"Schwarzenegger\""));
+    $$("#user-table th")
+      .should(containExactTextsCaseSensitive("First name", "Last name"));
+  }
+
+  @Test
+  void errorWhenCollectionDoesNotContainTextsButShould() {
+    List<String> expectedTexts = Arrays.asList("@livemail.ru", "@yandex.ru", "@list.ru");
+    List<String> actualTexts = Arrays.asList("@livemail.ru", "@myrambler.ru", "@rusmail.ru", "@мыло.ру");
+    List<String> difference = Arrays.asList("@yandex.ru", "@list.ru");
+
+    assertThatThrownBy(() -> $$("[name='domain'] > option").should(containExactTextsCaseSensitive(expectedTexts)))
+      .isInstanceOf(DoesNotContainTextsError.class)
+      .hasMessageContaining(
+        String.format("The collection with text elements: %s%n" +
+            "should contain all of the following text elements: %s%n" +
+            "but could not find these elements: %s%n",
+          actualTexts, expectedTexts, difference));
+  }
+
+  @Test
+  void collectionToString() {
+    assertThat($$("not-existing-locator"))
+      .hasToString("not-existing-locator []");
+
+    assertThat($$("input[type=checkbox].red").as("red checkboxes"))
+      .hasToString("red checkboxes []");
+
+    assertThat($$(".active").first(42))
+      .hasToString(".active:first(42) []");
+
+    assertThat($$(".parent").first(2).filterBy(cssClass("child")))
+      .hasToString(".parent:first(2).filter(css class 'child') []");
   }
 }

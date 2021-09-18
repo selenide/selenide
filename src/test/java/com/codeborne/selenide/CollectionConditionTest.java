@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.collections.ContainExactTextsCaseSensitive;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.collections.ExactTextsCaseSensitiveInAnyOrder;
 import com.codeborne.selenide.collections.ListSize;
@@ -137,5 +138,17 @@ final class CollectionConditionTest implements WithAssertions {
   void testExactTextsCaseSensitiveInAnyOrderWithVarargs() {
     CollectionCondition condition = CollectionCondition.exactTextsCaseSensitiveInAnyOrder("One", "Two");
     assertThat(condition).isInstanceOf(ExactTextsCaseSensitiveInAnyOrder.class);
+  }
+
+  @Test
+  void testContainTextsWithStringList() {
+    CollectionCondition condition = CollectionCondition.containExactTextsCaseSensitive(asList("One", "Two", "Three"));
+    assertThat(condition).isInstanceOf(ContainExactTextsCaseSensitive.class);
+  }
+
+  @Test
+  void testContainTextsWithVarargs() {
+    CollectionCondition condition = CollectionCondition.containExactTextsCaseSensitive("One", "Two", "Three");
+    assertThat(condition).isInstanceOf(ContainExactTextsCaseSensitive.class);
   }
 }

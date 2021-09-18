@@ -37,20 +37,21 @@ public class OperaDriverFactory extends AbstractDriverFactory {
     OperaDriverService driverService = createDriverService(config);
     OperaOptions capabilities = createCapabilities(config, browser, proxy, browserDownloadsFolder);
     OperaDriver driver = new OperaDriver(driverService, capabilities);
-    cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
+    if (browserDownloadsFolder != null) {
+      cdpClient.setDownloadsFolder(driverService, driver, browserDownloadsFolder);
+    }
     return driver;
   }
 
   private OperaDriverService createDriverService(Config config) {
-    return new OperaDriverService.Builder()
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new OperaDriverService.Builder());
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
-  public OperaOptions createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public OperaOptions createCapabilities(Config config, Browser browser,
+                                         @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
     OperaOptions operaOptions = new OperaOptions();
     if (config.headless()) {
       throw new InvalidArgumentException("headless browser not supported in Opera. Set headless property to false.");

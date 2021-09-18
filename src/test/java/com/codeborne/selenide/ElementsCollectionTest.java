@@ -2,7 +2,7 @@ package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
-import com.codeborne.selenide.impl.WebElementsCollection;
+import com.codeborne.selenide.impl.CollectionSource;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 final class ElementsCollectionTest implements WithAssertions {
   private final DriverStub driver = new DriverStub();
-  private final WebElementsCollection source = mock(WebElementsCollection.class);
+  private final CollectionSource source = mock(CollectionSource.class);
   private final WebElement element1 = element("h1");
   private final WebElement element2 = element("h2");
   private final WebElement element3 = element("h3");
@@ -70,7 +71,7 @@ final class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(emptyList());
 
-    assertThatThrownBy(() -> collection.should("Size", 1, CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Size", Duration.ofMillis(1), CollectionCondition.size(1)))
       .isInstanceOf(Error.class);
   }
 
@@ -79,7 +80,7 @@ final class ElementsCollectionTest implements WithAssertions {
     ElementsCollection collection = new ElementsCollection(source);
     doThrow(RuntimeException.class).when(source).getElements();
 
-    assertThatThrownBy(() -> collection.should("Be size 1", 1, CollectionCondition.size(1)))
+    assertThatThrownBy(() -> collection.should("Be size 1", Duration.ofMillis(1), CollectionCondition.size(1)))
       .isInstanceOf(RuntimeException.class);
   }
 
@@ -221,7 +222,7 @@ final class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void doesNotWait_ifConditionAlreadyMatches() {
-    WebElementsCollection source = mock(WebElementsCollection.class);
+    CollectionSource source = mock(CollectionSource.class);
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(asList(element1, element2));
@@ -232,7 +233,7 @@ final class ElementsCollectionTest implements WithAssertions {
 
   @Test
   void doesNotWait_ifJavascriptExceptionHappened() {
-    WebElementsCollection source = mock(WebElementsCollection.class);
+    CollectionSource source = mock(CollectionSource.class);
     when(source.driver()).thenReturn(driver);
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenThrow(new JavascriptException("ReferenceError: Sizzle is not defined"));
@@ -256,18 +257,20 @@ final class ElementsCollectionTest implements WithAssertions {
   }
 
   @Test
-  void toStringFetchedCollectionFromWebdriverIfNotFetchedYet() {
+  void toStringFetchesCollectionFromWebdriverIfNotFetchedYet() {
+    when(source.description()).thenReturn("li.odd");
     ElementsCollection collection = new ElementsCollection(source);
     when(source.getElements()).thenReturn(asList(element1, element2));
     assertThat(collection)
-      .hasToString(String.format("[%n\t<h1></h1>,%n\t<h2></h2>%n]"));
+      .hasToString(String.format("li.odd [%n\t<h1></h1>,%n\t<h2></h2>%n]"));
   }
 
   @Test
   void toStringPrintsErrorIfFailedToFetchElements() {
+    when(source.description()).thenReturn("li.odd");
     when(source.getElements()).thenThrow(new WebDriverException("Failed to fetch elements"));
     assertThat(new ElementsCollection(source))
-      .hasToString("[WebDriverException: Failed to fetch elements]");
+      .hasToString("li.odd [WebDriverException: Failed to fetch elements]");
   }
 
   @Test

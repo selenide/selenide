@@ -24,7 +24,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -44,6 +43,7 @@ import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -58,8 +58,9 @@ public class ScreenShotLaboratory {
     return instance;
   }
 
-  private final Photographer photographer = inject(Photographer.class);
-  private final PageSourceExtractor extractor = inject(PageSourceExtractor.class);
+  private final Photographer photographer;
+  private final PageSourceExtractor extractor;
+  private final Clock clock;
   protected final List<File> allScreenshots = new ArrayList<>();
   protected AtomicLong screenshotCounter = new AtomicLong();
   protected ThreadLocal<String> currentContext = withInitial(() -> "");
@@ -67,40 +68,75 @@ public class ScreenShotLaboratory {
   protected ThreadLocal<List<File>> threadScreenshots = withInitial(ArrayList::new);
 
   protected ScreenShotLaboratory() {
+    this(inject(Photographer.class), inject(PageSourceExtractor.class), new Clock());
+  }
+
+  protected ScreenShotLaboratory(Photographer photographer, PageSourceExtractor extractor, Clock clock) {
+    this.photographer = photographer;
+    this.extractor = extractor;
+    this.clock = clock;
   }
 
   @CheckReturnValue
-  @Nullable
-  public String takeScreenShot(Driver driver, String className, String methodName) {
-    return takeScreenShot(driver, getScreenshotFileName(className, methodName));
+  @Nonnull
+  public Screenshot takeScreenShot(Driver driver, String className, String methodName) {
+    return takeScreenshot(driver, getScreenshotFileName(className, methodName), true, true);
   }
 
   @CheckReturnValue
   @Nonnull
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
-      methodName + '.' + timestamp();
+      methodName + '.' + clock.timestamp();
   }
 
+  /**
+   * @deprecated use {@link #takeScreenshot(Driver, boolean, boolean)} which returns {@link Screenshot} instead of String
+   */
   @CheckReturnValue
   @Nullable
+  @Deprecated
   public String takeScreenShot(Driver driver) {
     return takeScreenShot(driver, generateScreenshotFileName());
   }
 
   /**
    * Takes screenshot of current browser window.
-   * Stores 2 files: html of page (if "savePageSource" option is enabled), and (if possible) image in PNG format.
+   * Stores 2 files:
+   * 1. html of the page (if "savePageSource" parameter is true), and
+   * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
+   *
+   * Either file may be null if webdriver has failed to save it.
    *
    * @param fileName name of file (without extension) to store screenshot to.
    * @return the name of last saved screenshot or null if failed to create screenshot
+   * @deprecated use {@link #takeScreenshot(Driver, String, boolean, boolean)} which returns {@link Screenshot} instead of String
    */
   @CheckReturnValue
   @Nullable
+  @Deprecated
   public String takeScreenShot(Driver driver, String fileName) {
-    return ifWebDriverStarted(driver, webDriver ->
+    return takeScreenshot(driver, fileName, true, true).getImage();
+  }
+
+  /**
+   * Takes screenshot of current browser window.
+   * Stores 2 files:
+   * 1. html of the page (if "savePageSource" parameter is true), and
+   * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
+   *
+   * Either file may be null if webdriver has failed to save it.
+   *
+   * @param fileName name of file (without extension) to store screenshot to.
+   * @return instance of {@link Screenshot} containing both files
+   */
+  @CheckReturnValue
+  @Nonnull
+  public Screenshot takeScreenshot(Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
+    Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
       ifReportsFolderNotNull(driver.config(), config ->
-        takeScreenShot(config, driver, fileName)));
+        takeScreenShot(config, driver, fileName, saveScreenshot, savePageSource)));
+    return screenshot != null ? screenshot : Screenshot.none();
   }
 
   @CheckReturnValue
@@ -120,21 +156,14 @@ public class ScreenShotLaboratory {
   }
 
   @CheckReturnValue
-  @Nullable
-  private String takeScreenShot(Config config, Driver driver, String fileName) {
-    File screenshot = null;
-    if (config.savePageSource()) {
-      screenshot = savePageSourceToFile(config, fileName, driver);
+  @Nonnull
+  private Screenshot takeScreenShot(Config config, Driver driver, String fileName, boolean saveScreenshot, boolean savePageSource) {
+    File source = savePageSource ? savePageSourceToFile(config, fileName, driver) : null;
+    File image = saveScreenshot ? savePageImageToFile(config, fileName, driver) : null;
+    if (image != null) {
+      addToHistory(image);
     }
-
-    File imageFile = savePageImageToFile(config, fileName, driver);
-    if (imageFile != null) {
-      screenshot = imageFile;
-    }
-    if (screenshot == null) {
-      return null;
-    }
-    return addToHistory(screenshot).getAbsolutePath();
+    return new Screenshot(toUrl(config, image), toUrl(config, source));
   }
 
   @CheckReturnValue
@@ -193,11 +222,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   protected String generateScreenshotFileName() {
-    return currentContext.get() + timestamp() + "." + screenshotCounter.getAndIncrement();
-  }
-
-  protected long timestamp() {
-    return System.currentTimeMillis();
+    return currentContext.get() + clock.timestamp() + "." + screenshotCounter.getAndIncrement();
   }
 
   @CheckReturnValue
@@ -217,7 +242,7 @@ public class ScreenShotLaboratory {
   @CheckReturnValue
   @Nonnull
   private File writeToFile(Driver driver, BufferedImage destination) throws IOException {
-    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png");
+    File screenshotOfElement = new File(driver.config().reportsFolder(), generateScreenshotFileName() + ".png").getAbsoluteFile();
     ensureParentFolderExists(screenshotOfElement);
     ImageIO.write(destination, "png", screenshotOfElement);
     return screenshotOfElement;
@@ -295,7 +320,6 @@ public class ScreenShotLaboratory {
   @Nullable
   public File takeScreenShotAsFile(Driver driver) {
     return ifWebDriverStarted(driver, webDriver -> {
-      //File pageSource = savePageSourceToFile(fileName, webDriver); - temporary not available
       try {
         return photographer.takeScreenshot(driver, FILE)
           .map(this::addToHistory)
@@ -329,7 +353,7 @@ public class ScreenShotLaboratory {
         log.info("Webdriver doesn't support screenshots");
         return null;
       }
-      File imageFile = new File(config.reportsFolder(), fileName + ".png");
+      File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       try {
         FileHelper.writeToFile(scrFile.get(), imageFile);
       } catch (IOException e) {
@@ -418,30 +442,39 @@ public class ScreenShotLaboratory {
       : Optional.of(screenshots.get(screenshots.size() - 1));
   }
 
+  /**
+   * @deprecated Use method {@link #takeScreenshot(Driver, boolean, boolean)} which returns Screenshot instead of String
+   */
   @CheckReturnValue
   @Nonnull
+  @Deprecated
   public String formatScreenShotPath(Driver driver) {
-    if (!driver.config().screenshots()) {
-      log.debug("Automatic screenshots are disabled.");
-      return "";
-    }
+    return defaultString(takeScreenshot(driver, true, false).getImage(), "");
+  }
 
-    String screenshot = takeScreenShot(driver);
-    if (screenshot == null) {
-      return "";
-    }
+  @CheckReturnValue
+  @Nonnull
+  public Screenshot takeScreenshot(Driver driver, boolean saveScreenshot, boolean savePageSource) {
+    Screenshot screenshot = ifWebDriverStarted(driver, webDriver ->
+      ifReportsFolderNotNull(driver.config(), config ->
+        takeScreenShot(config, driver, generateScreenshotFileName(), saveScreenshot, savePageSource)));
+    return screenshot != null ? screenshot : Screenshot.none();
+  }
 
-    if (driver.config().reportsUrl() != null) {
-      String screenShotURL = formatScreenShotURL(driver.config().reportsUrl(), screenshot);
-      log.info("Replaced screenshot file path '{}' by public CI URL '{}'", screenshot, screenShotURL);
-      return screenShotURL;
+  @CheckReturnValue
+  @Nullable
+  private String toUrl(Config config, @Nullable File file) {
+    if (file == null) {
+      return null;
     }
-
-    log.debug("reportsUrl is not configured. Returning screenshot file name '{}'", screenshot);
+    else if (config.reportsUrl() != null) {
+      return formatScreenShotURL(config.reportsUrl(), file.getAbsolutePath());
+    }
     try {
-      return new File(screenshot).toURI().toURL().toExternalForm();
-    } catch (MalformedURLException e) {
-      return "file://" + screenshot;
+      return file.getCanonicalFile().toURI().toURL().toExternalForm();
+    }
+    catch (IOException e) {
+      return "file://" + file.getAbsolutePath();
     }
   }
 

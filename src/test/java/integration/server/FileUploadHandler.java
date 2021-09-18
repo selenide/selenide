@@ -29,6 +29,7 @@ class FileUploadHandler extends BaseHandler {
     DiskFileItemFactory factory = new DiskFileItemFactory();
     factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
     ServletFileUpload upload = new ServletFileUpload(factory);
+    upload.setHeaderEncoding(UTF_8.name());
     try {
       List<FileItem> items = upload.parseRequest(request);
       for (FileItem item : items) {

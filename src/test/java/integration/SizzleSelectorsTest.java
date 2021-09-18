@@ -14,7 +14,8 @@ import static com.codeborne.selenide.SelectorMode.Sizzle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class SizzleSelectorsTest extends BaseIntegrationTest {
-  SelenideDriver driver = new SelenideDriver(new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle));
+  private final SelenideConfig sizzleEnabled = new SelenideConfig().baseUrl(getBaseUrl()).selectorMode(Sizzle);
+  private final SelenideDriver driver = new SelenideDriver(sizzleEnabled);
 
   @AfterEach
   void tearDown() {
@@ -27,7 +28,7 @@ final class SizzleSelectorsTest extends BaseIntegrationTest {
     driver.$$(":input").shouldHave(size(4));
     driver.$$(":input:not(.masked)").shouldHave(size(3));
     driver.$$(":header").shouldHave(size(3)); // h1, h1, h2
-    driver.$$(":parent").shouldHave(sizeGreaterThanOrEqual(13)); // all non-leaf elements
+    driver.$$(":parent").shouldHave(sizeGreaterThanOrEqual(10)); // all non-leaf elements
     driver.$$(":not(:parent)").shouldHave(size(14)); // all leaf elements
 
     driver.$("input:first").shouldHave(attribute("name", "username"));

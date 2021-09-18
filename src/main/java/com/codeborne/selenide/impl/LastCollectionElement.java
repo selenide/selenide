@@ -16,15 +16,15 @@ import static com.codeborne.selenide.Condition.visible;
 
 @ParametersAreNonnullByDefault
 public class LastCollectionElement extends WebElementSource {
-  public static SelenideElement wrap(WebElementsCollection collection) {
+  public static SelenideElement wrap(CollectionSource collection) {
     return (SelenideElement) Proxy.newProxyInstance(
         collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
         new SelenideElementProxy(new LastCollectionElement(collection)));
   }
 
-  private final WebElementsCollection collection;
+  private final CollectionSource collection;
 
-  LastCollectionElement(WebElementsCollection collection) {
+  LastCollectionElement(CollectionSource collection) {
     this.collection = collection;
   }
 
@@ -58,15 +58,8 @@ public class LastCollectionElement extends WebElementSource {
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.driver(), getSearchCriteria(), visible, lastError);
+      return new ElementNotFound(collection.driver(), description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
-  }
-
-  @Override
-  @CheckReturnValue
-  @Nonnull
-  public String toString() {
-    return getSearchCriteria();
   }
 }

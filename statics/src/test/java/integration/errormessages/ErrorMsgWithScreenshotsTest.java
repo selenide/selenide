@@ -80,10 +80,10 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
         .shouldBe(visible)
     )
       .isInstanceOf(ElementNotFound.class)
-      .hasMessageContaining("Element not found {thead}")
+      .hasMessageContaining("Element not found {#multirowTable/thead}")
       .matches(e -> {
         String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportWhichParentElementIsNotFound";
-        return ((ElementNotFound) e).getScreenshot()
+        return ((ElementNotFound) e).getScreenshot().getImage()
           .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
       });
   }
@@ -102,7 +102,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
       assertThat(e)
         .hasMessageContaining("Element not found {#multirowTable/thead");
       String path = "/integration/errormessages/ErrorMsgWithScreenshotsTest/reportIfParentCollectionIsNotFound";
-      assertThat(e.getScreenshot())
+      assertThat(e.getScreenshot().getImage())
         .matches("http://ci\\.org/build/reports/tests/ErrorMsgWithScreenshotsTest" + path + "/\\d+\\.\\d+\\.(png|html)");
     }
   }
@@ -119,7 +119,7 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     }
     catch (ElementNotFound e) {
       assertThat(e)
-        .hasMessageContaining("Element not found {.second_row}");
+        .hasMessageContaining("Element not found {#multirowTable/tbody tr.findBy(text 'Norris')/.second_row}");
     }
   }
 

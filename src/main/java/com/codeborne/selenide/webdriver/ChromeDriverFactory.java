@@ -3,6 +3,7 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -57,15 +58,16 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
   @CheckReturnValue
   @Nonnull
   protected ChromeDriverService buildService(Config config) {
-    return new ChromeDriverService.Builder()
-      .withLogFile(webdriverLog(config))
-      .build();
+    return withLog(config, new ChromeDriverService.Builder());
   }
 
   @Override
   @CheckReturnValue
   @Nonnull
-  public MutableCapabilities createCapabilities(Config config, Browser browser, @Nullable Proxy proxy, File browserDownloadsFolder) {
+  public MutableCapabilities createCapabilities(Config config, Browser browser,
+                                                @Nullable Proxy proxy, @Nullable File browserDownloadsFolder) {
+    Capabilities commonCapabilities = createCommonCapabilities(config, browser, proxy);
+
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(config.headless());
     if (!config.browserBinary().isEmpty()) {
@@ -73,11 +75,11 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
       options.setBinary(config.browserBinary());
     }
     options.addArguments(createChromeArguments(config, browser));
-    options.setExperimentalOption("excludeSwitches", excludeSwitches());
-    options.setExperimentalOption("prefs", prefs(config, browserDownloadsFolder));
-    setMobileEmulation(config, options);
+    options.setExperimentalOption("excludeSwitches", excludeSwitches(commonCapabilities));
+    options.setExperimentalOption("prefs", prefs(browserDownloadsFolder));
+    setMobileEmulation(options);
 
-    return new MergeableCapabilities(options, createCommonCapabilities(config, browser, proxy));
+    return new MergeableCapabilities(options, commonCapabilities);
   }
 
   @CheckReturnValue
@@ -88,17 +90,59 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
     arguments.add("--disable-dev-shm-usage");
     arguments.add("--no-sandbox");
     arguments.addAll(parseArguments(System.getProperty("chromeoptions.args")));
+    arguments.addAll(createHeadlessArguments(config));
     return arguments;
   }
 
   @CheckReturnValue
   @Nonnull
-  protected String[] excludeSwitches() {
-    return new String[]{"enable-automation", "load-extension"};
+  protected List<String> createHeadlessArguments(Config config) {
+    List<String> arguments = new ArrayList<>();
+    if (config.headless()) {
+      arguments.add("--disable-background-networking");
+      arguments.add("--enable-features=NetworkService,NetworkServiceInProcess");
+      arguments.add("--disable-background-timer-throttling");
+      arguments.add("--disable-backgrounding-occluded-windows");
+      arguments.add("--disable-breakpad");
+      arguments.add("--disable-client-side-phishing-detection");
+      arguments.add("--disable-component-extensions-with-background-pages");
+      arguments.add("--disable-default-apps");
+      arguments.add("--disable-features=TranslateUI");
+      arguments.add("--disable-hang-monitor");
+      arguments.add("--disable-ipc-flooding-protection");
+      arguments.add("--disable-popup-blocking");
+      arguments.add("--disable-prompt-on-repost");
+      arguments.add("--disable-renderer-backgrounding");
+      arguments.add("--disable-sync");
+      arguments.add("--force-color-profile=srgb");
+      arguments.add("--metrics-recording-only");
+      arguments.add("--no-first-run");
+      arguments.add("--password-store=basic");
+      arguments.add("--use-mock-keychain");
+      arguments.add("--hide-scrollbars");
+      arguments.add("--mute-audio");
+    }
+    return arguments;
   }
 
-  private void setMobileEmulation(Config config, ChromeOptions chromeOptions) {
-    Map<String, Object> mobileEmulation = mobileEmulation(config);
+  @CheckReturnValue
+  @Nonnull
+  protected String[] excludeSwitches(Capabilities capabilities) {
+    return hasExtensions(capabilities) ?
+      new String[]{"enable-automation"} :
+      new String[]{"enable-automation", "load-extension"};
+  }
+
+  private boolean hasExtensions(Capabilities capabilities) {
+    Map<?, ?> chromeOptions = (Map<?, ?>) capabilities.getCapability("goog:chromeOptions");
+    if (chromeOptions == null) return false;
+
+    List<?> extensions = (List<?>) chromeOptions.get("extensions");
+    return extensions != null && !extensions.isEmpty();
+  }
+
+  private void setMobileEmulation(ChromeOptions chromeOptions) {
+    Map<String, Object> mobileEmulation = mobileEmulation();
     if (!mobileEmulation.isEmpty()) {
       chromeOptions.setExperimentalOption("mobileEmulation", mobileEmulation);
     }
@@ -106,19 +150,21 @@ public class ChromeDriverFactory extends AbstractDriverFactory {
 
   @CheckReturnValue
   @Nonnull
-  protected Map<String, Object> mobileEmulation(Config config) {
+  protected Map<String, Object> mobileEmulation() {
     String mobileEmulation = System.getProperty("chromeoptions.mobileEmulation", "");
     return parsePreferencesFromString(mobileEmulation);
   }
 
   @CheckReturnValue
   @Nonnull
-  protected Map<String, Object> prefs(Config config, File browserDownloadsFolder) {
+  protected Map<String, Object> prefs(@Nullable File browserDownloadsFolder) {
     Map<String, Object> chromePreferences = new HashMap<>();
+    chromePreferences.put("safebrowsing.enabled", true);
     chromePreferences.put("credentials_enable_service", false);
     chromePreferences.put("plugins.always_open_pdf_externally", true);
+    chromePreferences.put("profile.default_content_setting_values.automatic_downloads", 1);
 
-    if (config.remote() == null) {
+    if (browserDownloadsFolder != null) {
       chromePreferences.put("download.default_directory", browserDownloadsFolder.getAbsolutePath());
     }
     chromePreferences.putAll(parsePreferencesFromString(System.getProperty("chromeoptions.prefs", "")));

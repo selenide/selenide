@@ -1,16 +1,22 @@
 package com.codeborne.selenide.logevents;
 
+import integration.UseLocaleExtension;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static com.codeborne.selenide.logevents.SelenideLogger.readableArguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -21,6 +27,10 @@ import static org.mockito.Mockito.when;
 
 final class SelenideLoggerTest implements WithAssertions {
   private final WebDriver webdriver = mock(WebDriver.class);
+
+  @RegisterExtension
+  static UseLocaleExtension useLocale = new UseLocaleExtension("en");
+  private static final Object[] NO_ARGS = null;
 
   @BeforeEach
   @AfterEach
@@ -41,21 +51,26 @@ final class SelenideLoggerTest implements WithAssertions {
   }
 
   @Test
+  @SuppressWarnings("RedundantCast")
   void printsReadableArgumentsValues() {
-    assertThat(SelenideLogger.readableArguments((Object[]) null))
-      .isEqualTo("");
-    assertThat(SelenideLogger.readableArguments(111))
-      .isEqualTo("111");
-    assertThat(SelenideLogger.readableArguments(1, 2, 3))
-      .isEqualTo("[1, 2, 3]");
-    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{"a"}))
-      .isEqualTo("a");
-    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{"a", "bb"}))
-      .isEqualTo("[a, bb]");
-    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{null}))
-      .isEqualTo("null");
-    assertThat(SelenideLogger.readableArguments((Object[]) new String[]{null, "a", null}))
-      .isEqualTo("[null, a, null]");
+    assertThat(readableArguments((Object[]) null)).isEqualTo("");
+    assertThat(readableArguments(111)).isEqualTo("111");
+    assertThat(readableArguments(1, 2, 3)).isEqualTo("[1, 2, 3]");
+    assertThat(readableArguments((Object[]) new String[]{"a"})).isEqualTo("a");
+    assertThat(readableArguments((Object[]) new String[]{"a", "bb"})).isEqualTo("[a, bb]");
+    assertThat(readableArguments((Object[]) new String[]{null})).isEqualTo("null");
+    assertThat(readableArguments((Object[]) new String[]{null, "a", null})).isEqualTo("[null, a, null]");
+    assertThat(readableArguments((Object) new int[]{1})).isEqualTo("1");
+    assertThat(readableArguments((Object) new int[]{1, 2})).isEqualTo("[1, 2]");
+  }
+
+  @Test
+  void printsDurationAmongArguments() {
+    assertThat(readableArguments(Duration.ofMillis(900))).isEqualTo("900 ms.");
+    assertThat(readableArguments(visible, Duration.ofSeconds(42))).isEqualTo("[visible, 42 s.]");
+    assertThat(readableArguments(visible, Duration.ofMillis(8500))).isEqualTo("[visible, 8.500 s.]");
+    assertThat(readableArguments(visible, Duration.ofMillis(900))).isEqualTo("[visible, 900 ms.]");
+    assertThat(readableArguments(visible, Duration.ofNanos(0))).isEqualTo("[visible, 0 ms.]");
   }
 
   @Test
@@ -72,7 +87,7 @@ final class SelenideLoggerTest implements WithAssertions {
     when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
     when(webElement.isDisplayed()).thenReturn(true);
 
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
 
     verifyEvent(listener1, "div", "click()", PASS);
     verifyEvent(listener2, "div", "click()", PASS);
@@ -84,7 +99,7 @@ final class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.removeListener("simpleReport");
     SelenideLogger.removeListener("softAsserts");
 
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
     verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);
