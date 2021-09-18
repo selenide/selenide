@@ -17,11 +17,11 @@ class ExactTextCaseSensitiveTest {
   private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
 
-  private final ExactTextCaseSensitive condition = new ExactTextCaseSensitive("John Malcovich");
+  private final ExactTextCaseSensitive condition = new ExactTextCaseSensitive("John Malkovich");
 
   @BeforeEach
   void setUp() {
-    when(element.getText()).thenReturn("John Malcovich");
+    when(element.getText()).thenReturn("John Malkovich");
   }
 
   @AfterEach
@@ -37,7 +37,7 @@ class ExactTextCaseSensitiveTest {
 
   @Test
   void shouldNotMatchExpectedTextWithDifferentCase() {
-    assertThat(new ExactTextCaseSensitive("john malcovich").apply(driver, element)).isFalse();
+    assertThat(new ExactTextCaseSensitive("john Malkovich").apply(driver, element)).isFalse();
     verify(element).getText();
   }
 
@@ -49,7 +49,7 @@ class ExactTextCaseSensitiveTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(condition).hasToString("exact text case sensitive 'John Malcovich'");
+    assertThat(condition).hasToString("exact text case sensitive 'John Malkovich'");
   }
 
   @Test
@@ -62,7 +62,7 @@ class ExactTextCaseSensitiveTest {
     ExactTextCaseSensitive condition = new ExactTextCaseSensitive("Two");
     condition.apply(driver, element);
 
-    assertThat(condition.actualValue(driver, element)).isEqualTo("John Malcovich");
+    assertThat(condition.actualValue(driver, element)).isEqualTo("John Malkovich");
     verify(element).getText();
   }
 }

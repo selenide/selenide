@@ -1,10 +1,10 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -22,18 +22,16 @@ public class CaseSensitiveText extends TextCondition {
     return Html.text.containsCaseSensitive(actualText, expectedText);
   }
 
-  ====================
+  @Nullable
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    String elementText = "select".equalsIgnoreCase(element.getTagName()) ?
+  protected String getText(WebElement element) {
+    return "select".equalsIgnoreCase(element.getTagName()) ?
       getSelectedOptionsTexts(element) :
       element.getText();
-    return Html.text.containsCaseSensitive(elementText, expectedText);
   }
 
   private String getSelectedOptionsTexts(WebElement element) {
     List<WebElement> selectedOptions = new Select(element).getAllSelectedOptions();
     return selectedOptions.stream().map(WebElement::getText).collect(joining());
   }
-
 }
