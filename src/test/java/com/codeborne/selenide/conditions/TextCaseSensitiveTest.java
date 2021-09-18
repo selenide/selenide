@@ -65,7 +65,7 @@ final class TextCaseSensitiveTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(new CaseSensitiveText("One")).hasToString("textCaseSensitive 'One'");
+    assertThat(new CaseSensitiveText("One")).hasToString("text case sensitive 'One'");
   }
 
   private WebElement elementWithText(String text) {

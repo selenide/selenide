@@ -15,7 +15,7 @@ class ExactTextTest {
   private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
 
-  private final ExactText condition = new ExactText("John Malcovich");
+  private final ExactText condition = new ExactText("John Malkovich");
 
   @AfterEach
   void verifyNoMoreInteractions() {
@@ -24,7 +24,7 @@ class ExactTextTest {
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {
-    when(element.getText()).thenReturn("John Malcovich");
+    when(element.getText()).thenReturn("John Malkovich");
 
     assertThat(condition.apply(driver, element)).isTrue();
     verify(element).getText();
@@ -32,7 +32,7 @@ class ExactTextTest {
 
   @Test
   void shouldMatchExpectedTextWithDifferentCase() {
-    when(element.getText()).thenReturn("john malcovich");
+    when(element.getText()).thenReturn("john Malkovich");
 
     assertThat(condition.apply(driver, element)).isTrue();
     verify(element).getText();
@@ -40,7 +40,7 @@ class ExactTextTest {
 
   @Test
   void shouldNotMatchExpectedPartOfActualText() {
-    when(element.getText()).thenReturn("test John Malcovich test");
+    when(element.getText()).thenReturn("test John Malkovich test");
 
     assertThat(condition.apply(driver, element)).isFalse();
     verify(element).getText();
@@ -56,7 +56,7 @@ class ExactTextTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(condition).hasToString("exact text 'John Malcovich'");
+    assertThat(condition).hasToString("exact text 'John Malkovich'");
   }
 
   @Test
