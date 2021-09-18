@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -24,7 +25,7 @@ public class CaseSensitiveText extends TextCondition {
 
   @Nullable
   @Override
-  protected String getText(WebElement element) {
+  protected String getText(Driver driver, WebElement element) {
     return "select".equalsIgnoreCase(element.getTagName()) ?
       getSelectedOptionsTexts(element) :
       element.getText();

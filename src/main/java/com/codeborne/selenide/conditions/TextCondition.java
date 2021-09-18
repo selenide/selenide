@@ -19,13 +19,13 @@ public abstract class TextCondition extends Condition {
 
   protected abstract boolean match(String actualText, String expectedText);
 
-  protected String getText(WebElement element) {
+  protected String getText(Driver driver, WebElement element) {
     return element.getText();
   }
 
   @Override
   public boolean apply(Driver driver, WebElement element) {
-    actualText.set(getText(element));
+    actualText.set(getText(driver, element));
     return match(actualText.get(), expectedText);
   }
 
