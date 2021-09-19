@@ -25,8 +25,10 @@ public class Ancestor implements Command<SelenideElement> {
       1;
 
     String xpath = tagOrClass.startsWith(".") ?
-      format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][" + indexPredicate + "]", tagOrClass.substring(1)) :
-      format("ancestor::%s[" + indexPredicate + "]", tagOrClass);
+      format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][" + indexPredicate + "]",
+        tagOrClass.substring(1)) :
+      format("ancestor::%s[" + indexPredicate + "]",
+        tagOrClass);
     return locator.find(proxy, By.xpath(xpath), 0);
   }
 }
