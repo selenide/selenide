@@ -47,7 +47,8 @@ class SelenideElementProxy implements InvocationHandler {
       "sibling",
       "preceding",
       "lastChild",
-      "closest"
+      "closest",
+      "ancestor"
   ));
 
   private static final Set<String> methodsForSoftAssertion = new HashSet<>(asList(
