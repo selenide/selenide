@@ -101,7 +101,8 @@ public class Commands {
     add("findAll", new FindAll());
     add("$$", new FindAll());
     add("$$x", new FindAllByXpath());
-    add("closest", new GetClosest());
+    add("ancestor", new Ancestor());
+    add("closest", new Ancestor());
     add("parent", new GetParent());
     add("sibling", new GetSibling());
     add("preceding", new GetPreceding());

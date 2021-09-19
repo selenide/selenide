@@ -640,13 +640,42 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement lastChild();
 
   /**
-   * Locates closes ancestor element matching given criteria
+   * Locates the closest ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").ancestor("table") returns the closest "table" element above "td".
+   * <br/>
+   * Same as {@code ancestor("tagOrClass", 0)} or {@code closest("tagOrClass")}.
    *
-   * For example, $("td").closest("table") could give some "table".
-   *
-   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
+   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" (tag) or ".active" (class).
    * @return Matching ancestor element
-   * @see com.codeborne.selenide.commands.GetClosest
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement ancestor(String tagOrClass);
+
+  /**
+   * Locates the Nth ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").closest("table", 1) returns the 2nd "table" element above "td".
+   *
+   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" (tag) or ".active" (class).
+   * @param index      0...N index of the ancestor. 0 is the closest, 1 is higher up the hierarchy, etc...
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement ancestor(String tagOrClass, int index);
+
+  /**
+   * Same as {@link #ancestor(String)}.
+   *
+   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" (tag) or ".active" (class).
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue

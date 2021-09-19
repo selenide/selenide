@@ -1,5 +1,6 @@
 package integration;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -48,5 +49,33 @@ final class ParentTest extends ITest {
       .isEqualTo($("#multirowTable"));
     assertThat($(".second_row").closest(".multirow_table"))
       .isEqualTo($("#multirowTable"));
+  }
+
+  @Test
+  void canGetAncestorByTagName() {
+    SelenideElement element = $(By.name("domain"));
+
+    assertThat(element.ancestor("div"))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor("div", 0))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor("div", 1))
+      .isEqualTo($("#domain-container"));
+    assertThat(element.ancestor("div", 10).exists())
+      .isFalse();
+  }
+
+  @Test
+  void canGetAncestorByClassName() {
+    SelenideElement element = $(By.name("domain"));
+
+    assertThat(element.ancestor(".container"))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor(".container", 0))
+      .isEqualTo($("#dropdown-list-container"));
+    assertThat(element.ancestor(".container", 1))
+      .isEqualTo($("#domain-container"));
+    assertThat(element.ancestor(".container", 10).exists())
+      .isFalse();
   }
 }
