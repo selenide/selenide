@@ -9,7 +9,7 @@ ext {
   junitVersion = '5.8.0'
   jettyVersion = '9.4.43.v20210629'
   nettyVersion = '4.1.68.Final'
-  assertjVersion = '3.20.2'
+  assertjVersion = '3.21.0'
   mockitoVersion = '3.12.4'
   browserupProxyVersion = '2.1.2'
   littleProxyVersion = '2.0.5'
@@ -20,7 +20,7 @@ dependencies {
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy'
   }
-  api('io.github.bonigarcia:webdrivermanager:5.0.2') {
+  api('io.github.bonigarcia:webdrivermanager:5.0.3') {
     exclude group: 'org.apache.httpcomponents.core5', module: 'httpcore5-h2'
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
