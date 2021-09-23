@@ -14,15 +14,21 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 import static java.lang.String.format;
 
 @ParametersAreNonnullByDefault
-public class GetClosest implements Command<SelenideElement> {
+public class Ancestor implements Command<SelenideElement> {
   @Override
   @CheckReturnValue
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     String tagOrClass = firstOf(args);
+    int indexPredicate = args.length > 1 ?
+      (args[1] instanceof Integer ? (int) args[1] + 1 : 1) :
+      1;
+
     String xpath = tagOrClass.startsWith(".") ?
-        format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][1]", tagOrClass.substring(1)) :
-        format("ancestor::%s[1]", tagOrClass);
+      format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][" + indexPredicate + "]",
+        tagOrClass.substring(1)) :
+      format("ancestor::%s[" + indexPredicate + "]",
+        tagOrClass);
     return locator.find(proxy, By.xpath(xpath), 0);
   }
 }
