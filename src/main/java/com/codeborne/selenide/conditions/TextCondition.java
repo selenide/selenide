@@ -12,7 +12,7 @@ public abstract class TextCondition extends Condition {
   private final String expectedText;
   private final ThreadLocal<String> actualText = new ThreadLocal<>();
 
-  public TextCondition(String name, String expectedText) {
+  protected TextCondition(String name, String expectedText) {
     super(name);
     this.expectedText = expectedText;
   }
@@ -24,19 +24,19 @@ public abstract class TextCondition extends Condition {
   }
 
   @Override
-  public boolean apply(Driver driver, WebElement element) {
+  public final boolean apply(Driver driver, WebElement element) {
     actualText.set(getText(driver, element));
     return match(actualText.get(), expectedText);
   }
 
   @Nullable
   @Override
-  public String actualValue(Driver driver, WebElement element) {
+  public final String actualValue(Driver driver, WebElement element) {
     return actualText.get();
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     return String.format("%s '%s'", getName(), expectedText);
   }
 }
