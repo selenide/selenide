@@ -1,37 +1,26 @@
 package com.codeborne.selenide.conditions;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.commands.GetOwnText.getOwnText;
 
 @ParametersAreNonnullByDefault
-public class ExactOwnText extends Condition {
-  private final String expectedText;
-
+public class ExactOwnText extends TextCondition {
   public ExactOwnText(String expectedText) {
-    super("exact own text");
-    this.expectedText = expectedText;
+    super("exact own text", expectedText);
   }
 
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    return Html.text.equals(getOwnText(driver, element), expectedText);
+  protected boolean match(String actualText, String expectedText) {
+    return Html.text.equals(actualText, expectedText);
   }
 
   @Override
-  public String toString() {
-    return String.format("%s '%s'", getName(), expectedText);
-  }
-
-  @Nullable
-  @Override
-  public String actualValue(Driver driver, WebElement element) {
+  protected String getText(Driver driver, WebElement element) {
     return getOwnText(driver, element);
   }
 }
