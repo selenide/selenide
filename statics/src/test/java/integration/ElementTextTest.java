@@ -3,12 +3,16 @@ package integration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.regex.PatternSyntaxException;
+
 import static com.codeborne.selenide.Condition.exactOwnText;
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.matchText;
 import static com.codeborne.selenide.Condition.ownText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 final class ElementTextTest extends IntegrationTest {
   @BeforeEach
@@ -60,5 +64,25 @@ final class ElementTextTest extends IntegrationTest {
     $("#parent_div").shouldNotHave(exactOwnText("papa"));
     $("#parent_div").shouldNotHave(exactOwnText("Son"));
     $("#parent_div").shouldNotHave(exactOwnText("Daughter"));
+  }
+
+  @Test
+  void canCheckTextByRegularExpression() {
+    $("#child_div1").should(matchText("Son"));
+    $("#child_div1").should(matchText("So.+"));
+    $("#child_div1").should(matchText("So\\w"));
+  }
+
+  @Test
+  void cannotUseEmptyRegularExpression() {
+    assertThatThrownBy(() -> $("#child_div1").should(matchText("")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Argument must not be null or empty string");
+  }
+
+  @Test
+  void cannotUseInvalidRegularExpression() {
+    assertThatThrownBy(() -> $("#child_div1").should(matchText("{")))
+      .isInstanceOf(PatternSyntaxException.class);
   }
 }
