@@ -7,7 +7,7 @@ import com.codeborne.selenide.conditions.webdriver.NumberOfWindows;
 import com.codeborne.selenide.conditions.webdriver.Url;
 import com.codeborne.selenide.conditions.webdriver.UrlContaining;
 import com.codeborne.selenide.conditions.webdriver.UrlStartingWith;
-import com.codeborne.selenide.conditions.webdriver.TitleContaining;
+import com.codeborne.selenide.conditions.webdriver.Title;
 
 import org.openqa.selenium.WebDriver;
 
@@ -68,6 +68,6 @@ public class WebDriverConditions {
   @CheckReturnValue
   @Nonnull
   public static ObjectCondition<WebDriver> title(String expectedTitle) {
-    return new TitleContaining(expectedTitle);
+    return new Title(expectedTitle);
   }
 }
