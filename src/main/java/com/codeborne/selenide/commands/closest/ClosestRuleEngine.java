@@ -17,10 +17,10 @@ public class ClosestRuleEngine {
     ));
   }
 
-  public ClosestResult process(String selector) {
+  public ClosestResult process(String selector, int index) {
     ClosestRule closestRule = rules
       .stream()
-      .filter(rule -> rule.evaluate(selector))
+      .filter(rule -> rule.evaluate(selector, index))
       .findFirst()
       .orElseThrow(() -> new IllegalArgumentException("Selector does not match any rule"));
     return closestRule.getClosestResult();

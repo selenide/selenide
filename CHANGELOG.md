@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.24.4 (released 21.09.2021)
+* #1560 un-deprecate method ElementsContainer.getSelf()  --  see PR #1565
+* #1569 add details to error message about missing BrowserUpProxy dependency
+* upgrade okhttp 3.11.0 -> 3.12.13 
+* upgrade to WebDriverManager 5.0.3 (support Firefox 92.0)
+
+## 5.24.3 (released 13.09.2021)
+* upgrade to WebDriverManager to 5.0.2
+* exclude docker-java and few other dependencies
+
 ## 5.24.2 (released 02.09.2021)
 * #1551 Fix NoClassDefFoundException for StringUtils
 

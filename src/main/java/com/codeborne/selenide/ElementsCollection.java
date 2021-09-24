@@ -150,10 +150,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return should("have", Duration.ofMillis(timeoutMs), toArray(condition));
   }
 
+  @CheckReturnValue
+  @Nonnull
   private CollectionCondition[] toArray(CollectionCondition condition) {
     return new CollectionCondition[]{condition};
   }
 
+  @Nonnull
   protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
     validateAssertionMode(driver().config());
 

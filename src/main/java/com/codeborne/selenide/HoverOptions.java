@@ -1,5 +1,10 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class HoverOptions {
   private final int offsetX;
   private final int offsetY;
@@ -9,14 +14,18 @@ public class HoverOptions {
     this.offsetY = offsetY;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static HoverOptions withOffset(int offsetX, int offsetY) {
     return new HoverOptions(offsetX, offsetY);
   }
 
+  @CheckReturnValue
   public int offsetX() {
     return offsetX;
   }
 
+  @CheckReturnValue
   public int offsetY() {
     return offsetY;
   }

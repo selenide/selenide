@@ -7,10 +7,10 @@ public class ClosestWithTagRule extends SelectorValidation implements ClosestRul
   private String xpath;
 
   @Override
-  public boolean evaluate(String selector) {
+  public boolean evaluate(String selector, int index) {
     boolean evaluationResult = false;
     if (!isCssClass(selector) && !isAttribute(selector) && !containsAttributeValue(selector)) {
-      this.xpath = format("ancestor::%s[1]", selector);
+      this.xpath = format("ancestor::%s[%s]", selector, index);
       evaluationResult = true;
     }
     return evaluationResult;

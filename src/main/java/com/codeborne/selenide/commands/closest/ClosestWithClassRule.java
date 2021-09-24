@@ -7,11 +7,15 @@ public class ClosestWithClassRule extends SelectorValidation implements ClosestR
   private String xpath;
 
   @Override
-  public boolean evaluate(String selector) {
+  public boolean evaluate(String selector, int index) {
     boolean evaluationResult = false;
     if (isCssClass(selector)) {
       this.xpath =
-        format("ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][1]", selector.substring(1));
+        format(
+          "ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][%s]",
+          selector.substring(1),
+          index
+        );
       evaluationResult = true;
     }
     return evaluationResult;

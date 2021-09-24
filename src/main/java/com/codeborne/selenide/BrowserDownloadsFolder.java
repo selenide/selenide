@@ -1,5 +1,6 @@
 package com.codeborne.selenide;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
@@ -29,6 +30,8 @@ public final class BrowserDownloadsFolder extends DownloadsFolder {
     }
   }
 
+  @Nullable
+  @CheckReturnValue
   public static BrowserDownloadsFolder from(@Nullable File folder) {
     return folder == null ? null : new BrowserDownloadsFolder(folder);
   }

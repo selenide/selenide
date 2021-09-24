@@ -9,11 +9,11 @@ import org.openqa.selenium.By;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class GetClosestCommandTest implements WithAssertions {
+final class AncestorCommandTest implements WithAssertions {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final GetClosest getClosestCommand = new GetClosest();
+  private final Ancestor ancestorCommand = new Ancestor();
 
   @Test
   void testExecuteMethodWithTagsStartsWithDot() {
@@ -26,7 +26,7 @@ final class GetClosestCommandTest implements WithAssertions {
           argument.substring(1))),
       0)).
       thenReturn(mockedElement);
-    assertThat(getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+    assertThat(ancestorCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
       .isEqualTo(mockedElement);
   }
 
@@ -36,7 +36,29 @@ final class GetClosestCommandTest implements WithAssertions {
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
     when(locator.find(proxy, By.xpath(String.format("ancestor::%s[1]", argument)), 0)).thenReturn(mockedElement);
-    assertThat(getClosestCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+    assertThat(ancestorCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+      .isEqualTo(mockedElement);
+  }
+
+  @Test
+  void testExecuteMethodWithZeroIndex() {
+    String argument = "class";
+    String elementAttribute = "hello";
+    when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
+    when(locator.find(proxy, By.xpath(String.format("ancestor::%s[1]", argument)), 0))
+      .thenReturn(mockedElement);
+    assertThat(ancestorCommand.execute(proxy, locator, new Object[]{argument, 0}))
+      .isEqualTo(mockedElement);
+  }
+
+  @Test
+  void testExecuteMethodWithNonZeroIndex() {
+    String argument = "class";
+    String elementAttribute = "hello";
+    when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
+    when(locator.find(proxy, By.xpath(String.format("ancestor::%s[3]", argument)), 0))
+      .thenReturn(mockedElement);
+    assertThat(ancestorCommand.execute(proxy, locator, new Object[]{argument, 2}))
       .isEqualTo(mockedElement);
   }
 
@@ -48,7 +70,7 @@ final class GetClosestCommandTest implements WithAssertions {
     when(locator.find(proxy, By.xpath("ancestor::*[@test-argument='test-value'][1]"), 0))
       .thenReturn(mockedElement);
     assertThat(
-      getClosestCommand.execute(proxy, locator, new Object[]{selector, "something more"})
+      ancestorCommand.execute(proxy, locator, new Object[]{selector, "something more"})
     ).isEqualTo(mockedElement);
   }
 
@@ -59,7 +81,7 @@ final class GetClosestCommandTest implements WithAssertions {
     when(mockedElement.getAttribute(selector)).thenReturn(elementAttribute);
     when(locator.find(proxy, By.xpath("ancestor::*[@test-argument][1]"), 0)).thenReturn(mockedElement);
     assertThat(
-      getClosestCommand.execute(proxy, locator, new Object[]{selector, "something more"})
+      ancestorCommand.execute(proxy, locator, new Object[]{selector, "something more"})
     ).isEqualTo(mockedElement);
   }
 }
