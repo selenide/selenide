@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.25.0
+* #1515 add method $.shadowRoot()  --  see PR #1517
+* #1556 add method `SelenideElement.ancestor()`  --  thanks Oleg Berezhnoy for PR #1567
+* #1571 fix method `$.screenshot()` on Retina display  --  see PR #1576
+* #217 report **exact** text at the moment of failure of text conditions  --  thanks Pavel Fokin for PR #1313
+* #1566 forbid empty regex in MatchText 
+* #1573 add check `webdriver().shouldHave(title(...))` --  thanks Ervīns Patmalnieks for PR #1579
+
 ## 5.24.4 (released 21.09.2021)
 * #1560 un-deprecate method ElementsContainer.getSelf()  --  see PR #1565
 * #1569 add details to error message about missing BrowserUpProxy dependency

@@ -4,7 +4,6 @@ import com.codeborne.selenide.ObjectCondition;
 import com.codeborne.selenide.ex.ConditionMetException;
 import com.codeborne.selenide.ex.ConditionNotMetException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
@@ -21,10 +20,10 @@ import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
 import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
+import static com.codeborne.selenide.WebDriverConditions.title;
 import static com.codeborne.selenide.WebDriverConditions.url;
 import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
-import static com.codeborne.selenide.WebDriverConditions.title;
 import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -173,7 +172,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
       webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
     )
       .isInstanceOf(ConditionNotMetException.class)
-      .hasMessageContaining("Actual value: " + "Test::frames with delays");
+      .hasMessageContaining("Actual value: Test::frames with delays");
   }
 
   @Test
@@ -182,8 +181,8 @@ final class WebDriverConditionsTest extends IntegrationTest {
       webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
     )
       .isInstanceOf(ConditionMetException.class)
-      .hasMessageStartingWith("Page should not have title " + "Test::frames with delays")
-      .hasMessageContaining("Actual value: " + "Test::frames with delays");
+      .hasMessageStartingWith("Page should not have title Test::frames with delays")
+      .hasMessageContaining("Actual value: Test::frames with delays");
   }
 
   @Test
