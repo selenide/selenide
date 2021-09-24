@@ -1,4 +1,4 @@
-package com.codeborne.selenide.commands.closest;
+package com.codeborne.selenide.commands.ancestor;
 
 public class SelectorValidation {
 

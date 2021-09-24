@@ -1,7 +1,0 @@
-package com.codeborne.selenide.commands.closest;
-
-public interface ClosestRule {
-  boolean evaluate(String selector, int index);
-
-  ClosestResult getClosestResult();
-}

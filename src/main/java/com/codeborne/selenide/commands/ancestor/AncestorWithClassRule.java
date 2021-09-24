@@ -1,8 +1,8 @@
-package com.codeborne.selenide.commands.closest;
+package com.codeborne.selenide.commands.ancestor;
 
 import static java.lang.String.format;
 
-public class ClosestWithClassRule extends SelectorValidation implements ClosestRule {
+public class AncestorWithClassRule extends SelectorValidation implements AncestorRule {
 
   private String xpath;
 
@@ -22,7 +22,7 @@ public class ClosestWithClassRule extends SelectorValidation implements ClosestR
   }
 
   @Override
-  public ClosestResult getClosestResult() {
-    return new ClosestResult(xpath);
+  public AncestorResult getAncestorResult() {
+    return new AncestorResult(xpath);
   }
 }
