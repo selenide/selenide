@@ -16,9 +16,8 @@ final class ElementWithTextNotFoundTest {
   @Test
   void errorMessage() {
     ElementWithTextNotFound elementWithTextNotFound = new ElementWithTextNotFound(mockCollection(".characters"),
-      actualTexts,
-      expectedTexts,
-      null, 9000, cause);
+        expectedTexts, actualTexts,
+        null, 9000, cause);
 
     assertThat(elementWithTextNotFound).hasMessage(String.format("Element with text not found%n" +
       "Actual: [Niff, Naff, Nuff]%n" +
@@ -31,9 +30,8 @@ final class ElementWithTextNotFoundTest {
   @Test
   void errorMessageWithExplanation() {
     ElementWithTextNotFound elementWithTextNotFound = new ElementWithTextNotFound(mockCollection(".characters"),
-      actualTexts,
-      expectedTexts,
-      "we expect favorite characters", 9000, cause);
+        expectedTexts, actualTexts,
+        "we expect favorite characters", 9000, cause);
 
     assertThat(elementWithTextNotFound).hasMessage(String.format("Element with text not found%n" +
       "Actual: [Niff, Naff, Nuff]%n" +

@@ -6,7 +6,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class AlertNotFoundException extends UIAssertionError {
-  public AlertNotFoundException(Driver driver, String message, Throwable cause) {
-    super(driver, message, cause);
+  public AlertNotFoundException(Driver driver, Throwable cause) {
+    super(driver, "Alert not found", cause);
   }
 }

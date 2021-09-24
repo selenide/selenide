@@ -5,11 +5,15 @@ import com.codeborne.selenide.ObjectCondition;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.codeborne.selenide.ex.ErrorMessages.actualValue;
+import static com.codeborne.selenide.ex.ErrorMessages.extractActualValue;
 
 @ParametersAreNonnullByDefault
-public class ConditionMetException extends UIAssertionError {
+public class ConditionMetException extends ObjectConditionError {
   public <T> ConditionMetException(Driver driver, ObjectCondition<T> condition, T subject) {
-    super(driver, condition.describe(subject) + " " + condition.negativeDescription() + actualValue(condition, subject));
+    super(driver,
+      condition.describe(subject) + " " + condition.negativeDescription(),
+      condition.expectedValue(),
+      extractActualValue(condition, subject)
+    );
   }
 }

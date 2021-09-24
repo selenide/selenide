@@ -31,8 +31,20 @@ public class UIAssertionError extends AssertionFailedError {
     this.driver = driver;
   }
 
+  protected UIAssertionError(Driver driver, String message, @Nullable Object expected, @Nullable Object actual) {
+    super(message, expected, actual);
+    this.driver = driver;
+  }
+
   protected UIAssertionError(Driver driver, String message, @Nullable Throwable cause) {
     super(message, cause);
+    this.driver = driver;
+  }
+
+  protected UIAssertionError(Driver driver, String message,
+                             @Nullable Object expected, @Nullable Object actual,
+                             @Nullable Throwable cause) {
+    super(message, expected, actual, cause);
     this.driver = driver;
   }
 

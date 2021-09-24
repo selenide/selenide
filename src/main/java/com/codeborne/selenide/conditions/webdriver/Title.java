@@ -23,6 +23,13 @@ public class Title implements ObjectCondition<WebDriver> {
     return webDriver.getTitle();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return title;
+  }
+
   @Nonnull
   @Override
   public String description() {

@@ -17,7 +17,8 @@ public class TextsSizeMismatch extends UIAssertionError {
         lineSeparator() + "Actual: " + actualTexts + ", List size: " + actualTexts.size() +
         lineSeparator() + "Expected: " + expectedTexts + ", List size: " + expectedTexts.size() +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
-        lineSeparator() + "Collection: " + collection.description()
+        lineSeparator() + "Collection: " + collection.description(),
+      expectedTexts, actualTexts
     );
     super.timeoutMs = timeoutMs;
   }

@@ -10,7 +10,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class UrlCondition implements ObjectCondition<WebDriver> {
-  protected final String name;
+  private final String name;
   protected final String expectedUrl;
 
   protected UrlCondition(String name, String expectedUrl) {
@@ -23,6 +23,13 @@ public abstract class UrlCondition implements ObjectCondition<WebDriver> {
   @Override
   public String actualValue(WebDriver webDriver) {
     return webDriver.getCurrentUrl();
+  }
+
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return expectedUrl;
   }
 
   @Nonnull

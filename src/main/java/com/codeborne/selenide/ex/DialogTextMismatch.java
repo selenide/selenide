@@ -6,10 +6,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class DialogTextMismatch extends UIAssertionError {
-  public DialogTextMismatch(Driver driver, String actualText, String expectedText) {
+  public DialogTextMismatch(Driver driver, String expectedText, String actualText) {
     super(driver,
       String.format("Dialog text mismatch" +
         "%nActual: %s" +
-        "%nExpected: %s", actualText, expectedText));
+        "%nExpected: %s", actualText, expectedText),
+      expectedText, actualText);
   }
 }

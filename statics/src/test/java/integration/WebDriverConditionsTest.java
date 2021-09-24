@@ -218,6 +218,12 @@ final class WebDriverConditionsTest extends IntegrationTest {
         return "Available cookies: " + webdriver.manage().getCookies();
       }
 
+      @Override
+      @CheckReturnValue
+      public String expectedValue() {
+        return expectedCookieName;
+      }
+
       @Nonnull
       @Override
       public String describe(WebDriver object) {

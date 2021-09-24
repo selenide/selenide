@@ -37,6 +37,13 @@ public class Item implements ObjectCondition<LocalStorage> {
     return localStorage.getItems().toString();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return item;
+  }
+
   @CheckReturnValue
   @Override
   public boolean test(LocalStorage localStorage) {

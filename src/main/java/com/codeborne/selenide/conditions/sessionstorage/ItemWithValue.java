@@ -40,6 +40,13 @@ public class ItemWithValue implements ObjectCondition<SessionStorage> {
     return sessionStorage.getItems().toString();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return String.format("%s=%s", item, value);
+  }
+
   @CheckReturnValue
   @Override
   public boolean test(SessionStorage sessionStorage) {

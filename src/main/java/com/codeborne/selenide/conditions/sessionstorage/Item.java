@@ -37,6 +37,13 @@ public class Item implements ObjectCondition<SessionStorage> {
     return sessionStorage.getItems().toString();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return item;
+  }
+
   @CheckReturnValue
   @Override
   public boolean test(SessionStorage sessionStorage) {

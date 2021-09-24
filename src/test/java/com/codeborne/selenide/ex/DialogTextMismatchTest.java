@@ -10,7 +10,7 @@ final class DialogTextMismatchTest {
   @Test
   void dialogMismatchTextStringTest() {
     Driver driver = new DriverStub();
-    DialogTextMismatch dialogTextMismatch = new DialogTextMismatch(driver, "Actual text", "Expected text");
+    DialogTextMismatch dialogTextMismatch = new DialogTextMismatch(driver, "Expected text", "Actual text");
 
     assertThat(dialogTextMismatch).hasMessage(String.format("Dialog text mismatch%n" +
       "Actual: Actual text%n" +
