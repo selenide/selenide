@@ -192,6 +192,12 @@ final class LocalStorageTest extends IntegrationTest {
         return localStorage.getItems().toString();
       }
 
+      @Override
+      @CheckReturnValue
+      public String expectedValue() {
+        return expectedValue;
+      }
+
       @Nonnull
       @Override
       public String describe(LocalStorage object) {

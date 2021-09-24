@@ -20,6 +20,7 @@ public class ErrorMessages {
   private static final DurationFormat df = new DurationFormat();
 
   @CheckReturnValue
+  @Nonnull
   protected static String timeout(long timeoutMs) {
     return String.format("%nTimeout: %s", df.format(timeoutMs));
   }
@@ -45,22 +46,32 @@ public class ErrorMessages {
   @CheckReturnValue
   @Nonnull
   static <T> String actualValue(ObjectCondition<T> condition, @Nullable T object) {
-    if (object != null) {
-      try {
-        Object actualValue = condition.actualValue(object);
-        if (actualValue != null) {
-          return String.format("%nActual value: %s", actualValue);
-        }
-      }
-      catch (RuntimeException failedToGetValue) {
-        String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
-        return String.format("%nActual value: %s", substring(failedActualValue, 0, 50));
-      }
+    if (object == null) {
+      return "";
     }
-    return "";
+    return formatActualValue(extractActualValue(condition, object));
   }
 
   @CheckReturnValue
+  @Nullable
+  static <T> String extractActualValue(ObjectCondition<T> condition, @Nonnull T object) {
+    try {
+      return condition.actualValue(object);
+    }
+    catch (RuntimeException failedToGetValue) {
+      String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
+      return substring(failedActualValue, 0, 50);
+    }
+  }
+
+  @CheckReturnValue
+  @Nonnull
+  static <T> String formatActualValue(@Nullable String actualValue) {
+    return actualValue == null ? "" : String.format("%nActual value: %s", actualValue);
+  }
+
+  @CheckReturnValue
+  @Nonnull
   static String causedBy(@Nullable Throwable cause) {
     if (cause == null) {
       return "";

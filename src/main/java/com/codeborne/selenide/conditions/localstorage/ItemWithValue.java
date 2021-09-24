@@ -40,6 +40,13 @@ public class ItemWithValue implements ObjectCondition<LocalStorage> {
     return localStorage.getItems().toString();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return String.format("%s=%s", item, value);
+  }
+
   @CheckReturnValue
   @Override
   public boolean test(LocalStorage localStorage) {

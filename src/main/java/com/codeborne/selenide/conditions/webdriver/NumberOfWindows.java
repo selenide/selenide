@@ -43,6 +43,13 @@ public class NumberOfWindows implements ObjectCondition<WebDriver> {
     return String.valueOf(webDriver.getWindowHandles().size());
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return String.valueOf(expectedNumberOfWindows);
+  }
+
   @Nonnull
   @CheckReturnValue
   @Override

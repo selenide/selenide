@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver> {
-  protected final String name;
+  private final String name;
   protected final String expectedUrl;
 
   protected CurrentFrameCondition(String name, String expectedUrl) {
@@ -38,6 +38,13 @@ public abstract class CurrentFrameCondition implements ObjectCondition<WebDriver
   @Override
   public String actualValue(WebDriver webDriver) {
     return getCurrentFrameUrl(webDriver);
+  }
+
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return expectedUrl;
   }
 
   @CheckReturnValue

@@ -4,8 +4,10 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.CollectionSource;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collection;
 import java.util.List;
 
 import static com.codeborne.selenide.ElementsCollection.elementsToString;
@@ -22,10 +24,18 @@ public class ListSizeMismatch extends UIAssertionError {
     super(driver,
       "List size mismatch: expected: " + operator + ' ' + expectedSize +
         (explanation == null ? "" : " (because " + explanation + ")") +
-        ", actual: " + (actualElements == null ? 0 : actualElements.size()) +
+        ", actual: " + sizeOf(actualElements) +
         ", collection: " + collection.description() +
-        lineSeparator() + "Elements: " + elementsToString(collection.driver(), actualElements), lastError
+        lineSeparator() + "Elements: " + elementsToString(collection.driver(), actualElements),
+      expectedSize,
+      sizeOf(actualElements),
+      lastError
     );
     super.timeoutMs = timeoutMs;
+  }
+
+  @CheckReturnValue
+  private static int sizeOf(@Nullable Collection<?> collection) {
+    return collection == null ? 0 : collection.size();
   }
 }

@@ -43,6 +43,13 @@ public class Content implements ObjectCondition<Clipboard> {
     return clipboard.getText();
   }
 
+  @Override
+  @Nullable
+  @CheckReturnValue
+  public String expectedValue() {
+    return expectedContent;
+  }
+
   @Nonnull
   @CheckReturnValue
   @Override
