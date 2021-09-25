@@ -1,25 +1,20 @@
 package com.codeborne.selenide.commands.ancestor;
 
+import java.util.Optional;
+
 import static java.lang.String.format;
 
 public class AncestorWithAttributeAndValueRule extends SelectorValidation implements AncestorRule {
 
-  private String xpath;
-
   @Override
-  public boolean evaluate(String selector, int index) {
-    boolean evaluationResult = false;
+  public Optional<AncestorResult> evaluate(String selector, int index) {
     if (isAttribute(selector) && containsAttributeValue(selector)) {
-      String attribute = selector.substring(1, selector.indexOf("="));
-      String attributeValue = selector.substring(selector.indexOf("=") + 1, selector.length() - 1);
-      this.xpath = format("ancestor::*[@%s='%s'][%s]", attribute, attributeValue, index);
-      evaluationResult = true;
+      int endIndex = selector.indexOf("=");
+      String attribute = selector.substring(1, endIndex);
+      String attributeValue = selector.substring(endIndex + 1, selector.length() - 1);
+      String xpath = format("ancestor::*[@%s='%s'][%s]", attribute, attributeValue, index);
+      return Optional.of(new AncestorResult(xpath));
     }
-    return evaluationResult;
-  }
-
-  @Override
-  public AncestorResult getAncestorResult() {
-    return new AncestorResult(xpath);
+    return Optional.empty();
   }
 }

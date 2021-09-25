@@ -1,28 +1,21 @@
 package com.codeborne.selenide.commands.ancestor;
 
+import java.util.Optional;
+
 import static java.lang.String.format;
 
 public class AncestorWithClassRule extends SelectorValidation implements AncestorRule {
 
-  private String xpath;
-
   @Override
-  public boolean evaluate(String selector, int index) {
-    boolean evaluationResult = false;
+  public Optional<AncestorResult> evaluate(String selector, int index) {
     if (isCssClass(selector)) {
-      this.xpath =
-        format(
-          "ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][%s]",
-          selector.substring(1),
-          index
-        );
-      evaluationResult = true;
+      String xpath = format(
+        "ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' %s ')][%s]",
+        selector.substring(1),
+        index
+      );
+      return Optional.of(new AncestorResult(xpath));
     }
-    return evaluationResult;
-  }
-
-  @Override
-  public AncestorResult getAncestorResult() {
-    return new AncestorResult(xpath);
+    return Optional.empty();
   }
 }

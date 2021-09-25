@@ -2,6 +2,7 @@ package com.codeborne.selenide.commands.ancestor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class AncestorRuleEngine {
 
@@ -13,11 +14,11 @@ public class AncestorRuleEngine {
   );
 
   public AncestorResult process(String selector, int index) {
-    AncestorRule ancestorRule = rules
+    return rules
       .stream()
-      .filter(rule -> rule.evaluate(selector, index))
+      .map(rule -> rule.evaluate(selector, index))
+      .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
       .findFirst()
       .orElseThrow(() -> new IllegalArgumentException("Selector does not match any rule"));
-    return ancestorRule.getAncestorResult();
   }
 }
