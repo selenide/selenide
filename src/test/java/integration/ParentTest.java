@@ -78,4 +78,18 @@ final class ParentTest extends ITest {
     assertThat(element.ancestor(".container", 10).exists())
       .isFalse();
   }
+
+  @Test
+  void canGetClosestMatchingAncestorByAttribute() {
+    SelenideElement expectedElement = $("#ancestor");
+    assertThat($("#second-div").closest("[test-attribute]"))
+      .isEqualTo(expectedElement);
+  }
+
+  @Test
+  void canGetClosestMatchingAncestorByAttributeAndValue() {
+    SelenideElement expectedElement = $("#ancestor");
+    assertThat($("#second-div").closest("[test-attribute=test-value]"))
+      .isEqualTo(expectedElement);
+  }
 }

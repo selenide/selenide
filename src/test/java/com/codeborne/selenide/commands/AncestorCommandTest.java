@@ -31,7 +31,7 @@ final class AncestorCommandTest implements WithAssertions {
   }
 
   @Test
-  void testExecuteMethodWithTagsThatDontStartsWithDot() {
+  void testExecuteMethodWithTagsThatDoesNotStartWithDot() {
     String argument = "class";
     String elementAttribute = "hello";
     when(mockedElement.getAttribute(argument)).thenReturn(elementAttribute);
@@ -60,5 +60,28 @@ final class AncestorCommandTest implements WithAssertions {
       .thenReturn(mockedElement);
     assertThat(ancestorCommand.execute(proxy, locator, new Object[]{argument, 2}))
       .isEqualTo(mockedElement);
+  }
+
+  @Test
+  void testExecuteMethodWithAttributeNameAndValue() {
+    String selector = "[test-argument=test-value]";
+    String elementAttribute = "hello";
+    when(mockedElement.getAttribute(selector)).thenReturn(elementAttribute);
+    when(locator.find(proxy, By.xpath("ancestor::*[@test-argument='test-value'][1]"), 0))
+      .thenReturn(mockedElement);
+    assertThat(
+      ancestorCommand.execute(proxy, locator, new Object[]{selector, "something more"})
+    ).isEqualTo(mockedElement);
+  }
+
+  @Test
+  void testExecuteMethodWithAttribute() {
+    String selector = "[test-argument]";
+    String elementAttribute = "hello";
+    when(mockedElement.getAttribute(selector)).thenReturn(elementAttribute);
+    when(locator.find(proxy, By.xpath("ancestor::*[@test-argument][1]"), 0)).thenReturn(mockedElement);
+    assertThat(
+      ancestorCommand.execute(proxy, locator, new Object[]{selector, "something more"})
+    ).isEqualTo(mockedElement);
   }
 }
