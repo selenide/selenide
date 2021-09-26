@@ -1,13 +1,14 @@
 package integration;
 
-import com.codeborne.selenide.Driver;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.commands.Click;
 import com.codeborne.selenide.commands.Commands;
+import com.codeborne.selenide.impl.WebElementSource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,10 +37,12 @@ final class OverrideCommandsTest extends ITest {
 
   @ParametersAreNonnullByDefault
   private class MyClick extends Click {
+
     @Override
-    protected void click(Driver driver, WebElement element) {
-      super.click(driver, element);
+    @Nullable
+    public Void execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
       clickCounter.incrementAndGet();
+      return null;
     }
   }
 }

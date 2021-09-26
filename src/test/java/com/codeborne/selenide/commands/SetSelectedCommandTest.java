@@ -8,18 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 final class SetSelectedCommandTest {
-  private final Click mockedClick = mock(Click.class);
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SetSelected setSelectedCommand = new SetSelected(mockedClick);
+  private final SetSelected setSelectedCommand = new SetSelected();
   private final WebElement mockedFoundElement = mock(WebElement.class);
 
   @BeforeEach
@@ -29,22 +26,11 @@ final class SetSelectedCommandTest {
   }
 
   @Test
-  void defaultConstructor() throws NoSuchFieldException, IllegalAccessException {
-    SetSelected setSelected = new SetSelected();
-    Field clickField = setSelected.getClass().getDeclaredField("click");
-    clickField.setAccessible(true);
-    Click click = (Click) clickField.get(setSelected);
-    assertThat(click)
-      .isNotNull();
-  }
-
-  @Test
   void executeMethodWhenElementIsNotDisplayed() {
     when(mockedFoundElement.isDisplayed()).thenReturn(false);
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    }
-    catch (InvalidStateException exception) {
+    } catch (InvalidStateException exception) {
       assertThat(exception)
         .hasMessageStartingWith("Invalid element state: Cannot change invisible element");
     }
@@ -61,8 +47,7 @@ final class SetSelectedCommandTest {
     when(mockedFoundElement.getAttribute("type")).thenReturn("href");
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    }
-    catch (InvalidStateException exception) {
+    } catch (InvalidStateException exception) {
       assertThat(exception)
         .hasMessageStartingWith("Invalid element state: Only use setSelected on checkbox/option/radio");
     }

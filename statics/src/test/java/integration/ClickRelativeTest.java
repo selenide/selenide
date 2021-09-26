@@ -45,7 +45,7 @@ final class ClickRelativeTest extends IntegrationTest {
   void userCanClickElementWithOffsetPositions_withClickOptionJS() {
     Configuration.clickViaJs = false;
 
-    $("#page").click(usingJavaScript().offset(123, 222));
+    $("#page").click(usingJavaScript(123, 222));
 
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
@@ -54,7 +54,7 @@ final class ClickRelativeTest extends IntegrationTest {
   void userCanClickElementWithOffsetXPosition_withClickOptionJS() {
     Configuration.clickViaJs = false;
 
-    $("#page").click(usingJavaScript().offsetX(123));
+    $("#page").click(usingJavaScript(123, 0));
 
     $("#coords").shouldHave(exactText("(523, 300)"));
   }
@@ -63,7 +63,7 @@ final class ClickRelativeTest extends IntegrationTest {
   void screenshotIsTaken_ifClickWithOffset_getsOutsideOfElement() {
     Configuration.timeout = 123;
 
-    assertThatThrownBy(() -> $("#page").click(usingDefaultMethod().offsetX(9999999)))
+    assertThatThrownBy(() -> $("#page").click(usingDefaultMethod(9999999, 0)))
       .isInstanceOf(UIAssertionError.class)
       .hasMessageContaining("MoveTargetOutOfBoundsException")
       .hasMessageContaining("out of bounds")

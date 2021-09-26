@@ -1,6 +1,8 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
+import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.InvalidStateException;
@@ -18,15 +20,6 @@ import static com.codeborne.selenide.impl.WebElementWrapper.wrap;
 
 @ParametersAreNonnullByDefault
 public class SelectRadio implements Command<SelenideElement> {
-  private final Click click;
-
-  public SelectRadio() {
-    this(new Click());
-  }
-
-  SelectRadio(Click click) {
-    this.click = click;
-  }
 
   @Override
   @Nonnull
@@ -35,10 +28,12 @@ public class SelectRadio implements Command<SelenideElement> {
     List<WebElement> matchingRadioButtons = locator.findAll();
     for (WebElement radio : matchingRadioButtons) {
       if (value.equals(radio.getAttribute("value"))) {
-        if (radio.getAttribute("readonly") != null)
+        if (radio.getAttribute("readonly") != null) {
           throw new InvalidStateException("Cannot select readonly radio button");
-        click.click(locator.driver(), radio);
-        return wrap(locator.driver(), radio);
+        }
+        Driver driver = locator.driver();
+        ClickOptions.clickUsingConfigMethod(driver, radio);
+        return wrap(driver, radio);
       }
     }
     throw new ElementNotFound(locator.description(), value(value));

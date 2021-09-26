@@ -14,16 +14,13 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 final class SelectRadioCommandTest {
   private final DriverStub driver = new DriverStub();
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final Click click = mock(Click.class);
-  private final SelectRadio command = new SelectRadio(click);
+  private final SelectRadio command = new SelectRadio();
 
   @BeforeEach
   void setup() {
@@ -46,8 +43,6 @@ final class SelectRadioCommandTest {
     assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{"ElementValue"}))
       .isInstanceOf(InvalidStateException.class)
       .hasMessageStartingWith("Invalid element state: Cannot select readonly radio button");
-
-    verifyNoInteractions(click);
   }
 
   @Test
@@ -56,7 +51,6 @@ final class SelectRadioCommandTest {
 
     SelenideElement clickedElement = command.execute(proxy, locator, new Object[]{"ElementValue"});
     assertThat(clickedElement.getWrappedElement()).isEqualTo(input);
-    verify(click).click(driver, input);
   }
 
   private WebElement givenRadioInput(String value, boolean readonly) {

@@ -1165,18 +1165,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   WebElement getWrappedElement();
 
   /**
-   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}
-   *
-   * <p>
-   * You can specify a relative offset from the center of the element inside ClickOptions:
-   * e.g. {@code $("#username").click(usingJavaScript().offset(123, 222))}
-   * </p>
-   *
-   * @see com.codeborne.selenide.commands.Click
-   */
-  void click(ClickOptions clickOption);
-
-  /**
    * Click the element
    *
    * <p>
@@ -1193,12 +1181,45 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   void click();
 
   /**
+   * Click the element with given timeout.
+   *
+   * @see #click()
+   */
+  void click(Duration timeout);
+
+  /**
    * Click the element with a relative offset from the center of the element
    *
-   * @deprecated use {@link #click(ClickOptions)} with offsets
+   * @see #click()
    */
-  @Deprecated
   void click(int offsetX, int offsetY);
+
+  /**
+   * Click the element with a relative offset from the center of the element
+   * with given timeout.
+   *
+   * @see #click(int, int)
+   */
+  void click(int offsetX, int offsetY, Duration timeout);
+
+  /**
+   * Click the element using {@link ClickOptions}: {@code $("#username").click(ClickOptions.usingJavaScript())}
+   *
+   * <p>
+   * You can specify a relative offset from the center of the element inside ClickOptions:
+   * e.g. {@code $("#username").click(ClickOptions.usingJavaScript(123, 222))}
+   * </p>
+   *
+   * @see com.codeborne.selenide.commands.Click
+   */
+  void click(ClickOptions clickOption);
+
+  /**
+   * Click the element using {@link ClickOptions} with given timeout.
+   *
+   * @see #click(ClickOptions)
+   */
+  void click(ClickOptions clickOption, Duration timeout);
 
   /**
    * Click with right mouse button on this element

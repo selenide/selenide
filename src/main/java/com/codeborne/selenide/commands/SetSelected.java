@@ -1,5 +1,6 @@
 package com.codeborne.selenide.commands;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
@@ -14,15 +15,6 @@ import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
 public class SetSelected implements Command<SelenideElement> {
-  private final Click click;
-
-  public SetSelected() {
-    this.click = new Click();
-  }
-
-  public SetSelected(Click click) {
-    this.click = click;
-  }
 
   @Override
   @Nonnull
@@ -39,8 +31,7 @@ public class SetSelected implements Command<SelenideElement> {
         if (!type.equals("checkbox") && !type.equals("radio")) {
           throw new InvalidStateException("Only use setSelected on checkbox/option/radio");
         }
-      }
-      else {
+      } else {
         throw new InvalidStateException("Only use setSelected on checkbox/option/radio");
       }
     }
@@ -48,7 +39,7 @@ public class SetSelected implements Command<SelenideElement> {
       throw new InvalidStateException("Cannot change value of readonly/disabled element");
     }
     if (element.isSelected() != selected) {
-      click.execute(proxy, locator, NO_ARGS);
+      ClickOptions.clickUsingConfigMethod(locator.driver(), element);
     }
     return proxy;
   }
