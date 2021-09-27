@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverProvider;
 import com.codeborne.selenide.WebDriverRunner;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +13,12 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class WebDriverThreadLocalContainerTest implements WithAssertions {
+final class WebDriverThreadLocalContainerTest {
   private final WebDriverThreadLocalContainer container = new WebDriverThreadLocalContainer();
 
   @BeforeEach

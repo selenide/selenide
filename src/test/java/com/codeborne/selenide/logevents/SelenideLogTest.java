@@ -1,45 +1,32 @@
 package com.codeborne.selenide.logevents;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
+import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class SelenideLogTest implements WithAssertions {
+final class SelenideLogTest {
   @Test
-  void testGetSubject() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    assertThat(log.getSubject())
-      .isEqualTo("Subject");
-  }
-
-  @Test
-  void testGetStatus() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    assertThat(log.getStatus())
+  void initialStatusIsInProgress() {
+    assertThat(new SelenideLog("By.name: domain", "exists()").getStatus())
       .isEqualTo(IN_PROGRESS);
   }
 
   @Test
-  void testGetElement() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    assertThat(log.getElement())
-      .isEqualTo("Element");
+  void measuresDurationOfEveryStep() throws InterruptedException {
+    SelenideLog step = new SelenideLog("By.name: domain", "exists()");
+
+    Thread.sleep(15);
+    step.setStatus(PASS);
+
+    assertThat(step.getStatus()).isEqualTo(PASS);
+    assertThat(step.getDuration()).isBetween(15L, 100L);
   }
 
   @Test
-  void testError() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    Throwable error = new Throwable("Error message");
-    log.setError(error);
-    assertThat(log.getError())
-      .isEqualTo(error);
-  }
-
-  @Test
-  void testToString() {
-    SelenideLog log = new SelenideLog("Element", "Subject");
-    assertThat(log)
-      .hasToString(String.format("$(\"%s\") %s", log.getElement(), log.getSubject()));
+  void stringRepresentationUsedInReports() {
+    SelenideLog log = new SelenideLog("By.name: domain", "exists()");
+    assertThat(log).hasToString("$(\"By.name: domain\") exists()");
   }
 }

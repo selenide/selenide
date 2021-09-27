@@ -1,9 +1,8 @@
 package com.codeborne.selenide;
 
+import com.codeborne.selenide.impl.CollectionSource;
 import com.codeborne.selenide.impl.SelenideElementIterator;
 import com.codeborne.selenide.impl.SelenideElementListIterator;
-import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptException;
@@ -21,6 +20,8 @@ import static com.codeborne.selenide.Condition.text;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class ElementsCollectionTest implements WithAssertions {
+final class ElementsCollectionTest {
   private final DriverStub driver = new DriverStub();
   private final CollectionSource source = mock(CollectionSource.class);
   private final WebElement element1 = element("h1");

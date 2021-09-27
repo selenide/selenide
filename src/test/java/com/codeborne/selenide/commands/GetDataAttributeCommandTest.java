@@ -2,38 +2,39 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class GetDataAttributeCommandTest implements WithAssertions {
+final class GetDataAttributeCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final GetDataAttribute getDataAttributeCommand = new GetDataAttribute();
+  private final SelenideElement webElement = mock(SelenideElement.class);
+  private final GetDataAttribute command = new GetDataAttribute();
 
   @BeforeEach
   void setup() {
-    when(locator.getWebElement()).thenReturn(mockedElement);
+    when(locator.getWebElement()).thenReturn(webElement);
   }
 
   @Test
-  void testExecuteMethodWithDataAttribute() {
-    String argument = "class";
-    String elementAttribute = "hello";
-    when(mockedElement.getAttribute("data-" + argument)).thenReturn(elementAttribute);
-    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
-      .isEqualTo(elementAttribute);
+  void returnsValueOfDataAttribute() {
+    when(webElement.getAttribute(any())).thenReturn("hello");
+    assertThat(command.execute(proxy, locator, new Object[]{"test-id"}))
+      .isEqualTo("hello");
+    verify(webElement).getAttribute("data-test-id");
   }
 
   @Test
-  void testExecuteMethodWithNoDataAttribute() {
-    String argument = "class";
-    when(mockedElement.getAttribute("data-" + argument)).thenReturn(null);
-    assertThat(getDataAttributeCommand.execute(proxy, locator, new Object[]{argument, "something more"}))
+  void returnsNullIfDataAttributeIsMissing() {
+    when(webElement.getAttribute(any())).thenReturn(null);
+    assertThat(command.execute(proxy, locator, new Object[]{"test-id"}))
       .isNull();
+    verify(webElement).getAttribute("data-test-id");
   }
 }

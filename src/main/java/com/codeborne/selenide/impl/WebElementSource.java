@@ -106,7 +106,7 @@ public abstract class WebElementSource {
     }
 
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
+      throw Cleanup.of.wrapInvalidSelectorException(lastError);
     }
 
     if (element == null) {

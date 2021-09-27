@@ -1,16 +1,16 @@
 package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-final class MatchTextTest implements WithAssertions {
+final class MatchTextTest {
   private final Driver driver = mock(Driver.class);
 
   @Test

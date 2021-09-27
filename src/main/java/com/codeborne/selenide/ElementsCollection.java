@@ -200,7 +200,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       }
       catch (WebDriverException | IndexOutOfBoundsException | UIAssertionError elementNotFound) {
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-          throw Cleanup.of.wrap(elementNotFound);
+          throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
         }
         if (condition.missingElementSatisfiesCondition()) {
           return;

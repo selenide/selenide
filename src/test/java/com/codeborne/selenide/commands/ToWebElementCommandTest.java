@@ -2,28 +2,24 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class ToWebElementCommandTest implements WithAssertions {
+final class ToWebElementCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final ToWebElement toWebElementCommand = new ToWebElement();
-  private final WebElement mockedFoundElement = mock(WebElement.class);
-
-  @BeforeEach
-  void setup() {
-    when(locator.getWebElement()).thenReturn(mockedFoundElement);
-  }
+  private final ToWebElement command = new ToWebElement();
+  private final WebElement webElement = mock(WebElement.class);
 
   @Test
-  void testExecuteMethod() {
-    assertThat(toWebElementCommand.execute(proxy, locator, new Object[]{}))
-      .isEqualTo(mockedFoundElement);
+  void returnsUnderlyingWebElement() {
+    when(locator.getWebElement()).thenReturn(webElement);
+    assertThat(command.execute(proxy, locator, new Object[]{})).isEqualTo(webElement);
+    verify(locator).getWebElement();
   }
 }

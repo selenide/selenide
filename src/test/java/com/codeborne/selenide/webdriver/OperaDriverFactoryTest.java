@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.InvalidArgumentException;
@@ -12,9 +11,11 @@ import org.openqa.selenium.opera.OperaOptions;
 import java.io.File;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-final class OperaDriverFactoryTest implements WithAssertions {
+final class OperaDriverFactoryTest {
   private final Proxy proxy = mock(Proxy.class);
   private final File browserDownloadsFolder = new File("build/downlao");
   private final SelenideConfig config = new SelenideConfig().headless(false);

@@ -1,9 +1,10 @@
 package com.codeborne.selenide;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-final class InternetExplorerNamesTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class InternetExplorerNamesTest {
   @Test
   void internetExplorerShortNameTest() {
     assertThat(new Browser(Browsers.IE, false).isIE()).isTrue();

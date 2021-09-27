@@ -1,10 +1,11 @@
 package com.codeborne.selenide.drivercommands;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-final class BasicAuthUrlTest implements WithAssertions {
-  private BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class BasicAuthUrlTest {
+  private final BasicAuthUrl basicAuthUrl = new BasicAuthUrl();
 
   @Test
   void appendBasicAuthToURL_absoluteUrl() {

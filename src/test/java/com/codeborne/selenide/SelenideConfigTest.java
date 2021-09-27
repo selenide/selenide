@@ -1,11 +1,12 @@
 package com.codeborne.selenide;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-final class SelenideConfigTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class SelenideConfigTest {
   @Test
   void getsReportsUrlFromSystemProperty() {
     System.setProperty("selenide.reportsUrl", "http://ci.org/job/123/artifact/");

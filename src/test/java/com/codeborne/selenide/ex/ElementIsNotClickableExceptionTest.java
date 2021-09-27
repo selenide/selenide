@@ -2,11 +2,12 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriverException;
 
-final class ElementIsNotClickableExceptionTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class ElementIsNotClickableExceptionTest {
   @Test
   void errorMessage() {
     Driver driver = new DriverStub();

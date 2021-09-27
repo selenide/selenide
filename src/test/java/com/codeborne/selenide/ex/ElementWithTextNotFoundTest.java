@@ -1,14 +1,14 @@
 package com.codeborne.selenide.ex;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class ElementWithTextNotFoundTest implements WithAssertions {
+final class ElementWithTextNotFoundTest {
   private final List<String> actualTexts = asList("Niff", "Naff", "Nuff");
   private final List<String> expectedTexts = asList("Piff", "Paff", "Puff");
   private final Throwable cause = new org.openqa.selenium.NoSuchElementException("ups");

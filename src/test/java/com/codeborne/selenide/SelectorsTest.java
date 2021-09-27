@@ -1,11 +1,12 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.selector.ByShadow;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-final class SelectorsTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class SelectorsTest {
 
   @Test
   void byAttributeUsesXPath() {

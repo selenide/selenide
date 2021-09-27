@@ -2,7 +2,6 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
@@ -11,69 +10,62 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class IsDisplayedCommandTest implements WithAssertions {
+final class IsDisplayedCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final WebElement mockedElement = mock(WebElement.class);
-  private final IsDisplayed isDisplayedCommand = new IsDisplayed();
+  private final IsDisplayed command = new IsDisplayed();
 
   @BeforeEach
-  void setup() {
+  void setUp() {
     when(locator.getWebElement()).thenReturn(mockedElement);
   }
 
   @Test
-  void testExecuteMethodWhenElementIsNotPresent() {
-    assertThat(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}))
-      .isFalse();
-  }
-
-  @Test
-  void testExecuteMethodWhenElementIsNotDisplayed() {
-    when(locator.getWebElement()).thenReturn(mockedElement);
+  void elementIsNotDisplayed() {
     when(mockedElement.isDisplayed()).thenReturn(false);
-    assertThat(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}))
-      .isFalse();
+    assertThat(command.execute(proxy, locator, null)).isFalse();
+    verify(mockedElement).isDisplayed();
   }
 
   @Test
-  void testExecuteMethodWhenElementIsDisplayed() {
-    when(locator.getWebElement()).thenReturn(mockedElement);
+  void elementIsDisplayed() {
     when(mockedElement.isDisplayed()).thenReturn(true);
-    assertThat(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}))
-      .isTrue();
+    assertThat(command.execute(proxy, locator, null)).isTrue();
+    verify(mockedElement).isDisplayed();
   }
 
   @Test
-  void testExecuteMethodWhenWebDriverExceptionIsThrown() {
-    catchExecuteMethodWithException(new WebDriverException());
-  }
-
-  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
-    when(locator.getWebElement()).thenReturn(mockedElement);
-    doThrow(exception).when(mockedElement).isDisplayed();
-    assertThat(isDisplayedCommand.execute(proxy, locator, new Object[]{"something more"}))
-      .isFalse();
+  void returnsFalse_whenWebDriverExceptionIsThrown() {
+    doThrow(new WebDriverException()).when(mockedElement).isDisplayed();
+    assertThat(command.execute(proxy, locator, null)).isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenNotFoundExceptionIsThrown() {
-    catchExecuteMethodWithException(new NotFoundException());
+  void returnsFalse_whenNotFoundExceptionIsThrown() {
+    doThrow(new NotFoundException()).when(mockedElement).isDisplayed();
+    assertThat(command.execute(proxy, locator, null)).isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenIndexOutOfBoundsExceptionIsThrown() {
-    catchExecuteMethodWithException(new IndexOutOfBoundsException());
+  void returnsFalse_whenIndexOutOfBoundsExceptionIsThrown() {
+    doThrow(new IndexOutOfBoundsException()).when(mockedElement).isDisplayed();
+    assertThat(command.execute(proxy, locator, null)).isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
-    assertThatThrownBy(() -> catchExecuteMethodWithException(new NotFoundException("invalid selector")))
-      .isInstanceOf(InvalidSelectorException.class);
+  void throwsInvalidSelectorExceptionAsIs() {
+    doThrow(new InvalidSelectorException("wrong xpath")).when(mockedElement).isDisplayed();
+    assertThatThrownBy(() -> command.execute(proxy, locator, null))
+      .isInstanceOf(InvalidSelectorException.class)
+      .hasMessageStartingWith("wrong xpath");
   }
 
   /**
@@ -85,7 +77,7 @@ final class IsDisplayedCommandTest implements WithAssertions {
     RemoteWebElement webElement = mock(RemoteWebElement.class);
     when(webElement.isDisplayed()).thenThrow(new NullPointerException());
     when(locator.getWebElement()).thenReturn(webElement);
-    Boolean isDisplayed = isDisplayedCommand.execute(proxy, locator, null);
-    assertThat(isDisplayed).isFalse();
+
+    assertThat(command.execute(proxy, locator, null)).isFalse();
   }
 }

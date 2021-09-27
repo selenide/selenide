@@ -4,7 +4,6 @@ import com.codeborne.selenide.Config;
 import com.codeborne.selenide.DummyWebDriver;
 import com.codeborne.selenide.impl.DummyFileNamer;
 import com.codeborne.selenide.webdriver.WebDriverFactory;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
@@ -13,6 +12,8 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class LazyDriverTest implements WithAssertions {
+final class LazyDriverTest {
   private final Config config = mock(Config.class);
   private final WebDriver webdriver = new DummyWebDriver();
   private final WebDriverFactory factory = mock(WebDriverFactory.class);

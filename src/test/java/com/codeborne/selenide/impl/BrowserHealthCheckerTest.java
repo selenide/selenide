@@ -1,18 +1,18 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.drivercommands.BrowserHealthChecker;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-final class BrowserHealthCheckerTest implements WithAssertions {
+final class BrowserHealthCheckerTest {
   private final WebDriver webdriver = mock(WebDriver.class);
   private final BrowserHealthChecker checker = new BrowserHealthChecker();
 

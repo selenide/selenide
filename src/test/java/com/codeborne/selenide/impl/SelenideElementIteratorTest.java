@@ -1,14 +1,15 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockWebElement;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class SelenideElementIteratorTest implements WithAssertions {
+final class SelenideElementIteratorTest {
   private final WebElement webElement = mockWebElement("a", "click me if you can");
 
   @Test

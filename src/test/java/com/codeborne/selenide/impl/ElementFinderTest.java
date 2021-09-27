@@ -1,13 +1,13 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class ElementFinderTest implements WithAssertions {
+final class ElementFinderTest {
   private final Driver driver = mock(Driver.class);
 
   @Test

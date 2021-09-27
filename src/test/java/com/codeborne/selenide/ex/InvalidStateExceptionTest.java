@@ -2,11 +2,12 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
-final class InvalidStateExceptionTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class InvalidStateExceptionTest {
   private final Driver driver = new DriverStub();
 
   @Test

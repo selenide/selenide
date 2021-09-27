@@ -1,17 +1,18 @@
 package com.codeborne.selenide.logevents;
 
 import com.codeborne.selenide.ex.SoftAssertionError;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ErrorsCollectorTest implements WithAssertions {
+final class ErrorsCollectorTest {
   private final ErrorsCollector errorsCollector = new ErrorsCollector();
   private final LogEvent mockedInProgressEvent = mock(LogEvent.class);
   private final LogEvent mockedPassedEvent = mock(LogEvent.class);
@@ -71,7 +72,8 @@ final class ErrorsCollectorTest implements WithAssertions {
     try {
       errorsCollector.failIfErrors(defaultTestName);
       fail("Expected SoftAssertionError");
-    } catch (SoftAssertionError error) {
+    }
+    catch (SoftAssertionError error) {
       assertThat(error)
         .withFailMessage("I couldn't find default error message in error message")
         .hasMessageContaining(defaultErrorMessage);
@@ -90,7 +92,8 @@ final class ErrorsCollectorTest implements WithAssertions {
     try {
       errorsCollector.failIfErrors(defaultTestName);
       fail("Expected SoftAssertionError");
-    } catch (SoftAssertionError error) {
+    }
+    catch (SoftAssertionError error) {
       assertThat(error)
         .as("Error title")
         .hasMessageContaining(String.format("Test %s failed.", defaultTestName));

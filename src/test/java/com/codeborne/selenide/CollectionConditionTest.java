@@ -11,57 +11,48 @@ import com.codeborne.selenide.collections.SizeLessThanOrEqual;
 import com.codeborne.selenide.collections.SizeNotEqual;
 import com.codeborne.selenide.collections.Texts;
 import com.codeborne.selenide.collections.TextsInAnyOrder;
-
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class CollectionConditionTest implements WithAssertions {
+final class CollectionConditionTest {
   @Test
-  void testSizeIsEmptyListSize() {
-    CollectionCondition collectionCondition = CollectionCondition.size(10);
-    assertThat(collectionCondition)
-      .isInstanceOf(ListSize.class);
+  void exactSize() {
+    assertThat(CollectionCondition.size(10)).isInstanceOf(ListSize.class);
   }
 
   @Test
-  void testSizeGreaterThan() {
-    CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThan(10);
-    assertThat(collectionCondition)
-      .isInstanceOf(SizeGreaterThan.class);
+  void sizeGreaterThan() {
+    assertThat(CollectionCondition.sizeGreaterThan(10)).isInstanceOf(SizeGreaterThan.class);
   }
 
   @Test
-  void testSizeGraterThenOrEqual() {
-    CollectionCondition collectionCondition = CollectionCondition.sizeGreaterThanOrEqual(10);
-    assertThat(collectionCondition)
+  void sizeGraterThenOrEqual() {
+    assertThat(CollectionCondition.sizeGreaterThanOrEqual(10))
       .isInstanceOf(SizeGreaterThanOrEqual.class);
   }
 
   @Test
-  void testSizeLessThan() {
-    CollectionCondition collectionCondition = CollectionCondition.sizeLessThan(10);
-    assertThat(collectionCondition)
+  void sizeLessThan() {
+    assertThat(CollectionCondition.sizeLessThan(10))
       .isInstanceOf(SizeLessThan.class);
   }
 
   @Test
-  void testSizeLessThanOrEqual() {
-    CollectionCondition collectionCondition = CollectionCondition.sizeLessThanOrEqual(10);
-    assertThat(collectionCondition)
+  void sizeLessThanOrEqual() {
+    assertThat(CollectionCondition.sizeLessThanOrEqual(10))
       .isInstanceOf(SizeLessThanOrEqual.class);
   }
 
   @Test
-  void testSizeNotEqual() {
-    CollectionCondition collectionCondition = CollectionCondition.sizeNotEqual(10);
-    assertThat(collectionCondition)
+  void sizeNotEqual() {
+    assertThat(CollectionCondition.sizeNotEqual(10))
       .isInstanceOf(SizeNotEqual.class);
   }
 
   @Test
-  void testTextsWithObjectsList() {
+  void textsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.texts("One", "Two", "Three");
     assertThat(collectionCondition)
       .isInstanceOf(Texts.class);
@@ -71,7 +62,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testTextsWithListOfStrings() {
+  void textsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.texts(asList("One", "Two", "Three"));
     assertThat(collectionCondition)
       .isInstanceOf(Texts.class);
@@ -81,7 +72,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testExactTextsWithObjectsList() {
+  void exactTextsWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts("One", "Two", "Three");
     assertThat(collectionCondition)
       .isInstanceOf(ExactTexts.class);
@@ -91,7 +82,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testExactTextsWithListOfStrings() {
+  void exactTextsWithListOfStrings() {
     CollectionCondition collectionCondition = CollectionCondition.exactTexts(asList("One", "Two", "Three"));
     assertThat(collectionCondition)
       .isInstanceOf(ExactTexts.class);
@@ -101,7 +92,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testTextsInAnyOrderWithObjectsList() {
+  void textsInAnyOrderWithObjectsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder("One", "Two", "Three");
     assertThat(collectionCondition)
       .isInstanceOf(TextsInAnyOrder.class);
@@ -111,7 +102,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testTextsInAnyOrderWithStringsList() {
+  void textsInAnyOrderWithStringsList() {
     CollectionCondition collectionCondition = CollectionCondition.textsInAnyOrder(asList("One", "Two", "Three"));
     assertThat(collectionCondition)
       .isInstanceOf(TextsInAnyOrder.class);
@@ -121,7 +112,7 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testExplanationIsIncludedToString() {
+  void explanationIsIncludedToString() {
     CollectionCondition collectionCondition = CollectionCondition.texts("One").because("should be");
     assertThat(collectionCondition)
       .as("Should contain explanation")
@@ -129,25 +120,25 @@ final class CollectionConditionTest implements WithAssertions {
   }
 
   @Test
-  void testExactTextsCaseSensitiveInAnyOrderWithList() {
+  void exactTextsCaseSensitiveInAnyOrderWithList() {
     CollectionCondition condition = CollectionCondition.exactTextsCaseSensitiveInAnyOrder(asList("One", "Two"));
     assertThat(condition).isInstanceOf(ExactTextsCaseSensitiveInAnyOrder.class);
   }
 
   @Test
-  void testExactTextsCaseSensitiveInAnyOrderWithVarargs() {
+  void exactTextsCaseSensitiveInAnyOrderWithVarargs() {
     CollectionCondition condition = CollectionCondition.exactTextsCaseSensitiveInAnyOrder("One", "Two");
     assertThat(condition).isInstanceOf(ExactTextsCaseSensitiveInAnyOrder.class);
   }
 
   @Test
-  void testContainTextsWithStringList() {
+  void containTextsWithStringList() {
     CollectionCondition condition = CollectionCondition.containExactTextsCaseSensitive(asList("One", "Two", "Three"));
     assertThat(condition).isInstanceOf(ContainExactTextsCaseSensitive.class);
   }
 
   @Test
-  void testContainTextsWithVarargs() {
+  void containTextsWithVarargs() {
     CollectionCondition condition = CollectionCondition.containExactTextsCaseSensitive("One", "Two", "Three");
     assertThat(condition).isInstanceOf(ContainExactTextsCaseSensitive.class);
   }

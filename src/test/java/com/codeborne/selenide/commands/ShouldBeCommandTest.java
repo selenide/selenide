@@ -1,50 +1,41 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.readonly;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-final class ShouldBeCommandTest implements WithAssertions {
+final class ShouldBeCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final ShouldBe shouldBeCommand = new ShouldBe();
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final ShouldBe command = new ShouldBe();
+  private final WebElement webElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    when(locator.getWebElement()).thenReturn(mockedFoundElement);
+    when(locator.getWebElement()).thenReturn(webElement);
   }
 
   @Test
-  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
-    ShouldBe shouldBe = new ShouldBe();
-    Field prefixField = shouldBe.getClass().getSuperclass().getDeclaredField("prefix");
-    prefixField.setAccessible(true);
-    String prefix = (String) prefixField.get(shouldBe);
-    assertThat(prefix)
-      .isEqualToIgnoringWhitespace("be");
+  void checksEveryConditionFromGivenParameters() {
+    SelenideElement returnedElement = command.execute(proxy, locator, new Object[]{disabled, readonly});
+    assertThat(returnedElement).isEqualTo(proxy);
+    verify(locator).checkCondition("be ", disabled, false);
+    verify(locator).checkCondition("be ", readonly, false);
   }
 
   @Test
-  void testExecuteMethodWithNonStringArgs() {
-    SelenideElement returnedElement = shouldBeCommand.execute(proxy, locator, new Object[]{Condition.disabled});
-    assertThat(returnedElement)
-      .isEqualTo(proxy);
-  }
-
-  @Test
-  void testExecuteMethodWithStringArgs() {
-    SelenideElement returnedElement = shouldBeCommand.execute(proxy, locator, new Object[]{"hello"});
-    assertThat(returnedElement)
-      .isEqualTo(proxy);
+  void noArgs() {
+    command.execute(proxy, locator, new Object[0]);
+    verifyNoMoreInteractions(locator);
   }
 }

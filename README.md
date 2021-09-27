@@ -20,7 +20,7 @@ It defines concise fluent API, natural language assertions and does some magic f
 Selenide is based on and is compatible to Selenium WebDriver 2.0+ and 3.0+
 
     @Test
-    public void testLogin() {
+    public void login() {
       open("/login");
       $(By.name("user.name")).setValue("johny");
       $("#submit").click();

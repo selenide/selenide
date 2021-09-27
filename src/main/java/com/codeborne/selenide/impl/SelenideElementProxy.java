@@ -144,7 +144,7 @@ class SelenideElementProxy implements InvocationHandler {
       }
 
       if (Cleanup.of.isInvalidSelectorError(lastError)) {
-        throw Cleanup.of.wrap(lastError);
+        throw Cleanup.of.wrapInvalidSelectorException(lastError);
       }
       else if (!shouldRetryAfterError(lastError)) {
         throw lastError;

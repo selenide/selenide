@@ -2,15 +2,15 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.appear;
 import static java.lang.System.lineSeparator;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class ElementShouldNotTest implements WithAssertions {
+final class ElementShouldNotTest {
   private final Driver driver = new DriverStub();
 
   @Test
