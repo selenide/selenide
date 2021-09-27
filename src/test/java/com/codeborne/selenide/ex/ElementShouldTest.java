@@ -3,14 +3,14 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.lang.System.lineSeparator;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class ElementShouldTest implements WithAssertions {
+final class ElementShouldTest {
   @Test
   void testToString() {
     String searchCriteria = "by.name: selenide";

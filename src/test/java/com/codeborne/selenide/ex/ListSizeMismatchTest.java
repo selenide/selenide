@@ -3,7 +3,6 @@ package com.codeborne.selenide.ex;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -13,9 +12,10 @@ import java.util.List;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-final class ListSizeMismatchTest implements WithAssertions {
+final class ListSizeMismatchTest {
   private final int expectedSize = 10;
   private final Driver driver = new DriverStub();
   private final CollectionSource collection = mockCollection("Collection description");

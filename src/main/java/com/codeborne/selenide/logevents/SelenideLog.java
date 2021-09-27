@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.IN_PROGRESS;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 @ParametersAreNonnullByDefault
 public class SelenideLog implements LogEvent {
@@ -47,7 +48,7 @@ public class SelenideLog implements LogEvent {
 
   @Override
   public long getDuration() {
-    return (endNs - startNs) / 1_000_000;
+    return NANOSECONDS.toMillis(endNs - startNs);
   }
 
   @Override

@@ -1,15 +1,12 @@
 package com.codeborne.selenide.logevents;
 
 import integration.UseLocaleExtension;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 
@@ -17,15 +14,15 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static com.codeborne.selenide.logevents.SelenideLogger.readableArguments;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-final class SelenideLoggerTest implements WithAssertions {
+final class SelenideLoggerTest {
   private final WebDriver webdriver = mock(WebDriver.class);
 
   @RegisterExtension
@@ -82,10 +79,6 @@ final class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.addListener("simpleReport", listener1);
     SelenideLogger.addListener("softAsserts", listener2);
     SelenideLogger.addListener("userProvided", listener3);
-
-    WebElement webElement = mock(WebElement.class);
-    when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
-    when(webElement.isDisplayed()).thenReturn(true);
 
     SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
 

@@ -4,17 +4,18 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.InvalidStateException;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Field;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class SetSelectedCommandTest implements WithAssertions {
+final class SetSelectedCommandTest {
   private final Click mockedClick = mock(Click.class);
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
@@ -42,7 +43,8 @@ final class SetSelectedCommandTest implements WithAssertions {
     when(mockedFoundElement.isDisplayed()).thenReturn(false);
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    } catch (InvalidStateException exception) {
+    }
+    catch (InvalidStateException exception) {
       assertThat(exception)
         .hasMessageStartingWith("Invalid element state: Cannot change invisible element");
     }
@@ -59,7 +61,8 @@ final class SetSelectedCommandTest implements WithAssertions {
     when(mockedFoundElement.getAttribute("type")).thenReturn("href");
     try {
       setSelectedCommand.execute(proxy, locator, new Object[]{true});
-    } catch (InvalidStateException exception) {
+    }
+    catch (InvalidStateException exception) {
       assertThat(exception)
         .hasMessageStartingWith("Invalid element state: Only use setSelected on checkbox/option/radio");
     }

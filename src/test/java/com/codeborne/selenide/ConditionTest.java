@@ -26,6 +26,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Mocks.elementWithAttribute;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
@@ -54,12 +55,6 @@ final class ConditionTest {
     assertThat(Condition.value("John").apply(driver, element)).isTrue();
     assertThat(Condition.value("John Malkovich").apply(driver, element)).isTrue();
     assertThat(Condition.value("malko").apply(driver, element)).isTrue();
-  }
-
-  private WebElement elementWithAttribute(String name, String value) {
-    WebElement element = mock(WebElement.class);
-    when(element.getAttribute(name)).thenReturn(value);
-    return element;
   }
 
   @Test
@@ -142,19 +137,19 @@ final class ConditionTest {
   }
 
   @Test
-  void elementHasType() {
-    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide"))).isTrue();
-    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide is great"))).isFalse();
+  void checksValueOfTypeAttribute() {
+    assertThat(type("radio").apply(driver, elementWithAttribute("type", "radio"))).isTrue();
+    assertThat(type("radio").apply(driver, elementWithAttribute("type", "radio-button"))).isFalse();
   }
 
   @Test
-  void elementHasId() {
+  void checksValueOfIdAttribute() {
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide"))).isTrue();
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide is great"))).isFalse();
   }
 
   @Test
-  void elementHasClass() {
+  void checksValueOfClassAttribute() {
     assertThat(cssClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();

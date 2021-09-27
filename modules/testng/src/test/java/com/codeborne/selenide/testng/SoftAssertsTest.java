@@ -2,17 +2,16 @@ package com.codeborne.selenide.testng;
 
 import com.codeborne.selenide.logevents.ErrorsCollector;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import org.assertj.core.api.WithAssertions;
 import org.testng.IClass;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.internal.ConstructorOrMethod;
 
 import static com.codeborne.selenide.logevents.ErrorsCollector.LISTENER_SOFT_ASSERT;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.ITestResult.FAILURE;
 
-final class SoftAssertsTest implements WithAssertions {
+final class SoftAssertsTest {
   private final SoftAsserts listener = new SoftAsserts();
 
   @AfterMethod

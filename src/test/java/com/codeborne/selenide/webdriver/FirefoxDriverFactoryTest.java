@@ -2,7 +2,6 @@ package com.codeborne.selenide.webdriver;
 
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -19,9 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.codeborne.selenide.webdriver.SeleniumCapabilitiesHelper.getBrowserLaunchArgs;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class FirefoxDriverFactoryTest implements WithAssertions {
+final class FirefoxDriverFactoryTest {
   private static final String DOWNLOADS_FOLDER = Paths.get("blah", "downloads").toString();
 
   private final Proxy proxy = mock(Proxy.class);

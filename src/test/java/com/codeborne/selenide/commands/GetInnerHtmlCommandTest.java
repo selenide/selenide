@@ -3,29 +3,33 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class GetInnerHtmlCommandTest implements WithAssertions {
+final class GetInnerHtmlCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final GetInnerHtml getInnerHtmlCommand = new GetInnerHtml();
+  private final SelenideElement webElement = mock(SelenideElement.class);
+  private final GetInnerHtml command = new GetInnerHtml();
 
   @BeforeEach
   void setup() {
-    when(locator.getWebElement()).thenReturn(mockedElement);
+    when(locator.getWebElement()).thenReturn(webElement);
   }
 
   @Test
   void uses_innerHTML_attribute() {
     when(locator.driver()).thenReturn(new DriverStub("firefox"));
+    when(webElement.getAttribute(any())).thenReturn("hello");
 
-    when(mockedElement.getAttribute("innerHTML")).thenReturn("hello");
-    assertThat(getInnerHtmlCommand.execute(proxy, locator, null)).isEqualTo("hello");
+    assertThat(command.execute(proxy, locator, null)).isEqualTo("hello");
+
+    verify(webElement).getAttribute("innerHTML");
   }
 }

@@ -1,32 +1,34 @@
 package com.codeborne.selenide.collections;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementWithTextNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
+import static com.codeborne.selenide.ElementsCollection.texts;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class ItemWithTextTest implements WithAssertions {
+final class ItemWithTextTest {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");
   private final CollectionSource collection = mockCollection("Collection description", element1, element2, element3);
 
   @Test
-  void applyOnCorrectElementText() {
+  void correctElementText() {
     assertThat(new ItemWithText("Test-One")
       .test(collection.getElements()))
       .isTrue();
   }
 
   @Test
-  void applyOnWrongElementText() {
+  void wrongElementText() {
     assertThat(new ItemWithText("Test-X")
       .test(collection.getElements()))
       .isFalse();
@@ -39,10 +41,9 @@ final class ItemWithTextTest implements WithAssertions {
   }
 
   @Test
-  void testApplyWithEmptyList() {
-    CollectionSource emptyCollection = mockCollection("empty collection");
+  void emptyList() {
     assertThat(new ItemWithText("Test-X")
-      .test(emptyCollection.getElements()))
+      .test(new ArrayList<>()))
       .isFalse();
   }
 
@@ -53,9 +54,8 @@ final class ItemWithTextTest implements WithAssertions {
       .fail(collection,
         collection.getElements(),
         new Exception("Exception message"), 10000)).isInstanceOf(ElementWithTextNotFound.class)
-      .hasMessageContaining(
-        String.format(String.format("Element with text not found" +
-          "%nActual: %s" +
-          "%nExpected: %s", ElementsCollection.texts(collection.getElements()), Collections.singletonList(expectedText))));
+      .hasMessageContaining(String.format("Element with text not found" +
+        "%nActual: %s" +
+        "%nExpected: %s", texts(collection.getElements()), singletonList(expectedText)));
   }
 }

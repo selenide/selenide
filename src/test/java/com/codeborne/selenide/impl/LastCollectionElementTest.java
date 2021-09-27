@@ -2,7 +2,6 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 
@@ -13,10 +12,11 @@ import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-final class LastCollectionElementTest implements WithAssertions {
+final class LastCollectionElementTest {
   private final SelenideElement element1 = mockElement("Hello");
   private final SelenideElement element2 = mockElement("World");
   private final CollectionSource collection = mockCollection("ul#employees li.employee", element1, element2);

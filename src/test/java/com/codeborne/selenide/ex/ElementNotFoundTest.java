@@ -5,18 +5,18 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ElementNotFoundTest implements WithAssertions {
-  private Driver driver = new DriverStub();
+final class ElementNotFoundTest {
+  private final Driver driver = new DriverStub();
 
   @Test
   void elementNotFoundWithByCriteria() {

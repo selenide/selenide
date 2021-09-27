@@ -8,24 +8,23 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 
 @ParametersAreNonnullByDefault
 public class GetSelectedValue implements Command<String> {
-  private final Command<SelenideElement> getSelectedOption;
+  private final GetSelectedOption getSelectedOption;
 
   public GetSelectedValue() {
-    this.getSelectedOption = new GetSelectedOption();
+    this(new GetSelectedOption());
   }
 
-  public GetSelectedValue(Command<SelenideElement> getSelectedOption) {
+  GetSelectedValue(GetSelectedOption getSelectedOption) {
     this.getSelectedOption = getSelectedOption;
   }
 
   @Override
   @CheckReturnValue
   @Nullable
-  public String execute(SelenideElement proxy, WebElementSource selectElement, @Nullable Object[] args) throws IOException {
+  public String execute(SelenideElement proxy, WebElementSource selectElement, @Nullable Object[] args) {
     WebElement option = getSelectedOption.execute(proxy, selectElement, args);
     return option == null ? null : option.getAttribute("value");
   }

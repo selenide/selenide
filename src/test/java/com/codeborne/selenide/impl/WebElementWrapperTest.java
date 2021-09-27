@@ -4,21 +4,22 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
-import java.util.HashMap;
-import java.util.Map;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class WebElementWrapperTest implements WithAssertions {
+final class WebElementWrapperTest {
   private final SelenideConfig config = new SelenideConfig();
   private final WebDriver webDriver = mock(FirefoxDriver.class);
   private final Driver driver = new DriverStub(config, new Browser("firefox", false), webDriver, null);

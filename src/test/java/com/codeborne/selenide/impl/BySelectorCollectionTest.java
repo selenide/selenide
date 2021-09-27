@@ -1,29 +1,25 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Driver;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class BySelectorCollectionTest implements WithAssertions {
+final class BySelectorCollectionTest {
   private final Driver driver = mock(Driver.class);
-  private final WebElementSource mockedWebElement = new ElementFinder(driver, null, By.tagName("table"), 3);
+  private final WebElementSource webElement = new ElementFinder(driver, null, By.tagName("table"), 3);
 
   @Test
-  void testNoParentConstructor() {
-    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, By.id("selenide"));
-    String description = bySelectorCollection.description();
-    assertThat(description)
-      .isEqualTo("By.id: selenide");
+  void constructorWithoutParent() {
+    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, By.name("query"));
+    assertThat(bySelectorCollection.description()).isEqualTo("By.name: query");
   }
 
   @Test
-  void testWithWebElementParentConstructor() {
-    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, mockedWebElement, By.name("query"));
-    String description = bySelectorCollection.description();
-    assertThat(description)
-      .isEqualTo("By.tagName: table[3]/By.name: query");
+  void constructorWithParent() {
+    BySelectorCollection bySelectorCollection = new BySelectorCollection(driver, webElement, By.name("query"));
+    assertThat(bySelectorCollection.description()).isEqualTo("By.tagName: table[3]/By.name: query");
   }
 }

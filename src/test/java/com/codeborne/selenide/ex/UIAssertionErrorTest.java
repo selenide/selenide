@@ -2,10 +2,11 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-final class UIAssertionErrorTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class UIAssertionErrorTest {
   @Test
   void errorMessage() {
     Driver driver = new DriverStub();

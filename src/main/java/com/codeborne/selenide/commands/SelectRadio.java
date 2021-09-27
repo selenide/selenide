@@ -21,10 +21,10 @@ public class SelectRadio implements Command<SelenideElement> {
   private final Click click;
 
   public SelectRadio() {
-    this.click = new Click();
+    this(new Click());
   }
 
-  public SelectRadio(Click click) {
+  SelectRadio(Click click) {
     this.click = click;
   }
 

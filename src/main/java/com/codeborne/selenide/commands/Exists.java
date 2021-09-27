@@ -22,12 +22,14 @@ public class Exists implements Command<Boolean> {
       //noinspection ResultOfMethodCallIgnored
       locator.getWebElement();
       return true;
-    } catch (WebDriverException | ElementNotFound elementNotFound) {
+    }
+    catch (WebDriverException | ElementNotFound elementNotFound) {
       if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-        throw Cleanup.of.wrap(elementNotFound);
+        throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
       }
       return false;
-    } catch (IndexOutOfBoundsException invalidElementIndex) {
+    }
+    catch (IndexOutOfBoundsException invalidElementIndex) {
       return false;
     }
   }

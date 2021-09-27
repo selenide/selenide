@@ -4,7 +4,6 @@ import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,6 +18,7 @@ import static java.io.File.separatorChar;
 import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.resourceToByteArray;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.OutputType.BYTES;
 
-final class ScreenShotLaboratoryTest implements WithAssertions {
+final class ScreenShotLaboratoryTest {
   private final String dir = System.getProperty("user.dir");
   private final String workingDirectory = new File(dir).toURI().toString().replaceAll("/$", "");
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
@@ -41,7 +41,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
   @BeforeEach
   void setUp() {
-    when(photographer.takeScreenshot(any(), eq(BYTES))).thenReturn(Optional.of("siski".getBytes(UTF_8)));
+    when(photographer.takeScreenshot(any(), eq(BYTES))).thenReturn(Optional.of("some png source".getBytes(UTF_8)));
   }
 
   @Test
@@ -92,14 +92,14 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void collectsAllScreenshots() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
     screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     screenshots.finishContext();
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
 
     List<File> allScreenshots = screenshots.getScreenshots();
     assertThat(allScreenshots).hasSize(5);
@@ -118,14 +118,14 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void collectsAllThreadScreenshots() {
     screenshots.startContext("ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
     screenshots.finishContext();
     screenshots.startContext("ui/YourTest/test_another_method/");
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     screenshots.finishContext();
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
 
     List<File> allThreadScreenshots = screenshots.getThreadScreenshots();
     assertThat(allThreadScreenshots).hasSize(5);
@@ -144,9 +144,9 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   @Test
   void collectsContextScreenshots() {
     screenshots.startContext("build/reports/tests/ui/MyTest/test_some_method/");
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
+    screenshots.takeScreenshot(driver, true, true);
 
     List<File> contextScreenshots = screenshots.getContextScreenshots();
     assertThat(contextScreenshots)
@@ -161,15 +161,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
   void canGetLastScreenshot() {
     assertThat(screenshots.getLastScreenshot()).isNull();
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
       .hasToString(dir + normalize("/build/reports/tests/12356789.0.png"));
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
       .hasToString(dir + normalize("/build/reports/tests/12356789.1.png"));
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastScreenshot())
       .hasToString(dir + normalize("/build/reports/tests/12356789.2.png"));
   }
@@ -179,15 +179,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     assertThat(screenshots.getLastThreadScreenshot())
       .isEmpty();
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
       .hasValue(new File("build/reports/tests/12356789.0.png").getAbsoluteFile());
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
       .hasValue(new File("build/reports/tests/12356789.1.png").getAbsoluteFile());
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastThreadScreenshot())
       .hasValue(new File("build/reports/tests/12356789.2.png").getAbsoluteFile());
   }
@@ -200,15 +200,15 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     screenshots.startContext("ui/MyTest/test_some_method/");
     assertThat(screenshots.getLastContextScreenshot())
       .isEmpty();
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
       .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.0.png").getAbsoluteFile());
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
       .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.1.png").getAbsoluteFile());
 
-    screenshots.takeScreenShot(driver);
+    screenshots.takeScreenshot(driver, true, true);
     assertThat(screenshots.getLastContextScreenshot())
       .hasValue(new File("build/reports/tests/ui/MyTest/test_some_method/12356789.2.png").getAbsoluteFile());
   }
@@ -221,7 +221,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
     config.reportsUrl("http://ci.org/job/123/artifact");
     config.reportsFolder("build/reports/path with spaces/");
 
-    String screenShot = screenshots.formatScreenShotPath(driver);
+    String screenShot = screenshots.takeScreenshot(driver, true, false).getImage();
 
     assertThat(screenShot)
       .contains("http://ci.org/job/123/artifact/build/reports/path%20with%20spaces/");
@@ -234,7 +234,7 @@ final class ScreenShotLaboratoryTest implements WithAssertions {
 
     config.reportsUrl("http://ci.org/path%20with%spaces/");
 
-    String screenShotPath = screenshots.formatScreenShotPath(driver);
+    String screenShotPath = screenshots.takeScreenshot(driver, true, false).getImage();
 
     assertThat(screenShotPath)
       .contains("http://ci.org/path%20with%spaces/");

@@ -1,50 +1,32 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import java.lang.reflect.Field;
-
+import static com.codeborne.selenide.Condition.disabled;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class ShouldNotBeCommandTest implements WithAssertions {
+final class ShouldNotBeCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final ShouldNotBe shouldNotBeCommand = new ShouldNotBe();
-  private final WebElement mockedFoundElement = mock(WebElement.class);
+  private final ShouldNotBe command = new ShouldNotBe();
+  private final WebElement webElement = mock(WebElement.class);
 
   @BeforeEach
   void setup() {
-    when(locator.getWebElement()).thenReturn(mockedFoundElement);
+    when(locator.getWebElement()).thenReturn(webElement);
   }
 
   @Test
-  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
-    ShouldNotBe shouldNotBe = new ShouldNotBe();
-    Field prefixField = shouldNotBe.getClass().getSuperclass().getDeclaredField("prefix");
-    prefixField.setAccessible(true);
-    String prefix = (String) prefixField.get(shouldNotBe);
-    assertThat(prefix)
-      .isEqualToIgnoringWhitespace("be");
-  }
-
-  @Test
-  void testExecuteMethodWithNonStringArgs() {
-    SelenideElement returnedElement = shouldNotBeCommand.execute(proxy, locator, new Object[]{Condition.disabled});
-    assertThat(returnedElement)
-      .isEqualTo(proxy);
-  }
-
-  @Test
-  void testExecuteMethodWithStringArgs() {
-    SelenideElement returnedElement = shouldNotBeCommand.execute(proxy, locator, new Object[]{"hello"});
-    assertThat(returnedElement)
-      .isEqualTo(proxy);
+  void checksEveryConditionFromGivenParameters() {
+    SelenideElement returnedElement = command.execute(proxy, locator, new Object[]{disabled});
+    assertThat(returnedElement).isEqualTo(proxy);
+    verify(locator).checkCondition("be ", disabled, true);
   }
 }

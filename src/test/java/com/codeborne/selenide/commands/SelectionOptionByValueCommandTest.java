@@ -4,7 +4,6 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -13,10 +12,12 @@ import org.openqa.selenium.WebElement;
 import java.util.Collections;
 
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class SelectionOptionByValueCommandTest implements WithAssertions {
+final class SelectionOptionByValueCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource selectField = mock(WebElementSource.class);
   private final SelectOptionByValue selectOptionByValueCommand = new SelectOptionByValue();

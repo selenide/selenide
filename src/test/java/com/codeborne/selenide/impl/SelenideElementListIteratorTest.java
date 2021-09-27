@@ -1,17 +1,18 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.SelenideElement;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockWebElement;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class SelenideElementListIteratorTest implements WithAssertions {
+final class SelenideElementListIteratorTest {
   private final WebElement webElement = mockWebElement("a", "click me if you can");
   private final CollectionSource collection = mockCollection("Collection description", webElement);
 

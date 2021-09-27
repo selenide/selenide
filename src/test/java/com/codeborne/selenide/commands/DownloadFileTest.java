@@ -11,7 +11,6 @@ import com.codeborne.selenide.impl.DownloadFileWithHttpRequest;
 import com.codeborne.selenide.impl.DownloadFileWithProxyServer;
 import com.codeborne.selenide.impl.WebElementSource;
 import com.codeborne.selenide.proxy.SelenideProxyServer;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
@@ -23,6 +22,7 @@ import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
 import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-final class DownloadFileTest implements WithAssertions {
+final class DownloadFileTest {
   private final SelenideConfig config = new SelenideConfig();
   private final Driver driver = mock(Driver.class);
   private final DownloadFileWithHttpRequest httpget = mock(DownloadFileWithHttpRequest.class);

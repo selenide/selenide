@@ -19,8 +19,6 @@ public class GetPreceding implements Command<SelenideElement> {
   @CheckReturnValue
   @Nonnull
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
-    assert args != null;
-
     int siblingIndex = (int) firstOf(args) + 1;
     return locator.find(proxy, By.xpath(String.format("preceding-sibling::*[%d]", siblingIndex)), 0);
   }

@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 
 import static com.codeborne.selenide.Condition.exist;
 
@@ -22,11 +23,15 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
     }
     else if (args[0] instanceof String[]) {
       selectOptionsByTexts(selectField, (String[]) args[0]);
+      return null;
     }
     else if (args[0] instanceof int[]) {
       selectOptionsByIndexes(selectField, (int[]) args[0]);
+      return null;
     }
-    return null;
+    else {
+      throw new IllegalArgumentException("Unsupported argument (expected String or Integer): " + Arrays.toString(args));
+    }
   }
 
   private void selectOptionsByTexts(WebElementSource selectField, String[] texts) {

@@ -34,14 +34,14 @@ public class Matches implements Command<Boolean> {
   protected WebElement getElementOrNull(WebElementSource locator) {
     try {
       return locator.getWebElement();
-    } catch (WebDriverException | ElementNotFound elementNotFound) {
+    }
+    catch (WebDriverException | ElementNotFound elementNotFound) {
       if (Cleanup.of.isInvalidSelectorError(elementNotFound))
-        throw Cleanup.of.wrap(elementNotFound);
+        throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
       return null;
-    } catch (IndexOutOfBoundsException ignore) {
+    }
+    catch (IndexOutOfBoundsException ignore) {
       return null;
-    } catch (RuntimeException e) {
-      throw Cleanup.of.wrap(e);
     }
   }
 }
