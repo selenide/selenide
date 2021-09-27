@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
@@ -235,5 +236,10 @@ final class SelectsTest extends IntegrationTest {
 
     $(By.xpath("//select[@name='domain']")).selectOptionByValue("myrambler.ru");
     $("#selectedDomain").shouldHave(text("@myrambler.ru"));
+  }
+
+  @Test
+  void getSelectedOption_isLazyLoaded() {
+    $("#emptySelect").getSelectedOption().shouldNot(exist);
   }
 }
