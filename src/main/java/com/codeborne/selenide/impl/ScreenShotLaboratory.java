@@ -2,10 +2,9 @@ package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.SelenideTargetLocator;
-import org.openqa.selenium.JavascriptExecutor;
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -19,10 +18,10 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.RasterFormatException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -105,7 +104,7 @@ public class ScreenShotLaboratory {
    * Stores 2 files:
    * 1. html of the page (if "savePageSource" parameter is true), and
    * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
-   *
+   * <p>
    * Either file may be null if webdriver has failed to save it.
    *
    * @param fileName name of file (without extension) to store screenshot to.
@@ -124,7 +123,7 @@ public class ScreenShotLaboratory {
    * Stores 2 files:
    * 1. html of the page (if "savePageSource" parameter is true), and
    * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
-   *
+   * <p>
    * Either file may be null if webdriver has failed to save it.
    *
    * @param fileName name of file (without extension) to store screenshot to.
@@ -174,7 +173,8 @@ public class ScreenShotLaboratory {
       if (destination != null) {
         return writeToFile(driver, destination);
       }
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       log.error("Failed to take screenshot of {}", element, e);
     }
     return null;
@@ -196,25 +196,17 @@ public class ScreenShotLaboratory {
       return Optional.empty();
     }
 
-    return photographer.takeScreenshot(driver, BYTES)
-      .flatMap(screen -> cropToElement(screen, element));
-  }
-
-  @CheckReturnValue
-  @Nonnull
-  private Optional<BufferedImage> cropToElement(byte[] screen, WebElement element) {
-    Point elementLocation = element.getLocation();
     try {
-      BufferedImage img = ImageIO.read(new ByteArrayInputStream(screen));
-      int elementWidth = getRescaledElementWidth(element, img);
-      int elementHeight = getRescaledElementHeight(element, img);
-
-      return Optional.of(img.getSubimage(elementLocation.getX(), elementLocation.getY(), elementWidth, elementHeight));
-    } catch (IOException e) {
-      log.error("Failed to take screenshot of {}", element, e);
-      return Optional.empty();
-    } catch (RasterFormatException e) {
-      log.warn("Cannot take screenshot because element is not displayed on current screen position");
+      byte[] screenshot = element.getScreenshotAs(BYTES);
+      try (InputStream in = new ByteArrayInputStream(screenshot)) {
+        return Optional.of(ImageIO.read(in));
+      }
+      catch (IOException e) {
+        throw new RuntimeException("Failed to take element screenshot", e);
+      }
+    }
+    catch (InvalidElementStateException elementIsNotVisible) {
+      log.error("Failed to take element screenshot: {}", elementIsNotVisible.toString());
       return Optional.empty();
     }
   }
@@ -227,13 +219,14 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nullable
-  public File takeScreenshot(Driver driver, WebElement iframe, WebElement element) {
+  public File takeScreenshot(Driver driver, WebElement iframe, SelenideElement element) {
     try {
       BufferedImage destination = takeScreenshotAsImage(driver, iframe, element);
       if (destination != null) {
         return writeToFile(driver, destination);
       }
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
     }
     return null;
@@ -250,70 +243,24 @@ public class ScreenShotLaboratory {
 
   @CheckReturnValue
   @Nullable
-  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, WebElement element) {
-    WebDriver webdriver = checkIfFullyValidDriver(driver);
-    if (webdriver == null) {
-      return null;
-    }
-
-    Optional<byte[]> screenshot = photographer.takeScreenshot(driver, BYTES);
-
-    return screenshot.flatMap(screen ->
-      takeScreenshotAsImage(driver, iframe, element, screen))
-      .orElse(null);
+  public BufferedImage takeScreenshotAsImage(Driver driver, WebElement iframe, SelenideElement element) {
+    return ifWebDriverStarted(driver, webdriver ->
+      ifReportsFolderNotNull(driver.config(), config ->
+        takeElementScreenshotAsImage(driver, iframe, element)
+      ));
   }
 
-  @CheckReturnValue
-  @Nonnull
-  private Optional<BufferedImage> takeScreenshotAsImage(Driver driver, WebElement iframe,
-                                                        WebElement element, byte[] screen) {
-    Point iframeLocation = iframe.getLocation();
-    BufferedImage img;
-    try {
-      img = ImageIO.read(new ByteArrayInputStream(screen));
-    } catch (IOException e) {
-      log.error("Failed to take screenshot of {} inside frame {}", element, iframe, e);
-      return Optional.empty();
-    } catch (RasterFormatException ex) {
-      log.warn("Cannot take screenshot because iframe is not displayed");
-      return Optional.empty();
-    }
-    int iframeHeight = getRescaledElementHeight(iframe, img);
-    SelenideTargetLocator switchTo = new SelenideTargetLocator(driver);
-    switchTo.frame(iframe);
-    int iframeWidth = getRescaledIframeWidth(iframe, img, driver.getWebDriver());
-
-    Point elementLocation = element.getLocation();
-    int elementWidth = getRescaledElementWidth(element, iframeWidth);
-    int elementHeight = getRescaledElementHeight(element, iframeHeight);
-    switchTo.defaultContent();
-    try {
-      img = img.getSubimage(iframeLocation.getX() + elementLocation.getX(), iframeLocation.getY() + elementLocation.getY(),
-        elementWidth, elementHeight);
-    } catch (RasterFormatException ex) {
-      log.warn("Cannot take screenshot because element is not displayed in iframe");
-      return Optional.empty();
-    }
-    return Optional.of(img);
-  }
-
-  @CheckReturnValue
   @Nullable
-  private WebDriver checkIfFullyValidDriver(Driver driver) {
-    return ifWebDriverStarted(driver, this::checkIfFullyValidDriver);
-  }
-
   @CheckReturnValue
-  @Nullable
-  private WebDriver checkIfFullyValidDriver(WebDriver webdriver) {
-    if (!(webdriver instanceof TakesScreenshot)) {
-      log.warn("Cannot take screenshot because browser does not support screenshots");
-      return null;
-    } else if (!(webdriver instanceof JavascriptExecutor)) {
-      log.warn("Cannot take screenshot as driver is not supporting javascript execution");
-      return null;
+  private BufferedImage takeElementScreenshotAsImage(Driver driver, WebElement iframe, SelenideElement element) {
+    driver.switchTo().frame(iframe);
+    try {
+      WebElement webElement = element.toWebElement();
+      return takeElementScreenshotAsImage(driver, webElement).orElse(null);
     }
-    return webdriver;
+    finally {
+      driver.switchTo().parentFrame();
+    }
   }
 
   @CheckReturnValue
@@ -356,11 +303,13 @@ public class ScreenShotLaboratory {
       File imageFile = new File(config.reportsFolder(), fileName + ".png").getAbsoluteFile();
       try {
         FileHelper.writeToFile(scrFile.get(), imageFile);
-      } catch (IOException e) {
+      }
+      catch (IOException e) {
         log.error("Failed to save screenshot to {}", imageFile, e);
       }
       return imageFile;
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       log.error("Failed to take screenshot to {}", fileName, e);
       return null;
     }
@@ -486,7 +435,8 @@ public class ScreenShotLaboratory {
     String screenShotPath;
     if (isInsideFolder(current, target)) {
       screenShotPath = current.relativize(target).toString().replace('\\', '/');
-    } else {
+    }
+    else {
       screenShotPath = target.toFile().getName();
     }
     return normalizeURL(reportsURL, screenShotPath);
@@ -517,7 +467,8 @@ public class ScreenShotLaboratory {
   private String encode(String str) {
     try {
       return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
-    } catch (UnsupportedEncodingException e) {
+    }
+    catch (UnsupportedEncodingException e) {
       log.debug("Cannot encode path segment: {}", str, e);
       return str;
     }
@@ -546,67 +497,5 @@ public class ScreenShotLaboratory {
       return null;
     }
     return lambda.apply(config);
-  }
-
-  @CheckReturnValue
-  private int getRescaledElementWidth(WebElement element, int iframeWidth) {
-    int elementWidth = getElementWidth(element);
-    if (elementWidth > iframeWidth) {
-      return iframeWidth - element.getLocation().getX();
-    } else {
-      return elementWidth;
-    }
-  }
-
-  @CheckReturnValue
-  private int getRescaledElementHeight(WebElement element, int iframeHeight) {
-    int elementHeight = getElementHeight(element);
-    if (elementHeight > iframeHeight) {
-      return iframeHeight - element.getLocation().getY();
-    } else {
-      return elementHeight;
-    }
-  }
-
-  @CheckReturnValue
-  private int getRescaledElementWidth(WebElement element, BufferedImage image) {
-    if (getElementWidth(element) > image.getWidth()) {
-      return image.getWidth() - element.getLocation().getX();
-    } else {
-      return getElementWidth(element);
-    }
-  }
-
-  @CheckReturnValue
-  private int getRescaledElementHeight(WebElement element, BufferedImage image) {
-    if (getElementHeight(element) > image.getHeight()) {
-      return image.getHeight() - element.getLocation().getY();
-    } else {
-      return getElementHeight(element);
-    }
-  }
-
-  @CheckReturnValue
-  private int getRescaledIframeWidth(WebElement iframe, BufferedImage image, WebDriver driver) {
-    if (getIframeWidth(driver) > image.getWidth()) {
-      return image.getWidth() - iframe.getLocation().getX();
-    } else {
-      return getIframeWidth(driver);
-    }
-  }
-
-  @CheckReturnValue
-  private int getIframeWidth(WebDriver driver) {
-    return ((Long) ((JavascriptExecutor) driver).executeScript("return document.body.clientWidth")).intValue();
-  }
-
-  @CheckReturnValue
-  private int getElementWidth(WebElement element) {
-    return element.getSize().getWidth();
-  }
-
-  @CheckReturnValue
-  private int getElementHeight(WebElement element) {
-    return element.getSize().getHeight();
   }
 }

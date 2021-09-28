@@ -1,17 +1,17 @@
 package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Locale;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ErrorMessagesTest implements WithAssertions {
+final class ErrorMessagesTest {
   private final ChromeDriver webDriver = mock(ChromeDriver.class);
   private final SelenideConfig config = new SelenideConfig().reportsFolder("build/reports/tests");
 

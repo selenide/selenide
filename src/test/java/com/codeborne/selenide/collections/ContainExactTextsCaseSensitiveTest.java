@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.DoesNotContainTextsError;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -13,8 +12,10 @@ import java.util.Collections;
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
+public class ContainExactTextsCaseSensitiveTest {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");
@@ -48,7 +49,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   private final CollectionSource emptyCollection = mockCollection("Empty collection");
 
   @Test
-  void testExactCollection() {
+  void exactCollection() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -57,7 +58,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionUnordered() {
+  void collectionUnordered() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
@@ -66,7 +67,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionUnorderedMoreElements() {
+  void collectionUnorderedMoreElements() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
@@ -75,7 +76,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionUnorderedMoreElementsWithDuplicates() {
+  void collectionUnorderedMoreElementsWithDuplicates() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-Three", "Test-One", "Test-Two");
 
@@ -84,7 +85,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionWithoutElement() {
+  void collectionWithoutElement() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -107,7 +108,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionMoreElementsWithoutSomeElements() {
+  void collectionMoreElementsWithoutSomeElements() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -130,7 +131,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionLessElementsWithoutElement() {
+  void collectionLessElementsWithoutElement() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -153,7 +154,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionNullElements() {
+  void collectionNullElements() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -169,7 +170,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testCollectionEmpty() {
+  void collectionEmpty() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 
@@ -194,7 +195,7 @@ public class ContainExactTextsCaseSensitiveTest implements WithAssertions {
   }
 
   @Test
-  void testMissingElementSatisfiesCondition() {
+  void missingElementSatisfiesCondition() {
     ContainExactTextsCaseSensitive expectedTexts =
       new ContainExactTextsCaseSensitive("Test-One", "Test-Two", "Test-Three");
 

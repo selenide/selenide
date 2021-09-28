@@ -5,8 +5,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
-import com.codeborne.selenide.impl.Html;
 import com.codeborne.selenide.impl.CollectionSource;
+import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
 import javax.annotation.CheckReturnValue;
@@ -60,10 +60,10 @@ public class ExactTexts extends CollectionCondition {
       throw elementNotFound;
     }
     else if (elements.size() != expectedTexts.size()) {
-      throw new TextsSizeMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
+      throw new TextsSizeMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
     }
     else {
-      throw new TextsMismatch(collection, ElementsCollection.texts(elements), expectedTexts, explanation, timeoutMs);
+      throw new TextsMismatch(collection, expectedTexts, ElementsCollection.texts(elements), explanation, timeoutMs);
     }
   }
 

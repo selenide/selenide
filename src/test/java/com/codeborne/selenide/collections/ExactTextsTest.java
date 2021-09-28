@@ -3,7 +3,6 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.TextsMismatch;
 import com.codeborne.selenide.ex.TextsSizeMismatch;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -14,10 +13,12 @@ import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ExactTextsTest implements WithAssertions {
+final class ExactTextsTest {
   @Test
   void varArgsConstructor() {
     ExactTexts exactTexts = new ExactTexts("One", "Two", "Three");

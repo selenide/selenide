@@ -80,7 +80,7 @@ public abstract class WebElementSource {
   @CheckReturnValue
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
-    return new ElementNotFound(driver(), description(), condition, lastError);
+    return new ElementNotFound(description(), condition, lastError);
   }
 
   @CheckReturnValue
@@ -106,7 +106,7 @@ public abstract class WebElementSource {
     }
 
     if (lastError != null && Cleanup.of.isInvalidSelectorError(lastError)) {
-      throw Cleanup.of.wrap(lastError);
+      throw Cleanup.of.wrapInvalidSelectorException(lastError);
     }
 
     if (element == null) {
@@ -125,7 +125,7 @@ public abstract class WebElementSource {
 
   /**
    * Asserts that returned element can be interacted with.
-   *
+   * <p>
    * Elements which are transparent (opacity:0) are considered to be invisible, but interactable.
    * User (as of 05.12.2018) can click, doubleClick etc., and enter text etc. to transparent elements
    * for all major browsers

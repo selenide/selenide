@@ -3,9 +3,14 @@ package com.codeborne.selenide;
 import com.codeborne.selenide.files.DownloadAction;
 import com.codeborne.selenide.files.FileFilter;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.files.DownloadActions.click;
 import static com.codeborne.selenide.files.FileFilters.none;
 
+@ParametersAreNonnullByDefault
 public class DownloadOptions {
   private static final long UNSPECIFIED_TIMEOUT = Long.MIN_VALUE;
 
@@ -21,10 +26,13 @@ public class DownloadOptions {
     this.action = action;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public FileDownloadMode getMethod() {
     return method;
   }
 
+  @CheckReturnValue
   public long getTimeout(long defaultValue) {
     return hasSpecifiedTimed() ? timeout : defaultValue;
   }
@@ -33,18 +41,26 @@ public class DownloadOptions {
     return timeout != UNSPECIFIED_TIMEOUT;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public FileFilter getFilter() {
     return filter;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public DownloadAction getAction() {
     return action;
   }
 
+  @CheckReturnValue
+  @Nonnull
   public DownloadOptions withTimeout(long timeout) {
     return new DownloadOptions(method, timeout, filter, action);
   }
 
+  @CheckReturnValue
+  @Nonnull
   public DownloadOptions withFilter(FileFilter filter) {
     return new DownloadOptions(method, timeout, filter, action);
   }
@@ -52,7 +68,7 @@ public class DownloadOptions {
   /**
    * An user action to start the downloading process.
    * By default it's a click.
-   *
+   * <p>
    * Use this method if you need to close some alert before downloading file etc.
    *
    * @param action any lambda accepting a Driver and WebElement (the element being clicked).
@@ -75,6 +91,8 @@ public class DownloadOptions {
       return String.format("method: %s", method);
   }
 
+  @CheckReturnValue
+  @Nonnull
   public static DownloadOptions using(FileDownloadMode method) {
     return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none(), click());
   }

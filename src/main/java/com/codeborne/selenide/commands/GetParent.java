@@ -3,7 +3,6 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-
 import org.openqa.selenium.By;
 
 import javax.annotation.CheckReturnValue;
@@ -16,7 +15,7 @@ public class GetParent implements Command<SelenideElement> {
   private final Find find;
 
   GetParent() {
-    this.find = new Find();
+    this(new Find());
   }
 
   GetParent(Find find) {

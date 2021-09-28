@@ -3,13 +3,16 @@ package com.codeborne.selenide.commands;
 import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Mocks.mockElement;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-final class GetSelectedTextCommandTest implements WithAssertions {
+final class GetSelectedTextCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource selectElement = mock(WebElementSource.class);
   private final GetSelectedOption getSelectedOptionCommand = mock(GetSelectedOption.class);

@@ -1,8 +1,7 @@
 package com.codeborne.selenide.proxy;
 
-import com.codeborne.selenide.Config;
 import com.browserup.bup.BrowserUpProxyServer;
-import org.assertj.core.api.WithAssertions;
+import com.codeborne.selenide.Config;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 
@@ -10,13 +9,14 @@ import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class SelenideProxyServerTest implements WithAssertions {
+final class SelenideProxyServerTest {
   private final BrowserUpProxyServer bmp = mock(BrowserUpProxyServer.class);
   private final Config config = mock(Config.class);
   private final SelenideProxyServer proxyServer = new SelenideProxyServer(config, null, new InetAddressResolverStub(), bmp);

@@ -2,53 +2,39 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-
+import static com.codeborne.selenide.Mocks.mockElement;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class GetSelectedValueCommandTest implements WithAssertions {
+final class GetSelectedValueCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource selectElement = mock(WebElementSource.class);
-  private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private GetSelectedValue getSelectedValueCommand;
   private final GetSelectedOption getSelectedOptionCommand = mock(GetSelectedOption.class);
+  private final GetSelectedValue command = new GetSelectedValue(getSelectedOptionCommand);
 
-  @BeforeEach
-  void setup() {
-    getSelectedValueCommand = new GetSelectedValue(getSelectedOptionCommand);
+  @Test
+  void selectedOptionReturnsNothing() {
+    // TODO fix me: https://github.com/selenide/selenide/issues/1581
+    //when(getSelectedOptionCommand.execute(any(), any(), any())).thenThrow(new NoSuchElementException("No options are selected"));
+    when(getSelectedOptionCommand.execute(any(), any(), any())).thenReturn(null);
+    assertThat(command.execute(proxy, selectElement, null)).isNull();
+    verify(getSelectedOptionCommand).execute(proxy, selectElement, null);
   }
 
   @Test
-  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
-    GetSelectedValue getSelectedText = new GetSelectedValue();
-    Field getSelectedOptionField = getSelectedText.getClass().getDeclaredField("getSelectedOption");
-    getSelectedOptionField.setAccessible(true);
-    GetSelectedOption getSelectedOption = (GetSelectedOption) getSelectedOptionField.get(getSelectedText);
-    assertThat(getSelectedOption)
-      .isNotNull();
-  }
+  void selectedOptionReturnsElement() {
+    SelenideElement option = mockElement("option", "Element text");
+    when(option.getAttribute("value")).thenReturn("Element value");
+    when(getSelectedOptionCommand.execute(any(), any(), any())).thenReturn(option);
 
-  @Test
-  void testExecuteMethodWhenSelectedOptionReturnsNothing() throws IOException {
-    Object[] args = {"something more"};
-    when(getSelectedOptionCommand.execute(proxy, selectElement, args)).thenReturn(null);
-    assertThat(getSelectedValueCommand.execute(proxy, selectElement, args))
-      .isNullOrEmpty();
-  }
+    String selectedValue = command.execute(proxy, selectElement, null);
 
-  @Test
-  void testExecuteMethodWhenSelectedOptionReturnsElement() throws IOException {
-    Object[] args = {"something more"};
-    when(getSelectedOptionCommand.execute(proxy, selectElement, args)).thenReturn(mockedElement);
-    String elementText = "Element text";
-    when(mockedElement.getAttribute("value")).thenReturn(elementText);
-    assertThat(getSelectedValueCommand.execute(proxy, selectElement, args))
-      .isEqualTo(elementText);
+    assertThat(selectedValue).isEqualTo("Element value");
+    verify(getSelectedOptionCommand).execute(proxy, selectElement, null);
   }
 }

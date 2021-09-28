@@ -29,7 +29,7 @@ public class ListSize extends CollectionCondition {
                    @Nullable List<WebElement> elements,
                    @Nullable Exception lastError,
                    long timeoutMs) {
-    throw new ListSizeMismatch(collection.driver(), "=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
+    throw new ListSizeMismatch("=", expectedSize, explanation, collection, elements, lastError, timeoutMs);
   }
 
   @CheckReturnValue

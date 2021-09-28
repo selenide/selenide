@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.byText;
@@ -18,6 +20,7 @@ import static com.codeborne.selenide.WebDriverConditions.currentFrameUrl;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlContaining;
 import static com.codeborne.selenide.WebDriverConditions.currentFrameUrlStartingWith;
 import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
+import static com.codeborne.selenide.WebDriverConditions.title;
 import static com.codeborne.selenide.WebDriverConditions.url;
 import static com.codeborne.selenide.WebDriverConditions.urlContaining;
 import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
@@ -159,11 +162,36 @@ final class WebDriverConditionsTest extends IntegrationTest {
   }
 
   @Test
+  void checkForPageTitle() {
+    webdriver().shouldHave(title("Test::frames with delays"), ofMillis(10));
+  }
+
+  @Test
+  void errorMessageForWrongTitle() {
+    assertThatThrownBy(() ->
+      webdriver().shouldHave(title("Selenide-test-page"), ofMillis(10))
+    )
+      .isInstanceOf(ConditionNotMetException.class)
+      .hasMessageContaining("Actual value: Test::frames with delays");
+  }
+
+  @Test
+  void errorMessageWhenWebdriverShouldNotHaveTitle() {
+    assertThatThrownBy(() ->
+      webdriver().shouldNotHave(title("Test::frames with delays"), ofMillis(10))
+    )
+      .isInstanceOf(ConditionMetException.class)
+      .hasMessageStartingWith("Page should not have title Test::frames with delays")
+      .hasMessageContaining("Actual value: Test::frames with delays");
+  }
+
+  @Test
   void userCanDefineCustomConditions() {
     webdriver().shouldHave(cookie("session_id"));
     webdriver().shouldNotHave(cookie("nonexistent_cookie"));
   }
 
+  @ParametersAreNonnullByDefault
   private ObjectCondition<WebDriver> cookie(String expectedCookieName) {
     return new ObjectCondition<WebDriver>() {
       @Nonnull
@@ -178,6 +206,7 @@ final class WebDriverConditionsTest extends IntegrationTest {
         return "should not have a cookie with name '" + expectedCookieName + "'";
       }
 
+      @CheckReturnValue
       @Override
       public boolean test(WebDriver webdriver) {
         return webdriver.manage().getCookieNamed(expectedCookieName) != null;
@@ -187,6 +216,12 @@ final class WebDriverConditionsTest extends IntegrationTest {
       @Override
       public String actualValue(WebDriver webdriver) {
         return "Available cookies: " + webdriver.manage().getCookies();
+      }
+
+      @Override
+      @CheckReturnValue
+      public String expectedValue() {
+        return expectedCookieName;
       }
 
       @Nonnull

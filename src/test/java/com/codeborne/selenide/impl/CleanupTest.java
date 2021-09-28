@@ -1,16 +1,16 @@
 package com.codeborne.selenide.impl;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-final class CleanupTest implements WithAssertions {
+final class CleanupTest {
   @Test
   void cleansWebDriverExceptionMessage() {
     String webDriverException = "org.openqa.selenium.NoSuchElementException: " +

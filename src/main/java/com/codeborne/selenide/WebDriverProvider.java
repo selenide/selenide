@@ -5,10 +5,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * <p>
- *   Interface for using custom WebDriver in your tests
+ * Interface for using custom WebDriver in your tests
  * </p>
  *
  * <p>
@@ -20,6 +21,7 @@ import javax.annotation.Nonnull;
  * <li>Implement this very interface and pass the implementation class name as {@code browser} system variable value.
  * </ul>
  */
+@ParametersAreNonnullByDefault
 public interface WebDriverProvider {
 
   /**
@@ -34,5 +36,5 @@ public interface WebDriverProvider {
    */
   @CheckReturnValue
   @Nonnull
-  WebDriver createDriver(@Nonnull DesiredCapabilities desiredCapabilities);
+  WebDriver createDriver(DesiredCapabilities desiredCapabilities);
 }

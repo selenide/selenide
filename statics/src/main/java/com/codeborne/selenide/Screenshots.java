@@ -69,7 +69,7 @@ public class Screenshots {
    */
   @CheckReturnValue
   @Nullable
-  public static File takeScreenShot(WebElement iframe, WebElement element) {
+  public static File takeScreenShot(WebElement iframe, SelenideElement element) {
     return screenshots.takeScreenshot(driver(), iframe, element);
   }
 
@@ -80,7 +80,7 @@ public class Screenshots {
    */
   @CheckReturnValue
   @Nullable
-  public static BufferedImage takeScreenShotAsImage(WebElement iframe, WebElement element) {
+  public static BufferedImage takeScreenShotAsImage(WebElement iframe, SelenideElement element) {
     return screenshots.takeScreenshotAsImage(driver(), iframe, element);
   }
 

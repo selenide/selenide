@@ -65,7 +65,7 @@ public class Cleanup {
       message.contains("INVALID_EXPRESSION_ERR");
   }
 
-  public InvalidSelectorException wrap(Throwable error) {
+  public InvalidSelectorException wrapInvalidSelectorException(Throwable error) {
     return (error instanceof InvalidSelectorException) ?
       (InvalidSelectorException) error :
       new InvalidSelectorException("Invalid selector", error);

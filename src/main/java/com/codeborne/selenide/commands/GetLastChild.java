@@ -16,10 +16,10 @@ public class GetLastChild implements Command<SelenideElement> {
   private final Find find;
 
   public GetLastChild() {
-    find = new Find();
+    this(new Find());
   }
 
-  public GetLastChild(Find find) {
+  GetLastChild(Find find) {
     this.find = find;
   }
 

@@ -1,17 +1,17 @@
 package com.codeborne.selenide.impl;
 
-import java.util.List;
-
 import com.codeborne.selenide.Condition;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class FilteringCollectionTest implements WithAssertions {
+final class FilteringCollectionTest {
   @Test
   void getActualElement() {
     WebElement mockedWebElement1 = mock(WebElement.class);

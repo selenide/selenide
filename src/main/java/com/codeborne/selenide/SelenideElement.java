@@ -639,18 +639,88 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement lastChild();
 
   /**
-   * Locates closes ancestor element matching given criteria
+   * Locates the closest ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").ancestor("table") returns the closest "table" element above "td".
+   * <br/>
+   * Same as {@code closest("selector", 0)} or {@code closest("selector")}.
    *
-   * For example, $("td").closest("table") could give some "table".
-   *
-   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
+   * Examples:
+   * <br>
+   * {@code $("td").ancestor("table")} will find the closest ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").ancestor(".container")} will find the closest ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").ancestor("[data-testid]")} will find the closest ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").ancestor("[data-testid=test-value]")} will find the closest ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
    * @return Matching ancestor element
-   * @see com.codeborne.selenide.commands.GetClosest
+   * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
-  SelenideElement closest(String tagOrClass);
+  SelenideElement ancestor(String selector);
+
+  /**
+   * Locates the Nth ancestor element matching given criteria.
+   * <br/>
+   *
+   * Examples:
+   * <br>
+   * {@code $("td").ancestor("table", 1)} will find the 2nd ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").ancestor(".container", 1)} will find the 2nd ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").ancestor("[data-testid]", 1)} will find the 2nd ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").ancestor("[data-testid=test-value]", 1)} will find the 2nd ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
+   * @param index    0...N index of the ancestor. 0 is the closest, 1 is higher up the hierarchy, etc...
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement ancestor(String selector, int index);
+
+  /**
+   * Same as {@link #ancestor(String)}.
+   *
+   * Locates the closest ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").closest("table") returns the closest "table" element above "td".
+   * <br/>
+   * Same as {@code ancestor("selector", 0)}.
+   *
+   * Examples:
+   * <br>
+   * {@code $("td").closest("table")} will find the closest ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").closest(".container")} will find the closest ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").closest("[data-testid]")} will find the closest ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").closest("[data-testid=test-value]")} will find the closest ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement closest(String selector);
 
   /**
    * <p>Locates the first matching element inside given element</p>
@@ -755,6 +825,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nonnull
   SelenideElement $x(String xpath, int index);
+
+  /**
+   * <p>Returns shadow root of this element</p>
+   *
+   * @see com.codeborne.selenide.commands.GetShadowRoot
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement shadowRoot();
 
   /**
    * <p>

@@ -37,21 +37,25 @@ public interface Conditional<T> {
   @CheckReturnValue
   T object();
 
+  @Nonnull
   default Conditional<T> shouldHave(ObjectCondition<T> predicate) {
     new Waiter().wait(driver(), object(), predicate);
     return this;
   }
 
+  @Nonnull
   default Conditional<T> shouldHave(ObjectCondition<T> predicate, Duration timeout) {
     new Waiter().wait(driver(), object(), predicate, timeout);
     return this;
   }
 
+  @Nonnull
   default Conditional<T> shouldNotHave(ObjectCondition<T> predicate) {
     new Waiter().waitWhile(driver(), object(), predicate);
     return this;
   }
 
+  @Nonnull
   default Conditional<T> shouldNotHave(ObjectCondition<T> predicate, Duration timeout) {
     new Waiter().waitWhile(driver(), object(), predicate, timeout);
     return this;

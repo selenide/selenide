@@ -3,7 +3,9 @@ package com.codeborne.selenide;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public interface ObjectCondition<T> {
   @Nonnull
   @CheckReturnValue
@@ -19,6 +21,10 @@ public interface ObjectCondition<T> {
   @Nullable
   @CheckReturnValue
   String actualValue(T object);
+
+  @Nullable
+  @CheckReturnValue
+  String expectedValue();
 
   @Nonnull
   @CheckReturnValue

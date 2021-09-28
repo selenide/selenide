@@ -4,14 +4,15 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.MatcherError;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class AllMatchTest implements WithAssertions {
+final class AllMatchTest {
   private final SelenideElement element1 = mockElement("Test-One");
   private final SelenideElement element2 = mockElement("Test-Two");
   private final SelenideElement element3 = mockElement("Test-Three");

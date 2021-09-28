@@ -3,16 +3,16 @@ package com.codeborne.selenide.webdriver;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Config;
 import com.codeborne.selenide.SelenideConfig;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-final class TransferBrowserCapabilitiesFromConfigurationTest implements WithAssertions {
+final class TransferBrowserCapabilitiesFromConfigurationTest {
   private static final String SOME_CAP = "some.cap";
   private final AbstractDriverFactory driverFactory = new ChromeDriverFactory();
   private final Proxy proxy = mock(Proxy.class);

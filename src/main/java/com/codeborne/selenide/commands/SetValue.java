@@ -20,11 +20,10 @@ public class SetValue implements Command<SelenideElement> {
   private final SelectRadio selectRadio;
 
   public SetValue() {
-    this.selectOptionByValue = new SelectOptionByValue();
-    this.selectRadio = new SelectRadio();
+    this(new SelectOptionByValue(), new SelectRadio());
   }
 
-  public SetValue(SelectOptionByValue selectOptionByValue, SelectRadio selectRadio) {
+  SetValue(SelectOptionByValue selectOptionByValue, SelectRadio selectRadio) {
     this.selectOptionByValue = selectOptionByValue;
     this.selectRadio = selectRadio;
   }
@@ -34,19 +33,23 @@ public class SetValue implements Command<SelenideElement> {
   public SelenideElement execute(SelenideElement proxy, WebElementSource locator, @Nullable Object[] args) {
     String text = firstOf(args);
     WebElement element = locator.findAndAssertElementIsInteractable();
+    Driver driver = locator.driver();
 
-    if (locator.driver().config().versatileSetValue()
-      && "select".equalsIgnoreCase(element.getTagName())) {
+    if (!driver.config().versatileSetValue()) {
+      setValueForTextInput(driver, element, text);
+      return proxy;
+    }
+
+    String tagName = element.getTagName();
+    if ("select".equalsIgnoreCase(tagName)) {
       selectOptionByValue.execute(proxy, locator, args);
-      return proxy;
     }
-    if (locator.driver().config().versatileSetValue()
-      && "input".equalsIgnoreCase(element.getTagName()) && "radio".equals(element.getAttribute("type"))) {
+    else if ("input".equalsIgnoreCase(tagName) && "radio".equals(element.getAttribute("type"))) {
       selectRadio.execute(proxy, locator, args);
-      return proxy;
     }
-
-    setValueForTextInput(locator.driver(), element, text);
+    else {
+      setValueForTextInput(driver, element, text);
+    }
     return proxy;
   }
 
@@ -56,7 +59,7 @@ public class SetValue implements Command<SelenideElement> {
     }
     else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
-      if (error != null) throw new InvalidStateException(driver, error);
+      if (error != null) throw new InvalidStateException(error);
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }

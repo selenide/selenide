@@ -4,47 +4,90 @@
   <title>Test::Screenshots</title>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <!--<style> Please don't edit styles above-->
   <style>
+    #huge_div div {
+      text-align: center;
+      border: red 3px solid;
+      position: relative;
+    }
+    .top-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .bottom-left {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
+    .bottom-right {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
     #small_div {
-        width:185px;
-        height:200px;
-        background:#666;
-        margin-bottom:20px;
-     }
-     #wide_div {
-        width:3000px;
-        height:50px;
-        background:#888;
-        margin-bottom:20px;
-     }
-     #medium_div {
-        width:185px;
-        height:300px;
-        background:#333;
-        margin-bottom:20px;
-     }
-     #big_div {
-        width:185px;
-        height:1600px;
-        background:#999;
-        margin-bottom:20px;
-     }
-     #huge_div {
-        width:3000px;
-        height:3000px;
-        background:yellow;
-     }
+      width: 185px;
+      height: 200px;
+      background: #0ff;
+      padding: 20px;
+    }
 
+    #wide_div {
+      width: 3000px;
+      height: 50px;
+      background: #888;
+      margin-bottom: 20px;
+    }
+
+    #medium_div {
+      width: 185px;
+      height: 300px;
+      background: #0e0;
+      margin-bottom: 20px;
+    }
+
+    #big_div {
+      width: 185px;
+      height: 1600px;
+      background: pink;
+      margin-bottom: 20px;
+    }
+
+    #huge_div {
+      width: 3000px;
+      height: 3000px;
+      background: yellow;
+    }
   </style>
 </head>
 <body>
 <h1>Some big divs</h1>
 <div id="huge_div">
-  <div id="wide_div">Long div</div>
-  <div id="small_div">Small div</div>
-  <div id="medium_div">Medium div</div>
-  <div id="big_div">Big div</div>
+  <div id="wide_div"><br>Long div</div>
+  <div id="small_div"><br>Small div</div>
+  <div id="medium_div"><br>Medium div</div>
+  <div id="big_div"><br>Big div</div>
 </div>
+
+<script>
+  (function() {
+    function markCorners(div) {
+      div.innerHTML += "<span class='top-left'>tl</span>" +
+        "<span class='top-right'>tr</span>" +
+        "<span class='bottom-left'>bl</span>" +
+        "<span class='bottom-right'>br</span>"
+    }
+    markCorners(document.getElementById("wide_div"))
+    markCorners(document.getElementById("small_div"))
+    markCorners(document.getElementById("medium_div"))
+    markCorners(document.getElementById("big_div"))
+  })()
+</script>
+
 </body>
 </html>

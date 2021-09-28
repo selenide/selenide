@@ -2,24 +2,21 @@ package com.codeborne.selenide.conditions;
 
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
+import static com.codeborne.selenide.Mocks.mockElement;
+import static com.codeborne.selenide.Mocks.mockSelect;
+import static com.codeborne.selenide.Mocks.option;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 final class TextCaseSensitiveTest {
 
   private final Driver driver = mock(Driver.class);
-  private final WebElement elementShort = elementWithText("One");
-  private final WebElement elementLong = elementWithText("ZeroOneTwo");
-  private final WebElement singleSelectElement = selectSingle("One", "Two", "Three"); // only the first element is selected
-  private final WebElement multiSelectElement = selectMulti("One", "Two", "Three");  //  all elements are selected
+  private final WebElement elementShort = mockElement("One");
+  private final WebElement elementLong = mockElement("ZeroOneTwo");
+  private final WebElement singleSelectElement = mockSelect(option("One", true), option("Two"), option("Three"));
+  private final WebElement multiSelectElement = mockSelect(option("One", true), option("Two", true), option("Three", true));
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {
@@ -65,40 +62,6 @@ final class TextCaseSensitiveTest {
 
   @Test
   void shouldHaveCorrectToString() {
-    assertThat(new CaseSensitiveText("One")).hasToString("textCaseSensitive 'One'");
-  }
-
-  private WebElement elementWithText(String text) {
-    WebElement webElement = mock(WebElement.class);
-    when(webElement.getText()).thenReturn(text);
-    return webElement;
-  }
-
-  private WebElement selectSingle(String... optionTexts) {
-    WebElement select = mock(WebElement.class);
-    when(select.getTagName()).thenReturn("select");
-
-    List<WebElement> options = Stream.of(optionTexts)
-      .map(this::elementWithText)
-      .peek(option -> when(option.isSelected()).thenReturn(false))
-      .collect(toList());
-
-    when(options.get(0).isSelected()).thenReturn(true);
-
-    when(select.findElements(By.tagName("option"))).thenReturn(options);
-    return select;
-  }
-
-  private WebElement selectMulti(String... optionTexts) {
-    WebElement select = mock(WebElement.class);
-    when(select.getTagName()).thenReturn("select");
-
-    List<WebElement> options = Stream.of(optionTexts)
-      .map(this::elementWithText)
-      .peek(option -> when(option.isSelected()).thenReturn(true))
-      .collect(toList());
-
-    when(select.findElements(By.tagName("option"))).thenReturn(options);
-    return select;
+    assertThat(new CaseSensitiveText("One")).hasToString("text case sensitive 'One'");
   }
 }

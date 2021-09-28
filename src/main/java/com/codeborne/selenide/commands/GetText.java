@@ -15,10 +15,10 @@ public class GetText implements Command<String> {
   private final GetSelectedText getSelectedText;
 
   public GetText() {
-    this.getSelectedText = new GetSelectedText();
+    this(new GetSelectedText());
   }
 
-  public GetText(GetSelectedText getSelectedtext) {
+  GetText(GetSelectedText getSelectedtext) {
     this.getSelectedText = getSelectedtext;
   }
 

@@ -19,8 +19,8 @@ public class CollectionElementByCondition extends WebElementSource {
   @Nonnull
   public static SelenideElement wrap(CollectionSource collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
-        collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-        new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
+      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+      new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
   }
 
   private final CollectionSource collection;
@@ -50,7 +50,7 @@ public class CollectionElementByCondition extends WebElementSource {
       }
     }
 
-    throw new ElementNotFound(driver(), description(), condition);
+    throw new ElementNotFound(description(), condition);
   }
 
   @Override

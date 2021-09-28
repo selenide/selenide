@@ -3,16 +3,17 @@ package com.codeborne.selenide.collections;
 import com.codeborne.selenide.Mocks;
 import com.codeborne.selenide.ex.ListSizeMismatch;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-final class SizeGreaterThanOrEqualTest implements WithAssertions {
+final class SizeGreaterThanOrEqualTest {
   @Test
   void applyWithEmptyList() {
     assertThat(new SizeGreaterThanOrEqual(10).test(emptyList()))

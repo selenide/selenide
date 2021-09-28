@@ -15,21 +15,18 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.id;
-import static com.codeborne.selenide.Condition.matchesText;
 import static com.codeborne.selenide.Condition.name;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.or;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.type;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Mocks.elementWithAttribute;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
@@ -50,81 +47,6 @@ final class ConditionTest {
   }
 
   @Test
-  void textConditionChecksForSubstring() {
-    assertThat(text("John Malkovich The First").apply(driver, elementWithText("John Malkovich The First")))
-      .isTrue();
-    assertThat(text("John Malkovich First").apply(driver, elementWithText("John Malkovich The First")))
-      .isFalse();
-    assertThat(text("john bon jovi").apply(driver, elementWithText("John Malkovich The First")))
-      .isFalse();
-  }
-
-  private WebElement elementWithText(String text) {
-    WebElement element = mock(WebElement.class);
-    when(element.getText()).thenReturn(text);
-    return element;
-  }
-
-  @Test
-  void textConditionIsCaseInsensitive() {
-    WebElement element = elementWithText("John Malkovich The First");
-    assertThat(text("john malkovich").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textConditionIgnoresWhitespaces() {
-    assertThat(text("john the malkovich").apply(driver, elementWithText("John  the\n Malkovich")))
-      .isTrue();
-    assertThat(text("This is nonbreakable space").apply(driver, elementWithText("This is nonbreakable\u00a0space")))
-      .isTrue();
-  }
-
-  @Test
-  void testTextCaseSensitive() {
-    WebElement element = elementWithText("John Malkovich The First");
-    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(textCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textCaseSensitiveIgnoresWhitespaces() {
-    WebElement element = elementWithText("John Malkovich\t The   \n First");
-    assertThat(textCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(textCaseSensitive("John        Malkovich The   ").apply(driver, element)).isTrue();
-  }
-
-  @Test
-  void textCaseSensitiveToString() {
-    assertThat(textCaseSensitive("John Malcovich")).hasToString("textCaseSensitive 'John Malcovich'");
-  }
-
-  @Test
-  void exactTextIsCaseInsensitive() {
-    WebElement element = elementWithText("John Malkovich");
-    assertThat(exactText("john malkovich").apply(driver, element)).isTrue();
-    assertThat(exactText("john").apply(driver, element)).isFalse();
-  }
-
-  @Test
-  void exactTextToString() {
-    assertThat(exactText("John Malcovich")).hasToString("exact text 'John Malcovich'");
-  }
-
-  @Test
-  void testExactTextCaseSensitive() {
-    WebElement element = elementWithText("John Malkovich");
-    assertThat(exactTextCaseSensitive("john malkovich").apply(driver, element)).isFalse();
-    assertThat(exactTextCaseSensitive("John Malkovich").apply(driver, element)).isTrue();
-    assertThat(exactTextCaseSensitive("John").apply(driver, element)).isFalse();
-  }
-
-  @Test
-  void exactTextCaseSensitiveToString() {
-    assertThat(exactTextCaseSensitive("John Malcovich"))
-      .hasToString("exact text case sensitive 'John Malcovich'");
-  }
-
-  @Test
   void value() {
     WebElement element = elementWithAttribute("value", "John Malkovich");
     assertThat(Condition.value("Peter").apply(driver, element)).isFalse();
@@ -133,12 +55,6 @@ final class ConditionTest {
     assertThat(Condition.value("John").apply(driver, element)).isTrue();
     assertThat(Condition.value("John Malkovich").apply(driver, element)).isTrue();
     assertThat(Condition.value("malko").apply(driver, element)).isTrue();
-  }
-
-  private WebElement elementWithAttribute(String name, String value) {
-    WebElement element = mock(WebElement.class);
-    when(element.getAttribute(name)).thenReturn(value);
-    return element;
   }
 
   @Test
@@ -221,32 +137,19 @@ final class ConditionTest {
   }
 
   @Test
-  void elementHasType() {
-    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide"))).isTrue();
-    assertThat(type("selenide").apply(driver, elementWithAttribute("type", "selenide is great"))).isFalse();
+  void checksValueOfTypeAttribute() {
+    assertThat(type("radio").apply(driver, elementWithAttribute("type", "radio"))).isTrue();
+    assertThat(type("radio").apply(driver, elementWithAttribute("type", "radio-button"))).isFalse();
   }
 
   @Test
-  void elementHasId() {
+  void checksValueOfIdAttribute() {
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide"))).isTrue();
     assertThat(id("selenide").apply(driver, elementWithAttribute("id", "selenide is great"))).isFalse();
   }
 
   @Test
-  void elementMatchesText() {
-    assertThat(matchesText("selenide").apply(driver, elementWithText("selenidehello"))).isTrue();
-    assertThat(matchesText("selenide").apply(driver, elementWithText("  this is  selenide  the great "))).isTrue();
-    assertThat(matchesText("selenide\\s+hello\\s*").apply(driver, elementWithText("selenide    hello"))).isTrue();
-    assertThat(matchesText("selenide").apply(driver, elementWithText("selenite"))).isFalse();
-  }
-
-  @Test
-  void elementMatchTextToString() {
-    assertThat(matchesText("John Malcovich")).hasToString("match text 'John Malcovich'");
-  }
-
-  @Test
-  void elementHasClass() {
+  void checksValueOfClassAttribute() {
     assertThat(cssClass("btn").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("btn-warning").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isTrue();
     assertThat(cssClass("active").apply(driver, elementWithAttribute("class", "btn btn-warning"))).isFalse();

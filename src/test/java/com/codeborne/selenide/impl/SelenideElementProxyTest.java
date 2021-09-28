@@ -10,7 +10,7 @@ import com.codeborne.selenide.logevents.LogEvent;
 import com.codeborne.selenide.logevents.LogEvent.EventStatus;
 import com.codeborne.selenide.logevents.LogEventListener;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import org.assertj.core.api.WithAssertions;
+import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.enabled;
@@ -40,30 +38,27 @@ import static com.codeborne.selenide.impl.SelenideElementProxy.isSelenideElement
 import static com.codeborne.selenide.impl.SelenideElementProxy.shouldRetryAfterError;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class SelenideElementProxyTest implements WithAssertions {
+final class SelenideElementProxyTest {
   private static final Logger log = LoggerFactory.getLogger(SelenideElementProxyTest.class);
 
   private final RemoteWebDriver webdriver = mock(RemoteWebDriver.class);
   private final WebElement element = mock(WebElement.class);
-  private final SelenideConfig config = new SelenideConfig()
-    .screenshots(false)
-    .timeout(3)
-    .pollingInterval(1);
+  private final SelenideConfig config = new SelenideConfig().screenshots(false).timeout(1);
   private final SelenideDriver driver = new SelenideDriver(config, webdriver, null, new SharedDownloadsFolder("build/downloads/123"));
 
   @BeforeEach
   void mockWebDriver() {
-    Map<String, String> map = new HashMap<>();
-    map.put("id", "id1");
-    map.put("class", "class1");
-    when(webdriver
-      .executeScript(anyString(), any(WebElement.class)))
-      .thenReturn(map);
+    when(webdriver.executeScript(anyString(), any(WebElement.class)))
+      .thenReturn(ImmutableMap.of("id", "id1", "class", "class1"));
     when(webdriver.getPageSource()).thenReturn("<html>mock</html>");
 
     when(element.getTagName()).thenReturn("h1");
@@ -79,98 +74,151 @@ final class SelenideElementProxyTest implements WithAssertions {
   @Test
   void elementShouldBeVisible() {
     when(element.isDisplayed()).thenReturn(true);
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(any())).thenReturn(element);
     driver.find("#firstName").shouldBe(visible);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementNotFound() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new NotFoundException());
-    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible))
-      .isInstanceOf(ElementNotFound.class);
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
+    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible)).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementFoundButNotMatched() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(any())).thenReturn(element);
     when(element.isDisplayed()).thenReturn(false);
-    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible))
-      .isInstanceOf(ElementShould.class);
+    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible)).isInstanceOf(ElementShould.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementFoundButInvisible() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(any())).thenReturn(element);
     when(element.isDisplayed()).thenThrow(new WebDriverException("failed to call isDisplayed"));
-    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible))
-      .isInstanceOf(ElementShould.class);
+    assertThatThrownBy(() -> driver.find("#firstName").shouldBe(visible)).isInstanceOf(ElementShould.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void elementFoundButConditionCheckFailed() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(any())).thenReturn(element);
     when(element.isDisplayed()).thenReturn(true);
-    assertThatThrownBy(() -> driver.find("#firstName").shouldHave(text("goodbye")))
-      .isInstanceOf(ElementShould.class);
+    assertThatThrownBy(() -> driver.find("#firstName").shouldHave(text("goodbye"))).isInstanceOf(ElementShould.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
-  void elementNotFoundAsExpected() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenThrow(new NotFoundException());
+  void elementNotFoundAsExpected_case1() {
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
     driver.find("#firstName").shouldNotBe(exist);
-    driver.find("#firstName").should(disappear);
-    driver.find("#firstName").shouldNotBe(visible);
-    assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
-    assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
-  void elementNotFoundAsExpected2() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
-      .thenThrow(new WebDriverException("element is not found and this is expected"));
-    driver.find("#firstName").shouldNot(exist);
+  void elementNotFoundAsExpected_case2() {
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
     driver.find("#firstName").should(disappear);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected_case3() {
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
     driver.find("#firstName").shouldNotBe(visible);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected_case4() {
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
     assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected_case5() {
+    when(webdriver.findElement(any())).thenThrow(new NotFoundException());
     assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected2_case1() {
+    when(webdriver.findElement(any())).thenThrow(new WebDriverException("element is not found and this is expected"));
+    driver.find("#firstName").shouldNot(exist);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected2_case2() {
+    when(webdriver.findElement(any())).thenThrow(new WebDriverException("element is not found and this is expected"));
+    driver.find("#firstName").should(disappear);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected2_case3() {
+    when(webdriver.findElement(any())).thenThrow(new WebDriverException("element is not found and this is expected"));
+    driver.find("#firstName").shouldNotBe(visible);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected2_case4() {
+    when(webdriver.findElement(any())).thenThrow(new WebDriverException("element is not found and this is expected"));
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotBe(enabled)).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+  }
+
+  @Test
+  void elementNotFoundAsExpected2_case5() {
+    when(webdriver.findElement(any())).thenThrow(new WebDriverException("element is not found and this is expected"));
+    assertThatThrownBy(() -> driver.find("#firstName").shouldNotHave(text("goodbye"))).isInstanceOf(ElementNotFound.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void webdriverReportsInvalidXpath_using_should() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
+    when(webdriver.findElement(any()))
       .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     assertThatThrownBy(() -> driver.find("#firstName").should(disappear))
       .isInstanceOf(InvalidSelectorException.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void webdriverReportsInvalidXpath_using_shouldNot() {
-    when(webdriver.findElement(By.cssSelector("#firstName")))
+    when(webdriver.findElement(any()))
       .thenThrow(new InvalidSelectorException("Error INVALID_EXPRESSION_ERR ups"));
     assertThatThrownBy(() -> driver.find("#firstName").shouldNot(exist))
       .isInstanceOf(InvalidSelectorException.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void setValueShouldNotFailIfElementHasDisappearedWhileEnteringText() {
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
+    when(webdriver.findElement(any())).thenReturn(element);
     when(webdriver.executeScript(anyString(), any()))
       .thenThrow(new StaleElementReferenceException("element disappeared after entering text"));
     driver.find("#firstName").setValue("john");
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @Test
   void shouldLogSetValueSubject() {
-    String selector = "#firstName";
-    SelenideLogger.addListener("test", new TestEventListener(selector, "set value", PASS));
+    SelenideLogger.addListener("test", new TestEventListener("#firstName", "set value", PASS));
+    when(webdriver.findElement(any())).thenReturn(element);
 
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    SelenideElement selEl = driver.find("#firstName");
-    selEl.setValue("ABC");
+    driver.find("#firstName").setValue("ABC");
+
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
   }
 
   @ParametersAreNonnullByDefault
-  private class TestEventListener implements LogEventListener {
+  private static class TestEventListener implements LogEventListener {
 
     private final String expectSelector;
     private final String expectSubject;
@@ -186,94 +234,93 @@ final class SelenideElementProxyTest implements WithAssertions {
     public void afterEvent(LogEvent currentLog) {
       String format = String.format("{%s} %s: %s", currentLog.getElement(), currentLog.getSubject(), currentLog.getStatus());
       log.info(format);
-      assertThat(currentLog.getElement())
-        .contains(expectSelector);
-      assertThat(currentLog.getSubject())
-        .contains(expectSubject);
-      assertThat(currentLog.getStatus())
-        .isEqualTo(expectStatus);
+      assertThat(currentLog.getElement()).contains(expectSelector);
+      assertThat(currentLog.getSubject()).contains(expectSubject);
+      assertThat(currentLog.getStatus()).isEqualTo(expectStatus);
     }
 
     @Override
     public void beforeEvent(LogEvent currentLog) {
-
     }
   }
 
   @Test
   void shouldLogShouldSubject() {
-    String selector = "#firstName";
-    SelenideLogger.addListener("test", new TestEventListener(selector, "should have", PASS));
+    when(webdriver.findElement(any())).thenReturn(element);
+    when(element.getAttribute(any())).thenReturn("ABC");
 
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    when(element.getAttribute("value")).thenReturn("ABC");
-    SelenideElement selEl = driver.find("#firstName");
-    selEl.shouldHave(value("ABC"));
+    SelenideLogger.addListener("test", new TestEventListener("#firstName", "should have", PASS));
+
+    driver.find("#firstName").shouldHave(value("ABC"));
+
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+    verify(element).getAttribute("value");
   }
 
   @Test
   void shouldLogShouldNotSubject() {
-    String selector = "#firstName";
-    SelenideLogger.addListener("test", new TestEventListener(selector, "should not have", PASS));
+    SelenideLogger.addListener("test", new TestEventListener("#firstName", "should not have", PASS));
+    when(webdriver.findElement(any())).thenReturn(element);
+    when(element.getAttribute(any())).thenReturn("wrong value");
 
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    when(element.getAttribute("value")).thenReturn("wrong value");
-    SelenideElement selEl = driver.find("#firstName");
-    selEl.shouldNotHave(value("ABC"));
+    driver.find("#firstName").shouldNotHave(value("ABC"));
+
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+    verify(element).getAttribute("value");
   }
 
   @Test
   void shouldLogFailedShouldNotSubject() {
-    String selector = "#firstName";
-    SelenideLogger.addListener("test", new TestEventListener(selector, "should have", FAIL));
+    SelenideLogger.addListener("test", new TestEventListener("#firstName", "should have", FAIL));
+    when(webdriver.findElement(any())).thenReturn(element);
+    when(element.getAttribute(any())).thenReturn("wrong value");
 
-    when(webdriver.findElement(By.cssSelector("#firstName"))).thenReturn(element);
-    when(element.getAttribute("value")).thenReturn("wrong value");
+    assertThatThrownBy(() -> driver.find("#firstName").shouldHave(value("ABC"))).isInstanceOf(ElementShould.class);
 
-    assertThatThrownBy(() -> driver.find("#firstName").shouldHave(value("ABC")))
-      .isInstanceOf(ElementShould.class);
+    verify(webdriver).findElement(By.cssSelector("#firstName"));
+    verify(element, times(2)).getAttribute("value");
   }
 
   @Test
   void shouldNotRetry_onIllegalArgumentException() {
-    assertThat(shouldRetryAfterError(new IllegalArgumentException("The element does not have href attribute")))
-      .isFalse();
+    IllegalArgumentException exception = new IllegalArgumentException("The element does not have href attribute");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
   @Test
   void shouldNotRetry_onFileNotFoundException() {
-    assertThat(shouldRetryAfterError(new FileNotFoundException("bla")))
-      .isFalse();
+    FileNotFoundException exception = new FileNotFoundException("bla");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
   @Test
   void shouldNotRetry_onClassLoadingException() {
-    assertThat(shouldRetryAfterError(new ClassNotFoundException("bla")))
-      .isFalse();
+    ClassNotFoundException exception = new ClassNotFoundException("bla");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
   @Test
   void shouldNotRetry_onClassDefLoadingException() {
-    assertThat(shouldRetryAfterError(new NoClassDefFoundError("bla")))
-      .isFalse();
+    NoClassDefFoundError error = new NoClassDefFoundError("bla");
+    assertThat(shouldRetryAfterError(error)).isFalse();
   }
 
   @Test
   void shouldNotRetry_onJavaScriptException() {
-    assertThat(shouldRetryAfterError(new JavascriptException("bla")))
-      .isFalse();
+    JavascriptException exception = new JavascriptException("bla");
+    assertThat(shouldRetryAfterError(exception)).isFalse();
   }
 
   @Test
   void shouldRetry_onAssertionError() {
-    assertThat(shouldRetryAfterError(new AssertionError("bla")))
-      .isTrue();
+    AssertionError error = new AssertionError("bla");
+    assertThat(shouldRetryAfterError(error)).isTrue();
   }
 
   @Test
   void shouldRetry_onAnyOtherException() {
-    assertThat(shouldRetryAfterError(new Exception("bla")))
-      .isTrue();
+    Exception exception = new Exception("bla");
+    assertThat(shouldRetryAfterError(exception)).isTrue();
   }
 
   @Test

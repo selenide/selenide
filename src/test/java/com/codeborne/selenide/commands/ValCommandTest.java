@@ -1,52 +1,40 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Command;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-
+import static com.codeborne.selenide.Command.NO_ARGS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class ValCommandTest implements WithAssertions {
+final class ValCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final GetValue mockedGetValue = mock(GetValue.class);
-  private final SetValue mockedSetValue = mock(SetValue.class);
-  private final Val valCommand = new Val(mockedGetValue, mockedSetValue);
+  private final GetValue getValue = mock(GetValue.class);
+  private final SetValue setValue = mock(SetValue.class);
+  private final Val command = new Val(getValue, setValue);
 
   @Test
-  void testDefaultConstructor() throws NoSuchFieldException, IllegalAccessException {
-    Val val = new Val();
-    Field getValueField = val.getClass().getDeclaredField("getValue");
-    Field setValueField = val.getClass().getDeclaredField("setValue");
-    getValueField.setAccessible(true);
-    setValueField.setAccessible(true);
-    GetValue getValue = (GetValue) getValueField.get(val);
-    SetValue setValue = (SetValue) setValueField.get(val);
-
-    assertThat(getValue)
-      .isNotNull();
-    assertThat(setValue)
-      .isNotNull();
+  void returnsValue_whenCalledWithoutArguments() {
+    when(getValue.execute(any(), any(), any())).thenReturn("some value");
+    assertThat(command.execute(proxy, locator, null)).isEqualTo("some value");
+    verify(getValue).execute(proxy, locator, NO_ARGS);
   }
 
   @Test
-  void testExecuteValueWithNoArgs() {
-    String getValueResult = "getValueResult";
-    when(mockedGetValue.execute(proxy, locator, Command.NO_ARGS)).thenReturn(getValueResult);
-    assertThat(valCommand.execute(proxy, locator, null))
-      .isEqualTo(getValueResult);
-    assertThat(valCommand.execute(proxy, locator, new Object[]{}))
-      .isEqualTo(getValueResult);
+  void returnsValue_whenCalledWithEmptyArguments() {
+    when(getValue.execute(any(), any(), any())).thenReturn("some value");
+    assertThat(command.execute(proxy, locator, new Object[]{})).isEqualTo("some value");
+    verify(getValue).execute(proxy, locator, NO_ARGS);
   }
 
   @Test
-  void testExecuteValueWithArgs() {
-    assertThat(valCommand.execute(proxy, locator, new Object[]{"value"}))
-      .isEqualTo(proxy);
+  void setsValue_whenCalledWithStringArgument() {
+    assertThat(command.execute(proxy, locator, new Object[]{"new value"})).isEqualTo(proxy);
+    verify(setValue).execute(proxy, locator, new Object[]{"new value"});
   }
 }

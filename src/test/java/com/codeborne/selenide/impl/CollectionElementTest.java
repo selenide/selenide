@@ -5,16 +5,16 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class CollectionElementTest implements WithAssertions {
+final class CollectionElementTest {
   private final Driver driver = new DriverStub();
 
   @Test

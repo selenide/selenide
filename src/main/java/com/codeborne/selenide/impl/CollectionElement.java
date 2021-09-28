@@ -20,8 +20,8 @@ public class CollectionElement extends WebElementSource {
   @Nonnull
   public static SelenideElement wrap(CollectionSource collection, int index) {
     return (SelenideElement) Proxy.newProxyInstance(
-        collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-        new SelenideElementProxy(new CollectionElement(collection, index)));
+      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+      new SelenideElementProxy(new CollectionElement(collection, index)));
   }
 
   private final CollectionSource collection;
@@ -50,7 +50,7 @@ public class CollectionElement extends WebElementSource {
   @CheckReturnValue
   @Nonnull
   public String getSearchCriteria() {
-    return collection.description() + '[' + index  + ']';
+    return collection.description() + '[' + index + ']';
   }
 
   @Override
@@ -58,7 +58,7 @@ public class CollectionElement extends WebElementSource {
   @Nonnull
   public ElementNotFound createElementNotFoundError(Condition condition, Throwable lastError) {
     if (collection.getElements().isEmpty()) {
-      return new ElementNotFound(collection.driver(), description(), visible, lastError);
+      return new ElementNotFound(description(), visible, lastError);
     }
     return super.createElementNotFoundError(condition, lastError);
   }

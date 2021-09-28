@@ -17,7 +17,7 @@ public class Val implements Command<Object> {
     this.setValue = new SetValue();
   }
 
-  public Val(GetValue getValue, SetValue setValue) {
+  Val(GetValue getValue, SetValue setValue) {
     this.getValue = getValue;
     this.setValue = setValue;
   }

@@ -1,10 +1,11 @@
 package com.codeborne.selenide.impl;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Quotes;
 
-final class EscapeQuotesTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class EscapeQuotesTest {
   @Test
   void textWithoutQuotes() {
     assertThat(Quotes.escape("john"))

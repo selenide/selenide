@@ -60,7 +60,7 @@ public class ElementsContainerCollection extends AbstractList<ElementsContainer>
       return elementSelector.findElements(driver, parent, selector).size();
     }
     catch (NoSuchElementException e) {
-      throw new ElementNotFound(driver, selector.toString(), exist, e);
+      throw new ElementNotFound(selector.toString(), exist, e);
     }
   }
 }
