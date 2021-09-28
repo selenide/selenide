@@ -127,7 +127,7 @@ final class MissingElementTest extends IntegrationTest {
       .hasMessageMatching(String.format(
         "Element should be visible or transparent: visible or have css value opacity=0 \\{#theHiddenElement}%n" +
           "Element: '<div id=\"theHiddenElement\" displayed:false></div>'%n" +
-          "Actual value: visible:false, 1%n" +
+          "Actual value: visible:false, opacity=1%n" +
           "Screenshot: " + path + png() + "%n" +
           "Page source: " + path + html() + "%n" +
           "Timeout: 15 ms."));
@@ -195,6 +195,7 @@ final class MissingElementTest extends IntegrationTest {
       .isInstanceOf(ElementShouldNot.class)
       .hasMessageMatching(String.format("Element should not exist \\{h2}%n" +
         "Element: '<h2>Dropdown list</h2>'%n" +
+        "Actual value: exists%n" +
         "Screenshot: " + path + png() + "%n" +
         "Page source: " + path + html() + "%n" +
         "Timeout: 15 ms."));

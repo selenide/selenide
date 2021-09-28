@@ -44,7 +44,7 @@ final class SelenideElementDescriberTest {
 
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(driver, "div", "", visible, webElement, null)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(driver, "div", "", visible, null, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(describe.briefly(driver, selenideElement))
       .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: disappeared]");

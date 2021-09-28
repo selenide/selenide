@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -19,9 +22,8 @@ final class AndTest {
 
   @Test
   void ctorOfEmptyConditionsListThrowsException() {
-    assertThatCode(() -> {
-      new And("", emptyList());
-    }).isInstanceOf(IllegalArgumentException.class);
+    assertThatCode(() -> new And("", emptyList()))
+      .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -49,29 +51,29 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).apply(mock(Driver.class), mock(WebElement.class))
-    ).isTrue();
+      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).apply(mock(Driver.class), mock(WebElement.class))
-    ).isFalse();
+      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).apply(mock(Driver.class), mock(WebElement.class))
-    ).isFalse();
+      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).apply(mock(Driver.class), mock(WebElement.class))
-    ).isFalse();
+      )).check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(REJECT);
   }
 
   @Test
@@ -80,29 +82,29 @@ final class AndTest {
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(true)
-      )).negate().apply(mock(Driver.class), mock(WebElement.class))
-    ).isFalse();
+      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(REJECT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(true),
         new SimpleCondition(false)
-      )).negate().apply(mock(Driver.class), mock(WebElement.class))
-    ).isTrue();
+      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(true)
-      )).negate().apply(mock(Driver.class), mock(WebElement.class))
-    ).isTrue();
+      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(ACCEPT);
 
     assertThat(
       new And("", asList(
         new SimpleCondition(false),
         new SimpleCondition(false)
-      )).negate().apply(mock(Driver.class), mock(WebElement.class))
-    ).isTrue();
+      )).negate().check(mock(Driver.class), mock(WebElement.class)).verdict
+    ).isEqualTo(ACCEPT);
   }
 
   @Test
@@ -180,9 +182,10 @@ final class AndTest {
       this.applyResult = applyResult;
     }
 
+    @Nonnull
     @Override
-    public boolean apply(Driver driver, WebElement element) {
-      return this.applyResult;
+    public CheckResult check(Driver driver, WebElement element) {
+      return new CheckResult(this.applyResult, null);
     }
 
     @Nonnull

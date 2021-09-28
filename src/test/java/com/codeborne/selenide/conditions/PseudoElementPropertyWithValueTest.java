@@ -1,10 +1,13 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.conditions.PseudoElementPropertyWithValue.JS_CODE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -23,17 +26,18 @@ final class PseudoElementPropertyWithValueTest {
   @Test
   void apply() {
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello")
-      .apply(driver, element)).isTrue();
+      .check(driver, element).verdict).isEqualTo(ACCEPT);
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "Hello")
-      .apply(driver, element)).isTrue();
+      .check(driver, element).verdict).isEqualTo(ACCEPT);
     assertThat(new PseudoElementPropertyWithValue(":before", "content", "dummy")
-      .apply(driver, element)).isFalse();
+      .check(driver, element).verdict).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue() {
-    assertThat(new PseudoElementPropertyWithValue(":before", "content", "hello")
-      .actualValue(driver, element)).isEqualTo(":before {content: hello;}");
+    PseudoElementPropertyWithValue condition = new PseudoElementPropertyWithValue(":before", "content", "hello");
+    CheckResult checkResult = condition.check(driver, element);
+    assertThat(checkResult.actualValue).isEqualTo(":before {content: hello;}");
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -31,19 +34,21 @@ class ExactTextCaseSensitiveTest {
 
   @Test
   void shouldMatchExpectedTextWithSameCase() {
-    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
   @Test
   void shouldNotMatchExpectedTextWithDifferentCase() {
-    assertThat(new ExactTextCaseSensitive("john Malkovich").apply(driver, element)).isFalse();
+    ExactTextCaseSensitive condition = new ExactTextCaseSensitive("john Malkovich");
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getText();
   }
 
   @Test
   void shouldNotMatchDifferentExpectedText() {
-    assertThat(new ExactTextCaseSensitive("John").apply(driver, element)).isFalse();
+    ExactTextCaseSensitive condition = new ExactTextCaseSensitive("John");
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -53,16 +58,12 @@ class ExactTextCaseSensitiveTest {
   }
 
   @Test
-  void shouldNotHaveActualValueBeforeAnyMatching() {
-    assertThat(condition.actualValue(driver, element)).isNull();
-  }
-
-  @Test
   void shouldHaveCorrectActualValueAfterMatching() {
     ExactTextCaseSensitive condition = new ExactTextCaseSensitive("Two");
-    condition.apply(driver, element);
+    CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(condition.actualValue(driver, element)).isEqualTo("John Malkovich");
+    assertThat(checkResult.verdict).isEqualTo(REJECT);
+    assertThat(checkResult.actualValue).isEqualTo("John Malkovich");
     verify(element).getText();
   }
 }

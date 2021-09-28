@@ -1,9 +1,12 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,30 +19,31 @@ final class MatchTextTest {
   @Test
   void shouldMatchWholeString() {
     assertThat(new MatchText("Chuck Norris' gmail account is gmail@chuck.norris")
-      .apply(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")))
-      .isTrue();
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .isEqualTo(ACCEPT);
 
     assertThat(new MatchText("Chuck Norris.* gmail\\s+account is gmail@chuck.norris")
-      .apply(driver, element("Chuck Norris' gmail    account is gmail@chuck.norris")))
-      .isTrue();
+      .check(driver, element("Chuck Norris' gmail    account is gmail@chuck.norris")).verdict)
+      .isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldMatchSubstring() {
     assertThat(new MatchText("Chuck")
-      .apply(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")))
-      .isTrue();
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .isEqualTo(ACCEPT);
     assertThat(new MatchText("Chuck\\s*Norris")
-      .apply(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")))
-      .isTrue();
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .isEqualTo(ACCEPT);
     assertThat(new MatchText("gmail account")
-      .apply(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")))
-      .isTrue();
+      .check(driver, element("Chuck Norris' gmail account is gmail@chuck.norris")).verdict)
+      .isEqualTo(ACCEPT);
   }
 
   @Test
   void shouldNotMatch() {
-    assertThat(new MatchText("selenide").apply(driver, element("selenite"))).isFalse();
+    MatchText condition = new MatchText("selenide");
+    assertThat(condition.check(driver, element("selenite")).verdict).isEqualTo(REJECT);
   }
 
   @Test
@@ -48,20 +52,13 @@ final class MatchTextTest {
   }
 
   @Test
-  void shouldNotHaveActualValueBeforeAnyMatching() {
-    WebElement element = element("Norris' gmail account");
-
-    assertThat(new MatchText("Chuck").actualValue(driver, element)).isNull();
-    verifyNoMoreInteractions(driver, element);
-  }
-
-  @Test
   void shouldHaveCorrectActualValueAfterMatching() {
     MatchText condition = new MatchText("Chuck");
     WebElement element = element("Chuck Norris' gmail account");
-    condition.apply(driver, element);
 
-    assertThat(condition.actualValue(driver, element)).isEqualTo("Chuck Norris' gmail account");
+    CheckResult checkResult = condition.check(driver, element);
+
+    assertThat(checkResult.actualValue).isEqualTo("Chuck Norris' gmail account");
     verify(element).getText();
     verifyNoMoreInteractions(driver, element);
   }

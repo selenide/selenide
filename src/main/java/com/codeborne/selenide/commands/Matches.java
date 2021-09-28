@@ -13,6 +13,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.commands.Util.firstOf;
 
 @ParametersAreNonnullByDefault
@@ -23,7 +24,7 @@ public class Matches implements Command<Boolean> {
     Condition condition = firstOf(args);
     WebElement element = getElementOrNull(locator);
     if (element != null) {
-      return condition.apply(locator.driver(), element);
+      return condition.check(locator.driver(), element).verdict == ACCEPT;
     }
 
     return condition.missingElementSatisfiesCondition();

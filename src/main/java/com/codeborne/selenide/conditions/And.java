@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
@@ -7,15 +8,15 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static java.util.stream.Collectors.joining;
 
 @ParametersAreNonnullByDefault
 public class And extends Condition {
-
   private final List<? extends Condition> conditions;
-  private Condition lastFailedCondition;
 
   /**
    * Ctor.
@@ -42,23 +43,24 @@ public class And extends Condition {
     return new Not(this, conditions.stream().map(Condition::negate).allMatch(Condition::missingElementSatisfiesCondition));
   }
 
+  @Nonnull
   @CheckReturnValue
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    lastFailedCondition = null;
+  public CheckResult check(Driver driver, WebElement element) {
+    List<CheckResult> results = new ArrayList<>();
+
     for (Condition c : conditions) {
-      if (!c.apply(driver, element)) {
-        lastFailedCondition = c;
-        return false;
+      CheckResult checkResult = c.check(driver, element);
+      if (checkResult.verdict != ACCEPT) {
+        return checkResult;
+      }
+      else {
+        results.add(checkResult);
       }
     }
-    return true;
-  }
 
-  @CheckReturnValue
-  @Override
-  public String actualValue(Driver driver, WebElement element) {
-    return lastFailedCondition == null ? null : lastFailedCondition.actualValue(driver, element);
+    String actualValues = results.stream().map(check -> String.valueOf(check.actualValue)).collect(joining(", "));
+    return new CheckResult(ACCEPT, actualValues); // TODO Does it look nice in the error message?
   }
 
   @Nonnull

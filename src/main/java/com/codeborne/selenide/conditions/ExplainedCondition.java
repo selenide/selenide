@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
@@ -18,20 +19,16 @@ public class ExplainedCondition extends Condition {
     this.message = message;
   }
 
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    return delegate.apply(driver, element);
+  public CheckResult check(Driver driver, WebElement element) {
+    return delegate.check(driver, element);
   }
 
   @Nonnull
   @Override
   public Condition negate() {
     return delegate.negate().because(message);
-  }
-
-  @Override
-  public String actualValue(Driver driver, WebElement element) {
-    return delegate.actualValue(driver, element);
   }
 
   @Override

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -18,29 +19,29 @@ final class HrefTest {
 
   @Test
   void hrefContainingFullUrl() {
-    assertThat(new Href("http://google.ek").apply(driver, link("http://google.ek/"))).isTrue();
-    assertThat(new Href("http://google.ek/").apply(driver, link("http://google.ek/"))).isTrue();
+    assertThat(new Href("http://google.ek").check(driver, link("http://google.ek/")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("http://google.ek/").check(driver, link("http://google.ek/")).verdict).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingRelativeUrlToFile() {
-    assertThat(new Href("cv.yml").apply(driver, link("https://cv.ee/cv.yml"))).isTrue();
-    assertThat(new Href("/people/cv.yml").apply(driver, link("https://cv.ee/people/cv.yml"))).isTrue();
+    assertThat(new Href("cv.yml").check(driver, link("https://cv.ee/cv.yml")).verdict).isEqualTo(ACCEPT);
+    assertThat(new Href("/people/cv.yml").check(driver, link("https://cv.ee/people/cv.yml")).verdict).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingCyrillicSymbols() {
-    assertThat(new Href("/файл/cv.yml").apply(driver, link("https://cv.ee/%D1%84%D0%B0%D0%B9%D0%BB/cv.yml"))).isTrue();
+    assertThat(new Href("/файл/cv.yml").check(driver, link("https://cv.ee/%D1%84%D0%B0%D0%B9%D0%BB/cv.yml")).verdict).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingAnchor() {
-    assertThat(new Href("#").apply(driver, link("https://cv.ee/people/jaan?source=23213#"))).isTrue();
+    assertThat(new Href("#").check(driver, link("https://cv.ee/people/jaan?source=23213#")).verdict).isEqualTo(ACCEPT);
   }
 
   @Test
   void hrefContainingEncodedSpace() {
-    assertThat(new Href("some%20file.pdf").apply(driver, link("https://dropbox.com/some%20file.pdf"))).isTrue();
+    assertThat(new Href("some%20file.pdf").check(driver, link("https://dropbox.com/some%20file.pdf")).verdict).isEqualTo(ACCEPT);
   }
 
   @Test

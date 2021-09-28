@@ -1,16 +1,16 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class TextCondition extends Condition {
   private final String expectedText;
-  private final ThreadLocal<String> actualText = new ThreadLocal<>();
 
   protected TextCondition(String name, String expectedText) {
     super(name);
@@ -23,16 +23,11 @@ public abstract class TextCondition extends Condition {
     return element.getText();
   }
 
+  @Nonnull
   @Override
-  public final boolean apply(Driver driver, WebElement element) {
-    actualText.set(getText(driver, element));
-    return match(actualText.get(), expectedText);
-  }
-
-  @Nullable
-  @Override
-  public final String actualValue(Driver driver, WebElement element) {
-    return actualText.get();
+  public CheckResult check(Driver driver, WebElement element) {
+    String elementText = getText(driver, element);
+    return new CheckResult(match(elementText, expectedText), elementText);
   }
 
   @Override

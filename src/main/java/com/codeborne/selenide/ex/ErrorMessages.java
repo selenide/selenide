@@ -1,5 +1,6 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.ObjectCondition;
@@ -27,20 +28,34 @@ public class ErrorMessages {
 
   @CheckReturnValue
   @Nonnull
-  static String actualValue(Condition condition, Driver driver, @Nullable WebElement element) {
+  static String actualValue(Condition condition, Driver driver,
+                            @Nullable WebElement element,
+                            @Nullable CheckResult lastCheckResult) {
+    if (lastCheckResult != null) {
+      return String.format("%nActual value: %s", lastCheckResult.actualValue);
+    }
+
+    // Deprecated branch for custom condition (not migrated to CheckResult):
+    String actualValue = extractActualValue(condition, driver, element);
+    if (actualValue != null) {
+      return String.format("%nActual value: %s", actualValue);
+    }
+    return "";
+  }
+
+  @Nullable
+  @CheckReturnValue
+  private static String extractActualValue(Condition condition, Driver driver, @Nullable WebElement element) {
     if (element != null) {
       try {
-        String actualValue = condition.actualValue(driver, element);
-        if (actualValue != null) {
-          return String.format("%nActual value: %s", actualValue);
-        }
+        return condition.actualValue(driver, element);
       }
       catch (RuntimeException failedToGetValue) {
         String failedActualValue = failedToGetValue.getClass().getSimpleName() + ": " + failedToGetValue.getMessage();
-        return String.format("%nActual value: %s", substring(failedActualValue, 0, 50));
+        return substring(failedActualValue, 0, 50);
       }
     }
-    return "";
+    return null;
   }
 
   @CheckReturnValue
