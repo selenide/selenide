@@ -41,7 +41,7 @@ final class SelectOptionContainingTextTest {
 
     verify(option1).click();
     verify(option2, never()).click();
-    verify(element).getAttribute("multiple");
+    verify(element).getDomAttribute("multiple");
     verify(element).findElements(By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
   }
 
@@ -54,7 +54,8 @@ final class SelectOptionContainingTextTest {
 
     verify(option1).click();
     verify(option2).click();
-    verify(element).getAttribute("multiple");
+    verify(element).getTagName();
+    verify(element).getDomAttribute("multiple");
     verify(element).findElements(By.xpath(".//option[contains(normalize-space(.), \"option-subtext\")]"));
   }
 
