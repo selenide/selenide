@@ -22,7 +22,7 @@ Currently the plugin supports only one feature:
 We are going to implement more features, like using clipboard, reading logs and videos etc.
 
 ## Usage
-1. Import `org.selenide:selenide-selenoid:1.1.7`
+1. Import `org.selenide:selenide-selenoid:1.2.0`
 2. Set `Configuration.fileDownload = FOLDER;`
 3. Use method `$.download()` as usually.
 

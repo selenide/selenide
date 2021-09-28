@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.0 (released 28.09.2021)
+* upgrade to Selenide 5.25.0
+
 ## 1.1.7 (released 13.09.2021)
 * add Selenide and other dependencies
 
