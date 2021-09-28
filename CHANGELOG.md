@@ -1,10 +1,14 @@
 # Changelog
 
-## 5.25.0
-* #969 Add support for OpenTest4j  --  see PR #1545 
+## 5.25.0 (released 28.09.2021)
+* #969 Add support for OpenTest4j  --  see PR #1545
+  NB! We changed the signature of many Selenide assertion errors:
+  * changed order of "expected" and "actual" values
+  * removed "driver" parameter from constructor
 * #1543 add stack trace to every error in SoftAsserts  --  see PR #1545
 * #1515 add method $.shadowRoot()  --  see PR #1517
 * #1556 add method `SelenideElement.ancestor()`  --  thanks Oleg Berezhnoy for PR #1567
+* #1554 Enhance `closest()` and `ancestor()` methods to search by attribute  --  thanks to Vitali Plagov for PR #1554
 * #1571 fix method `$.screenshot()` on Retina display  --  see PR #1576
 * #217 report **exact** text at the moment of failure of text conditions  --  thanks Pavel Fokin for PR #1313
 * #1566 forbid empty regex in MatchText 
