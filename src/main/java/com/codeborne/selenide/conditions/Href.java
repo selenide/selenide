@@ -1,9 +1,10 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
-import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -16,20 +17,22 @@ public class Href extends AttributeWithValue {
     super("href", expectedAttributeValue);
   }
 
-  @CheckReturnValue
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement element) {
+  public CheckResult check(Driver driver, WebElement element) {
     String href = getAttributeValue(element);
     String fullUrl = decode(href);
-    return fullUrl.endsWith(expectedAttributeValue) ||
+    boolean matches = fullUrl.endsWith(expectedAttributeValue) ||
       fullUrl.endsWith(expectedAttributeValue + "/") ||
       href.endsWith(expectedAttributeValue);
+    return new CheckResult(matches, href);
   }
 
   String decode(String url) {
     try {
       return URLDecoder.decode(url, UTF_8.name());
-    } catch (UnsupportedEncodingException e) {
+    }
+    catch (UnsupportedEncodingException e) {
       throw new RuntimeException("Failed to decode " + url, e);
     }
   }

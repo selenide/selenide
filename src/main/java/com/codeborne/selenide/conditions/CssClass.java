@@ -1,9 +1,11 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -16,9 +18,11 @@ public class CssClass extends Condition {
   }
 
   @Override
-  public boolean apply(Driver driver, WebElement element) {
+  @Nonnull
+  public CheckResult check(Driver driver, WebElement element) {
     String actualCssClasses = element.getAttribute("class");
-    return actualCssClasses != null && contains(actualCssClasses.split(" "), expectedCssClass);
+    boolean hasClass = actualCssClasses != null && contains(actualCssClasses.split(" "), expectedCssClass);
+    return new CheckResult(hasClass, actualCssClasses);
   }
 
   @Override

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class AttributeWithValueTest {
+final class MatchAttributeWithValueTest {
   private final Driver driver = mock(Driver.class);
   private final WebElement element = mock(WebElement.class);
 
@@ -22,17 +22,17 @@ final class AttributeWithValueTest {
 
   @Test
   void check() {
-    assertThat(new AttributeWithValue("data-id", "actual").check(driver, element).verdict).isEqualTo(ACCEPT);
-    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).verdict).isEqualTo(REJECT);
+    assertThat(new MatchAttributeWithValue("data-id", "act.*").check(driver, element).verdict).isEqualTo(ACCEPT);
+    assertThat(new MatchAttributeWithValue("data-id", "exp.*").check(driver, element).verdict).isEqualTo(REJECT);
   }
 
   @Test
   void actualValue() {
-    assertThat(new AttributeWithValue("data-id", "expected").check(driver, element).actualValue).isEqualTo("data-id=\"actual\"");
+    assertThat(new MatchAttributeWithValue("data-id", "expected").check(driver, element).actualValue).isEqualTo("data-id~/actual/");
   }
 
   @Test
   void tostring() {
-    assertThat(new AttributeWithValue("data-id", "expected")).hasToString("attribute data-id=\"expected\"");
+    assertThat(new MatchAttributeWithValue("data-id", "exp.*")).hasToString("match attribute data-id~/exp.*/");
   }
 }

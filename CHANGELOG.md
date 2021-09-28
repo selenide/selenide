@@ -1,7 +1,8 @@
 # Changelog
 
-## 5.26.0 (planned to 1x.10.2021)
-* 
+## 6.0.0 (planned to 1x.10.2021)
+* upgrade to Selenium 4.0.0
+* #1581 report exact actual value at the moment of failure
 
 ## 5.25.0 (released 28.09.2021)
 * #969 Add support for OpenTest4j  --  see PR #1545

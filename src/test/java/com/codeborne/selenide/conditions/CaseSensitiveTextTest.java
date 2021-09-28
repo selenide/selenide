@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.Mocks;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,7 +30,7 @@ class CaseSensitiveTextTest {
   void shouldMatchExpectedPartOfActualTextWithSameCase() {
     when(element.getText()).thenReturn("John Malkovich The First");
 
-    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -36,7 +39,7 @@ class CaseSensitiveTextTest {
   void shouldMatchExpectedPartOfActualTextWithSameCaseIgnoresWhitespaces() {
     when(element.getText()).thenReturn("John Malkovich\t The   \n First");
 
-    assertThat(new CaseSensitiveText("John        Malkovich The   ").apply(driver, element)).isTrue();
+    assertThat(new CaseSensitiveText("John        Malkovich The   ").check(driver, element).verdict).isEqualTo(ACCEPT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -45,7 +48,7 @@ class CaseSensitiveTextTest {
   void shouldNotMatchExpectedPartOfActualTextWithDifferentCase() {
     when(element.getText()).thenReturn("john Malkovich the first");
 
-    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -54,7 +57,7 @@ class CaseSensitiveTextTest {
   void shouldNotMatchActualPartOfExpectedText() {
     when(element.getText()).thenReturn("John");
 
-    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getTagName();
     verify(element).getText();
   }
@@ -65,16 +68,11 @@ class CaseSensitiveTextTest {
   }
 
   @Test
-  void shouldNotHaveActualValueBeforeAnyMatching() {
-    assertThat(condition.actualValue(driver, element)).isNull();
-  }
-
-  @Test
   void shouldHaveCorrectActualValueAfterMatching() {
     when(element.getText()).thenReturn("John");
-    condition.apply(driver, element);
+    CheckResult checkResult = condition.check(driver, element);
 
-    assertThat(condition.actualValue(driver, element)).isEqualTo("John");
+    assertThat(checkResult.actualValue).isEqualTo("John");
     verify(element).getTagName();
     verify(element).getText();
   }

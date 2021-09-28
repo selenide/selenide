@@ -1,10 +1,12 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.impl.Plugins.inject;
@@ -21,17 +23,14 @@ public class Focused extends Condition {
     return driver.executeJavaScript("return document.activeElement");
   }
 
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement webElement) {
+  public CheckResult check(Driver driver, WebElement webElement) {
     WebElement focusedElement = getFocusedElement(driver);
-    return focusedElement != null && focusedElement.equals(webElement);
-  }
-
-  @Override
-  public String actualValue(Driver driver, WebElement webElement) {
-    WebElement focusedElement = getFocusedElement(driver);
-    return focusedElement == null ? "No focused element found " :
-      "Focused element: " + describe.fully(driver, focusedElement) +
-        ", current element: " + describe.fully(driver, webElement);
+    boolean focused = focusedElement != null && focusedElement.equals(webElement);
+    String description = focusedElement == null ? "No focused element found " :
+      "Focused element: " + describe.briefly(driver, focusedElement) +
+        ", current element: " + describe.briefly(driver, webElement);
+    return new CheckResult(focused, description);
   }
 }

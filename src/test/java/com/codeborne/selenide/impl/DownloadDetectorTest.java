@@ -1,11 +1,11 @@
 package com.codeborne.selenide.impl;
 
 import com.codeborne.selenide.files.DownloadedFile;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;

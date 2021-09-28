@@ -1,30 +1,35 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
+import com.codeborne.selenide.Mocks;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
+import static com.codeborne.selenide.Condition.appear;
 import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 final class ElementShouldTest {
+  private final Driver driver = new DriverStub();
+  private final WebElement webElement = Mocks.mockWebElement("h1", "Hello boy");
+
   @Test
   void testToString() {
-    String searchCriteria = "by.name: selenide";
-    String prefix = "be ";
-    Driver driver = new DriverStub();
-    WebElement webElementMock = mock(WebElement.class);
-    Exception exception = new Exception("Error message");
-    ElementShould elementShould = new ElementShould(driver, searchCriteria, prefix, Condition.appear, webElementMock, exception);
+    String searchCriteria = By.name("selenide").toString();
+    Exception cause = new NoSuchElementException("By.name: q");
+    CheckResult checkResult = new CheckResult(REJECT, "visible:false");
+    ElementShould elementShould = new ElementShould(driver, searchCriteria, "be ", appear, checkResult, webElement, cause);
 
     assertThat(elementShould)
-      .hasMessage("Element should be visible {by.name: selenide}" + lineSeparator() +
-        "Element: '<null displayed:false></null>'" + lineSeparator() +
+      .hasMessage("Element should be visible {By.name: selenide}" + lineSeparator() +
+        "Element: '<h1>Hello boy</h1>'" + lineSeparator() +
         "Actual value: visible:false" + lineSeparator() +
         "Timeout: 0 ms." + lineSeparator() +
-        "Caused by: java.lang.Exception: Error message");
+        "Caused by: NoSuchElementException: By.name: q");
   }
 }

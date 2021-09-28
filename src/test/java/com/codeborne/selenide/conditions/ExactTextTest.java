@@ -1,11 +1,14 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Driver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,7 +29,7 @@ class ExactTextTest {
   void shouldMatchExpectedTextWithSameCase() {
     when(element.getText()).thenReturn("John Malkovich");
 
-    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
@@ -34,7 +37,7 @@ class ExactTextTest {
   void shouldMatchExpectedTextWithDifferentCase() {
     when(element.getText()).thenReturn("john Malkovich");
 
-    assertThat(condition.apply(driver, element)).isTrue();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(ACCEPT);
     verify(element).getText();
   }
 
@@ -42,7 +45,7 @@ class ExactTextTest {
   void shouldNotMatchExpectedPartOfActualText() {
     when(element.getText()).thenReturn("test John Malkovich test");
 
-    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -50,7 +53,7 @@ class ExactTextTest {
   void shouldNotMatchActualPartOfExpectedText() {
     when(element.getText()).thenReturn("John");
 
-    assertThat(condition.apply(driver, element)).isFalse();
+    assertThat(condition.check(driver, element).verdict).isEqualTo(REJECT);
     verify(element).getText();
   }
 
@@ -60,16 +63,13 @@ class ExactTextTest {
   }
 
   @Test
-  void shouldNotHaveActualValueBeforeAnyMatching() {
-    assertThat(condition.actualValue(driver, element)).isNull();
-  }
-
-  @Test
   void shouldHaveCorrectActualValueAfterMatching() {
     when(element.getText()).thenReturn("John");
-    condition.apply(driver, element);
 
-    assertThat(condition.actualValue(driver, element)).isEqualTo("John");
+    CheckResult checkResult = condition.check(driver, element);
+
+    assertThat(checkResult.verdict).isEqualTo(REJECT);
+    assertThat(checkResult.actualValue).isEqualTo("John");
     verify(element).getText();
   }
 }

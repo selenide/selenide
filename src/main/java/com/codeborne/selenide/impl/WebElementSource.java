@@ -1,5 +1,6 @@
 package com.codeborne.selenide.impl;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
@@ -16,6 +17,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.not;
@@ -95,9 +97,12 @@ public abstract class WebElementSource {
 
     Throwable lastError = null;
     WebElement element = null;
+    CheckResult checkResult = null;
     try {
       element = getWebElement();
-      if (check.apply(driver(), element)) {
+      checkResult = check.check(driver(), element);
+
+      if (checkResult.verdict == ACCEPT) {
         return element;
       }
     }
@@ -110,17 +115,17 @@ public abstract class WebElementSource {
     }
 
     if (element == null) {
-      if (!check.missingElementSatisfiesCondition()) {
-        throw createElementNotFoundError(check, lastError);
+      if (check.missingElementSatisfiesCondition()) {
+        return null;
       }
+      throw createElementNotFoundError(check, lastError);
     }
     else if (invert) {
-      throw new ElementShouldNot(driver(), description(), prefix, condition, element, lastError);
+      throw new ElementShouldNot(driver(), description(), prefix, condition, checkResult, element, lastError);
     }
     else {
-      throw new ElementShould(driver(), description(), prefix, condition, element, lastError);
+      throw new ElementShould(driver(), description(), prefix, condition, checkResult, element, lastError);
     }
-    return null;
   }
 
   /**

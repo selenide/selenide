@@ -39,12 +39,13 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+import static com.codeborne.selenide.CheckResult.Verdict.REJECT;
 import static com.codeborne.selenide.conditions.ConditionHelpers.merge;
 
 /**
  * Conditions to match web elements: checks for visibility, text etc.
  */
-@SuppressWarnings("StaticInitializerReferencesSubClass")
 @ParametersAreNonnullByDefault
 public abstract class Condition {
   /**
@@ -80,6 +81,7 @@ public abstract class Condition {
   /**
    * Synonym for {@link #visible} - may be used for better readability
    * <p><code>$("#logoutLink").waitUntil(appears, 10000);</code></p>
+   *
    * @deprecated use {@link #visible} or {@link #appear}
    */
   @Deprecated
@@ -151,9 +153,9 @@ public abstract class Condition {
 
   /**
    * <p>Sample: <code>$("#mydiv").shouldHave(href("/one/two/three.pdf"));</code></p>
-   *
+   * <p>
    * It looks similar to `$.shouldHave(attribute("href", href))`, but
-   *   it overcomes the fact that Selenium returns full url (even if "href" attribute in html contains relative url).
+   * it overcomes the fact that Selenium returns full url (even if "href" attribute in html contains relative url).
    *
    * @param href expected value of "href" attribute
    */
@@ -183,8 +185,8 @@ public abstract class Condition {
    *
    * @param pseudoElementName pseudo-element name of the element,
    *                          ":before", ":after", ":first-letter", ":first-line", ":selection"
-   * @param propertyName property name of the pseudo-element
-   * @param expectedValue expected value of the property
+   * @param propertyName      property name of the pseudo-element
+   * @param expectedValue     expected value of the property
    */
   @CheckReturnValue
   @Nonnull
@@ -197,7 +199,7 @@ public abstract class Condition {
    * <p>Sample: <code>$("input").shouldHave(pseudo(":before", "Hello"));</code></p>
    *
    * @param pseudoElementName pseudo-element name of the element, ":before", ":after"
-   * @param expectedValue expected content of the pseudo-element
+   * @param expectedValue     expected content of the pseudo-element
    */
   @CheckReturnValue
   @Nonnull
@@ -229,7 +231,7 @@ public abstract class Condition {
   }
 
   /**
-   *  Asserts the type attribute of the element to be exact string
+   * Asserts the type attribute of the element to be exact string
    * <p>Sample: <code>$("#input").shouldHave(type("checkbox"))</code></p>
    *
    * @param type expected type of input field
@@ -299,7 +301,6 @@ public abstract class Condition {
    *
    * @param text expected text of HTML element.
    *             NB! Empty string is not allowed (because any element does contain an empty text).
-   *
    * @throws IllegalArgumentException if given text is null or empty
    */
   @CheckReturnValue
@@ -576,19 +577,42 @@ public abstract class Condition {
    *
    * @param element given WebElement
    * @return true if element matches condition
+   * @deprecated replace by {@link #check(Driver, WebElement)}
    */
-  public abstract boolean apply(Driver driver, WebElement element);
+  @Deprecated
+  public boolean apply(Driver driver, WebElement element) {
+    throw new UnsupportedOperationException("Method 'apply' is deprecated. Please implement 'check' method.");
+  }
+
+  /**
+   * Check if given element matches this condition
+   *
+   * @param driver  selenide driver
+   * @param element given WebElement
+   * @return  ACCEPT if element matches condition, or
+   *          REJECT if element doesn't match (and we should keep trying until timeout).
+   *
+   * @since 6.0.0
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CheckResult check(Driver driver, WebElement element) {
+    boolean result = apply(driver, element);
+    return new CheckResult(result ? ACCEPT : REJECT, null);
+  }
 
   /**
    * If element didn't match the condition, returns the actual value of element.
    * Used in error reporting.
    * Optional. Makes sense only if you need to add some additional important info to error message.
    *
-   * @param driver given driver
+   * @param driver  given driver
    * @param element given WebElement
    * @return any string that needs to be appended to error message.
+   * @deprecated not needed anymore since the actual value is returned by method {@link #check(Driver, WebElement)}
    */
   @Nullable
+  @Deprecated
   public String actualValue(Driver driver, WebElement element) {
     return null;
   }

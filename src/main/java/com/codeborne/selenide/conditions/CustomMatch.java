@@ -1,9 +1,11 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
@@ -16,9 +18,11 @@ public class CustomMatch extends Condition {
     this.predicate = predicate;
   }
 
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    return predicate.test(element);
+  public CheckResult check(Driver driver, WebElement element) {
+    boolean matched = predicate.test(element);
+    return new CheckResult(matched, matched);
   }
 
 
