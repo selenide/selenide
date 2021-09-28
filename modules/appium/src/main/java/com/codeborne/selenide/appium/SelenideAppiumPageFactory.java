@@ -44,7 +44,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
   @Nullable
   @Override
   public Object decorate(ClassLoader loader,
-                         Driver driver, WebElementSource searchContext,
+                         Driver driver, @Nullable WebElementSource searchContext,
                          Field field, By selector, Type[] genericTypes) {
     if (selector instanceof ByIdOrName) {
       return decorateWithAppium(loader, searchContext, field);
@@ -53,7 +53,7 @@ public class SelenideAppiumPageFactory extends SelenidePageFactory {
     return super.decorate(loader, driver, searchContext, field, selector, genericTypes);
   }
 
-  private Object decorateWithAppium(ClassLoader loader, WebElementSource searchContext, Field field) {
+  private Object decorateWithAppium(ClassLoader loader, @Nullable WebElementSource searchContext, Field field) {
     AppiumFieldDecorator defaultAppiumFieldDecorator = new AppiumFieldDecorator(searchContext.getWebElement());
     Object appiumElement = defaultAppiumFieldDecorator.decorate(loader, field);
     if (appiumElement instanceof MobileElement) {

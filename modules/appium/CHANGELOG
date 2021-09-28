@@ -1,5 +1,8 @@
 == Changelog
 
+=== 1.7.0 (released 28.09.2021)
+* upgrade to Selenide 5.25.0
+
 === 1.6.10 (released 22.09.2021)
 * #56 add clipboard methods in Appium
 * upgrade to Selenide 5.24.4
