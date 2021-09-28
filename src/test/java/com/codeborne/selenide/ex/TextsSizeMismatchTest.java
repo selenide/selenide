@@ -15,9 +15,8 @@ final class TextsSizeMismatchTest {
   @Test
   void errorMessage() {
     TextsSizeMismatch textsMismatch = new TextsSizeMismatch(mockCollection(".characters"),
-      actualTexts,
-      expectedTexts,
-      null, 9000);
+        expectedTexts, actualTexts,
+        null, 9000);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts size mismatch%n" +
       "Actual: [Niff, Naff, Nuff%%], List size: 3%n" +
@@ -29,9 +28,8 @@ final class TextsSizeMismatchTest {
   @Test
   void errorMessage_withExplanation() {
     TextsSizeMismatch textsMismatch = new TextsSizeMismatch(mockCollection(".characters"),
-      actualTexts,
-      expectedTexts,
-      "we expect favorite characters", 9000);
+        expectedTexts, actualTexts,
+        "we expect favorite characters", 9000);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts size mismatch%n" +
       "Actual: [Niff, Naff, Nuff%%], List size: 3%n" +

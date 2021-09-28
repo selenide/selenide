@@ -41,7 +41,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
         select.selectByVisibleText(text);
       }
       catch (NoSuchElementException e) {
-        throw new ElementNotFound(selectField.driver(), selectField.description() + "/option[text:" + text + ']', exist, e);
+        throw new ElementNotFound(selectField.description() + "/option[text:" + text + ']', exist, e);
       }
     }
   }
@@ -53,7 +53,7 @@ public class SelectOptionByTextOrIndex implements Command<Void> {
         select.selectByIndex(index);
       }
       catch (NoSuchElementException e) {
-        throw new ElementNotFound(selectField.driver(), selectField.description() + "/option[index:" + index + ']', exist, e);
+        throw new ElementNotFound(selectField.description() + "/option[index:" + index + ']', exist, e);
       }
     }
   }

@@ -20,7 +20,7 @@ public class MatcherError extends UIAssertionError {
                       List<WebElement> actualElements,
                       @Nullable Exception lastError,
                       long timeoutMs) {
-    super(collection.driver(),
+    super(
       "Collection matcher error" +
         lineSeparator() + "Expected: " + matcher + " of elements to match [" + predicateDescription + "] predicate" +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +

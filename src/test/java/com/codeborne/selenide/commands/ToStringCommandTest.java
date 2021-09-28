@@ -32,17 +32,17 @@ final class ToStringCommandTest {
 
   @Test
   void executeMethod() {
+    when(mockedFoundElement.getTagName()).thenReturn("option");
     when(mockedFoundElement.isSelected()).thenReturn(true);
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
-    String elementText = "text";
-    when(mockedFoundElement.getText()).thenReturn(elementText);
+    when(mockedFoundElement.getText()).thenReturn("Cinderella");
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo("<null selected:true>text</null>");
+      .isEqualTo("<option selected:true>Cinderella</option>");
   }
 
   @Test
-  void executeMethodWhenWebDriverExceptionIsThrown() {
+  void executeMethodWhenWebDriverDriverExceptionIsThrown() {
     doThrow(new WebDriverException()).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
@@ -51,10 +51,10 @@ final class ToStringCommandTest {
 
   @Test
   void executeMethodWhenElementNotFoundIsThrown() {
-    doThrow(new ElementNotFound(driver, By.name(""), Condition.visible)).when(locator).getWebElement();
+    doThrow(new ElementNotFound(By.name("q"), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo(String.format("Element not found {By.name: }%n" +
+      .isEqualTo(String.format("Element not found {By.name: q}%n" +
         "Expected: visible%n" +
         "Timeout: 0 ms."));
   }

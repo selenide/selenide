@@ -15,7 +15,7 @@ public class ElementWithTextNotFound extends UIAssertionError {
                                  List<String> expectedTexts, List<String> actualTexts,
                                  @Nullable String explanation,
                                  long timeoutMs, @Nullable Throwable lastError) {
-    super(collection.driver(),
+    super(
       "Element with text not found" +
         lineSeparator() + "Actual: " + actualTexts +
         lineSeparator() + "Expected: " + expectedTexts +

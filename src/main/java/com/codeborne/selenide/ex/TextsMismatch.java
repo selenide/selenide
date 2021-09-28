@@ -10,9 +10,10 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class TextsMismatch extends UIAssertionError {
-  public TextsMismatch(CollectionSource collection, List<String> expectedTexts, List<String> actualTexts,
+  public TextsMismatch(CollectionSource collection,
+                       List<String> expectedTexts, List<String> actualTexts,
                        @Nullable String explanation, long timeoutMs) {
-    super(collection.driver(),
+    super(
       "Texts mismatch" +
         lineSeparator() + "Actual: " + actualTexts +
         lineSeparator() + "Expected: " + expectedTexts +

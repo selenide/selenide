@@ -1,7 +1,5 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.DriverStub;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,8 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class DialogTextMismatchTest {
   @Test
   void dialogMismatchTextStringTest() {
-    Driver driver = new DriverStub();
-    DialogTextMismatch dialogTextMismatch = new DialogTextMismatch(driver, "Expected text", "Actual text");
+    DialogTextMismatch dialogTextMismatch = new DialogTextMismatch("Expected text", "Actual text");
 
     assertThat(dialogTextMismatch).hasMessage(String.format("Dialog text mismatch%n" +
       "Actual: Actual text%n" +

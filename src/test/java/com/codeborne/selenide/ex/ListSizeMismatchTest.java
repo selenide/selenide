@@ -1,9 +1,6 @@
 package com.codeborne.selenide.ex;
 
-import com.codeborne.selenide.Driver;
-import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
@@ -13,24 +10,17 @@ import static com.codeborne.selenide.Mocks.mockCollection;
 import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 final class ListSizeMismatchTest {
   private final int expectedSize = 10;
-  private final Driver driver = new DriverStub();
   private final CollectionSource collection = mockCollection("Collection description");
   private final List<WebElement> actualElementsList = asList(mockElement("Niff"), mockElement("Naff"), mockElement("Nuff"));
   private final Exception exception = new Exception("Something happened");
   private final long timeoutMs = 1000L;
 
-  @BeforeEach
-  void setUp() {
-    when(collection.driver()).thenReturn(driver);
-  }
-
   @Test
   void toString_withoutExplanation() {
-    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(driver, "<=",
+    ListSizeMismatch listSizeMismatch = new ListSizeMismatch("<=",
       expectedSize,
       null,
       collection,
@@ -51,7 +41,7 @@ final class ListSizeMismatchTest {
 
   @Test
   void toString_withExplanation() {
-    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(driver, ">",
+    ListSizeMismatch listSizeMismatch = new ListSizeMismatch(">",
       expectedSize,
       "it's said in customer requirement #12345",
       collection,

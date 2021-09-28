@@ -59,7 +59,7 @@ public class SetValue implements Command<SelenideElement> {
     }
     else if (driver.config().fastSetValue()) {
       String error = setValueByJs(driver, element, text);
-      if (error != null) throw new InvalidStateException(driver, error);
+      if (error != null) throw new InvalidStateException(error);
       else {
         events.fireEvent(driver, element, "keydown", "keypress", "input", "keyup", "change");
       }
