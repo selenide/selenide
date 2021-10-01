@@ -27,7 +27,7 @@ dependencies {
     exclude group: 'com.github.docker-java'
     exclude group: 'org.rauschig'
   }
-  implementation('com.squareup.okhttp3:okhttp:3.14.9') {because 'used by selenium'}
+  implementation('com.squareup.okhttp3:okhttp:4.9.2') {because 'used by selenium'}
   implementation('commons-lang:commons-lang:2.6') {because 'used by webdrivermanager'}
   implementation('org.apache.commons:commons-compress:1.21') {because 'used by webdrivermanager'}
 
