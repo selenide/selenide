@@ -104,7 +104,6 @@ public class AppiumElementDescriberTest {
     when(element.getAttribute("package")).thenReturn("com.android.calculator2");
     when(element.getAttribute("bounds")).thenReturn("[0,183][1080,584]");
     when(element.getAttribute("displayed")).thenReturn("true");
-    when(element.getAttribute("contentSize")).thenReturn("{\"width\":1080,\"height\":401,\"top\":183,\"left\":0,\"touchPadding\":24}");
 
     assertThat(describer.fully(driver, element))
       .isEqualTo("<TextView class=\"android.widget.TextView\"" +
@@ -112,8 +111,7 @@ public class AppiumElementDescriberTest {
         " content-desc=\"blah\" enabled=\"true\" focused=\"false\"" +
         " package=\"com.android.calculator2\"" +
         " bounds=\"[0,183][1080,584]\"" +
-        " displayed=\"true\"" +
-        " contentSize=\"{\"width\":1080,\"height\":401,\"top\":183,\"left\":0,\"touchPadding\":24}\">" +
+        " displayed=\"true\">" +
         "Hello, world</TextView>");
   }
 
