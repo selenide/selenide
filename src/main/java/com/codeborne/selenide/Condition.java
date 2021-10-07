@@ -457,14 +457,21 @@ public abstract class Condition {
   public static final Condition focused = new Focused();
 
   /**
-   * Checks that element is not disabled
+   * Checks that element is not disabled.
+   * <br>
+   * Will throw {@code IllegalArgumentException} if called on an element which is not {@code input}
    *
    * @see WebElement#isEnabled()
    */
   public static final Condition enabled = new Enabled();
 
   /**
-   * Checks that element is disabled
+   * Checks that element is disabled.
+   * <br>
+   * Will throw {@code IllegalArgumentException} if called on an element which is not {@code input}
+   * <br>
+   * Use {@code $("div").shouldHave(Condition.attribute("disabled");} to assert the {@code disabled} attribute
+   * on a non {@code input} element.
    *
    * @see WebElement#isEnabled()
    */
