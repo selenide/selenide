@@ -182,6 +182,7 @@ final class ConditionTest {
 
   private WebElement elementWithEnabled(boolean isEnabled) {
     WebElement element = mock(WebElement.class);
+    when(element.getTagName()).thenReturn("input");
     when(element.isEnabled()).thenReturn(isEnabled);
     return element;
   }

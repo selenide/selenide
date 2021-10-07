@@ -9,7 +9,6 @@ import static com.codeborne.selenide.Condition.and;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.cssClass;
-import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.have;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.match;
@@ -43,10 +42,10 @@ final class ConditionsTest extends ITest {
   @Test
   void orShouldReportAllConditions() {
     assertThatThrownBy(() ->
-      $("#multirowTable").shouldBe(or("non-active", be(disabled), have(cssClass("inactive"))))
+      $("#multirowTable").shouldBe(or("non-active", be(hidden), have(cssClass("inactive"))))
     )
       .isInstanceOf(ElementShould.class)
-      .hasMessageStartingWith("Element should be non-active: be disabled or have css class 'inactive' {#multirowTable}");
+      .hasMessageStartingWith("Element should be non-active: be hidden or have css class 'inactive' {#multirowTable}");
   }
 
   @Test

@@ -35,4 +35,16 @@ final class ElementEnabledTest extends ITest {
     $("#captcha").shouldBe(enabled);
     $("#captcha").shouldNotBe(disabled);
   }
+
+  @Test
+  void shouldThrowForNonInputElementWhenCheckIfDisabled() {
+    assertThatThrownBy(() -> $("#disabled-label").shouldBe(disabled))
+      .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void shouldThrowForNonInputElementWhenCheckIfEnabled() {
+    assertThatThrownBy(() -> $("#enabled-label").shouldBe(enabled))
+      .isInstanceOf(IllegalArgumentException.class);
+  }
 }

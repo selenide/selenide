@@ -31,6 +31,7 @@ final class MatchesCommandTest {
   @Test
   void elementDoesNotMeetCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
+    when(mockedElement.getTagName()).thenReturn("input");
     when(mockedElement.isEnabled()).thenReturn(true);
     assertThat(command.execute(proxy, locator, new Object[]{disabled}))
       .isFalse();
@@ -40,6 +41,7 @@ final class MatchesCommandTest {
   void elementMeetsCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
+    when(mockedElement.getTagName()).thenReturn("input");
     assertThat(command.execute(proxy, locator, new Object[]{enabled}))
       .isTrue();
   }

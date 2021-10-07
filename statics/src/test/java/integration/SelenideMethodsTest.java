@@ -333,9 +333,9 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void canUseBeWrapper_errorMessage() {
-    assertThatThrownBy(() -> $("#username-blur-counter").should(be(disabled)))
+    assertThatThrownBy(() -> $("#username-blur-counter").should(be(hidden)))
       .isInstanceOf(ElementShould.class)
-      .hasMessageContaining("Element should be disabled {#username-blur-counter}");
+      .hasMessageContaining("Element should be hidden {#username-blur-counter}");
   }
 
   @Test
