@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.26.0 (planned to 1x.10.2021)
+* 
+
 ## 5.25.0 (released 28.09.2021)
 * #969 Add support for OpenTest4j  --  see PR #1545
   NB! We changed the signature of many Selenide assertion errors:
