@@ -7,7 +7,7 @@ allprojects {
 ext {
   seleniumVersion = '3.141.59'
   junitVersion = '5.8.1'
-  jettyVersion = '9.4.44.v20210927'
+  jettyVersion = '10.0.6'
   nettyVersion = '4.1.68.Final'
   assertjVersion = '3.21.0'
   mockitoVersion = '4.0.0'
