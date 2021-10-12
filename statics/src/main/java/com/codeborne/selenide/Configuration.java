@@ -35,7 +35,7 @@ public class Configuration {
 
   /**
    * Base url for open() function calls
-   * Can be configured either programmatically or by system property "-Dselenide.baseUrl=http://myhost".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.baseUrl=http://myhost".
    * <br>
    * Default value: http://localhost:8080
    */
@@ -43,7 +43,7 @@ public class Configuration {
 
   /**
    * Timeout in milliseconds to fail the test, if conditions still not met
-   * Can be configured either programmatically or by system property "-Dselenide.timeout=10000"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.timeout=10000"
    * <br>
    * Default value: 4000 (milliseconds)
    */
@@ -51,7 +51,7 @@ public class Configuration {
 
   /**
    * Interval in milliseconds, when checking if a single element or collection elements are appeared
-   * Can be configured either programmatically or by system property "-Dselenide.pollingInterval=50"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.pollingInterval=50"
    * <br>
    * Default value: 200 (milliseconds)
    */
@@ -59,7 +59,7 @@ public class Configuration {
 
   /**
    * If holdBrowserOpen is true, browser window stays open after running tests. It may be useful for debugging.
-   * Can be configured either programmatically or by system property "-Dselenide.holdBrowserOpen=true".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.holdBrowserOpen=true".
    * <br>
    * Default value: false.
    */
@@ -68,7 +68,7 @@ public class Configuration {
   /**
    * Should Selenide re-spawn browser if it's disappeared (hangs, broken, unexpectedly closed).
    * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.reopenBrowserOnFail=false".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reopenBrowserOnFail=false".
    * <br>
    * Set this property to false if you want to disable automatic re-spawning the browser.
    * <br>
@@ -78,7 +78,7 @@ public class Configuration {
 
   /**
    * Which browser to use.
-   * Can be configured either programmatically or by system property "-Dselenide.browser=ie".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browser=ie".
    * Supported values: "chrome", "firefox", "ie", "opera", "edge"
    * <br>
    * Default value: "chrome"
@@ -87,7 +87,7 @@ public class Configuration {
 
   /**
    * Which browser version to use (for Internet Explorer).
-   * Can be configured either programmatically or by system property "-Dselenide.browserVersion=8".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browserVersion=8".
    * <br>
    * Default value: none
    */
@@ -95,7 +95,7 @@ public class Configuration {
 
   /**
    * URL of remote web driver (in case of using Selenium Grid).
-   * Can be configured either programmatically or by system property "-Dselenide.remote=http://localhost:5678/wd/hub".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.remote=http://localhost:5678/wd/hub".
    * <br>
    * Default value: null (Grid is not used).
    */
@@ -103,7 +103,7 @@ public class Configuration {
 
   /**
    * The browser window size.
-   * Can be configured either programmatically or by system property "-Dselenide.browserSize=1024x768".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browserSize=1024x768".
    * <br>
    * Default value: 1366x768
    */
@@ -111,7 +111,7 @@ public class Configuration {
 
   /**
    * The browser window position on screen.
-   * Can be configured either programmatically or by system property "-Dselenide.browserPosition=10x10".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browserPosition=10x10".
    * <br>
    * Default value: none
    */
@@ -129,7 +129,7 @@ public class Configuration {
    * Should webdriver wait until page is completely loaded.
    * Possible values: "none", "normal" and "eager".
    * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.pageLoadStrategy=eager".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.pageLoadStrategy=eager".
    * Default value: "normal".
    * <br>
    * - `normal`: return after the load event fires on the new page (it's default in Selenium webdriver);
@@ -158,7 +158,7 @@ public class Configuration {
    * ATTENTION! Automatic WebDriver waiting after click isn't working in case of using this feature.
    * Use clicking via JavaScript instead common element clicking.
    * This solution may be helpful for testing in Internet Explorer.
-   * Can be configured either programmatically or by system property "-Dselenide.clickViaJs=true".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.clickViaJs=true".
    * <br>
    * Default value: false
    */
@@ -166,7 +166,7 @@ public class Configuration {
 
   /**
    * Defines if Selenide takes screenshots on failing tests.
-   * Can be configured either programmatically or by system property "-Dselenide.screenshots=false".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.screenshots=false".
    * <br>
    * Default value: true
    */
@@ -174,7 +174,7 @@ public class Configuration {
 
   /**
    * Defines if Selenide saves page source on failing tests.
-   * Can be configured either programmatically or by system property "-Dselenide.savePageSource=false".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.savePageSource=false".
    * <br>
    * Default value: true
    */
@@ -182,7 +182,7 @@ public class Configuration {
 
   /**
    * Folder to store screenshots to.
-   * Can be configured either programmatically or by system property "-Dselenide.reportsFolder=test-result/reports".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reportsFolder=test-result/reports".
    * <br>
    * Default value: "build/reports/tests" (this is default for Gradle projects)
    */
@@ -190,7 +190,7 @@ public class Configuration {
 
     /**
    * Folder to store downloaded files to.
-   * Can be configured either programmatically or by system property "-Dselenide.downloadsFolder=test-result/downloads".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.downloadsFolder=test-result/downloads".
    * <br>
    * Default value: "build/downloads" (this is default for Gradle projects)
    */
@@ -200,7 +200,7 @@ public class Configuration {
    * Optional: URL of CI server where reports are published to.
    * In case of Jenkins, it is "BUILD_URL/artifact" by default.
    * <br>
-   * Can be configured either programmatically or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.reportsUrl=http://jenkins-host/reports".
    * <br>
    * If it's given, names of screenshots are printed as
    * "http://ci.mycompany.com/job/my-job/446/artifact/build/reports/tests/my_test.png" - it's useful to analyze test
@@ -217,7 +217,7 @@ public class Configuration {
    * slow via network to Selenium Grid on cloud).
    * <br>
    * https://github.com/selenide/selenide/issues/135
-   * Can be configured either programmatically or by system property "-Dselenide.fastSetValue=true".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.fastSetValue=true".
    * <br>
    * Default value: false
    */
@@ -227,7 +227,7 @@ public class Configuration {
    * <p>Choose how Selenide should retrieve web elements: using default CSS or Sizzle (CSS3).</p>
    * <br>
    * <p>
-   * Can be configured either programmatically or by system property "-Dselenide.selectorMode=Sizzle".
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.selectorMode=Sizzle".
    * </p>
    * <br>
    *   Possible values: "CSS" or "Sizzle"
@@ -241,7 +241,7 @@ public class Configuration {
   /**
    * <p>Assertion mode</p>
    *
-   * <p>Can be configured either programmatically or by system property "-Dselenide.assertionMode=SOFT".</p>
+   * <p>Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.assertionMode=SOFT".</p>
    *
    * <br>
    *   Possible values: "STRICT" or "SOFT"
@@ -254,7 +254,7 @@ public class Configuration {
 
   /**
    * Defines if files are downloaded via direct HTTP or vie selenide embedded proxy server
-   * Can be configured either programmatically or by system property "-Dselenide.fileDownload=PROXY"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.fileDownload=PROXY"
    * <br>
    * Default: HTTPGET
    */
@@ -266,7 +266,7 @@ public class Configuration {
    * But it's not enabled by default because sometimes it would not work (more exactly, if tests and browser and
    * executed on different machines, and "test machine" is not accessible from "browser machine"). If it's not your
    * case, I recommend to enable proxy.
-   * Can be configured either programmatically or by system property "-Dselenide.proxyEnabled=true"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.proxyEnabled=true"
    * <br>
    * Default: false
    */
@@ -275,7 +275,7 @@ public class Configuration {
   /**
    * Host of Selenide proxy server.
    * Used only if proxyEnabled == true.
-   * Can be configured either programmatically or by system property "-Dselenide.proxyHost=127.0.0.1"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.proxyHost=127.0.0.1"
    * <br>
    * Default: empty (meaning that Selenide will detect current machine's ip/hostname automatically)
    *
@@ -286,7 +286,7 @@ public class Configuration {
   /**
    * Port of Selenide proxy server.
    * Used only if proxyEnabled == true.
-   * Can be configured either programmatically or by system property "-Dselenide.proxyPort=8888"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.proxyPort=8888"
    * <br>
    * Default: 0 (meaning that Selenide will choose a random free port on current machine)
    */
@@ -296,7 +296,7 @@ public class Configuration {
    * Controls Selenide and WebDriverManager integration.
    * When integration is enabled you don't need to download and setup any browser driver executables.
    * See https://github.com/bonigarcia/webdrivermanager for WebDriverManager configuration details.
-   * Can be configured either programmatically or by system property "-Dselenide.driverManagerEnabled=false"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.driverManagerEnabled=false"
    * <br>
    *
    * Default: true
@@ -322,7 +322,7 @@ public class Configuration {
   /**
    * Enables the ability to run the browser in headless mode.
    * Works only for Chrome(59+) and Firefox(56+).
-   * Can be configured either programmatically or by system property "-Dselenide.headless=true"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.headless=true"
    * <br>
    * Default: false
    */
@@ -331,7 +331,7 @@ public class Configuration {
   /**
    * Sets the path to browser executable.
    * Works only for Chrome, Firefox and Opera.
-   * Can be configured either programmatically or by system property "-Dselenide.browserBinary=/path/to/binary"
+   * Can be configured either programmatically, via selenide.properties file or by system property "-Dselenide.browserBinary=/path/to/binary"
    */
   public static String browserBinary = defaults.browserBinary();
 
