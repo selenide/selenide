@@ -13,7 +13,7 @@ allprojects {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.25.0-selenium-4.0.0-rc-3'
+version = '5.25.0-selenium-4.0.0'
 
 apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/dependencies.gradle'
