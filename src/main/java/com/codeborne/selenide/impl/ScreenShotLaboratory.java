@@ -42,7 +42,6 @@ import static java.lang.ThreadLocal.withInitial;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.openqa.selenium.OutputType.BYTES;
 import static org.openqa.selenium.OutputType.FILE;
 
@@ -87,35 +86,6 @@ public class ScreenShotLaboratory {
   protected String getScreenshotFileName(String className, String methodName) {
     return className.replace('.', separatorChar) + separatorChar +
       methodName + '.' + clock.timestamp();
-  }
-
-  /**
-   * @deprecated use {@link #takeScreenshot(Driver, boolean, boolean)} which returns {@link Screenshot} instead of String
-   */
-  @CheckReturnValue
-  @Nullable
-  @Deprecated
-  public String takeScreenShot(Driver driver) {
-    return takeScreenShot(driver, generateScreenshotFileName());
-  }
-
-  /**
-   * Takes screenshot of current browser window.
-   * Stores 2 files:
-   * 1. html of the page (if "savePageSource" parameter is true), and
-   * 2. screenshot of the page in PNG format (if "saveScreenshot" parameter is true)
-   * <p>
-   * Either file may be null if webdriver has failed to save it.
-   *
-   * @param fileName name of file (without extension) to store screenshot to.
-   * @return the name of last saved screenshot or null if failed to create screenshot
-   * @deprecated use {@link #takeScreenshot(Driver, String, boolean, boolean)} which returns {@link Screenshot} instead of String
-   */
-  @CheckReturnValue
-  @Nullable
-  @Deprecated
-  public String takeScreenShot(Driver driver, String fileName) {
-    return takeScreenshot(driver, fileName, true, true).getImage();
   }
 
   /**
@@ -389,16 +359,6 @@ public class ScreenShotLaboratory {
     return screenshots == null || screenshots.isEmpty()
       ? Optional.empty()
       : Optional.of(screenshots.get(screenshots.size() - 1));
-  }
-
-  /**
-   * @deprecated Use method {@link #takeScreenshot(Driver, boolean, boolean)} which returns Screenshot instead of String
-   */
-  @CheckReturnValue
-  @Nonnull
-  @Deprecated
-  public String formatScreenShotPath(Driver driver) {
-    return defaultString(takeScreenshot(driver, true, false).getImage(), "");
   }
 
   @CheckReturnValue

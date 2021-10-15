@@ -27,7 +27,7 @@ final class ClickRelativeTest extends IntegrationTest {
   void userCanClickElementWithOffsetPosition_withActions() {
     Configuration.clickViaJs = false;
 
-    $("#page").click(123, 222);
+    $("#page").click(usingDefaultMethod().offset(123, 222));
 
     $("#coords").shouldHave(exactText("(523, 522)"));
   }
@@ -36,7 +36,7 @@ final class ClickRelativeTest extends IntegrationTest {
   void userCanClickElementWithOffsetPosition_withJavascript() {
     Configuration.clickViaJs = true;
 
-    $("#page").click(123, 222);
+    $("#page").click(usingDefaultMethod().offset(123, 222));
 
     $("#coords").shouldHave(exactText("(523, 522)"));
   }

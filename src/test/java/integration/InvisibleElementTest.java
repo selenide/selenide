@@ -1,5 +1,6 @@
 package integration;
 
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ final class InvisibleElementTest extends ITest {
   void clickHidesElement() {
     openFile("elements_disappear_on_click.html");
     $("#hide").click();
-    $("#hide").waitUntil(hidden, 2000);
+    $("#hide").shouldBe(hidden, Duration.ofMillis(2000));
   }
 
   @Test

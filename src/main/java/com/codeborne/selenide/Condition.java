@@ -90,16 +90,6 @@ public abstract class Condition {
   /**
    * Synonym for {@link #hidden} - may be used for better readability:
    *
-   * <p>Sample: <code>$("#loginLink").waitUntil(disappears, 9000);</code></p>
-   *
-   * @deprecated use {@link #disappear} or {@link #hidden}
-   */
-  @Deprecated
-  public static final Condition disappears = hidden;
-
-  /**
-   * Synonym for {@link #hidden} - may be used for better readability:
-   *
    * <p><code>$("#loginLink").should(disappear);</code></p>
    */
   public static final Condition disappear = hidden;
@@ -261,20 +251,6 @@ public abstract class Condition {
    * <p>Sample: <code>$("h2").shouldBe(empty)</code></p>
    */
   public static final Condition empty = and("empty", exactValue(""), exactText(""));
-
-  /**
-   * The same as matchText()
-   * <p>Sample: <code>$(".error_message").waitWhile(matchesText("Exception"), 12000)</code></p>
-   *
-   * @see #matchText(String)
-   * @deprecated use {@link #matchText(String)}
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static Condition matchesText(String text) {
-    return matchText(text);
-  }
 
   /**
    * Assert that given element's text matches given regular expression

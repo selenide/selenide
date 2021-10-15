@@ -23,7 +23,6 @@ import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.cssValue;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.disappear;
-import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.exist;
@@ -104,7 +103,6 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("#theHiddenElement").shouldBe(hidden);
     $("#theHiddenElement").should(disappear);
     $("#theHiddenElement").should(disappear, Duration.ofSeconds(2));
-    $("#theHiddenElement").waitUntil(disappears, 1000);
     $("#theHiddenElement").should(exist);
 
     $(".non-existing-element").should(Condition.not(exist));
@@ -135,12 +133,6 @@ final class SelenideMethodsTest extends IntegrationTest {
     $("#theHiddenElement").shouldBe(hidden, Duration.ofMillis(3_000));
     $("#theHiddenElement").shouldHave(exactText(""), Duration.ofSeconds(3));
     $("#theHiddenElement").shouldNotHave(text("no"), Duration.ofHours(3));
-  }
-
-  @Test
-  void userCanUseCustomPollingInterval() {
-    $("#theHiddenElement").waitUntil(disappears, 1000, 10);
-    $(".non-existing-element").waitWhile(exist, 1000, 20);
   }
 
   @Test
@@ -211,7 +203,7 @@ final class SelenideMethodsTest extends IntegrationTest {
     $(By.name("password")).setValue("john");
     $(By.name("password")).val("sherlyn");
     $(By.name("password")).shouldHave(value("sherlyn"));
-    $(By.name("password")).waitUntil(value("sherlyn"), 1000);
+    $(By.name("password")).shouldHave(value("sherlyn"), Duration.ofMillis(1000));
     assertThat($(By.name("password")).val())
       .isEqualTo("sherlyn");
   }
@@ -463,10 +455,10 @@ final class SelenideMethodsTest extends IntegrationTest {
 
   @Test
   void userCanListMatchingSubElements() {
-    $("#multirowTable").findAll(byText("Chack")).shouldHaveSize(2);
-    $("#multirowTable").$$(byText("Chack")).shouldHaveSize(2);
-    $("#multirowTable tr").findAll(byText("Chack")).shouldHaveSize(1);
-    $("#multirowTable tr").$$(byText("Chack")).shouldHaveSize(1);
+    $("#multirowTable").findAll(byText("Chack")).shouldHave(size(2));
+    $("#multirowTable").$$(byText("Chack")).shouldHave(size(2));
+    $("#multirowTable tr").findAll(byText("Chack")).shouldHave(size(1));
+    $("#multirowTable tr").$$(byText("Chack")).shouldHave(size(1));
   }
 
   @Test
@@ -561,7 +553,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void waitWhileMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitWhile(visible.because("we expect it do disappear"), 100);
+      $("h1").shouldNotBe(visible.because("we expect it do disappear"), Duration.ofMillis(100));
       fail("exception expected");
     }
     catch (ElementShouldNot expected) {
@@ -573,7 +565,7 @@ final class SelenideMethodsTest extends IntegrationTest {
   @Test
   void waitUntilMethodMayContainOptionalMessageThatIsPartOfErrorMessage() {
     try {
-      $("h1").waitUntil(hidden.because("it's sensitive information"), 100);
+      $("h1").shouldBe(hidden.because("it's sensitive information"), Duration.ofMillis(100));
       fail("exception expected");
     }
     catch (ElementShould expected) {
