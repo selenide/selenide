@@ -1,6 +1,7 @@
 package integration;
 
 import com.codeborne.selenide.ex.ElementNotFound;
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -33,7 +34,7 @@ final class TimeoutTest extends ITest {
   @Test
   void timeoutShouldBeInMilliseconds() {
     try {
-      $(By.xpath("//h16")).waitUntil(visible, 15);
+      $(By.xpath("//h16")).shouldBe(visible, Duration.ofMillis(15));
     } catch (ElementNotFound expectedException) {
       assertThat(expectedException.toString())
         .withFailMessage(String.format("Error message should contain timeout '15 ms', but received: %s", expectedException.toString()))
@@ -44,7 +45,7 @@ final class TimeoutTest extends ITest {
   @Test
   void timeoutShouldBeFormattedInErrorMessage() {
     try {
-      $(By.xpath("//h19")).waitUntil(visible, 1500);
+      $(By.xpath("//h19")).shouldBe(visible, Duration.ofMillis(1500));
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expectedException) {
       assertThat(expectedException.toString())
@@ -57,7 +58,7 @@ final class TimeoutTest extends ITest {
   @Test
   void timeoutLessThanSecond() {
     try {
-      $(By.xpath("//h18")).waitUntil(visible, 800);
+      $(By.xpath("//h18")).shouldBe(visible, Duration.ofMillis(800));
       fail("Expected ElementNotFound");
     } catch (ElementNotFound expectedException) {
 

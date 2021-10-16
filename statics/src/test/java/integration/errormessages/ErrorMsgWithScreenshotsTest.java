@@ -40,19 +40,12 @@ final class ErrorMsgWithScreenshotsTest extends IntegrationTest {
     reportsFolder = Configuration.reportsFolder;
     Configuration.reportsFolder = "build/reports/tests/ErrorMsgWithScreenshotsTest";
     Configuration.reportsUrl = "http://ci.org/";
-    Screenshots.screenshots = new ScreenShotLaboratory() {
-      @Override
-      public String takeScreenShot(@Nonnull Driver driver) {
-        return new File(reportsFolder, "1.jpg").getAbsolutePath();
-      }
-    };
   }
 
   @AfterEach
   void restoreScreenshots() {
     Configuration.reportsUrl = reportsUrl;
     Configuration.reportsFolder = reportsFolder;
-    Screenshots.screenshots = ScreenShotLaboratory.getInstance();
   }
 
   @Test

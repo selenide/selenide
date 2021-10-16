@@ -6,6 +6,7 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.ex.ElementShouldNot;
 import integration.IntegrationTest;
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +35,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
     SelenideElement element = $(".detective");
 
     try {
-      element.waitUntil(have(text("Müller")), 42);
+      element.should(have(text("Müller")), Duration.ofMillis(42));
       fail("Expected ElementNotFound");
     }
     catch (ElementShould expected) {
@@ -47,7 +48,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
     SelenideElement element = $$("ul .nonexistent").get(1);
 
     try {
-      element.waitUntil(visible, 42);
+      element.shouldBe(visible, Duration.ofMillis(42));
       fail("Expected ElementNotFound");
     }
     catch (ElementNotFound expected) {
@@ -61,7 +62,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
     SelenideElement element = $(".detective").shouldBe(visible);
 
     try {
-      element.waitWhile(visible, 42);
+      element.shouldNot(visible, Duration.ofMillis(42));
       fail("Expected ElementNotFound");
     }
     catch (ElementShouldNot expected) {
@@ -75,7 +76,7 @@ final class WaitMethodFailsOnTest extends IntegrationTest {
     SelenideElement element = $(".detective").shouldBe(visible);
 
     try {
-      element.waitWhile(have(text("Miller")), 42);
+      element.shouldNot(have(text("Miller")), Duration.ofMillis(42));
       fail("Expected ElementNotFound");
     }
     catch (ElementShouldNot expected) {

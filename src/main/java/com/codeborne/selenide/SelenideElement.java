@@ -494,72 +494,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotBe(Condition condition, Duration timeout);
 
   /**
-   * <p>Wait until given element meets given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition           e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
-
-  /**
-   * <p>Wait until given element meets given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition                   e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds         timeout in milliseconds.
-   * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
-
-  /**
-   * <p>Wait until given element does not meet given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition           e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
-
-  /**
-   * <p>Wait until given element does not meet given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition                   e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds         timeout in milliseconds.
-   * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
-
-  /**
    * Displays WebElement in human-readable format.
    * Useful for logging and debugging.
    * Not recommended to use for test verifications.
@@ -1190,14 +1124,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Override
   void click();
-
-  /**
-   * Click the element with a relative offset from the center of the element
-   *
-   * @deprecated use {@link #click(ClickOptions)} with offsets
-   */
-  @Deprecated
-  void click(int offsetX, int offsetY);
 
   /**
    * Click with right mouse button on this element

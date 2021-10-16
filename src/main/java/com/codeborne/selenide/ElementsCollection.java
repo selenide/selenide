@@ -65,15 +65,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use {@code $$.shouldHave(size(expectedSize))} instead.
-   */
-  @Nonnull
-  @Deprecated
-  public ElementsCollection shouldHaveSize(int expectedSize) {
-    return shouldHave(CollectionCondition.size(expectedSize));
-  }
-
-  /**
    * Check if a collection matches given condition(s).
    * <p> For example: </p>
    * <pre code='java'>
@@ -110,15 +101,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated use {@link #shouldBe(CollectionCondition, Duration)}
-   */
-  @Nonnull
-  @Deprecated
-  public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
-    return should("be", Duration.ofMillis(timeoutMs), toArray(condition));
-  }
-
-  /**
    * For example:
    * {@code $$(".error").shouldHave(size(3))}
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
@@ -136,18 +118,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   @Nonnull
   public ElementsCollection shouldHave(CollectionCondition condition, Duration timeout) {
     return should("have", timeout, toArray(condition));
-  }
-
-  /**
-   * Check if a collection matches given condition within given period
-   *
-   * @param timeoutMs maximum waiting time in milliseconds
-   * @deprecated use {@link #shouldHave(CollectionCondition, Duration)}
-   */
-  @Nonnull
-  @Deprecated
-  public ElementsCollection shouldHave(CollectionCondition condition, long timeoutMs) {
-    return should("have", Duration.ofMillis(timeoutMs), toArray(condition));
   }
 
   @CheckReturnValue

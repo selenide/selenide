@@ -33,16 +33,6 @@ public class Screenshots {
   }
 
   /**
-   * @deprecated Use either {@link Selenide#screenshot(java.lang.String)} or {@link SelenideDriver#screenshot(java.lang.String)}
-   */
-  @CheckReturnValue
-  @Nullable
-  @Deprecated
-  public static String takeScreenShot(String fileName) {
-    return screenshots.takeScreenShot(driver(), fileName);
-  }
-
-  /**
    * Take screenshot and return as a file
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */

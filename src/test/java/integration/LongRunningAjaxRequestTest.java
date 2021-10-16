@@ -1,5 +1,6 @@
 package integration;
 
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -40,7 +41,7 @@ final class LongRunningAjaxRequestTest extends ITest {
 
   @Test
   void userCanWaitUntilConditionIsMet() {
-    $(byText("Result 2")).waitUntil(visible, 3000);
+    $(byText("Result 2")).shouldBe(visible, Duration.ofMillis(3000));
     assertThat($(byText("Result 2")).isDisplayed()).isTrue();
   }
 

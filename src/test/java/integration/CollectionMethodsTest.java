@@ -94,7 +94,7 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canCheckIfCollectionIsEmptyForNonExistingParent() {
     $$("not-existing-locator").first().$$("#multirowTable")
-      .shouldHaveSize(0)
+      .shouldHave(size(0))
       .shouldBe(empty)
       .shouldBe(size(0))
       .shouldBe(sizeGreaterThan(-1))
@@ -109,11 +109,11 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canCheckSizeOfCollection() {
     withLongTimeout(() -> {
-      $$(By.name("domain")).shouldHaveSize(1);
-      $$("#theHiddenElement").shouldHaveSize(1);
-      $$("#radioButtons input").shouldHaveSize(4);
-      $$(By.xpath("//select[@name='domain']/option")).shouldHaveSize(4);
-      $$(By.name("non-existing-element")).shouldHaveSize(0);
+      $$(By.name("domain")).shouldHave(size(1));
+      $$("#theHiddenElement").shouldHave(size(1));
+      $$("#radioButtons input").shouldHave(size(4));
+      $$(By.xpath("//select[@name='domain']/option")).shouldHave(size(4));
+      $$(By.name("non-existing-element")).shouldHave(size(0));
       $$("#dynamic-content-container span").shouldHave(size(2));
     });
   }
@@ -195,16 +195,16 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void userCanFilterOutMatchingElements() {
-    $$("#multirowTable tr").shouldHaveSize(2);
-    $$("#multirowTable tr").filterBy(text("Norris")).shouldHaveSize(1);
-    $$("#multirowTable tr").filterBy(cssClass("inexisting")).shouldHaveSize(0);
+    $$("#multirowTable tr").shouldHave(size(2));
+    $$("#multirowTable tr").filterBy(text("Norris")).shouldHave(size(1));
+    $$("#multirowTable tr").filterBy(cssClass("inexisting")).shouldHave(size(0));
   }
 
   @Test
   void userCanExcludeMatchingElements() {
-    $$("#multirowTable tr").shouldHaveSize(2);
-    $$("#multirowTable tr").excludeWith(text("Chack")).shouldHaveSize(0);
-    $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHaveSize(2);
+    $$("#multirowTable tr").shouldHave(size(2));
+    $$("#multirowTable tr").excludeWith(text("Chack")).shouldHave(size(0));
+    $$("#multirowTable tr").excludeWith(cssClass("inexisting")).shouldHave(size(2));
   }
 
   @Test
@@ -325,8 +325,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetFirstNElements() {
     ElementsCollection collection = $$x("//select[@name='domain']/option");
-    collection.first(2).shouldHaveSize(2);
-    collection.first(10).shouldHaveSize(collection.size());
+    collection.first(2).shouldHave(size(2));
+    collection.first(10).shouldHave(size(collection.size()));
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
       .map(SelenideElement::getText)
@@ -365,8 +365,8 @@ final class CollectionMethodsTest extends ITest {
   @Test
   void canGetLastNElements() {
     ElementsCollection collection = $$x("//select[@name='domain']/option");
-    collection.last(2).shouldHaveSize(2);
-    collection.last(10).shouldHaveSize(collection.size());
+    collection.last(2).shouldHave(size(2));
+    collection.last(10).shouldHave(size(collection.size()));
 
     List<String> regularSublist = $$x("//select[@name='domain']/option").stream()
       .map(SelenideElement::getText)
@@ -410,7 +410,7 @@ final class CollectionMethodsTest extends ITest {
     ElementsCollection elementsCollection = $$("not-existing-locator").first().$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
 
-    assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))
+    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
       .as(description, "shouldHaveSize").isInstanceOf(ListSizeMismatch.class)
       .hasCauseExactlyInstanceOf(NoSuchElementException.class);
 
@@ -456,7 +456,7 @@ final class CollectionMethodsTest extends ITest {
     ElementsCollection elementsCollection = $$("not-existing-locator").get(1).$$("#multirowTable");
     String description = "Check throwing ElementNotFound for %s";
 
-    assertThatThrownBy(() -> elementsCollection.shouldHaveSize(1))
+    assertThatThrownBy(() -> elementsCollection.shouldHave(size(1)))
       .as(description, "shouldHaveSize").isInstanceOf(ElementNotFound.class)
       .hasCauseExactlyInstanceOf(IndexOutOfBoundsException.class);
 
@@ -507,7 +507,7 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void errorWhenFindCollectionInLastElementOfEmptyCollection() {
-    assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(1))
+    assertThatThrownBy(() -> $$("#not_exist").last().$$("#multirowTable").shouldHave(size(1)))
       .isInstanceOf(ElementNotFound.class)
       .hasMessageStartingWith("Element not found {#not_exist:last/#multirowTable}")
       .hasCauseInstanceOf(IndexOutOfBoundsException.class);
@@ -515,12 +515,12 @@ final class CollectionMethodsTest extends ITest {
 
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfEmptyCollection() {
-    $$("#not_exist").last().$$("#multirowTable").shouldHaveSize(0);
+    $$("#not_exist").last().$$("#multirowTable").shouldHave(size(0));
   }
 
   @Test
   void shouldHaveZeroSizeWhenFindCollectionInLastElementOfFullCollection() {
-    $$("#user-table td").last().$$("#not_exist").shouldHaveSize(0);
+    $$("#user-table td").last().$$("#not_exist").shouldHave(size(0));
   }
 
   @Test

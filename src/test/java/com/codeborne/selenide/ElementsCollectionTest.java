@@ -48,10 +48,10 @@ final class ElementsCollectionTest {
     ElementsCollection collection = spy(new ElementsCollection(source));
     when(source.getElements()).thenReturn(emptyList());
 
-    collection.shouldHaveSize(0);
+    collection.shouldHave(size(0));
 
     when(source.getElements()).thenReturn(asList(element1, element2));
-    collection.shouldHaveSize(2);
+    collection.shouldHave(size(2));
 
     verify(collection, never()).sleep(anyLong());
   }

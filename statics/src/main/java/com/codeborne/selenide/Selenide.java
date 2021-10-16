@@ -217,14 +217,6 @@ public class Selenide {
   }
 
   /**
-   * @deprecated Use either {@link #closeWindow()} or {@link #closeWebDriver()}
-   */
-  @Deprecated
-  public static void close() {
-    closeWebDriver();
-  }
-
-  /**
    * Reload current page
    */
   public static void refresh() {
@@ -356,23 +348,6 @@ public class Selenide {
   }
 
   /**
-   * @param parent      the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return SelenideElement
-   * @see #$(String)
-   * <p>
-   * Locates the first element matching given CSS selector
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$(String) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @Nonnull
-  public static SelenideElement $(WebElement parent, String cssSelector) {
-    return getSelenideDriver().$(parent).find(cssSelector);
-  }
-
-  /**
    * Locates the Nth element matching given criteria (lazy evaluation)
    *
    * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
@@ -384,62 +359,6 @@ public class Selenide {
   @Nonnull
   public static SelenideElement $(String cssSelector, int index) {
     return getSelenideDriver().$(cssSelector, index);
-  }
-
-  /**
-   * @param parent      the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @param index       0..N
-   * @return SelenideElement
-   * @see #$(String, int)
-   * <p>
-   * Locates the Nth element matching given criteria
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$(String, int) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement $(WebElement parent, String cssSelector, int index) {
-    return getSelenideDriver().$(parent).find(cssSelector, index);
-  }
-
-  /**
-   * @param parent           the WebElement to search elements in
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @return SelenideElement
-   * @see #$(By)
-   * <p>
-   * Locates the first element matching given criteria
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$(By) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement $(WebElement parent, By seleniumSelector) {
-    return getSelenideDriver().$(parent).find(seleniumSelector);
-  }
-
-  /**
-   * @param parent           the WebElement to search elements in
-   * @param seleniumSelector any Selenium selector like By.id(), By.name() etc.
-   * @param index            0..N
-   * @return SelenideElement
-   * @see #$(By, int)
-   * <p>
-   * Locates the Nth element matching given criteria
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$(By, int) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement $(WebElement parent, By seleniumSelector, int index) {
-    return getSelenideDriver().$(parent).find(seleniumSelector, index);
   }
 
   /**
@@ -500,44 +419,6 @@ public class Selenide {
   @Nonnull
   public static ElementsCollection $$(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
-  }
-
-  /**
-   * @param parent      the WebElement to search elements in
-   * @param cssSelector any CSS selector like "input[name='first_name']" or "#messages .new_message"
-   * @return empty list if element was no found
-   * @see #$$(String)
-   * <p>
-   * Locates all elements matching given CSS selector inside given parent element
-   * <p>
-   * Methods returns an ElementsCollection which is a list of WebElement objects that can be iterated,
-   * and at the same time is implementation of WebElement interface,
-   * meaning that you can call methods .sendKeys(), click() etc. on it.
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$$(String) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static ElementsCollection $$(WebElement parent, String cssSelector) {
-    return getSelenideDriver().$(parent).findAll(cssSelector);
-  }
-
-  /**
-   * Locates all elements matching given criteria inside given parent element
-   *
-   * @see #$$(By)
-   * @see Selenide#$$(WebElement, String)
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use $(parent).$$(By) which is the same
-   * (method will not be removed until 4.x or later)
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static ElementsCollection $$(WebElement parent, By seleniumSelector) {
-    return getSelenideDriver().$(parent).findAll(seleniumSelector);
   }
 
   /**
@@ -652,52 +533,6 @@ public class Selenide {
   @Nonnull
   public static ElementsCollection elements(By seleniumSelector) {
     return getSelenideDriver().$$(seleniumSelector);
-  }
-
-  /**
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @return SelenideElement
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use element(criteria) which is the same
-   * (method will not be removed until 4.x or later)
-   * Locates the first element matching given criteria
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement getElement(By criteria) {
-    return getSelenideDriver().find(criteria);
-  }
-
-  /**
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @param index    0..N
-   * @return SelenideElement
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use element(criteria, index) which is the same
-   * (method will not be removed until 4.x or later)
-   * Locates the Nth element matching given criteria
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static SelenideElement getElement(By criteria, int index) {
-    return getSelenideDriver().find(criteria, index);
-  }
-
-  /**
-   * @param criteria instance of By: By.id(), By.className() etc.
-   * @return empty list if element was no found
-   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
-   * @deprecated please use elements(criteria) which is the same
-   * (method will not be removed until 4.x or later)
-   * Locates all elements matching given CSS selector
-   */
-  @Deprecated
-  @CheckReturnValue
-  @Nonnull
-  public static ElementsCollection getElements(By criteria) {
-    return getSelenideDriver().findAll(criteria);
   }
 
   /**

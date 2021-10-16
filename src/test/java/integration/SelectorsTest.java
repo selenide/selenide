@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.exist;
@@ -82,7 +83,7 @@ final class SelectorsTest extends ITest {
   @Test
   void canFindChildElementsCollectionByXpath() {
     SelenideElement parent = $x("//table[@id='multirowTable']");
-    parent.$$x(".//tr").shouldHaveSize(2);
+    parent.$$x(".//tr").shouldHave(size(2));
     parent.$$x(".//tr").shouldHave(texts("Chack Norris", "Chack L'a Baskerville"));
   }
 
