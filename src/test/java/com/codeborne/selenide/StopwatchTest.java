@@ -15,6 +15,7 @@ final class StopwatchTest {
 
   @Test
   void timeout_is_reached() throws InterruptedException {
+    final Stopwatch stopwatch = new Stopwatch(100);
     Thread.sleep(101);
     assertThat(stopwatch.isTimeoutReached()).isTrue();
   }
