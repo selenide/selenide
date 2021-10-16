@@ -400,7 +400,7 @@ public class SelenideDriver {
   @CheckReturnValue
   @Nullable
   public String screenshot(String fileName) {
-    return screenshots.takeScreenshot(driver(), fileName, false, false).getImage();
+    return screenshots.takeScreenshot(driver(), fileName, true, false).getImage();
   }
 
   /**
