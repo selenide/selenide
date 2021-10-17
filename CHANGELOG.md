@@ -3,6 +3,8 @@
 ## 6.0.0 (planned to 1x.10.2021)
 * upgrade to Selenium 4.0.0
 * #1581 report exact actual value at the moment of failure
+* Remove lots of deprecated methods  --  thanks @BorisOsipov for PR https://github.com/selenide/selenide/pull/1607/files
+* Make Selenide.sleep(N) guarantee the sleep duration
 
 ## 5.25.0 (released 28.09.2021)
 * #969 Add support for OpenTest4j  --  see PR #1545

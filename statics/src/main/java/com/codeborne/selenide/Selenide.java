@@ -249,16 +249,18 @@ public class Selenide {
   /**
    * Not recommended. Test should not sleep, but should wait for some condition instead.
    *
+   * Implementation detail: method {@link java.lang.Thread#sleep(long)} is not guaranteed to
+   * sleep exactly given number of milliseconds, it can awake earlier. That's why we need to use a
+   * loop ti guarantee the sleep duration.
+   *
    * @param milliseconds Time to sleep in milliseconds
    */
   public static void sleep(long milliseconds) {
-    try {
-      Thread.sleep(milliseconds);
+    Stopwatch stopwatch = new Stopwatch(milliseconds);
+    do {
+      stopwatch.sleep(milliseconds);
     }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
-    }
+    while (!stopwatch.isTimeoutReached());
   }
 
   /**
@@ -339,7 +341,7 @@ public class Selenide {
   }
 
   /**
-   * @see #getElement(By, int)
+   * @see #element(By, int)
    */
   @CheckReturnValue
   @Nonnull
