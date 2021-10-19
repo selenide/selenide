@@ -1,9 +1,11 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -26,16 +28,15 @@ public class PseudoElementPropertyWithValue extends Condition {
     this.expectedPropertyValue = expectedPropertyValue;
   }
 
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    return defaultString(expectedPropertyValue)
-      .equalsIgnoreCase(getPseudoElementPropertyValue(driver, element));
+  public CheckResult check(Driver driver, WebElement element) {
+    String value = getPseudoElementPropertyValue(driver, element);
+    return new CheckResult(defaultString(expectedPropertyValue).equalsIgnoreCase(value), actualValue(value));
   }
 
-  @Override
-  public String actualValue(Driver driver, WebElement element) {
-    return String.format("%s {%s: %s;}", pseudoElementName, propertyName,
-      getPseudoElementPropertyValue(driver, element));
+  private String actualValue(String pseudoElementValue) {
+    return String.format("%s {%s: %s;}", pseudoElementName, propertyName, pseudoElementValue);
   }
 
   @Override

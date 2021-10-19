@@ -1,12 +1,13 @@
 package com.codeborne.selenide.impl;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-final class HttpHelperTest implements WithAssertions {
+import static org.assertj.core.api.Assertions.assertThat;
+
+final class HttpHelperTest {
   private final HttpHelper helper = new HttpHelper();
 
   @Test

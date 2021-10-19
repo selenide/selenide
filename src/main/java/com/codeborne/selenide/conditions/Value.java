@@ -1,10 +1,12 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.Html;
 import org.openqa.selenium.WebElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -16,9 +18,11 @@ public class Value extends Condition {
     this.expectedValue = expectedValue;
   }
 
+  @Nonnull
   @Override
-  public boolean apply(Driver driver, WebElement element) {
-    return Html.text.contains(getValueAttribute(element), expectedValue);
+  public CheckResult check(Driver driver, WebElement element) {
+    String value = getValueAttribute(element);
+    return new CheckResult(Html.text.contains(value, expectedValue), value);
   }
 
   @Override

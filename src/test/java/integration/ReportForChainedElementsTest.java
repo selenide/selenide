@@ -1,5 +1,7 @@
 package integration;
 
+import com.codeborne.selenide.SelenideConfig;
+import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.ex.ElementNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,20 +18,28 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-final class ReportForChainedElementsTest extends ITest {
+final class ReportForChainedElementsTest extends BaseIntegrationTest {
   private List<File> previousScreenshots;
+  private static final String reportsFolder = "build/reports/tests/" + System.currentTimeMillis();
+  private SelenideDriver driver;
 
   @BeforeEach
   void openTestPage() {
-    setTimeout(1);
-    openFile("page_with_absence.html");
+    driver = new SelenideDriver(new SelenideConfig()
+      .browser(browser).headless(headless)
+      .baseUrl(getBaseUrl())
+      .reportsFolder(reportsFolder)
+      .timeout(1)
+    );
+
+    driver.open("/page_with_absence.html?browser=" + browser);
     previousScreenshots = screenshots();
   }
 
   @Test
   void shouldShowWhichElementInChainWasNotFound() {
     assertThatThrownBy(() -> {
-      $("body")
+      driver.$("body")
         .$(".h1")
         .$(".h2")
         .$(".h3")
@@ -47,7 +57,7 @@ final class ReportForChainedElementsTest extends ITest {
   @Test
   void shouldShowAliasInElementNotFoundError() {
     assertThatThrownBy(() -> {
-      $("body").as("-the-body-")
+      driver.$("body").as("-the-body-")
         .$(".h1").as("-the-h1-")
         .$(".h2").as("-the-h2-")
         .$(".h3").as("-the-h3-")
@@ -76,6 +86,6 @@ final class ReportForChainedElementsTest extends ITest {
 
   @Nonnull
   private File screenshotsFolder() {
-    return new File(driver().config().reportsFolder());
+    return new File(driver.config().reportsFolder());
   }
 }

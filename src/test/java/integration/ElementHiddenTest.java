@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappear;
-import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
@@ -26,11 +25,6 @@ final class ElementHiddenTest extends ITest {
   @Test
   void shouldDisappear() {
     $("#hide").should(disappear);
-  }
-
-  @Test
-  void waitUntilDisappears() {
-    $("#hide").waitUntil(disappears, 2000);
   }
 
   @Test

@@ -38,9 +38,11 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(CSS);
     Driver driver = new DriverStub(config, browser, webDriver, null);
     WebElement div = mock(WebElement.class);
-    when(webDriver.findElement(By.cssSelector("a.active"))).thenReturn(div);
+    when(webDriver.findElement(any())).thenReturn(div);
 
     assertThat(selector.findElement(driver, null, By.cssSelector("a.active"))).isSameAs(div);
+
+    verify(webDriver).findElement(By.cssSelector("a.active"));
   }
 
   @Test
@@ -48,9 +50,11 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
     WebElement div = mock(WebElement.class);
-    when(webDriver.findElement(By.xpath("/div/h1"))).thenReturn(div);
+    when(webDriver.findElement(any())).thenReturn(div);
 
     assertThat(selector.findElement(driver, null, By.xpath("/div/h1"))).isSameAs(div);
+
+    verify(webDriver).findElement(By.xpath("/div/h1"));
   }
 
   @Test
@@ -88,9 +92,11 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(CSS);
     Driver driver = new DriverStub(config, browser, webDriver, null);
     List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
-    when(webDriver.findElements(By.cssSelector("a.active"))).thenReturn(divs);
+    when(webDriver.findElements(any())).thenReturn(divs);
 
     assertThat(selector.findElements(driver, null, By.cssSelector("a.active"))).isSameAs(divs);
+
+    verify(webDriver).findElements(By.cssSelector("a.active"));
   }
 
   @Test
@@ -98,9 +104,11 @@ final class WebElementSelectorTest {
     Config config = new SelenideConfig().selectorMode(Sizzle);
     Driver driver = new DriverStub(config, browser, webDriver, null);
     List<WebElement> divs = asList(mock(WebElement.class), mock(WebElement.class));
-    when(webDriver.findElements(By.xpath("/div/h1"))).thenReturn(divs);
+    when(webDriver.findElements(any())).thenReturn(divs);
 
     assertThat(selector.findElements(driver, null, By.xpath("/div/h1"))).isSameAs(divs);
+
+    verify(webDriver).findElements(By.xpath("/div/h1"));
   }
 
   @Test

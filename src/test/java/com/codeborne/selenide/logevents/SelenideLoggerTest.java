@@ -1,15 +1,12 @@
 package com.codeborne.selenide.logevents;
 
 import integration.UseLocaleExtension;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 
@@ -17,19 +14,20 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.FAIL;
 import static com.codeborne.selenide.logevents.LogEvent.EventStatus.PASS;
 import static com.codeborne.selenide.logevents.SelenideLogger.readableArguments;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-final class SelenideLoggerTest implements WithAssertions {
+final class SelenideLoggerTest {
   private final WebDriver webdriver = mock(WebDriver.class);
 
   @RegisterExtension
   static UseLocaleExtension useLocale = new UseLocaleExtension("en");
+  private static final Object[] NO_ARGS = null;
 
   @BeforeEach
   @AfterEach
@@ -50,6 +48,7 @@ final class SelenideLoggerTest implements WithAssertions {
   }
 
   @Test
+  @SuppressWarnings("RedundantCast")
   void printsReadableArgumentsValues() {
     assertThat(readableArguments((Object[]) null)).isEqualTo("");
     assertThat(readableArguments(111)).isEqualTo("111");
@@ -81,11 +80,7 @@ final class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.addListener("softAsserts", listener2);
     SelenideLogger.addListener("userProvided", listener3);
 
-    WebElement webElement = mock(WebElement.class);
-    when(webdriver.findElement(By.cssSelector("div"))).thenReturn(webElement);
-    when(webElement.isDisplayed()).thenReturn(true);
-
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
 
     verifyEvent(listener1, "div", "click()", PASS);
     verifyEvent(listener2, "div", "click()", PASS);
@@ -97,7 +92,7 @@ final class SelenideLoggerTest implements WithAssertions {
     SelenideLogger.removeListener("simpleReport");
     SelenideLogger.removeListener("softAsserts");
 
-    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", null), PASS);
+    SelenideLogger.commitStep(SelenideLogger.beginStep("div", "click", NO_ARGS), PASS);
     verifyEvent(listener3, "div", "click()", PASS);
 
     verifyNoMoreInteractions(listener1, listener2, listener3);

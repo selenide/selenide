@@ -1,5 +1,6 @@
 package com.codeborne.selenide.ex;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.impl.ElementDescriber;
@@ -16,13 +17,14 @@ import static java.lang.System.lineSeparator;
 public class ElementShouldNot extends UIAssertionError {
   private static final ElementDescriber describe = inject(ElementDescriber.class);
 
-  public ElementShouldNot(Driver driver, String searchCriteria, String prefix, Condition expectedCondition,
+  public ElementShouldNot(Driver driver, String searchCriteria, String prefix,
+                          Condition expectedCondition, @Nullable CheckResult lastCheckResult,
                           WebElement element, @Nullable Throwable lastError) {
-    super(driver,
+    super(
       String.format("Element should not %s%s {%s}%sElement: '%s'%s",
         prefix, expectedCondition, searchCriteria, lineSeparator(),
         describe.fully(driver, element),
-        actualValue(expectedCondition, driver, element)
+        actualValue(expectedCondition, driver, element, lastCheckResult)
       ), lastError);
   }
 }

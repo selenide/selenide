@@ -1,5 +1,6 @@
 package com.codeborne.selenide.conditions;
 
+import com.codeborne.selenide.CheckResult;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Driver;
 import org.openqa.selenium.WebElement;
@@ -14,17 +15,11 @@ public class Visible extends Condition {
     super("visible");
   }
 
-  @Override
-  @CheckReturnValue
-  public boolean apply(Driver driver, WebElement element) {
-    return element.isDisplayed();
-  }
-
-  @Override
-  @CheckReturnValue
   @Nonnull
-  public String actualValue(Driver driver, WebElement element) {
-    return String.format("visible:%s", element.isDisplayed());
+  @Override
+  public CheckResult check(Driver driver, WebElement element) {
+    boolean displayed = element.isDisplayed();
+    return new CheckResult(displayed, String.format("visible:%s", displayed));
   }
 
   @Override

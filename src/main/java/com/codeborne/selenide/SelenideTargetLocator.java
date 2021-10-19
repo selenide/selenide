@@ -15,6 +15,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -227,6 +228,11 @@ public class SelenideTargetLocator implements TargetLocator {
     });
   }
 
+  @Override
+  public WebDriver newWindow(WindowType typeHint) {
+    return webDriver.switchTo().newWindow(typeHint);
+  }
+
   private SelenideWait Wait() {
     return new SelenideWait(webDriver, config.timeout(), config.pollingInterval());
   }
@@ -236,12 +242,12 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error frameNotFoundError(String message, Throwable cause) {
-    FrameNotFoundException error = new FrameNotFoundException(driver, message, cause);
+    FrameNotFoundException error = new FrameNotFoundException(message, cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 
   private Error windowNotFoundError(String message, Throwable cause) {
-    WindowNotFoundException error = new WindowNotFoundException(driver, message, cause);
+    WindowNotFoundException error = new WindowNotFoundException(message, cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 

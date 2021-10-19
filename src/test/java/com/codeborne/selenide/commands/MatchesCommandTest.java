@@ -1,77 +1,75 @@
 package com.codeborne.selenide.commands;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriverException;
 
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.enabled;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class MatchesCommandTest implements WithAssertions {
+final class MatchesCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final Matches matchesCommand = new Matches();
+  private final Matches command = new Matches();
 
   @Test
-  void testExecuteMethodWhenNoElementFound() {
+  void whenNoElementFound() {
     when(locator.getWebElement()).thenReturn(null);
-    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}))
+    assertThat(command.execute(proxy, locator, new Object[]{disabled}))
       .isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenElementDoesntMeetCondition() {
+  void elementDoesNotMeetCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.disabled}))
+    assertThat(command.execute(proxy, locator, new Object[]{disabled}))
       .isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenElementMeetsCondition() {
+  void elementMeetsCondition() {
     when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.isEnabled()).thenReturn(true);
-    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}))
+    assertThat(command.execute(proxy, locator, new Object[]{enabled}))
       .isTrue();
   }
 
   @Test
-  void testExecuteMethodWhenWebDriverExceptionIsThrown() {
-    catchExecuteMethodWithException(new WebDriverException());
-  }
-
-  private <T extends Throwable> void catchExecuteMethodWithException(T exception) {
-    doThrow(exception).when(locator).getWebElement();
-    assertThat(matchesCommand.execute(proxy, locator, new Object[]{Condition.enabled}))
+  void webDriverExceptionIsThrown() {
+    doThrow(new WebDriverException()).when(locator).getWebElement();
+    assertThat(command.execute(proxy, locator, new Object[]{enabled}))
       .isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenNotFoundExceptionIsThrown() {
-    catchExecuteMethodWithException(new NotFoundException());
+  void notFoundExceptionIsThrown() {
+    doThrow(new NotFoundException()).when(locator).getWebElement();
+    assertThat(command.execute(proxy, locator, new Object[]{enabled}))
+      .isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenIndexOutOfBoundsExceptionIsThrown() {
-    catchExecuteMethodWithException(new IndexOutOfBoundsException());
+  void indexOutOfBoundsExceptionIsThrown() {
+    doThrow(new IndexOutOfBoundsException()).when(locator).getWebElement();
+    assertThat(command.execute(proxy, locator, new Object[]{enabled}))
+      .isFalse();
   }
 
   @Test
-  void testExecuteMethodWhenExceptionWithInvalidSelectorException() {
-    assertThatThrownBy(() -> catchExecuteMethodWithException(new NotFoundException("invalid selector")))
-      .isInstanceOf(InvalidSelectorException.class);
-  }
-
-  @Test
-  void testExecuteMethodWhenRunTimeExceptionIsThrown() {
-    assertThatThrownBy(() -> catchExecuteMethodWithException(new RuntimeException("invalid selector")))
-      .isInstanceOf(InvalidSelectorException.class);
+  void invalidSelectorIsThrownAsIs() {
+    doThrow(new InvalidSelectorException("wrong xpath")).when(locator).getWebElement();
+    assertThatThrownBy(() -> command.execute(proxy, locator, new Object[]{enabled}))
+      .isInstanceOf(InvalidSelectorException.class)
+      .hasMessageStartingWith("wrong xpath");
   }
 }

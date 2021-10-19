@@ -5,22 +5,22 @@ import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.collections.ExactTexts;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ElementNotFoundTest implements WithAssertions {
-  private Driver driver = new DriverStub();
+final class ElementNotFoundTest {
+  private final Driver driver = new DriverStub();
 
   @Test
   void elementNotFoundWithByCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(driver, By.id("Hello"), Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound(By.id("Hello"), Condition.exist);
     String expectedMessage = String.format("Element not found {By.id: Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.");
@@ -29,7 +29,7 @@ final class ElementNotFoundTest implements WithAssertions {
 
   @Test
   void elementNotFoundWithStringCriteria() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist);
+    ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist);
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.");
@@ -38,7 +38,7 @@ final class ElementNotFoundTest implements WithAssertions {
 
   @Test
   void elementNotFoundWithStringCriteriaAndThrowableError() {
-    ElementNotFound elementNotFoundById = new ElementNotFound(driver, "Hello", Condition.exist, new Throwable("Error message"));
+    ElementNotFound elementNotFoundById = new ElementNotFound("Hello", Condition.exist, new Throwable("Error message"));
     String expectedMessage = String.format("Element not found {Hello}%n" +
       "Expected: exist%n" +
       "Timeout: 0 ms.%n" +

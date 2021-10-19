@@ -65,15 +65,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated Use {@code $$.shouldHave(size(expectedSize))} instead.
-   */
-  @Nonnull
-  @Deprecated
-  public ElementsCollection shouldHaveSize(int expectedSize) {
-    return shouldHave(CollectionCondition.size(expectedSize));
-  }
-
-  /**
    * Check if a collection matches given condition(s).
    * <p> For example: </p>
    * <pre code='java'>
@@ -110,15 +101,6 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   }
 
   /**
-   * @deprecated use {@link #shouldBe(CollectionCondition, Duration)}
-   */
-  @Nonnull
-  @Deprecated
-  public ElementsCollection shouldBe(CollectionCondition condition, long timeoutMs) {
-    return should("be", Duration.ofMillis(timeoutMs), toArray(condition));
-  }
-
-  /**
    * For example:
    * {@code $$(".error").shouldHave(size(3))}
    * {@code $$(".error").shouldHave(texts("Error1", "Error2"))}
@@ -138,22 +120,13 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     return should("have", timeout, toArray(condition));
   }
 
-  /**
-   * Check if a collection matches given condition within given period
-   *
-   * @param timeoutMs maximum waiting time in milliseconds
-   * @deprecated use {@link #shouldHave(CollectionCondition, Duration)}
-   */
+  @CheckReturnValue
   @Nonnull
-  @Deprecated
-  public ElementsCollection shouldHave(CollectionCondition condition, long timeoutMs) {
-    return should("have", Duration.ofMillis(timeoutMs), toArray(condition));
-  }
-
   private CollectionCondition[] toArray(CollectionCondition condition) {
     return new CollectionCondition[]{condition};
   }
 
+  @Nonnull
   protected ElementsCollection should(String prefix, Duration timeout, CollectionCondition... conditions) {
     validateAssertionMode(driver().config());
 
@@ -197,7 +170,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
       }
       catch (WebDriverException | IndexOutOfBoundsException | UIAssertionError elementNotFound) {
         if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-          throw Cleanup.of.wrap(elementNotFound);
+          throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
         }
         if (condition.missingElementSatisfiesCondition()) {
           return;
@@ -209,7 +182,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
     while (!stopwatch.isTimeoutReached());
 
     if (lastError instanceof IndexOutOfBoundsException) {
-      throw new ElementNotFound(collection.driver(), collection.description(), exist, lastError);
+      throw new ElementNotFound(collection.description(), exist, lastError);
     }
     else if (lastError instanceof UIAssertionError) {
       throw (UIAssertionError) lastError;
@@ -222,7 +195,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   void sleep(long ms) {
     try {
       Thread.sleep(ms);
-    } catch (InterruptedException e) {
+    }
+    catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
@@ -244,9 +218,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Filters collection elements based on the given condition (lazy evaluation)
    *
-   * @see #filter(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see #filter(Condition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -271,9 +245,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Filters elements excluding those which met the given condition (lazy evaluation)
    *
-   * @see #exclude(Condition)
    * @param condition condition
    * @return ElementsCollection
+   * @see #exclude(Condition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -298,9 +272,9 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Find the first element which met the given condition (lazy evaluation)
    *
-   * @see #find(Condition)
    * @param condition condition
    * @return SelenideElement
+   * @see #find(Condition)
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
@@ -317,6 +291,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Gets all the texts in elements collection
+   *
    * @return array of texts
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
@@ -328,6 +303,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Fail-safe method for retrieving texts of given elements.
+   *
    * @param elements Any collection of WebElements
    * @return Array of texts (or exceptions in case of any WebDriverExceptions)
    */
@@ -340,13 +316,15 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   private static String getText(WebElement element) {
     try {
       return element.getText();
-    } catch (WebDriverException elementDisappeared) {
+    }
+    catch (WebDriverException elementDisappeared) {
       return elementDisappeared.toString();
     }
   }
 
   /**
    * Outputs string presentation of the element's collection
+   *
    * @param elements elements of string
    * @return e.g. "[<h1>foo</h1>, <h2>bar</h2>]"
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
@@ -447,15 +425,16 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
    * return actual size of the collection, doesn't wait on collection to be loaded.
    * </p>
    *
-   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    * @return actual size of the collection
+   * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @CheckReturnValue
   @Override
   public int size() {
     try {
       return getElements().size();
-    } catch (IndexOutOfBoundsException outOfCollection) {
+    }
+    catch (IndexOutOfBoundsException outOfCollection) {
       return 0;
     }
   }
@@ -463,6 +442,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Does not reload collection elements while iterating it.
    * Not recommended to use.
+   *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -475,6 +455,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Does not reload collection elements while iterating it.
    * Not recommended to use.
+   *
    * @see <a href="https://github.com/selenide/selenide/wiki/do-not-use-getters-in-tests">NOT RECOMMENDED</a>
    */
   @Override
@@ -507,7 +488,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   /**
    * Takes the snapshot of current state of this collection.
    * Succeeding calls to this object WILL NOT RELOAD collection element from browser.
-   *
+   * <p>
    * Use it to speed up your tests - but only if you know that collection will not be changed during the test.
    *
    * @return current state of this collection
@@ -520,7 +501,7 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
 
   /**
    * Give this collection a human-readable name
-   *
+   * <p>
    * Caution: you probably don't need this method.
    * It's always a good idea to have the actual selector instead of "nice" description (which might be misleading or even lying).
    *
@@ -540,7 +521,8 @@ public class ElementsCollection extends AbstractList<SelenideElement> {
   public String toString() {
     try {
       return String.format("%s %s", collection.description(), elementsToString(driver(), getElements()));
-    } catch (RuntimeException e) {
+    }
+    catch (RuntimeException e) {
       return String.format("%s [%s]", collection.description(), Cleanup.of.webdriverExceptionMessage(e));
     }
   }

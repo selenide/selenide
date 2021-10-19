@@ -3,7 +3,6 @@ package com.codeborne.selenide.impl;
 import com.codeborne.selenide.Driver;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -13,11 +12,12 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Condition.visible;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class SelenideElementDescriberTest implements WithAssertions {
+final class SelenideElementDescriberTest {
   private final SelenideElementDescriber describe = new SelenideElementDescriber();
 
   @Test
@@ -44,7 +44,7 @@ final class SelenideElementDescriberTest implements WithAssertions {
 
     SelenideElement selenideElement = mock(SelenideElement.class);
     when(selenideElement.toWebElement()).thenReturn(webElement);
-    doThrow(new ElementShould(driver, null, null, visible, webElement, null)).when(selenideElement).getTagName();
+    doThrow(new ElementShould(driver, "div", "", visible, null, webElement, null)).when(selenideElement).getTagName();
 
     assertThat(describe.briefly(driver, selenideElement))
       .isEqualTo("Ups, failed to described the element [caused by: StaleElementReferenceException: disappeared]");

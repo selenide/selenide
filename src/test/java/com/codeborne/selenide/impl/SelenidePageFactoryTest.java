@@ -109,7 +109,7 @@ final class SelenidePageFactoryTest {
     WebElement statusElement = mockWebElement("div", "the status");
     WebElement lastLogin = mockWebElement("div", "03.03.2003");
     WebElement name = mockWebElement("div", "lena");
-    when(webDriver.findElement(By.id("status"))).thenReturn(statusElement);
+    when(webDriver.findElement(any())).thenReturn(statusElement);
     when(statusElement.findElement(By.className("last-login"))).thenReturn(lastLogin);
     when(statusElement.findElement(By.className("name"))).thenReturn(name);
 

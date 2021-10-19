@@ -3,7 +3,6 @@ package com.codeborne.selenide.proxy;
 import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Credentials;
 import io.netty.handler.codec.http.DefaultHttpRequest;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Base64;
@@ -11,8 +10,9 @@ import java.util.Base64;
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class AuthenticationFilterTest implements WithAssertions {
+final class AuthenticationFilterTest {
   private final AuthenticationFilter filter = new AuthenticationFilter();
   private final DefaultHttpRequest request = new DefaultHttpRequest(HTTP_1_1, GET, "/secured/page");
 

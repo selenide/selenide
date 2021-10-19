@@ -2,32 +2,24 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class IsImageCommandTest implements WithAssertions {
+final class IsImageCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
   private final SelenideElement mockedElement = mock(SelenideElement.class);
-  private final IsImage isImageCommand = new IsImage();
-
-  @BeforeEach
-  void setup() {
-    when(locator.getWebElement()).thenReturn(mockedElement);
-  }
+  private final IsImage command = new IsImage();
 
   @Test
-  void testExecuteMethodWhenElementIsNotImage() {
+  void isNotApplicableForNonImages() {
+    when(locator.getWebElement()).thenReturn(mockedElement);
     when(mockedElement.getTagName()).thenReturn("href");
-    try {
-      isImageCommand.execute(proxy, locator, new Object[]{"something more"});
-    } catch (IllegalArgumentException exception) {
-      assertThat(exception)
-        .hasMessage("Method isImage() is only applicable for img elements");
-    }
+    assertThatThrownBy(() -> command.execute(proxy, locator, null))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Method isImage() is only applicable for img elements");
   }
 }

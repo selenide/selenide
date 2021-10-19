@@ -1,14 +1,14 @@
 package com.codeborne.selenide;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.ClickMethod.DEFAULT;
 import static com.codeborne.selenide.ClickMethod.JS;
 import static com.codeborne.selenide.ClickOptions.usingDefaultMethod;
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class ClickOptionsTest implements WithAssertions {
+final class ClickOptionsTest {
   @Test
   void javaScriptMethod() {
     assertThat(usingJavaScript().clickOption()).isEqualTo(JS);

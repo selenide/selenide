@@ -6,18 +6,18 @@ import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class ToStringCommandTest implements WithAssertions {
+final class ToStringCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final Driver driver = new DriverStub();
   private final WebElementSource locator = mock(WebElementSource.class);
@@ -32,17 +32,17 @@ final class ToStringCommandTest implements WithAssertions {
 
   @Test
   void executeMethod() {
+    when(mockedFoundElement.getTagName()).thenReturn("option");
     when(mockedFoundElement.isSelected()).thenReturn(true);
     when(mockedFoundElement.isDisplayed()).thenReturn(true);
-    String elementText = "text";
-    when(mockedFoundElement.getText()).thenReturn(elementText);
+    when(mockedFoundElement.getText()).thenReturn("Cinderella");
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo("<null selected:true>text</null>");
+      .isEqualTo("<option selected:true>Cinderella</option>");
   }
 
   @Test
-  void executeMethodWhenWebDriverExceptionIsThrown() {
+  void executeMethodWhenWebDriverDriverExceptionIsThrown() {
     doThrow(new WebDriverException()).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
@@ -51,10 +51,10 @@ final class ToStringCommandTest implements WithAssertions {
 
   @Test
   void executeMethodWhenElementNotFoundIsThrown() {
-    doThrow(new ElementNotFound(driver, By.name(""), Condition.visible)).when(locator).getWebElement();
+    doThrow(new ElementNotFound(By.name("q"), Condition.visible)).when(locator).getWebElement();
     String elementString = toStringCommand.execute(proxy, locator, new Object[]{});
     assertThat(elementString)
-      .isEqualTo(String.format("Element not found {By.name: }%n" +
+      .isEqualTo(String.format("Element not found {By.name: q}%n" +
         "Expected: visible%n" +
         "Timeout: 0 ms."));
   }

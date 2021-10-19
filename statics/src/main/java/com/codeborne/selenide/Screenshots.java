@@ -33,16 +33,6 @@ public class Screenshots {
   }
 
   /**
-   * @deprecated Use either {@link Selenide#screenshot(java.lang.String)} or {@link SelenideDriver#screenshot(java.lang.String)}
-   */
-  @CheckReturnValue
-  @Nullable
-  @Deprecated
-  public static String takeScreenShot(String fileName) {
-    return screenshots.takeScreenShot(driver(), fileName);
-  }
-
-  /**
    * Take screenshot and return as a file
    * @return a temporary file, not guaranteed to be stored after tests complete.
    */
@@ -69,7 +59,7 @@ public class Screenshots {
    */
   @CheckReturnValue
   @Nullable
-  public static File takeScreenShot(WebElement iframe, WebElement element) {
+  public static File takeScreenShot(WebElement iframe, SelenideElement element) {
     return screenshots.takeScreenshot(driver(), iframe, element);
   }
 
@@ -80,7 +70,7 @@ public class Screenshots {
    */
   @CheckReturnValue
   @Nullable
-  public static BufferedImage takeScreenShotAsImage(WebElement iframe, WebElement element) {
+  public static BufferedImage takeScreenShotAsImage(WebElement iframe, SelenideElement element) {
     return screenshots.takeScreenshotAsImage(driver(), iframe, element);
   }
 

@@ -58,7 +58,7 @@ public class ContainExactTextsCaseSensitive extends CollectionCondition {
       List<String> difference = new ArrayList<>(expectedTexts);
       difference.removeAll(actualTexts);
       throw new DoesNotContainTextsError(collection,
-        actualTexts, expectedTexts, difference, explanation,
+        expectedTexts, actualTexts, difference, explanation,
         timeoutMs, lastError);
     }
   }

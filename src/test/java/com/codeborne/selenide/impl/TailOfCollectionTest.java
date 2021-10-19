@@ -1,15 +1,15 @@
 package com.codeborne.selenide.impl;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class TailOfCollectionTest implements WithAssertions {
+final class TailOfCollectionTest {
   private final WebElement element1 = mock(WebElement.class);
   private final WebElement element2 = mock(WebElement.class);
   private final WebElement element3 = mock(WebElement.class);

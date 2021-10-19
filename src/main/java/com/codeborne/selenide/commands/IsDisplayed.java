@@ -28,7 +28,7 @@ public class IsDisplayed implements Command<Boolean> {
     }
     catch (WebDriverException | ElementNotFound elementNotFound) {
       if (Cleanup.of.isInvalidSelectorError(elementNotFound)) {
-        throw Cleanup.of.wrap(elementNotFound);
+        throw Cleanup.of.wrapInvalidSelectorException(elementNotFound);
       }
       return false;
     }

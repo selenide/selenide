@@ -1,48 +1,41 @@
 package com.codeborne.selenide.collections;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
+import static com.codeborne.selenide.Mocks.mockElement;
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
-final class TextsInAnyOrderTest implements WithAssertions {
+final class TextsInAnyOrderTest {
   @Test
-  void testApplyWithSameOrder() {
+  void elementsInSameOrder() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("One", "Two", "Three"));
-    testApplyMethod(true, texts);
-  }
-
-  private void testApplyMethod(boolean shouldMatch, TextsInAnyOrder texts) {
-    WebElement mockElement1 = mock(WebElement.class);
-    WebElement mockElement2 = mock(WebElement.class);
-    WebElement mockElement3 = mock(WebElement.class);
-
-    when(mockElement1.getText()).thenReturn("One");
-    when(mockElement2.getText()).thenReturn("Two");
-    when(mockElement3.getText()).thenReturn("Three");
-    assertThat(texts.test(asList(mockElement1, mockElement2, mockElement3)))
-      .isEqualTo(shouldMatch);
+    List<WebElement> collection = asList(mockElement("One"), mockElement("Two"), mockElement("Three"));
+    assertThat(texts.test(collection)).isTrue();
   }
 
   @Test
-  void testApplyWithDifferentOrder() {
+  void elementsInDifferentOrder() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("Two", "One", "Three"));
-    testApplyMethod(true, texts);
+    List<WebElement> collection = asList(mockElement("One"), mockElement("Two"), mockElement("Three"));
+    assertThat(texts.test(collection)).isTrue();
   }
 
   @Test
-  void testApplyWithWrongListSize() {
+  void tooLongListSize() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("Two", "One"));
-    testApplyMethod(false, texts);
+    List<WebElement> collection = asList(mockElement("One"), mockElement("Two"), mockElement("Three"));
+    assertThat(texts.test(collection)).isFalse();
   }
 
   @Test
-  void testApplyWithBiggerSize() {
+  void tooShortList() {
     TextsInAnyOrder texts = new TextsInAnyOrder(asList("Two", "One", "four", "three"));
-    testApplyMethod(false, texts);
+    List<WebElement> collection = asList(mockElement("One"), mockElement("Two"), mockElement("Three"));
+    assertThat(texts.test(collection)).isFalse();
   }
 
   @Test

@@ -13,13 +13,13 @@ allprojects {
 
 group = 'com.codeborne'
 archivesBaseName = 'selenide'
-version = '5.24.2-SNAPSHOT'
+version = '6.0.0-SNAPSHOT'
 
-apply from: rootProject.file('gradle/compilation.gradle')
-apply from: rootProject.file('gradle/dependencies.gradle')
-apply from: rootProject.file('gradle/code-analysis.gradle')
-apply from: rootProject.file('gradle/coverage.gradle')
-apply from: rootProject.file('gradle/tests.gradle')
-apply from: rootProject.file('gradle/deploy.gradle')
+apply from: 'gradle/compilation.gradle'
+apply from: 'gradle/dependencies.gradle'
+apply from: 'gradle/code-analysis.gradle'
+apply from: 'gradle/coverage.gradle'
+apply from: 'gradle/tests.gradle'
+apply from: 'gradle/deploy.gradle'
 
 defaultTasks 'check', 'buildAll'

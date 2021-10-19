@@ -2,36 +2,40 @@ package com.codeborne.selenide.commands;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.WebElementSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-final class FindCommandTest implements WithAssertions {
+final class FindCommandTest {
   private final SelenideElement proxy = mock(SelenideElement.class);
   private final WebElementSource locator = mock(WebElementSource.class);
-  private final SelenideElement element1 = mock(SelenideElement.class);
-  private final Find findCommand = new Find();
+  private final SelenideElement element = mock(SelenideElement.class);
+  private final Find command = new Find();
 
   @Test
-  void testExecuteMethodWithNoArgsPassed() {
-    assertThatThrownBy(() -> findCommand.execute(proxy, locator))
+  void noArgs() {
+    assertThatThrownBy(() -> command.execute(proxy, locator))
       .isInstanceOf(ArrayIndexOutOfBoundsException.class);
   }
 
   @Test
-  void testExecuteMethodWithZeroLengthArgs() {
-    when(locator.find(proxy, By.xpath(".."), 0)).thenReturn(element1);
-    assertThat(findCommand.execute(proxy, locator, By.xpath("..")))
-      .isEqualTo(element1);
+  void zeroLengthArgs() {
+    when(locator.find(any(), any(), anyInt())).thenReturn(element);
+    assertThat(command.execute(proxy, locator, By.xpath(".."))).isEqualTo(element);
+    verify(locator).find(proxy, By.xpath(".."), 0);
   }
 
   @Test
-  void testExecuteMethodWithMoreThenOneArgsList() {
-    when(locator.find(proxy, By.xpath(".."), 1)).thenReturn(element1);
-    assertThat(findCommand.execute(proxy, locator, By.xpath(".."), 1))
-      .isEqualTo(element1);
+  void moreThenOneArg() {
+    when(locator.find(any(), any(), anyInt())).thenReturn(element);
+    assertThat(command.execute(proxy, locator, By.xpath(".."), 1)).isEqualTo(element);
+    verify(locator).find(proxy, By.xpath(".."), 1);
   }
 }

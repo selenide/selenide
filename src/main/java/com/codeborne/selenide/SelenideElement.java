@@ -8,9 +8,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.WrapsElement;
 import org.openqa.selenium.interactions.Locatable;
-import org.openqa.selenium.internal.HasIdentity;
-import org.openqa.selenium.internal.WrapsElement;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -26,7 +25,7 @@ import java.time.Duration;
  * {@link #shouldBe(Condition...)} and {@link #shouldHave(Condition...)}
  */
 @ParametersAreNonnullByDefault
-public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot, HasIdentity {
+public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, Locatable, TakesScreenshot {
   /**
    * <b>Implementation details:</b>
    *
@@ -495,72 +494,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement shouldNotBe(Condition condition, Duration timeout);
 
   /**
-   * <p>Wait until given element meets given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition           e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds);
-
-  /**
-   * <p>Wait until given element meets given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all should- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition                   e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds         timeout in milliseconds.
-   * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.WaitUntil
-   * @deprecated use {@link #shouldBe(Condition, Duration)} or {@link #shouldHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitUntil(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
-
-  /**
-   * <p>Wait until given element does not meet given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition           e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds timeout in milliseconds.
-   * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds);
-
-  /**
-   * <p>Wait until given element does not meet given conditions.</p>
-   *
-   * <p>IMPORTANT: in most cases you don't need this method because all shouldNot- methods wait too.
-   * You need to use #waitUntil or #waitWhile methods only if you need another timeout.</p>
-   *
-   * @param condition                   e.g. enabled, visible, text() and so on
-   * @param timeoutMilliseconds         timeout in milliseconds.
-   * @param pollingIntervalMilliseconds interval in milliseconds, when checking condition
-   * @see com.codeborne.selenide.commands.WaitWhile
-   * @deprecated use {@link #shouldNotBe(Condition, Duration)} or {@link #shouldNotHave(Condition, Duration)}
-   */
-  @Nonnull
-  @CanIgnoreReturnValue
-  @Deprecated
-  SelenideElement waitWhile(Condition condition, long timeoutMilliseconds, long pollingIntervalMilliseconds);
-
-  /**
    * Displays WebElement in human-readable format.
    * Useful for logging and debugging.
    * Not recommended to use for test verifications.
@@ -640,18 +573,88 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   SelenideElement lastChild();
 
   /**
-   * Locates closes ancestor element matching given criteria
+   * Locates the closest ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").ancestor("table") returns the closest "table" element above "td".
+   * <br/>
+   * Same as {@code closest("selector", 0)} or {@code closest("selector")}.
    *
-   * For example, $("td").closest("table") could give some "table".
-   *
-   * @param tagOrClass Either HTML tag or CSS class. E.g. "form" or ".active".
+   * Examples:
+   * <br>
+   * {@code $("td").ancestor("table")} will find the closest ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").ancestor(".container")} will find the closest ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").ancestor("[data-testid]")} will find the closest ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").ancestor("[data-testid=test-value]")} will find the closest ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
    * @return Matching ancestor element
-   * @see com.codeborne.selenide.commands.GetClosest
+   * @see com.codeborne.selenide.commands.Ancestor
    * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
    */
   @CheckReturnValue
   @Nonnull
-  SelenideElement closest(String tagOrClass);
+  SelenideElement ancestor(String selector);
+
+  /**
+   * Locates the Nth ancestor element matching given criteria.
+   * <br/>
+   *
+   * Examples:
+   * <br>
+   * {@code $("td").ancestor("table", 1)} will find the 2nd ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").ancestor(".container", 1)} will find the 2nd ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").ancestor("[data-testid]", 1)} will find the 2nd ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").ancestor("[data-testid=test-value]", 1)} will find the 2nd ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
+   * @param index    0...N index of the ancestor. 0 is the closest, 1 is higher up the hierarchy, etc...
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement ancestor(String selector, int index);
+
+  /**
+   * Same as {@link #ancestor(String)}.
+   *
+   * Locates the closest ancestor element matching given criteria.
+   * <br/>
+   * For example, $("td").closest("table") returns the closest "table" element above "td".
+   * <br/>
+   * Same as {@code ancestor("selector", 0)}.
+   *
+   * Examples:
+   * <br>
+   * {@code $("td").closest("table")} will find the closest ancestor with tag {@code table}
+   * <br>
+   * {@code $("td").closest(".container")} will find the closest ancestor with CSS class {@code .container}
+   * <br>
+   * {@code $("td").closest("[data-testid]")} will find the closest ancestor with attribute {@code data-testid}
+   * <br>
+   * {@code $("td").closest("[data-testid=test-value]")} will find the closest ancestor with attribute and
+   * attribute's value {@code data-testid=test-value}
+   *<br>
+   * @param selector Either HTML tag, CSS class, attribute or attribute with value.<br>
+   *                 E.g. {@code form}, {@code .active}, {@code [data-testid]}, {@code [data-testid=test-value]}
+   * @return Matching ancestor element
+   * @see com.codeborne.selenide.commands.Ancestor
+   * @see <a href="https://github.com/selenide/selenide/wiki/lazy-loading">Lazy loading</a>
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement closest(String selector);
 
   /**
    * <p>Locates the first matching element inside given element</p>
@@ -756,6 +759,15 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
   @CheckReturnValue
   @Nonnull
   SelenideElement $x(String xpath, int index);
+
+  /**
+   * <p>Returns shadow root of this element</p>
+   *
+   * @see com.codeborne.selenide.commands.GetShadowRoot
+   */
+  @CheckReturnValue
+  @Nonnull
+  SelenideElement shadowRoot();
 
   /**
    * <p>
@@ -1112,14 +1124,6 @@ public interface SelenideElement extends WebElement, WrapsDriver, WrapsElement, 
    */
   @Override
   void click();
-
-  /**
-   * Click the element with a relative offset from the center of the element
-   *
-   * @deprecated use {@link #click(ClickOptions)} with offsets
-   */
-  @Deprecated
-  void click(int offsetX, int offsetY);
 
   /**
    * Click with right mouse button on this element

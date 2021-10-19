@@ -1,16 +1,16 @@
 package com.codeborne.selenide.collections;
 
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-final class TextsTest implements WithAssertions {
+final class TextsTest {
   @Test
   void applyWithEmptyList() {
     assertThat(new Texts("One", "Two", "Three").test(emptyList()))

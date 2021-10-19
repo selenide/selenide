@@ -11,7 +11,9 @@ import org.openqa.selenium.remote.SessionId;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public interface Driver {
   @CheckReturnValue
   @Nonnull

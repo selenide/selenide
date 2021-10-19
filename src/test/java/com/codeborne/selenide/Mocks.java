@@ -1,17 +1,27 @@
 package com.codeborne.selenide;
 
 import com.codeborne.selenide.impl.CollectionSource;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ParametersAreNonnullByDefault
 public class Mocks {
+  @Nonnull
+  @CheckReturnValue
   public static SelenideElement mockElement(String text) {
     return mockElement("div", text);
   }
 
+  @Nonnull
+  @CheckReturnValue
   public static SelenideElement mockElement(String tag, String text) {
     SelenideElement element = mock(SelenideElement.class);
     when(element.getTagName()).thenReturn(tag);
@@ -19,6 +29,39 @@ public class Mocks {
     return element;
   }
 
+  @Nonnull
+  @CheckReturnValue
+  public static WebElement elementWithAttribute(String name, String value) {
+    WebElement element = mock(WebElement.class);
+    when(element.getAttribute(name)).thenReturn(value);
+    return element;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static SelenideElement mockSelect(WebElement... options) {
+    SelenideElement select = mockElement("select", "");
+    when(select.isSelected()).thenReturn(true);
+    when(select.findElements(By.tagName("option"))).thenReturn(asList(options));
+    return select;
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static WebElement option(String text) {
+    return option(text, false);
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  public static WebElement option(String text, boolean selected) {
+    WebElement option = mockElement("option", text);
+    when(option.isSelected()).thenReturn(selected);
+    return option;
+  }
+
+  @Nonnull
+  @CheckReturnValue
   public static WebElement mockWebElement(String tag, String text) {
     WebElement element = mock(WebElement.class);
     when(element.getTagName()).thenReturn(tag);
@@ -27,6 +70,8 @@ public class Mocks {
     return element;
   }
 
+  @Nonnull
+  @CheckReturnValue
   public static CollectionSource mockCollection(String description, WebElement... elements) {
     Driver driver = mock(Driver.class);
     when(driver.config()).thenReturn(new SelenideConfig());

@@ -10,14 +10,16 @@ import static java.lang.System.lineSeparator;
 
 @ParametersAreNonnullByDefault
 public class TextsMismatch extends UIAssertionError {
-  public TextsMismatch(CollectionSource collection, List<String> actualTexts,
-                       List<String> expectedTexts, @Nullable String explanation, long timeoutMs) {
-    super(collection.driver(),
+  public TextsMismatch(CollectionSource collection,
+                       List<String> expectedTexts, List<String> actualTexts,
+                       @Nullable String explanation, long timeoutMs) {
+    super(
       "Texts mismatch" +
         lineSeparator() + "Actual: " + actualTexts +
         lineSeparator() + "Expected: " + expectedTexts +
         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
-        lineSeparator() + "Collection: " + collection.description());
+        lineSeparator() + "Collection: " + collection.description(),
+      expectedTexts, actualTexts);
     super.timeoutMs = timeoutMs;
   }
 }

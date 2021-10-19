@@ -3,9 +3,14 @@ package integration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static com.codeborne.selenide.Condition.text;
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -38,12 +43,12 @@ final class FileUploadTest extends ITest {
   }
 
   @Test
-  void userCanUploadFile() {
-    File file = $("#cv").uploadFile(new File("src/test/java/../resources/hello_world.txt"));
+  void userCanUploadFile() throws URISyntaxException {
+    File file = $("#cv").uploadFile(toLocalFile("/hello_world.txt"));
     $("#submit").click();
     $("h3").shouldHave(text("Uploaded 1 files"));
     assertThat(file).exists();
-    assertThat(file.getPath().replace(File.separatorChar, '/')).endsWith("src/test/resources/hello_world.txt");
+    assertThat(file.getPath()).endsWith("hello_world.txt");
     assertThat(server.getUploadedFiles().get(0).getName()).endsWith("hello_world.txt");
   }
 
@@ -91,16 +96,16 @@ final class FileUploadTest extends ITest {
   }
 
   @Test
-  void userCanUploadMultipleFiles() {
+  void userCanUploadMultipleFiles() throws URISyntaxException {
     File file = $("#multi-file-upload-form .file").uploadFile(
-      new File("src/test/java/../resources/hello_world.txt"),
-      new File("src/test/resources/jquery.min.js"));
+      toLocalFile("/hello_world.txt"),
+      toLocalFile("/jquery.min.js"));
 
     $("#multi-file-upload-form .submit").click();
     $("h3").shouldHave(text("Uploaded 2 files"));
 
     assertThat(file).exists();
-    assertThat(file.getPath().replace(File.separatorChar, '/')).endsWith("src/test/resources/hello_world.txt");
+    assertThat(file.getPath()).endsWith("hello_world.txt");
 
     assertThat(server.getUploadedFiles()).hasSize(2);
 
@@ -112,12 +117,12 @@ final class FileUploadTest extends ITest {
   }
 
   @Test
-  void userCanUploadMultipleFiles_withoutForm() {
+  void userCanUploadMultipleFiles_withoutForm() throws URISyntaxException {
     openFile("file_upload_without_form.html");
     $("#fileInput").uploadFile(
-      new File("src/test/java/../resources/файл-с-русским-названием.txt"),
-      new File("src/test/java/../resources/hello_world.txt"),
-      new File("src/test/resources/child_frame.txt"));
+      toLocalFile("/файл-с-русским-названием.txt"),
+      toLocalFile("/hello_world.txt"),
+      toLocalFile("/child_frame.txt"));
 
     $("#uploadButton").click();
     $("h3").shouldHave(text("Uploaded 3 files").because("Actual files: " + server.getUploadedFiles()));
@@ -147,5 +152,12 @@ final class FileUploadTest extends ITest {
     )
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageMatching("File not found in classpath:.*goodbye_world.txt");
+  }
+
+  @Nonnull
+  @CheckReturnValue
+  private File toLocalFile(String fileName) throws URISyntaxException {
+    URL url = requireNonNull(getClass().getResource(fileName), () -> "Not found in classpath: " + fileName);
+    return new File(url.toURI());
   }
 }

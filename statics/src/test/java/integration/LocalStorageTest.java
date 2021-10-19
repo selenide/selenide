@@ -9,7 +9,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.LocalStorageConditions.item;
 import static com.codeborne.selenide.LocalStorageConditions.itemWithValue;
@@ -161,6 +163,7 @@ final class LocalStorageTest extends IntegrationTest {
     localStorage().shouldHave(allItemsContaining("foo"));
   }
 
+  @ParametersAreNonnullByDefault
   private ObjectCondition<LocalStorage> allItemsContaining(String expectedValue) {
     return new ObjectCondition<LocalStorage>() {
       @Nonnull
@@ -175,6 +178,7 @@ final class LocalStorageTest extends IntegrationTest {
         return String.format("should not have all items containing '%s'", expectedValue);
       }
 
+      @CheckReturnValue
       @Override
       public boolean test(LocalStorage localStorage) {
         return localStorage.getItems().values().stream()
@@ -182,9 +186,16 @@ final class LocalStorageTest extends IntegrationTest {
       }
 
       @Nonnull
+      @CheckReturnValue
       @Override
       public String actualValue(LocalStorage localStorage) {
         return localStorage.getItems().toString();
+      }
+
+      @Override
+      @CheckReturnValue
+      public String expectedValue() {
+        return expectedValue;
       }
 
       @Nonnull

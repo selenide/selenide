@@ -92,8 +92,8 @@ public class WebElementSelector {
     injectSizzleIfNeeded(driver);
 
     String sizzleSelector = sizzleCssSelector.toString()
-        .replace("By.selector: ", "")
-        .replace("By.cssSelector: ", "");
+      .replace("By.selector: ", "")
+      .replace("By.cssSelector: ", "");
 
     if (context instanceof WebElement)
       return driver.executeJavaScript("return Sizzle(arguments[0], arguments[1])", sizzleSelector, context);
@@ -110,7 +110,8 @@ public class WebElementSelector {
   protected Boolean sizzleLoaded(Driver driver) {
     try {
       return driver.executeJavaScript("return typeof Sizzle != 'undefined'");
-    } catch (WebDriverException e) {
+    }
+    catch (WebDriverException e) {
       return false;
     }
   }

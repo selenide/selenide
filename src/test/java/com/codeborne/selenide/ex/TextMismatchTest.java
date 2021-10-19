@@ -2,7 +2,6 @@ package com.codeborne.selenide.ex;
 
 import com.codeborne.selenide.DriverStub;
 import com.codeborne.selenide.impl.CollectionSource;
-import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +9,10 @@ import java.util.List;
 
 import static com.codeborne.selenide.Mocks.mockCollection;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-final class TextMismatchTest implements WithAssertions {
+final class TextMismatchTest {
   private final CollectionSource collection = mockCollection("Collection description");
   private final List<String> actualTexts = asList("One", "Two", "Three");
   private final List<String> expectedTexts = asList("Four", "Five", "Six");
@@ -25,7 +25,7 @@ final class TextMismatchTest implements WithAssertions {
 
   @Test
   void toString_withoutExplanation() {
-    TextsMismatch textsMismatch = new TextsMismatch(collection, actualTexts, expectedTexts, null, timeoutMs);
+    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, null, timeoutMs);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [One, Two, Three]%n" +
@@ -36,7 +36,7 @@ final class TextMismatchTest implements WithAssertions {
 
   @Test
   void toString_withExplanation() {
-    TextsMismatch textsMismatch = new TextsMismatch(collection, actualTexts, expectedTexts, "it's said in doc", timeoutMs);
+    TextsMismatch textsMismatch = new TextsMismatch(collection, expectedTexts, actualTexts, "it's said in doc", timeoutMs);
 
     assertThat(textsMismatch).hasMessage(String.format("Texts mismatch%n" +
       "Actual: [One, Two, Three]%n" +

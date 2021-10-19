@@ -12,6 +12,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
+import static com.codeborne.selenide.CheckResult.Verdict.ACCEPT;
+
 @ParametersAreNonnullByDefault
 public class CollectionElementByCondition extends WebElementSource {
 
@@ -19,8 +21,8 @@ public class CollectionElementByCondition extends WebElementSource {
   @Nonnull
   public static SelenideElement wrap(CollectionSource collection, Condition condition) {
     return (SelenideElement) Proxy.newProxyInstance(
-        collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
-        new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
+      collection.getClass().getClassLoader(), new Class<?>[]{SelenideElement.class},
+      new SelenideElementProxy(new CollectionElementByCondition(collection, condition)));
   }
 
   private final CollectionSource collection;
@@ -45,12 +47,12 @@ public class CollectionElementByCondition extends WebElementSource {
     List<WebElement> list = collection.getElements();
 
     for (WebElement element : list) {
-      if (condition.apply(driver(), element)) {
+      if (condition.check(driver(), element).verdict == ACCEPT) {
         return element;
       }
     }
 
-    throw new ElementNotFound(driver(), description(), condition);
+    throw new ElementNotFound(description(), condition);
   }
 
   @Override

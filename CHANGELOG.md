@@ -1,5 +1,38 @@
 # Changelog
 
+## 6.0.0 (planned to 1x.10.2021)
+* upgrade to Selenium 4.0.0
+* #1581 report exact actual value at the moment of failure
+* Remove lots of deprecated methods  --  thanks @BorisOsipov for PR https://github.com/selenide/selenide/pull/1607/files
+* Make Selenide.sleep(N) guarantee the sleep duration
+
+## 5.25.0 (released 28.09.2021)
+* #969 Add support for OpenTest4j  --  see PR #1545
+  NB! We changed the signature of many Selenide assertion errors:
+  * changed order of "expected" and "actual" values
+  * removed "driver" parameter from constructor
+* #1543 add stack trace to every error in SoftAsserts  --  see PR #1545
+* #1515 add method $.shadowRoot()  --  see PR #1517
+* #1556 add method `SelenideElement.ancestor()`  --  thanks Oleg Berezhnoy for PR #1567
+* #1554 Enhance `closest()` and `ancestor()` methods to search by attribute  --  thanks to Vitali Plagov for PR #1554
+* #1571 fix method `$.screenshot()` on Retina display  --  see PR #1576
+* #217 report **exact** text at the moment of failure of text conditions  --  thanks Pavel Fokin for PR #1313
+* #1566 forbid empty regex in MatchText 
+* #1573 add check `webdriver().shouldHave(title(...))` --  thanks Ervīns Patmalnieks for PR #1579
+
+## 5.24.4 (released 21.09.2021)
+* #1560 un-deprecate method ElementsContainer.getSelf()  --  see PR #1565
+* #1569 add details to error message about missing BrowserUpProxy dependency
+* upgrade okhttp 3.11.0 -> 3.12.13 
+* upgrade to WebDriverManager 5.0.3 (support Firefox 92.0)
+
+## 5.24.3 (released 13.09.2021)
+* upgrade to WebDriverManager to 5.0.2
+* exclude docker-java and few other dependencies
+
+## 5.24.2 (released 02.09.2021)
+* #1551 Fix NoClassDefFoundException for StringUtils
+
 ## 5.24.1 (released 31.08.2021)
 * upgrade to WebDriverManager to 5.0.1  --  thanks to Anil Kumar Reddy Gaddam for PR #1547
 

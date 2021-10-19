@@ -6,6 +6,7 @@ import com.codeborne.selenide.impl.Cleanup;
 import com.codeborne.selenide.impl.ScreenShotLaboratory;
 import com.codeborne.selenide.impl.Screenshot;
 import org.openqa.selenium.WebDriverException;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,21 +19,28 @@ import static com.codeborne.selenide.ex.ErrorMessages.timeout;
 
 
 @ParametersAreNonnullByDefault
-public class UIAssertionError extends AssertionError {
+public class UIAssertionError extends AssertionFailedError {
   private static final Logger log = LoggerFactory.getLogger(UIAssertionError.class);
-  private final Driver driver;
 
   private Screenshot screenshot = Screenshot.none();
   public long timeoutMs;
 
-  protected UIAssertionError(Driver driver, String message) {
+  protected UIAssertionError(String message) {
     super(message);
-    this.driver = driver;
   }
 
-  protected UIAssertionError(Driver driver, String message, @Nullable Throwable cause) {
+  protected UIAssertionError(String message, @Nullable Object expected, @Nullable Object actual) {
+    super(message, expected, actual);
+  }
+
+  protected UIAssertionError(String message, @Nullable Throwable cause) {
     super(message, cause);
-    this.driver = driver;
+  }
+
+  protected UIAssertionError(String message,
+                             @Nullable Object expected, @Nullable Object actual,
+                             @Nullable Throwable cause) {
+    super(message, expected, actual, cause);
   }
 
   @CheckReturnValue
@@ -75,7 +83,7 @@ public class UIAssertionError extends AssertionError {
   @CheckReturnValue
   private static UIAssertionError wrapThrowable(Driver driver, Throwable error, long timeoutMs) {
     UIAssertionError uiError = error instanceof UIAssertionError ?
-      (UIAssertionError) error : wrapToUIAssertionError(driver, error);
+      (UIAssertionError) error : wrapToUIAssertionError(error);
     uiError.timeoutMs = timeoutMs;
     if (uiError.screenshot.isPresent()) {
       log.warn("UIAssertionError already has screenshot: {} {} -> {}",
@@ -90,8 +98,8 @@ public class UIAssertionError extends AssertionError {
   }
 
   @CheckReturnValue
-  private static UIAssertionError wrapToUIAssertionError(Driver driver, Throwable error) {
+  private static UIAssertionError wrapToUIAssertionError(Throwable error) {
     String message = error.getClass().getSimpleName() + ": " + Cleanup.of.webdriverExceptionMessage(error.getMessage());
-    return new UIAssertionError(driver, message, error);
+    return new UIAssertionError(message, error);
   }
 }
