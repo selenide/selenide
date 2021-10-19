@@ -11,11 +11,6 @@ public interface Browsers {
   String FIREFOX = "firefox";
 
   /**
-   * It is only supported for some ESR versions of Firefox up to ESR 52
-   */
-  String LEGACY_FIREFOX = "legacy_firefox";
-
-  /**
    * To use OperaDriver, you need to include extra dependency to your project:
    * &lt;dependency org="com.opera" name="operadriver" rev="1.5" conf="test-&gt;default"/&gt;
    */

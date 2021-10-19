@@ -27,7 +27,6 @@ import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
-import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -46,7 +45,6 @@ public class WebDriverFactory {
   private Map<String, Class<? extends AbstractDriverFactory>> factories() {
     Map<String, Class<? extends AbstractDriverFactory>> result = new HashMap<>();
     result.put(CHROME, ChromeDriverFactory.class);
-    result.put(LEGACY_FIREFOX, LegacyFirefoxDriverFactory.class);
     result.put(FIREFOX, FirefoxDriverFactory.class);
     result.put(EDGE, EdgeDriverFactory.class);
     result.put(INTERNET_EXPLORER, InternetExplorerDriverFactory.class);
