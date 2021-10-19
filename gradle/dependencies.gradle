@@ -17,6 +17,8 @@ subprojects {
   }
 
   dependencies {
+    annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
+    compileOnly("com.github.bsideup.jabel:jabel-javac-plugin:0.4.2")
     api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {exclude group: 'net.bytebuddy'}
     implementation("com.google.guava:guava:31.0.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
