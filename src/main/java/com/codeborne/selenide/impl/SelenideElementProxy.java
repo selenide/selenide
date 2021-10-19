@@ -57,9 +57,7 @@ class SelenideElementProxy implements InvocationHandler {
       "shouldHave",
       "shouldNot",
       "shouldNotHave",
-      "shouldNotBe",
-      "waitUntil",
-      "waitWhile"
+      "shouldNotBe"
   ));
 
   private final WebElementSource webElementSource;
@@ -79,11 +77,10 @@ class SelenideElementProxy implements InvocationHandler {
       validateAssertionMode(config());
     }
 
-    long timeoutMs = getTimeoutMs(method, arguments);
-    long pollingIntervalMs = getPollingIntervalMs(method, arguments);
+    long timeoutMs = getTimeoutMs(arguments);
     SelenideLog log = SelenideLogger.beginStep(webElementSource.description(), method.getName(), args);
     try {
-      Object result = dispatchAndRetry(timeoutMs, pollingIntervalMs, proxy, method, args);
+      Object result = dispatchAndRetry(timeoutMs, config().pollingInterval(), proxy, method, args);
       SelenideLogger.commitStep(log, PASS);
       return result;
     }
@@ -172,21 +169,8 @@ class SelenideElementProxy implements InvocationHandler {
   }
 
   @CheckReturnValue
-  private long getTimeoutMs(Method method, Arguments arguments) {
+  private long getTimeoutMs(Arguments arguments) {
     Optional<Duration> duration = arguments.ofType(Duration.class);
-
-    return duration.map(Duration::toMillis).orElseGet(() ->
-      isWaitCommand(method) ? arguments.nth(1) : config().timeout()
-    );
-  }
-
-  @CheckReturnValue
-  private long getPollingIntervalMs(Method method, Arguments arguments) {
-    return isWaitCommand(method) && arguments.length() == 3 ? arguments.nth(2) : config().pollingInterval();
-  }
-
-  @CheckReturnValue
-  private boolean isWaitCommand(Method method) {
-    return "waitUntil".equals(method.getName()) || "waitWhile".equals(method.getName());
+    return duration.map(Duration::toMillis).orElse(config().timeout());
   }
 }

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 
 /**
  * By using this extension selenide will collect all failed asserts
- * from "should*" and "waitUntil" methods and throw after test finished.
+ * from "should*" methods and throw after test finished.
  *
  * <br>
  * To use extension extend you test class with it:
