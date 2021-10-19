@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Browsers.EDGE;
 import static com.codeborne.selenide.Browsers.FIREFOX;
 import static com.codeborne.selenide.Browsers.IE;
 import static com.codeborne.selenide.Browsers.INTERNET_EXPLORER;
-import static com.codeborne.selenide.Browsers.LEGACY_FIREFOX;
 import static com.codeborne.selenide.Browsers.OPERA;
 import static com.codeborne.selenide.Browsers.SAFARI;
 
@@ -35,11 +34,6 @@ public class Browser {
   @CheckReturnValue
   public boolean isFirefox() {
     return FIREFOX.equalsIgnoreCase(name);
-  }
-
-  @CheckReturnValue
-  public boolean isLegacyFirefox() {
-    return LEGACY_FIREFOX.equalsIgnoreCase(name);
   }
 
   @CheckReturnValue

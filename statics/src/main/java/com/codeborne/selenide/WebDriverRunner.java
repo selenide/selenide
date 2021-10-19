@@ -198,14 +198,6 @@ public class WebDriverRunner {
   }
 
   /**
-   * Is Selenide configured to use legacy Firefox driver
-   */
-  @CheckReturnValue
-  public static boolean isLegacyFirefox() {
-    return browser().isLegacyFirefox();
-  }
-
-  /**
    * Is Selenide configured to use Chrome browser
    */
   @CheckReturnValue
