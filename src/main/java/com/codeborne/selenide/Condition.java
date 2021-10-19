@@ -80,7 +80,7 @@ public abstract class Condition {
 
   /**
    * Synonym for {@link #visible} - may be used for better readability
-   * <p><code>$("#logoutLink").should(appears, 10000);</code></p>
+   * <p><code>$("#logoutLink").should(appear, 10000);</code></p>
    *
    * @deprecated use {@link #visible} or {@link #appear}
    */
