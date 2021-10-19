@@ -7,10 +7,9 @@ allprojects {
     options.encoding = encoding
     options.debug = true
     options.release = 8
+    sourceCompatibility = 16
   }
   compileJava.options.debugOptions.debugLevel = "source,lines,vars"
-  sourceCompatibility = '16' // for the IDE support
-  targetCompatibility = 8
 
   java {
     toolchain {

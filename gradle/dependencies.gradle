@@ -19,7 +19,6 @@ ext {
 }
 
 dependencies {
-  annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.1'
   api("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
     exclude group: 'net.bytebuddy', module: 'byte-buddy'
   }
@@ -44,6 +43,7 @@ dependencies {
 
 allprojects {
   dependencies {
+    annotationProcessor("com.github.bsideup.jabel:jabel-javac-plugin:0.4.1")
     implementation("com.google.guava:guava:${guavaVersion}")
     testImplementation("com.browserup:browserup-proxy-core:$browserupProxyVersion")
     testImplementation("xyz.rogfam:littleproxy:$littleProxyVersion")

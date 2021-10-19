@@ -246,7 +246,7 @@ public class SelenideTargetLocator implements TargetLocator {
   }
 
   private Error alertNotFoundError(Throwable cause) {
-    AlertNotFoundException error = new AlertNotFoundException(driver, "Alert not found", cause);
+    var error = new AlertNotFoundException(driver, "Alert not found", cause);
     return UIAssertionError.wrap(driver, error, config.timeout());
   }
 }
